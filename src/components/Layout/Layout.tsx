@@ -12,7 +12,7 @@ const Layout: FC<RouteProps> = () => {
       <div className={styles.top}>
         <div className={styles.settings}>
           <div className={styles.appSettings}>
-
+            
           </div>
         </div>
         <div className={styles.navigation}>
