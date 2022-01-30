@@ -1,36 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { IDirData, IPmdData } from "../../utils/files/fileManipulations";
 
 interface IInitialState {
-  inputFiles: File[] | null;
-  outputFiles: File[] | null;
-
-  treatmentFiles: File[] | null;
-  dirStatFiles: File[] | null;
+  treatmentData: IPmdData[] | null;
+  dirStatData: IDirData[] | null;
 }
 
 const initialState: IInitialState = {
-  inputFiles: null,
-  outputFiles: null,
-
-  treatmentFiles: null,
-  dirStatFiles: null,
+  treatmentData: null,
+  dirStatData: null,
 }
 
-const filesSlice = createSlice({
+const parsedDataSlice = createSlice({
   name: 'files',
   initialState,
   reducers: {
-    setInputFiles (state, action) {
-      state.inputFiles = action.payload;
+    setTreatmentData (state, action) {
+      state.treatmentData = action.payload;
     },
-    setOutputFiles (state, action) {
-      state.outputFiles = action.payload;
-    },
-    setTreatmentFiles (state, action) {
-      state.treatmentFiles = action.payload;
-    },
-    setDirStatFiles (state, action) {
-      state.dirStatFiles = action.payload;
+    setDirStatData (state, action) {
+      state.dirStatData = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -54,11 +43,9 @@ const filesSlice = createSlice({
 });
 
 export const { 
-  setInputFiles, 
-  setOutputFiles, 
-  setTreatmentFiles,
-  setDirStatFiles
-} = filesSlice.actions;
+  setTreatmentData,
+  setDirStatData
+} = parsedDataSlice.actions;
 
-const filesReducer = filesSlice.reducer;
-export default filesReducer;
+const parsedDataReducer = parsedDataSlice.reducer;
+export default parsedDataReducer;

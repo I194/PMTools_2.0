@@ -1,8 +1,10 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import filesReducer from "../reducers/files";
+import parsedDataReducer from "../reducers/parsedData";
 
 export const rootReducer = combineReducers({
-  filesReducer
+  filesReducer,
+  parsedDataReducer,
 });
 
 export const setupStore = () => {
