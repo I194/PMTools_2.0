@@ -11,13 +11,20 @@ const Layout: FC<RouteProps> = () => {
     <div className={styles.appContainer}>
       <div className={styles.top}>
         <div className={styles.settings}>
+          <div className={styles.appSettings}>
 
+          </div>
         </div>
         <div className={styles.navigation}>
+          <div className={styles.pages}>
 
+          </div>
         </div>
       </div>
       <div className={styles.instruments}>
+        <div className={styles.dataSettings}>
+
+        </div>
       </div>
       <div className={styles.data}>
         <div className={styles.tables}>

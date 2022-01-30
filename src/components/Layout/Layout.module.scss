@@ -16,18 +16,36 @@
 
   display: flex;
   flex-direction: row;
-  background-color: greenyellow;
+  background-color: #000;
 
   .settings {
     width: 37.5%;
 
-    background-color: khaki;
+    background-color: #000;
+
+    .appSettings {
+      width: 100%;
+      height: 100%;
+      background-color: #212121;
+    }
+
+    padding: 8px 16px;
+    box-sizing: border-box;
   }
 
   .navigation {
     width: 62.5%;
+    
+    background-color: #000;
 
-    background-color: lightgreen;
+    .pages {
+      width: 100%;
+      height: 100%;
+      background-color: #212121;
+    }
+
+    padding: 8px 16px;
+    box-sizing: border-box;
   }
 }
 
@@ -37,7 +55,15 @@
 
   display: flex;
   flex-direction: row;
-  background-color: grey;
+  background-color: #000;
+
+  .dataSettings {
+    width: 100%;
+    background-color: #212121;
+  }
+
+  padding: 8px 16px;
+  box-sizing: border-box;
 }
 
 .data {
@@ -46,28 +72,32 @@
 
   display: flex;
   flex-direction: row;
-  background-color: indianred;
+  background-color: #000;
 
   .tables {
     width: 37.5%;
 
     display: flex;
     flex-direction: column;
-    background-color: lightsalmon;
+    background-color: #000;
 
     .tableSmall {
       width: 100%;
       height: 25%;
 
-      background-color: mediumvioletred;
+      background-color: #212121;
     }
 
     .tableLarge {
       width: 100%;
       height: 75%;
 
-      background-color: palevioletred;
+      background-color: #212121;
+      margin-top: 16px;
     }
+
+    padding: 8px 16px;
+    box-sizing: border-box;
   }
 
   .graphs {
@@ -75,7 +105,7 @@
 
     display: flex;
     flex-direction: row;
-    background-color: lightskyblue;
+    background-color: #000;
 
     .column {
       width: calc(100% / 3);
@@ -83,20 +113,32 @@
       
       display: flex;
       flex-direction: column;
+
+      :last-child {
+        margin-bottom: 0px;
+      }
+
+      :first-child {
+        margin-top: 0px;
+      }
     }
 
     .graphSmall {
       height: 50%;
 
-      background-color: rebeccapurple;
+      background-color: #212121;
+      margin: 8px;
     }
 
     .graphLarge {
       width: calc(2 * (100% / 3));
       height: 100%;
 
-      background-color: slateblue;
+      background-color: #212121;
+      margin: 0px 8px; 
     }
-  }
 
+    padding: 8px;
+    box-sizing: border-box;
+  }
 }
