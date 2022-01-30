@@ -1,8 +1,102 @@
 .appContainer {
+  width: 100vw;
   min-width: 100vw;
   max-width: 100vw;
+  height: 100vh;
   min-height: 100vh;
   max-height: 100vh;
 
   display: flex;
+  flex-direction: column;
+}
+
+.top {
+  min-height: 10%;
+  min-width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  background-color: greenyellow;
+
+  .settings {
+    width: 37.5%;
+
+    background-color: khaki;
+  }
+
+  .navigation {
+    width: 62.5%;
+
+    background-color: lightgreen;
+  }
+}
+
+.instruments {
+  height: 10%;
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  background-color: grey;
+}
+
+.data {
+  height: 80%;
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  background-color: indianred;
+
+  .tables {
+    width: 37.5%;
+
+    display: flex;
+    flex-direction: column;
+    background-color: lightsalmon;
+
+    .tableSmall {
+      width: 100%;
+      height: 25%;
+
+      background-color: mediumvioletred;
+    }
+
+    .tableLarge {
+      width: 100%;
+      height: 75%;
+
+      background-color: palevioletred;
+    }
+  }
+
+  .graphs {
+    width: 62.5%;
+
+    display: flex;
+    flex-direction: row;
+    background-color: lightskyblue;
+
+    .column {
+      width: calc(100% / 3);
+      height: 100%;
+      
+      display: flex;
+      flex-direction: column;
+    }
+
+    .graphSmall {
+      height: 50%;
+
+      background-color: rebeccapurple;
+    }
+
+    .graphLarge {
+      width: calc(2 * (100% / 3));
+      height: 100%;
+
+      background-color: slateblue;
+    }
+  }
+
 }
