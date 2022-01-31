@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import filesReducer from "../reducers/files";
 import parsedDataReducer from "../reducers/parsedData";
+import thunk from 'redux-thunk';
 
 export const rootReducer = combineReducers({
   filesReducer,
@@ -11,7 +12,7 @@ export const setupStore = () => {
   return configureStore({
     reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware(),
+      getDefaultMiddleware().concat(thunk),
   });
 };
 

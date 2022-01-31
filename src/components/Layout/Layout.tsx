@@ -2,7 +2,7 @@ import React, { FC, useEffect } from "react";
 import { Outlet, useNavigate, RouteProps, useLocation, Link } from "react-router-dom";
 import styles from "./Layout.module.scss";
 
-import { AppSettings } from "../Main";
+import { AppSettings, DataTable } from "../Main";
 
 const Layout: FC<RouteProps> = () => {
   // const dispatch = useAppDispatch();
@@ -34,7 +34,7 @@ const Layout: FC<RouteProps> = () => {
 
           </div>
           <div className={styles.tableLarge}>
-
+            <DataTable />
           </div>
         </div>
         <div className={styles.graphs}>

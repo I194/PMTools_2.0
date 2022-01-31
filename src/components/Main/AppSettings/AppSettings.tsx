@@ -4,6 +4,8 @@ import { MenuList, MenuItem, Button, Input } from '@mui/material';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
+import { useAppDispatch } from "../../../services/store/hooks";
+import { setInputFiles } from "../../../services/reducers/files";
 
 interface IAppSettings {
 
@@ -11,8 +13,12 @@ interface IAppSettings {
 
 const AppSettings: FC<IAppSettings> = () => {
 
-  const handleFileUpload = () => {
+  const dispatch = useAppDispatch();
 
+  const handleFileUpload = (event: any) => {
+    console.log(typeof(event));
+    const files = Array.from(event.currentTarget.files);
+    dispatch(setInputFiles(files));
   }
 
   return (
