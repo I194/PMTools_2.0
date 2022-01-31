@@ -33,12 +33,18 @@ const AppSettings: FC<IAppSettings> = () => {
         startIcon={<HelpOutlineOutlinedIcon />}
         sx={{
           textTransform: 'none', 
+          marginRight: '16px'
         }}
         component="span"
       >
         Помощь
       </Button>
-      <label htmlFor="upload-file">
+      <label 
+        htmlFor="upload-file" 
+        style={{
+          flex: 'auto'
+        }}
+      >
         <Input 
           id="upload-file"
           type={'file'}  
@@ -55,6 +61,8 @@ const AppSettings: FC<IAppSettings> = () => {
           startIcon={<UploadFileOutlinedIcon />}
           sx={{
             textTransform: 'none', 
+            width: '100%',
+            color: 'white',
           }}
           component="span"
         >
