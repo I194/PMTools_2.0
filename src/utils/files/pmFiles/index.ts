@@ -7,14 +7,19 @@ import parseCSV_PMD from "../parsers/parserCSV_PMD";
 import parseXLSX_PMD from "../parsers/parserXLSX_PMD";
 
 export default class PMFile {
+  name: string;
+  type: string;
+  size: number;
+  path: string;
+  data: string | ArrayBuffer | null;
 
-  name;
-  type;
-  size;
-  path;
-  data;
-
-  constructor(name: string, type: string, size: number, path: string, data: string | ArrayBuffer | null) {
+  constructor (
+    name: string, 
+    type: string, 
+    size: number, 
+    path: string, 
+    data: string | ArrayBuffer | null
+  ) {
     this.name = name;
     this.type = type;
     this.size = size;

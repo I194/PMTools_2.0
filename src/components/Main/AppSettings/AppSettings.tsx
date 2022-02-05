@@ -55,7 +55,8 @@ const AppSettings: FC<IAppSettings> = () => {
           id="upload-file"
           type={'file'}  
           inputProps={{
-            multiple: true
+            multiple: true,
+            accept: '.dir, .pmm, .pmd, .csv, .xlsx'
           }}
           disableUnderline={true}
           sx={{display: 'none'}}
