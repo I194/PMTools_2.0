@@ -6,9 +6,30 @@ import { NavLink } from 'react-router-dom';
 interface INavButton {
   label: string;
   to: string;
+  external?: boolean;
 }
 
-const NavButton: FC<INavButton> = ({ label, to }) => {
+const NavButton: FC<INavButton> = ({ label, to, external }) => {
+
+  const onClickExternal = () => {
+    window.location.href = to;
+  } 
+  
+  if (external) {
+    return (
+      <Button
+        variant="contained" 
+        sx={{
+          textTransform: 'none'
+        }}
+        component="span"
+        onClick={onClickExternal}
+      >
+        { label }
+      </Button>
+    )
+  }
+
   return (
     <NavLink to={to}>
       <Button
@@ -42,7 +63,8 @@ const AppNavigation: FC<IAppNavigation> = () => {
       />
       <NavButton 
         label={'Репозиторий проекта'}
-        to={'git'}
+        to={'https://github.com/I194/PMTools_2.0'}
+        external={true}
       />
       <NavButton 
         label={'Главная страница'}
