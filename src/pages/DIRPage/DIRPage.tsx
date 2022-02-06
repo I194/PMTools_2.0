@@ -4,8 +4,7 @@ import styles from './DIRPage.module.scss';
 
 const DIRPage: FC = ({}) => {
   return (
-    <div>
-      
+    <>
       <div className={styles.instruments}>
         <div className={styles.dataSettings}>
 
@@ -34,7 +33,7 @@ const DIRPage: FC = ({}) => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 

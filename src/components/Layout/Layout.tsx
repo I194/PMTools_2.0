@@ -2,12 +2,11 @@ import React, { FC, useEffect } from "react";
 import { Outlet, useNavigate, RouteProps, useLocation, Link } from "react-router-dom";
 import styles from "./Layout.module.scss";
 
-import { AppSettings, DataTable } from "../Main";
+import { AppSettings, AppNavigation } from "../Main";
 
 const Layout: FC<RouteProps> = () => {
   // const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
  
   return (
     <div className={styles.appContainer}>
@@ -19,7 +18,7 @@ const Layout: FC<RouteProps> = () => {
         </div>
         <div className={styles.navigation}>
           <div className={styles.pages}>
-
+            <AppNavigation />
           </div>
         </div>
       </div>

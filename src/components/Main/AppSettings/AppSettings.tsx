@@ -16,7 +16,6 @@ const AppSettings: FC<IAppSettings> = () => {
   const dispatch = useAppDispatch();
 
   const handleFileUpload = (event: any) => {
-    console.log(typeof(event));
     const files = Array.from(event.currentTarget.files);
     dispatch(setInputFiles(files));
   }

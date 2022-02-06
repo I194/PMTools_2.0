@@ -4,7 +4,7 @@ import styles from './PCAPage.module.scss';
 
 const PCAPage: FC = ({}) => {
   return (
-    <div>
+    <>
       <div className={styles.instruments}>
         <div className={styles.dataSettings}>
 
@@ -33,7 +33,7 @@ const PCAPage: FC = ({}) => {
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
