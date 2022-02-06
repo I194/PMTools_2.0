@@ -1,9 +1,9 @@
 import AppSettings from "./AppSettings/AppSettings";
 import AppNavigation from "./AppNavigation/AppNavigation";
-import DataTable from "./DataTable/DataTable";
+import DataTablePMD from "./DataTablePMD/DataTablePMD";
 
 export {
   AppSettings,
   AppNavigation,
-  DataTable,
+  DataTablePMD,
 }

@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { DataTable } from '../../components/Main';
+import { DataTablePMD } from '../../components/Main';
 import { filesToData } from '../../services/axios/filesAndData';
 import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
 import styles from './PCAPage.module.scss';
@@ -28,7 +28,10 @@ const PCAPage: FC = ({}) => {
 
           </div>
           <div className={styles.tableLarge}>
-            <DataTable />
+            {
+              treatmentData &&
+              <DataTablePMD data={treatmentData[0]}/>
+            }
           </div>
         </div>
         <div className={styles.graphs}>

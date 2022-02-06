@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import { DataTable } from '../../components/Main';
 import styles from './DIRPage.module.scss';
 
 const DIRPage: FC = ({}) => {
@@ -16,7 +15,6 @@ const DIRPage: FC = ({}) => {
 
           </div>
           <div className={styles.tableLarge}>
-            <DataTable />
           </div>
         </div>
         <div className={styles.graphs}>
