@@ -30,8 +30,6 @@ const AppSettings: FC<IAppSettings> = () => {
     dispatch(setInputFiles(files));
   };
 
-  if (currentPage !== 'pca' && currentPage !== 'dir') return null; 
-
   return (
     <div className={styles.buttons}>
       <Button
@@ -62,21 +60,24 @@ const AppSettings: FC<IAppSettings> = () => {
           flex: 'auto'
         }}
       >
-        <Input 
-          id="upload-file"
-          type={'file'}  
-          inputProps={{
-            multiple: true,
-            accept: availableFormats[currentPage].join(', '),
-          }}
-          disableUnderline={true}
-          sx={{display: 'none'}}
-          onChange={handleFileUpload}
-        />
-
+        {
+          (currentPage === 'pca' || currentPage === 'dir') &&
+          <Input 
+            id="upload-file"
+            type={'file'}  
+            inputProps={{
+              multiple: true,
+              accept: availableFormats[currentPage].join(', '),
+            }}
+            disableUnderline={true}
+            sx={{display: 'none'}}
+            onChange={handleFileUpload}
+          />
+        }
         <Button 
           variant="outlined" 
           startIcon={<UploadFileOutlinedIcon />}
+          disabled={currentPage !== 'pca' && currentPage !== 'dir'}
           sx={{
             textTransform: 'none', 
             width: '100%',
