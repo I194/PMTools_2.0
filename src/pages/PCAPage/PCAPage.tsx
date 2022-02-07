@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react';
-import { DataTablePMD } from '../../components/Main';
+import { DataTablePMD, MetaDataTablePMD } from '../../components/Main';
 import { filesToData } from '../../services/axios/filesAndData';
 import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
 import styles from './PCAPage.module.scss';
@@ -17,9 +17,19 @@ const PCAPage: FC = ({}) => {
 
   return (
     <>
-      <div className={styles.instruments}>
-        <div className={styles.dataSettings}>
-
+      <div className={styles.controlPanel}>
+        <div className={styles.metadata}>
+          <div className={styles.table}>
+            {
+              treatmentData && 
+              <MetaDataTablePMD data={treatmentData[0].metadata}/>
+            }
+          </div>
+        </div>
+        <div className={styles.instruments}>
+          <div className={styles.dataSettings}>
+            a
+          </div>
         </div>
       </div>
       <div className={styles.data}>

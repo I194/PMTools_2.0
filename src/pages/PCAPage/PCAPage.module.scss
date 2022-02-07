@@ -1,35 +1,20 @@
-.appContainer {
-  width: 100vw;
-  min-width: 100vw;
-  max-width: 100vw;
-  height: 100vh;
-  min-height: 100vh;
-  max-height: 100vh;
-
-  display: flex;
-  flex-direction: column;
-
-  
-  background-color: #000;
-}
-
-.top {
-  min-height: 10%;
-  min-width: 100%;
+.controlPanel {
+  height: 10%;
+  width: 100%;
 
   display: flex;
   flex-direction: row;
   background-color: #000;
 
-  .settings {
+  .metadata {
     width: 37.5%;
-
     background-color: #000;
 
-    .appSettings {
+    .table {
       width: 100%;
       height: 100%;
-      
+      background-color: #212121;
+
       display: flex;
       align-items: center;
 
@@ -39,38 +24,25 @@
     padding: 8px 16px;
     box-sizing: border-box;
   }
-
-  .navigation {
+  
+  .instruments {
     width: 62.5%;
-    
     background-color: #000;
 
-    .pages {
+    .dataSettings {
       width: 100%;
       height: 100%;
+      background-color: #212121;
+
+      display: flex;
+      align-items: center;
+
       background-color: #212121;
     }
 
     padding: 8px 16px;
     box-sizing: border-box;
   }
-}
-
-.instruments {
-  height: 10%;
-  width: 100%;
-
-  display: flex;
-  flex-direction: row;
-  background-color: #000;
-
-  .dataSettings {
-    width: 100%;
-    background-color: #212121;
-  }
-
-  padding: 8px 16px;
-  box-sizing: border-box;
 }
 
 .data {
