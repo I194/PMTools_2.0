@@ -1,7 +1,8 @@
 import React, { FC, useEffect } from 'react';
-import { DataTablePMD, MetaDataTablePMD, ToolsPMD } from '../../components/Main';
-import { filesToData } from '../../services/axios/filesAndData';
 import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
+import { DataTablePMD, MetaDataTablePMD, ToolsPMD } from '../../components/Main';
+import { ZijdGraph, StereoGraph, MagGraph} from '../../components/Graph';
+import { filesToData } from '../../services/axios/filesAndData';
 import styles from './PCAPage.module.scss';
 
 const PCAPage: FC = ({}) => {
@@ -46,14 +47,14 @@ const PCAPage: FC = ({}) => {
         </div>
         <div className={styles.graphs}>
           <div className={styles.graphLarge}>
-
+            <ZijdGraph graphId='zijd'/>
           </div>
           <div className={styles.column}>
             <div className={styles.graphSmall}>
-
+              <StereoGraph graphId='stereo'/>
             </div>
             <div className={styles.graphSmall}>
-
+              <MagGraph graphId='mag'/>
             </div>
           </div>
         </div>
