@@ -7,7 +7,6 @@ import Unit from "./Unit/Unit";
 import Ticks from "./Ticks/Ticks";
 import Axis from "./Axis/Axis";
 import Data from "./Data/Data";
-import PanZoom from "./PanZoom/PanZoom";
 
 export { 
   SelectableGraph,
@@ -19,5 +18,4 @@ export {
   Ticks, 
   Axis,
   Data,
-  PanZoom
 }; 

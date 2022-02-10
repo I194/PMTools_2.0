@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { Dot } from "..";
-import { createStraightPath } from "../../../utils/createPath";
+import { createStraightPath } from "../../../../utils/graphs/createPath";
 
 interface IData {
   graphId: string;

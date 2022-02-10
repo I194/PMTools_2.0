@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import styles from "./MagGraph.module.scss";
-import { IGraph } from "../../../../utils/GlobalTypes";
-import { SelectableGraph, GraphSymbols, Unit} from "../../../Sub/Graphs";
+import { IGraph } from "../../../utils/GlobalTypes";
+import { SelectableGraph, GraphSymbols, Unit} from "../../Sub/Graphs";
 import AxesAndData from "./AxesAndData";
 
 const MagGraph: FC<IGraph> = ({ graphId }) => {

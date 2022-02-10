@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Axis, Data } from "../../../Sub/Graphs";
+import { Axis, Data } from "../../Sub/Graphs";
 
 interface IAxesAndData {
   graphId: string;
