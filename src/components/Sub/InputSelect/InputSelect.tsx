@@ -14,7 +14,7 @@ const InputSelect: FC<IInputSelect> = ({ placeholder, leftIconButton, rightIconB
   
   const createRightIconButton = (icon: ReactNode, onClick: () => void) => (
     <>
-      <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+      <Divider sx={{ height: '80%', mr: 0.5, ml: 0.5 }} orientation="vertical" />
       <IconButton 
         onClick={onClick}
         color="primary" 
@@ -32,11 +32,14 @@ const InputSelect: FC<IInputSelect> = ({ placeholder, leftIconButton, rightIconB
         p: '2px 4px', 
         display: 'flex', 
         alignItems: 'center', 
-        minWidth: 400 
+        minWidth: 400,
+        height: '56px',
+        boxSizing: 'border-box'
       }}
     >
       <IconButton 
         onClick={leftIconButton.onClick}
+        color='primary'
         sx={{ p: '10px' }} 
         aria-label="menu"
       >

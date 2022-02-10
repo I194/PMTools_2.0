@@ -27,11 +27,9 @@ const PCAPage: FC = ({}) => {
           </div>
         </div>
         <div className={styles.instruments}>
-          <div className={styles.dataSettings}>
-            {
-              <ToolsPMD />
-            }
-          </div>
+          {
+            <ToolsPMD />
+          }
         </div>
       </div>
       <div className={styles.data}>

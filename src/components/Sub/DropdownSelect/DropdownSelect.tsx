@@ -20,19 +20,20 @@ const DropdownSelect: FC<IDropdownSelect> = ({ label, options, onOptionSelect })
   };
 
   return (
-    <div>
-      <FormControl variant="filled" sx={{ m: 1, minWidth: 200 }}>
-        <InputLabel>{ label }</InputLabel>
-        <Select
-          value={selectedOption}
-          onChange={handleSelect}
-        >
-          {
-            options.map((option) => <MenuItem value={option}>{ option }</MenuItem>)
-          }
-        </Select>
-      </FormControl>
-    </div>
+    <FormControl variant="filled" sx={{ minWidth: 200 }}>
+      <InputLabel>{ label }</InputLabel>
+      <Select
+        value={selectedOption}
+        onChange={handleSelect}
+        sx={{
+          margin: 0,
+        }}
+      >
+        {
+          options.map((option) => <MenuItem value={option}>{ option }</MenuItem>)
+        }
+      </Select>
+    </FormControl>
   );
 };
 
