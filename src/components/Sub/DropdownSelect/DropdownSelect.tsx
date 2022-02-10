@@ -30,7 +30,14 @@ const DropdownSelect: FC<IDropdownSelect> = ({ label, options, onOptionSelect })
         }}
       >
         {
-          options.map((option) => <MenuItem value={option}>{ option }</MenuItem>)
+          options.map((option, index) => (
+            <MenuItem 
+              value={option} 
+              key={index}
+            >
+              { option }
+            </MenuItem>
+          ))
         }
       </Select>
     </FormControl>

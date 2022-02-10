@@ -12,8 +12,8 @@ interface IInputSelect {
 
 const InputSelect: FC<IInputSelect> = ({ placeholder, leftIconButton, rightIconButtons }) => {
   
-  const createRightIconButton = (icon: ReactNode, onClick: () => void) => (
-    <>
+  const createRightIconButton = (icon: ReactNode, onClick: () => void, index: number) => (
+    <div key={index}>
       <Divider sx={{ height: '80%', mr: 0.5, ml: 0.5 }} orientation="vertical" />
       <IconButton 
         onClick={onClick}
@@ -22,7 +22,7 @@ const InputSelect: FC<IInputSelect> = ({ placeholder, leftIconButton, rightIconB
       >
         { icon }
       </IconButton>
-    </>
+    </div>
   );
 
   return (
@@ -52,8 +52,8 @@ const InputSelect: FC<IInputSelect> = ({ placeholder, leftIconButton, rightIconB
       />
       {
         rightIconButtons && 
-        rightIconButtons.map((iconButton) => {
-          return createRightIconButton(iconButton.icon, iconButton.onClick);
+        rightIconButtons.map((iconButton, index) => {
+          return createRightIconButton(iconButton.icon, iconButton.onClick, index);
         })
       }
     </Paper>

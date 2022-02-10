@@ -44,13 +44,13 @@ const Ticks: FC<ITicks> = ({
       {
         positionsAlongAxis.map((posAA, index) => {
           return (
-            <>
+            <g key={index}>
               {
                 labels 
                   ? <text
                       x={axis === 'x' ? posAA : zero + positionsAcrossAxis['outer'].x1 * 2}
                       y={axis === 'y' ? posAA + 5 : zero + positionsAcrossAxis['outer'].y2 * 4}
-                      text-anchor={axis === 'y' ? 'end' : 'middle'}
+                      textAnchor={axis === 'y' ? 'end' : 'middle'}
                     > 
                       {labels[index]}
                     </text>
@@ -81,7 +81,7 @@ const Ticks: FC<ITicks> = ({
                     />
                   : null
               }
-            </>
+            </g>
           )
         })
       }
