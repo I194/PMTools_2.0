@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
 import styles from './MainPage.module.scss';
+import { ZijdGraph } from '../../components/Graph';
 
 const MainPage: FC = ({}) => {
   return (
     <div className={styles.mainPage}>
-      test
+      <ZijdGraph graphId='zijd'/>
     </div>
   )
 }

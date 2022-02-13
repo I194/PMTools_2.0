@@ -18,16 +18,16 @@ const MouseSelection: FC<MouseSelectionProps> = ({
     eventsElement,
     onSelectionChange,
     onSelectionStart: () => {
-      console.log('OnSelectionStart');
     },
     onSelectionEnd: () => {
-      console.log('OnSelectionEnd');
     },
     selectionProps: {
       style: {
         border: '2px dashed purple',
         borderRadius: 2,
         opacity: 0.5,
+        translate: '500px 500px',
+        position: 'absolute'
       },
     },
   });

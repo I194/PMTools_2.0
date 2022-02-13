@@ -62,7 +62,6 @@ const SelectableGraph: FC<ISelectableGraph> = ({
           );
         }
       });
-      console.log(nodesDuplicated, indexesToSelect)
       setSelectedIndexes(indexesToSelect);
     }, [selectableNodesBoxes],
   );
@@ -74,8 +73,8 @@ const SelectableGraph: FC<ISelectableGraph> = ({
     if (timesClicked === 2) {
       setSelectedIndexes([]);
     }
-  }
-  
+  };
+
   return (
     <>
       <svg

@@ -9,7 +9,7 @@ export interface ITooltip {
 }
 
 const Tooltip: FC<ITooltip> = ({ position, isVisible, dot,  }) => {
-
+  console.log(position)
   return createPortal(
     (
       <>
@@ -19,7 +19,8 @@ const Tooltip: FC<ITooltip> = ({ position, isVisible, dot,  }) => {
             className={styles.tooltip} 
             style={{
               left: position.left + 24, 
-              top: position.top - 24
+              top: position.top - 24,
+              position: 'absolute'
             }}
           >
             <span>{dot.id}</span>
