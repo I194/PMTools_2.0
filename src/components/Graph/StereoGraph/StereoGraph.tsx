@@ -5,7 +5,12 @@ import { SelectableGraph, GraphSymbols, Unit} from "../../Sub/Graphs";
 import { dirToCartesian2D } from "../../../utils/graphs/dirToCartesian";
 import AxesAndData from "./AxesAndData";
 
-const StereoGraph: FC<IGraph> = ({ graphId }) => {
+interface IStereoGraph extends IGraph {
+  width: number;
+  height: number;
+}
+
+const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height }) => {
 
   // ToDo: 
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
@@ -22,10 +27,7 @@ const StereoGraph: FC<IGraph> = ({ graphId }) => {
     [0, 0], [-10, 0], [-20, 0], [-30, 0], [-40, 0],
   ]; // // "x" is Inclination, "y" is Declination
 
-  const width = 300;
-  const height = 300;
-
-  const graphAreaMargin = 50;
+  const graphAreaMargin = 40;
   const viewWidth = width + graphAreaMargin * 2;
   const viewHeight = height + graphAreaMargin * 2;
 

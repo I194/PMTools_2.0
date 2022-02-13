@@ -4,7 +4,14 @@ import { IGraph } from "../../../utils/GlobalTypes";
 import { SelectableGraph, GraphSymbols, Unit} from "../../Sub/Graphs";
 import AxesAndData from "./AxesAndData";
 
-const MagGraph: FC<IGraph> = ({ graphId }) => {
+
+interface IMagGraph extends IGraph {
+  width: number;
+  height: number;
+}
+
+
+const MagGraph: FC<IMagGraph> = ({ graphId, width, height }) => {
 
   // ToDo: 
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
@@ -25,10 +32,7 @@ const MagGraph: FC<IGraph> = ({ graphId }) => {
     0, 100, 250, 300, 350, 400, 450, 500, 540, 570, 590
   ];
 
-  const width = 300;
-  const height = 300;
-
-  const graphAreaMargin = 50;
+  const graphAreaMargin = 40;
   const viewWidth = width + graphAreaMargin * 2;
   const viewHeight = height + graphAreaMargin * 2;
 

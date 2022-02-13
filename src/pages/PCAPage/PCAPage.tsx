@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
 import { DataTablePMD, MetaDataTablePMD, ToolsPMD } from '../../components/Main';
 import { ZijdGraph, StereoGraph, MagGraph} from '../../components/Graph';
@@ -9,12 +9,31 @@ const PCAPage: FC = ({}) => {
   const disptach = useAppDispatch();
   const files = useAppSelector(state => state.filesReducer.treatmentFiles);
   const { treatmentData, loading } = useAppSelector(state => state.parsedDataReducer);
+  const graphLargeRef = useRef<HTMLDivElement>(null);
+  const graphSmallTopRef = useRef<HTMLDivElement>(null);
+  const graphLargeBotRef = useRef<HTMLDivElement>(null);
+
+  const [largeGraphSize, setLargeGraphSize] = useState<number>(300);
+  const [smallGraphSize, setSmallGraphSize] = useState<number>(300);
 
   useEffect(() => {
     if (files && !treatmentData) disptach(filesToData({files, format: 'pmd'}));
   }, [files]);
 
-  console.log(treatmentData);
+  useEffect(() => {
+    const largeGraphWidth = graphLargeRef.current?.offsetWidth;
+    const largeGraphHeight = graphLargeRef.current?.offsetHeight;
+    if (largeGraphWidth && largeGraphHeight) {
+      const minBoxSize = Math.min(largeGraphWidth, largeGraphHeight);
+      setLargeGraphSize(minBoxSize - 112);
+    };
+    const smallGraphWidth = graphSmallTopRef.current?.offsetWidth;
+    const smallGraphHeight = graphSmallTopRef.current?.offsetHeight;
+    if (smallGraphWidth && smallGraphHeight) {
+      const minBoxSize = Math.min(smallGraphWidth, smallGraphHeight);
+      setSmallGraphSize(minBoxSize - 80);
+    };
+  }, [graphLargeRef.current, graphSmallTopRef.current]);
 
   return (
     <>
@@ -46,15 +65,27 @@ const PCAPage: FC = ({}) => {
           </div>
         </div>
         <div className={styles.graphs}>
-          <div className={styles.graphLarge}>
-            <ZijdGraph graphId='zijd'/>
+          <div className={styles.graphLarge} ref={graphLargeRef}>
+            <ZijdGraph 
+              graphId='zijd'
+              width={largeGraphSize}
+              height={largeGraphSize} 
+            />
           </div>
           <div className={styles.column}>
-            <div className={styles.graphSmall}>
-              <StereoGraph graphId='stereo'/>
+            <div className={styles.graphSmall} ref={graphSmallTopRef}>
+              <StereoGraph 
+                graphId='stereo' 
+                width={smallGraphSize}
+                height={smallGraphSize}
+              />
             </div>
-            <div className={styles.graphSmall}>
-              <MagGraph graphId='mag'/>
+            <div className={styles.graphSmall} ref={graphLargeBotRef}>
+              <MagGraph 
+                graphId='mag' 
+                width={smallGraphSize}
+                height={smallGraphSize}
+              />
             </div>
           </div>
         </div>

@@ -13,11 +13,13 @@ interface LineCoords {
 
 interface IZijdGraph extends IGraph {
   pcaLines?: [LineCoords, LineCoords];
+  width: number;
+  height: number;
   // horizontalProjectionData: Array<[number, number]>;
   // verticalProjectionData: Array<[number, number]>;
 }
 
-const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines }) => {
+const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height }) => {
 
   // ToDo: 
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
@@ -33,10 +35,7 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines }) => {
     [20, 170], [25, 190], [50, 210], [39, 132], [110, 158], [118, 169], [134, 149], [150, 150]
   ]; // "x" is Y, "y" is Z
 
-  const width = 300;
-  const height = 300;
-
-  const graphAreaMargin = 50;
+  const graphAreaMargin = 56;
   const viewWidth = width + graphAreaMargin * 2;
   const viewHeight = height + graphAreaMargin * 2;
 
@@ -75,7 +74,7 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines }) => {
       <SelectableGraph
         graphId={graphId}
         width={viewWidth}
-        height={viewHeight}
+        height={viewWidth}
         selectableNodes={selectableNodes}
         selectedIndexes={selectedIndexes}
         setSelectedIndexes={setSelectedIndexes}
