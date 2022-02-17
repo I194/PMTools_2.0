@@ -3,6 +3,7 @@ import styles from "./ZijdGraph.module.scss";
 import { IGraph } from "../../../utils/GlobalTypes";
 import { SelectableGraph, GraphSymbols, Unit} from "../../Sub/Graphs";
 import AxesAndData from "./AxesAndData";
+import { IPmdData } from "../../../utils/files/fileManipulations";
 
 interface LineCoords {
   x1: number;
@@ -15,11 +16,10 @@ interface IZijdGraph extends IGraph {
   pcaLines?: [LineCoords, LineCoords];
   width: number;
   height: number;
-  // horizontalProjectionData: Array<[number, number]>;
-  // verticalProjectionData: Array<[number, number]>;
+  data: IPmdData['steps'];
 }
 
-const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height }) => {
+const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) => {
 
   // ToDo: 
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
@@ -28,12 +28,19 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height }) => {
   const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
   const [selectableNodes, setSelectableNodes] = useState<ChildNode[]>([]);
 
-  const horizontalProjectionData: Array<[number, number]> = [
-    [20, 20], [25, 70], [50, 40], [39, 72], [110, 119], [118, 129], [134, 141], [150, 150]
-  ]; // "x" is Y, "y" is X
-  const verticalProjectionData: Array<[number, number]> = [
-    [20, 170], [25, 190], [50, 210], [39, 132], [110, 158], [118, 169], [134, 149], [150, 150]
-  ]; // "x" is Y, "y" is Z
+  // const horizontalProjectionData: Array<[number, number]> = [
+  //   [20, 20], [25, 70], [50, 40], [39, 72], [110, 119], [118, 129], [134, 141], [150, 150]
+  // ]; // "x" is Y, "y" is X
+  // const verticalProjectionData: Array<[number, number]> = [
+  //   [20, 170], [25, 190], [50, 210], [39, 132], [110, 158], [118, 169], [134, 149], [150, 150]
+  // ]; // "x" is Y, "y" is Z
+
+  const horizontalProjectionData: Array<[number, number]> = data.map((step) => {
+    return [step.y, step.x]
+  });
+  const verticalProjectionData: Array<[number, number]> = data.map((step) => {
+    return [step.y, step.z]
+  });
 
   const graphAreaMargin = 56;
   const viewWidth = width + graphAreaMargin * 2;

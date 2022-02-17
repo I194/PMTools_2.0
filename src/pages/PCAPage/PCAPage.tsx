@@ -4,6 +4,7 @@ import { DataTablePMD, MetaDataTablePMD, ToolsPMD } from '../../components/Main'
 import { ZijdGraph, StereoGraph, MagGraph} from '../../components/Graph';
 import { filesToData } from '../../services/axios/filesAndData';
 import styles from './PCAPage.module.scss';
+import { IPmdData } from '../../utils/files/fileManipulations';
 
 const PCAPage: FC = ({}) => {
   const disptach = useAppDispatch();
@@ -15,10 +16,17 @@ const PCAPage: FC = ({}) => {
 
   const [largeGraphSize, setLargeGraphSize] = useState<number>(300);
   const [smallGraphSize, setSmallGraphSize] = useState<number>(300);
+  const [steps, setSteps] = useState<IPmdData['steps'] | null>(null);
 
   useEffect(() => {
     if (files && !treatmentData) disptach(filesToData({files, format: 'pmd'}));
   }, [files]);
+
+  useEffect(() => {
+    if (treatmentData && treatmentData.length > 0) {
+      setSteps(treatmentData[0].steps);
+    } else setSteps(null);
+  })
 
   useEffect(() => {
     const largeGraphWidth = graphLargeRef.current?.offsetWidth;
@@ -66,11 +74,15 @@ const PCAPage: FC = ({}) => {
         </div>
         <div className={styles.graphs}>
           <div className={styles.graphLarge} ref={graphLargeRef}>
-            <ZijdGraph 
-              graphId='zijd'
-              width={largeGraphSize}
-              height={largeGraphSize} 
-            />
+            {
+              steps && 
+              <ZijdGraph 
+                graphId='zijd'
+                width={largeGraphSize}
+                height={largeGraphSize} 
+                data={steps}
+              />
+            }
           </div>
           <div className={styles.column}>
             <div className={styles.graphSmall} ref={graphSmallTopRef}>
