@@ -40,6 +40,7 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
 
   const horizontalProjectionData: Array<[number, number]> = res.horizontalProjectionData;
   const verticalProjectionData: Array<[number, number]> = res.verticalProjectionData;
+  const directionalData: Array<[number, number]> = data.map((step) => [step.Dgeo, step.Igeo]); 
 
   const graphAreaMargin = 56;
   const viewWidth = width + graphAreaMargin * 2;
@@ -98,6 +99,7 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
             unitCount={unitCount}
             horizontalProjectionData={horizontalProjectionData}
             verticalProjectionData={verticalProjectionData}
+            directionalData={directionalData}
             selectedIndexes={selectedIndexes}
             handleDotClick={handleDotClick}
           />

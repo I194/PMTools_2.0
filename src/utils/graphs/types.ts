@@ -1,0 +1,1 @@
+export type Reference = 'specimen' | 'geographic' | 'stratigraphic';

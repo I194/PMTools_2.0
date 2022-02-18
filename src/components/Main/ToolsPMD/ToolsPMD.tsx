@@ -4,18 +4,46 @@ import DropdownSelect from '../../Sub/DropdownSelect/DropdownSelect';
 import InputSelect from '../../Sub/InputSelect/InputSelect';
 import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import { Typography } from '@mui/material';
+import { Reference } from '../../../utils/graphs/types';
+import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
+import { setReference } from '../../../services/reducers/pcaPage';
+
+const labelToReference = (label: string) => {
+  if (label === 'Образец') return 'specimen';
+  if (label === 'Стратиграфическая') return 'stratigraphic';
+  return 'geographic';
+};
+
+const referenceToLabel = (reference: Reference) => {
+  if (reference === 'specimen') return 'Образец';
+  if (reference === 'stratigraphic') return 'Стратиграфическая';
+  return 'Географическая';
+}
 
 const ToolsPMD: FC = ({}) => {
 
-  const [coordinateSystem, setCoordinateSystem] = useState('');
+  const dispatch = useAppDispatch();
+
+  const { reference } = useAppSelector(state => state.pcaPageReducer); 
+
+  const [coordinateSystem, setCoordinateSystem] = useState<Reference>('geographic');
   const [stepsFilter, setStepsFilter] = useState(null);
+
+  const handleReferenceSelect = (option: string) => {
+    dispatch(setReference(labelToReference(option)));
+  };
+
+  useEffect(() => {
+    setCoordinateSystem(reference);
+  }, [reference]);
 
   return (
     <div className={styles.dataSettings}>
       <DropdownSelect 
         label={'Система координат'}
         options={['Образец', 'Географическая', 'Стратиграфическая']}
-        onOptionSelect={() => null}
+        defaultValue='Географическая'
+        onOptionSelect={handleReferenceSelect}
       />
       <InputSelect 
         placeholder={'Введите шаги'}

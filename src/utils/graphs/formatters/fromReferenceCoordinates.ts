@@ -1,7 +1,6 @@
 import { IPmdData } from "../../files/fileManipulations";
 import Coordinates from "../classes/Coordinates";
-
-type Reference = 'specimen' | 'geographic' | 'stratigraphic';
+import { Reference } from "../types";
 
 const fromReferenceCoordinates = (
   reference: Reference, 

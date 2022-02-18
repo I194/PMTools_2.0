@@ -7,16 +7,17 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 interface IDropdownSelect {
   label: string;
   options: Array<string>;
-  onOptionSelect: () => void;
+  onOptionSelect: (option: string) => void;
+  defaultValue?: string;
 }
 
-const DropdownSelect: FC<IDropdownSelect> = ({ label, options, onOptionSelect }) => {
+const DropdownSelect: FC<IDropdownSelect> = ({ label, options, onOptionSelect, defaultValue }) => {
 
-  const [selectedOption, setSelectedOption] = useState('');
+  const [selectedOption, setSelectedOption] = useState(defaultValue || '');
 
   const handleSelect = (event: SelectChangeEvent) => {
     setSelectedOption(event.target.value);
-    onOptionSelect();
+    onOptionSelect(event.target.value);
   };
 
   return (

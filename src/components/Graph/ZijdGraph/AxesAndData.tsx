@@ -12,6 +12,7 @@ interface IAxesAndData {
   unitCount: number;
   horizontalProjectionData: Array<[number, number]>;
   verticalProjectionData: Array<[number, number]>;
+  directionalData: Array<[number, number]>;
   selectedIndexes: Array<number>;
   handleDotClick: (index: number) => void;
 }
@@ -19,7 +20,9 @@ interface IAxesAndData {
 const AxesAndData: FC<IAxesAndData> = ({ 
   graphId, graphAreaMargin,
   zeroX, zeroY, width, height, unit, unitCount,
-  horizontalProjectionData, verticalProjectionData,
+  horizontalProjectionData,
+  verticalProjectionData,
+  directionalData,
   selectedIndexes,
   handleDotClick
 }) => {
@@ -63,6 +66,7 @@ const AxesAndData: FC<IAxesAndData> = ({
           graphId={graphId}
           type='h'
           data={horizontalProjectionData}
+          directionalData={directionalData}
           selectedIndexes={selectedIndexes}
           handleDotClick={handleDotClick}
           dotFillColor='black'
@@ -71,6 +75,7 @@ const AxesAndData: FC<IAxesAndData> = ({
           graphId={graphId}
           type='v'
           data={verticalProjectionData}
+          directionalData={directionalData}
           selectedIndexes={selectedIndexes}
           handleDotClick={handleDotClick}
           dotFillColor='white'
