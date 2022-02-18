@@ -67,8 +67,7 @@ class Coordinates {
   };
 
   toUnit = () => {
-    const len = this.length;
-    return new Coordinates(this.x / len, this.y / len, this.z / len);
+    return new Coordinates(this.x / this.length, this.y / this.length, this.z / this.length);
   };
 
   toArray = () => {

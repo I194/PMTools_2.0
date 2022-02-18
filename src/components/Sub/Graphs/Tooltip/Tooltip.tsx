@@ -9,7 +9,6 @@ export interface ITooltip {
 }
 
 const Tooltip: FC<ITooltip> = ({ position, isVisible, dot,  }) => {
-  console.log(position)
   return createPortal(
     (
       <>

@@ -8,9 +8,11 @@ const dataToZijd = (data: IPmdData, graphSize: number, reference: Reference) => 
 
   const steps = data.steps;
 
+  const factor = Math.min(...steps.map((step) => new Coordinates(step.x, step.y, step.z).length));
+
   const coords = steps.map((step) => {
     const xyz = new Coordinates(step.x, step.y, step.z);
-    const normalizedCoords = xyz.toUnit().multiplyAll(graphSize);
+    const normalizedCoords = xyz.multiplyAll((graphSize / 5) / factor); // 5 is the count of ticks on each axis 1/2 side
     const inReferenceCoords = toReferenceCoordinates(reference, data.metadata, normalizedCoords);
     return inReferenceCoords;
   });
@@ -20,6 +22,8 @@ const dataToZijd = (data: IPmdData, graphSize: number, reference: Reference) => 
   const directionalData: Array<[number, number]> = []; // dec, inc
 
   coords.forEach((step) => {
+
+    console.log(step.x, step.y, step.z)
     const horX = step.x + graphSize;
     const horY = step.y + graphSize;
     const verX = step.x + graphSize;
