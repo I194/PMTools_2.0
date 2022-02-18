@@ -8,11 +8,11 @@ interface IObjectKeys {
 export interface IPmdData extends IObjectKeys {
   metadata: {
     name: string;
-    a: number;
-    b: number;
-    s: number;
-    d: number;
-    v: number;
+    a: number; // core azimuth
+    b: number; // core dip
+    s: number; // bedding strike
+    d: number; // bedding dip
+    v: number; // volume
   };
   steps: {
     step: string;
