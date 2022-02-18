@@ -21,7 +21,7 @@ const getRotationMatrix = (lambda: number, phi: number) => {
   return rotationMatrix;
 }
 
-const getRotationMatrixTransposed = (lambda, phi) => {
+const getRotationMatrixTransposed = (lambda: number, phi: number) => {
   // Function getRotationMatrixTransposed
   // Returns the reversed rotation matrix (transpose)
 
@@ -73,7 +73,7 @@ class Coordinates {
     return new Array(this.x, this.y, this.z);
   };
 
-  toVector = (vectorType) => {
+  toVector = (vectorType: any) => {
     // returns cartesian coordinates as a direction vector on sphere
     // represented as pair [declination, inclination]
 
@@ -96,28 +96,28 @@ class Coordinates {
     this.x += coordinates.x; 
     this.y += coordinates.y;
     this.z += coordinates.z;
-    return this.sum;
   };
 
   substract = (coordinates: Coordinates) => {
     this.x -= coordinates.x; 
     this.y -= coordinates.y;
     this.z -= coordinates.z;
-    return this.sum;
   };
 
   multiply = (coordinates: Coordinates) => {
     this.x *= coordinates.x; 
     this.y *= coordinates.y;
     this.z *= coordinates.z;
-    return this.sum;
   };
+
+  multiplyAll = (factor: number) => {
+    return new Coordinates(this.x * factor, this.y * factor, this.z * factor);
+  }
 
   divide = (coordinates: Coordinates) => {
     this.x /= coordinates.x; 
     this.y /= coordinates.y;
     this.z /= coordinates.z;
-    return this.sum;
   };
 
   dot = (coordinates: Coordinates) => {
@@ -134,9 +134,7 @@ class Coordinates {
   };
 
   reflect = () => {
-    this.x = -this.x;
-    this.y = -this.y;
-    this.z = -this.z;
+    return new Coordinates(-this.x, -this.y, -this.z);
   };
 
   angle = (coordinates: Coordinates) => {
@@ -191,7 +189,7 @@ class Coordinates {
     return this.rotate(rotationMatrix);
   };
 
-  correctBedding = (strike, plunge) => {
+  correctBedding = (strike: number, plunge: number) => {
     const dipDirection = strike + 90;
 
     // We can subtract the dip direction from the declination because

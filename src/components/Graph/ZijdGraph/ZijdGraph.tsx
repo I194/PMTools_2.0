@@ -4,6 +4,7 @@ import { IGraph } from "../../../utils/GlobalTypes";
 import { SelectableGraph, GraphSymbols, Unit} from "../../Sub/Graphs";
 import AxesAndData from "./AxesAndData";
 import { IPmdData } from "../../../utils/files/fileManipulations";
+import dataToZijd from "../../../utils/graphs/formatters/dataToZijd";
 
 interface LineCoords {
   x1: number;
@@ -34,13 +35,11 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
   // const verticalProjectionData: Array<[number, number]> = [
   //   [20, 170], [25, 190], [50, 210], [39, 132], [110, 158], [118, 169], [134, 149], [150, 150]
   // ]; // "x" is Y, "y" is Z
+  const res = dataToZijd(data, width / 2);
+  console.log(res)
 
-  const horizontalProjectionData: Array<[number, number]> = data.map((step) => {
-    return [step.y, step.x]
-  });
-  const verticalProjectionData: Array<[number, number]> = data.map((step) => {
-    return [step.y, step.z]
-  });
+  const horizontalProjectionData: Array<[number, number]> = res.horizontalProjectionData;
+  const verticalProjectionData: Array<[number, number]> = res.verticalProjectionData;
 
   const graphAreaMargin = 56;
   const viewWidth = width + graphAreaMargin * 2;
