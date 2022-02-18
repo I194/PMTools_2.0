@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import styles from "./ZijdGraph.module.scss";
+import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
 import { IGraph } from "../../../utils/GlobalTypes";
 import { SelectableGraph, GraphSymbols, Unit} from "../../Sub/Graphs";
 import AxesAndData from "./AxesAndData";
@@ -17,7 +18,7 @@ interface IZijdGraph extends IGraph {
   pcaLines?: [LineCoords, LineCoords];
   width: number;
   height: number;
-  data: IPmdData['steps'];
+  data: IPmdData;
 }
 
 const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) => {
@@ -26,21 +27,19 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
   // 2. zoom&pan
 
+  const dispatch = useAppDispatch();
+
+  const { reference } = useAppSelector(state => state.pcaPageReducer); 
+
   const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
   const [selectableNodes, setSelectableNodes] = useState<ChildNode[]>([]);
 
-  // const horizontalProjectionData: Array<[number, number]> = [
-  //   [20, 20], [25, 70], [50, 40], [39, 72], [110, 119], [118, 129], [134, 141], [150, 150]
-  // ]; // "x" is Y, "y" is X
-  // const verticalProjectionData: Array<[number, number]> = [
-  //   [20, 170], [25, 190], [50, 210], [39, 132], [110, 158], [118, 169], [134, 149], [150, 150]
-  // ]; // "x" is Y, "y" is Z
-  const res = dataToZijd(data, width / 2);
+  const res = dataToZijd(data, width / 2, reference);
   console.log(res)
 
   const horizontalProjectionData: Array<[number, number]> = res.horizontalProjectionData;
   const verticalProjectionData: Array<[number, number]> = res.verticalProjectionData;
-  const directionalData: Array<[number, number]> = data.map((step) => [step.Dgeo, step.Igeo]); 
+  const directionalData: Array<[number, number]> = res.directionalData; 
 
   const graphAreaMargin = 56;
   const viewWidth = width + graphAreaMargin * 2;

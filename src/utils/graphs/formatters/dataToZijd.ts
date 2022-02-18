@@ -1,25 +1,37 @@
 import { IPmdData } from "../../../utils/files/fileManipulations";
 import Coordinates from "../classes/Coordinates";
+import Direction from "../classes/Direction";
+import { Reference } from "../types";
+import toReferenceCoordinates from "./toReferenceCoordinates"
 
-const dataToZijd = (data: IPmdData['steps'], graphSize: number) => {
+const dataToZijd = (data: IPmdData, graphSize: number, reference: Reference) => {
 
-  const normalizedCoords = data.map((step) => {
+  const steps = data.steps;
+
+  const coords = steps.map((step) => {
     const xyz = new Coordinates(step.x, step.y, step.z);
-    return xyz.toUnit().multiplyAll(graphSize);
+    const normalizedCoords = xyz.toUnit().multiplyAll(graphSize);
+    const inReferenceCoords = toReferenceCoordinates(reference, data.metadata, normalizedCoords);
+    return inReferenceCoords;
   });
 
-  const horizontalProjectionData: Array<[number, number]> = []; // "x" is Y, "y" is X
+  const horizontalProjectionData: Array<[number, number]> = []; // "x" is Y, "y" is X 
   const verticalProjectionData: Array<[number, number]> = []; // "x" is Y, "y" is Z
+  const directionalData: Array<[number, number]> = []; // dec, inc
 
-  // const horizontalProjectionData: Array<[number, number]> = []; // "x" is X, "y" is -Y
-  // const verticalProjectionData: Array<[number, number]> = []; // "x" is X, "y" is -Z
+  coords.forEach((step) => {
+    const horX = step.x + graphSize;
+    const horY = step.y + graphSize;
+    const verX = step.x + graphSize;
+    const verZ = step.z + graphSize;
+    const direction = step.toDirection();
 
-  normalizedCoords.forEach((coords) => {
-    horizontalProjectionData.push([coords.x + graphSize, coords.y + graphSize]);
-    verticalProjectionData.push([coords.x + graphSize, coords.z + graphSize]);
+    horizontalProjectionData.push([horX, horY]);
+    verticalProjectionData.push([verX, verZ]);
+    directionalData.push([direction.declination, direction.inclination]);
   });
   
-  return {horizontalProjectionData, verticalProjectionData};
+  return {horizontalProjectionData, verticalProjectionData, directionalData};
 
 };
 

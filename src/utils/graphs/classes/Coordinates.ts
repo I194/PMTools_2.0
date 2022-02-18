@@ -1,3 +1,5 @@
+import Direction from "./Direction";
+
 type RotationMatrix = [
   [number, number, number],
   [number, number, number],
@@ -73,7 +75,7 @@ class Coordinates {
     return new Array(this.x, this.y, this.z);
   };
 
-  toVector = (vectorType: any) => {
+  toDirection = () => {
     // returns cartesian coordinates as a direction vector on sphere
     // represented as pair [declination, inclination]
 
@@ -85,7 +87,7 @@ class Coordinates {
       dec += 2 * Math.PI;
     };
 
-    return new vectorType(
+    return new Direction(
       dec * Coordinates.RADIANS,
       inc * Coordinates.RADIANS,
       this.length

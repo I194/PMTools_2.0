@@ -75,12 +75,12 @@ const PCAPage: FC = ({}) => {
         <div className={styles.graphs}>
           <div className={styles.graphLarge} ref={graphLargeRef}>
             {
-              steps && 
+              treatmentData && 
               <ZijdGraph 
                 graphId='zijd'
                 width={largeGraphSize}
                 height={largeGraphSize} 
-                data={steps}
+                data={treatmentData[0]}
               />
             }
           </div>
