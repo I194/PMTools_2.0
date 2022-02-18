@@ -97,12 +97,20 @@ class Coordinates {
     this.y += coordinates.y;
     this.z += coordinates.z;
   };
+  
+  addAll = (factor: number) => {
+    return new Coordinates(this.x + factor, this.y + factor, this.z + factor);
+  }
 
   substract = (coordinates: Coordinates) => {
     this.x -= coordinates.x; 
     this.y -= coordinates.y;
     this.z -= coordinates.z;
   };
+
+  substractAll = (factor: number) => {
+    return new Coordinates(this.x - factor, this.y - factor, this.z - factor);
+  }
 
   multiply = (coordinates: Coordinates) => {
     this.x *= coordinates.x; 
@@ -120,6 +128,10 @@ class Coordinates {
     this.z /= coordinates.z;
   };
 
+  divideAll = (factor: number) => {
+    return new Coordinates(this.x / factor, this.y / factor, this.z / factor);
+  }
+
   dot = (coordinates: Coordinates) => {
     return this.x * coordinates.x + this.y * coordinates.y + this.z * coordinates.z;
   };
@@ -128,9 +140,7 @@ class Coordinates {
     const newX = this.y * coordinates.z - coordinates.y * this.z;
     const newY = -this.x * coordinates.z + coordinates.x * this.z;
     const newZ = this.x * coordinates.y - coordinates.x * this.y;
-    this.x = newX;
-    this.y = newY;
-    this.z = newZ;
+    return new Coordinates(newX, newY, newZ);
   };
 
   reflect = () => {
