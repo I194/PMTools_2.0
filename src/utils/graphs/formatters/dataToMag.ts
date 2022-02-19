@@ -3,7 +3,7 @@ import Coordinates from "../classes/Coordinates";
 import { Reference } from "../types";
 import toReferenceCoordinates from "./toReferenceCoordinates";
 
-const dataToMag = (data: IPmdData, graphSize: number, reference: Reference) => {
+const dataToMag = (data: IPmdData, graphSize: number) => {
 
   const steps = data.steps;
   const mag: Array<number> = [];

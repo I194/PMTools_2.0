@@ -23,12 +23,10 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
   // 3. починить отображение цвета точек - проблема сейчас в том, что не считывается корректно inc (считывается y)
   //    то есть вообще надо уже начать работать с нормальной моделью данных, а не с выдуманным массивом [][]
 
-  const { reference } = useAppSelector(state => state.pcaPageReducer); 
-
   const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
   const [selectableNodes, setSelectableNodes] = useState<ChildNode[]>([]);
 
-  const { xyData, stepLabels, maxMag } = dataToMag(data, width, reference);
+  const { xyData, stepLabels, maxMag } = dataToMag(data, width);
 
   const demagnetizationType = data.steps[0].demagType;
 
