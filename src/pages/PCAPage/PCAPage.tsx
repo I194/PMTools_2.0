@@ -16,7 +16,7 @@ const PCAPage: FC = ({}) => {
 
   const [largeGraphSize, setLargeGraphSize] = useState<number>(300);
   const [smallGraphSize, setSmallGraphSize] = useState<number>(300);
-  const [steps, setSteps] = useState<IPmdData['steps'] | null>(null);
+  const [dataToShow, setDataToShow] = useState<IPmdData | null>(null);
 
   useEffect(() => {
     if (files && !treatmentData) disptach(filesToData({files, format: 'pmd'}));
@@ -24,9 +24,16 @@ const PCAPage: FC = ({}) => {
 
   useEffect(() => {
     if (treatmentData && treatmentData.length > 0) {
-      setSteps(treatmentData[0].steps);
-    } else setSteps(null);
-  })
+      const modifiedTreatmentData: IPmdData = {
+        ...treatmentData[0],
+        metadata: {
+          ...treatmentData[0].metadata,
+          b: 90 - treatmentData[0].metadata.b // core hade is measured, we use the plunge (90 - hade)
+        }
+      };
+      setDataToShow(modifiedTreatmentData);
+    } else setDataToShow(null);
+  }, [treatmentData])
 
   useEffect(() => {
     const largeGraphWidth = graphLargeRef.current?.offsetWidth;
@@ -49,8 +56,8 @@ const PCAPage: FC = ({}) => {
         <div className={styles.metadata}>
           <div className={styles.table}>
             {
-              treatmentData && 
-              <MetaDataTablePMD data={treatmentData[0].metadata}/>
+              dataToShow && 
+              <MetaDataTablePMD data={dataToShow.metadata}/>
             }
           </div>
         </div>
@@ -67,20 +74,20 @@ const PCAPage: FC = ({}) => {
           </div>
           <div className={styles.tableLarge}>
             {
-              treatmentData &&
-              <DataTablePMD data={treatmentData[0]}/>
+              dataToShow &&
+              <DataTablePMD data={dataToShow}/>
             }
           </div>
         </div>
         <div className={styles.graphs}>
           <div className={styles.graphLarge} ref={graphLargeRef}>
             {
-              treatmentData && 
+              dataToShow && 
               <ZijdGraph 
                 graphId='zijd'
                 width={largeGraphSize}
                 height={largeGraphSize} 
-                data={treatmentData[0]}
+                data={dataToShow}
               />
             }
           </div>

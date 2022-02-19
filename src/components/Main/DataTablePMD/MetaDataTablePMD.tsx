@@ -12,7 +12,7 @@ const MetaDataTablePMD: FC<IMetaDataTablePMD> = ({ data }) => {
   const columns: GridColDef[] = [
     { field: 'name', headerName: 'Name', type: 'string' },
     { field: 'a', headerName: 'Core Azimuth', type: 'string' },
-    { field: 'b', headerName: 'Core Dip', type: 'number' },
+    { field: 'b', headerName: 'Core Dip', description: 'Core hade is measured, we use the plunge (90 - hade)', type: 'number' },
     { field: 's', headerName: 'Bedding Strike', type: 'number' },
     { field: 'd', headerName: 'Bedding Dip', type: 'number' },
     { field: 'v', headerName: 'Volume', type: 'number' }
