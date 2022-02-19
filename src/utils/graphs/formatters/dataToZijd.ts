@@ -10,20 +10,21 @@ const dataToZijd = (data: IPmdData, graphSize: number, reference: Reference) => 
 
   const factor = Math.min(...steps.map((step) => new Coordinates(step.x, step.y, step.z).length));
 
-  const coords = steps.map((step) => {
+  const resizedCoords = steps.map((step) => {
     const xyz = new Coordinates(step.x, step.y, step.z);
-    const normalizedCoords = xyz.multiplyAll((graphSize / 5) / factor); // 5 is the count of ticks on each axis 1/2 side
-    const inReferenceCoords = toReferenceCoordinates(reference, data.metadata, normalizedCoords);
-    return inReferenceCoords;
+    const inReferenceCoords = toReferenceCoordinates(reference, data.metadata, xyz);
+    const normalizedCoords = inReferenceCoords.multiplyAll(1 / factor);
+    return normalizedCoords;
   });
+
+  const maxCoord = Math.max(...resizedCoords.map((step) => Math.max(Math.abs(step.x), Math.abs(step.y), Math.abs(step.z))));
+  const adjustedCoords = resizedCoords.map((coords) => coords.multiplyAll(graphSize / (maxCoord)));
 
   const horizontalProjectionData: Array<[number, number]> = []; // "x" is Y, "y" is X 
   const verticalProjectionData: Array<[number, number]> = []; // "x" is Y, "y" is Z
   const directionalData: Array<[number, number]> = []; // dec, inc
 
-  coords.forEach((step) => {
-
-    console.log(step.x, step.y, step.z)
+  adjustedCoords.forEach((step) => {
     const horX = step.x + graphSize;
     const horY = step.y + graphSize;
     const verX = step.x + graphSize;
