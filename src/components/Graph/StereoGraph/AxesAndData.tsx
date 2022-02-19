@@ -76,7 +76,7 @@ const AxesAndData: FC<IAxesAndData> = ({
         id={`${graphId}-data`}
         transform={
           `
-            translate(${150}, ${150})
+            translate(${width / 2}, ${width / 2})
           `
         }
       >

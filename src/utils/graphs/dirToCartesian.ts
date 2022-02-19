@@ -37,9 +37,9 @@ const dirToCartesian3D = (i: number, d: number, r: number) => {
   return {x, y, z};
 };
 
-const dirToCartesian2D = (inclination: number, declination: number, graphWidth: number) => {
+const dirToCartesian2D = (declination: number, inclination: number, graphSize: number) => {
   const theta = degreesToRadians(declination);
-  const radius = ((90 - Math.abs(inclination)) / 90) * (graphWidth / 2);
+  const radius = ((90 - Math.abs(inclination)) / 90) * graphSize;
   const x = +(radius * Math.cos(theta)).toFixed(2);
   const y = +(radius * Math.sin(theta)).toFixed(2);
   return {x, y};

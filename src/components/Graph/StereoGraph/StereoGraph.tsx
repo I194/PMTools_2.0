@@ -4,13 +4,17 @@ import { IGraph } from "../../../utils/GlobalTypes";
 import { SelectableGraph, GraphSymbols, Unit} from "../../Sub/Graphs";
 import { dirToCartesian2D } from "../../../utils/graphs/dirToCartesian";
 import AxesAndData from "./AxesAndData";
+import { IPmdData } from "../../../utils/files/fileManipulations";
+import { useAppSelector } from "../../../services/store/hooks";
+import dataToStereoPMD from "../../../utils/graphs/formatters/dataToStereoPMD";
 
 interface IStereoGraph extends IGraph {
   width: number;
   height: number;
+  data: IPmdData;
 }
 
-const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height }) => {
+const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
 
   // ToDo: 
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
@@ -18,14 +22,12 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height }) => {
   // 3. починить отображение цвета точек - проблема сейчас в том, что не считывается корректно inc (считывается y)
   //    то есть вообще надо уже начать работать с нормальной моделью данных, а не с выдуманным массивом [][]
 
+  const { reference } = useAppSelector(state => state.pcaPageReducer); 
+
   const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
   const [selectableNodes, setSelectableNodes] = useState<ChildNode[]>([]);
 
-  const directionalData: Array<[number, number]> = [
-    [50, 0], [10, 10], [20, 20], [30, 30], [40, 40], [50, 50], [60, 60], [70, 70], [80, 80], [90, 90],
-    [80, 270], [70, 270], [60, 270], [50, 270], [40, 270], [30, 270], [20, 270], [10, 270], [0, 270],
-    [0, 0], [-10, 0], [-20, 0], [-30, 0], [-40, 0],
-  ]; // // "x" is Inclination, "y" is Declination
+  const { directionalData, xyData } = dataToStereoPMD(data, width / 2, reference);
 
   const graphAreaMargin = 40;
   const viewWidth = width + graphAreaMargin * 2;
@@ -35,12 +37,6 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height }) => {
   const unitCount = 18;
   const zeroX = (width / 2);
   const zeroY = (height / 2);
-
-  const data: Array<[number, number]> = directionalData.map((di) => {
-    const xyz = dirToCartesian2D(di[0], di[1] - 90, width);
-    // console.log(xyz.x, xyz.y)
-    return [xyz.x, xyz.y];
-  })
 
   // selectableNodes - все точки на графике 
   useEffect(() => {
@@ -66,8 +62,6 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height }) => {
     return null;
   };
 
-  console.log("nodes:", selectableNodes)
-
   return (
     <>
       <SelectableGraph
@@ -89,7 +83,7 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height }) => {
             height={height}
             unit={unit}
             unitCount={unitCount}
-            data={data}
+            data={xyData}
             directionalData={directionalData}
             selectedIndexes={selectedIndexes}
             handleDotClick={handleDotClick}

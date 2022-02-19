@@ -29,8 +29,6 @@ class Direction {
   toCartesian = () => {
     const dec = this.declination / Direction.RADIANS;
     const inc = this.inclination / Direction.RADIANS;
-    console.log(dec, this.declination, inc, this.inclination, Direction.RADIANS)
-    console.log(Math.cos(dec), Math.sin(dec), Math.cos(inc), Math.sin(inc), this.length);
 
     const x = this.length * Math.cos(dec) * Math.cos(inc);
     const y = this.length * Math.sin(dec) * Math.cos(inc);

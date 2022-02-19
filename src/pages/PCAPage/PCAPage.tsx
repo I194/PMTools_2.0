@@ -93,11 +93,15 @@ const PCAPage: FC = ({}) => {
           </div>
           <div className={styles.column}>
             <div className={styles.graphSmall} ref={graphSmallTopRef}>
+            {
+              dataToShow && 
               <StereoGraph 
                 graphId='stereo' 
                 width={smallGraphSize}
                 height={smallGraphSize}
+                data={dataToShow}
               />
+            }
             </div>
             <div className={styles.graphSmall} ref={graphLargeBotRef}>
               <MagGraph 
