@@ -26,7 +26,7 @@ export interface IPmdData extends IObjectKeys {
     Istrat: number;
     a95: number;
     comment: string;
-    demagType: string | undefined;
+    demagType: 'thermal' | 'alternating field' | undefined;
   }[];
   format: string;
   created: string;
@@ -46,7 +46,7 @@ export interface IDirData extends IObjectKeys {
     mad: number;
     k: number;
     comment: string;
-    demagType: string | undefined;
+    demagType: 'thermal' | 'alternating field' | undefined;
   }[];
   format: string;
   created: string;

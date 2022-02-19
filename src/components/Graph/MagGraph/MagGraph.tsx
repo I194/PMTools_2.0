@@ -36,7 +36,7 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height }) => {
   const viewWidth = width + graphAreaMargin * 2;
   const viewHeight = height + graphAreaMargin * 2;
 
-  const unitCountX = Math.ceil(Math.max(...stepValues) / 100);
+  const unitCountX = 6;
   const unitCountY = 10;
   const unitX = (width / unitCountX);
   const unitY = (height / unitCountY);
@@ -104,7 +104,6 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height }) => {
             unitCountY={unitCountY}
             data={data}
             maxMAG={maxMag}
-            maxStep={maxStep}
             demagnetizationType={demagnetizationType}
             selectedIndexes={selectedIndexes}
             handleDotClick={handleDotClick}

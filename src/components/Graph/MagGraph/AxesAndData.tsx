@@ -14,7 +14,6 @@ interface IAxesAndData {
   unitCountY: number;
   data: Array<[number, number]>;
   maxMAG: number;
-  maxStep: number;
   demagnetizationType: string;
   selectedIndexes: Array<number>;
   handleDotClick: (index: number) => void;
@@ -24,7 +23,7 @@ const AxesAndData: FC<IAxesAndData> = ({
   graphId, graphAreaMargin,
   zeroX, zeroY, width, height,
   unitX, unitY, unitCountX, unitCountY,
-  data, maxMAG, maxStep,
+  data, maxMAG,
   demagnetizationType,
   selectedIndexes,
   handleDotClick
