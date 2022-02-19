@@ -3,15 +3,19 @@ import styles from "./MagGraph.module.scss";
 import { IGraph } from "../../../utils/GlobalTypes";
 import { SelectableGraph, GraphSymbols, Unit} from "../../Sub/Graphs";
 import AxesAndData from "./AxesAndData";
+import dataToMag from "../../../utils/graphs/formatters/dataToMag";
+import { useAppSelector } from "../../../services/store/hooks";
+import { IPmdData } from "../../../utils/files/fileManipulations";
 
 
 interface IMagGraph extends IGraph {
   width: number;
   height: number;
+  data: IPmdData;
 }
 
 
-const MagGraph: FC<IMagGraph> = ({ graphId, width, height }) => {
+const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
 
   // ToDo: 
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
@@ -19,39 +23,25 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height }) => {
   // 3. починить отображение цвета точек - проблема сейчас в том, что не считывается корректно inc (считывается y)
   //    то есть вообще надо уже начать работать с нормальной моделью данных, а не с выдуманным массивом [][]
 
+  const { reference } = useAppSelector(state => state.pcaPageReducer); 
+
   const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
   const [selectableNodes, setSelectableNodes] = useState<ChildNode[]>([]);
 
-  const demagnetizationType = 'T';
+  const { xyData, stepLabels, maxMag } = dataToMag(data, width, reference);
 
-  const mag: Array<number> = [
-    100, 90, 80, 60, 30, 35, 33, 30, 20, 10, 0
-  ];
-
-  const stepValues: Array<number> = [
-    0, 100, 250, 300, 350, 400, 450, 500, 540, 570, 590
-  ];
+  const demagnetizationType = data.steps[0].demagType;
 
   const graphAreaMargin = 40;
   const viewWidth = width + graphAreaMargin * 2;
   const viewHeight = height + graphAreaMargin * 2;
 
-  const unitCountX = 6;
+  const unitCountX = stepLabels.length - 1;
   const unitCountY = 10;
   const unitX = (width / unitCountX);
   const unitY = (height / unitCountY);
   const zeroX = (0);
   const zeroY = (height);
-  
-  const maxMag = Math.max(...mag);
-  const maxStep = unitCountX * 100;
-  
-  const data: Array<[number, number]> = stepValues.map((step, index) => {
-    const normalizedMAG = mag[index] / maxMag;
-    const x = step * (width / maxStep);
-    const y = (1 - normalizedMAG) * height;
-    return [x, y];
-  }); // "x" is stepValue, "y" is normalizedMAG
 
   // selectableNodes - все точки на графике 
   useEffect(() => {
@@ -102,8 +92,9 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height }) => {
             unitY={unitY}
             unitCountX={unitCountX}
             unitCountY={unitCountY}
-            data={data}
+            data={xyData}
             maxMAG={maxMag}
+            stepLabels={stepLabels}
             demagnetizationType={demagnetizationType}
             selectedIndexes={selectedIndexes}
             handleDotClick={handleDotClick}

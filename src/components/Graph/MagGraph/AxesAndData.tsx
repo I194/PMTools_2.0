@@ -14,7 +14,8 @@ interface IAxesAndData {
   unitCountY: number;
   data: Array<[number, number]>;
   maxMAG: number;
-  demagnetizationType: string;
+  stepLabels: Array<string>;
+  demagnetizationType: "thermal" | "alternating field" | undefined;
   selectedIndexes: Array<number>;
   handleDotClick: (index: number) => void;
 }
@@ -23,24 +24,20 @@ const AxesAndData: FC<IAxesAndData> = ({
   graphId, graphAreaMargin,
   zeroX, zeroY, width, height,
   unitX, unitY, unitCountX, unitCountY,
-  data, maxMAG,
+  data, maxMAG, stepLabels,
   demagnetizationType,
   selectedIndexes,
   handleDotClick
 }) => {
 
-  const labelsX = [];
+  const labelsX = stepLabels;
   const labelsY = [];
-
-  for (let i = 0; i <= unitCountX; i++) {
-    labelsX.push((i * 100).toString());
-  }
 
   for (let i = unitCountY; i >= 0; i--) {
     labelsY.push((i / 10).toString());
   }
 
-  const axisNameX = demagnetizationType === 'T' ? `°C` : 'nT';
+  const axisNameX = demagnetizationType === 'thermal' ? `°C` : 'nT';
 
   return (
     <g 

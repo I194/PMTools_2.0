@@ -104,11 +104,15 @@ const PCAPage: FC = ({}) => {
             }
             </div>
             <div className={styles.graphSmall} ref={graphLargeBotRef}>
+            {
+              dataToShow && 
               <MagGraph 
                 graphId='mag' 
                 width={smallGraphSize}
                 height={smallGraphSize}
+                data={dataToShow}
               />
+            }
             </div>
           </div>
         </div>
