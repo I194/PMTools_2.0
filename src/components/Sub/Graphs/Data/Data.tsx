@@ -29,14 +29,14 @@ const Data: FC<IData> = ({
   const colorByType = (
     type: 'stereo' | 'colouredStereo',
     xy: [number, number],
-    inc: number,
     dec: number,
+    inc: number,
     index: number
   ) => {
     if (type === 'stereo') return inc >= 0 ? 'black' : 'white';
     if (type === 'colouredStereo') return inc >= 0 ? 'red' : 'blue';
     return 'black';
-  }
+  };
 
   return (
     <g id={`${graphId}-${type}-data`}>
