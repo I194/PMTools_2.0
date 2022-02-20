@@ -41,13 +41,13 @@ var exportSVG = function(svg: any) {
   // a.innerHTML = 'download the svg file';
   // document.body.appendChild(a);
 
-  download(svgData, 'myAwesomeSVG.svg', '.svg');
+  download(svgData, 'graph.svg', '.svg');
 
 };
 
 
 
-export const handleSave = () => {
-  console.log(document.getElementById('zijd-graph'))
-	exportSVG(document.getElementById('mag-graph'));
+export const handleExportGraph = (id: string) => {
+  console.log(id)
+	exportSVG(document.getElementById(id));
 }

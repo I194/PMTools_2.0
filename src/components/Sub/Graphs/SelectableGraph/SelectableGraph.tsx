@@ -1,6 +1,7 @@
 import React, { FC, useCallback, useEffect, useRef, useState } from "react";
 import { Box, boxesIntersect } from "react-drag-to-select";
 import { MouseSelection } from "..";
+import ExportButton from "../Buttons/ExportButton/ExportButton";
 import styles from "./SelectableGraph.module.scss";
 
 interface ISelectableGraph {
@@ -77,6 +78,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
 
   return (
     <>
+      <ExportButton graphId={`${graphId}-graph`} />
       <svg
         xmlns="http://www.w3.org/2000/svg" 
         version="1.1" 
