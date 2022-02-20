@@ -1,9 +1,9 @@
 import { IPmdData } from "../../../utils/files/fileManipulations";
 import Coordinates from "../classes/Coordinates";
 import { Reference } from "../types";
-import toReferenceCoordinates from "./toReferenceCoordinates"
+import toReferenceCoordinates from "./toReferenceCoordinates";
 
-const dataToZijd = (data: IPmdData, graphSize: number, reference: Reference) => {
+const dataToZijd = (data: IPmdData, graphSize: number, reference: Reference, unitCount: number) => {
 
   const steps = data.steps;
 
@@ -15,6 +15,7 @@ const dataToZijd = (data: IPmdData, graphSize: number, reference: Reference) => 
 
   const maxCoord = Math.max(...rotatedCoords.map((step) => Math.max(Math.abs(step.x), Math.abs(step.y), Math.abs(step.z))));
   const adjustedCoords = rotatedCoords.map((coords) => coords.multiplyAll(graphSize / (maxCoord)));
+  const unitLabel = (maxCoord / unitCount).toExponential(2).toUpperCase();
 
   const horizontalProjectionData: Array<[number, number]> = []; // "x" is Y, "y" is X 
   const verticalProjectionData: Array<[number, number]> = []; // "x" is Y, "y" is Z
@@ -32,7 +33,7 @@ const dataToZijd = (data: IPmdData, graphSize: number, reference: Reference) => 
     directionalData.push([direction.declination, direction.inclination]);
   });
   
-  return {horizontalProjectionData, verticalProjectionData, directionalData};
+  return {horizontalProjectionData, verticalProjectionData, directionalData, unitLabel};
 
 };
 

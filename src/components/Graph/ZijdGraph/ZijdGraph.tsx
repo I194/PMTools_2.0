@@ -34,13 +34,6 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
   const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
   const [selectableNodes, setSelectableNodes] = useState<ChildNode[]>([]);
 
-  const res = dataToZijd(data, width / 2, reference);
-  console.log(res)
-
-  const horizontalProjectionData: Array<[number, number]> = res.horizontalProjectionData;
-  const verticalProjectionData: Array<[number, number]> = res.verticalProjectionData;
-  const directionalData: Array<[number, number]> = res.directionalData; 
-
   const graphAreaMargin = 56;
   const viewWidth = width + graphAreaMargin * 2;
   const viewHeight = height + graphAreaMargin * 2;
@@ -49,6 +42,13 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
   const unitCount = 10;
   const zeroX = (width / 2);
   const zeroY = (height / 2);
+  
+  const {
+    horizontalProjectionData,
+    verticalProjectionData,
+    directionalData,
+    unitLabel
+  } = dataToZijd(data, width / 2, reference, unitCount);
 
   // selectableNodes - все точки на графике 
   useEffect(() => {
@@ -108,7 +108,7 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
             viewHeight={viewHeight} viewWidth={viewWidth}
           />
           <Unit 
-            label={`${(height/10).toExponential(2)} A/m`} 
+            label={`${unitLabel} A/m`} 
             viewHeight={viewHeight} viewWidth={viewWidth}
           />
         </g>
