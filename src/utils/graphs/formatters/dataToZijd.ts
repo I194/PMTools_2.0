@@ -1,11 +1,24 @@
 import { IPmdData } from "../../../utils/files/fileManipulations";
 import Coordinates from "../classes/Coordinates";
-import { Reference } from "../types";
+import { Reference, TooltipDot } from "../types";
 import toReferenceCoordinates from "./toReferenceCoordinates";
 
 const dataToZijd = (data: IPmdData, graphSize: number, reference: Reference, unitCount: number) => {
 
   const steps = data.steps;
+
+  const tooltipData: Array<TooltipDot> = steps.map((step) => {
+    const xyz = new Coordinates(step.x, step.y, step.z);
+    const direction = xyz.toDirection();
+    return {
+      step: step.step,
+      x: step.x,
+      y: step.y,
+      z: step.z,
+      dec: +direction.declination.toFixed(1),
+      inc: +direction.inclination.toFixed(1),
+    };
+  })
 
   const rotatedCoords = steps.map((step) => {
     const xyz = new Coordinates(step.x, step.y, step.z);
@@ -33,7 +46,13 @@ const dataToZijd = (data: IPmdData, graphSize: number, reference: Reference, uni
     directionalData.push([direction.declination, direction.inclination]);
   });
   
-  return {horizontalProjectionData, verticalProjectionData, directionalData, unitLabel};
+  return {
+    horizontalProjectionData, 
+    verticalProjectionData, 
+    directionalData, 
+    unitLabel,
+    tooltipData,
+  };
 
 };
 

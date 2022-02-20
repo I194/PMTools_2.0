@@ -1,12 +1,15 @@
 import React, { FC } from "react";
 import { Dot } from "..";
 import { createStraightPath } from "../../../../utils/graphs/createPath";
+import { TooltipDot } from "../../../../utils/graphs/types";
+import DotTooltip from "../Tooltip/DotTooltip";
 
 interface IData {
   graphId: string;
   type: string;
   data: Array<[number, number]>;
   directionalData?: Array<[number, number]>;
+  tooltipData?: Array<TooltipDot>;
   selectedIndexes: Array<number>;
   handleDotClick: (index: number) => void;
   dotFillColor: string;
@@ -19,6 +22,7 @@ const Data: FC<IData> = ({
   type,
   data,
   directionalData,
+  tooltipData,
   selectedIndexes,
   handleDotClick,
   dotFillColor,
@@ -49,8 +53,8 @@ const Data: FC<IData> = ({
       <g 
         id={`${graphId}-${type}-dots`}
       >
-        {data.map((xy, index) => {
-          return (
+        {
+          data.map((xy, index) => (
             <Dot 
               x={xy[0]} 
               y={xy[1]} 
@@ -59,6 +63,7 @@ const Data: FC<IData> = ({
               id={`${graphId}-${type}-dot-${index}`} 
               key={index} 
               selected={selectedIndexes.includes(index)}
+              tooltip={tooltipData ? tooltipData[index] : undefined}
               fillColor={
                 differentColors && colorsType
                   ? colorByType(
@@ -74,7 +79,7 @@ const Data: FC<IData> = ({
               onClick={handleDotClick}
             />
           )
-        })}
+        )}
       </g>
     </g>
   )

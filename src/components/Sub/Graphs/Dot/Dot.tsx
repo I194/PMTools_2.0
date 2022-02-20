@@ -2,6 +2,7 @@ import React, { FC, useState } from "react";
 import styles from './Dot.module.scss';
 import { Tooltip } from "../index";
 import { ITooltip } from "../Tooltip/Tooltip";
+import { TooltipDot } from "../../../../utils/graphs/types";
 
 interface IDot {
   x: number;
@@ -10,6 +11,7 @@ interface IDot {
   dec?: number;
   r?: number;
   id: string;
+  tooltip?: TooltipDot;
   selected?: boolean;
   onClick: (index: number) => void;
   showText?: boolean;
@@ -24,6 +26,7 @@ const Dot: FC<IDot> = ({
   dec,
   r, 
   id, 
+  tooltip,
   onClick,
   selected, 
   showText, 
@@ -43,13 +46,6 @@ const Dot: FC<IDot> = ({
           left: dot.getBoundingClientRect().left,
           top: dot.getBoundingClientRect().top
         },
-        dot: {
-          id,
-          x,
-          y,
-          inc,
-          dec,
-        }
       })
     }
   }
@@ -109,7 +105,7 @@ const Dot: FC<IDot> = ({
           <Tooltip
             position={tooltipData.position} 
             isVisible={tooltipData.isVisible} 
-            dot={tooltipData.dot}
+            data={tooltip}
           /> 
         : null
       }

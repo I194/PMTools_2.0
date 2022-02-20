@@ -47,7 +47,8 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
     horizontalProjectionData,
     verticalProjectionData,
     directionalData,
-    unitLabel
+    unitLabel,
+    tooltipData
   } = dataToZijd(data, width / 2, reference, unitCount);
 
   // selectableNodes - все точки на графике 
@@ -101,6 +102,7 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
             directionalData={directionalData}
             selectedIndexes={selectedIndexes}
             handleDotClick={handleDotClick}
+            tooltipData={tooltipData}
           />
           <GraphSymbols 
             title1="Horizontal" id1={`${graphId}-h-data`} 
