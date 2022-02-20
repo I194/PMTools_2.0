@@ -6,6 +6,7 @@ import { SelectableGraph, GraphSymbols, Unit} from "../../Sub/Graphs";
 import AxesAndData from "./AxesAndData";
 import { IPmdData } from "../../../utils/files/fileManipulations";
 import dataToZijd from "../../../utils/graphs/formatters/dataToZijd";
+import { TMenuItem } from "../../../utils/graphs/types";
 
 interface LineCoords {
   x1: number;
@@ -51,6 +52,16 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
     tooltipData
   } = dataToZijd(data, width / 2, reference, unitCount);
 
+  const menuItems: Array<TMenuItem> = [
+    {label: 'Tooltips', onClick: () => 0, divider: false },
+    {label: 'Ticks', onClick: () => 0, divider: true },
+    {label: 'Annotations', onClick: () => 0, divider: false },
+    {label: 'Step ID', onClick: () => 0, divider: false },
+    {label: 'Step label', onClick: () => 0, divider: true },
+    {label: 'Highlight selected', onClick: () => 0, divider: false },
+    {label: 'Hightlight on hover', onClick: () => 0, divider: false },
+  ]
+
   // selectableNodes - все точки на графике 
   useEffect(() => {
     const elementsContainerH = document.getElementById(`${graphId}-h-dots`);
@@ -86,6 +97,7 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
         selectedIndexes={selectedIndexes}
         setSelectedIndexes={setSelectedIndexes}
         nodesDuplicated={true}
+        menuItems={menuItems}
       >
         <g>
           <AxesAndData 

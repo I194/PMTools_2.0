@@ -16,3 +16,9 @@ export type TooltipDot = {
   k?: number;
   comment?: string;
 };
+
+export type TMenuItem = {
+  label: string;
+  onClick?: () => void;
+  divider?: boolean;
+}

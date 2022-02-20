@@ -1,8 +1,10 @@
 import React, { FC, useCallback, useEffect, useRef, useState } from "react";
+import styles from "./SelectableGraph.module.scss";
 import { Box, boxesIntersect } from "react-drag-to-select";
 import { MouseSelection } from "..";
+import ContextMenu from "../ContextMenu/ContextMenu";
 import ExportButton from "../Buttons/ExportButton/ExportButton";
-import styles from "./SelectableGraph.module.scss";
+import { TMenuItem } from "../../../../utils/graphs/types";
 
 interface ISelectableGraph {
   graphId: string;
@@ -12,6 +14,7 @@ interface ISelectableGraph {
   selectedIndexes: Array<number>;
   setSelectedIndexes: React.Dispatch<React.SetStateAction<Array<number>>>
   nodesDuplicated: boolean;
+  menuItems?: Array<TMenuItem>;
 }
 
 const SelectableGraph: FC<ISelectableGraph> = ({
@@ -22,7 +25,8 @@ const SelectableGraph: FC<ISelectableGraph> = ({
   selectableNodes,
   selectedIndexes,
   setSelectedIndexes,
-  nodesDuplicated
+  nodesDuplicated,
+  menuItems
 }) => {
   
   const graphRef = useRef(null);
@@ -78,18 +82,20 @@ const SelectableGraph: FC<ISelectableGraph> = ({
 
   return (
     <>
-      <ExportButton graphId={`${graphId}-graph`} />
-      <svg
-        xmlns="http://www.w3.org/2000/svg" 
-        version="1.1" 
-        width={width} 
-        height={height} 
-        id={`${graphId}-graph`} 
-        ref={graphRef}
-        onClick={handleDoubleClick}
-      >
-        {children}
-      </svg>
+      <ContextMenu items={menuItems}>
+        <ExportButton graphId={`${graphId}-graph`} />
+        <svg
+          xmlns="http://www.w3.org/2000/svg" 
+          version="1.1" 
+          width={width} 
+          height={height} 
+          id={`${graphId}-graph`} 
+          ref={graphRef}
+          onClick={handleDoubleClick}
+        >
+          {children}
+        </svg>
+      </ContextMenu>
       <MouseSelection 
         onSelectionChange={handleSelectionChange} 
         eventsElement={graphElement}
