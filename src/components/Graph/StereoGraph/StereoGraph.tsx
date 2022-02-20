@@ -27,7 +27,11 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
   const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
   const [selectableNodes, setSelectableNodes] = useState<ChildNode[]>([]);
 
-  const { directionalData, xyData } = dataToStereoPMD(data, width / 2, reference);
+  const { 
+    directionalData, 
+    xyData, 
+    tooltipData
+  } = dataToStereoPMD(data, width / 2, reference);
 
   const graphAreaMargin = 40;
   const viewWidth = width + graphAreaMargin * 2;
@@ -85,6 +89,7 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
             unitCount={unitCount}
             data={xyData}
             directionalData={directionalData}
+            tooltipData={tooltipData}
             selectedIndexes={selectedIndexes}
             handleDotClick={handleDotClick}
           />

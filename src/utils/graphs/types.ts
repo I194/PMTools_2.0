@@ -11,7 +11,7 @@ export type TooltipDot = {
   z?: number;
   dec?: number;
   inc?: number;
-  mag?: number;
+  mag?: string;
   a95?: number;
   k?: number;
   comment?: string;

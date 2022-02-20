@@ -17,6 +17,7 @@ const dataToZijd = (data: IPmdData, graphSize: number, reference: Reference, uni
       z: step.z,
       dec: +direction.declination.toFixed(1),
       inc: +direction.inclination.toFixed(1),
+      mag: step.mag.toExponential(2).toUpperCase(),
     };
   })
 

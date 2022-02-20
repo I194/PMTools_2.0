@@ -26,7 +26,12 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
   const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
   const [selectableNodes, setSelectableNodes] = useState<ChildNode[]>([]);
 
-  const { xyData, stepLabels, maxMag } = dataToMag(data, width);
+  const { 
+    xyData, 
+    stepLabels, 
+    maxMag,
+    tooltipData,
+  } = dataToMag(data, width);
 
   const demagnetizationType = data.steps[0].demagType;
 
@@ -91,6 +96,7 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
             unitCountX={unitCountX}
             unitCountY={unitCountY}
             data={xyData}
+            tooltipData={tooltipData}
             maxMAG={maxMag}
             stepLabels={stepLabels}
             demagnetizationType={demagnetizationType}

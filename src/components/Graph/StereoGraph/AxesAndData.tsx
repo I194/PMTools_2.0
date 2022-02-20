@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { TooltipDot } from "../../../utils/graphs/types";
 import { Axis, Data } from "../../Sub/Graphs";
 
 interface IAxesAndData {
@@ -12,6 +13,7 @@ interface IAxesAndData {
   unitCount: number;
   data: Array<[number, number]>;
   directionalData: Array<[number, number]>;
+  tooltipData: Array<TooltipDot>;
   selectedIndexes: Array<number>;
   handleDotClick: (index: number) => void;
 }
@@ -19,7 +21,9 @@ interface IAxesAndData {
 const AxesAndData: FC<IAxesAndData> = ({ 
   graphId, graphAreaMargin,
   zeroX, zeroY, width, height, unit, unitCount,
-  data, directionalData,
+  data, 
+  directionalData,
+  tooltipData,
   selectedIndexes,
   handleDotClick
 }) => {
@@ -85,6 +89,7 @@ const AxesAndData: FC<IAxesAndData> = ({
           type='all'
           data={data}
           directionalData={directionalData}
+          tooltipData={tooltipData}
           selectedIndexes={selectedIndexes}
           handleDotClick={handleDotClick}
           dotFillColor='black'

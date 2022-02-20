@@ -1,11 +1,26 @@
 import { IPmdData } from "../../../utils/files/fileManipulations";
 import Coordinates from "../classes/Coordinates";
-import { Reference } from "../types";
+import { Reference, TooltipDot } from "../types";
 import toReferenceCoordinates from "./toReferenceCoordinates";
 
 const dataToMag = (data: IPmdData, graphSize: number) => {
 
   const steps = data.steps;
+
+  const tooltipData: Array<TooltipDot> = steps.map((step) => {
+    const xyz = new Coordinates(step.x, step.y, step.z);
+    const direction = xyz.toDirection();
+    return {
+      step: step.step,
+      x: step.x,
+      y: step.y,
+      z: step.z,
+      dec: +direction.declination.toFixed(1),
+      inc: +direction.inclination.toFixed(1),
+      mag: step.mag.toExponential(2).toUpperCase(),
+    };
+  })
+
   const mag: Array<number> = [];
   const stepValues: Array<number> = [];
 
@@ -31,7 +46,12 @@ const dataToMag = (data: IPmdData, graphSize: number) => {
     stepLabels.push(i.toString());
   };
   
-  return { xyData, stepLabels, maxMag };
+  return { 
+    xyData, 
+    stepLabels, 
+    maxMag,
+    tooltipData,
+  };
 
 };
 

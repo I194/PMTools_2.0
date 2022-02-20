@@ -1,11 +1,26 @@
 import { IPmdData } from "../../../utils/files/fileManipulations";
 import Coordinates from "../classes/Coordinates";
-import { Reference } from "../types";
+import { Reference, TooltipDot } from "../types";
 import toReferenceCoordinates from "./toReferenceCoordinates";
 import { dirToCartesian2D } from "../dirToCartesian";
  
 const dataToStereoPMD = (data: IPmdData, graphSize: number, reference: Reference) => {
+
   const steps = data.steps;
+
+  const tooltipData: Array<TooltipDot> = steps.map((step) => {
+    const xyz = new Coordinates(step.x, step.y, step.z);
+    const direction = xyz.toDirection();
+    return {
+      step: step.step,
+      x: step.x,
+      y: step.y,
+      z: step.z,
+      dec: +direction.declination.toFixed(1),
+      inc: +direction.inclination.toFixed(1),
+      mag: step.mag.toExponential(2).toUpperCase(),
+    };
+  })
 
   const rotatedCoords = steps.map((step) => {
     const xyz = new Coordinates(step.x, step.y, step.z);
@@ -23,7 +38,11 @@ const dataToStereoPMD = (data: IPmdData, graphSize: number, reference: Reference
     return [coords.x, coords.y];
   })
   
-  return {directionalData, xyData};
+  return {
+    directionalData, 
+    xyData,
+    tooltipData,
+  };
 }
 
 export default dataToStereoPMD;

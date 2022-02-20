@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { TooltipDot } from "../../../utils/graphs/types";
 import { Axis, Data } from "../../Sub/Graphs";
 
 interface IAxesAndData {
@@ -13,6 +14,7 @@ interface IAxesAndData {
   unitCountX: number;
   unitCountY: number;
   data: Array<[number, number]>;
+  tooltipData: Array<TooltipDot>;
   maxMAG: number;
   stepLabels: Array<string>;
   demagnetizationType: "thermal" | "alternating field" | undefined;
@@ -24,7 +26,9 @@ const AxesAndData: FC<IAxesAndData> = ({
   graphId, graphAreaMargin,
   zeroX, zeroY, width, height,
   unitX, unitY, unitCountX, unitCountY,
-  data, maxMAG, stepLabels,
+  data, 
+  tooltipData,
+  maxMAG, stepLabels,
   demagnetizationType,
   selectedIndexes,
   handleDotClick
@@ -103,6 +107,7 @@ const AxesAndData: FC<IAxesAndData> = ({
           graphId={graphId}
           type='all'
           data={data}
+          tooltipData={tooltipData}
           selectedIndexes={selectedIndexes}
           handleDotClick={handleDotClick}
           dotFillColor='black'
