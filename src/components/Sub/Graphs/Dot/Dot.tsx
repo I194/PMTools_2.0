@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { FC, useState } from "react";
 import styles from './Dot.module.scss';
 import { Tooltip } from "../index";
 import { ITooltip } from "../Tooltip/Tooltip";
@@ -34,24 +34,7 @@ const Dot: FC<IDot> = ({
   strokeColor
 }) => {
 
-  const dotRef = useRef(null);
-
   const [tooltipData, setTooltipData] = useState<ITooltip>();
-  const [position, setPosition] = useState<{left: number, top: number} | null>(null);
-  const [dotElement, setDotElement] = useState<HTMLElement | null>(dotRef.current);
-
-  useEffect(() => {
-    setDotElement(dotRef.current);
-  }, [dotRef]);
-
-  useEffect(() => {
-    if (dotElement) {
-      setPosition({
-        left: dotElement.getBoundingClientRect().left,
-        top: dotElement.getBoundingClientRect().top
-      });
-    }
-  }, [dotElement]);
 
   const handleOver = (id: string) => {
     const dot = document.getElementById(id);
@@ -118,7 +101,6 @@ const Dot: FC<IDot> = ({
         cy={y} 
         r={r ? r : 4}
         id={id}
-        ref={dotRef}
         style={{
           fill: fillColor, 
           stroke: strokeColor,
