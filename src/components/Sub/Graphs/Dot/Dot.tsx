@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import styles from './Dot.module.scss';
 import { Tooltip } from "../index";
 import { ITooltip } from "../Tooltip/Tooltip";
@@ -34,7 +34,24 @@ const Dot: FC<IDot> = ({
   strokeColor
 }) => {
 
+  const dotRef = useRef(null);
+
   const [tooltipData, setTooltipData] = useState<ITooltip>();
+  const [position, setPosition] = useState<{left: number, top: number} | null>(null);
+  const [dotElement, setDotElement] = useState<HTMLElement | null>(dotRef.current);
+
+  useEffect(() => {
+    setDotElement(dotRef.current);
+  }, [dotRef]);
+
+  useEffect(() => {
+    if (dotElement) {
+      setPosition({
+        left: dotElement.getBoundingClientRect().left,
+        top: dotElement.getBoundingClientRect().top
+      });
+    }
+  }, [dotElement]);
 
   const handleOver = (id: string) => {
     const dot = document.getElementById(id);
@@ -61,41 +78,52 @@ const Dot: FC<IDot> = ({
   return (
     <g>
       {
-        showText || selected ?
-        <text 
-          id={`${id}__annotation`}
-          x={x}
-          y={y - 8}
-        >
-          {id}
-        </text>
-        : null
+        [
+          (showText || selected) &&
+          <text 
+            id={`${id}__annotation`}
+            x={x}
+            y={y - 8}
+          >
+            {id}
+          </text>,
+
+          selected && 
+          <circle
+            cx={x} 
+            cy={y} 
+            r={r ? r + 2 : 6}
+            id={`${id}__selection`}
+            style={{
+              fill: 'purple', 
+              stroke: 'purple',
+              opacity: '50%',
+            }} 
+          />
+        ]
       }
-      { selected ? 
-        <circle
-          cx={x} 
-          cy={y} 
-          r={r ? r + 2 : 6}
-          id={`${id}__selection`}
-          style={{
-            fill: 'purple', 
-            stroke: 'purple',
-            opacity: '50%',
-          }} 
-        />
-        : null
-      }
+      <circle 
+        cx={x} 
+        cy={y} 
+        r={r ? r * 1.5 : 6}
+        style={{
+          fill: 'transparent', 
+          stroke: 'transparent',
+        }} 
+        onMouseOver={() => handleOver(id)}
+        onMouseOut={() => handleOut(id)}
+      />
       <circle 
         cx={x} 
         cy={y} 
         r={r ? r : 4}
         id={id}
+        ref={dotRef}
         style={{
           fill: fillColor, 
           stroke: strokeColor,
           cursor: 'pointer'
         }} 
-        className={styles.dot}
         onClick={() => onClick(+id.split('-')[id.split('-').length - 1])}
         onMouseOver={() => handleOver(id)}
         onMouseOut={() => handleOut(id)}
