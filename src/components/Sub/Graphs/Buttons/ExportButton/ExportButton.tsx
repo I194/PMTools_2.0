@@ -15,6 +15,7 @@ const ExportButton: FC<IExportButton> = ({ graphId }) => {
         color="primary" 
         component="span"
         onClick={() => handleExportGraph(graphId)}
+        sx={{p: '4px'}}
       >
         <FileDownloadOutlinedIcon />
       </IconButton>
