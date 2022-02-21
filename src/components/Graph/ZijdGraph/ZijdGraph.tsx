@@ -35,6 +35,20 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
   const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
   const [selectableNodes, setSelectableNodes] = useState<ChildNode[]>([]);
 
+  const [tooltips, setTooltips] = useState<boolean>(true);
+  const [ticks, setTicks] = useState<boolean>(true);
+  const [annotations, setAnnotations] = useState<boolean>(true);
+  const [stepID, setStepID] = useState<boolean>(true);
+  const [stepLabel, setStepLabel] = useState<boolean>(true);
+
+  const menuItems: Array<TMenuItem> = [
+    {label: 'Tooltips', onClick: () => setTooltips(!tooltips), state: tooltips},
+    {label: 'Ticks', onClick: () => setTicks(!ticks), state: ticks, divider: true},
+    {label: 'Annotations', onClick: () => setAnnotations(!annotations), state: annotations},
+    {label: 'Step ID', onClick: () => setStepID(!stepID), state: stepID},
+    {label: 'Step label', onClick: () => setStepLabel(!stepLabel), state: stepLabel},
+  ];
+
   const graphAreaMargin = 56;
   const viewWidth = width + graphAreaMargin * 2;
   const viewHeight = height + graphAreaMargin * 2;
@@ -51,16 +65,6 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
     unitLabel,
     tooltipData
   } = dataToZijd(data, width / 2, reference, unitCount);
-
-  const menuItems: Array<TMenuItem> = [
-    {label: 'Tooltips', onClick: () => 0, divider: false },
-    {label: 'Ticks', onClick: () => 0, divider: true },
-    {label: 'Annotations', onClick: () => 0, divider: false },
-    {label: 'Step ID', onClick: () => 0, divider: false },
-    {label: 'Step label', onClick: () => 0, divider: true },
-    {label: 'Highlight selected', onClick: () => 0, divider: false },
-    {label: 'Hightlight on hover', onClick: () => 0, divider: false },
-  ]
 
   // selectableNodes - все точки на графике 
   useEffect(() => {

@@ -6,6 +6,7 @@ import AxesAndData from "./AxesAndData";
 import dataToMag from "../../../utils/graphs/formatters/dataToMag";
 import { useAppSelector } from "../../../services/store/hooks";
 import { IPmdData } from "../../../utils/files/fileManipulations";
+import { TMenuItem } from "../../../utils/graphs/types";
 
 
 interface IMagGraph extends IGraph {
@@ -20,11 +21,23 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
   // ToDo: 
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
   // 2. zoom&pan
-  // 3. починить отображение цвета точек - проблема сейчас в том, что не считывается корректно inc (считывается y)
-  //    то есть вообще надо уже начать работать с нормальной моделью данных, а не с выдуманным массивом [][]
 
   const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
   const [selectableNodes, setSelectableNodes] = useState<ChildNode[]>([]);
+
+  const [tooltips, setTooltips] = useState<boolean>(true);
+  const [ticks, setTicks] = useState<boolean>(true);
+  const [annotations, setAnnotations] = useState<boolean>(true);
+  const [stepID, setStepID] = useState<boolean>(true);
+  const [stepLabel, setStepLabel] = useState<boolean>(true);
+
+  const menuItems: Array<TMenuItem> = [
+    {label: 'Tooltips', onClick: () => setTooltips(!tooltips), state: tooltips},
+    {label: 'Ticks', onClick: () => setTicks(!ticks), state: ticks, divider: true},
+    {label: 'Annotations', onClick: () => setAnnotations(!annotations), state: annotations},
+    {label: 'Step ID', onClick: () => setStepID(!stepID), state: stepID},
+    {label: 'Step label', onClick: () => setStepLabel(!stepLabel), state: stepLabel},
+  ];
 
   const { 
     xyData, 
@@ -82,6 +95,7 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
         selectedIndexes={selectedIndexes}
         setSelectedIndexes={setSelectedIndexes}
         nodesDuplicated={false}
+        menuItems={menuItems}
       >
         <g>
           <AxesAndData 

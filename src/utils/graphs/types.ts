@@ -19,6 +19,7 @@ export type TooltipDot = {
 
 export type TMenuItem = {
   label: string;
+  state: boolean;
   onClick?: () => void;
   divider?: boolean;
 }
