@@ -7,6 +7,10 @@ import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
 import { useAppDispatch } from "../../../services/store/hooks";
 import { setDirStatFiles, setInputFiles, setTreatmentFiles } from "../../../services/reducers/files";
 import { useLocation } from "react-router-dom";
+import { useTheme } from '@mui/material/styles';
+import {
+  textColor
+} from '../../../utils/ThemeConstants';
 
 interface IAppSettings {
 
@@ -16,6 +20,8 @@ const AppSettings: FC<IAppSettings> = () => {
 
   const dispatch = useAppDispatch();
   const location = useLocation();
+
+  const theme = useTheme();
 
   const currentPage = location.pathname.slice(1, location.pathname.length);
   const availableFormats = {
@@ -81,7 +87,7 @@ const AppSettings: FC<IAppSettings> = () => {
           sx={{
             textTransform: 'none', 
             width: '100%',
-            color: 'white',
+            color: textColor(theme.palette.mode),
           }}
           component="span"
         >

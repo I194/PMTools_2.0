@@ -1,13 +1,23 @@
 import React, { FC } from "react";
 import styles from './DataTablePMD.module.scss';
 import { IPmdData } from "../../../utils/files/fileManipulations";
-import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { useTheme } from '@mui/material/styles';
+import {
+  bgColorMain,
+  bgColorBlocks,
+  separatorColor,
+  borderColor,
+  boxShadowStyle
+} from '../../../utils/ThemeConstants';
 
 interface IMetaDataTablePMD {
   data: IPmdData['metadata'];
 };
 
 const MetaDataTablePMD: FC<IMetaDataTablePMD> = ({ data }) => {
+
+  const theme = useTheme();
 
   const columns: GridColDef[] = [
     { field: 'name', headerName: 'Name', type: 'string' },
@@ -28,25 +38,50 @@ const MetaDataTablePMD: FC<IMetaDataTablePMD> = ({ data }) => {
   const rows = [{...data, id: 0}];
 
   return (
-    <DataGrid 
-      rows={rows} 
-      columns={columns} 
-      sx={{
-        color: 'white',
-        maxHeight: '100%',
-        '.MuiDataGrid-columnHeaders': {
-          maxHeight: '20px!important',
-          minHeight: '20px!important',
-        },
-        '.MuiDataGrid-virtualScroller': {
-          marginTop: '20px!important',
-        }
+    <div 
+      className={styles.metadata}
+      style={{
+        backgroundColor: bgColorMain(theme.palette.mode),
       }}
-      hideFooter={true}
-      autoHeight={true}
-      density={'compact'}
-      disableSelectionOnClick={true}
-    />
+    >
+      <div 
+        className={styles.table}
+        style={{
+          backgroundColor: bgColorBlocks(theme.palette.mode),
+          WebkitBoxShadow: boxShadowStyle(theme.palette.mode),
+          MozBoxShadow: boxShadowStyle(theme.palette.mode),
+          boxShadow: boxShadowStyle(theme.palette.mode),
+        }}
+      >
+        <DataGrid 
+          rows={rows} 
+          columns={columns} 
+          sx={{
+            borderRadius: '0px',
+            borderColor: borderColor(theme.palette.mode),
+            maxHeight: '100%',
+            '.MuiDataGrid-columnHeaders': {
+              maxHeight: '20px!important',
+              minHeight: '20px!important',
+            },
+            '.MuiDataGrid-virtualScroller': {
+              marginTop: '20px!important',
+              borderColor: borderColor(theme.palette.mode)
+            },
+            '.MuiDataGrid-columnSeparator': {
+              color: separatorColor(theme.palette.mode)
+            },
+            '.MuiDataGrid-cell': {
+              borderColor: borderColor(theme.palette.mode)
+            }
+          }}
+          hideFooter={true}
+          autoHeight={true}
+          density={'compact'}
+          disableSelectionOnClick={true}
+        />
+      </div>
+    </div>
   )
 
 }

@@ -1,23 +1,53 @@
-import React, { FC, useEffect } from "react";
-import { Outlet, useNavigate, RouteProps, useLocation, Link } from "react-router-dom";
+import React, { FC, useEffect, useState } from "react";
 import styles from "./Layout.module.scss";
-
+import { Outlet, RouteProps, } from "react-router-dom";
 import { AppSettings, AppNavigation } from "../Main";
+import { useTheme } from '@mui/material/styles';
+import {
+  bgColorMain,
+  bgColorBlocks,
+  boxShadowStyle
+} from '../../utils/ThemeConstants';
 
 const Layout: FC<RouteProps> = () => {
-  // const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+
+  const theme = useTheme();
  
   return (
     <div className={styles.appContainer}>
-      <div className={styles.top}>
-        <div className={styles.settings}>
-          <div className={styles.appSettings}>
+      <div 
+        className={styles.top}
+        style={{backgroundColor: bgColorMain(theme.palette.mode)}}
+      >
+        <div 
+          className={styles.settings}
+          style={{backgroundColor: bgColorMain(theme.palette.mode)}}
+        >
+          <div 
+            className={styles.appSettings} 
+            style={{
+              backgroundColor: bgColorBlocks(theme.palette.mode),
+              WebkitBoxShadow: boxShadowStyle(theme.palette.mode),
+              MozBoxShadow: boxShadowStyle(theme.palette.mode),
+              boxShadow: boxShadowStyle(theme.palette.mode),
+            }}
+          >
             <AppSettings />
           </div>
         </div>
-        <div className={styles.navigation}>
-          <div className={styles.pages}>
+        <div 
+          className={styles.navigation}
+          style={{backgroundColor: bgColorMain(theme.palette.mode)}}
+        >
+          <div 
+            className={styles.pages}
+            style={{
+              backgroundColor: bgColorBlocks(theme.palette.mode),
+              WebkitBoxShadow: boxShadowStyle(theme.palette.mode),
+              MozBoxShadow: boxShadowStyle(theme.palette.mode),
+              boxShadow: boxShadowStyle(theme.palette.mode),
+            }}
+          >
             <AppNavigation />
           </div>
         </div>

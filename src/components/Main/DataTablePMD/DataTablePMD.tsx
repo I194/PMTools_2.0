@@ -2,13 +2,22 @@ import React, { FC, useEffect } from "react";
 import styles from './DataTablePMD.module.scss';
 import { IPmdData } from "../../../utils/files/fileManipulations";
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
-import MetaDataTablePMD from './MetaDataTablePMD';
+import { useTheme } from '@mui/material/styles';
+import {
+  bgColorMain,
+  bgColorBlocks,
+  separatorColor,
+  borderColor,
+  boxShadowStyle
+} from '../../../utils/ThemeConstants';
 
 interface IDataTablePMD {
   data: IPmdData;
 };
 
 const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
+
+  const theme = useTheme();
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', type: 'string', width: 40 },
@@ -44,22 +53,39 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
   });
 
   return (
-    <div className={styles.dataTable}>
-      <DataGrid 
-        rows={rows} 
-        columns={columns} 
-        sx={{
-          color: 'white',
-          '.MuiDataGrid-toolbarContainer': {
-            
-          }
-        }}
-        checkboxSelection
-        components={{
-          Toolbar: GridToolbar,
-        }}
-        hideFooter={true}
-      />
+    <div 
+      className={styles.tableLarge}
+      style={{
+        backgroundColor: bgColorBlocks(theme.palette.mode),
+        WebkitBoxShadow: boxShadowStyle(theme.palette.mode),
+        MozBoxShadow: boxShadowStyle(theme.palette.mode),
+        boxShadow: boxShadowStyle(theme.palette.mode),
+      }}
+    >
+      <div className={styles.dataTable}>
+        <DataGrid 
+          rows={rows} 
+          columns={columns} 
+          checkboxSelection
+          components={{
+            Toolbar: GridToolbar,
+          }}
+          sx={{
+            borderRadius: '0px',
+            borderColor: borderColor(theme.palette.mode),
+            '.MuiDataGrid-columnSeparator': {
+              color: separatorColor(theme.palette.mode)
+            },
+            '.MuiDataGrid-columnHeaders': {
+              borderColor: borderColor(theme.palette.mode)
+            },
+            '.MuiDataGrid-cell': {
+              borderColor: borderColor(theme.palette.mode)
+            }
+          }}
+          hideFooter={true}
+        />
+      </div>
     </div>
   )
 }

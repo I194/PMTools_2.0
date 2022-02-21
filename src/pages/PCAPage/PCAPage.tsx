@@ -1,26 +1,24 @@
-import React, { FC, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
-import { useWindowSize } from '../../utils/GlobalHooks';
-import { DataTablePMD, MetaDataTablePMD, ToolsPMD } from '../../components/Main';
-import { ZijdGraph, StereoGraph, MagGraph} from '../../components/Graph';
-import { filesToData } from '../../services/axios/filesAndData';
+import React, { FC, useEffect, useState } from 'react';
 import styles from './PCAPage.module.scss';
+import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
+import { filesToData } from '../../services/axios/filesAndData';
 import { IPmdData } from '../../utils/files/fileManipulations';
+import { useTheme } from '@mui/material/styles';
+import { MetaDataTablePMD, ToolsPMD } from '../../components/Main';
+import Graphs from './Graphs';
+import Tables from './Tables';
 
 const PCAPage: FC = ({}) => {
 
   const disptach = useAppDispatch();
+  
+  const theme = useTheme();
+  const bgColorMain = theme.palette.mode === 'dark' ? '#000' : '#e8eaf6';
+  const bgColorBlocks =  theme.palette.mode === 'dark' ? '#212121' : '#fff';
 
   const files = useAppSelector(state => state.filesReducer.treatmentFiles);
   const { treatmentData, loading } = useAppSelector(state => state.parsedDataReducer);
-  const [wv, wh] = useWindowSize();
 
-  const graphLargeRef = useRef<HTMLDivElement>(null);
-  const graphSmallTopRef = useRef<HTMLDivElement>(null);
-  const graphLargeBotRef = useRef<HTMLDivElement>(null);
-
-  const [largeGraphSize, setLargeGraphSize] = useState<number>(300);
-  const [smallGraphSize, setSmallGraphSize] = useState<number>(300);
   const [dataToShow, setDataToShow] = useState<IPmdData | null>(null);
 
   useEffect(() => {
@@ -38,93 +36,28 @@ const PCAPage: FC = ({}) => {
       };
       setDataToShow(modifiedTreatmentData);
     } else setDataToShow(null);
-  }, [treatmentData])
+  }, [treatmentData]);
 
-  useEffect(() => {
-    console.log(wv, wh)
-    const largeGraphWidth = graphLargeRef.current?.offsetWidth;
-    const largeGraphHeight = graphLargeRef.current?.offsetHeight;
-    if (largeGraphWidth && largeGraphHeight) {
-      const minBoxSize = Math.min(largeGraphWidth, largeGraphHeight);
-      setLargeGraphSize(minBoxSize - 112);
-    };
-    const smallGraphWidth = graphSmallTopRef.current?.offsetWidth;
-    const smallGraphHeight = graphSmallTopRef.current?.offsetHeight;
-    if (smallGraphWidth && smallGraphHeight) {
-      const minBoxSize = Math.min(smallGraphWidth, smallGraphHeight);
-      setSmallGraphSize(minBoxSize - 80);
-    };
-  }, [graphLargeRef.current, graphSmallTopRef.current, wv, wh]);
+  if (!dataToShow) return null;
 
   return (
     <>
-      <div className={styles.controlPanel}>
-        <div className={styles.metadata}>
-          <div className={styles.table}>
-            {
-              dataToShow && 
-              <MetaDataTablePMD data={dataToShow.metadata}/>
-            }
-          </div>
-        </div>
-        <div className={styles.instruments}>
-          {
-            <ToolsPMD />
-          }
-        </div>
+      <div 
+        className={styles.controlPanel}
+        style={{backgroundColor: bgColorMain}}
+      >
+        <MetaDataTablePMD data={dataToShow.metadata}/>
+        <ToolsPMD />
       </div>
-      <div className={styles.data}>
-        <div className={styles.tables}>
-          <div className={styles.tableSmall}>
-
-          </div>
-          <div className={styles.tableLarge}>
-            {
-              dataToShow &&
-              <DataTablePMD data={dataToShow}/>
-            }
-          </div>
-        </div>
-        <div className={styles.graphs}>
-          <div className={styles.graphLarge} ref={graphLargeRef}>
-            {
-              dataToShow && 
-              <ZijdGraph 
-                graphId='zijd'
-                width={largeGraphSize}
-                height={largeGraphSize} 
-                data={dataToShow}
-              />
-            }
-          </div>
-          <div className={styles.column}>
-            <div className={styles.graphSmall} ref={graphSmallTopRef}>
-            {
-              dataToShow && 
-              <StereoGraph 
-                graphId='stereo' 
-                width={smallGraphSize}
-                height={smallGraphSize}
-                data={dataToShow}
-              />
-            }
-            </div>
-            <div className={styles.graphSmall} ref={graphLargeBotRef}>
-            {
-              dataToShow && 
-              <MagGraph 
-                graphId='mag' 
-                width={smallGraphSize}
-                height={smallGraphSize}
-                data={dataToShow}
-              />
-            }
-            </div>
-          </div>
-        </div>
+      <div 
+        className={styles.data}
+        style={{backgroundColor: bgColorMain}}
+      > 
+        <Tables dataToShow={dataToShow}/>
+        <Graphs dataToShow={dataToShow}/>
       </div>
     </>
   )
-}
+};
 
 export default PCAPage;

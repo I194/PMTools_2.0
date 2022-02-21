@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import styles from './AppNavigation.module.scss';
 import NavButton from './NavButton';
 
-import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useAppDispatch, useAppSelector } from "../../../services/store/hooks";
