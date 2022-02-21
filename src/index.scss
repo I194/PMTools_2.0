@@ -18,6 +18,11 @@ code {
   background-color: transparent;
 }
 
+*:hover::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
 ::-webkit-scrollbar-thumb {
   background-color: #9facb3;
   border-radius: 6px;

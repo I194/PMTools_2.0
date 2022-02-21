@@ -14,7 +14,10 @@ const Layout: FC<RouteProps> = () => {
   const theme = useTheme();
  
   return (
-    <div className={styles.appContainer}>
+    <div 
+      className={styles.appContainer}
+      style={{backgroundColor: bgColorMain(theme.palette.mode)}}
+    >
       <div 
         className={styles.top}
         style={{backgroundColor: bgColorMain(theme.palette.mode)}}

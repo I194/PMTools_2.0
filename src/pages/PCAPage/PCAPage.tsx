@@ -3,18 +3,19 @@ import styles from './PCAPage.module.scss';
 import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
 import { filesToData } from '../../services/axios/filesAndData';
 import { IPmdData } from '../../utils/files/fileManipulations';
-import { useTheme } from '@mui/material/styles';
 import { MetaDataTablePMD, ToolsPMD } from '../../components/Main';
 import Graphs from './Graphs';
 import Tables from './Tables';
+import { useTheme } from '@mui/material/styles';
+import {
+  bgColorMain,
+} from '../../utils/ThemeConstants';
 
 const PCAPage: FC = ({}) => {
 
   const disptach = useAppDispatch();
   
   const theme = useTheme();
-  const bgColorMain = theme.palette.mode === 'dark' ? '#000' : '#e8eaf6';
-  const bgColorBlocks =  theme.palette.mode === 'dark' ? '#212121' : '#fff';
 
   const files = useAppSelector(state => state.filesReducer.treatmentFiles);
   const { treatmentData, loading } = useAppSelector(state => state.parsedDataReducer);
@@ -44,14 +45,14 @@ const PCAPage: FC = ({}) => {
     <>
       <div 
         className={styles.controlPanel}
-        style={{backgroundColor: bgColorMain}}
+        style={{backgroundColor: bgColorMain(theme.palette.mode)}}
       >
         <MetaDataTablePMD data={dataToShow.metadata}/>
         <ToolsPMD />
       </div>
       <div 
         className={styles.data}
-        style={{backgroundColor: bgColorMain}}
+        style={{backgroundColor: bgColorMain(theme.palette.mode)}}
       > 
         <Tables dataToShow={dataToShow}/>
         <Graphs dataToShow={dataToShow}/>
