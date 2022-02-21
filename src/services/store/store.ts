@@ -1,10 +1,12 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import appSettingsReducer from "../reducers/appSettings";
 import filesReducer from "../reducers/files";
 import parsedDataReducer from "../reducers/parsedData";
 import pcaPageReducer from "../reducers/pcaPage";
 import thunk from 'redux-thunk';
 
 export const rootReducer = combineReducers({
+  appSettingsReducer,
   filesReducer,
   parsedDataReducer,
   pcaPageReducer,

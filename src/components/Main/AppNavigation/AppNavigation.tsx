@@ -1,55 +1,24 @@
 import React, { FC } from "react";
 import styles from './AppNavigation.module.scss';
-import { Button } from '@mui/material';
-import { NavLink } from 'react-router-dom';
+import NavButton from './NavButton';
 
-interface INavButton {
-  label: string;
-  to: string;
-  external?: boolean;
-}
+import { useTheme, ThemeProvider, createTheme } from '@mui/material/styles';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { useAppDispatch, useAppSelector } from "../../../services/store/hooks";
+import { setColorMode } from "../../../services/reducers/appSettings";
+import { IconButton } from "@mui/material";
 
-const NavButton: FC<INavButton> = ({ label, to, external }) => {
+const AppNavigation: FC = ({}) => {
 
-  const onClickExternal = () => {
-    window.location.href = to;
-  } 
-  
-  if (external) {
-    return (
-      <Button
-        variant="contained" 
-        sx={{
-          textTransform: 'none',
-        }}
-        component="span"
-        onClick={onClickExternal}
-      >
-        { label }
-      </Button>
-    )
-  }
+  const dispatch = useAppDispatch();
+  const { colorMode } = useAppSelector(state => state.appSettingsReducer);
 
-  return (
-    <NavLink to={to}>
-      <Button
-        variant="contained" 
-        sx={{
-          textTransform: 'none',
-        }}
-        component="span"
-      >
-        { label }
-      </Button>
-    </NavLink>
-  )
-}
+  const onColorModeClick = () => {
+    dispatch(setColorMode(colorMode === 'dark' ? 'light' : 'dark'));
+  };
 
-interface IAppNavigation {
-
-}
-
-const AppNavigation: FC<IAppNavigation> = () => {
+  const theme = useTheme();
 
   return (
     <div className={styles.navButtons}>
@@ -70,6 +39,9 @@ const AppNavigation: FC<IAppNavigation> = () => {
         label={'Главная страница'}
         to={'/'}
       />
+      <IconButton onClick={onColorModeClick} color="inherit">
+        {theme.palette.mode === 'dark' ? <Brightness7Icon color="primary" /> : <Brightness4Icon color="primary" />}
+      </IconButton>
     </div>
   )
 }

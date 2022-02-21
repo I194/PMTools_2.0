@@ -45,7 +45,7 @@ const Dot: FC<IDot> = ({
   const handleOver = (id: string) => {
     const dot = document.getElementById(id);
     if (dot) {
-      dot.style.setProperty('fill', 'orange');
+      dot.style.setProperty('fill', '#90CAF9');
       setTooltipData({
         isVisible: true,
         position: {
