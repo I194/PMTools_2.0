@@ -1,5 +1,6 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
+import { useWindowSize } from '../../utils/GlobalHooks';
 import { DataTablePMD, MetaDataTablePMD, ToolsPMD } from '../../components/Main';
 import { ZijdGraph, StereoGraph, MagGraph} from '../../components/Graph';
 import { filesToData } from '../../services/axios/filesAndData';
@@ -7,9 +8,13 @@ import styles from './PCAPage.module.scss';
 import { IPmdData } from '../../utils/files/fileManipulations';
 
 const PCAPage: FC = ({}) => {
+
   const disptach = useAppDispatch();
+
   const files = useAppSelector(state => state.filesReducer.treatmentFiles);
   const { treatmentData, loading } = useAppSelector(state => state.parsedDataReducer);
+  const [wv, wh] = useWindowSize();
+
   const graphLargeRef = useRef<HTMLDivElement>(null);
   const graphSmallTopRef = useRef<HTMLDivElement>(null);
   const graphLargeBotRef = useRef<HTMLDivElement>(null);
@@ -36,6 +41,7 @@ const PCAPage: FC = ({}) => {
   }, [treatmentData])
 
   useEffect(() => {
+    console.log(wv, wh)
     const largeGraphWidth = graphLargeRef.current?.offsetWidth;
     const largeGraphHeight = graphLargeRef.current?.offsetHeight;
     if (largeGraphWidth && largeGraphHeight) {
@@ -48,7 +54,7 @@ const PCAPage: FC = ({}) => {
       const minBoxSize = Math.min(smallGraphWidth, smallGraphHeight);
       setSmallGraphSize(minBoxSize - 80);
     };
-  }, [graphLargeRef.current, graphSmallTopRef.current]);
+  }, [graphLargeRef.current, graphSmallTopRef.current, wv, wh]);
 
   return (
     <>
