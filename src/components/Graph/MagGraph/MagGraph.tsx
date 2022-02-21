@@ -6,7 +6,7 @@ import AxesAndData from "./AxesAndData";
 import dataToMag from "../../../utils/graphs/formatters/dataToMag";
 import { useAppSelector } from "../../../services/store/hooks";
 import { IPmdData } from "../../../utils/files/fileManipulations";
-import { TMenuItem } from "../../../utils/graphs/types";
+import { GraphSettings, TMenuItem } from "../../../utils/graphs/types";
 
 
 interface IMagGraph extends IGraph {
@@ -39,11 +39,22 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
     {label: 'Step label', onClick: () => setStepLabel(!stepLabel), state: stepLabel},
   ];
 
+  const settings: GraphSettings = {
+    area: {ticks},
+    dots: {
+      annotations,
+      tooltips,
+      id: stepID,
+      label: stepLabel,
+    },
+  };
+
   const { 
     xyData, 
     stepLabels, 
     maxMag,
     tooltipData,
+    labels,
   } = dataToMag(data, width);
 
   const demagnetizationType = data.steps[0].demagType;
@@ -109,6 +120,7 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
             unitY={unitY}
             unitCountX={unitCountX}
             unitCountY={unitCountY}
+            labels={labels}
             data={xyData}
             tooltipData={tooltipData}
             maxMAG={maxMag}
@@ -116,6 +128,7 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
             demagnetizationType={demagnetizationType}
             selectedIndexes={selectedIndexes}
             handleDotClick={handleDotClick}
+            settings={settings}
           />
         </g>
       </SelectableGraph>

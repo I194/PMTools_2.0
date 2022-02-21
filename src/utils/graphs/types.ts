@@ -22,4 +22,20 @@ export type TMenuItem = {
   state: boolean;
   onClick?: () => void;
   divider?: boolean;
-}
+};
+
+export type DotSettings = {
+  annotations: boolean;
+  tooltips: boolean;
+  id?: boolean;
+  label?: boolean;
+};
+
+export type GraphAreaSettings = {
+  ticks: boolean;
+};
+
+export type GraphSettings = {
+  area: GraphAreaSettings;
+  dots: DotSettings;
+};

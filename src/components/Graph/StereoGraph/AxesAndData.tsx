@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { TooltipDot } from "../../../utils/graphs/types";
+import { GraphSettings, TooltipDot } from "../../../utils/graphs/types";
 import { Axis, Data } from "../../Sub/Graphs";
 
 interface IAxesAndData {
@@ -11,21 +11,25 @@ interface IAxesAndData {
   height: number;
   unit: number;
   unitCount: number;
+  labels: Array<string>;
   data: Array<[number, number]>;
   directionalData: Array<[number, number]>;
   tooltipData: Array<TooltipDot>;
   selectedIndexes: Array<number>;
   handleDotClick: (index: number) => void;
+  settings: GraphSettings;
 }
 
 const AxesAndData: FC<IAxesAndData> = ({ 
   graphId, graphAreaMargin,
   zeroX, zeroY, width, height, unit, unitCount,
+  labels,
   data, 
   directionalData,
   tooltipData,
   selectedIndexes,
-  handleDotClick
+  handleDotClick,
+  settings,
 }) => {
   return (
     <g 
@@ -53,6 +57,7 @@ const AxesAndData: FC<IAxesAndData> = ({
           unit={unit}
           unitCount={unitCount}
           hideLine={true}
+          hideTicks={!settings.area.ticks}
           tickPosition="both"
         />
         <Axis 
@@ -66,6 +71,7 @@ const AxesAndData: FC<IAxesAndData> = ({
           unit={unit}
           unitCount={unitCount}
           hideLine={true}
+          hideTicks={!settings.area.ticks}
           tickPosition="both"
         />
       </g>
@@ -87,6 +93,7 @@ const AxesAndData: FC<IAxesAndData> = ({
         <Data 
           graphId={graphId}
           type='all'
+          labels={labels}
           data={data}
           directionalData={directionalData}
           tooltipData={tooltipData}
@@ -95,6 +102,7 @@ const AxesAndData: FC<IAxesAndData> = ({
           dotFillColor='black'
           differentColors={true}
           colorsType="stereo"
+          settings={settings.dots}
         />
       </g>
     </g>

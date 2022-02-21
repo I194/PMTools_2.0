@@ -7,7 +7,7 @@ import AxesAndData from "./AxesAndData";
 import { IPmdData } from "../../../utils/files/fileManipulations";
 import { useAppSelector } from "../../../services/store/hooks";
 import dataToStereoPMD from "../../../utils/graphs/formatters/dataToStereoPMD";
-import { TMenuItem } from "../../../utils/graphs/types";
+import { GraphSettings, TMenuItem } from "../../../utils/graphs/types";
 
 interface IStereoGraph extends IGraph {
   width: number;
@@ -40,10 +40,21 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
     {label: 'Step label', onClick: () => setStepLabel(!stepLabel), state: stepLabel},
   ];
 
+  const settings: GraphSettings = {
+    area: {ticks},
+    dots: {
+      annotations,
+      tooltips,
+      id: stepID,
+      label: stepLabel,
+    },
+  };
+
   const { 
     directionalData, 
     xyData, 
-    tooltipData
+    tooltipData,
+    labels,
   } = dataToStereoPMD(data, width / 2, reference);
 
   const graphAreaMargin = 40;
@@ -101,11 +112,13 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
             height={height}
             unit={unit}
             unitCount={unitCount}
+            labels={labels}
             data={xyData}
             directionalData={directionalData}
             tooltipData={tooltipData}
             selectedIndexes={selectedIndexes}
             handleDotClick={handleDotClick}
+            settings={settings}
           />
           <GraphSymbols 
             title1="Down" id1={`${graphId}-d-data`} 

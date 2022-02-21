@@ -2,36 +2,36 @@ import React, { FC, useState } from "react";
 import styles from './Dot.module.scss';
 import { Tooltip } from "../index";
 import { ITooltip } from "../Tooltip/Tooltip";
-import { TooltipDot } from "../../../../utils/graphs/types";
+import { DotSettings, TooltipDot } from "../../../../utils/graphs/types";
 
 interface IDot {
   x: number;
   y: number;
-  inc?: number;
-  dec?: number;
   r?: number;
   id: string;
+  annotation: {id: string, label: string};
   tooltip?: TooltipDot;
   selected?: boolean;
   onClick: (index: number) => void;
   showText?: boolean;
   fillColor: string;
   strokeColor: string;
+  settings: DotSettings;
 }
 
 const Dot: FC<IDot> = ({
   x, 
   y, 
-  inc,
-  dec,
   r, 
-  id, 
+  id,
+  annotation,
   tooltip,
   onClick,
   selected, 
   showText, 
   fillColor, 
-  strokeColor
+  strokeColor,
+  settings,
 }) => {
 
   const [tooltipData, setTooltipData] = useState<ITooltip>();
@@ -68,13 +68,19 @@ const Dot: FC<IDot> = ({
     <g>
       {
         [
-          (showText || selected) &&
+          ((showText || selected) && settings.annotations) &&
           <text 
             id={`${id}__annotation`}
             x={x}
             y={y - 8}
           >
-            {id}
+           {
+             [
+               settings.id && annotation.id,
+               settings.id && settings.label && ': ',
+               settings.label && annotation.label
+             ]
+           }
           </text>,
 
           selected && 
@@ -117,7 +123,7 @@ const Dot: FC<IDot> = ({
         onMouseOut={() => handleOut(id)}
       />
       {
-        tooltipData ? 
+        (tooltipData && settings.tooltips) ? 
           <Tooltip
             position={tooltipData.position} 
             isVisible={tooltipData.isVisible} 

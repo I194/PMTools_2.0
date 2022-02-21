@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { TooltipDot } from "../../../utils/graphs/types";
+import { GraphSettings, TooltipDot } from "../../../utils/graphs/types";
 import { Axis, Data } from "../../Sub/Graphs";
 
 interface IAxesAndData {
@@ -14,12 +14,14 @@ interface IAxesAndData {
   unitCountX: number;
   unitCountY: number;
   data: Array<[number, number]>;
+  labels: Array<string>;
   tooltipData: Array<TooltipDot>;
   maxMAG: number;
   stepLabels: Array<string>;
   demagnetizationType: "thermal" | "alternating field" | undefined;
   selectedIndexes: Array<number>;
   handleDotClick: (index: number) => void;
+  settings: GraphSettings;
 }
 
 const AxesAndData: FC<IAxesAndData> = ({ 
@@ -27,11 +29,13 @@ const AxesAndData: FC<IAxesAndData> = ({
   zeroX, zeroY, width, height,
   unitX, unitY, unitCountX, unitCountY,
   data, 
+  labels,
   tooltipData,
   maxMAG, stepLabels,
   demagnetizationType,
   selectedIndexes,
-  handleDotClick
+  handleDotClick,
+  settings,
 }) => {
 
   const labelsX = stepLabels;
@@ -69,6 +73,7 @@ const AxesAndData: FC<IAxesAndData> = ({
           unit={unitX}
           unitCount={unitCountX}
           hideLine={true}
+          hideTicks={!settings.area.ticks}
           tickPosition="outer"
           labels={labelsX}
         />
@@ -83,6 +88,7 @@ const AxesAndData: FC<IAxesAndData> = ({
           unit={unitY}
           unitCount={unitCountY}
           hideLine={true}
+          hideTicks={!settings.area.ticks}
           tickPosition="inner"
           labels={labelsY}
           grid={{
@@ -106,6 +112,7 @@ const AxesAndData: FC<IAxesAndData> = ({
         <Data 
           graphId={graphId}
           type='all'
+          labels={labels}
           data={data}
           tooltipData={tooltipData}
           selectedIndexes={selectedIndexes}
@@ -113,6 +120,7 @@ const AxesAndData: FC<IAxesAndData> = ({
           dotFillColor='black'
           differentColors={true}
           colorsType="stereo"
+          settings={settings.dots}
         />
       </g>
     </g>

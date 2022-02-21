@@ -6,7 +6,7 @@ import { SelectableGraph, GraphSymbols, Unit} from "../../Sub/Graphs";
 import AxesAndData from "./AxesAndData";
 import { IPmdData } from "../../../utils/files/fileManipulations";
 import dataToZijd from "../../../utils/graphs/formatters/dataToZijd";
-import { TMenuItem } from "../../../utils/graphs/types";
+import { GraphSettings, TMenuItem } from "../../../utils/graphs/types";
 
 interface LineCoords {
   x1: number;
@@ -49,6 +49,16 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
     {label: 'Step label', onClick: () => setStepLabel(!stepLabel), state: stepLabel},
   ];
 
+  const settings: GraphSettings = {
+    area: {ticks},
+    dots: {
+      annotations,
+      tooltips,
+      id: stepID,
+      label: stepLabel,
+    },
+  };
+
   const graphAreaMargin = 56;
   const viewWidth = width + graphAreaMargin * 2;
   const viewHeight = height + graphAreaMargin * 2;
@@ -63,7 +73,8 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
     verticalProjectionData,
     directionalData,
     unitLabel,
-    tooltipData
+    tooltipData,
+    labels,
   } = dataToZijd(data, width / 2, reference, unitCount);
 
   // selectableNodes - все точки на графике 
@@ -113,12 +124,14 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
             height={height}
             unit={unit}
             unitCount={unitCount}
+            labels={labels}
             horizontalProjectionData={horizontalProjectionData}
             verticalProjectionData={verticalProjectionData}
             directionalData={directionalData}
             selectedIndexes={selectedIndexes}
             handleDotClick={handleDotClick}
             tooltipData={tooltipData}
+            settings={settings}
           />
           <GraphSymbols 
             title1="Horizontal" id1={`${graphId}-h-data`} 

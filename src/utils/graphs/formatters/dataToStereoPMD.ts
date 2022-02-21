@@ -8,6 +8,8 @@ const dataToStereoPMD = (data: IPmdData, graphSize: number, reference: Reference
 
   const steps = data.steps;
 
+  const labels = steps.map((step) => step.step);
+
   const tooltipData: Array<TooltipDot> = steps.map((step) => {
     const xyz = new Coordinates(step.x, step.y, step.z);
     const direction = xyz.toDirection();
@@ -42,6 +44,7 @@ const dataToStereoPMD = (data: IPmdData, graphSize: number, reference: Reference
     directionalData, 
     xyData,
     tooltipData,
+    labels,
   };
 }
 

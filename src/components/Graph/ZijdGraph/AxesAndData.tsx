@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { TooltipDot } from "../../../utils/graphs/types";
+import { GraphSettings, TooltipDot } from "../../../utils/graphs/types";
 import { Axis, Data } from "../../Sub/Graphs";
 
 interface IAxesAndData {
@@ -11,23 +11,27 @@ interface IAxesAndData {
   height: number;
   unit: number;
   unitCount: number;
+  labels: Array<string>;
   horizontalProjectionData: Array<[number, number]>;
   verticalProjectionData: Array<[number, number]>;
   directionalData: Array<[number, number]>;
   tooltipData: Array<TooltipDot>;
   selectedIndexes: Array<number>;
   handleDotClick: (index: number) => void;
+  settings: GraphSettings;
 }
 
 const AxesAndData: FC<IAxesAndData> = ({ 
   graphId, graphAreaMargin,
   zeroX, zeroY, width, height, unit, unitCount,
+  labels,
   horizontalProjectionData,
   verticalProjectionData,
   directionalData,
   tooltipData,
   selectedIndexes,
-  handleDotClick
+  handleDotClick,
+  settings,
 }) => {
   return (
     <g 
@@ -44,6 +48,7 @@ const AxesAndData: FC<IAxesAndData> = ({
           unit={unit}
           unitCount={unitCount}
           tickPosition="both"
+          hideTicks={!settings.area.ticks}
         />
         <Axis 
           graphId={graphId}
@@ -55,6 +60,7 @@ const AxesAndData: FC<IAxesAndData> = ({
           unit={unit}
           unitCount={unitCount}
           tickPosition="both"
+          hideTicks={!settings.area.ticks}
         />
       </g>
       {/* 
@@ -68,22 +74,26 @@ const AxesAndData: FC<IAxesAndData> = ({
         <Data 
           graphId={graphId}
           type='h'
+          labels={labels}
           data={horizontalProjectionData}
           directionalData={directionalData}
           tooltipData={tooltipData}
           selectedIndexes={selectedIndexes}
           handleDotClick={handleDotClick}
           dotFillColor='black'
+          settings={settings.dots}
         />
         <Data 
           graphId={graphId}
           type='v'
+          labels={labels}
           data={verticalProjectionData}
           directionalData={directionalData}
           tooltipData={tooltipData}
           selectedIndexes={selectedIndexes}
           handleDotClick={handleDotClick}
           dotFillColor='white'
+          settings={settings.dots}
         />
       </g>
     </g>

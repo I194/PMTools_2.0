@@ -1,12 +1,13 @@
 import React, { FC } from "react";
 import { Dot } from "..";
 import { createStraightPath } from "../../../../utils/graphs/createPath";
-import { TooltipDot } from "../../../../utils/graphs/types";
+import { DotSettings, TooltipDot } from "../../../../utils/graphs/types";
 import DotTooltip from "../Tooltip/DotTooltip";
 
 interface IData {
   graphId: string;
   type: string;
+  labels?: Array<string>;
   data: Array<[number, number]>;
   directionalData?: Array<[number, number]>;
   tooltipData?: Array<TooltipDot>;
@@ -15,11 +16,13 @@ interface IData {
   dotFillColor: string;
   differentColors?: boolean; 
   colorsType?: 'stereo' | 'colouredStereo';
+  settings: DotSettings;
 }
 
 const Data: FC<IData> = ({
   graphId,
   type,
+  labels,
   data,
   directionalData,
   tooltipData,
@@ -28,6 +31,7 @@ const Data: FC<IData> = ({
   dotFillColor,
   differentColors,
   colorsType,
+  settings,
  }) => {
   
   const colorByType = (
@@ -58,9 +62,8 @@ const Data: FC<IData> = ({
             <Dot 
               x={xy[0]} 
               y={xy[1]} 
-              dec={directionalData ? directionalData[index][0] : undefined}
-              inc={directionalData ? directionalData[index][1] : undefined}
               id={`${graphId}-${type}-dot-${index}`} 
+              annotation={{id: (index + 1).toString(), label: labels ? labels[index] : ''}}
               key={index} 
               selected={selectedIndexes.includes(index)}
               tooltip={tooltipData ? tooltipData[index] : undefined}
@@ -77,6 +80,7 @@ const Data: FC<IData> = ({
               }
               strokeColor="black"
               onClick={handleDotClick}
+              settings={settings}
             />
           )
         )}
