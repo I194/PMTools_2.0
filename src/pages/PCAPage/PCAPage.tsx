@@ -39,16 +39,14 @@ const PCAPage: FC = ({}) => {
     } else setDataToShow(null);
   }, [treatmentData]);
 
-  if (!dataToShow) return null;
-
   return (
     <>
       <div 
         className={styles.controlPanel}
         style={{backgroundColor: bgColorMain(theme.palette.mode)}}
       >
-        <MetaDataTablePMD data={dataToShow.metadata}/>
-        <ToolsPMD />
+        <MetaDataTablePMD data={dataToShow?.metadata}/>
+        <ToolsPMD data={dataToShow}/>
       </div>
       <div 
         className={styles.data}

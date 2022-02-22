@@ -9,20 +9,19 @@ import {
   bgColorBlocks,
   boxShadowStyle
 } from '../../utils/ThemeConstants';
+import GraphsSkeleton from './GraphsSkeleton';
 
 interface IGraphs {
-  dataToShow: IPmdData;
+  dataToShow: IPmdData | null;
 };
 
 const Graphs: FC<IGraphs> = ({ dataToShow }) => {
-  
-  const theme = useTheme();
 
   const [wv, wh] = useWindowSize();
 
   const graphLargeRef = useRef<HTMLDivElement>(null);
   const graphSmallTopRef = useRef<HTMLDivElement>(null);
-  const graphLargeBotRef = useRef<HTMLDivElement>(null);
+  const graphSmallBotRef = useRef<HTMLDivElement>(null);
 
   const [largeGraphSize, setLargeGraphSize] = useState<number>(300);
   const [smallGraphSize, setSmallGraphSize] = useState<number>(300);
@@ -40,70 +39,46 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
       const minBoxSize = Math.min(smallGraphWidth, smallGraphHeight);
       setSmallGraphSize(minBoxSize - 80);
     };
-  }, [graphLargeRef.current, graphSmallTopRef.current, wv, wh]);
+  }, [graphLargeRef, graphSmallTopRef, wv, wh]);
+
+  if (!dataToShow) return (
+    <GraphsSkeleton 
+      graphLarge={{node: null, ref: graphLargeRef}} 
+      graphSmallTop={{node: null, ref: graphSmallTopRef}}
+      graphSmallBot={{node: null, ref: graphSmallBotRef}}
+    />
+  );
 
   return (
-    <div 
-      className={styles.graphs}
-      style={{backgroundColor: bgColorMain(theme.palette.mode)}}
-    >
-      <div 
-        className={styles.graphLarge} 
-        style={{
-          backgroundColor: bgColorBlocks(theme.palette.mode),
-          WebkitBoxShadow: boxShadowStyle(theme.palette.mode),
-          MozBoxShadow: boxShadowStyle(theme.palette.mode),
-          boxShadow: boxShadowStyle(theme.palette.mode),
-        }}
-        ref={graphLargeRef}
-      >
-        <ZijdGraph 
+    <GraphsSkeleton 
+      graphLarge={{
+        node: <ZijdGraph 
           graphId='zijd'
           width={largeGraphSize}
           height={largeGraphSize} 
           data={dataToShow}
-        />
-      </div>
-      <div 
-        className={styles.column}
-        style={{backgroundColor: bgColorMain(theme.palette.mode)}}
-      >
-        <div 
-          className={styles.graphSmall} 
-          style={{
-            backgroundColor: bgColorBlocks(theme.palette.mode),
-            WebkitBoxShadow: boxShadowStyle(theme.palette.mode),
-            MozBoxShadow: boxShadowStyle(theme.palette.mode),
-            boxShadow: boxShadowStyle(theme.palette.mode),
-          }}
-          ref={graphSmallTopRef}
-        >
-          <StereoGraph 
-            graphId='stereo' 
-            width={smallGraphSize}
-            height={smallGraphSize}
-            data={dataToShow}
-          />
-        </div>
-        <div 
-          className={styles.graphSmall} 
-          ref={graphLargeBotRef}
-          style={{
-            backgroundColor: bgColorBlocks(theme.palette.mode),
-            WebkitBoxShadow: boxShadowStyle(theme.palette.mode),
-            MozBoxShadow: boxShadowStyle(theme.palette.mode),
-            boxShadow: boxShadowStyle(theme.palette.mode),
-          }}
-        > 
-          <MagGraph 
-            graphId='mag' 
-            width={smallGraphSize}
-            height={smallGraphSize}
-            data={dataToShow}
-          />
-        </div>
-      </div>
-    </div>
+        />,
+        ref: graphLargeRef
+      }}
+      graphSmallTop={{
+        node: <StereoGraph 
+          graphId='stereo' 
+          width={smallGraphSize}
+          height={smallGraphSize}
+          data={dataToShow}
+        />,
+        ref: graphSmallTopRef
+      }}
+      graphSmallBot={{
+        node: <MagGraph 
+          graphId='mag' 
+          width={smallGraphSize}
+          height={smallGraphSize}
+          data={dataToShow}
+        />,
+        ref: graphSmallBotRef
+      }}
+    />
   )
 };
 

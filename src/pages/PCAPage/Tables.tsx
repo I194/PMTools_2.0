@@ -11,7 +11,7 @@ import {
 } from '../../utils/ThemeConstants';
 
 interface ITables {
-  dataToShow: IPmdData;
+  dataToShow: IPmdData | null;
 }
 
 const Tables: FC<ITables> = ({ dataToShow }) => {

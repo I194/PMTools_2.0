@@ -4,15 +4,13 @@ import { IPmdData } from "../../../utils/files/fileManipulations";
 import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
 import { useTheme } from '@mui/material/styles';
 import {
-  bgColorMain,
-  bgColorBlocks,
   separatorColor,
   borderColor,
-  boxShadowStyle
 } from '../../../utils/ThemeConstants';
+import DataTablePMDSkeleton from './DataTablePMDSkeleton';
 
 interface IDataTablePMD {
-  data: IPmdData;
+  data: IPmdData | null;
 };
 
 const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
@@ -35,7 +33,9 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
     col.align = 'center';
     col.headerAlign = 'center';
     col.hideSortIcons = true;
-  })
+  });
+  
+  if (!data) return <DataTablePMDSkeleton />;
 
   const rows = data.steps.map((stepData, index) => {
     const { step, Dgeo, Igeo, Dstrat, Istrat, mag, a95, comment } = stepData;
@@ -53,40 +53,30 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
   });
 
   return (
-    <div 
-      className={styles.tableLarge}
-      style={{
-        backgroundColor: bgColorBlocks(theme.palette.mode),
-        WebkitBoxShadow: boxShadowStyle(theme.palette.mode),
-        MozBoxShadow: boxShadowStyle(theme.palette.mode),
-        boxShadow: boxShadowStyle(theme.palette.mode),
-      }}
-    >
-      <div className={styles.dataTable}>
-        <DataGrid 
-          rows={rows} 
-          columns={columns} 
-          checkboxSelection
-          components={{
-            Toolbar: GridToolbar,
-          }}
-          sx={{
-            borderRadius: '0px',
-            borderColor: borderColor(theme.palette.mode),
-            '.MuiDataGrid-columnSeparator': {
-              color: separatorColor(theme.palette.mode)
-            },
-            '.MuiDataGrid-columnHeaders': {
-              borderColor: borderColor(theme.palette.mode)
-            },
-            '.MuiDataGrid-cell': {
-              borderColor: borderColor(theme.palette.mode)
-            }
-          }}
-          hideFooter={true}
-        />
-      </div>
-    </div>
+    <DataTablePMDSkeleton>
+      <DataGrid 
+        rows={rows} 
+        columns={columns} 
+        checkboxSelection
+        components={{
+          Toolbar: GridToolbar,
+        }}
+        sx={{
+          borderRadius: '0px',
+          borderColor: borderColor(theme.palette.mode),
+          '.MuiDataGrid-columnSeparator': {
+            color: separatorColor(theme.palette.mode)
+          },
+          '.MuiDataGrid-columnHeaders': {
+            borderColor: borderColor(theme.palette.mode)
+          },
+          '.MuiDataGrid-cell': {
+            borderColor: borderColor(theme.palette.mode)
+          }
+        }}
+        hideFooter={true}
+      />
+    </DataTablePMDSkeleton>
   )
 }
 

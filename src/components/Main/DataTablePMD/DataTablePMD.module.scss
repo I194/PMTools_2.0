@@ -22,13 +22,15 @@
   width: 100%;
   height: 75%;
 
+  .dataTable {
+    display: flex;
+    flex-direction: column;
+
+    height: 100%;
+  } 
+
   background-color: #212121;
   margin-top: 16px;
 }
 
-.dataTable {
-  display: flex;
-  flex-direction: column;
-
-  height: 100%;
-} 
+  

@@ -9,7 +9,7 @@ import { useAppSelector } from "../../../services/store/hooks";
 import dataToStereoPMD from "../../../utils/graphs/formatters/dataToStereoPMD";
 import { GraphSettings, TMenuItem } from "../../../utils/graphs/types";
 
-interface IStereoGraph extends IGraph {
+export interface IStereoGraph extends IGraph {
   width: number;
   height: number;
   data: IPmdData;

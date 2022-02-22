@@ -15,7 +15,7 @@ interface LineCoords {
   y2: number;
 }
 
-interface IZijdGraph extends IGraph {
+export interface IZijdGraph extends IGraph {
   pcaLines?: [LineCoords, LineCoords];
   width: number;
   height: number;

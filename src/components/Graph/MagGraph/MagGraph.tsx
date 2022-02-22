@@ -9,7 +9,7 @@ import { IPmdData } from "../../../utils/files/fileManipulations";
 import { GraphSettings, TMenuItem } from "../../../utils/graphs/types";
 
 
-interface IMagGraph extends IGraph {
+export interface IMagGraph extends IGraph {
   width: number;
   height: number;
   data: IPmdData;
