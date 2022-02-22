@@ -6,7 +6,7 @@ import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
 import { Skeleton, Typography } from '@mui/material';
 import { Reference } from '../../../utils/graphs/types';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
-import { setReference } from '../../../services/reducers/pcaPage';
+import { setReference, setSelectedStepsIDs, setStatisticsMode } from '../../../services/reducers/pcaPage';
 import { IPmdData } from '../../../utils/files/fileManipulations';
 import ToolsPMDSkeleton from './ToolsPMDSkeleton';
 
@@ -39,7 +39,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
     dispatch(setReference(labelToReference(option)));
   };
 
-  const handleStepsSelect = () => {
+  const handleStepsSelect = (statisticsMode: 'pca' | 'pca0' | 'gc' | 'gcn') => {
     let stepsIDs = [];
     if (stepsInput.includes(',')) stepsIDs = stepsInput.split(',').map(id => +id);
     else if (stepsInput.includes('-')) {
@@ -48,7 +48,8 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
         stepsIDs.push(i);
       };
     };
-    console.log(stepsIDs);
+    dispatch(setSelectedStepsIDs(stepsIDs));
+    dispatch(setStatisticsMode(statisticsMode));
   };
 
   useEffect(() => {
@@ -69,10 +70,10 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
         placeholder={'Введите шаги'}
         leftIconButton={{icon: <FilterAltOutlinedIcon />, onClick: () => null}}
         rightIconButtons={[
-          {icon: <Typography>PCA</Typography>, onClick: handleStepsSelect},
-          {icon: <Typography>PCA<sub>0</sub></Typography>, onClick: handleStepsSelect},
-          {icon: <Typography>GC</Typography>, onClick: handleStepsSelect},
-          {icon: <Typography>GCn</Typography>, onClick: handleStepsSelect},
+          {icon: <Typography>PCA</Typography>, onClick: () => handleStepsSelect('pca')},
+          {icon: <Typography>PCA<sub>0</sub></Typography>, onClick: () => handleStepsSelect('pca0')},
+          {icon: <Typography>GC</Typography>, onClick: () => handleStepsSelect('gc')},
+          {icon: <Typography>GCn</Typography>, onClick: () => handleStepsSelect('gcn')},
         ]}
         inputText={stepsInput}
         setInputText={setStepsInput}

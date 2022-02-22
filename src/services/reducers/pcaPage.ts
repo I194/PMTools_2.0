@@ -7,12 +7,14 @@ interface IInitialState {
   currentFile: IPmdData | null;
   reference: Reference;
   selectedStepsIDs: Array<number> | null;
+  statisticsMode: 'pca' | 'pca0' | 'gc' | 'gcn' | null;
 }
 
 const initialState: IInitialState = {
   currentFile: null,
   reference: 'geographic',
   selectedStepsIDs: null,
+  statisticsMode: null,
 }
 
 const pcaPage = createSlice({
@@ -28,6 +30,9 @@ const pcaPage = createSlice({
     setSelectedStepsIDs (state, action) {
       state.selectedStepsIDs = action.payload;
     },
+    setStatisticsMode (state, action) {
+      state.statisticsMode = action.payload;
+    },
   },
   extraReducers: (builder) => {
   }
@@ -37,6 +42,7 @@ export const {
   setCurrentFile,
   setReference,
   setSelectedStepsIDs,
+  setStatisticsMode,
 } = pcaPage.actions;
 
 const pcaPageReducer = pcaPage.reducer;
