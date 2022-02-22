@@ -40,7 +40,15 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   };
 
   const handleStepsSelect = () => {
-    console.log(stepsInput);
+    let stepsIDs = [];
+    if (stepsInput.includes(',')) stepsIDs = stepsInput.split(',').map(id => +id);
+    else if (stepsInput.includes('-')) {
+      const [startID, endID] = stepsInput.split('-');
+      for (let i = +startID; i <= +endID; i++) {
+        stepsIDs.push(i);
+      };
+    };
+    console.log(stepsIDs);
   };
 
   useEffect(() => {
