@@ -6,11 +6,13 @@ import { filesToData } from "../axios/filesAndData";
 interface IInitialState {
   currentFile: IPmdData | null;
   reference: Reference;
+  selectedStepsIDs: Array<number> | null;
 }
 
 const initialState: IInitialState = {
   currentFile: null,
   reference: 'geographic',
+  selectedStepsIDs: null,
 }
 
 const pcaPage = createSlice({
@@ -22,7 +24,10 @@ const pcaPage = createSlice({
     },
     setReference (state, action) {
       state.reference = action.payload;
-    }
+    },
+    setSelectedStepsIDs (state, action) {
+      state.selectedStepsIDs = action.payload;
+    },
   },
   extraReducers: (builder) => {
   }
@@ -30,7 +35,8 @@ const pcaPage = createSlice({
 
 export const { 
   setCurrentFile,
-  setReference
+  setReference,
+  setSelectedStepsIDs,
 } = pcaPage.actions;
 
 const pcaPageReducer = pcaPage.reducer;

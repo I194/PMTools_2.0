@@ -8,13 +8,19 @@ interface IInputSelect {
   placeholder: string;
   leftIconButton: {icon: ReactNode, onClick: () => void};
   rightIconButtons: Array<{icon: ReactNode, onClick: () => void}>;
+  inputText: string;
+  setInputText: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const InputSelect: FC<IInputSelect> = ({ placeholder, leftIconButton, rightIconButtons }) => {
+const InputSelect: FC<IInputSelect> = ({ placeholder, leftIconButton, rightIconButtons, inputText, setInputText }) => {
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputText(event.target.value);
+  };
   
   const createRightIconButton = (icon: ReactNode, onClick: () => void, index: number) => (
-    <div key={index}>
-      <Divider sx={{ height: '80%', mr: 0.5, ml: 0.5 }} orientation="vertical" />
+    <>
+      <Divider sx={{ height: '80%', mr: 0.5, ml: 0.5 }} orientation="vertical"/>
       <IconButton 
         onClick={onClick}
         color="primary" 
@@ -22,7 +28,7 @@ const InputSelect: FC<IInputSelect> = ({ placeholder, leftIconButton, rightIconB
       >
         { icon }
       </IconButton>
-    </div>
+    </>
   );
 
   return (
@@ -46,9 +52,17 @@ const InputSelect: FC<IInputSelect> = ({ placeholder, leftIconButton, rightIconB
         { leftIconButton.icon }
       </IconButton>
       <InputBase
-        sx={{ ml: 1, flex: 1 }}
+        sx={{ 
+          ml: 1,
+          flex: 1,
+          '.MuiInputBase-input': {
+            padding: '0px',
+          }
+        }}
         placeholder={ placeholder }
         inputProps={{ 'aria-label': placeholder }}
+        value={inputText}
+        onChange={handleChange}
       />
       {
         rightIconButtons && 

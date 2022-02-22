@@ -33,10 +33,14 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   const { reference } = useAppSelector(state => state.pcaPageReducer); 
 
   const [coordinateSystem, setCoordinateSystem] = useState<Reference>('geographic');
-  const [stepsFilter, setStepsFilter] = useState(null);
+  const [stepsInput, setStepsInput] = useState<string>('');
 
   const handleReferenceSelect = (option: string) => {
     dispatch(setReference(labelToReference(option)));
+  };
+
+  const handleStepsSelect = () => {
+    console.log(stepsInput);
   };
 
   useEffect(() => {
@@ -57,11 +61,13 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
         placeholder={'Введите шаги'}
         leftIconButton={{icon: <FilterAltOutlinedIcon />, onClick: () => null}}
         rightIconButtons={[
-          {icon: <Typography>PCA</Typography>, onClick: () => null},
-          {icon: <Typography>PCA<sub>0</sub></Typography>, onClick: () => null},
-          {icon: <Typography>GC</Typography>, onClick: () => null},
-          {icon: <Typography>GCn</Typography>, onClick: () => null},
+          {icon: <Typography>PCA</Typography>, onClick: handleStepsSelect},
+          {icon: <Typography>PCA<sub>0</sub></Typography>, onClick: handleStepsSelect},
+          {icon: <Typography>GC</Typography>, onClick: handleStepsSelect},
+          {icon: <Typography>GCn</Typography>, onClick: handleStepsSelect},
         ]}
+        inputText={stepsInput}
+        setInputText={setStepsInput}
       />
     </ToolsPMDSkeleton>
   )
