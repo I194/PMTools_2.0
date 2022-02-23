@@ -24,7 +24,7 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
 
   const { reference, selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
   const { menuItems, settings } = usePMDGraphSettings();
-  const selectableNodes = useGraphSelectableNodes(graphId, true); 
+  const selectableNodes = useGraphSelectableNodes(graphId, false); 
 
   const selectedIndexes = useGraphSelectedIndexes();
 

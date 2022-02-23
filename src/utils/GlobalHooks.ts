@@ -67,6 +67,7 @@ export const useGraphSelectableNodes = (graphId: string, isZijd?: boolean) => {
     } else {
       if (elements.containerAll) {
         nodes.push(...elements.containerAll.childNodes);
+        console.log('->>', nodes)
       };
     };
     setSelectableNodes(nodes);

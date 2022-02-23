@@ -1,8 +1,6 @@
 import React, { FC, useCallback, useEffect, useRef, useState } from "react";
 import styles from "./SelectableGraph.module.scss";
-import { Box, boxesIntersect } from "react-drag-to-select";
-// import { Box, boxesIntersect } from "@air/react-drag-to-select";
-import { MouseSelection } from "..";
+import Selecto from "react-selecto";
 import ContextMenu from "../ContextMenu/ContextMenu";
 import ExportButton from "../Buttons/ExportButton/ExportButton";
 import { TMenuItem } from "../../../../utils/graphs/types";
@@ -29,68 +27,19 @@ const SelectableGraph: FC<ISelectableGraph> = ({
 }) => {
 
   const dispatch = useAppDispatch();
-
   const graphRef = useRef(null);
-  const selectableNodesBoxes = useRef<Box[]>([]);
 
   const [graphElement, setGraphElement] = useState<HTMLElement | Window | null>(graphRef.current);
-  const [selectedIndexes, setSelectedIndexes] = useState<Array<number>>([]);
 
   useEffect(() => {
     setGraphElement(graphRef.current);
   }, [graphRef]);
-
-  useEffect(() => {
-    selectableNodesBoxes.current = [];
-    if (selectableNodes) {
-      selectableNodes.forEach((item, index) => {
-        //@ts-ignore
-        const { left, top, width, height } = item.getBoundingClientRect();
-        selectableNodesBoxes.current.push({
-          left,
-          top,
-          width,
-          height,
-        });
-      });
-    }
-  }, [selectableNodes]);
-
-  const handleSelectionChange = useCallback(
-    (box: Box) => {
-      const indexesToSelect: number[] = [];
-
-      selectableNodesBoxes.current.forEach((item, index) => {
-        if (boxesIntersect(box, item)) {
-          indexesToSelect.push(
-            nodesDuplicated 
-              ? index % (selectableNodesBoxes.current.length / 2) 
-              : index 
-          );
-        }
-      });
-      setSelectedIndexes(indexesToSelect);
-    }, [selectableNodesBoxes],
-  );
-
-  const onSelectionEnd = useCallback(
-    () => {
-      const stepsIDs = nodesDuplicated 
-          ? selectedIndexes.slice(0, selectedIndexes.length/2).map(index => index + 1)
-          : selectedIndexes.map(index => index + 1);
-      if (stepsIDs.length > 0) dispatch(setSelectedStepsIDs(stepsIDs));
-      else dispatch(setSelectedStepsIDs(null));
-    }, [selectedIndexes],
-  );
-
-  // const onSelectionEnd = () => {};
 
   const handleDoubleClick = (event: any) => {
     event.preventDefault();
 
     const timesClicked = event.detail;
     if (timesClicked === 2) {
-      setSelectedIndexes([]);
       dispatch(setSelectedStepsIDs(null));
     }
   };
@@ -111,10 +60,18 @@ const SelectableGraph: FC<ISelectableGraph> = ({
           {children}
         </svg>
       </ContextMenu>
-      <MouseSelection 
-        onSelectionChange={handleSelectionChange} 
-        onSelectionEnd={onSelectionEnd}
-        eventsElement={graphElement}
+      <Selecto
+        dragContainer={`#${graphId}-graph`}
+        selectableTargets={selectableNodes.map(node => document.getElementById((node.lastChild as any).id) || '')}
+        hitRate={100}
+        selectByClick={true}
+        selectFromInside={false}
+        ratio={0}
+        onSelectEnd={e => {
+          const indexes = new Set(e.selected.map(el => el.id.split('-').pop()));
+          const IDs = [...indexes].filter(index => index) as Array<string>;
+          dispatch(setSelectedStepsIDs(IDs.map(id => +id + 1)));
+        }}
       />
     </>
 
