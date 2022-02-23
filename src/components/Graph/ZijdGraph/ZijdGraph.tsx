@@ -9,7 +9,7 @@ import dataToZijd from "../../../utils/graphs/formatters/dataToZijd";
 import { GraphSettings, TMenuItem } from "../../../utils/graphs/types";
 import { setSelectedStepsIDs } from "../../../services/reducers/pcaPage";
 import { zijdAreaConstants } from "./ZijdConstants";
-import { usePMDGraphSettings } from "../../../utils/GlobalHooks";
+import { useGraphSelectableNodes, usePMDGraphSettings } from "../../../utils/GlobalHooks";
 
 interface LineCoords {
   x1: number;
@@ -35,26 +35,14 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
 
   const { reference, selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
 
-  const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
-  const [selectableNodes, setSelectableNodes] = useState<ChildNode[]>([]);
-
   const { menuItems, settings } = usePMDGraphSettings();
+  const selectableNodes = useGraphSelectableNodes(graphId, true);
 
   const areaConstants = useMemo(() => zijdAreaConstants(width, height), [width, height]);
   const { viewWidth, viewHeight } = areaConstants; 
-  
   const dataConstants = useMemo(() => dataToZijd(data, width / 2, reference, areaConstants.unitCount), [reference, width]);
-  const { unitLabel } = dataConstants;
-
-  // selectableNodes - все точки на графике 
-  useEffect(() => {
-    const elementsContainerH = document.getElementById(`${graphId}-h-dots`);
-    const elementsContainerV = document.getElementById(`${graphId}-v-dots`);
-    if (elementsContainerH && elementsContainerV) {
-      const nodes = Array.from(elementsContainerH.childNodes).concat(Array.from(elementsContainerV.childNodes));
-      setSelectableNodes(nodes);
-    };
-  }, [graphId]);
+  const { unitLabel } = dataConstants; 
+  const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
 
   // проверка на наличие в сторе выбранных шагов (их ID хранятся в selectedStepsIDs)
   useEffect(() => {

@@ -7,7 +7,7 @@ import dataToMag from "../../../utils/graphs/formatters/dataToMag";
 import { useAppDispatch, useAppSelector } from "../../../services/store/hooks";
 import { IPmdData } from "../../../utils/files/fileManipulations";
 import { GraphSettings, TMenuItem } from "../../../utils/graphs/types";
-import { usePMDGraphSettings } from "../../../utils/GlobalHooks";
+import { useGraphSelectableNodes, usePMDGraphSettings } from "../../../utils/GlobalHooks";
 
 
 export interface IMagGraph extends IGraph {
@@ -23,13 +23,12 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
   // 2. zoom&pan
   const dispatch = useAppDispatch();
-
-  const { selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
+  
+  const { reference, selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
+  const { menuItems, settings } = usePMDGraphSettings();
+  const selectableNodes = useGraphSelectableNodes(graphId, true);
 
   const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
-  const [selectableNodes, setSelectableNodes] = useState<ChildNode[]>([]);
-
-  const { menuItems, settings } = usePMDGraphSettings();
 
   const { 
     xyData, 
@@ -51,15 +50,6 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
   const unitY = (height / unitCountY);
   const zeroX = (0);
   const zeroY = (height);
-
-  // selectableNodes - все точки на графике 
-  useEffect(() => {
-    const elementsContainer = document.getElementById(`${graphId}-all-dots`);
-    if (elementsContainer) {
-      const nodes = Array.from(elementsContainer.childNodes);
-      setSelectableNodes(nodes);
-    }
-  }, [graphId]);
 
   useEffect(() => {
     if (selectedStepsIDs) setSelectedIndexes(selectedStepsIDs.map(id => id - 1));

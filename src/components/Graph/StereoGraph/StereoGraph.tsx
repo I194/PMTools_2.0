@@ -8,7 +8,7 @@ import { IPmdData } from "../../../utils/files/fileManipulations";
 import { useAppSelector } from "../../../services/store/hooks";
 import dataToStereoPMD from "../../../utils/graphs/formatters/dataToStereoPMD";
 import { GraphSettings, TMenuItem } from "../../../utils/graphs/types";
-import { usePMDGraphSettings } from "../../../utils/GlobalHooks";
+import { useGraphSelectableNodes, usePMDGraphSettings } from "../../../utils/GlobalHooks";
 
 export interface IStereoGraph extends IGraph {
   width: number;
@@ -23,11 +23,10 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
   // 2. zoom&pan
 
   const { reference, selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
+  const { menuItems, settings } = usePMDGraphSettings();
+  const selectableNodes = useGraphSelectableNodes(graphId, true); 
 
   const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
-  const [selectableNodes, setSelectableNodes] = useState<ChildNode[]>([]);
-
-  const { menuItems, settings } = usePMDGraphSettings();
 
   const { 
     directionalData, 
@@ -44,15 +43,6 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
   const unitCount = 18;
   const zeroX = (width / 2);
   const zeroY = (height / 2);
-
-  // selectableNodes - все точки на графике 
-  useEffect(() => {
-    const elementsContainer = document.getElementById(`${graphId}-all-dots`);
-    if (elementsContainer) {
-      const nodes = Array.from(elementsContainer.childNodes);
-      setSelectableNodes(nodes);
-    }
-  }, [graphId]);
 
   useEffect(() => {
     if (selectedStepsIDs) setSelectedIndexes(selectedStepsIDs.map(id => id - 1));

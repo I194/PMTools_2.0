@@ -1,4 +1,5 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import { useAppSelector } from '../services/store/hooks';
 import { GraphSettings, TMenuItem } from './graphs/types';
 
 export const useWindowSize = () => {
@@ -39,4 +40,33 @@ export const usePMDGraphSettings = () => {
   };
 
   return {menuItems, settings};
-}
+};
+
+export const useGraphSelectableNodes = (graphId: string, isZijd?: boolean) => {
+  const { reference } = useAppSelector(state => state.pcaPageReducer); 
+  const [selectableNodes, setSelectableNodes] = useState<Array<ChildNode>>([]);
+
+  const graphElement = document.getElementById(`${graphId}-graph`);
+
+  const elements = {
+    containerH: document.getElementById(`${graphId}-h-dots`),
+    containerV: document.getElementById(`${graphId}-v-dots`),
+    containerAll: document.getElementById(`${graphId}-all-dots`),
+  };
+
+  useEffect(() => {
+    const nodes: Array<ChildNode> = [];
+    if (isZijd) {
+      if (elements.containerH && elements.containerV) {
+        nodes.push(...elements.containerH.childNodes, ...elements.containerV.childNodes);
+      };
+    } else {
+      if (elements.containerAll) {
+        nodes.push(...elements.containerAll.childNodes);
+      };
+    };
+    setSelectableNodes(nodes);
+  }, [graphElement, isZijd, reference]);
+
+  return selectableNodes;
+};
