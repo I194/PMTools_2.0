@@ -16,7 +16,6 @@ interface IAxesAndData {
   directionalData: Array<[number, number]>;
   tooltipData: Array<TooltipDot>;
   selectedIndexes: Array<number>;
-  handleDotClick: (index: number) => void;
   settings: GraphSettings;
 }
 
@@ -28,7 +27,6 @@ const AxesAndData: FC<IAxesAndData> = ({
   directionalData,
   tooltipData,
   selectedIndexes,
-  handleDotClick,
   settings,
 }) => {
   return (
@@ -98,7 +96,6 @@ const AxesAndData: FC<IAxesAndData> = ({
           directionalData={directionalData}
           tooltipData={tooltipData}
           selectedIndexes={selectedIndexes}
-          handleDotClick={handleDotClick}
           dotFillColor='black'
           differentColors={true}
           colorsType="stereo"

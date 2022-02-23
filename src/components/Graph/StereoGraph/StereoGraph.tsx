@@ -44,20 +44,6 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
   const zeroX = (width / 2);
   const zeroY = (height / 2);
 
-  const handleDotClick = (index: number) => {
-    const selectedIndexesUpdated = Array.from(selectedIndexes);
-
-    if (selectedIndexes.includes(index)) {
-      selectedIndexesUpdated.splice(
-        selectedIndexesUpdated.findIndex((selectedIndex) => selectedIndex === index),
-        1
-      );
-    } else {
-      selectedIndexesUpdated.push(index);
-    }
-    // setSelectedIndexes(selectedIndexesUpdated);
-  };
-
   return (
     <>
       <SelectableGraph
@@ -83,7 +69,6 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
             directionalData={directionalData}
             tooltipData={tooltipData}
             selectedIndexes={selectedIndexes}
-            handleDotClick={handleDotClick}
             settings={settings}
           />
           <GraphSymbols 

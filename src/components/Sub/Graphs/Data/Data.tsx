@@ -12,7 +12,6 @@ interface IData {
   directionalData?: Array<[number, number]>;
   tooltipData?: Array<TooltipDot>;
   selectedIndexes: Array<number>;
-  handleDotClick: (index: number) => void;
   dotFillColor: string;
   differentColors?: boolean; 
   colorsType?: 'stereo' | 'colouredStereo';
@@ -27,7 +26,6 @@ const Data: FC<IData> = ({
   directionalData,
   tooltipData,
   selectedIndexes,
-  handleDotClick,
   dotFillColor,
   differentColors,
   colorsType,
@@ -79,7 +77,6 @@ const Data: FC<IData> = ({
                   : dotFillColor
               }
               strokeColor="black"
-              onClick={handleDotClick}
               settings={settings}
             />
           )

@@ -44,24 +44,6 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
 
   const selectedIndexes = useGraphSelectedIndexes();
 
-  // при нажатии на точку она выбирается
-  const handleDotClick = (index: number) => {
-    const selectedIndexesUpdated = Array.from(selectedIndexes);
-
-    if (selectedIndexes.includes(index)) {
-      selectedIndexesUpdated.splice(
-        selectedIndexesUpdated.findIndex((selectedIndex) => selectedIndex === index),
-        1
-      );
-    } else {
-      selectedIndexesUpdated.push(index);
-    };
-    // const stepsIDs = selectedIndexesUpdated.map(index => index + 1);
-    // if (stepsIDs.length > 0) dispatch(setSelectedStepsIDs(stepsIDs));
-    // else dispatch(setSelectedStepsIDs(null));
-    // setSelectedIndexes(selectedIndexesUpdated);
-  };
-
   return (
     <>
       <SelectableGraph
@@ -80,7 +62,6 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
             areaConstants={areaConstants}
             dataConstants={dataConstants}
             selectedIndexes={selectedIndexes}
-            handleDotClick={handleDotClick}
             settings={settings}
           />
           <GraphSymbols 

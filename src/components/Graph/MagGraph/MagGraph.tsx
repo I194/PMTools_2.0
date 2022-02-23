@@ -94,7 +94,6 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
             stepLabels={stepLabels}
             demagnetizationType={demagnetizationType}
             selectedIndexes={selectedIndexes}
-            handleDotClick={handleDotClick}
             settings={settings}
           />
         </g>

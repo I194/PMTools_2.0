@@ -66,6 +66,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
         hitRate={100}
         selectByClick={true}
         selectFromInside={false}
+        continueSelect={true}
         ratio={0}
         onSelectEnd={e => {
           const indexes = new Set(e.selected.map(el => el.id.split('-').pop()));

@@ -20,7 +20,6 @@ interface IAxesAndData {
   stepLabels: Array<string>;
   demagnetizationType: "thermal" | "alternating field" | undefined;
   selectedIndexes: Array<number>;
-  handleDotClick: (index: number) => void;
   settings: GraphSettings;
 }
 
@@ -34,7 +33,6 @@ const AxesAndData: FC<IAxesAndData> = ({
   maxMAG, stepLabels,
   demagnetizationType,
   selectedIndexes,
-  handleDotClick,
   settings,
 }) => {
 
@@ -116,7 +114,6 @@ const AxesAndData: FC<IAxesAndData> = ({
           data={data}
           tooltipData={tooltipData}
           selectedIndexes={selectedIndexes}
-          handleDotClick={handleDotClick}
           dotFillColor='black'
           differentColors={true}
           colorsType="stereo"

@@ -12,7 +12,6 @@ interface IDot {
   annotation: {id: string, label: string};
   tooltip?: TooltipDot;
   selected?: boolean;
-  onClick: (index: number) => void;
   showText?: boolean;
   fillColor: string;
   strokeColor: string;
@@ -26,7 +25,6 @@ const Dot: FC<IDot> = ({
   id,
   annotation,
   tooltip,
-  onClick,
   selected, 
   showText, 
   fillColor, 
@@ -117,8 +115,7 @@ const Dot: FC<IDot> = ({
           fill: fillColor, 
           stroke: strokeColor,
           cursor: 'pointer'
-        }} 
-        onClick={() => onClick(+id.split('-')[id.split('-').length - 1])}
+        }}
         onMouseOver={() => handleOver(id)}
         onMouseOut={() => handleOut(id)}
       />
