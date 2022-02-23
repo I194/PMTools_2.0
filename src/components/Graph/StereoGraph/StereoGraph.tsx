@@ -2,12 +2,11 @@ import React, { FC, useEffect, useMemo, useState } from "react";
 import styles from "./ZijdGraph.module.scss";
 import { IGraph } from "../../../utils/GlobalTypes";
 import { SelectableGraph, GraphSymbols, Unit} from "../../Sub/Graphs";
-import { dirToCartesian2D } from "../../../utils/graphs/dirToCartesian";
 import AxesAndData from "./AxesAndData";
+import { stereoAreaConstants } from "./StereoConstants";
 import { IPmdData } from "../../../utils/files/fileManipulations";
 import { useAppSelector } from "../../../services/store/hooks";
 import dataToStereoPMD from "../../../utils/graphs/formatters/dataToStereoPMD";
-import { GraphSettings, TMenuItem } from "../../../utils/graphs/types";
 import { useGraphSelectableNodes, useGraphSelectedIndexes, usePMDGraphSettings } from "../../../utils/GlobalHooks";
 
 export interface IStereoGraph extends IGraph {
@@ -25,24 +24,10 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
   const { reference, selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
   const { menuItems, settings } = usePMDGraphSettings();
   const selectableNodes = useGraphSelectableNodes(graphId, false); 
-
   const selectedIndexes = useGraphSelectedIndexes();
 
-  const { 
-    directionalData, 
-    xyData, 
-    tooltipData,
-    labels,
-  } = useMemo(() => dataToStereoPMD(data, width / 2, reference), [reference, width]);
-
-  const graphAreaMargin = 40;
-  const viewWidth = width + graphAreaMargin * 2;
-  const viewHeight = height + graphAreaMargin * 2;
-
-  const unit = (width / 18);
-  const unitCount = 18;
-  const zeroX = (width / 2);
-  const zeroY = (height / 2);
+  const {viewHeight, viewWidth, ...areaConstants} = stereoAreaConstants(width, height);
+  const dataConstants = useMemo(() => dataToStereoPMD(data, width / 2, reference), [reference, width]);
 
   return (
     <>
@@ -57,17 +42,10 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
         <g>
           <AxesAndData 
             graphId={graphId}
-            graphAreaMargin={graphAreaMargin}
-            zeroX={zeroX}
-            zeroY={zeroY}
             width={width}
             height={height}
-            unit={unit}
-            unitCount={unitCount}
-            labels={labels}
-            data={xyData}
-            directionalData={directionalData}
-            tooltipData={tooltipData}
+            areaConstants={areaConstants}
+            dataConstants={dataConstants}
             selectedIndexes={selectedIndexes}
             settings={settings}
           />

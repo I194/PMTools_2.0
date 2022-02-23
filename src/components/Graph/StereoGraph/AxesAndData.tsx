@@ -4,31 +4,48 @@ import { Axis, Data } from "../../Sub/Graphs";
 
 interface IAxesAndData {
   graphId: string;
-  graphAreaMargin: number;
-  zeroX: number;
-  zeroY: number;
   width: number;
   height: number;
-  unit: number;
-  unitCount: number;
-  labels: Array<string>;
-  data: Array<[number, number]>;
-  directionalData: Array<[number, number]>;
-  tooltipData: Array<TooltipDot>;
+  areaConstants: {
+    graphAreaMargin: number;
+    zeroX: number;
+    zeroY: number;
+    unit: number;
+    unitCount: number;
+  };
+  dataConstants: {
+    labels: Array<string>;
+    xyData: Array<[number, number]>;
+    directionalData: Array<[number, number]>;
+    tooltipData: Array<TooltipDot>;
+  };
   selectedIndexes: Array<number>;
   settings: GraphSettings;
 }
 
 const AxesAndData: FC<IAxesAndData> = ({ 
-  graphId, graphAreaMargin,
-  zeroX, zeroY, width, height, unit, unitCount,
-  labels,
-  data, 
-  directionalData,
-  tooltipData,
+  graphId, width, height,
+  areaConstants,
+  dataConstants,
   selectedIndexes,
   settings,
 }) => {
+
+  const {
+    graphAreaMargin,
+    unit,
+    unitCount,
+    zeroX,
+    zeroY,
+  } = areaConstants;
+
+  const {
+    directionalData,
+    tooltipData,
+    labels,
+    xyData
+  } = dataConstants;
+
   return (
     <g 
       id={`${graphId}-axes-and-data`}
@@ -92,7 +109,7 @@ const AxesAndData: FC<IAxesAndData> = ({
           graphId={graphId}
           type='all'
           labels={labels}
-          data={data}
+          data={xyData}
           directionalData={directionalData}
           tooltipData={tooltipData}
           selectedIndexes={selectedIndexes}

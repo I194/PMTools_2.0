@@ -4,44 +4,60 @@ import { Axis, Data } from "../../Sub/Graphs";
 
 interface IAxesAndData {
   graphId: string;
-  graphAreaMargin: number;
-  zeroX: number;
-  zeroY: number;
   width: number;
   height: number;
-  unitX: number;
-  unitY: number;
-  unitCountX: number;
-  unitCountY: number;
-  data: Array<[number, number]>;
-  labels: Array<string>;
-  tooltipData: Array<TooltipDot>;
-  maxMAG: number;
-  stepLabels: Array<string>;
-  demagnetizationType: "thermal" | "alternating field" | undefined;
+  areaConstants: {
+    graphAreaMargin: number;
+    zeroX: number;
+    zeroY: number;
+    unitX: number;
+    unitY: number;
+    unitCountX: number;
+    unitCountY: number;
+  };
+  dataConstants: {
+    xyData: Array<[number, number]>;
+    labels: Array<string>;
+    tooltipData: Array<TooltipDot>;
+    maxMAG: number;
+    stepLabels: Array<string>;
+    demagnetizationType: "thermal" | "alternating field" | undefined;
+  };
   selectedIndexes: Array<number>;
   settings: GraphSettings;
 }
 
 const AxesAndData: FC<IAxesAndData> = ({ 
-  graphId, graphAreaMargin,
-  zeroX, zeroY, width, height,
-  unitX, unitY, unitCountX, unitCountY,
-  data, 
-  labels,
-  tooltipData,
-  maxMAG, stepLabels,
-  demagnetizationType,
+  graphId, width, height,
+  areaConstants,
+  dataConstants,
   selectedIndexes,
   settings,
 }) => {
 
+  const {
+    graphAreaMargin,
+    zeroX,
+    zeroY,
+    unitX,
+    unitY,
+    unitCountX,
+    unitCountY,
+  } = areaConstants;
+
+  const { 
+    xyData, 
+    stepLabels, 
+    maxMAG,
+    tooltipData,
+    labels,
+    demagnetizationType,
+  } = dataConstants;
+
   const labelsX = stepLabels;
   const labelsY = [];
-
-  for (let i = unitCountY; i >= 0; i--) {
-    labelsY.push((i / 10).toString());
-  }
+  
+  for (let i = unitCountY; i >= 0; i--) labelsY.push((i / 10).toString());
 
   const axisNameX = demagnetizationType === 'thermal' ? `°C` : 'nT';
 
@@ -111,7 +127,7 @@ const AxesAndData: FC<IAxesAndData> = ({
           graphId={graphId}
           type='all'
           labels={labels}
-          data={data}
+          data={xyData}
           tooltipData={tooltipData}
           selectedIndexes={selectedIndexes}
           dotFillColor='black'

@@ -31,13 +31,13 @@ const dataToMag = (data: IPmdData, graphSize: number) => {
     stepValues.push(+step.step.match(/\d+/)![0]);
   });
 
-  const maxMag = Math.max(...mag);
+  const maxMAG = Math.max(...mag);
   const maxStep = Math.max(...stepValues);
   const maxStepOrder = maxStep.toFixed(0).length - 1;
   const stepsCeil = Math.ceil(maxStep / Math.pow(10, maxStepOrder)) * Math.pow(10, maxStepOrder);
   
   const xyData: Array<[number, number]> = stepValues.map((step, index) => {
-    const normalizedMAG = mag[index] / maxMag;
+    const normalizedMAG = mag[index] / maxMAG;
     const x = step * (graphSize / stepsCeil);
     const y = (1 - normalizedMAG) * graphSize;
     return [x, y]; // "x" is stepValue, "y" is normalizedMAG
@@ -47,13 +47,16 @@ const dataToMag = (data: IPmdData, graphSize: number) => {
   for (let i = 0; i <= stepsCeil; i += Math.pow(10, maxStepOrder)) {
     stepLabels.push(i.toString());
   };
+
+  const demagnetizationType = data.steps[0].demagType;
   
   return { 
     xyData, 
     stepLabels, 
-    maxMag,
+    maxMAG,
     tooltipData,
     labels,
+    demagnetizationType,
   };
 
 };

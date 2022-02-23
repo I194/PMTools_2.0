@@ -36,13 +36,10 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
   const { reference, selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
   const { menuItems, settings } = usePMDGraphSettings();
   const selectableNodes = useGraphSelectableNodes(graphId, true);
-
-  const areaConstants = useMemo(() => zijdAreaConstants(width, height), [width, height]);
-  const { viewWidth, viewHeight } = areaConstants; 
-  const dataConstants = useMemo(() => dataToZijd(data, width / 2, reference, areaConstants.unitCount), [reference, width]);
-  const { unitLabel } = dataConstants; 
-
   const selectedIndexes = useGraphSelectedIndexes();
+
+  const { viewWidth, viewHeight, ...areaConstants} = useMemo(() => zijdAreaConstants(width, height), [width, height]);
+  const { unitLabel, ...dataConstants } = useMemo(() => dataToZijd(data, width / 2, reference, areaConstants.unitCount), [reference, width]);
 
   return (
     <>
