@@ -1,4 +1,5 @@
 import React, { useLayoutEffect, useState } from 'react';
+import { GraphSettings, TMenuItem } from './graphs/types';
 
 export const useWindowSize = () => {
   const [size, setSize] = useState([0, 0]);
@@ -11,3 +12,31 @@ export const useWindowSize = () => {
   }, []);
   return size;
 };
+
+export const usePMDGraphSettings = () => {
+  const [tooltips, setTooltips] = useState<boolean>(true);
+  const [ticks, setTicks] = useState<boolean>(true);
+  const [annotations, setAnnotations] = useState<boolean>(true);
+  const [stepID, setStepID] = useState<boolean>(true);
+  const [stepLabel, setStepLabel] = useState<boolean>(true);
+
+  const menuItems: Array<TMenuItem> = [
+    {label: 'Tooltips', onClick: () => setTooltips(!tooltips), state: tooltips},
+    {label: 'Ticks', onClick: () => setTicks(!ticks), state: ticks, divider: true},
+    {label: 'Annotations', onClick: () => setAnnotations(!annotations), state: annotations},
+    {label: 'Step ID', onClick: () => setStepID(!stepID), state: stepID},
+    {label: 'Step label', onClick: () => setStepLabel(!stepLabel), state: stepLabel},
+  ];
+
+  const settings: GraphSettings = {
+    area: {ticks},
+    dots: {
+      annotations,
+      tooltips,
+      id: stepID,
+      label: stepLabel,
+    },
+  };
+
+  return {menuItems, settings};
+}

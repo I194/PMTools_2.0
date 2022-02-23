@@ -7,6 +7,7 @@ import dataToMag from "../../../utils/graphs/formatters/dataToMag";
 import { useAppDispatch, useAppSelector } from "../../../services/store/hooks";
 import { IPmdData } from "../../../utils/files/fileManipulations";
 import { GraphSettings, TMenuItem } from "../../../utils/graphs/types";
+import { usePMDGraphSettings } from "../../../utils/GlobalHooks";
 
 
 export interface IMagGraph extends IGraph {
@@ -28,29 +29,7 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
   const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
   const [selectableNodes, setSelectableNodes] = useState<ChildNode[]>([]);
 
-  const [tooltips, setTooltips] = useState<boolean>(true);
-  const [ticks, setTicks] = useState<boolean>(true);
-  const [annotations, setAnnotations] = useState<boolean>(true);
-  const [stepID, setStepID] = useState<boolean>(true);
-  const [stepLabel, setStepLabel] = useState<boolean>(true);
-
-  const menuItems: Array<TMenuItem> = [
-    {label: 'Tooltips', onClick: () => setTooltips(!tooltips), state: tooltips},
-    {label: 'Ticks', onClick: () => setTicks(!ticks), state: ticks, divider: true},
-    {label: 'Annotations', onClick: () => setAnnotations(!annotations), state: annotations},
-    {label: 'Step ID', onClick: () => setStepID(!stepID), state: stepID},
-    {label: 'Step label', onClick: () => setStepLabel(!stepLabel), state: stepLabel},
-  ];
-
-  const settings: GraphSettings = {
-    area: {ticks},
-    dots: {
-      annotations,
-      tooltips,
-      id: stepID,
-      label: stepLabel,
-    },
-  };
+  const { menuItems, settings } = usePMDGraphSettings();
 
   const { 
     xyData, 
