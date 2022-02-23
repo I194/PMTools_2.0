@@ -6,13 +6,12 @@ import { UseSelectionContainerParams } from 'react-drag-to-select/dist/hooks/use
 
 export interface MouseSelectionProps {
   onSelectionChange: OnSelectionChange;
-  onSelectionEnd: () => void;
+  onSelectionEnd?: () => void;
   eventsElement: HTMLElement | Window | null;
 }
 
 const MouseSelection: FC<MouseSelectionProps> = ({ 
   onSelectionChange, 
-  onSelectionEnd,
   eventsElement, 
 }) => {
 
@@ -21,7 +20,8 @@ const MouseSelection: FC<MouseSelectionProps> = ({
     onSelectionChange,
     onSelectionStart: () => {
     },
-    onSelectionEnd,
+    onSelectionEnd: () => {
+    },
     selectionProps: {
       style: {
         border: '2px dashed purple',

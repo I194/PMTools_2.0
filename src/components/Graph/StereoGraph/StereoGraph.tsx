@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import styles from "./ZijdGraph.module.scss";
 import { IGraph } from "../../../utils/GlobalTypes";
 import { SelectableGraph, GraphSymbols, Unit} from "../../Sub/Graphs";
@@ -55,7 +55,7 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
     xyData, 
     tooltipData,
     labels,
-  } = dataToStereoPMD(data, width / 2, reference);
+  } = useMemo(() => dataToStereoPMD(data, width / 2, reference), [reference, width]);
 
   const graphAreaMargin = 40;
   const viewWidth = width + graphAreaMargin * 2;
@@ -92,7 +92,6 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
       selectedIndexesUpdated.push(index);
     }
     setSelectedIndexes(selectedIndexesUpdated);
-    return null;
   };
 
   return (

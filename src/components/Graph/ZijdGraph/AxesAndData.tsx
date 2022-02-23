@@ -4,35 +4,52 @@ import { Axis, Data } from "../../Sub/Graphs";
 
 interface IAxesAndData {
   graphId: string;
-  graphAreaMargin: number;
-  zeroX: number;
-  zeroY: number;
   width: number;
   height: number;
-  unit: number;
-  unitCount: number;
-  labels: Array<string>;
-  horizontalProjectionData: Array<[number, number]>;
-  verticalProjectionData: Array<[number, number]>;
-  directionalData: Array<[number, number]>;
-  tooltipData: Array<TooltipDot>;
+  areaConstants: {
+    graphAreaMargin: number;
+    zeroX: number;
+    zeroY: number;
+    unit: number;
+    unitCount: number;
+  };
+  dataConstants: {
+    labels: Array<string>;
+    horizontalProjectionData: Array<[number, number]>;
+    verticalProjectionData: Array<[number, number]>;
+    directionalData: Array<[number, number]>;
+    tooltipData: Array<TooltipDot>;
+  };
   selectedIndexes: Array<number>;
   handleDotClick: (index: number) => void;
   settings: GraphSettings;
 }
 
 const AxesAndData: FC<IAxesAndData> = ({ 
-  graphId, graphAreaMargin,
-  zeroX, zeroY, width, height, unit, unitCount,
-  labels,
-  horizontalProjectionData,
-  verticalProjectionData,
-  directionalData,
-  tooltipData,
+  graphId, width, height,
+  areaConstants, 
+  dataConstants,
   selectedIndexes,
   handleDotClick,
   settings,
 }) => {
+  
+  const {
+    graphAreaMargin,
+    unit,
+    unitCount,
+    zeroX,
+    zeroY,
+  } = areaConstants;
+
+  const {
+    horizontalProjectionData,
+    verticalProjectionData,
+    directionalData,
+    tooltipData,
+    labels,
+  } = dataConstants;
+
   return (
     <g 
       id={`${graphId}-axes-and-data`}

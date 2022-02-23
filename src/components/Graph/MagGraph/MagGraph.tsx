@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import styles from "./MagGraph.module.scss";
 import { IGraph } from "../../../utils/GlobalTypes";
 import { SelectableGraph, GraphSymbols, Unit} from "../../Sub/Graphs";
@@ -58,7 +58,7 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
     maxMag,
     tooltipData,
     labels,
-  } = dataToMag(data, width);
+  } = useMemo(() => dataToMag(data, width), [width]);
 
   const demagnetizationType = data.steps[0].demagType;
 
@@ -99,10 +99,7 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
       selectedIndexesUpdated.push(index);
     }
     setSelectedIndexes(selectedIndexesUpdated);
-    return null;
   };
-
-  console.log("nodes:", selectableNodes)
 
   return (
     <>

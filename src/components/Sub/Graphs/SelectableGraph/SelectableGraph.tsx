@@ -76,11 +76,11 @@ const SelectableGraph: FC<ISelectableGraph> = ({
   );
 
   const onSelectionEnd = () => {
-    const stepsIDs = nodesDuplicated 
-        ? selectedIndexes.slice(0, selectedIndexes.length/2).map(index => index + 1)
-        : selectedIndexes.map(index => index + 1);
-    if (stepsIDs.length > 0) dispatch(setSelectedStepsIDs(stepsIDs));
-    else dispatch(setSelectedStepsIDs(null));
+    // const stepsIDs = nodesDuplicated 
+    //     ? selectedIndexes.slice(0, selectedIndexes.length/2).map(index => index + 1)
+    //     : selectedIndexes.map(index => index + 1);
+    // if (stepsIDs.length > 0) dispatch(setSelectedStepsIDs(stepsIDs));
+    // else dispatch(setSelectedStepsIDs(null));
   }
 
   const handleDoubleClick = (event: any) => {
@@ -89,6 +89,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
     const timesClicked = event.detail;
     if (timesClicked === 2) {
       setSelectedIndexes([]);
+      dispatch(setSelectedStepsIDs(null));
     }
   };
 
@@ -110,7 +111,6 @@ const SelectableGraph: FC<ISelectableGraph> = ({
       </ContextMenu>
       <MouseSelection 
         onSelectionChange={handleSelectionChange} 
-        onSelectionEnd={onSelectionEnd}
         eventsElement={graphElement}
       />
     </>

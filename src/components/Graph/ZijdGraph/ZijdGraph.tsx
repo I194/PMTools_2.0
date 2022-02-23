@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import styles from "./ZijdGraph.module.scss";
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
 import { IGraph } from "../../../utils/GlobalTypes";
@@ -8,6 +8,7 @@ import { IPmdData } from "../../../utils/files/fileManipulations";
 import dataToZijd from "../../../utils/graphs/formatters/dataToZijd";
 import { GraphSettings, TMenuItem } from "../../../utils/graphs/types";
 import { setSelectedStepsIDs } from "../../../services/reducers/pcaPage";
+import { zijdAreaConstants } from "./ZijdConstants";
 
 interface LineCoords {
   x1: number;
@@ -60,23 +61,11 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
     },
   };
 
-  const graphAreaMargin = 56;
-  const viewWidth = width + graphAreaMargin * 2;
-  const viewHeight = height + graphAreaMargin * 2;
-
-  const unit = (width / 10);
-  const unitCount = 10;
-  const zeroX = (width / 2);
-  const zeroY = (height / 2);
+  const areaConstants = useMemo(() => zijdAreaConstants(width, height), [width, height]);
+  const { viewWidth, viewHeight } = areaConstants; 
   
-  const {
-    horizontalProjectionData,
-    verticalProjectionData,
-    directionalData,
-    unitLabel,
-    tooltipData,
-    labels,
-  } = dataToZijd(data, width / 2, reference, unitCount);
+  const dataConstants = useMemo(() => dataToZijd(data, width / 2, reference, areaConstants.unitCount), [reference, width]);
+  const { unitLabel } = dataConstants;
 
   // selectableNodes - все точки на графике 
   useEffect(() => {
@@ -88,11 +77,13 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
     }
   }, [graphId]);
 
+  // проверка на наличие в сторе выбранных шагов (их ID хранятся в selectedStepsIDs)
   useEffect(() => {
     if (selectedStepsIDs) setSelectedIndexes(selectedStepsIDs.map(id => id - 1));
     else setSelectedIndexes([]); 
   }, [selectedStepsIDs]);
 
+  // при нажатии на точку она выбирается
   const handleDotClick = (index: number) => {
     const selectedIndexesUpdated = Array.from(selectedIndexes);
 
@@ -104,11 +95,10 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
     } else {
       selectedIndexesUpdated.push(index);
     };
-    const stepsIDs = selectedIndexesUpdated.map(index => index + 1);
-    if (stepsIDs.length > 0) dispatch(setSelectedStepsIDs(stepsIDs));
-    else dispatch(setSelectedStepsIDs(null));
+    // const stepsIDs = selectedIndexesUpdated.map(index => index + 1);
+    // if (stepsIDs.length > 0) dispatch(setSelectedStepsIDs(stepsIDs));
+    // else dispatch(setSelectedStepsIDs(null));
     setSelectedIndexes(selectedIndexesUpdated);
-    return null;
   };
 
   return (
@@ -116,7 +106,7 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
       <SelectableGraph
         graphId={graphId}
         width={viewWidth}
-        height={viewWidth}
+        height={viewHeight}
         selectableNodes={selectableNodes}
         selectedIndexes={selectedIndexes}
         setSelectedIndexes={setSelectedIndexes}
@@ -126,20 +116,12 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
         <g>
           <AxesAndData 
             graphId={graphId}
-            graphAreaMargin={graphAreaMargin}
-            zeroX={zeroX}
-            zeroY={zeroY}
             width={width}
             height={height}
-            unit={unit}
-            unitCount={unitCount}
-            labels={labels}
-            horizontalProjectionData={horizontalProjectionData}
-            verticalProjectionData={verticalProjectionData}
-            directionalData={directionalData}
+            areaConstants={areaConstants}
+            dataConstants={dataConstants}
             selectedIndexes={selectedIndexes}
             handleDotClick={handleDotClick}
-            tooltipData={tooltipData}
             settings={settings}
           />
           <GraphSymbols 
