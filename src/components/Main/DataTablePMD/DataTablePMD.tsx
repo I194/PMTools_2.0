@@ -1,13 +1,16 @@
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 import styles from './DataTablePMD.module.scss';
 import { IPmdData } from "../../../utils/files/fileManipulations";
-import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridSelectionModel, GridToolbar } from '@mui/x-data-grid';
 import { useTheme } from '@mui/material/styles';
 import {
   separatorColor,
   borderColor,
 } from '../../../utils/ThemeConstants';
 import DataTablePMDSkeleton from './DataTablePMDSkeleton';
+import { DataGridPMDRow } from "../../../utils/GlobalTypes";
+import { useAppDispatch, useAppSelector } from "../../../services/store/hooks";
+import { setSelectedStepsIDs } from "../../../services/reducers/pcaPage";
 
 interface IDataTablePMD {
   data: IPmdData | null;
@@ -15,7 +18,20 @@ interface IDataTablePMD {
 
 const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
 
+  const dispatch = useAppDispatch();
+
   const theme = useTheme();
+
+  // selectionModel is array of ID's of rows
+  const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
+  const [selectedRows, setSelectedRows] = useState<Array<DataGridPMDRow>>([]);
+
+  const { selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer);
+
+  useEffect(() => {
+    if (selectedStepsIDs) setSelectionModel(selectedStepsIDs);
+    else setSelectionModel([]); 
+  }, [selectedStepsIDs]);
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', type: 'string', width: 40 },
@@ -37,10 +53,10 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
   
   if (!data) return <DataTablePMDSkeleton />;
 
-  const rows = data.steps.map((stepData, index) => {
+  const rows: Array<DataGridPMDRow> = data.steps.map((stepData, index) => {
     const { step, Dgeo, Igeo, Dstrat, Istrat, mag, a95, comment } = stepData;
     return {
-      id: index,
+      id: index + 1,
       step,
       Dgeo,
       Igeo,
@@ -58,6 +74,15 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
         rows={rows} 
         columns={columns} 
         checkboxSelection
+        selectionModel={selectionModel}
+        onSelectionModelChange={(e) => {
+          setSelectionModel(e);
+          const selectedIDs = new Set(e);
+          if ([...selectedIDs].length > 0) dispatch(setSelectedStepsIDs([...selectedIDs]));
+          else dispatch(setSelectedStepsIDs(null));
+          const selectedRows = rows.filter((r) => selectedIDs.has(r.id));
+          setSelectedRows(selectedRows);
+        }}
         components={{
           Toolbar: GridToolbar,
         }}

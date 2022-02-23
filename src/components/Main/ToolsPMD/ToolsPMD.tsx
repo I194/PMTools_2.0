@@ -30,27 +30,47 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
 
   const dispatch = useAppDispatch();
 
-  const { reference } = useAppSelector(state => state.pcaPageReducer); 
+  const { reference, selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
 
   const [coordinateSystem, setCoordinateSystem] = useState<Reference>('geographic');
   const [stepsInput, setStepsInput] = useState<string>('');
+  const [disabledStatistics, setDisabledStatistics] = useState<boolean>(!selectedStepsIDs);
 
-  const handleReferenceSelect = (option: string) => {
-    dispatch(setReference(labelToReference(option)));
-  };
+  useEffect(() => {
+    console.log(selectedStepsIDs);
+    if (selectedStepsIDs) {
+      // setStepsInput(selectedStepsIDs.join(','));
+    }
+    else {
+      // setStepsInput('')
+    }
+    setDisabledStatistics(!selectedStepsIDs);
+  }, [selectedStepsIDs]);
 
-  const handleStepsSelect = (statisticsMode: 'pca' | 'pca0' | 'gc' | 'gcn') => {
-    let stepsIDs = [];
+  useEffect(() => {
+    // selected steps ids update here
+    let stepsIDs: Array<number> | null = [];
     if (stepsInput.includes(',')) stepsIDs = stepsInput.split(',').map(id => +id);
     else if (stepsInput.includes('-')) {
       const [startID, endID] = stepsInput.split('-');
       for (let i = +startID; i <= +endID; i++) {
         stepsIDs.push(i);
       };
-    };
+    }
+    else if (stepsInput.length === 1) stepsIDs.push(+stepsInput[0]);
+    else stepsIDs = null;
+    if (stepsIDs && stepsIDs.includes(NaN)) stepsIDs = null;
     dispatch(setSelectedStepsIDs(stepsIDs));
-    dispatch(setStatisticsMode(statisticsMode));
+  }, [stepsInput]);
+
+  const handleReferenceSelect = (option: string) => {
+    dispatch(setReference(labelToReference(option)));
   };
+
+  const onStatisticsModeApply = (statisticsMode: 'pca' | 'pca0' | 'gc' | 'gcn') => {
+    dispatch(setStatisticsMode(statisticsMode));
+    console.log('a')
+  }
 
   useEffect(() => {
     setCoordinateSystem(reference);
@@ -70,10 +90,10 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
         placeholder={'Введите шаги'}
         leftIconButton={{icon: <FilterAltOutlinedIcon />, onClick: () => null}}
         rightIconButtons={[
-          {icon: <Typography>PCA</Typography>, onClick: () => handleStepsSelect('pca')},
-          {icon: <Typography>PCA<sub>0</sub></Typography>, onClick: () => handleStepsSelect('pca0')},
-          {icon: <Typography>GC</Typography>, onClick: () => handleStepsSelect('gc')},
-          {icon: <Typography>GCn</Typography>, onClick: () => handleStepsSelect('gcn')},
+          {icon: <Typography>PCA</Typography>, onClick: () => onStatisticsModeApply('pca'), disabled: disabledStatistics},
+          {icon: <Typography>PCA<sub>0</sub></Typography>, onClick: () => onStatisticsModeApply('pca0'), disabled: disabledStatistics},
+          {icon: <Typography>GC</Typography>, onClick: () => onStatisticsModeApply('gc'), disabled: disabledStatistics},
+          {icon: <Typography>GCn</Typography>, onClick: () => onStatisticsModeApply('gcn'), disabled: disabledStatistics},
         ]}
         inputText={stepsInput}
         setInputText={setStepsInput}

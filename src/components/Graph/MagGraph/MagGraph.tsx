@@ -4,7 +4,7 @@ import { IGraph } from "../../../utils/GlobalTypes";
 import { SelectableGraph, GraphSymbols, Unit} from "../../Sub/Graphs";
 import AxesAndData from "./AxesAndData";
 import dataToMag from "../../../utils/graphs/formatters/dataToMag";
-import { useAppSelector } from "../../../services/store/hooks";
+import { useAppDispatch, useAppSelector } from "../../../services/store/hooks";
 import { IPmdData } from "../../../utils/files/fileManipulations";
 import { GraphSettings, TMenuItem } from "../../../utils/graphs/types";
 
@@ -21,6 +21,9 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
   // ToDo: 
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
   // 2. zoom&pan
+  const dispatch = useAppDispatch();
+
+  const { selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
 
   const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
   const [selectableNodes, setSelectableNodes] = useState<ChildNode[]>([]);
@@ -77,7 +80,12 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
       const nodes = Array.from(elementsContainer.childNodes);
       setSelectableNodes(nodes);
     }
-  }, [graphId])
+  }, [graphId]);
+
+  useEffect(() => {
+    if (selectedStepsIDs) setSelectedIndexes(selectedStepsIDs.map(id => id - 1));
+    else setSelectedIndexes([]); 
+  }, [selectedStepsIDs]);
 
   const handleDotClick = (index: number) => {
     const selectedIndexesUpdated = Array.from(selectedIndexes);

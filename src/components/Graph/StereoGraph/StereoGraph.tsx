@@ -21,7 +21,7 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
   // 2. zoom&pan
 
-  const { reference } = useAppSelector(state => state.pcaPageReducer); 
+  const { reference, selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
 
   const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
   const [selectableNodes, setSelectableNodes] = useState<ChildNode[]>([]);
@@ -73,7 +73,12 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
       const nodes = Array.from(elementsContainer.childNodes);
       setSelectableNodes(nodes);
     }
-  }, [graphId])
+  }, [graphId]);
+
+  useEffect(() => {
+    if (selectedStepsIDs) setSelectedIndexes(selectedStepsIDs.map(id => id - 1));
+    else setSelectedIndexes([]); 
+  }, [selectedStepsIDs]);
 
   const handleDotClick = (index: number) => {
     const selectedIndexesUpdated = Array.from(selectedIndexes);

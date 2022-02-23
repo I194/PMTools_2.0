@@ -5,6 +5,8 @@ import { MouseSelection } from "..";
 import ContextMenu from "../ContextMenu/ContextMenu";
 import ExportButton from "../Buttons/ExportButton/ExportButton";
 import { TMenuItem } from "../../../../utils/graphs/types";
+import { useAppDispatch } from "../../../../services/store/hooks";
+import { setSelectedStepsIDs } from "../../../../services/reducers/pcaPage";
 
 interface ISelectableGraph {
   graphId: string;
@@ -28,7 +30,9 @@ const SelectableGraph: FC<ISelectableGraph> = ({
   nodesDuplicated,
   menuItems
 }) => {
-  
+
+  const dispatch = useAppDispatch();
+
   const graphRef = useRef(null);
   const selectableNodesBoxes = useRef<Box[]>([]);
 
@@ -71,6 +75,14 @@ const SelectableGraph: FC<ISelectableGraph> = ({
     }, [selectableNodesBoxes],
   );
 
+  const onSelectionEnd = () => {
+    const stepsIDs = nodesDuplicated 
+        ? selectedIndexes.slice(0, selectedIndexes.length/2).map(index => index + 1)
+        : selectedIndexes.map(index => index + 1);
+    if (stepsIDs.length > 0) dispatch(setSelectedStepsIDs(stepsIDs));
+    else dispatch(setSelectedStepsIDs(null));
+  }
+
   const handleDoubleClick = (event: any) => {
     event.preventDefault();
 
@@ -98,6 +110,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
       </ContextMenu>
       <MouseSelection 
         onSelectionChange={handleSelectionChange} 
+        onSelectionEnd={onSelectionEnd}
         eventsElement={graphElement}
       />
     </>

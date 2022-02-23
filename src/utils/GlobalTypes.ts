@@ -7,3 +7,15 @@ export interface IGraph {
 };
 
 export type PMDGraph = React.FC<IZijdGraph> | React.FC<IStereoGraph> | React.FC<IMagGraph>;
+
+export type DataGridPMDRow = {
+  id: number;
+  step: string;
+  Dgeo: number;
+  Igeo: number;
+  Dstrat: number;
+  Istrat: number;
+  mag: string;
+  a95: number;
+  comment: string;
+};

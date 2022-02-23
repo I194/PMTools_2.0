@@ -7,6 +7,7 @@ import AxesAndData from "./AxesAndData";
 import { IPmdData } from "../../../utils/files/fileManipulations";
 import dataToZijd from "../../../utils/graphs/formatters/dataToZijd";
 import { GraphSettings, TMenuItem } from "../../../utils/graphs/types";
+import { setSelectedStepsIDs } from "../../../services/reducers/pcaPage";
 
 interface LineCoords {
   x1: number;
@@ -30,7 +31,7 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
 
   const dispatch = useAppDispatch();
 
-  const { reference } = useAppSelector(state => state.pcaPageReducer); 
+  const { reference, selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
 
   const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
   const [selectableNodes, setSelectableNodes] = useState<ChildNode[]>([]);
@@ -85,7 +86,12 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
       const nodes = Array.from(elementsContainerH.childNodes).concat(Array.from(elementsContainerV.childNodes));
       setSelectableNodes(nodes);
     }
-  }, [graphId])
+  }, [graphId]);
+
+  useEffect(() => {
+    if (selectedStepsIDs) setSelectedIndexes(selectedStepsIDs.map(id => id - 1));
+    else setSelectedIndexes([]); 
+  }, [selectedStepsIDs]);
 
   const handleDotClick = (index: number) => {
     const selectedIndexesUpdated = Array.from(selectedIndexes);
@@ -97,7 +103,10 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
       );
     } else {
       selectedIndexesUpdated.push(index);
-    }
+    };
+    const stepsIDs = selectedIndexesUpdated.map(index => index + 1);
+    if (stepsIDs.length > 0) dispatch(setSelectedStepsIDs(stepsIDs));
+    else dispatch(setSelectedStepsIDs(null));
     setSelectedIndexes(selectedIndexesUpdated);
     return null;
   };
