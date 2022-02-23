@@ -9,7 +9,7 @@ import dataToZijd from "../../../utils/graphs/formatters/dataToZijd";
 import { GraphSettings, TMenuItem } from "../../../utils/graphs/types";
 import { setSelectedStepsIDs } from "../../../services/reducers/pcaPage";
 import { zijdAreaConstants } from "./ZijdConstants";
-import { useGraphSelectableNodes, usePMDGraphSettings } from "../../../utils/GlobalHooks";
+import { useGraphSelectableNodes, useGraphSelectedIndexes, usePMDGraphSettings } from "../../../utils/GlobalHooks";
 
 interface LineCoords {
   x1: number;
@@ -34,7 +34,6 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
   const dispatch = useAppDispatch();
 
   const { reference, selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
-
   const { menuItems, settings } = usePMDGraphSettings();
   const selectableNodes = useGraphSelectableNodes(graphId, true);
 
@@ -42,13 +41,8 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
   const { viewWidth, viewHeight } = areaConstants; 
   const dataConstants = useMemo(() => dataToZijd(data, width / 2, reference, areaConstants.unitCount), [reference, width]);
   const { unitLabel } = dataConstants; 
-  const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
 
-  // проверка на наличие в сторе выбранных шагов (их ID хранятся в selectedStepsIDs)
-  useEffect(() => {
-    if (selectedStepsIDs) setSelectedIndexes(selectedStepsIDs.map(id => id - 1));
-    else setSelectedIndexes([]); 
-  }, [selectedStepsIDs]);
+  const selectedIndexes = useGraphSelectedIndexes();
 
   // при нажатии на точку она выбирается
   const handleDotClick = (index: number) => {
@@ -65,7 +59,7 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
     // const stepsIDs = selectedIndexesUpdated.map(index => index + 1);
     // if (stepsIDs.length > 0) dispatch(setSelectedStepsIDs(stepsIDs));
     // else dispatch(setSelectedStepsIDs(null));
-    setSelectedIndexes(selectedIndexesUpdated);
+    // setSelectedIndexes(selectedIndexesUpdated);
   };
 
   return (
@@ -75,8 +69,6 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) =
         width={viewWidth}
         height={viewHeight}
         selectableNodes={selectableNodes}
-        selectedIndexes={selectedIndexes}
-        setSelectedIndexes={setSelectedIndexes}
         nodesDuplicated={true}
         menuItems={menuItems}
       >

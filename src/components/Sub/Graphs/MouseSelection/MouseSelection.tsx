@@ -1,33 +1,30 @@
 import React, { FC, useEffect } from 'react';
 import { OnSelectionChange, useSelectionContainer } from 'react-drag-to-select';
-import { UseSelectionContainerParams } from 'react-drag-to-select/dist/hooks/useSelectionContainer';
+// import { OnSelectionChange, useSelectionContainer } from "@air/react-drag-to-select";
 
 // export interface MouseSelectionProps extends Pick<UseSelectionContainerParams<HTMLElement>, 'onSelectionChange'> {}
 
 export interface MouseSelectionProps {
   onSelectionChange: OnSelectionChange;
-  onSelectionEnd?: () => void;
+  onSelectionEnd: () => void;
   eventsElement: HTMLElement | Window | null;
 }
 
 const MouseSelection: FC<MouseSelectionProps> = ({ 
-  onSelectionChange, 
+  onSelectionChange,
+  onSelectionEnd,
   eventsElement, 
 }) => {
 
   const { DragSelection } = useSelectionContainer({
     eventsElement,
     onSelectionChange,
-    onSelectionStart: () => {
-    },
-    onSelectionEnd: () => {
-    },
+    onSelectionEnd,
     selectionProps: {
       style: {
         border: '2px dashed purple',
         borderRadius: 2,
         opacity: 0.5,
-        translate: '500px 500px',
         position: 'absolute'
       },
     },

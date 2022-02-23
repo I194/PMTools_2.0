@@ -3,6 +3,7 @@ import { useAppSelector } from '../services/store/hooks';
 import { GraphSettings, TMenuItem } from './graphs/types';
 
 export const useWindowSize = () => {
+  // отслеживает изменения в размере окна (в том числе при его масштабировании, например, посредством ctrl+, ctrl-)
   const [size, setSize] = useState([0, 0]);
   useLayoutEffect(() => {
     const updateSize = () => {
@@ -15,6 +16,7 @@ export const useWindowSize = () => {
 };
 
 export const usePMDGraphSettings = () => {
+  // производит всю работу с хранением и отображением настроек графиков на странице PCA (PMD Graphs)
   const [tooltips, setTooltips] = useState<boolean>(true);
   const [ticks, setTicks] = useState<boolean>(true);
   const [annotations, setAnnotations] = useState<boolean>(true);
@@ -43,6 +45,8 @@ export const usePMDGraphSettings = () => {
 };
 
 export const useGraphSelectableNodes = (graphId: string, isZijd?: boolean) => {
+  // возвращает все точки на графике как NodeList преобразованный в массив Array<ChildNode>
+  // необходимо для реализации react-drag-to-select
   const { reference } = useAppSelector(state => state.pcaPageReducer); 
   const [selectableNodes, setSelectableNodes] = useState<Array<ChildNode>>([]);
 
@@ -70,3 +74,20 @@ export const useGraphSelectableNodes = (graphId: string, isZijd?: boolean) => {
 
   return selectableNodes;
 };
+
+export const useGraphSelectedIndexes = () => {
+  // возвращает список индексов выбранных точек на графике (каждый индекс равен id - 1)
+  // необходимо для синхронизации выбора точек на всей странице:
+  // все графики, использующие этот хук, могут быть синхронизованы с другими элементами, 
+  // позволяющими выбирать точки - например, с таблицей точек (шагов)
+  const { selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer);
+  const [selectedIndexes, setSelectedIndexes] = useState<Array<number>>([]);
+
+  // проверка на наличие в сторе выбранных шагов (их ID хранятся в selectedStepsIDs)
+  useEffect(() => {
+    if (selectedStepsIDs) setSelectedIndexes(selectedStepsIDs.map(id => id - 1));
+    else setSelectedIndexes([]); 
+  }, [selectedStepsIDs]);
+
+  return selectedIndexes;
+}

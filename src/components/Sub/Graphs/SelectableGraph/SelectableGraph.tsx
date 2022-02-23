@@ -1,6 +1,7 @@
 import React, { FC, useCallback, useEffect, useRef, useState } from "react";
 import styles from "./SelectableGraph.module.scss";
 import { Box, boxesIntersect } from "react-drag-to-select";
+// import { Box, boxesIntersect } from "@air/react-drag-to-select";
 import { MouseSelection } from "..";
 import ContextMenu from "../ContextMenu/ContextMenu";
 import ExportButton from "../Buttons/ExportButton/ExportButton";
@@ -13,8 +14,6 @@ interface ISelectableGraph {
   width: number;
   height: number;
   selectableNodes: ChildNode[];
-  selectedIndexes: Array<number>;
-  setSelectedIndexes: React.Dispatch<React.SetStateAction<Array<number>>>
   nodesDuplicated: boolean;
   menuItems?: Array<TMenuItem>;
 }
@@ -25,8 +24,6 @@ const SelectableGraph: FC<ISelectableGraph> = ({
   width,
   height,
   selectableNodes,
-  selectedIndexes,
-  setSelectedIndexes,
   nodesDuplicated,
   menuItems
 }) => {
@@ -37,6 +34,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
   const selectableNodesBoxes = useRef<Box[]>([]);
 
   const [graphElement, setGraphElement] = useState<HTMLElement | Window | null>(graphRef.current);
+  const [selectedIndexes, setSelectedIndexes] = useState<Array<number>>([]);
 
   useEffect(() => {
     setGraphElement(graphRef.current);
@@ -75,13 +73,17 @@ const SelectableGraph: FC<ISelectableGraph> = ({
     }, [selectableNodesBoxes],
   );
 
-  const onSelectionEnd = () => {
-    // const stepsIDs = nodesDuplicated 
-    //     ? selectedIndexes.slice(0, selectedIndexes.length/2).map(index => index + 1)
-    //     : selectedIndexes.map(index => index + 1);
-    // if (stepsIDs.length > 0) dispatch(setSelectedStepsIDs(stepsIDs));
-    // else dispatch(setSelectedStepsIDs(null));
-  }
+  const onSelectionEnd = useCallback(
+    () => {
+      const stepsIDs = nodesDuplicated 
+          ? selectedIndexes.slice(0, selectedIndexes.length/2).map(index => index + 1)
+          : selectedIndexes.map(index => index + 1);
+      if (stepsIDs.length > 0) dispatch(setSelectedStepsIDs(stepsIDs));
+      else dispatch(setSelectedStepsIDs(null));
+    }, [selectedIndexes],
+  );
+
+  // const onSelectionEnd = () => {};
 
   const handleDoubleClick = (event: any) => {
     event.preventDefault();
@@ -111,6 +113,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
       </ContextMenu>
       <MouseSelection 
         onSelectionChange={handleSelectionChange} 
+        onSelectionEnd={onSelectionEnd}
         eventsElement={graphElement}
       />
     </>

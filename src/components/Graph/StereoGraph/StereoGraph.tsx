@@ -8,7 +8,7 @@ import { IPmdData } from "../../../utils/files/fileManipulations";
 import { useAppSelector } from "../../../services/store/hooks";
 import dataToStereoPMD from "../../../utils/graphs/formatters/dataToStereoPMD";
 import { GraphSettings, TMenuItem } from "../../../utils/graphs/types";
-import { useGraphSelectableNodes, usePMDGraphSettings } from "../../../utils/GlobalHooks";
+import { useGraphSelectableNodes, useGraphSelectedIndexes, usePMDGraphSettings } from "../../../utils/GlobalHooks";
 
 export interface IStereoGraph extends IGraph {
   width: number;
@@ -26,7 +26,7 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
   const { menuItems, settings } = usePMDGraphSettings();
   const selectableNodes = useGraphSelectableNodes(graphId, true); 
 
-  const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
+  const selectedIndexes = useGraphSelectedIndexes();
 
   const { 
     directionalData, 
@@ -44,11 +44,6 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
   const zeroX = (width / 2);
   const zeroY = (height / 2);
 
-  useEffect(() => {
-    if (selectedStepsIDs) setSelectedIndexes(selectedStepsIDs.map(id => id - 1));
-    else setSelectedIndexes([]); 
-  }, [selectedStepsIDs]);
-
   const handleDotClick = (index: number) => {
     const selectedIndexesUpdated = Array.from(selectedIndexes);
 
@@ -60,7 +55,7 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
     } else {
       selectedIndexesUpdated.push(index);
     }
-    setSelectedIndexes(selectedIndexesUpdated);
+    // setSelectedIndexes(selectedIndexesUpdated);
   };
 
   return (
@@ -70,8 +65,6 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
         width={viewWidth}
         height={viewHeight}
         selectableNodes={selectableNodes}
-        selectedIndexes={selectedIndexes}
-        setSelectedIndexes={setSelectedIndexes}
         nodesDuplicated={false}
         menuItems={menuItems}
       >

@@ -7,7 +7,7 @@ import dataToMag from "../../../utils/graphs/formatters/dataToMag";
 import { useAppDispatch, useAppSelector } from "../../../services/store/hooks";
 import { IPmdData } from "../../../utils/files/fileManipulations";
 import { GraphSettings, TMenuItem } from "../../../utils/graphs/types";
-import { useGraphSelectableNodes, usePMDGraphSettings } from "../../../utils/GlobalHooks";
+import { useGraphSelectableNodes, useGraphSelectedIndexes, usePMDGraphSettings } from "../../../utils/GlobalHooks";
 
 
 export interface IMagGraph extends IGraph {
@@ -23,12 +23,12 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
   // 2. zoom&pan
   const dispatch = useAppDispatch();
-  
+
   const { reference, selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
   const { menuItems, settings } = usePMDGraphSettings();
   const selectableNodes = useGraphSelectableNodes(graphId, true);
 
-  const [selectedIndexes, setSelectedIndexes] = useState<number[]>([]);
+  const selectedIndexes = useGraphSelectedIndexes();
 
   const { 
     xyData, 
@@ -51,11 +51,6 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
   const zeroX = (0);
   const zeroY = (height);
 
-  useEffect(() => {
-    if (selectedStepsIDs) setSelectedIndexes(selectedStepsIDs.map(id => id - 1));
-    else setSelectedIndexes([]); 
-  }, [selectedStepsIDs]);
-
   const handleDotClick = (index: number) => {
     const selectedIndexesUpdated = Array.from(selectedIndexes);
 
@@ -67,7 +62,7 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
     } else {
       selectedIndexesUpdated.push(index);
     }
-    setSelectedIndexes(selectedIndexesUpdated);
+    // setSelectedIndexes(selectedIndexesUpdated);
   };
 
   return (
@@ -77,8 +72,6 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
         width={viewWidth}
         height={viewHeight}
         selectableNodes={selectableNodes}
-        selectedIndexes={selectedIndexes}
-        setSelectedIndexes={setSelectedIndexes}
         nodesDuplicated={false}
         menuItems={menuItems}
       >
