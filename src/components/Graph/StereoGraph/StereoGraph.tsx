@@ -1,17 +1,15 @@
-import React, { FC, useEffect, useMemo, useState } from "react";
+import React, { FC, useMemo } from "react";
 import styles from "./ZijdGraph.module.scss";
-import { IGraph } from "../../../utils/GlobalTypes";
-import { SelectableGraph, GraphSymbols, Unit} from "../../Sub/Graphs";
-import AxesAndData from "./AxesAndData";
-import { stereoAreaConstants } from "./StereoConstants";
-import { IPmdData } from "../../../utils/files/fileManipulations";
 import { useAppSelector } from "../../../services/store/hooks";
-import dataToStereoPMD from "../../../utils/graphs/formatters/dataToStereoPMD";
 import { useGraphSelectableNodes, useGraphSelectedIndexes, usePMDGraphSettings } from "../../../utils/GlobalHooks";
+import { IGraph } from "../../../utils/GlobalTypes";
+import { IPmdData } from "../../../utils/files/fileManipulations";
+import dataToStereoPMD from "../../../utils/graphs/formatters/dataToStereoPMD";
+import { SelectableGraph, GraphSymbols } from "../../Sub/Graphs";
+import { stereoAreaConstants } from "./StereoConstants";
+import AxesAndData from "./AxesAndData";
 
 export interface IStereoGraph extends IGraph {
-  width: number;
-  height: number;
   data: IPmdData;
 }
 
@@ -21,7 +19,7 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
   // 2. zoom&pan
 
-  const { reference, selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
+  const { reference } = useAppSelector(state => state.pcaPageReducer); 
   const { menuItems, settings } = usePMDGraphSettings();
   const selectableNodes = useGraphSelectableNodes(graphId, false); 
   const selectedIndexes = useGraphSelectedIndexes();

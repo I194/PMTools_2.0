@@ -1,39 +1,25 @@
-import React, { FC, useEffect, useMemo, useState } from "react";
+import React, { FC, useMemo } from "react";
 import styles from "./ZijdGraph.module.scss";
-import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
+import { useAppSelector } from '../../../services/store/hooks';
+import { useGraphSelectableNodes, useGraphSelectedIndexes, usePMDGraphSettings } from "../../../utils/GlobalHooks";
 import { IGraph } from "../../../utils/GlobalTypes";
-import { SelectableGraph, GraphSymbols, Unit} from "../../Sub/Graphs";
-import AxesAndData from "./AxesAndData";
 import { IPmdData } from "../../../utils/files/fileManipulations";
 import dataToZijd from "../../../utils/graphs/formatters/dataToZijd";
-import { GraphSettings, TMenuItem } from "../../../utils/graphs/types";
-import { setSelectedStepsIDs } from "../../../services/reducers/pcaPage";
+import { SelectableGraph, GraphSymbols, Unit} from "../../Sub/Graphs";
 import { zijdAreaConstants } from "./ZijdConstants";
-import { useGraphSelectableNodes, useGraphSelectedIndexes, usePMDGraphSettings } from "../../../utils/GlobalHooks";
-
-interface LineCoords {
-  x1: number;
-  y1: number;
-  x2: number;
-  y2: number;
-}
+import AxesAndData from "./AxesAndData";
 
 export interface IZijdGraph extends IGraph {
-  pcaLines?: [LineCoords, LineCoords];
-  width: number;
-  height: number;
   data: IPmdData;
 }
 
-const ZijdGraph: FC<IZijdGraph> = ({ graphId, pcaLines, width, height, data }) => {
+const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data }) => {
 
   // ToDo: 
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
   // 2. zoom&pan
 
-  const dispatch = useAppDispatch();
-
-  const { reference, selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
+  const { reference } = useAppSelector(state => state.pcaPageReducer); 
   const { menuItems, settings } = usePMDGraphSettings();
   const selectableNodes = useGraphSelectableNodes(graphId, true);
   const selectedIndexes = useGraphSelectedIndexes();
