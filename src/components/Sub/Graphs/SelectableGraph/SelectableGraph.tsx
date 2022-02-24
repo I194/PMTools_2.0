@@ -22,18 +22,16 @@ const SelectableGraph: FC<ISelectableGraph> = ({
   width,
   height,
   selectableNodes,
-  nodesDuplicated,
   menuItems
 }) => {
 
   const dispatch = useAppDispatch();
-  const graphRef = useRef(null);
 
-  const [graphElement, setGraphElement] = useState<HTMLElement | Window | null>(graphRef.current);
-
-  useEffect(() => {
-    setGraphElement(graphRef.current);
-  }, [graphRef]);
+  const handleDoubleClick = (event: any) => {
+    event.preventDefault();
+    const timesClicked = event.detail;
+    if (timesClicked === 2) dispatch(setSelectedStepsIDs(null));
+  };
 
   return (
     <>
@@ -45,13 +43,13 @@ const SelectableGraph: FC<ISelectableGraph> = ({
           width={width} 
           height={height} 
           id={`${graphId}-graph`} 
-          ref={graphRef}
+          onClick={handleDoubleClick}
         >
           {children}
         </svg>
       </ContextMenu>
       <Selecto
-        dragContainer={`${graphId}-graph`}
+        dragContainer={`#${graphId}-graph`}
         boundContainer={document.getElementById(`${graphId}-graph`)}
         selectableTargets={selectableNodes.map(node => document.getElementById((node.lastChild as any).id) || '')}
         hitRate={100}
@@ -66,7 +64,6 @@ const SelectableGraph: FC<ISelectableGraph> = ({
         }}
       />
     </>
-
   )
 }
 

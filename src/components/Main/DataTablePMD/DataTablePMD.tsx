@@ -28,10 +28,10 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
 
   const { selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer);
 
-  // useEffect(() => {
-  //   if (selectedStepsIDs) setSelectionModel(selectedStepsIDs);
-  //   else setSelectionModel([]); 
-  // }, [selectedStepsIDs]);
+  useEffect(() => {
+    if (selectedStepsIDs) setSelectionModel(selectedStepsIDs);
+    else setSelectionModel([]); 
+  }, [selectedStepsIDs]);
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', type: 'string', width: 40 },
@@ -78,8 +78,8 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
         onSelectionModelChange={(e) => {
           setSelectionModel(e);
           const selectedIDs = new Set(e);
-          // if ([...selectedIDs].length > 0) dispatch(setSelectedStepsIDs([...selectedIDs]));
-          // else dispatch(setSelectedStepsIDs(null));
+          if ([...selectedIDs].length > 0) dispatch(setSelectedStepsIDs([...selectedIDs]));
+          else dispatch(setSelectedStepsIDs(null));
           const selectedRows = rows.filter((r) => selectedIDs.has(r.id));
           setSelectedRows(selectedRows);
         }}
