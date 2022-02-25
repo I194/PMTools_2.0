@@ -9,10 +9,11 @@ const dataToZijd = (data: IPmdData, graphSize: number, reference: Reference, uni
 
   const labels = steps.map((step) => step.step);
 
-  const tooltipData: Array<TooltipDot> = steps.map((step) => {
+  const tooltipData: Array<TooltipDot> = steps.map((step, index) => {
     const xyz = new Coordinates(step.x, step.y, step.z);
     const direction = xyz.toDirection();
     return {
+      id: index + 1,
       step: step.step,
       x: step.x,
       y: step.y,

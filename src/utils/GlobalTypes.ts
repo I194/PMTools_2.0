@@ -21,3 +21,5 @@ export type DataGridPMDRow = {
   a95: number;
   comment: string;
 };
+
+export type ThemeMode = 'dark' | 'light'

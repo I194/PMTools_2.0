@@ -1,7 +1,9 @@
 import React, { FC } from "react";
+import styles from './Tooltip.module.scss';
 import { createPortal } from "react-dom";
 import { TooltipDot } from "../../../../utils/graphs/types";
-import styles from './Tooltip.module.scss';
+import { useTheme } from '@mui/material/styles';
+import { primaryColor, textColorInverted } from '../../../../utils/ThemeConstants';
 
 export interface ITooltip {
   position: {left: number, top: number};
@@ -10,6 +12,8 @@ export interface ITooltip {
 }
 
 const Tooltip: FC<ITooltip> = ({ position, isVisible, data }) => {
+
+  const theme = useTheme();
 
   const parsedText = (text: TooltipDot) => {
     const res = [];
@@ -25,7 +29,6 @@ const Tooltip: FC<ITooltip> = ({ position, isVisible, data }) => {
   };
 
   const isWindowWidthBorder = (left: number) => {
-    console.log(left, window.innerWidth)
     return (Math.abs(window.innerWidth - left) <= 128) || (Math.abs(left - window.innerWidth) <= 128);
   }
   const isWindowHeightBorder = (top: number) => {
@@ -40,9 +43,11 @@ const Tooltip: FC<ITooltip> = ({ position, isVisible, data }) => {
           <div 
             className={styles.tooltip} 
             style={{
+              position: 'absolute',
               left: isWindowWidthBorder(position.left) ? position.left - 88 : position.left + 24, 
               top: isWindowHeightBorder(position.top) ? position.top - 88 : position.top - 24, 
-              position: 'absolute'
+              backgroundColor: primaryColor(theme.palette.mode),
+              color: textColorInverted(theme.palette.mode),
             }}
           >
             {

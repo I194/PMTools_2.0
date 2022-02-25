@@ -21,7 +21,7 @@ const DropdownSelect: FC<IDropdownSelect> = ({ label, options, onOptionSelect, d
   };
 
   return (
-    <FormControl variant="filled" sx={{ minWidth: 200 }}>
+    <FormControl variant="standard" sx={{ minWidth: 200 }}>
       <InputLabel>{ label }</InputLabel>
       <Select
         value={selectedOption}
