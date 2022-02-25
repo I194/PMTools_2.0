@@ -111,6 +111,7 @@ const Axis: FC<IAxis> = ({
         id={`${graphId}-${type}-name`} 
         x={ namePosition ? namePosition.x : axisPos[type].text.x } 
         y={ namePosition ? namePosition.y : axisPos[type].text.y }
+        fontSize={'0.9vw'}
       >
         {name}
       </text>
@@ -120,6 +121,7 @@ const Axis: FC<IAxis> = ({
               id={`${graphId}-${type}-name`} 
               x={ mirrorNamePosition ? mirrorNamePosition.x : axisPos[type].text.xMirror } 
               y={ mirrorNamePosition ? mirrorNamePosition.y : axisPos[type].text.yMirror }
+              fontSize={'0.9vw'}
             >
               {mirrorName}
             </text>

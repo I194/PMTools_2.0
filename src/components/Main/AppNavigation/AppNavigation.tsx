@@ -39,7 +39,7 @@ const AppNavigation: FC = ({}) => {
         label={'Главная страница'}
         to={'/'}
       />
-      <IconButton onClick={onColorModeClick} color="inherit">
+      <IconButton onClick={onColorModeClick} color="inherit" sx={{position: 'absolute', right: '0px'}}>
         {theme.palette.mode === 'dark' ? <Brightness7Icon color="primary" /> : <Brightness4Icon color="primary" />}
       </IconButton>
     </div>

@@ -21,6 +21,7 @@ const NavButton: FC<INavButton> = ({ label, to, external }) => {
         variant="contained" 
         sx={{
           textTransform: 'none',
+          marginRight: '16px',
         }}
         component="span"
         onClick={onClickExternal}
@@ -36,6 +37,7 @@ const NavButton: FC<INavButton> = ({ label, to, external }) => {
         variant="contained" 
         sx={{
           textTransform: 'none',
+          marginRight: '16px',
         }}
         component="span"
       >

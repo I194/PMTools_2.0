@@ -9,7 +9,13 @@ interface IUnit {
 
 const Unit: FC<IUnit> = ({ label, viewHeight, viewWidth }) => {
   return (
-    <text id='graph-unit' x={viewWidth - 150} y={viewHeight - 10} className={styles.unitText}>
+    <text 
+      id='graph-unit' 
+      x={`75%`} 
+      y={viewHeight - 4} 
+      className={styles.unitText}
+      fontSize={ '1vw' }
+    >
       Unit={label}
     </text>
   )
