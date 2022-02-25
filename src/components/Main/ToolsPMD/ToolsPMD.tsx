@@ -1,9 +1,8 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import styles from './ToolsPMD.module.scss';
 import DropdownSelect from '../../Sub/DropdownSelect/DropdownSelect';
-import InputSelect from '../../Sub/InputSelect/InputSelect';
-import FilterAltOutlinedIcon from '@mui/icons-material/FilterAltOutlined';
-import { Skeleton, Typography } from '@mui/material';
+import ButtonGroupWithLabel from '../../Sub/ButtonGroupWithLabel/ButtonGroupWithLabel';
+import { Button, ButtonGroup, FormControl, InputLabel } from '@mui/material';
 import { Reference } from '../../../utils/graphs/types';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
 import { setReference, setSelectedStepsIDs, setStatisticsMode } from '../../../services/reducers/pcaPage';
@@ -36,16 +35,20 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   const [stepsInput, setStepsInput] = useState<string>('');
   const [disabledStatistics, setDisabledStatistics] = useState<boolean>(!selectedStepsIDs);
 
+  const onStatisticsModeSelect = useCallback((e) => {
+    const key = (e.key as string).toLowerCase();
+    if (key === 'd') onStatisticsModeApply('pca');
+    if (key === 'o') onStatisticsModeApply('pca0');
+    if (key === 'g') onStatisticsModeApply('gc');
+    if (key === 'i') onStatisticsModeApply('gcn');
+  }, []);
+  
   useEffect(() => {
-    console.log(selectedStepsIDs);
-    if (selectedStepsIDs) {
-      // setStepsInput(selectedStepsIDs.join(','));
-    }
-    else {
-      // setStepsInput('')
-    }
-    setDisabledStatistics(!selectedStepsIDs);
-  }, [selectedStepsIDs]);
+    window.addEventListener("keydown", onStatisticsModeSelect);
+    return () => {
+      window.removeEventListener("keydown", onStatisticsModeSelect);
+    };
+  }, []);
 
   useEffect(() => {
     // selected steps ids update here
@@ -68,8 +71,8 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   };
 
   const onStatisticsModeApply = (statisticsMode: 'pca' | 'pca0' | 'gc' | 'gcn') => {
+    alert(`--->>> ${statisticsMode}`);
     dispatch(setStatisticsMode(statisticsMode));
-    console.log('a')
   }
 
   useEffect(() => {
@@ -86,18 +89,12 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
         defaultValue='Географическая'
         onOptionSelect={handleReferenceSelect}
       />
-      <InputSelect 
-        placeholder={'Введите шаги'}
-        leftIconButton={{icon: <FilterAltOutlinedIcon />, onClick: () => null}}
-        rightIconButtons={[
-          {icon: <Typography>PCA</Typography>, onClick: () => onStatisticsModeApply('pca'), disabled: disabledStatistics},
-          {icon: <Typography>PCA<sub>0</sub></Typography>, onClick: () => onStatisticsModeApply('pca0'), disabled: disabledStatistics},
-          {icon: <Typography>GC</Typography>, onClick: () => onStatisticsModeApply('gc'), disabled: disabledStatistics},
-          {icon: <Typography>GCn</Typography>, onClick: () => onStatisticsModeApply('gcn'), disabled: disabledStatistics},
-        ]}
-        inputText={stepsInput}
-        setInputText={setStepsInput}
-      />
+      <ButtonGroupWithLabel label='Статистический метод'>
+        <Button onClick={() => onStatisticsModeApply('pca')}>PCA</Button>
+        <Button onClick={() => onStatisticsModeApply('pca0')}>PCA₀</Button>
+        <Button onClick={() => onStatisticsModeApply('gc')}>GC</Button>
+        <Button onClick={() => onStatisticsModeApply('gcn')}>GCN</Button>
+      </ButtonGroupWithLabel>
     </ToolsPMDSkeleton>
   )
 }
