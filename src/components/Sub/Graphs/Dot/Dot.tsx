@@ -3,6 +3,8 @@ import styles from './Dot.module.scss';
 import { Tooltip } from "../index";
 import { ITooltip } from "../Tooltip/Tooltip";
 import { DotSettings, TooltipDot } from "../../../../utils/graphs/types";
+import { useTheme } from '@mui/material/styles';
+import { primaryColor } from "../../../../utils/ThemeConstants";
 
 interface IDot {
   x: number;
@@ -40,10 +42,12 @@ const Dot: FC<IDot> = ({
   // но тут ещё как-то надо проверять, нет ли рядом ещё точки (в пределах 1.5 радиусов)
   // и если есть, то надо сравнить до какой точки расстояние меньше, и именно для неё показать тултип...
 
+  const theme = useTheme();
+
   const handleOver = (id: string) => {
     const dot = document.getElementById(id);
     if (dot) {
-      dot.style.setProperty('fill', '#90CAF9');
+      dot.style.setProperty('fill', primaryColor(theme.palette.mode),);
       setTooltipData({
         isVisible: true,
         position: {
