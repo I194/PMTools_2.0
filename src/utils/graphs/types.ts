@@ -1,5 +1,12 @@
 export type Reference = 'specimen' | 'geographic' | 'stratigraphic';
 
+export type StatisticsModePCA = 'pca' | 'pca0' | 'gc' | 'gcn' | null;
+
+export type PCALines = {
+  horX: [number, number], horY: [number, number],
+  verX: [number, number], verY: [number, number]
+} | null;
+
 export type TooltipDot = {
   posX?: number;
   posY?: number;

@@ -9,7 +9,7 @@ const initialState: IInitialState = {
 }
 
 const appSettings = createSlice({
-  name: 'files',
+  name: 'appSettings',
   initialState,
   reducers: {
     setColorMode (state, action) {

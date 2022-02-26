@@ -4,6 +4,7 @@ import filesReducer from "../reducers/files";
 import parsedDataReducer from "../reducers/parsedData";
 import pcaPageReducer from "../reducers/pcaPage";
 import thunk from 'redux-thunk';
+import { pcaMiddleware } from './middleware';
 
 export const rootReducer = combineReducers({
   appSettingsReducer,
@@ -16,7 +17,7 @@ export const setupStore = () => {
   return configureStore({
     reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(thunk),
+      getDefaultMiddleware().concat(thunk),//.concat(pcaMiddleware()),
   });
 };
 

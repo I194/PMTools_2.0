@@ -35,36 +35,32 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   const [stepsInput, setStepsInput] = useState<string>('');
   const [disabledStatistics, setDisabledStatistics] = useState<boolean>(!selectedStepsIDs);
 
-  const onStatisticsModeSelect = useCallback((e) => {
-    const key = (e.key as string).toLowerCase();
-    if (key === 'd') onStatisticsModeApply('pca');
-    if (key === 'o') onStatisticsModeApply('pca0');
-    if (key === 'g') onStatisticsModeApply('gc');
-    if (key === 'i') onStatisticsModeApply('gcn');
+  // useEffect(() => {
+  //   // selected steps ids update here
+  //   let stepsIDs: Array<number> | null = [];
+  //   if (stepsInput.includes(',')) stepsIDs = stepsInput.split(',').map(id => +id);
+  //   else if (stepsInput.includes('-')) {
+  //     const [startID, endID] = stepsInput.split('-');
+  //     for (let i = +startID; i <= +endID; i++) {
+  //       stepsIDs.push(i);
+  //     };
+  //   }
+  //   else if (stepsInput.length === 1) stepsIDs.push(+stepsInput[0]);
+  //   else stepsIDs = null;
+  //   if (stepsIDs && stepsIDs.includes(NaN)) stepsIDs = null;
+  //   dispatch(setSelectedStepsIDs(stepsIDs));
+  // }, [stepsInput]);
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleStatisticsModeSelect);
+    return () => {
+      window.removeEventListener("keydown", handleStatisticsModeSelect);
+    };
   }, []);
   
   useEffect(() => {
-    window.addEventListener("keydown", onStatisticsModeSelect);
-    return () => {
-      window.removeEventListener("keydown", onStatisticsModeSelect);
-    };
-  }, []);
-
-  useEffect(() => {
-    // selected steps ids update here
-    let stepsIDs: Array<number> | null = [];
-    if (stepsInput.includes(',')) stepsIDs = stepsInput.split(',').map(id => +id);
-    else if (stepsInput.includes('-')) {
-      const [startID, endID] = stepsInput.split('-');
-      for (let i = +startID; i <= +endID; i++) {
-        stepsIDs.push(i);
-      };
-    }
-    else if (stepsInput.length === 1) stepsIDs.push(+stepsInput[0]);
-    else stepsIDs = null;
-    if (stepsIDs && stepsIDs.includes(NaN)) stepsIDs = null;
-    dispatch(setSelectedStepsIDs(stepsIDs));
-  }, [stepsInput]);
+    setCoordinateSystem(reference);
+  }, [reference]);
 
   const handleReferenceSelect = (option: string) => {
     dispatch(setReference(labelToReference(option)));
@@ -73,11 +69,15 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   const onStatisticsModeApply = (statisticsMode: 'pca' | 'pca0' | 'gc' | 'gcn') => {
     alert(`--->>> ${statisticsMode}`);
     dispatch(setStatisticsMode(statisticsMode));
-  }
+  };
 
-  useEffect(() => {
-    setCoordinateSystem(reference);
-  }, [reference]);
+  const handleStatisticsModeSelect = useCallback((e) => {
+    const key = (e.key as string).toLowerCase();
+    if (key === 'd') onStatisticsModeApply('pca');
+    if (key === 'o') onStatisticsModeApply('pca0');
+    if (key === 'g') onStatisticsModeApply('gc');
+    if (key === 'i') onStatisticsModeApply('gcn');
+  }, []);
 
   if (!data) return <ToolsPMDSkeleton />;
 

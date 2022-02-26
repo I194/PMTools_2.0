@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { GraphSettings, TooltipDot } from "../../../utils/graphs/types";
+import { GraphSettings, PCALines, TooltipDot } from "../../../utils/graphs/types";
 import { Axis, Data } from "../../Sub/Graphs";
 
 interface IAxesAndData {
@@ -19,6 +19,7 @@ interface IAxesAndData {
     verticalProjectionData: Array<[number, number]>;
     directionalData: Array<[number, number]>;
     tooltipData: Array<TooltipDot>;
+    pcaLines: PCALines;
   };
   selectedIndexes: Array<number>;
   settings: GraphSettings;
@@ -46,6 +47,7 @@ const AxesAndData: FC<IAxesAndData> = ({
     directionalData,
     tooltipData,
     labels,
+    pcaLines,
   } = dataConstants;
 
   return (
@@ -109,6 +111,29 @@ const AxesAndData: FC<IAxesAndData> = ({
           settings={settings.dots}
         />
       </g>
+      {
+        pcaLines &&
+        <g id={`${graphId}-pcaLines`}>
+          <line 
+            id={`${graphId}-pcaLine-h`} 
+            x1={pcaLines.horX[0]} 
+            y1={pcaLines.horY[0]} 
+            x2={pcaLines.horX[1]} 
+            y2={pcaLines.horY[1]} 
+            stroke="#9933ff" 
+            strokeWidth="1" 
+          />
+          <line 
+            id={`${graphId}-pcaLine-v`} 
+            x1={pcaLines.verX[0]} 
+            y1={pcaLines.verY[0]} 
+            x2={pcaLines.verX[1]} 
+            y2={pcaLines.verY[1]} 
+            stroke="#119dff" 
+            strokeWidth="1" 
+          />
+        </g>
+      }
     </g>
   )
 }

@@ -19,7 +19,7 @@ const initialState: IInitialState = {
 }
 
 const parsedDataSlice = createSlice({
-  name: 'files',
+  name: 'parsedData',
   initialState,
   reducers: {
     setTreatmentData (state, action) {

@@ -1,13 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IDirData, IPmdData } from "../../utils/files/fileManipulations";
-import { Reference } from "../../utils/graphs/types";
+import { Reference, StatisticsModePCA } from "../../utils/graphs/types";
 import { filesToData } from "../axios/filesAndData";
 
 interface IInitialState {
   currentFile: IPmdData | null;
   reference: Reference;
   selectedStepsIDs: Array<number> | null;
-  statisticsMode: 'pca' | 'pca0' | 'gc' | 'gcn' | null;
+  statisticsMode: StatisticsModePCA;
+  showStepsInput: boolean;
 }
 
 const initialState: IInitialState = {
@@ -15,10 +16,11 @@ const initialState: IInitialState = {
   reference: 'geographic',
   selectedStepsIDs: null,
   statisticsMode: null,
+  showStepsInput: false,
 }
 
 const pcaPage = createSlice({
-  name: 'files',
+  name: 'pcaPage',
   initialState,
   reducers: {
     setCurrentFile (state, action) {
@@ -33,6 +35,9 @@ const pcaPage = createSlice({
     setStatisticsMode (state, action) {
       state.statisticsMode = action.payload;
     },
+    showStepsInput (state, action) {
+      state.showStepsInput = action.payload;
+    },
   },
   extraReducers: (builder) => {
   }
@@ -43,6 +48,7 @@ export const {
   setReference,
   setSelectedStepsIDs,
   setStatisticsMode,
+  showStepsInput,
 } = pcaPage.actions;
 
 const pcaPageReducer = pcaPage.reducer;

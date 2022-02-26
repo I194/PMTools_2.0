@@ -10,20 +10,22 @@ import { useTheme } from '@mui/material/styles';
 import {
   bgColorMain,
 } from '../../utils/ThemeConstants';
+import { showStepsInput } from '../../services/reducers/pcaPage';
 
 const PCAPage: FC = ({}) => {
 
-  const disptach = useAppDispatch();
+  const dispatch = useAppDispatch();
   
   const theme = useTheme();
 
   const files = useAppSelector(state => state.filesReducer.treatmentFiles);
   const { treatmentData, loading } = useAppSelector(state => state.parsedDataReducer);
+  const { statisticsMode, selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer);
 
   const [dataToShow, setDataToShow] = useState<IPmdData | null>(null);
 
   useEffect(() => {
-    if (files && !treatmentData) disptach(filesToData({files, format: 'pmd'}));
+    if (files && !treatmentData) dispatch(filesToData({files, format: 'pmd'}));
   }, [files]);
 
   useEffect(() => {
@@ -38,6 +40,10 @@ const PCAPage: FC = ({}) => {
       setDataToShow(modifiedTreatmentData);
     } else setDataToShow(null);
   }, [treatmentData]);
+
+  useEffect(() => {
+    if (statisticsMode && !selectedStepsIDs) dispatch(showStepsInput(true));
+  }, [statisticsMode, selectedStepsIDs]);
 
   return (
     <>
