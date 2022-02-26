@@ -11,6 +11,7 @@ import {
   bgColorMain,
 } from '../../utils/ThemeConstants';
 import { showStepsInput } from '../../services/reducers/pcaPage';
+import calculateStatisticsPMD from '../../utils/statistics/calculateStatisticsPMD';
 
 const PCAPage: FC = ({}) => {
 
@@ -43,7 +44,10 @@ const PCAPage: FC = ({}) => {
 
   useEffect(() => {
     if (statisticsMode && !selectedStepsIDs) dispatch(showStepsInput(true));
-  }, [statisticsMode, selectedStepsIDs]);
+    if (statisticsMode && selectedStepsIDs && dataToShow) {
+      calculateStatisticsPMD(dataToShow, statisticsMode, selectedStepsIDs);
+    };
+  }, [statisticsMode, selectedStepsIDs, dataToShow]);
 
   return (
     <>
