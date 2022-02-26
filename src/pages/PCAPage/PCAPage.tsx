@@ -44,8 +44,9 @@ const PCAPage: FC = ({}) => {
 
   useEffect(() => {
     if (statisticsMode && !selectedStepsIDs) dispatch(showStepsInput(true));
-    if (statisticsMode && selectedStepsIDs && dataToShow) {
-      calculateStatisticsPMD(dataToShow, statisticsMode, selectedStepsIDs);
+    if (statisticsMode && selectedStepsIDs && selectedStepsIDs.length >= 2 && dataToShow) {
+      const statistics = calculateStatisticsPMD(dataToShow, statisticsMode, selectedStepsIDs);
+      console.log(statistics);
     };
   }, [statisticsMode, selectedStepsIDs, dataToShow]);
 

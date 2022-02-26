@@ -41,6 +41,7 @@ const dataToZijd = (
     return inReferenceCoords;
   });
 
+  const maxCoord = Math.max(...rotatedCoords.map((step) => Math.max(Math.abs(step.x), Math.abs(step.y), Math.abs(step.z))));
   const adjustedCoords = rotatedCoords.map((coords) => coords.multiplyAll(graphSize / (maxCoord)));
 
   const horizontalProjectionData: Array<[number, number]> = []; // "x" is Y, "y" is X 
@@ -61,7 +62,6 @@ const dataToZijd = (
   });
 
   // 'calculation' of unit label, using in Unit component
-  const maxCoord = Math.max(...rotatedCoords.map((step) => Math.max(Math.abs(step.x), Math.abs(step.y), Math.abs(step.z))));
   const unitLabel = (maxCoord / unitCount).toExponential(2).toUpperCase();
 
   // calculation of statistic (if statisticMode selected)

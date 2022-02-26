@@ -1,9 +1,6 @@
 import { IPmdData } from "../files/fileManipulations";
 import { StatisticsModePCA } from "../graphs/types";
-import calculatePCA from "./pca/calculatePCA";
-import calculatePCA0 from "./pca/calculatePCA0";
-import calculateGC from "./gc/calculateGC";
-import calculateGCN from "./gc/calculateGCN";
+import calculatePCA from "./calculatePCA";
 
 
 const calculateStatisticsPMD = (
@@ -11,10 +8,19 @@ const calculateStatisticsPMD = (
   mode: StatisticsModePCA, 
   selectedStepsIDs: Array<number>, 
 ) => {
-  if (mode === 'pca') return calculatePCA();
-  if (mode === 'pca0') return calculatePCA0();
-  if (mode === 'gc') return calculateGC();
-  if (mode === 'gcn') return calculateGCN();
+
+  const selectedSteps = data.steps.filter((step, index) => selectedStepsIDs.includes(index + 1));
+
+  let anchored = false;
+  let normalized = false;
+  if (mode === 'pca0') anchored = true;
+  if (mode === 'gc') anchored = true;
+  if (mode === 'gcn') {
+    anchored = true;
+    normalized = true;
+  };
+  
+  return {mode, ...calculatePCA(selectedSteps, anchored, normalized, 'directions')};
 };
 
 export default calculateStatisticsPMD;
