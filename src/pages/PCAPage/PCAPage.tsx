@@ -46,9 +46,8 @@ const PCAPage: FC = ({}) => {
     if (statisticsMode && !selectedStepsIDs) dispatch(showStepsInput(true));
     if (statisticsMode && selectedStepsIDs && selectedStepsIDs.length >= 2 && dataToShow) {
       const statistics = calculateStatisticsPMD(dataToShow, statisticsMode, selectedStepsIDs);
-      console.log(statistics);
       dispatch(setCurrentStatistics(statistics));
-    };
+    } else dispatch(setCurrentStatistics(null));
   }, [statisticsMode, selectedStepsIDs, dataToShow]);
 
   return (
