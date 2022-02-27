@@ -9,9 +9,11 @@ export interface ITooltip {
   position: {left: number, top: number};
   isVisible: boolean;
   data?: TooltipDot;
+  bgColor?: string;
+  textColor?: string;
 }
 
-const Tooltip: FC<ITooltip> = ({ position, isVisible, data }) => {
+const Tooltip: FC<ITooltip> = ({ position, isVisible, data, bgColor, textColor }) => {
 
   const theme = useTheme();
 
@@ -46,8 +48,8 @@ const Tooltip: FC<ITooltip> = ({ position, isVisible, data }) => {
               position: 'absolute',
               left: isWindowWidthBorder(position.left) ? position.left - 88 : position.left + 24, 
               top: isWindowHeightBorder(position.top) ? position.top - 88 : position.top - 24, 
-              backgroundColor: primaryColor(theme.palette.mode),
-              color: textColorInverted(theme.palette.mode),
+              backgroundColor: bgColor ? bgColor : primaryColor(theme.palette.mode),
+              color: textColor ? textColor : textColorInverted(theme.palette.mode),
             }}
           >
             {

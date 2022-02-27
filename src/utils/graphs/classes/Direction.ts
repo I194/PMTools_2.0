@@ -23,7 +23,8 @@ class Direction {
   };
 
   toArray = () => {
-    return new Array(this.declination, this.inclination);
+    const dirArr: [number, number] = [this.declination, this.inclination];
+    return dirArr;
   };
 
   toCartesian = () => {

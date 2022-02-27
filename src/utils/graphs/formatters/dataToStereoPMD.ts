@@ -1,15 +1,22 @@
 import { IPmdData } from "../../../utils/files/fileManipulations";
 import Coordinates from "../classes/Coordinates";
-import { Reference, TooltipDot } from "../types";
+import { MeanDirection, Reference, TooltipDot } from "../types";
 import toReferenceCoordinates from "./toReferenceCoordinates";
 import { dirToCartesian2D } from "../dirToCartesian";
+import { StatisticsPCA } from "../../GlobalTypes";
  
-const dataToStereoPMD = (data: IPmdData, graphSize: number, reference: Reference) => {
-
+const dataToStereoPMD = (
+  data: IPmdData, 
+  graphSize: number, 
+  reference: Reference,
+  statistics: StatisticsPCA | null,
+) => {
   const steps = data.steps;
 
+  // annotations for dots ('id' field added right in the Data.tsx as dot index)
   const labels = steps.map((step) => step.step);
 
+  // tooltip data for each dot on graph
   const tooltipData: Array<TooltipDot> = steps.map((step, index) => {
     const xyz = new Coordinates(step.x, step.y, step.z);
     const direction = xyz.toDirection();
@@ -25,6 +32,8 @@ const dataToStereoPMD = (data: IPmdData, graphSize: number, reference: Reference
     };
   })
 
+  // 1) rotate dots coords to reference direction 
+  // 2) filling arrays of directed and XY data
   const rotatedCoords = steps.map((step) => {
     const xyz = new Coordinates(step.x, step.y, step.z);
     let inReferenceCoords = toReferenceCoordinates(reference, data.metadata, xyz);
@@ -40,12 +49,34 @@ const dataToStereoPMD = (data: IPmdData, graphSize: number, reference: Reference
     const coords = dirToCartesian2D(di[0] - 90, di[1], graphSize);
     return [coords.x, coords.y];
   })
+
+  // mean direction calculation
+  let meanDirection: MeanDirection = null;
+  if (statistics) {
+    const meanDirData: [number, number] = toReferenceCoordinates(
+      reference, data.metadata, statistics.component.edges
+    ).toDirection().toArray();
+    const meanXYData = dirToCartesian2D(meanDirData[0] - 90, meanDirData[1], graphSize);
+    const tooltip: TooltipDot = {
+      title: 'Mean dot',
+      dec: +meanDirData[0].toFixed(1),
+      inc: +meanDirData[1].toFixed(1),
+      mad: +statistics.MAD.toFixed(1),
+      meanType: statistics.mode,
+    } 
+    meanDirection = {
+      dirData: meanDirData,
+      xyData: [meanXYData.x, meanXYData.y],
+      tooltip,
+    };
+  };
   
   return {
     directionalData, 
     xyData,
     tooltipData,
     labels,
+    meanDirection,
   };
 }
 

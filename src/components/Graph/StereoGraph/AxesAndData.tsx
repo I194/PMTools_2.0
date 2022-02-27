@@ -1,6 +1,7 @@
 import React, { FC } from "react";
-import { GraphSettings, TooltipDot } from "../../../utils/graphs/types";
-import { Axis, Data } from "../../Sub/Graphs";
+import { GraphSettings, MeanDirection, TooltipDot } from "../../../utils/graphs/types";
+import { graphSelectedDotColor } from "../../../utils/ThemeConstants";
+import { Axis, Data, Dot } from "../../Sub/Graphs";
 
 interface IAxesAndData {
   graphId: string;
@@ -18,6 +19,7 @@ interface IAxesAndData {
     xyData: Array<[number, number]>;
     directionalData: Array<[number, number]>;
     tooltipData: Array<TooltipDot>;
+    meanDirection: MeanDirection;
   };
   selectedIndexes: Array<number>;
   settings: GraphSettings;
@@ -43,8 +45,11 @@ const AxesAndData: FC<IAxesAndData> = ({
     directionalData,
     tooltipData,
     labels,
-    xyData
+    xyData,
+    meanDirection,
   } = dataConstants;
+
+  console.log(meanDirection)
 
   return (
     <g 
@@ -118,6 +123,20 @@ const AxesAndData: FC<IAxesAndData> = ({
           colorsType="stereo"
           settings={settings.dots}
         />
+        {
+          meanDirection &&
+          <Dot 
+            x={meanDirection.xyData[0]} 
+            y={meanDirection.xyData[1]} 
+            id={`${graphId}-mean-dot`} 
+            type={'mean'}
+            annotation={{id: '', label: ''}}
+            tooltip={meanDirection.tooltip}
+            fillColor={graphSelectedDotColor('mean')}
+            strokeColor="black"
+            settings={settings.dots}
+          />
+        }
       </g>
     </g>
   )

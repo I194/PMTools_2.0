@@ -49,7 +49,7 @@ const Dot: FC<IDot> = ({
   const handleOver = (id: string) => {
     const dot = document.getElementById(id);
     if (dot) {
-      dot.style.setProperty('fill', primaryColor(theme.palette.mode),);
+      if (type !== 'mean') dot.style.setProperty('fill', primaryColor(theme.palette.mode));
       setTooltipData({
         isVisible: true,
         position: {
@@ -99,7 +99,13 @@ const Dot: FC<IDot> = ({
               stroke: graphSelectedDotColor(type),
               opacity: 0.5,
             }} 
-          />
+          />,
+
+          type === 'mean' &&
+          <g>
+            <line x1={x - 8} x2={x + 8} y1={y} y2={y} stroke={graphSelectedDotColor(type)}/>
+            <line x1={x} x2={x} y1={y - 8} y2={y + 8} stroke={graphSelectedDotColor(type)}/>
+          </g>
         ]
       }
       <circle 
@@ -127,13 +133,14 @@ const Dot: FC<IDot> = ({
         onMouseOut={() => handleOut(id)}
       />
       {
-        (tooltipData && settings.tooltips) ? 
+        tooltipData && settings.tooltips && 
           <Tooltip
             position={tooltipData.position} 
             isVisible={tooltipData.isVisible} 
             data={tooltip}
+            bgColor={type === 'mean' ? graphSelectedDotColor(type) : undefined}
+            textColor={type === 'mean' ? '#fff' : undefined}
           /> 
-        : null
       }
     </g>
   )

@@ -31,4 +31,5 @@ export const graphSelectedDotColor = (dotType: DotType) => {
   if (dotType === 'h') return '#7411ff';
   if (dotType === 'v') return '#119dff';
   if (dotType === 'mean') return '#ff119c';
+  return 'transparent';
 };

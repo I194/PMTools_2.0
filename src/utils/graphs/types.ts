@@ -9,6 +9,12 @@ export type PCALines = {
   verX: [number, number], verY: [number, number]
 } | null;
 
+export type MeanDirection = {
+  dirData: [number, number], 
+  xyData: [number, number],
+  tooltip: TooltipDot,
+} | null;
+
 export type TooltipDot = {
   posX?: number;
   posY?: number;
@@ -21,6 +27,8 @@ export type TooltipDot = {
   dec?: number;
   inc?: number;
   mag?: string;
+  meanType?: StatisticsModePCA;
+  mad?: number;
   a95?: number;
   k?: number;
   comment?: string;
