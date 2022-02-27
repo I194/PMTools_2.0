@@ -61,9 +61,7 @@ class Coordinates {
   };
 
   add = (coordinates: Coordinates) => {
-    this.x += coordinates.x; 
-    this.y += coordinates.y;
-    this.z += coordinates.z;
+    return new Coordinates(this.x + coordinates.x, this.y + coordinates.y, this.z + coordinates.z)
   };
   
   addAll = (factor: number) => {

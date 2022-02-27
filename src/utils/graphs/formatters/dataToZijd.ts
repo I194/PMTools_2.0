@@ -4,6 +4,7 @@ import { PCALines, Reference, StatisticsModePCA, TooltipDot } from "../types";
 import { StatisticsPCA } from "../../GlobalTypes";
 import toReferenceCoordinates from "./toReferenceCoordinates";
 import createPCALines from "./pcaToZijd";
+import Graphs from "../../../pages/PCAPage/Graphs";
 
 const dataToZijd = (
   data: IPmdData, 
@@ -68,21 +69,17 @@ const dataToZijd = (
   // pcaLines calculation  
   let rotatedCenterMass: Coordinates | null = null;
   let rotatedEdges: Coordinates | null = null;
+  
   if (statistics) {
     const { centerMass, edges } = statistics.component;
-    const maxStatCoord = Math.max(
-      Math.abs(centerMass.x), Math.abs(centerMass.y), Math.abs(centerMass.z),
-      Math.abs(edges.x), Math.abs(edges.y), Math.abs(edges.z),
-    );
-    rotatedCenterMass = toReferenceCoordinates(reference, data.metadata, centerMass)
-      .multiplyAll(graphSize/maxStatCoord)
-    rotatedEdges = toReferenceCoordinates(reference, data.metadata, edges)
-      .multiplyAll(graphSize/maxStatCoord)
+    const maxEdgeCoord = Math.max(Math.abs(edges.x), Math.abs(edges.y), Math.abs(edges.z));
+    const scaling = graphSize / maxEdgeCoord;
+    rotatedCenterMass = toReferenceCoordinates(reference, data.metadata, centerMass).multiplyAll(graphSize / maxCoord);
+    rotatedEdges = toReferenceCoordinates(reference, data.metadata, edges).multiplyAll(scaling);
   };
+
   const pcaLines = createPCALines(rotatedCenterMass, rotatedEdges, 'W, UP', graphSize);
 
-  console.log(pcaLines, statistics)
-  
   return {
     horizontalProjectionData, 
     verticalProjectionData, 

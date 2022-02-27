@@ -13,15 +13,15 @@ const createPCALines = (
     'W, UP': {
       hor: {
         x1: centerMass.x + coordinates.x, 
-        y1: -centerMass.y - coordinates.y,
+        y1: centerMass.y + coordinates.y,
         x2: centerMass.x - coordinates.x,
-        y2: -centerMass.y + coordinates.y
+        y2: centerMass.y - coordinates.y
       },
       ver: {
         x1: centerMass.x + coordinates.x, 
-        y1: -centerMass.z - coordinates.z,
+        y1: centerMass.z + coordinates.z,
         x2: centerMass.x - coordinates.x,
-        y2: -centerMass.z + coordinates.z
+        y2: centerMass.z - coordinates.z
       }
     },
     'N, UP': {

@@ -29,12 +29,17 @@ const calculatePCA = (
   // in opposite case need to transform to the center of mass
   if (anchored) vectors.push(...vectors);
   else {
-    vectors.forEach((vector, index) => {
-      vector.forEach((coordinate, jndex) => {
-        centerMass[jndex] += coordinate / selectedSteps.length;
-        vectors[index][jndex] = coordinate - centerMass[jndex];
-      });
-    });
+    for(var i = 0; i < vectors.length; i++) {
+      for(var j = 0; j < 3; j++) {
+        centerMass[j] += vectors[i][j] / selectedSteps.length;
+      }
+    }
+
+    for(var i = 0; i < vectors.length; i++) {
+      for(var j = 0; j < 3; j++) {
+        vectors[i][j] = vectors[i][j] - centerMass[j];
+      }
+    }
   };
 
   // Library call (numeric.js) to get the eigenvector / eigenvalues

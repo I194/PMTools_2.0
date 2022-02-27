@@ -14,16 +14,22 @@ const calculateStatisticsPMD = (
 
   let anchored = false;
   let normalized = false;
+  let type: 'directions' | 'planes' = 'directions';
+  
   if (mode === 'pca0') anchored = true;
-  if (mode === 'gc') anchored = true;
+  if (mode === 'gc') {
+    anchored = true;
+    type = 'planes';
+  }
   if (mode === 'gcn') {
     anchored = true;
     normalized = true;
+    type = 'planes';
   };
 
   const res: StatisticsPCA = {
     mode, 
-    ...calculatePCA(selectedSteps, anchored, normalized, 'directions')
+    ...calculatePCA(selectedSteps, anchored, normalized, type)
   }
   
   return res;
