@@ -89,7 +89,7 @@ const GraphSymbols: FC<IGraphSymbols> = ({
   return (
     <g 
       id='graph-symbols' 
-      transform={`translate(${20}, ${viewHeight - 45})`}
+      transform={`translate(${12}, ${viewHeight - 45})`}
     >
       {
         title1 && id1 &&

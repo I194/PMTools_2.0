@@ -1,5 +1,5 @@
 export const magAreaConstants = (width: number, height: number, stepLabels: Array<string>) => {
-  const graphAreaMargin = 40;
+  const graphAreaMargin = 32;
   const unitCountX = stepLabels.length - 1;
   const unitCountY = 10;
   return {

@@ -2,15 +2,16 @@ import React, { FC, useState } from "react";
 import styles from './Dot.module.scss';
 import { Tooltip } from "../index";
 import { ITooltip } from "../Tooltip/Tooltip";
-import { DotSettings, TooltipDot } from "../../../../utils/graphs/types";
+import { DotSettings, DotType, TooltipDot } from "../../../../utils/graphs/types";
 import { useTheme } from '@mui/material/styles';
-import { primaryColor } from "../../../../utils/ThemeConstants";
+import { graphSelectedDotColor, primaryColor } from "../../../../utils/ThemeConstants";
 
 interface IDot {
   x: number;
   y: number;
   r?: number;
   id: string;
+  type: DotType;
   annotation: {id: string, label: string};
   tooltip?: TooltipDot;
   selected?: boolean;
@@ -25,6 +26,7 @@ const Dot: FC<IDot> = ({
   y, 
   r, 
   id,
+  type,
   annotation,
   tooltip,
   selected, 
@@ -75,6 +77,7 @@ const Dot: FC<IDot> = ({
             id={`${id}__annotation`}
             x={x}
             y={y - 8}
+            fontSize={'0.8vw'}
           >
            {
              [
@@ -92,9 +95,9 @@ const Dot: FC<IDot> = ({
             r={r ? r + 2 : 6}
             id={`${id}__selection`}
             style={{
-              fill: 'purple', 
-              stroke: 'purple',
-              opacity: '50%',
+              fill: graphSelectedDotColor(type), 
+              stroke: graphSelectedDotColor(type),
+              opacity: 0.5,
             }} 
           />
         ]

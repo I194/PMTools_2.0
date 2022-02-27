@@ -1,5 +1,5 @@
 export const stereoAreaConstants = (width: number, height: number) => {
-  const graphAreaMargin = 40;
+  const graphAreaMargin = 32;
   return {
     graphAreaMargin,
     viewWidth: width + graphAreaMargin * 2,

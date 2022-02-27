@@ -1,4 +1,5 @@
 import { ThemeMode } from "./GlobalTypes";
+import { DotType } from "./graphs/types";
 
 export const bgColorMain = (themeMode: ThemeMode) => themeMode === 'dark' 
   ? '#000' 
@@ -24,3 +25,10 @@ export const textColorInverted = (themeMode: ThemeMode) => themeMode ==='dark'
 export const primaryColor = (themeMode: ThemeMode) => themeMode ==='dark' 
   ? '#90CAF9'
   : '#1976d2';
+
+export const graphSelectedDotColor = (dotType: DotType) => {
+  if (dotType === 'all') return '#1125ff';
+  if (dotType === 'h') return '#7411ff';
+  if (dotType === 'v') return '#119dff';
+  if (dotType === 'mean') return '#ff119c';
+};

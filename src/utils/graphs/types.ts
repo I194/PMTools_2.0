@@ -26,6 +26,8 @@ export type TooltipDot = {
   comment?: string;
 };
 
+export type DotType = 'h' | 'v'| 'all' | 'mean';
+
 export type TMenuItem = {
   label: string;
   state: boolean;

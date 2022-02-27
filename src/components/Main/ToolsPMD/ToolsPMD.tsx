@@ -67,7 +67,6 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   };
 
   const onStatisticsModeApply = (statisticsMode: 'pca' | 'pca0' | 'gc' | 'gcn') => {
-    alert(`--->>> ${statisticsMode}`);
     dispatch(setStatisticsMode(statisticsMode));
   };
 

@@ -69,7 +69,7 @@ const dataToZijd = (
   // pcaLines calculation  
   let rotatedCenterMass: Coordinates | null = null;
   let rotatedEdges: Coordinates | null = null;
-  
+
   if (statistics) {
     const { centerMass, edges } = statistics.component;
     const maxEdgeCoord = Math.max(Math.abs(edges.x), Math.abs(edges.y), Math.abs(edges.z));
