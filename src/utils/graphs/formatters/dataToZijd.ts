@@ -1,14 +1,15 @@
 import { IPmdData } from "../../../utils/files/fileManipulations";
 import Coordinates from "../classes/Coordinates";
 import { PCALines, Reference, StatisticsModePCA, TooltipDot } from "../types";
+import { StatisticsPCA } from "../../GlobalTypes";
 import toReferenceCoordinates from "./toReferenceCoordinates";
+import createPCALines from "./pcaToZijd";
 
 const dataToZijd = (
   data: IPmdData, 
   graphSize: number, 
   reference: Reference, 
-  statisticsMode: StatisticsModePCA,
-  selectedIndexes: Array<number>,
+  statistics: StatisticsPCA | null,
   unitCount: number
 ) => {
   const steps = data.steps;
@@ -64,8 +65,23 @@ const dataToZijd = (
   // 'calculation' of unit label, using in Unit component
   const unitLabel = (maxCoord / unitCount).toExponential(2).toUpperCase();
 
-  // calculation of statistic (if statisticMode selected)
-  const pcaLines: PCALines = null;
+  // pcaLines calculation  
+  let rotatedCenterMass: Coordinates | null = null;
+  let rotatedEdges: Coordinates | null = null;
+  if (statistics) {
+    const { centerMass, edges } = statistics.component;
+    const maxStatCoord = Math.max(
+      Math.abs(centerMass.x), Math.abs(centerMass.y), Math.abs(centerMass.z),
+      Math.abs(edges.x), Math.abs(edges.y), Math.abs(edges.z),
+    );
+    rotatedCenterMass = toReferenceCoordinates(reference, data.metadata, centerMass)
+      .multiplyAll(graphSize/maxStatCoord)
+    rotatedEdges = toReferenceCoordinates(reference, data.metadata, edges)
+      .multiplyAll(graphSize/maxStatCoord)
+  };
+  const pcaLines = createPCALines(rotatedCenterMass, rotatedEdges, 'W, UP', graphSize);
+
+  console.log(pcaLines, statistics)
   
   return {
     horizontalProjectionData, 

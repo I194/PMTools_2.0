@@ -1,6 +1,8 @@
 import { IMagGraph } from "../components/Graph/MagGraph/MagGraph";
 import { IStereoGraph } from "../components/Graph/StereoGraph/StereoGraph";
 import { IZijdGraph } from "../components/Graph/ZijdGraph/ZijdGraph";
+import Coordinates from "./graphs/classes/Coordinates";
+import { StatisticsModePCA } from "./graphs/types";
 
 export interface IGraph {
   graphId: string;
@@ -9,6 +11,16 @@ export interface IGraph {
 };
 
 export type PMDGraph = React.FC<IZijdGraph> | React.FC<IStereoGraph> | React.FC<IMagGraph>;
+
+export type StatisticsPCA = {
+  component: {
+    edges: Coordinates;
+    centerMass: Coordinates;
+  };
+  intensity: number;
+  MAD: number;
+  mode: StatisticsModePCA;
+};
 
 export type DataGridPMDRow = {
   id: number;
@@ -22,4 +34,4 @@ export type DataGridPMDRow = {
   comment: string;
 };
 
-export type ThemeMode = 'dark' | 'light'
+export type ThemeMode = 'dark' | 'light';

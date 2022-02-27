@@ -19,15 +19,15 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data }) => {
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
   // 2. zoom&pan
 
-  const { reference, statisticsMode } = useAppSelector(state => state.pcaPageReducer); 
+  const { reference, statisticsMode, currentStatistics } = useAppSelector(state => state.pcaPageReducer); 
   const { menuItems, settings } = usePMDGraphSettings();
   const selectableNodes = useGraphSelectableNodes(graphId, true);
   const selectedIndexes = useGraphSelectedIndexes();
 
   const { viewWidth, viewHeight, ...areaConstants} = useMemo(() => zijdAreaConstants(width, height), [width, height]);
   const { unitLabel, ...dataConstants } = useMemo(
-    () => dataToZijd(data, width / 2, reference, statisticsMode, selectedIndexes, areaConstants.unitCount),
-  [reference, width]);
+    () => dataToZijd(data, width / 2, reference, currentStatistics, areaConstants.unitCount),
+  [reference, width, currentStatistics]);
 
   return (
     <>

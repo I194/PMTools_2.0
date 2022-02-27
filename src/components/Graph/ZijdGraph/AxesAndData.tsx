@@ -49,7 +49,7 @@ const AxesAndData: FC<IAxesAndData> = ({
     labels,
     pcaLines,
   } = dataConstants;
-
+  console.log(pcaLines);
   return (
     <g 
       id={`${graphId}-axes-and-data`}

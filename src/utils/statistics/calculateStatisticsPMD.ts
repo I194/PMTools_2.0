@@ -1,4 +1,5 @@
 import { IPmdData } from "../files/fileManipulations";
+import { StatisticsPCA } from "../GlobalTypes";
 import { StatisticsModePCA } from "../graphs/types";
 import calculatePCA from "./calculatePCA";
 
@@ -19,8 +20,13 @@ const calculateStatisticsPMD = (
     anchored = true;
     normalized = true;
   };
+
+  const res: StatisticsPCA = {
+    mode, 
+    ...calculatePCA(selectedSteps, anchored, normalized, 'directions')
+  }
   
-  return {mode, ...calculatePCA(selectedSteps, anchored, normalized, 'directions')};
+  return res;
 };
 
 export default calculateStatisticsPMD;

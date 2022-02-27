@@ -1,5 +1,7 @@
 export type Reference = 'specimen' | 'geographic' | 'stratigraphic';
 
+export type Projection = 'W, UP' | 'N, UP' | 'N, N';
+
 export type StatisticsModePCA = 'pca' | 'pca0' | 'gc' | 'gcn' | null;
 
 export type PCALines = {

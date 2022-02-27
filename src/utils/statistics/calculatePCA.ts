@@ -47,7 +47,7 @@ const calculatePCA = (
   let vectorTAU1 = new Coordinates(...eig.v1); // eigenvector for directions
   let vectorTAU3 = new Coordinates(...eig.v3); // eigenvector for planes
   let MAD = 0;
-  let eigenVectorCoordinates = undefined;
+  let eigenVectorCoordinates = type === 'directions' ? vectorTAU1 : vectorTAU3;
 
   if (directionVector.dot(vectorTAU1) < 0) vectorTAU1 = vectorTAU1.reflect();
   if (vectorTAU3.z > 0) vectorTAU3 = vectorTAU3.reflect();
@@ -56,19 +56,17 @@ const calculatePCA = (
     // Calculation of maximum angle of deviation
     const s1 = Math.sqrt(eig.tau[0]);
     MAD = (Math.atan(Math.sqrt(eig.tau[1] + eig.tau[2]) / s1)  * Coordinates.RADIANS) || 0;
-    eigenVectorCoordinates = vectorTAU1;
   };
 
   if (type === 'planes') {
     // Calculation of maximum angle of deviation
     const s1 = Math.sqrt((eig.tau[2] / eig.tau[1]) + (eig.tau[2] / eig.tau[0]));
     MAD = (Math.atan(s1) * Coordinates.RADIANS) || 0;
-    eigenVectorCoordinates = vectorTAU3;
   };
 
   return {
     component: {
-      coordinates: eigenVectorCoordinates,
+      edges: eigenVectorCoordinates,
       centerMass: centerMassCoordinates
     },
     intensity,
