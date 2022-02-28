@@ -44,7 +44,7 @@ const dataToStereoPMD = (
     ).toDirection().toArray();
     const meanXYData = dirToCartesian2D(meanDirData[0] - 90, meanDirData[1], graphSize);
     const confidenceCircleXYData = createSmallCircle(
-      meanDirData[0] - 90, meanDirData[1],
+      meanDirData[0], meanDirData[1],
       statistics.MAD, graphSize
     );
 

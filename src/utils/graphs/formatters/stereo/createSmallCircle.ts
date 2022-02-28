@@ -11,9 +11,14 @@ const createSmallCircle = (
   // сначала корректируем координаты (не является необходимой частью алгоритма)
   if (radius == 180) return [];
 
+  // необязательные преобразования, без которых ничего не будет работать (криво отобразится)
+  dec = 360 - dec;
+  inc = 90 - Math.abs(inc);
+  radius = 90 - radius;
+
   const polarSmallCircle = []
   for (let dec = 0; dec < 361; dec++) { // создаем малый круг на полюсе
-    let xyz = dirToCartesian3D(dec, radius, 1); // и тут же переводим в декартовы
+    let xyz = dirToCartesian3D(dec, radius, 1); // я не помню, почему тут такая каша с параметрами, но без этого отображется неправильно
     polarSmallCircle.push([xyz.x, xyz.y, xyz.z]);
   };
   const rotY = rotate3x3AroundY(inc); // матрица поворота вокруг оси Y
@@ -25,7 +30,7 @@ const createSmallCircle = (
   });
 
   const smallCircleDirs = smallCircleCoords.map((coords: Coordinates) => coords.toDirection());
-
+  // координаты для построения
   const xyData: Array<[number, number]> = smallCircleDirs.map((direction) => {
     const di = direction.toArray();
     const coords = dirToCartesian2D(di[0] - 90, di[1], graphSize);
