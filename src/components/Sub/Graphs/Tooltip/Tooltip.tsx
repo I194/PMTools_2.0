@@ -23,7 +23,11 @@ const Tooltip: FC<ITooltip> = ({ position, isVisible, data, bgColor, textColor }
     for (prop in text) {
       res.push(
         <span key={prop}>
-          <b>{prop}</b>{`: ${text[prop]}`}
+          {
+            prop === 'title' 
+              ? text[prop]
+              : <><b>{prop}</b>: {text[prop]}</>
+          }
         </span>
       );
     };
