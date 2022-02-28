@@ -9,7 +9,7 @@ export type PCALines = {
   verX: [number, number], verY: [number, number]
 } | null;
 
-export type ConfidenceCircle = {radius: number, color: string};
+export type ConfidenceCircle = {xyData: Array<[number, number]>, color: string};
  
 export type MeanDirection = {
   dirData: [number, number], 

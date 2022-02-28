@@ -28,7 +28,7 @@ const projectInclination = (inc: number, type: 'equalArea' | 'equalAngle') => {
 
 }
 
-const dirToCartesian3D = (i: number, d: number, r: number) => {
+const dirToCartesian3D = (d: number, i: number, r: number) => {
   d = degreesToRadians(d);
   i = degreesToRadians(i);
   const x = +(r * Math.cos(i) * Math.cos(d)).toFixed(2);

@@ -5,6 +5,7 @@ import { ITooltip } from "../Tooltip/Tooltip";
 import { ConfidenceCircle, DotSettings, DotType, TooltipDot } from "../../../../utils/graphs/types";
 import { useTheme } from '@mui/material/styles';
 import { graphSelectedDotColor, primaryColor } from "../../../../utils/ThemeConstants";
+import { createStraightPath } from "../../../../utils/graphs/createPath";
 
 interface IDot {
   x: number;
@@ -70,6 +71,8 @@ const Dot: FC<IDot> = ({
     };
   };
 
+  if (confidenceCircle) console.log(createStraightPath(confidenceCircle.xyData))
+
   return (
     <g>
       {
@@ -110,14 +113,10 @@ const Dot: FC<IDot> = ({
           </g>,
 
           confidenceCircle &&
-          <circle
-            cx={x} 
-            cy={y} 
-            r={confidenceCircle.radius}
-            style={{
-              fill: 'transparent', 
-              stroke: confidenceCircle.color,
-            }} 
+          <path 
+            d={createStraightPath(confidenceCircle.xyData)}
+            fill='transparent'
+            stroke={confidenceCircle.color}
           />
         ]
       }

@@ -1,3 +1,5 @@
+import Coordinates from "../graphs/classes/Coordinates";
+
 export type Matrix3x3 = [
   [number, number, number],
   [number, number, number],
@@ -43,12 +45,11 @@ export const nullVector = () => {
   return vector;
 };
 
-
 export const nullMatrix = () => {
   // Function nullMatrix
   // Returns an empty 3D matrix
-
-  return [nullVector(), nullVector(), nullVector()];
+  const matrix: Matrix3x3 = [nullVector(), nullVector(), nullVector()];
+  return matrix;
 };
 
 export const TMatrix = (vectors: Array<[number, number, number]>) => {
@@ -66,4 +67,39 @@ export const TMatrix = (vectors: Array<[number, number, number]>) => {
   });
 
   return orientationMatrix;
+};
+
+export const rotate3x3AroundY = (angle: number) => {
+  const rotationAngle = angle / Coordinates.RADIANS; 
+  const rotationMatrix: Matrix3x3 = [
+    [Math.cos(rotationAngle), 0, -Math.sin(rotationAngle)],
+    [0, 1, 0],
+    [Math.sin(rotationAngle), 0, Math.cos(rotationAngle)]
+  ];
+  return rotationMatrix;
+};
+
+export const rotate3x3AroundZ = (angle: number) => {
+  const rotationAngle = angle / Coordinates.RADIANS; 
+  const rotationMatrix: Matrix3x3 = [
+    [Math.cos(rotationAngle), -Math.sin(rotationAngle), 0],
+    [Math.sin(rotationAngle), Math.cos(rotationAngle), 0],
+    [0, 0, 1],
+  ];
+  return rotationMatrix;
+};
+
+export const matrixMultiply = (matrixFirst: number[][], matrixSecond: number[][]) => {
+  const result: number[][] = [];
+  for (let i = 0; i < matrixFirst.length; i++) {
+    result[i] = [];
+    for (let j = 0; j < matrixSecond[0].length; j++) {
+      let sum = 0;
+      for (let k = 0; k < matrixFirst[0].length; k++) {
+        sum += matrixFirst[i][k] * matrixSecond[k][j];
+      };
+      result[i][j] = sum;
+    };
+  };
+  return result;
 };

@@ -5,6 +5,7 @@ import toReferenceCoordinates from "../toReferenceCoordinates";
 import { dirToCartesian2D } from "../../dirToCartesian";
 import { StatisticsPCA } from "../../../GlobalTypes";
 import { graphSelectedDotColor } from "../../../ThemeConstants";
+import createSmallCircle from "./createSmallCircle";
  
 const dataToStereoPMD = (
   data: IPmdData, 
@@ -33,7 +34,7 @@ const dataToStereoPMD = (
   const xyData: Array<[number, number]> = directionalData.map((di) => {
     const coords = dirToCartesian2D(di[0] - 90, di[1], graphSize);
     return [coords.x, coords.y];
-  })
+  });
 
   // mean direction calculation
   let meanDirection: MeanDirection = null;
@@ -42,17 +43,23 @@ const dataToStereoPMD = (
       reference, data.metadata, statistics.component.edges
     ).toDirection().toArray();
     const meanXYData = dirToCartesian2D(meanDirData[0] - 90, meanDirData[1], graphSize);
+    const confidenceCircleXYData = createSmallCircle(
+      meanDirData[0] - 90, meanDirData[1],
+      statistics.MAD, graphSize
+    );
+
     const tooltip: TooltipDot = {
       title: 'Mean dot',
       dec: +meanDirData[0].toFixed(1),
       inc: +meanDirData[1].toFixed(1),
       mad: +statistics.MAD.toFixed(1),
       meanType: statistics.mode,
-    } 
+    };
+
     meanDirection = {
       dirData: meanDirData,
       xyData: [meanXYData.x, meanXYData.y],
-      confidenceCircle: {radius: statistics.MAD, color: graphSelectedDotColor('mean')},
+      confidenceCircle: {xyData: confidenceCircleXYData, color: graphSelectedDotColor('mean')},
       tooltip,
     };
   };
