@@ -17,7 +17,7 @@ const createSmallCircle = (
   radius = 90 - radius;
 
   const polarSmallCircle = []
-  for (let dec = 0; dec < 361; dec++) { // создаем малый круг на полюсе
+  for (let dec = 0; dec < 361; dec += 4) { // создаем малый круг на полюсе
     let xyz = dirToCartesian3D(dec, radius, 1); // я не помню, почему тут такая каша с параметрами, но без этого отображется неправильно
     polarSmallCircle.push([xyz.x, xyz.y, xyz.z]);
   };
@@ -31,6 +31,7 @@ const createSmallCircle = (
 
   const smallCircleDirs = smallCircleCoords.map((coords: Coordinates) => coords.toDirection());
   // координаты для построения
+  console.log(smallCircleDirs)
   const xyData: Array<[number, number]> = smallCircleDirs.map((direction) => {
     const di = direction.toArray();
     const coords = dirToCartesian2D(di[0] - 90, di[1], graphSize);

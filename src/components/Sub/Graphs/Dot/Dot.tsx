@@ -71,7 +71,7 @@ const Dot: FC<IDot> = ({
     };
   };
 
-  if (confidenceCircle) console.log(createStraightPath(confidenceCircle.xyData))
+  if (confidenceCircle) console.log(createStraightPath(confidenceCircle.xyData), createStraightPath(confidenceCircle.xyData).split(' '))
 
   return (
     <g>
@@ -117,6 +117,8 @@ const Dot: FC<IDot> = ({
             d={createStraightPath(confidenceCircle.xyData)}
             fill='transparent'
             stroke={confidenceCircle.color}
+            strokeLinejoin="round"
+            strokeLinecap="round"
           />
         ]
       }
