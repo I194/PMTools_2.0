@@ -1,10 +1,10 @@
-import { IPmdData } from "../../../utils/files/fileManipulations";
-import Coordinates from "../classes/Coordinates";
-import { MeanDirection, Reference, TooltipDot } from "../types";
-import toReferenceCoordinates from "./toReferenceCoordinates";
-import { dirToCartesian2D } from "../dirToCartesian";
-import { StatisticsPCA } from "../../GlobalTypes";
-import { graphSelectedDotColor } from "../../ThemeConstants";
+import { IPmdData } from "../../../files/fileManipulations";
+import Coordinates from "../../classes/Coordinates";
+import { MeanDirection, Reference, TooltipDot } from "../../types";
+import toReferenceCoordinates from "../toReferenceCoordinates";
+import { dirToCartesian2D } from "../../dirToCartesian";
+import { StatisticsPCA } from "../../../GlobalTypes";
+import { graphSelectedDotColor } from "../../../ThemeConstants";
  
 const dataToStereoPMD = (
   data: IPmdData, 
@@ -16,22 +16,6 @@ const dataToStereoPMD = (
 
   // annotations for dots ('id' field added right in the Data.tsx as dot index)
   const labels = steps.map((step) => step.step);
-
-  // tooltip data for each dot on graph
-  const tooltipData: Array<TooltipDot> = steps.map((step, index) => {
-    const xyz = new Coordinates(step.x, step.y, step.z);
-    const direction = xyz.toDirection();
-    return {
-      id: index + 1,
-      step: step.step,
-      x: step.x,
-      y: step.y,
-      z: step.z,
-      dec: +direction.declination.toFixed(1),
-      inc: +direction.inclination.toFixed(1),
-      mag: step.mag.toExponential(2).toUpperCase(),
-    };
-  })
 
   // 1) rotate dots coords to reference direction 
   // 2) filling arrays of directed and XY data
@@ -72,6 +56,22 @@ const dataToStereoPMD = (
       tooltip,
     };
   };
+
+  // tooltip data for each dot on graph
+  const tooltipData: Array<TooltipDot> = steps.map((step, index) => {
+    const xyz = new Coordinates(step.x, step.y, step.z);
+    const direction = xyz.toDirection();
+    return {
+      id: index + 1,
+      step: step.step,
+      x: step.x,
+      y: step.y,
+      z: step.z,
+      dec: +directionalData[index][0].toFixed(1),
+      inc: +directionalData[index][1].toFixed(1),
+      mag: step.mag.toExponential(2).toUpperCase(),
+    };
+  });
   
   return {
     directionalData, 

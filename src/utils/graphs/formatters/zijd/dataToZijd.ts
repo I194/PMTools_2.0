@@ -1,10 +1,10 @@
-import { IPmdData } from "../../../utils/files/fileManipulations";
-import Coordinates from "../classes/Coordinates";
-import { PCALines, Reference, StatisticsModePCA, TooltipDot } from "../types";
-import { StatisticsPCA } from "../../GlobalTypes";
-import toReferenceCoordinates from "./toReferenceCoordinates";
+import { IPmdData } from "../../../files/fileManipulations";
+import Coordinates from "../../classes/Coordinates";
+import { PCALines, Reference, StatisticsModePCA, TooltipDot } from "../../types";
+import { StatisticsPCA } from "../../../GlobalTypes";
+import toReferenceCoordinates from "../toReferenceCoordinates";
 import createPCALines from "./pcaToZijd";
-import Graphs from "../../../pages/PCAPage/Graphs";
+import Graphs from "../../../../pages/PCAPage/Graphs";
 
 const dataToZijd = (
   data: IPmdData, 
@@ -17,22 +17,6 @@ const dataToZijd = (
 
   // annotations for dots ('id' field added right in the Data.tsx as dot index)
   const labels = steps.map((step) => step.step); 
-
-  // tooltip data for each dot on graph
-  const tooltipData: Array<TooltipDot> = steps.map((step, index) => {
-    const xyz = new Coordinates(step.x, step.y, step.z);
-    const direction = xyz.toDirection();
-    return {
-      id: index + 1,
-      step: step.step,
-      x: step.x,
-      y: step.y,
-      z: step.z,
-      dec: +direction.declination.toFixed(1),
-      inc: +direction.inclination.toFixed(1),
-      mag: step.mag.toExponential(2).toUpperCase(),
-    };
-  });
 
   // 1) rotate dots coords to reference direction 
   // 2) adjustment of rotated coords to fit graph size
@@ -79,6 +63,22 @@ const dataToZijd = (
   };
 
   const pcaLines = createPCALines(rotatedCenterMass, rotatedEdges, 'W, UP', graphSize);
+
+  // tooltip data for each dot on graph
+  const tooltipData: Array<TooltipDot> = steps.map((step, index) => {
+    const xyz = new Coordinates(step.x, step.y, step.z);
+    const direction = xyz.toDirection();
+    return {
+      id: index + 1,
+      step: step.step,
+      x: step.x,
+      y: step.y,
+      z: step.z,
+      dec: +directionalData[index][0].toFixed(1),
+      inc: +directionalData[index][1].toFixed(1),
+      mag: step.mag.toExponential(2).toUpperCase(),
+    };
+  });
 
   return {
     horizontalProjectionData, 

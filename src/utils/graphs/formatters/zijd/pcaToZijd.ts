@@ -1,5 +1,5 @@
-import { PCALines, Projection } from "../types";
-import Coordinates from "../classes/Coordinates";
+import { PCALines, Projection } from "../../types";
+import Coordinates from "../../classes/Coordinates";
 
 const createPCALines = (
   centerMass: Coordinates | null,

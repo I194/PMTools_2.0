@@ -4,7 +4,7 @@ import { useAppSelector } from '../../../services/store/hooks';
 import { useGraphSelectableNodes, useGraphSelectedIndexes, usePMDGraphSettings } from "../../../utils/GlobalHooks";
 import { IGraph } from "../../../utils/GlobalTypes";
 import { IPmdData } from "../../../utils/files/fileManipulations";
-import dataToZijd from "../../../utils/graphs/formatters/dataToZijd";
+import dataToZijd from "../../../utils/graphs/formatters/zijd/dataToZijd";
 import { SelectableGraph, GraphSymbols, Unit} from "../../Sub/Graphs";
 import { zijdAreaConstants } from "./ZijdConstants";
 import AxesAndData from "./AxesAndData";
@@ -19,7 +19,7 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data }) => {
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
   // 2. zoom&pan
 
-  const { reference, statisticsMode, currentStatistics } = useAppSelector(state => state.pcaPageReducer); 
+  const { reference, currentStatistics } = useAppSelector(state => state.pcaPageReducer); 
   const { menuItems, settings } = usePMDGraphSettings();
   const selectableNodes = useGraphSelectableNodes(graphId, true);
   const selectedIndexes = useGraphSelectedIndexes();

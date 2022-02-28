@@ -1,7 +1,7 @@
-import { IPmdData } from "../../../utils/files/fileManipulations";
-import Coordinates from "../classes/Coordinates";
-import { Reference, TooltipDot } from "../types";
-import toReferenceCoordinates from "./toReferenceCoordinates";
+import { IPmdData } from "../../../files/fileManipulations";
+import Coordinates from "../../classes/Coordinates";
+import { Reference, TooltipDot } from "../../types";
+import toReferenceCoordinates from "../toReferenceCoordinates";
 
 const dataToMag = (data: IPmdData, graphSize: number) => {
 

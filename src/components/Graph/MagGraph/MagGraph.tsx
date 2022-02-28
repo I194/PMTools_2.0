@@ -3,7 +3,7 @@ import styles from "./MagGraph.module.scss";
 import { useGraphSelectableNodes, useGraphSelectedIndexes, usePMDGraphSettings } from "../../../utils/GlobalHooks";
 import { IGraph } from "../../../utils/GlobalTypes";
 import { IPmdData } from "../../../utils/files/fileManipulations"
-import dataToMag from "../../../utils/graphs/formatters/dataToMag";
+import dataToMag from "../../../utils/graphs/formatters/mag/dataToMag";
 import { SelectableGraph } from "../../Sub/Graphs";
 import { magAreaConstants } from "./MagConstants";
 import AxesAndData from "./AxesAndData";
