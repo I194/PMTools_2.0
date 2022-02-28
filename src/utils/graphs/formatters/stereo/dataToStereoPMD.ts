@@ -59,7 +59,10 @@ const dataToStereoPMD = (
     meanDirection = {
       dirData: meanDirData,
       xyData: [meanXYData.x, meanXYData.y],
-      confidenceCircle: {xyData: confidenceCircleXYData, color: graphSelectedDotColor('mean')},
+      confidenceCircle: {
+        xyData: confidenceCircleXYData, 
+        color: graphSelectedDotColor('mean')
+      },
       tooltip,
     };
   };
