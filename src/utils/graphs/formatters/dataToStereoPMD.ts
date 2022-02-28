@@ -4,6 +4,7 @@ import { MeanDirection, Reference, TooltipDot } from "../types";
 import toReferenceCoordinates from "./toReferenceCoordinates";
 import { dirToCartesian2D } from "../dirToCartesian";
 import { StatisticsPCA } from "../../GlobalTypes";
+import { graphSelectedDotColor } from "../../ThemeConstants";
  
 const dataToStereoPMD = (
   data: IPmdData, 
@@ -67,6 +68,7 @@ const dataToStereoPMD = (
     meanDirection = {
       dirData: meanDirData,
       xyData: [meanXYData.x, meanXYData.y],
+      confidenceCircle: {radius: statistics.MAD, color: graphSelectedDotColor('mean')},
       tooltip,
     };
   };

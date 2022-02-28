@@ -134,6 +134,7 @@ const AxesAndData: FC<IAxesAndData> = ({
             tooltip={meanDirection.tooltip}
             fillColor={graphSelectedDotColor('mean')}
             strokeColor="black"
+            confidenceCircle={meanDirection.confidenceCircle}
             settings={settings.dots}
           />
         }

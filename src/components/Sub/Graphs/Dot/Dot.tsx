@@ -2,7 +2,7 @@ import React, { FC, useState } from "react";
 import styles from './Dot.module.scss';
 import { Tooltip } from "../index";
 import { ITooltip } from "../Tooltip/Tooltip";
-import { DotSettings, DotType, TooltipDot } from "../../../../utils/graphs/types";
+import { ConfidenceCircle, DotSettings, DotType, TooltipDot } from "../../../../utils/graphs/types";
 import { useTheme } from '@mui/material/styles';
 import { graphSelectedDotColor, primaryColor } from "../../../../utils/ThemeConstants";
 
@@ -18,6 +18,7 @@ interface IDot {
   showText?: boolean;
   fillColor: string;
   strokeColor: string;
+  confidenceCircle?: ConfidenceCircle;
   settings: DotSettings;
 }
 
@@ -33,6 +34,7 @@ const Dot: FC<IDot> = ({
   showText, 
   fillColor, 
   strokeColor,
+  confidenceCircle,
   settings,
 }) => {
 
@@ -56,17 +58,17 @@ const Dot: FC<IDot> = ({
           left: dot.getBoundingClientRect().left,
           top: dot.getBoundingClientRect().top
         },
-      })
-    }
-  }
+      });
+    };
+  };
 
   const handleOut = (id: string) => {
     const dot = document.getElementById(id);
     if (dot) {
       setTooltipData(undefined);
       dot.style.setProperty('fill', fillColor);
-    }
-  }
+    };
+  };
 
   return (
     <g>
@@ -105,7 +107,18 @@ const Dot: FC<IDot> = ({
           <g>
             <line x1={x - 8} x2={x + 8} y1={y} y2={y} stroke={graphSelectedDotColor(type)}/>
             <line x1={x} x2={x} y1={y - 8} y2={y + 8} stroke={graphSelectedDotColor(type)}/>
-          </g>
+          </g>,
+
+          confidenceCircle &&
+          <circle
+            cx={x} 
+            cy={y} 
+            r={confidenceCircle.radius}
+            style={{
+              fill: 'transparent', 
+              stroke: confidenceCircle.color,
+            }} 
+          />
         ]
       }
       <circle 
