@@ -2,7 +2,7 @@ import { IMagGraph } from "../components/Graph/MagGraph/MagGraph";
 import { IStereoGraph } from "../components/Graph/StereoGraph/StereoGraph";
 import { IZijdGraph } from "../components/Graph/ZijdGraph/ZijdGraph";
 import Coordinates from "./graphs/classes/Coordinates";
-import { StatisticsModePCA } from "./graphs/types";
+import { StatisticsModeDIR, StatisticsModePCA } from "./graphs/types";
 
 export interface IGraph {
   graphId: string;
@@ -12,14 +12,29 @@ export interface IGraph {
 
 export type PMDGraph = React.FC<IZijdGraph> | React.FC<IStereoGraph> | React.FC<IMagGraph>;
 
-export type StatisticsPCA = {
+export type StatisitcsInterpretation = {
+  id: string;
+  code: StatisticsModePCA | StatisticsModeDIR;
+  stepRange: string;
+  stepCount: number;
+  Dgeo: number;
+  Igeo: number;
+  Dstrat: number;
+  Istrat: number;
+  confidenceRadius: number; // MAD for PCA and a95 for DIR
+  k?: number; // not exist for MAD as a confidene value
+  comment: string;
+  demagType: 'thermal' | 'alternating field' | undefined;
+};
+
+export type RawStatisticsPCA = {
   component: {
     edges: Coordinates;
     centerMass: Coordinates;
   };
+  code: StatisticsModePCA;
   intensity: number;
   MAD: number;
-  mode: StatisticsModePCA;
 };
 
 export type DataGridPMDRow = {
@@ -33,5 +48,7 @@ export type DataGridPMDRow = {
   a95: number;
   comment: string;
 };
+
+export type DataGridDIRRow = Omit<StatisitcsInterpretation, 'demagType'> ;
 
 export type ThemeMode = 'dark' | 'light';

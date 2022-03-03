@@ -3,7 +3,7 @@ import Coordinates from "../../classes/Coordinates";
 import { MeanDirection, Reference, TooltipDot } from "../../types";
 import toReferenceCoordinates from "../toReferenceCoordinates";
 import { dirToCartesian2D } from "../../dirToCartesian";
-import { StatisticsPCA } from "../../../GlobalTypes";
+import { RawStatisticsPCA } from "../../../GlobalTypes";
 import { graphSelectedDotColor } from "../../../ThemeConstants";
 import createSmallCircle from "./createSmallCircle";
  
@@ -11,7 +11,7 @@ const dataToStereoPMD = (
   data: IPmdData, 
   graphSize: number, 
   reference: Reference,
-  statistics: StatisticsPCA | null,
+  statistics: RawStatisticsPCA | null,
 ) => {
   const steps = data.steps;
 
@@ -53,7 +53,7 @@ const dataToStereoPMD = (
       dec: +meanDirData[0].toFixed(1),
       inc: +meanDirData[1].toFixed(1),
       mad: +statistics.MAD.toFixed(1),
-      meanType: statistics.mode,
+      meanType: statistics.code,
     };
 
     meanDirection = {

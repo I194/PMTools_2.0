@@ -1,21 +1,15 @@
 import React, { FC } from "react";
 import styles from './DataTablePMD.module.scss';
-import { IPmdData } from "../../../utils/files/fileManipulations";
+import { IPmdData } from "../../../../utils/files/fileManipulations";
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { useTheme } from '@mui/material/styles';
-import {
-  separatorColor,
-  borderColor,
-} from '../../../utils/ThemeConstants';
 import MetaDataTablePMDSkeleton from './MetaDataTablePMDSkeleton';
+import { GetDataTableBaseStyle } from "../styleConstants";
 
 interface IMetaDataTablePMD {
   data: IPmdData['metadata'] | null | undefined;
 };
 
 const MetaDataTablePMD: FC<IMetaDataTablePMD> = ({ data }) => {
-
-  const theme = useTheme();
 
   const columns: GridColDef[] = [
     { field: 'name', headerName: 'Name', type: 'string' },
@@ -42,28 +36,7 @@ const MetaDataTablePMD: FC<IMetaDataTablePMD> = ({ data }) => {
       <DataGrid 
         rows={rows} 
         columns={columns} 
-        sx={{
-          borderRadius: '0px',
-          borderColor: borderColor(theme.palette.mode),
-          maxHeight: '100%',
-          '.MuiDataGrid-columnHeaders': {
-            maxHeight: '20px!important',
-            minHeight: '20px!important',
-          },
-          '.MuiDataGrid-virtualScroller': {
-            marginTop: '20px!important',
-            borderColor: borderColor(theme.palette.mode)
-          },
-          '.MuiDataGrid-columnSeparator': {
-            color: separatorColor(theme.palette.mode)
-          },
-          '.MuiDataGrid-cell': {
-            borderColor: borderColor(theme.palette.mode)
-          },
-          "& .MuiDataGrid-cell:focus-within, & .MuiDataGrid-cell:focus": {
-            outline: "none"
-          },
-        }}
+        sx={GetDataTableBaseStyle()}
         hideFooter={true}
         autoHeight={true}
         density={'compact'}

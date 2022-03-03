@@ -4,6 +4,8 @@ export type Projection = 'W, UP' | 'N, UP' | 'N, N';
 
 export type StatisticsModePCA = 'pca' | 'pca0' | 'gc' | 'gcn' | null;
 
+export type StatisticsModeDIR = 'fisher' | 'mcFadden' | 'gc' | 'gcn' | null;
+
 export type PCALines = {
   horX: [number, number], horY: [number, number],
   verX: [number, number], verY: [number, number]

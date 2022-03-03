@@ -1,7 +1,7 @@
 import { IPmdData } from "../../../files/fileManipulations";
 import Coordinates from "../../classes/Coordinates";
 import { PCALines, Reference, StatisticsModePCA, TooltipDot } from "../../types";
-import { StatisticsPCA } from "../../../GlobalTypes";
+import { RawStatisticsPCA } from "../../../GlobalTypes";
 import toReferenceCoordinates from "../toReferenceCoordinates";
 import createPCALines from "./pcaToZijd";
 import Graphs from "../../../../pages/PCAPage/Graphs";
@@ -10,7 +10,7 @@ const dataToZijd = (
   data: IPmdData, 
   graphSize: number, 
   reference: Reference, 
-  statistics: StatisticsPCA | null,
+  statistics: RawStatisticsPCA | null,
   unitCount: number
 ) => {
   const steps = data.steps;

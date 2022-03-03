@@ -5,7 +5,7 @@ import {
   bgColorMain,
   bgColorBlocks,
   boxShadowStyle
-} from '../../../utils/ThemeConstants';
+} from '../../../../utils/ThemeConstants';
 
 const MetaDataTablePMDSkeleton: FC = ({ children }) => {
 

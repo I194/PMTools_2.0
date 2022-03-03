@@ -1,16 +1,12 @@
 import React, { FC, useEffect, useState } from "react";
 import styles from './DataTablePMD.module.scss';
-import { IPmdData } from "../../../utils/files/fileManipulations";
+import { IPmdData } from "../../../../utils/files/fileManipulations";
 import { DataGrid, GridColDef, GridSelectionModel, GridToolbar } from '@mui/x-data-grid';
-import { useTheme } from '@mui/material/styles';
-import {
-  separatorColor,
-  borderColor,
-} from '../../../utils/ThemeConstants';
 import DataTablePMDSkeleton from './DataTablePMDSkeleton';
-import { DataGridPMDRow } from "../../../utils/GlobalTypes";
-import { useAppDispatch, useAppSelector } from "../../../services/store/hooks";
-import { setSelectedStepsIDs } from "../../../services/reducers/pcaPage";
+import { DataGridPMDRow } from "../../../../utils/GlobalTypes";
+import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
+import { setSelectedStepsIDs } from "../../../../services/reducers/pcaPage";
+import { GetDataTableBaseStyle } from "../styleConstants";
 
 interface IDataTablePMD {
   data: IPmdData | null;
@@ -19,8 +15,6 @@ interface IDataTablePMD {
 const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
 
   const dispatch = useAppDispatch();
-
-  const theme = useTheme();
 
   // selectionModel is array of ID's of rows
   const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
@@ -86,25 +80,7 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
         components={{
           Toolbar: GridToolbar,
         }}
-        sx={{
-          borderRadius: '0px',
-          borderColor: borderColor(theme.palette.mode),
-          '.MuiDataGrid-columnSeparator': {
-            color: separatorColor(theme.palette.mode)
-          },
-          '.MuiDataGrid-columnHeaders': {
-            borderColor: borderColor(theme.palette.mode)
-          },
-          '.MuiDataGrid-cell': {
-            borderColor: borderColor(theme.palette.mode)
-          },
-          "& .MuiDataGrid-cell:focus-within, & .MuiDataGrid-cell:focus": {
-            outline: "none"
-          },
-          '.MuiDataGrid-row:hover': {
-            cursor: 'pointer',
-          }
-        }}
+        sx={GetDataTableBaseStyle()}
         hideFooter={true}
       />
     </DataTablePMDSkeleton>

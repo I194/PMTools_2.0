@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IDirData, IPmdData } from "../../utils/files/fileManipulations";
-import { StatisticsPCA } from "../../utils/GlobalTypes";
+import { RawStatisticsPCA } from "../../utils/GlobalTypes";
 import { Reference, StatisticsModePCA } from "../../utils/graphs/types";
 import { filesToData } from "../axios/filesAndData";
 
@@ -9,8 +9,8 @@ interface IInitialState {
   reference: Reference;
   selectedStepsIDs: Array<number> | null;
   statisticsMode: StatisticsModePCA;
-  statisticsData: Array<StatisticsPCA> | null;
-  currentStatistics: StatisticsPCA | null;
+  statisticsData: Array<RawStatisticsPCA> | null;
+  currentRawStatistics: RawStatisticsPCA | null;
   showStepsInput: boolean;
 }
 
@@ -20,7 +20,7 @@ const initialState: IInitialState = {
   selectedStepsIDs: null,
   statisticsMode: null,
   statisticsData: null,
-  currentStatistics: null,
+  currentRawStatistics: null,
   showStepsInput: false,
 }
 
@@ -44,7 +44,7 @@ const pcaPage = createSlice({
       state.showStepsInput = action.payload;
     },
     setCurrentStatistics (state, action) {
-      state.currentStatistics = action.payload;
+      state.currentRawStatistics = action.payload;
     },
   },
   extraReducers: (builder) => {

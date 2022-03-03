@@ -4,7 +4,7 @@ import { useTheme } from '@mui/material/styles';
 import {
   bgColorBlocks,
   boxShadowStyle
-} from '../../../utils/ThemeConstants';
+} from '../../../../utils/ThemeConstants';
 
 const DataTablePMDSkeleton: FC = ({ children }) => {
 
