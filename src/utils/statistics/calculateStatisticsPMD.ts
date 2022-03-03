@@ -2,7 +2,7 @@ import { IPmdData } from "../files/fileManipulations";
 import { RawStatisticsPCA } from "../GlobalTypes";
 import { StatisticsModePCA } from "../graphs/types";
 import calculatePCA from "./calculatePCA";
-
+import rawStatisticsToInterpretation from "./formtatters/rawStatisticsToInterpretation";
 
 const calculateStatisticsPMD = (
   data: IPmdData,
@@ -27,12 +27,14 @@ const calculateStatisticsPMD = (
     type = 'planes';
   };
 
-  const res: RawStatisticsPCA = {
+  const rawStatistics: RawStatisticsPCA = {
     code: mode, 
     ...calculatePCA(selectedSteps, anchored, normalized, type)
-  }
+  };
+
+  const interpretation = rawStatisticsToInterpretation(rawStatistics, selectedSteps, data.metadata, mode);
   
-  return res;
+  return {rawStatistics, interpretation};
 };
 
 export default calculateStatisticsPMD;
