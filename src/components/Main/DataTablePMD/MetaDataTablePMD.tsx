@@ -33,7 +33,7 @@ const MetaDataTablePMD: FC<IMetaDataTablePMD> = ({ data }) => {
     col.disableColumnMenu = true;
   })
 
-  const rows = [{...data, id: 0}];
+  const rows = [{...data, id: 0, isRowSelectable: false}];
 
   if (!data) return <MetaDataTablePMDSkeleton />;
 
@@ -59,7 +59,10 @@ const MetaDataTablePMD: FC<IMetaDataTablePMD> = ({ data }) => {
           },
           '.MuiDataGrid-cell': {
             borderColor: borderColor(theme.palette.mode)
-          }
+          },
+          "& .MuiDataGrid-cell:focus-within, & .MuiDataGrid-cell:focus": {
+            outline: "none"
+          },
         }}
         hideFooter={true}
         autoHeight={true}

@@ -97,6 +97,12 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
           },
           '.MuiDataGrid-cell': {
             borderColor: borderColor(theme.palette.mode)
+          },
+          "& .MuiDataGrid-cell:focus-within, & .MuiDataGrid-cell:focus": {
+            outline: "none"
+          },
+          '.MuiDataGrid-row:hover': {
+            cursor: 'pointer',
           }
         }}
         hideFooter={true}
