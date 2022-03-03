@@ -1,9 +1,9 @@
 import React, { FC, useEffect } from 'react';
 import styles from './PCAPage.module.scss';
-import { useAppDispatch } from '../../services/store/hooks';
+import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
 import { IPmdData } from '../../utils/files/fileManipulations';
 import { useTheme } from '@mui/material/styles';
-import { DataTablePMD } from '../../components/Main';
+import { DataTablePMD, StatisticsDataTablePMD } from '../../components/Main';
 import {
   bgColorMain,
   bgColorBlocks,
@@ -19,6 +19,9 @@ const Tables: FC<ITables> = ({ dataToShow }) => {
   const disptach = useAppDispatch();
   
   const theme = useTheme();
+  
+  const interpretation = useAppSelector(state => state.pcaPageReducer.currentInterpretation);
+  const interpretations = interpretation ? [interpretation] : null;
 
   return (
     <div 
@@ -34,7 +37,7 @@ const Tables: FC<ITables> = ({ dataToShow }) => {
           boxShadow: boxShadowStyle(theme.palette.mode),
         }}
       >
-
+        <StatisticsDataTablePMD data={interpretations}/>
       </div>
       <DataTablePMD data={dataToShow}/>
     </div>

@@ -9,9 +9,10 @@ interface IInitialState {
   reference: Reference;
   selectedStepsIDs: Array<number> | null;
   statisticsMode: StatisticsModePCA;
-  statisticsData: Array<RawStatisticsPCA> | null;
   currentRawStatistics: RawStatisticsPCA | null;
   currentInterpretation: StatisitcsInterpretation | null;
+  currentFileInterpretations: Array<StatisitcsInterpretation> | null;
+  allInterpretations: Array<StatisitcsInterpretation> | null;
   showStepsInput: boolean;
 }
 
@@ -20,9 +21,10 @@ const initialState: IInitialState = {
   reference: 'geographic',
   selectedStepsIDs: null,
   statisticsMode: null,
-  statisticsData: null,
   currentRawStatistics: null,
   currentInterpretation: null,
+  currentFileInterpretations: null,
+  allInterpretations: null,
   showStepsInput: false,
 }
 
@@ -46,8 +48,8 @@ const pcaPage = createSlice({
       state.showStepsInput = action.payload;
     },
     setCurrentStatistics (state, action) {
-      state.currentRawStatistics = action.payload.rawStatistics;
-      state.currentInterpretation = action.payload.interpretation;
+      state.currentRawStatistics = action.payload?.rawStatistics;
+      state.currentInterpretation = action.payload?.interpretation;
     },
   },
   extraReducers: (builder) => {

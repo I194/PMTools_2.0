@@ -49,6 +49,6 @@ export type DataGridPMDRow = {
   comment: string;
 };
 
-export type DataGridDIRRow = Omit<StatisitcsInterpretation, 'demagType'> ;
+export type DataGridDIRRow = Omit<StatisitcsInterpretation, 'demagType'>
 
 export type ThemeMode = 'dark' | 'light';

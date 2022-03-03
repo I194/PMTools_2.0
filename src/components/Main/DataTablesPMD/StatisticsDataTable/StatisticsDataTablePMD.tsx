@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
 import StatisticsDataTablePMDSkeleton from './StatisticsDataTablePMDSkeleton';
 import { GetDataTableBaseStyle } from "../styleConstants";
 import { DataGridDIRRow, StatisitcsInterpretation } from "../../../../utils/GlobalTypes";
@@ -11,10 +11,10 @@ interface IStatisticsDataTablePMD {
 const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
 
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', type: 'string', width: 40 },
+    { field: 'id', headerName: 'ID', type: 'string', width: 70 },
     { field: 'code', headerName: 'Code', type: 'string', width: 70 },
-    { field: 'stepRange', headerName: 'StepRange', type: 'string', width: 70 },
-    { field: 'stepCount', headerName: 'N', type: 'number', width: 70 },
+    { field: 'stepRange', headerName: 'StepRange', type: 'string', width: 120 },
+    { field: 'stepCount', headerName: 'N', type: 'number', width: 40 },
     { field: 'Dgeo', headerName: 'Dgeo', type: 'number', width: 70 },
     { field: 'Igeo', headerName: 'Igeo', type: 'number', width: 70 },
     { field: 'Dstrat', headerName: 'Dstrat', type: 'number', width: 70 },
@@ -27,6 +27,7 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
     col.align = 'center';
     col.headerAlign = 'center';
     col.hideSortIcons = true;
+    col.disableColumnMenu = true;
   });
 
   if (!data) return <StatisticsDataTablePMDSkeleton />;
@@ -38,11 +39,11 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
       code, 
       stepRange,
       stepCount,
-      Dgeo,
-      Igeo,
-      Dstrat,
-      Istrat,
-      confidenceRadius,
+      Dgeo: +Dgeo.toFixed(1),
+      Igeo: +Igeo.toFixed(1),
+      Dstrat: +Dstrat.toFixed(1),
+      Istrat: +Istrat.toFixed(1),
+      confidenceRadius: +confidenceRadius.toFixed(1),
       comment
     };
   });
@@ -55,6 +56,9 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
         sx={GetDataTableBaseStyle()}
         hideFooter={true}
         autoHeight={true}
+        components={{
+          Toolbar: GridToolbar,
+        }}
         density={'compact'}
         disableSelectionOnClick={true}
       />
