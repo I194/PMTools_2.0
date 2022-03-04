@@ -54,7 +54,7 @@ const dataToZijd = (
   let rotatedCenterMass: Coordinates | null = null;
   let rotatedEdges: Coordinates | null = null;
 
-  if (statistics) {
+  if (statistics && (statistics.code === 'pca' || statistics.code === 'pca0')) {
     const { centerMass, edges } = statistics.component;
     const maxEdgeCoord = Math.max(Math.abs(edges.x), Math.abs(edges.y), Math.abs(edges.z));
     const scaling = graphSize / maxEdgeCoord;
