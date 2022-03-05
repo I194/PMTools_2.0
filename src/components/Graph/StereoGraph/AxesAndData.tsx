@@ -135,6 +135,7 @@ const AxesAndData: FC<IAxesAndData> = ({
             fillColor={meanDirection.dirData[1] > 0 ? graphSelectedDotColor('mean') : 'white'}
             strokeColor="black"
             confidenceCircle={meanDirection.confidenceCircle}
+            greatCircle={meanDirection.greatCircle}
             settings={settings.dots}
           />
         }

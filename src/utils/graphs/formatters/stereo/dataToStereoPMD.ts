@@ -6,6 +6,8 @@ import { dirToCartesian2D } from "../../dirToCartesian";
 import { RawStatisticsPCA } from "../../../GlobalTypes";
 import { graphSelectedDotColor } from "../../../ThemeConstants";
 import createSmallCircle from "./createSmallCircle";
+import createStereoPlaneData from "./createStereoPlaneData";
+import Direction from "../../classes/Direction";
  
 const dataToStereoPMD = (
   data: IPmdData, 
@@ -39,30 +41,35 @@ const dataToStereoPMD = (
   // mean direction calculation
   let meanDirection: MeanDirection = null;
   if (statistics) {
-    const meanDirData: [number, number] = toReferenceCoordinates(
+    const direction = toReferenceCoordinates(
       reference, data.metadata, statistics.component.edges
-    ).toDirection().toArray();
-    const meanXYData = dirToCartesian2D(meanDirData[0] - 90, meanDirData[1], graphSize);
-    const confidenceCircleXYData = createSmallCircle(
-      meanDirData[0], meanDirData[1],
-      statistics.MAD, graphSize
-    );
+    ).toDirection();
+    const [declination, inclination] = direction.toArray(); // mean dec and inc
+    const meanXYData = dirToCartesian2D(declination - 90, inclination, graphSize);
+    const confidenceCircle = createStereoPlaneData(direction, graphSize, statistics.MAD);
+    const greatCircle = createStereoPlaneData(direction, graphSize);
 
     const tooltip: TooltipDot = {
       title: 'Mean dot',
-      dec: +meanDirData[0].toFixed(1),
-      inc: +meanDirData[1].toFixed(1),
+      dec: +declination.toFixed(1),
+      inc: +inclination.toFixed(1),
       mad: +statistics.MAD.toFixed(1),
       meanType: statistics.code,
     };
 
     meanDirection = {
-      dirData: meanDirData,
+      dirData: direction.toArray(),
       xyData: [meanXYData.x, meanXYData.y],
       confidenceCircle: {
-        xyData: confidenceCircleXYData, 
+        xyData: confidenceCircle, 
         color: graphSelectedDotColor('mean')
       },
+      greatCircle: (statistics.code === 'gc' || statistics.code === 'gcn') 
+        ? {
+            xyData: greatCircle, 
+            color: graphSelectedDotColor('mean')
+          }
+        : undefined,
       tooltip,
     };
   };

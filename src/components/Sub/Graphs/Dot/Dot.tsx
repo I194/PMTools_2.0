@@ -2,7 +2,7 @@ import React, { FC, useState } from "react";
 import styles from './Dot.module.scss';
 import { Tooltip } from "../index";
 import { ITooltip } from "../Tooltip/Tooltip";
-import { ConfidenceCircle, DotSettings, DotType, TooltipDot } from "../../../../utils/graphs/types";
+import { PlaneData, DotSettings, DotType, TooltipDot } from "../../../../utils/graphs/types";
 import { useTheme } from '@mui/material/styles';
 import { graphSelectedDotColor, primaryColor } from "../../../../utils/ThemeConstants";
 import { createStraightPath } from "../../../../utils/graphs/createPath";
@@ -19,7 +19,8 @@ interface IDot {
   showText?: boolean;
   fillColor: string;
   strokeColor: string;
-  confidenceCircle?: ConfidenceCircle;
+  confidenceCircle?: PlaneData;
+  greatCircle?: PlaneData;
   settings: DotSettings;
 }
 
@@ -36,6 +37,7 @@ const Dot: FC<IDot> = ({
   fillColor, 
   strokeColor,
   confidenceCircle,
+  greatCircle,
   settings,
 }) => {
 
@@ -70,9 +72,7 @@ const Dot: FC<IDot> = ({
       dot.style.setProperty('fill', fillColor);
     };
   };
-
-  if (confidenceCircle) console.log(createStraightPath(confidenceCircle.xyData), createStraightPath(confidenceCircle.xyData).split(' '))
-
+  if (greatCircle) console.log(greatCircle.xyData);
   return (
     <g>
       {
@@ -117,6 +117,14 @@ const Dot: FC<IDot> = ({
             d={createStraightPath(confidenceCircle.xyData)}
             fill='transparent'
             stroke={confidenceCircle.color}
+            strokeLinejoin="round"
+            strokeLinecap="round"
+          />,
+          greatCircle &&
+          <path 
+            d={createStraightPath(greatCircle.xyData)}
+            fill='transparent'
+            stroke={greatCircle.color}
             strokeLinejoin="round"
             strokeLinecap="round"
           />

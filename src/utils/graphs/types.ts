@@ -11,13 +11,17 @@ export type PCALines = {
   verX: [number, number], verY: [number, number]
 } | null;
 
-export type ConfidenceCircle = {xyData: Array<[number, number]>, color: string};
+export type PlaneData = {
+  xyData: Array<[number, number]>;
+  color: string;
+};
  
 export type MeanDirection = {
-  dirData: [number, number], 
-  xyData: [number, number],
-  confidenceCircle: ConfidenceCircle,
-  tooltip: TooltipDot,
+  dirData: [number, number];
+  xyData: [number, number];
+  confidenceCircle?: PlaneData;
+  greatCircle?: PlaneData;
+  tooltip: TooltipDot;
 } | null;
 
 export type TooltipDot = {
