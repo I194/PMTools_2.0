@@ -98,9 +98,9 @@ const AxesAndData: FC<IAxesAndData> = ({
       {/* 
           Создавать маркеры черезе path нельзя, ибо тогда теряется почти весь их функционал
           Добавить слушатель можно только к конкретному элементу по типу <circle />
-          Потому лучше отрисовывать отдельно каждый <circle /> через map массива координат
+          Потому лучше отрисовывать отдельно каждый <circle /> через map() массива координат
           Однако hover всё равно работать не будет и потому лучше использовать onMouseOver
-          Как раз при этом достигается условие zero-css (я его только что сам придумал)
+          Как раз при этом достигается условие zero-css (я его только что сам придумал, а может и раньше было оно)
       */}
       <g 
         id={`${graphId}-data`}
@@ -133,7 +133,7 @@ const AxesAndData: FC<IAxesAndData> = ({
             annotation={{id: '', label: ''}}
             tooltip={meanDirection.tooltip}
             fillColor={meanDirection.dirData[1] > 0 ? graphSelectedDotColor('mean') : 'white'}
-            strokeColor="black"
+            strokeColor={meanDirection.confidenceCircle?.color || 'black'}
             confidenceCircle={meanDirection.confidenceCircle}
             greatCircle={meanDirection.greatCircle}
             settings={settings.dots}
