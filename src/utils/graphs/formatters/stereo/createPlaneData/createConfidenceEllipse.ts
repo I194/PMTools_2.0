@@ -1,4 +1,4 @@
-import Coordinates from "../../classes/Coordinates";
+import Coordinates from "../../../classes/Coordinates";
 
 const createConfidenceEllipse = (
   dDx: number, 

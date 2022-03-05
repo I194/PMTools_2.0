@@ -5,9 +5,7 @@ import toReferenceCoordinates from "../toReferenceCoordinates";
 import { dirToCartesian2D } from "../../dirToCartesian";
 import { RawStatisticsPCA } from "../../../GlobalTypes";
 import { graphSelectedDotColor } from "../../../ThemeConstants";
-import createSmallCircle from "./createSmallCircle";
-import createStereoPlaneData from "./createStereoPlaneData";
-import Direction from "../../classes/Direction";
+import createStereoPlaneData from "./createPlaneData/createStereoPlaneData";
  
 const dataToStereoPMD = (
   data: IPmdData, 

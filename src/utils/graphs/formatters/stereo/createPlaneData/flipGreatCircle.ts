@@ -1,4 +1,4 @@
-import Direction from "../../classes/Direction";
+import Direction from "../../../classes/Direction";
 
 
 const flipGreatCircle = (

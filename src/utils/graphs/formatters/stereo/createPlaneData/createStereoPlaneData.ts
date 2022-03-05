@@ -1,5 +1,5 @@
-import Direction from "../../classes/Direction";
-import { dirToCartesian2D } from "../../dirToCartesian";
+import Direction from "../../../classes/Direction";
+import { dirToCartesian2D } from "../../../dirToCartesian";
 import createConfidenceEllipse from "./createConfidenceEllipse";
 import flipGreatCircle from "./flipGreatCircle";
 import flipSmallCircle from "./flipSmallCircle";
