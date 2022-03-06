@@ -5,11 +5,17 @@ import { Box } from '@mui/material';
 
 const style = {
   position: 'absolute' as 'absolute',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  flexDirection: 'column',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 'auto',
+  width: '60vw',
+  height: '60vh',
   bgcolor: 'background.paper',
+  borderRadius: '6px',
   boxShadow: 24,
   p: '16px',
 };
@@ -33,7 +39,7 @@ const ModalWrapper: FC<IModal> = ({ open, setOpen, children }) => {
       >
         <Box sx={{ ...style }}>
           { children }
-          <Button variant='outlined' onClick={handleClose}>Закрыть</Button>
+          <Button variant='outlined' onClick={handleClose} sx={{mt: 2}}>Закрыть</Button>
         </Box>
       </Modal>
     </div>
