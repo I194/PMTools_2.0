@@ -3,7 +3,7 @@ import styles from "./ZijdGraph.module.scss";
 import { useAppSelector } from '../../../services/store/hooks';
 import { useGraphSelectableNodes, useGraphSelectedIndexes, usePMDGraphSettings } from "../../../utils/GlobalHooks";
 import { IGraph } from "../../../utils/GlobalTypes";
-import { IPmdData } from "../../../utils/files/fileManipulations";
+import { IPmdData } from "../../../utils/GlobalTypes";
 import dataToZijd from "../../../utils/graphs/formatters/zijd/dataToZijd";
 import { SelectableGraph, GraphSymbols, Unit} from "../../Sub/Graphs";
 import { zijdAreaConstants } from "./ZijdConstants";

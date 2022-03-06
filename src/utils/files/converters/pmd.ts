@@ -1,6 +1,7 @@
 import * as XLSX from 'xlsx';
 import { dataModel_metaPMD, dataModel_step } from '../fileConstants';
-import { download, getDirectionalData, IPmdData, s2ab } from '../fileManipulations';
+import { download, getDirectionalData, s2ab } from '../fileManipulations';
+import { IPmdData } from '../../GlobalTypes';
 import { toExponential_PMD, putParamToString, getFileName } from '../subFunctions';
 
 export const toPMD = async (file: File, parsedData?: IPmdData) => {

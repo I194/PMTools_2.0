@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IDirData, IPmdData } from "../../utils/files/fileManipulations";
+import { IPmdData, IDirData } from "../../utils/GlobalTypes";
 import { filesToData } from "../axios/filesAndData";
 
 interface IInitialState {

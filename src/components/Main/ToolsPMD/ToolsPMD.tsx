@@ -6,7 +6,7 @@ import { Button } from '@mui/material';
 import { Reference } from '../../../utils/graphs/types';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
 import { addCurrentFileInterpretation, setCurrentStatistics, setReference, setStatisticsMode } from '../../../services/reducers/pcaPage';
-import { IPmdData } from '../../../utils/files/fileManipulations';
+import { IPmdData } from '../../../utils/GlobalTypes';
 import ModalWrapper from '../../Sub/Modal/ModalWrapper';
 import ToolsPMDSkeleton from './ToolsPMDSkeleton';
 import OutputDataTablePMD from '../DataTablesPMD/OutputDataTable/OutputDataTablePMD';

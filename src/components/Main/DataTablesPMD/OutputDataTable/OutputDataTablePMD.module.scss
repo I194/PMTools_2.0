@@ -4,4 +4,12 @@
   height: 80%;
 
   background-color: #212121;
+};
+
+.toolbar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+
+  margin-bottom: 16px;
 }

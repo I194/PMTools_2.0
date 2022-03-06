@@ -1,4 +1,4 @@
-import { IPmdData } from "../../../files/fileManipulations";
+import { IPmdData } from "../../../GlobalTypes";
 import Coordinates from "../../classes/Coordinates";
 import { PCALines, Reference, StatisticsModePCA, TooltipDot } from "../../types";
 import { RawStatisticsPCA } from "../../../GlobalTypes";

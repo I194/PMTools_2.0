@@ -6,7 +6,7 @@ import {
 } from "@mui/x-data-grid";
 import { FC } from "react";
 import { useAppSelector } from "../../../../services/store/hooks";
-import { IDirData, IPmdData } from "../../../../utils/files/fileManipulations";
+import { IDirData, IPmdData } from "../../../../utils/GlobalTypes";
 import ExportDIR from "./Buttons/ExportButton/ExportDIR";
 import ExportPMD from './Buttons/ExportButton/ExportPMD';
 

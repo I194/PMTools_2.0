@@ -3,7 +3,7 @@ import styles from "./ZijdGraph.module.scss";
 import { useAppSelector } from "../../../services/store/hooks";
 import { useGraphSelectableNodes, useGraphSelectedIndexes, usePMDGraphSettings } from "../../../utils/GlobalHooks";
 import { IGraph } from "../../../utils/GlobalTypes";
-import { IPmdData } from "../../../utils/files/fileManipulations";
+import { IPmdData } from "../../../utils/GlobalTypes";
 import dataToStereoPMD from "../../../utils/graphs/formatters/stereo/dataToStereoPMD";
 import { SelectableGraph, GraphSymbols } from "../../Sub/Graphs";
 import { stereoAreaConstants } from "./StereoConstants";

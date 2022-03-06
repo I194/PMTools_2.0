@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import styles from './DataTablePMD.module.scss';
-import { IPmdData } from "../../../../utils/files/fileManipulations";
+import { IPmdData } from "../../../../utils/GlobalTypes";
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import MetaDataTablePMDSkeleton from './MetaDataTablePMDSkeleton';
 import { GetDataTableBaseStyle } from "../styleConstants";

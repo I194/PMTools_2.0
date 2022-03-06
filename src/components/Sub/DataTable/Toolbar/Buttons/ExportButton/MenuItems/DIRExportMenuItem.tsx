@@ -4,7 +4,7 @@ import {
 } from '@mui/x-data-grid';
 import { FC } from 'react';
 import { toCSV_DIR, toDIR, toPMM, toXLSX_DIR } from '../../../../../../../utils/files/converters';
-import { IDirData } from '../../../../../../../utils/files/fileManipulations';
+import { IDirData } from '../../../../../../../utils/GlobalTypes'; 
 
 interface DIRExport {
   as: 'dir' | 'pmm' | 'csv' | 'xlsx';
@@ -16,11 +16,37 @@ const DIRExportMenuItem: FC<DIRExport> = ({as, data}, props: GridExportMenuItemP
   const { hideMenu } = props;
   const blankFile = new File([], '');
 
+  data.format = as;
+
   const exportAs = {
-    dir: {export: () => toDIR(blankFile, data), label: 'Export as DIR'},
-    pmm: {export: () => toPMM(blankFile, data), label: 'Export as PMM'},
-    csv: {export: () => toCSV_DIR(blankFile, data), label: 'Export as CSV'},
-    xlsx: {export: () => toXLSX_DIR(blankFile, data), label: 'Export as XLSX'}
+    dir: {
+      export: () => {
+        data.created = new Date().toLocaleString();
+        toDIR(blankFile, data)
+      }, 
+      label: 'Export as DIR'
+    },
+    pmm: {
+      export: () => {
+        data.created = new Date().toLocaleString();
+        toPMM(blankFile, data)
+      }, 
+      label: 'Export as PMM'
+    },
+    csv: {
+      export: () => {
+        data.created = new Date().toLocaleString();
+        toCSV_DIR(blankFile, data)
+      }, 
+      label: 'Export as CSV'
+    },
+    xlsx: {
+      export: () => {
+        data.created = new Date().toLocaleString();
+        toXLSX_DIR(blankFile, data)
+      }, 
+      label: 'Export as XLSX'
+    }
   };
 
   return (

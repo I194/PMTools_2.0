@@ -2,7 +2,7 @@ import React, { FC, useMemo } from "react";
 import styles from "./MagGraph.module.scss";
 import { useGraphSelectableNodes, useGraphSelectedIndexes, usePMDGraphSettings } from "../../../utils/GlobalHooks";
 import { IGraph } from "../../../utils/GlobalTypes";
-import { IPmdData } from "../../../utils/files/fileManipulations"
+import { IPmdData } from "../../../utils/GlobalTypes";
 import dataToMag from "../../../utils/graphs/formatters/mag/dataToMag";
 import { SelectableGraph } from "../../Sub/Graphs";
 import { magAreaConstants } from "./MagConstants";

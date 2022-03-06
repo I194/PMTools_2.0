@@ -1,8 +1,5 @@
-import React, { FC, ReactElement, ReactNode, useEffect, useRef, useState } from 'react';
+import React, { FC, ReactNode } from 'react';
 import styles from './PCAPage.module.scss';
-import { useWindowSize } from '../../utils/GlobalHooks';
-import { ZijdGraph, StereoGraph, MagGraph} from '../../components/Graph';
-import { IPmdData } from '../../utils/files/fileManipulations';
 import { useTheme } from '@mui/material/styles';
 import {
   bgColorMain,

@@ -1,4 +1,4 @@
-import { IPmdData } from "../../files/fileManipulations";
+import { IPmdData } from "../../GlobalTypes";
 import { RawStatisticsPCA, StatisitcsInterpretation } from "../../GlobalTypes";
 import toReferenceCoordinates from "../../graphs/formatters/toReferenceCoordinates";
 import { StatisticsModePCA } from "../../graphs/types";
@@ -9,12 +9,12 @@ const rawStatisticsToInterpretation = (
   metadata: IPmdData['metadata'],
   code: StatisticsModePCA,
 ) => {
+  // ограничение по длине в 7 символов из-за специфики .dir файлов
+  // здесь оставляется 4 первые символа имени файла, далее добавится id
+  // получится по итогу такое: aBcD_1 или aBcD_12
+  const id: string = metadata.name.slice(0, 4);  
 
-  const id: string = metadata.name;
-
-  const stepRange: string = `
-    ${selectedSteps[0].step}-${selectedSteps[selectedSteps.length - 1].step}
-  `;
+  const stepRange: string = `${selectedSteps[0].step}-${selectedSteps[selectedSteps.length - 1].step}`;
   const stepCount: number = selectedSteps.length;
 
   const [Dgeo, Igeo] = toReferenceCoordinates(
@@ -34,11 +34,11 @@ const rawStatisticsToInterpretation = (
     code,
     stepRange,
     stepCount,
-    Dgeo,
-    Igeo,
-    Dstrat,
-    Istrat,
-    confidenceRadius,
+    Dgeo: +Dgeo.toFixed(1),
+    Igeo: +Igeo.toFixed(1),
+    Dstrat: +Dstrat.toFixed(1),
+    Istrat: +Istrat.toFixed(1),
+    confidenceRadius: +confidenceRadius.toFixed(1),
     comment,
     demagType
   };

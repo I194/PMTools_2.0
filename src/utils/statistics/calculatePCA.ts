@@ -1,5 +1,5 @@
 import numeric from "numeric";
-import { IPmdData } from "../files/fileManipulations";
+import { IPmdData } from "../GlobalTypes";
 import Coordinates from "../graphs/classes/Coordinates";
 import { TMatrix } from "./matrix";
 import { sortEigenvectors } from "./eigManipulations";

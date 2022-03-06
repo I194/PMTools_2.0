@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import styles from './PCAPage.module.scss';
 import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
 import { filesToData } from '../../services/axios/filesAndData';
-import { IPmdData } from '../../utils/files/fileManipulations';
+import { IPmdData } from '../../utils/GlobalTypes';
 import { MetaDataTablePMD, ToolsPMD } from '../../components/Main';
 import Graphs from './Graphs';
 import Tables from './Tables';

@@ -4,25 +4,45 @@ import {
   GridToolbarDensitySelector,
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { useAppSelector } from "../../../../services/store/hooks";
-import { IDirData, IPmdData } from "../../../../utils/files/fileManipulations";
+import { IDirData } from "../../../../utils/GlobalTypes"; 
 import ExportDIR from "./Buttons/ExportButton/ExportDIR";
 import ExportPMD from './Buttons/ExportButton/ExportPMD';
 
 const PMDOutputDataTableToolbar = () => {
 
-  const { treatmentData } = useAppSelector(state => state.parsedDataReducer);
+  const { allInterpretations, outputFilename } = useAppSelector(state => state.pcaPageReducer);
 
-  if (!treatmentData) return null;
-  const data = treatmentData[0];
+  if (!allInterpretations) return null;
+  const data: IDirData = {
+    name: outputFilename,
+    interpretations: allInterpretations.map((interpretation) => {
+      return {
+        id: interpretation.id,
+        code: interpretation.code || '',
+        stepRange: interpretation.stepRange,
+        stepCount: interpretation.stepCount,
+        Dgeo: interpretation.Dgeo,
+        Igeo: interpretation.Igeo,
+        Dstrat: interpretation.Dstrat,
+        Istrat: interpretation.Istrat,
+        mad: interpretation.confidenceRadius,
+        k: interpretation.k || 0,
+        comment: interpretation.comment,
+        demagType: interpretation.demagType
+      };
+    }),
+    format: '',
+    created: ''
+  };
 
   return (
     <GridToolbarContainer>
       <GridToolbarFilterButton />
       <GridToolbarColumnsButton />
       <GridToolbarDensitySelector />
-      <ExportPMD data={data as IPmdData}/>
+      <ExportDIR data={data}/>
     </GridToolbarContainer>
   );
 };

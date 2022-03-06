@@ -1,15 +1,24 @@
-import React, { FC } from "react";
-import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
+import React, { FC, useEffect, useState } from "react";
+import styles from './OutputDataTablePMD.module.scss';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import StatisticsDataTablePMDSkeleton from './OutputDataTablePMDSkeleton';
 import { GetDataTableBaseStyle } from "../styleConstants";
 import { DataGridDIRRow, StatisitcsInterpretation } from "../../../../utils/GlobalTypes";
-import PMDStatisticsDataTableToolbar from "../../../Sub/DataTable/Toolbar/PMDStatisticsDataTableToolbar";
+import PMDOutputDataTableToolbar from '../../../Sub/DataTable/Toolbar/PMDOutputDataTableToolbar';
+import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import { useAppDispatch } from "../../../../services/store/hooks";
+import { setOutputFilename } from "../../../../services/reducers/pcaPage";
 
 interface IOutputDataTablePMD {
   data: Array<StatisitcsInterpretation> | null;
 };
 
 const OutputDataTablePMD: FC<IOutputDataTablePMD> = ({ data }) => {
+  
+  const dispatch = useAppDispatch();
+  const [filename, setFilename] = useState<string>('PCA Interpretations');
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', type: 'string', width: 120 },
@@ -31,6 +40,10 @@ const OutputDataTablePMD: FC<IOutputDataTablePMD> = ({ data }) => {
     col.disableColumnMenu = true;
   });
 
+  useEffect(() => {
+    dispatch(setOutputFilename(filename));
+  }, [filename]);
+
   if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
 
   const rows: Array<DataGridDIRRow> = data.map((statistics, index) => {
@@ -49,17 +62,45 @@ const OutputDataTablePMD: FC<IOutputDataTablePMD> = ({ data }) => {
     };
   });
 
+  const handleFilenameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFilename(event.target.value);
+  };  
+
   return (
-    <StatisticsDataTablePMDSkeleton>
-      <DataGrid 
-        rows={rows} 
-        columns={columns} 
-        sx={GetDataTableBaseStyle()}
-        hideFooter={true}
-        density={'compact'}
-        disableSelectionOnClick={true}
-      />
-    </StatisticsDataTablePMDSkeleton>
+    <>
+      <div className={styles.toolbar}>
+        <TextField
+          id="allInterpretationsPCA_filename"
+          label="Имя файла"
+          value={filename}
+          onChange={handleFilenameChange}
+          variant="standard"
+        />
+        <IconButton 
+          color="error" 
+          sx={{
+            position: 'absolute',
+            right: '8px'
+          }}
+        >
+          <CloseOutlinedIcon />
+        </IconButton>
+      </div>
+      <StatisticsDataTablePMDSkeleton>
+        <DataGrid 
+          rows={rows} 
+          columns={columns} 
+          sx={GetDataTableBaseStyle()}
+          hideFooter={true}
+          density={'compact'}
+          components={{
+            Toolbar: PMDOutputDataTableToolbar,
+          }}
+          disableSelectionOnClick={true}
+        />
+      </StatisticsDataTablePMDSkeleton>
+    </>
+    
   );
 };
 

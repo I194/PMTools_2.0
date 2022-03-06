@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import styles from './DataTablePMD.module.scss';
-import { IPmdData } from "../../../../utils/files/fileManipulations";
-import { DataGrid, GridColDef, GridSelectionModel, GridToolbar } from '@mui/x-data-grid';
+import { IPmdData } from "../../../../utils/GlobalTypes";
+import { DataGrid, GridColDef, GridSelectionModel } from '@mui/x-data-grid';
 import DataTablePMDSkeleton from './DataTablePMDSkeleton';
 import { DataGridPMDRow } from "../../../../utils/GlobalTypes";
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";

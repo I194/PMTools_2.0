@@ -2,13 +2,7 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import styles from './PCAPage.module.scss';
 import { useWindowSize } from '../../utils/GlobalHooks';
 import { ZijdGraph, StereoGraph, MagGraph} from '../../components/Graph';
-import { IPmdData } from '../../utils/files/fileManipulations';
-import { useTheme } from '@mui/material/styles';
-import {
-  bgColorMain,
-  bgColorBlocks,
-  boxShadowStyle
-} from '../../utils/ThemeConstants';
+import { IPmdData } from '../../utils/GlobalTypes';
 import GraphsSkeleton from './GraphsSkeleton';
 
 interface IGraphs {

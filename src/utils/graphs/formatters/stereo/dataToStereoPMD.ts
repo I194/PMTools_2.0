@@ -1,4 +1,4 @@
-import { IPmdData } from "../../../files/fileManipulations";
+import { IPmdData } from "../../../GlobalTypes";
 import Coordinates from "../../classes/Coordinates";
 import { MeanDirection, Reference, TooltipDot } from "../../types";
 import toReferenceCoordinates from "../toReferenceCoordinates";

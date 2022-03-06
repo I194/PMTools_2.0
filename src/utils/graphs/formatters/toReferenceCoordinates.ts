@@ -1,4 +1,4 @@
-import { IPmdData } from "../../files/fileManipulations";
+import { IPmdData } from "../../GlobalTypes";
 import Coordinates from "../classes/Coordinates";
 import { Reference } from "../types";
 

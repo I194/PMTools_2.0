@@ -1,3 +1,5 @@
+import { IDirData } from "../GlobalTypes"
+
 export const examplePMD = {
   metadata: {
     name: 'string',
@@ -25,7 +27,7 @@ export const examplePMD = {
   created: 'string',
 }
 
-export const exampleDir = {
+export const exampleDir: IDirData = {
   name: 'string',
   interpretations: [{
     id: 'string',

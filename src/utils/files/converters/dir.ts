@@ -1,11 +1,14 @@
 import * as XLSX from 'xlsx';
 import { dataModel_interpretation } from '../fileConstants';
-import { download, getDirectionalData, IDirData, s2ab } from '../fileManipulations';
+import { download, getDirectionalData, s2ab } from '../fileManipulations';
+import { IDirData } from '../../GlobalTypes';
 import { getFileName, putParamToString } from '../subFunctions';
 
 export const toDIR = async (file: File, parsedData?: IDirData) => {
   
   const data = parsedData ? parsedData : await getDirectionalData(file, 'dir') as IDirData;
+
+  console.log(data.interpretations[0].stepRange, data.interpretations[0].stepRange.length);
 
   const lines = data.interpretations.map((interpretation: any) => {
     const line = Object.keys(dataModel_interpretation).reduce((line, param) => {

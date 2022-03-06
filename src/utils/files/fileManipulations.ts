@@ -1,57 +1,6 @@
 import PMFile from "./pmFiles";
 import { exampleDir } from "./fileConstants";
-
-interface IObjectKeys {
-  [key: string | number | symbol]: any;
-}
-
-export interface IPmdData extends IObjectKeys {
-  metadata: {
-    name: string;
-    a: number; // core azimuth
-    b: number; // core dip
-    s: number; // bedding strike
-    d: number; // bedding dip
-    v: number; // volume
-  };
-  steps: {
-    step: string;
-    x: number;
-    y: number;
-    z: number;
-    mag: number;
-    Dgeo: number;
-    Igeo: number;
-    Dstrat: number;
-    Istrat: number;
-    a95: number;
-    comment: string;
-    demagType: 'thermal' | 'alternating field' | undefined;
-  }[];
-  format: string;
-  created: string;
-}
-
-export interface IDirData extends IObjectKeys {
-  name: string;
-  interpretations: {
-    id: string;
-    code: string;
-    stepRange: string;
-    stepCount: number;
-    Dgeo: number;
-    Igeo: number;
-    Dstrat: number;
-    Istrat: number;
-    mad: number;
-    k: number;
-    comment: string;
-    demagType: 'thermal' | 'alternating field' | undefined;
-  }[];
-  format: string;
-  created: string;
-}
-
+import { IDirData, IPmdData } from "../GlobalTypes";
 
 export const getDirectionalData = (file: File, as: string) => {
 

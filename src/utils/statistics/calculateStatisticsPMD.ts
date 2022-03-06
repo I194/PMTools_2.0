@@ -1,4 +1,4 @@
-import { IPmdData } from "../files/fileManipulations";
+import { IPmdData } from "../GlobalTypes";
 import { RawStatisticsPCA } from "../GlobalTypes";
 import { StatisticsModePCA } from "../graphs/types";
 import calculatePCA from "./calculatePCA";
