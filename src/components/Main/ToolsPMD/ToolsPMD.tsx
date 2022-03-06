@@ -2,11 +2,12 @@ import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import styles from './ToolsPMD.module.scss';
 import DropdownSelect from '../../Sub/DropdownSelect/DropdownSelect';
 import ButtonGroupWithLabel from '../../Sub/ButtonGroupWithLabel/ButtonGroupWithLabel';
-import { Button, ButtonGroup, FormControl, InputLabel } from '@mui/material';
+import { Button } from '@mui/material';
 import { Reference } from '../../../utils/graphs/types';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
-import { addCurrentFileInterpretation, setCurrentStatistics, setReference, setSelectedStepsIDs, setStatisticsMode } from '../../../services/reducers/pcaPage';
+import { addCurrentFileInterpretation, setCurrentStatistics, setReference, setStatisticsMode } from '../../../services/reducers/pcaPage';
 import { IPmdData } from '../../../utils/files/fileManipulations';
+import ModalWrapper from '../../Sub/Modal/ModalWrapper';
 import ToolsPMDSkeleton from './ToolsPMDSkeleton';
 
 const labelToReference = (label: string) => {
@@ -32,6 +33,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   const { reference, statisticsMode } = useAppSelector(state => state.pcaPageReducer); 
 
   const [coordinateSystem, setCoordinateSystem] = useState<Reference>('geographic');
+  const [allFilesStatOpen, setAllFilesStatOpen] = useState<boolean>(false);
 
   useEffect(() => {
     window.addEventListener("keydown", handleStatisticsModeSelect);
@@ -91,8 +93,14 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
         <Button color='error' onClick={() => onStatisticsDecline()} disabled={!statisticsMode}>Отменить</Button>
       </ButtonGroupWithLabel>
       <ButtonGroupWithLabel label='Смотреть статистику'>
-        <Button onClick={() => onStatisticsApply()}>По всем файлам</Button>
+        <Button onClick={() => setAllFilesStatOpen(true)}>По всем файлам</Button>
       </ButtonGroupWithLabel>
+      <ModalWrapper
+        open={allFilesStatOpen}
+        setOpen={setAllFilesStatOpen}
+      >
+
+      </ModalWrapper>
     </ToolsPMDSkeleton>
   )
 }
