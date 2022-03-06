@@ -2,23 +2,24 @@ import { MenuItem } from '@mui/material';
 import {
   GridExportMenuItemProps,
 } from '@mui/x-data-grid';
-import { useAppSelector } from '../../../../../../services/store/hooks';
+import { FC } from 'react';
 import { toCSV_PMD, toPMD, toXLSX_PMD } from '../../../../../../utils/files/converters';
+import { IPmdData } from '../../../../../../utils/files/fileManipulations';
 
-type PMDExportProps = GridExportMenuItemProps<{}> & {as: 'pmd' | 'csv' | 'xlsx'}
+interface PMDExport {
+  as: 'pmd' | 'csv' | 'xlsx';
+  data: IPmdData;
+};
 
-const PMDExportMenuItem = (props: PMDExportProps) => {
+const PMDExportMenuItem: FC<PMDExport> = ({as, data}, props: GridExportMenuItemProps<{}>) => {
 
-  const files = useAppSelector(state => state.filesReducer.treatmentFiles);
-
-  const { hideMenu, as } = props;
-
-  if (!files) return null;
+  const { hideMenu } = props;
+  const blankFile = new File([], '');
 
   const exportAs = {
-    pmd: {export: () => toPMD(files[0]), label: 'Export as PMD'},
-    csv: {export: () => toCSV_PMD(files[0]), label: 'Export as CSV'},
-    xlsx: {export: () => toXLSX_PMD(files[0]), label: 'Export as XLSX'}
+    pmd: {export: () => toPMD(blankFile, data), label: 'Export as PMD'},
+    csv: {export: () => toCSV_PMD(blankFile, data), label: 'Export as CSV'},
+    xlsx: {export: () => toXLSX_PMD(blankFile, data), label: 'Export as XLSX'}
   };
 
   return (

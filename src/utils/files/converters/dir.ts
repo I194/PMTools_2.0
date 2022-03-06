@@ -3,9 +3,9 @@ import { dataModel_interpretation } from '../fileConstants';
 import { download, getDirectionalData, IDirData, s2ab } from '../fileManipulations';
 import { getFileName, putParamToString } from '../subFunctions';
 
-export const toDIR = async (file: File) => {
+export const toDIR = async (file: File, parsedData?: IDirData) => {
   
-  const data = await getDirectionalData(file, 'dir') as IDirData;
+  const data = parsedData ? parsedData : await getDirectionalData(file, 'dir') as IDirData;
 
   const lines = data.interpretations.map((interpretation: any) => {
     const line = Object.keys(dataModel_interpretation).reduce((line, param) => {
@@ -18,14 +18,11 @@ export const toDIR = async (file: File) => {
   const filename = getFileName(data.name);
 
   download(res, `${filename}.dir`, 'text/plain;charset=utf-8');
+};
 
-  return 'hey';
+export const toPMM = async (file: File, parsedData?: IDirData) => {
 
-}
-
-export const toPMM = async (file: File) => {
-
-  const data = await getDirectionalData(file, 'dir') as IDirData;
+  const data = parsedData ? parsedData : await getDirectionalData(file, 'dir') as IDirData;
 
   const metaLines = `"file_comment"\n${data.name},"author","2021-11-27"\n`;
   const columnNames = 'ID,CODE,STEPRANGE,N,Dg,Ig,kg,a95g,Ds,Is,ks,a95s,comment\n';
@@ -44,14 +41,11 @@ export const toPMM = async (file: File) => {
   const filename = getFileName(data.name);
 
   download(res, `${filename}.pmm`, 'text/plain;charset=utf-8');
+};
 
-  return 'hey';
+export const toCSV_DIR = async (file: File, parsedData?: IDirData) => {
 
-}
-
-export const toCSV_DIR = async (file: File) => {
-
-  const data = await getDirectionalData(file, 'dir') as IDirData;
+  const data = parsedData ? parsedData : await getDirectionalData(file, 'dir') as IDirData;
   
   const columNames = 'id,Code,StepRange,N,Dgeo,Igeo,Dstrat,Istrat,MAD,K,Comment\n';
 
@@ -66,14 +60,11 @@ export const toCSV_DIR = async (file: File) => {
   const filename = getFileName(data.name);
 
   download(res, `${filename}.csv`, 'text/csv;charset=utf-8');
+};
 
-  return 'hey';
+export const toXLSX_DIR = async (file: File, parsedData?: IDirData) => {
 
-}
-
-export const toXLSX_DIR = async (file: File) => {
-
-  const data = await getDirectionalData(file, 'dir') as IDirData;
+  const data = parsedData ? parsedData : await getDirectionalData(file, 'dir') as IDirData;
 
   const columnNames = 'id,Code,StepRange,N,Dgeo,Igeo,Dstrat,Istrat,MAD,K,Comment'.split(',');
 
@@ -94,7 +85,4 @@ export const toXLSX_DIR = async (file: File) => {
   const filename = getFileName(data.name);
 
   download(res, `${filename}.xlsx`, "application/octet-stream")
-
-  return 'hey';
-
-}
+};

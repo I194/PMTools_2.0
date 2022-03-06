@@ -7,13 +7,15 @@ import {
   GridExportMenuItemProps,
 } from '@mui/x-data-grid';
 import PMDExportMenuItem from './MenuItems/PMDExportMenuItem';
+import { IPmdData } from '../../../../../utils/files/fileManipulations';
 
-const ExportPMD = (props: ButtonProps) => {
+const ExportPMD = (props: ButtonProps & {data: IPmdData}) => {
+  const { data } = props;
   return (
     <GridToolbarExportContainer {...props}>
-      <PMDExportMenuItem as={'pmd'}/>
-      <PMDExportMenuItem as={'csv'}/>
-      <PMDExportMenuItem as={'xlsx'}/>
+      <PMDExportMenuItem as={'pmd'} data={data}/>
+      <PMDExportMenuItem as={'csv'} data={data}/>
+      <PMDExportMenuItem as={'xlsx'} data={data}/>
     </GridToolbarExportContainer>
   );
 };

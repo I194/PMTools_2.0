@@ -7,7 +7,7 @@ import { DataGridPMDRow } from "../../../../utils/GlobalTypes";
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
 import { setSelectedStepsIDs } from "../../../../services/reducers/pcaPage";
 import { GetDataTableBaseStyle } from "../styleConstants";
-import StandardToolbar from "../../../Sub/DataTable/Toolbar/StandardToolbar";
+import PMDInputDataTableToolbar from "../../../Sub/DataTable/Toolbar/PMDInputDataTableToolbar";
 
 interface IDataTablePMD {
   data: IPmdData | null;
@@ -79,7 +79,7 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
           setSelectedRows(selectedRows);
         }}
         components={{
-          Toolbar: StandardToolbar, 
+          Toolbar: PMDInputDataTableToolbar, 
         }}
         sx={GetDataTableBaseStyle()}
         hideFooter={true}

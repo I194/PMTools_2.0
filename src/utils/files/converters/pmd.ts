@@ -1,11 +1,11 @@
 import * as XLSX from 'xlsx';
-import { dataModel_interpretation, dataModel_metaPMD, dataModel_step } from '../fileConstants';
+import { dataModel_metaPMD, dataModel_step } from '../fileConstants';
 import { download, getDirectionalData, IPmdData, s2ab } from '../fileManipulations';
 import { toExponential_PMD, putParamToString, getFileName } from '../subFunctions';
 
-export const toPMD = async (file: File) => {
+export const toPMD = async (file: File, parsedData?: IPmdData) => {
   
-  const data = await getDirectionalData(file, 'pmd') as IPmdData;
+  const data = parsedData ? parsedData : await getDirectionalData(file, 'pmd') as IPmdData;
 
   const extraMeta: any = {
     ...data.metadata,
@@ -47,14 +47,11 @@ export const toPMD = async (file: File) => {
   const filename = getFileName(data.metadata.name);
 
   download(res, `${filename}.pmd`, 'text/plain;charset=utf-8');
+};
 
-  return 'hey';
+export const toCSV_PMD = async (file: File, parsedData?: IPmdData) => {
 
-}
-
-export const toCSV_PMD = async (file: File) => {
-
-  const data = await getDirectionalData(file, 'pmd') as IPmdData;
+  const data = parsedData ? parsedData : await getDirectionalData(file, 'pmd') as IPmdData;
 
   const metaNames = 'a,b,s,d,v(m3)\n';
   const metaLine = [
@@ -78,14 +75,11 @@ export const toCSV_PMD = async (file: File) => {
   const filename = getFileName(data.metadata.name);
 
   download(res, `${filename}.csv`, 'text/csv;charset=utf-8');
+};
 
-  return 'hey';
+export const toXLSX_PMD = async (file: File, parsedData?: IPmdData) => {
 
-}
-
-export const toXLSX_PMD = async (file: File) => {
-
-  const data = await getDirectionalData(file, 'pmd') as IPmdData;
+  const data = parsedData ? parsedData : await getDirectionalData(file, 'pmd') as IPmdData;
 
   const metaNames = 'a,b,s,d,v (m3)'.split(',');
   const metaLine = [
@@ -116,8 +110,5 @@ export const toXLSX_PMD = async (file: File) => {
   const res = s2ab(wbinary);
   const filename = getFileName(data.metadata.name);
 
-  download(res, `${filename}.xlsx`, "application/octet-stream")
-
-  return 'hey';
-
-}
+  download(res, `${filename}.xlsx`, "application/octet-stream");
+};
