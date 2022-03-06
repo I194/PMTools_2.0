@@ -4,17 +4,16 @@ import {
   GridToolbarExportContainer,
   GridCsvExportMenuItem,
   GridCsvExportOptions,
+  GridExportMenuItemProps,
 } from '@mui/x-data-grid';
 import PMDExportMenuItem from './MenuItems/PMDExportMenuItem';
 
 const ExportPMD = (props: ButtonProps) => {
-
-  const csvOptions: GridCsvExportOptions = { delimiter: ';' };
-
   return (
     <GridToolbarExportContainer {...props}>
-      <GridCsvExportMenuItem options={csvOptions} />
-      <PMDExportMenuItem />
+      <PMDExportMenuItem as={'pmd'}/>
+      <PMDExportMenuItem as={'csv'}/>
+      <PMDExportMenuItem as={'xlsx'}/>
     </GridToolbarExportContainer>
   );
 };

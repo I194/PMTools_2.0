@@ -2,7 +2,7 @@ import { toPMD, toCSV_PMD, toXLSX_PMD } from "./pmd";
 import { toDIR, toPMM, toCSV_DIR, toXLSX_DIR } from "./dir";
 
 export {
-  toPMD,
+  toPMD, toCSV_PMD, toXLSX_PMD,
   toDIR, toPMM,
   toCSV_DIR, toXLSX_DIR
 };
