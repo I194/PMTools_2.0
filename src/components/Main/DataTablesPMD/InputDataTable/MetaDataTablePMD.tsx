@@ -12,12 +12,12 @@ interface IMetaDataTablePMD {
 const MetaDataTablePMD: FC<IMetaDataTablePMD> = ({ data }) => {
 
   const columns: GridColDef[] = [
-    { field: 'name', headerName: 'Name', type: 'string' },
-    { field: 'a', headerName: 'Core Azimuth', type: 'string' },
-    { field: 'b', headerName: 'Core Dip', description: 'Core hade is measured, we use the plunge (90 - hade)', type: 'number' },
-    { field: 's', headerName: 'Bedding Strike', type: 'number' },
-    { field: 'd', headerName: 'Bedding Dip', type: 'number' },
-    { field: 'v', headerName: 'Volume', type: 'number' }
+    { field: 'name', headerName: 'Name', type: 'string', flex: 1 },
+    { field: 'a', headerName: 'Core Azimuth', type: 'string', flex: 1 },
+    { field: 'b', headerName: 'Core Dip', description: 'Core hade is measured, we use the plunge (90 - hade)', type: 'number', flex: 1 },
+    { field: 's', headerName: 'Bedding Strike', type: 'number', flex: 1 },
+    { field: 'd', headerName: 'Bedding Dip', type: 'number', flex: 1 },
+    { field: 'v', headerName: 'Volume', type: 'number', flex: 1 }
   ];
 
   columns.forEach((col) => {
@@ -36,9 +36,20 @@ const MetaDataTablePMD: FC<IMetaDataTablePMD> = ({ data }) => {
       <DataGrid 
         rows={rows} 
         columns={columns} 
-        sx={GetDataTableBaseStyle()}
+        sx={{
+          ...GetDataTableBaseStyle(),
+          '& .MuiDataGrid-columnHeaders': {
+            minHeight: '24px!important',
+            maxHeight: '24px!important',
+            lineHeight: '24px!important',
+          },
+          '& .MuiDataGrid-virtualScroller': {
+            marginTop: '24px!important',
+          }
+        }}
         hideFooter={true}
         autoHeight={true}
+        getRowHeight={() => 24}
         density={'compact'}
         disableSelectionOnClick={true}
       />
