@@ -23,6 +23,7 @@ const Tables: FC<ITables> = ({ dataToShow }) => {
   useEffect(() => {
     if (currentFileInterpretations && currentFileInterpretations.length) setInterpretations(currentFileInterpretations);
     else if (currentInterpretation) setInterpretations([currentInterpretation]);
+    else setInterpretations(null);
   }, [currentInterpretation, currentFileInterpretations]);
 
   return (

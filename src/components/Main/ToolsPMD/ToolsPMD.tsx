@@ -5,7 +5,7 @@ import ButtonGroupWithLabel from '../../Sub/ButtonGroupWithLabel/ButtonGroupWith
 import { Button, ButtonGroup, FormControl, InputLabel } from '@mui/material';
 import { Reference } from '../../../utils/graphs/types';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
-import { addCurrentFileInterpretation, setReference, setSelectedStepsIDs, setStatisticsMode } from '../../../services/reducers/pcaPage';
+import { addCurrentFileInterpretation, setCurrentStatistics, setReference, setSelectedStepsIDs, setStatisticsMode } from '../../../services/reducers/pcaPage';
 import { IPmdData } from '../../../utils/files/fileManipulations';
 import ToolsPMDSkeleton from './ToolsPMDSkeleton';
 
@@ -66,6 +66,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   }, []);
 
   const onStatisticsDecline = useCallback(() => {
+    dispatch(setCurrentStatistics(null))
     dispatch(setStatisticsMode(null));
   }, []);
 
