@@ -7,7 +7,7 @@ import {
   GridExportMenuItemProps,
 } from '@mui/x-data-grid';
 import PMDExportMenuItem from './MenuItems/PMDExportMenuItem';
-import { IPmdData } from '../../../../../utils/files/fileManipulations';
+import { IPmdData } from '../../../../../../utils/files/fileManipulations';
 
 const ExportPMD = (props: ButtonProps & {data: IPmdData}) => {
   const { data } = props;

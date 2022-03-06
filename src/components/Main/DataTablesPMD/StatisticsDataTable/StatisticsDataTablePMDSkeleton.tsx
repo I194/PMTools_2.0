@@ -13,22 +13,15 @@ const StatisticsDataTablePMDSkeleton: FC = ({ children }) => {
 
   return (
     <div 
-      className={styles.metadata}
+      className={styles.tableSmall}
       style={{
-        backgroundColor: bgColorMain(theme.palette.mode),
+        backgroundColor: bgColorBlocks(theme.palette.mode),
+        WebkitBoxShadow: boxShadowStyle(theme.palette.mode),
+        MozBoxShadow: boxShadowStyle(theme.palette.mode),
+        boxShadow: boxShadowStyle(theme.palette.mode),
       }}
     >
-      <div 
-        className={styles.table}
-        style={{
-          backgroundColor: bgColorBlocks(theme.palette.mode),
-          WebkitBoxShadow: boxShadowStyle(theme.palette.mode),
-          MozBoxShadow: boxShadowStyle(theme.palette.mode),
-          boxShadow: boxShadowStyle(theme.palette.mode),
-        }}
-      > 
-        { children }
-      </div>
+      { children }
     </div>
   )
 

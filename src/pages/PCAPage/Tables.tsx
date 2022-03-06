@@ -28,17 +28,7 @@ const Tables: FC<ITables> = ({ dataToShow }) => {
       className={styles.tables}
       style={{backgroundColor: bgColorMain(theme.palette.mode)}}
     >
-      <div 
-        className={styles.tableSmall}
-        style={{
-          backgroundColor: bgColorBlocks(theme.palette.mode),
-          WebkitBoxShadow: boxShadowStyle(theme.palette.mode),
-          MozBoxShadow: boxShadowStyle(theme.palette.mode),
-          boxShadow: boxShadowStyle(theme.palette.mode),
-        }}
-      >
-        <StatisticsDataTablePMD data={interpretations}/>
-      </div>
+      <StatisticsDataTablePMD data={interpretations}/>
       <DataTablePMD data={dataToShow}/>
     </div>
   )

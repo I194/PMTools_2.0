@@ -7,8 +7,8 @@ import {
 import { FC } from "react";
 import { useAppSelector } from "../../../../services/store/hooks";
 import { IDirData, IPmdData } from "../../../../utils/files/fileManipulations";
-import ExportDIR from "./ExportButton/ExportDIR";
-import ExportPMD from './ExportButton/ExportPMD';
+import ExportDIR from "./Buttons/ExportButton/ExportDIR";
+import ExportPMD from './Buttons/ExportButton/ExportPMD';
 
 const PMDOutputDataTableToolbar = () => {
 

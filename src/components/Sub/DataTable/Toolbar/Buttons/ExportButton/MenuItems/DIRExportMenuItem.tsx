@@ -3,8 +3,8 @@ import {
   GridExportMenuItemProps,
 } from '@mui/x-data-grid';
 import { FC } from 'react';
-import { toCSV_DIR, toDIR, toPMM, toXLSX_DIR } from '../../../../../../utils/files/converters';
-import { IDirData } from '../../../../../../utils/files/fileManipulations';
+import { toCSV_DIR, toDIR, toPMM, toXLSX_DIR } from '../../../../../../../utils/files/converters';
+import { IDirData } from '../../../../../../../utils/files/fileManipulations';
 
 interface DIRExport {
   as: 'dir' | 'pmm' | 'csv' | 'xlsx';

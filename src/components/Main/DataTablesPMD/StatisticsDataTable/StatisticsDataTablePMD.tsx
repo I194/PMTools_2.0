@@ -3,6 +3,7 @@ import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
 import StatisticsDataTablePMDSkeleton from './StatisticsDataTablePMDSkeleton';
 import { GetDataTableBaseStyle } from "../styleConstants";
 import { DataGridDIRRow, StatisitcsInterpretation } from "../../../../utils/GlobalTypes";
+import PMDStatisticsDataTableToolbar from "../../../Sub/DataTable/Toolbar/PMDStatisticsDataTableToolbar";
 
 interface IStatisticsDataTablePMD {
   data: Array<StatisitcsInterpretation> | null;
@@ -56,9 +57,6 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
         sx={GetDataTableBaseStyle()}
         hideFooter={true}
         autoHeight={true}
-        components={{
-          Toolbar: GridToolbar,
-        }}
         density={'compact'}
         disableSelectionOnClick={true}
       />

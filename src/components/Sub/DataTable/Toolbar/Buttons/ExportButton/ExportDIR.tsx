@@ -7,7 +7,7 @@ import {
   GridExportMenuItemProps,
 } from '@mui/x-data-grid';
 import PMDExportMenuItem from './MenuItems/PMDExportMenuItem';
-import { IDirData } from '../../../../../utils/files/fileManipulations';
+import { IDirData } from '../../../../../../utils/files/fileManipulations';
 import DIRExportMenuItem from './MenuItems/DIRExportMenuItem';
 
 const ExportDIR = (props: ButtonProps & {data: IDirData}) => {
