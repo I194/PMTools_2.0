@@ -12,7 +12,7 @@ interface IStatisticsDataTablePMD {
 const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
 
   const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', type: 'string', width: 70 },
+    { field: 'id', headerName: 'ID', type: 'string', width: 90 },
     { field: 'code', headerName: 'Code', type: 'string', width: 70 },
     { field: 'stepRange', headerName: 'StepRange', type: 'string', width: 120 },
     { field: 'stepCount', headerName: 'N', type: 'number', width: 40 },
@@ -31,7 +31,7 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
     col.disableColumnMenu = true;
   });
 
-  if (!data) return <StatisticsDataTablePMDSkeleton />;
+  if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
 
   const rows: Array<DataGridDIRRow> = data.map((statistics, index) => {
     const { id, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadius, comment } = statistics;
@@ -56,7 +56,6 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
         columns={columns} 
         sx={GetDataTableBaseStyle()}
         hideFooter={true}
-        autoHeight={true}
         density={'compact'}
         disableSelectionOnClick={true}
       />

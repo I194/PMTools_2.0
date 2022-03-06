@@ -25,6 +25,12 @@ export const textColorInverted = (themeMode: ThemeMode) => themeMode ==='dark'
 export const primaryColor = (themeMode: ThemeMode) => themeMode ==='dark' 
   ? '#90CAF9'
   : '#1976d2';
+export const successColor = (themeMode: ThemeMode) => themeMode === 'dark'
+  ? '#388e3c'
+  : '#4caf50';
+export const errorColor = (themeMode: ThemeMode) => themeMode === 'dark'
+  ? '#f44336'
+  : '#d32f2f';
 
 export const graphSelectedDotColor = (dotType: DotType) => {
   if (dotType === 'all') return '#1125ff';

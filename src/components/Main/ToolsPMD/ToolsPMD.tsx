@@ -5,7 +5,7 @@ import ButtonGroupWithLabel from '../../Sub/ButtonGroupWithLabel/ButtonGroupWith
 import { Button, ButtonGroup, FormControl, InputLabel } from '@mui/material';
 import { Reference } from '../../../utils/graphs/types';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
-import { setReference, setSelectedStepsIDs, setStatisticsMode } from '../../../services/reducers/pcaPage';
+import { addCurrentFileInterpretation, setReference, setSelectedStepsIDs, setStatisticsMode } from '../../../services/reducers/pcaPage';
 import { IPmdData } from '../../../utils/files/fileManipulations';
 import ToolsPMDSkeleton from './ToolsPMDSkeleton';
 
@@ -29,27 +29,9 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
 
   const dispatch = useAppDispatch();
 
-  const { reference, selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
+  const { reference, statisticsMode } = useAppSelector(state => state.pcaPageReducer); 
 
   const [coordinateSystem, setCoordinateSystem] = useState<Reference>('geographic');
-  const [stepsInput, setStepsInput] = useState<string>('');
-  const [disabledStatistics, setDisabledStatistics] = useState<boolean>(!selectedStepsIDs);
-
-  // useEffect(() => {
-  //   // selected steps ids update here
-  //   let stepsIDs: Array<number> | null = [];
-  //   if (stepsInput.includes(',')) stepsIDs = stepsInput.split(',').map(id => +id);
-  //   else if (stepsInput.includes('-')) {
-  //     const [startID, endID] = stepsInput.split('-');
-  //     for (let i = +startID; i <= +endID; i++) {
-  //       stepsIDs.push(i);
-  //     };
-  //   }
-  //   else if (stepsInput.length === 1) stepsIDs.push(+stepsInput[0]);
-  //   else stepsIDs = null;
-  //   if (stepsIDs && stepsIDs.includes(NaN)) stepsIDs = null;
-  //   dispatch(setSelectedStepsIDs(stepsIDs));
-  // }, [stepsInput]);
 
   useEffect(() => {
     window.addEventListener("keydown", handleStatisticsModeSelect);
@@ -66,16 +48,25 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
     dispatch(setReference(labelToReference(option)));
   };
 
-  const onStatisticsModeApply = (statisticsMode: 'pca' | 'pca0' | 'gc' | 'gcn') => {
+  const onStatisticsModeClick = (statisticsMode: 'pca' | 'pca0' | 'gc' | 'gcn') => {
     dispatch(setStatisticsMode(statisticsMode));
   };
 
   const handleStatisticsModeSelect = useCallback((e) => {
     const key = (e.key as string).toLowerCase();
-    if (key === 'd') onStatisticsModeApply('pca');
-    if (key === 'o') onStatisticsModeApply('pca0');
-    if (key === 'g') onStatisticsModeApply('gc');
-    if (key === 'i') onStatisticsModeApply('gcn');
+    if (key === 'd') onStatisticsModeClick('pca');
+    if (key === 'o') onStatisticsModeClick('pca0');
+    if (key === 'g') onStatisticsModeClick('gc');
+    if (key === 'i') onStatisticsModeClick('gcn');
+  }, []);
+
+  const onStatisticsApply = useCallback(() => {
+    dispatch(addCurrentFileInterpretation());
+    dispatch(setStatisticsMode(null));
+  }, []);
+
+  const onStatisticsDecline = useCallback(() => {
+    dispatch(setStatisticsMode(null));
   }, []);
 
   if (!data) return <ToolsPMDSkeleton />;
@@ -89,10 +80,17 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
         onOptionSelect={handleReferenceSelect}
       />
       <ButtonGroupWithLabel label='Статистический метод'>
-        <Button onClick={() => onStatisticsModeApply('pca')}>PCA</Button>
-        <Button onClick={() => onStatisticsModeApply('pca0')}>PCA₀</Button>
-        <Button onClick={() => onStatisticsModeApply('gc')}>GC</Button>
-        <Button onClick={() => onStatisticsModeApply('gcn')}>GCN</Button>
+        <Button onClick={() => onStatisticsModeClick('pca')}>PCA</Button>
+        <Button onClick={() => onStatisticsModeClick('pca0')}>PCA₀</Button>
+        <Button onClick={() => onStatisticsModeClick('gc')}>GC</Button>
+        <Button onClick={() => onStatisticsModeClick('gcn')}>GCN</Button>
+      </ButtonGroupWithLabel>
+      <ButtonGroupWithLabel label='Рассчитанная статистика'>
+        <Button color='success' onClick={() => onStatisticsApply()} disabled={!statisticsMode}>Применить</Button>
+        <Button color='error' onClick={() => onStatisticsDecline()} disabled={!statisticsMode}>Отменить</Button>
+      </ButtonGroupWithLabel>
+      <ButtonGroupWithLabel label='Смотреть статистику'>
+        <Button onClick={() => onStatisticsApply()}>По всем файлам</Button>
       </ButtonGroupWithLabel>
     </ToolsPMDSkeleton>
   )

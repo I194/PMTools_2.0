@@ -11,8 +11,8 @@ interface IInitialState {
   statisticsMode: StatisticsModePCA;
   currentRawStatistics: RawStatisticsPCA | null;
   currentInterpretation: StatisitcsInterpretation | null;
-  currentFileInterpretations: Array<StatisitcsInterpretation> | null;
-  allInterpretations: Array<StatisitcsInterpretation> | null;
+  currentFileInterpretations: Array<StatisitcsInterpretation>;
+  allInterpretations: Array<StatisitcsInterpretation>;
   showStepsInput: boolean;
 }
 
@@ -23,8 +23,8 @@ const initialState: IInitialState = {
   statisticsMode: null,
   currentRawStatistics: null,
   currentInterpretation: null,
-  currentFileInterpretations: null,
-  allInterpretations: null,
+  currentFileInterpretations: [],
+  allInterpretations: [],
   showStepsInput: false,
 }
 
@@ -51,6 +51,11 @@ const pcaPage = createSlice({
       state.currentRawStatistics = action.payload?.rawStatistics;
       state.currentInterpretation = action.payload?.interpretation;
     },
+    addCurrentFileInterpretation (state) {
+      if (!state.currentInterpretation) return;
+      state.currentFileInterpretations.push(state.currentInterpretation);
+      state.allInterpretations.push(state.currentInterpretation);
+    },
   },
   extraReducers: (builder) => {
   }
@@ -63,6 +68,7 @@ export const {
   setStatisticsMode,
   showStepsInput,
   setCurrentStatistics,
+  addCurrentFileInterpretation,
 } = pcaPage.actions;
 
 const pcaPageReducer = pcaPage.reducer;

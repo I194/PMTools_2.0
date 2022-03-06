@@ -21,7 +21,7 @@ const PCAPage: FC = ({}) => {
 
   const files = useAppSelector(state => state.filesReducer.treatmentFiles);
   const { treatmentData, loading } = useAppSelector(state => state.parsedDataReducer);
-  const { statisticsMode, selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer);
+  const { statisticsMode, selectedStepsIDs, currentFileInterpretations } = useAppSelector(state => state.pcaPageReducer);
 
   const [dataToShow, setDataToShow] = useState<IPmdData | null>(null);
 
@@ -46,6 +46,7 @@ const PCAPage: FC = ({}) => {
     if (statisticsMode && !selectedStepsIDs) dispatch(showStepsInput(true));
     if (statisticsMode && selectedStepsIDs && selectedStepsIDs.length >= 2 && dataToShow) {
       const statistics = calculateStatisticsPMD(dataToShow, statisticsMode, selectedStepsIDs);
+      statistics.interpretation.id += `_${currentFileInterpretations.length}`;
       dispatch(setCurrentStatistics(statistics));
     } else dispatch(setCurrentStatistics(null));
   }, [statisticsMode, selectedStepsIDs, dataToShow]);
