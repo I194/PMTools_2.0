@@ -31,7 +31,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
 
   const dispatch = useAppDispatch();
 
-  const { reference, statisticsMode, allInterpretations } = useAppSelector(state => state.pcaPageReducer); 
+  const { reference, statisticsMode } = useAppSelector(state => state.pcaPageReducer); 
 
   const [coordinateSystem, setCoordinateSystem] = useState<Reference>('geographic');
   const [allFilesStatOpen, setAllFilesStatOpen] = useState<boolean>(false);
@@ -100,7 +100,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
         open={allFilesStatOpen}
         setOpen={setAllFilesStatOpen}
       >
-        <OutputDataTablePMD data={allInterpretations}/>
+        <OutputDataTablePMD />
       </ModalWrapper>
     </ToolsPMDSkeleton>
   )

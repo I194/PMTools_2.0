@@ -55,8 +55,15 @@ const pcaPage = createSlice({
     },
     addCurrentFileInterpretation (state) {
       if (!state.currentInterpretation) return;
+      console.log('a')
       state.currentFileInterpretations.push(state.currentInterpretation);
       state.allInterpretations.push(state.currentInterpretation);
+    },
+    setAllInterpretations (state, action) {
+      state.allInterpretations = action.payload;
+    },
+    setCurrentFileInterpretations (state, action) {
+      state.currentFileInterpretations = action.payload;
     },
     setOutputFilename (state, action) {
       state.outputFilename = action.payload;
@@ -75,6 +82,8 @@ export const {
   setCurrentStatistics,
   addCurrentFileInterpretation,
   setOutputFilename,
+  setAllInterpretations,
+  setCurrentFileInterpretations,
 } = pcaPage.actions;
 
 const pcaPageReducer = pcaPage.reducer;

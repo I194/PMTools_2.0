@@ -25,6 +25,8 @@ const Tables: FC<ITables> = ({ dataToShow }) => {
     else setInterpretations(null);
   }, [currentInterpretation, currentFileInterpretations]);
 
+  console.log(interpretations);
+
   return (
     <div 
       className={styles.tables}

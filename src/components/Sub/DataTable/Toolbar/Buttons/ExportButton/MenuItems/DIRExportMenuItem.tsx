@@ -1,6 +1,6 @@
 import { MenuItem } from '@mui/material';
 import {
-  GridExportMenuItemProps,
+  GridExportMenuItemProps
 } from '@mui/x-data-grid';
 import { FC } from 'react';
 import { toCSV_DIR, toDIR, toPMM, toXLSX_DIR } from '../../../../../../../utils/files/converters';
@@ -15,8 +15,6 @@ const DIRExportMenuItem: FC<DIRExport> = ({as, data}, props: GridExportMenuItemP
 
   const { hideMenu } = props;
   const blankFile = new File([], '');
-
-  data.format = as;
 
   const exportAs = {
     dir: {

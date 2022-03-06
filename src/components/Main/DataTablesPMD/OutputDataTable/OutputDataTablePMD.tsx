@@ -1,6 +1,7 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import styles from './OutputDataTablePMD.module.scss';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import equal from "deep-equal"
+import { DataGrid, GridColDef, GridEditRowsModel, gridFilteredSortedRowIdsSelector, gridVisibleColumnFieldsSelector, useGridApiContext } from '@mui/x-data-grid';
 import StatisticsDataTablePMDSkeleton from './OutputDataTablePMDSkeleton';
 import { GetDataTableBaseStyle } from "../styleConstants";
 import { DataGridDIRRow, StatisitcsInterpretation } from "../../../../utils/GlobalTypes";
@@ -8,17 +9,20 @@ import PMDOutputDataTableToolbar from '../../../Sub/DataTable/Toolbar/PMDOutputD
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import { useAppDispatch } from "../../../../services/store/hooks";
-import { setOutputFilename } from "../../../../services/reducers/pcaPage";
+import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
+import { setAllInterpretations, setOutputFilename } from "../../../../services/reducers/pcaPage";
 
-interface IOutputDataTablePMD {
-  data: Array<StatisitcsInterpretation> | null;
-};
-
-const OutputDataTablePMD: FC<IOutputDataTablePMD> = ({ data }) => {
+const OutputDataTablePMD: FC = () => {
   
   const dispatch = useAppDispatch();
+
+  const data = useAppSelector(state => state.pcaPageReducer.allInterpretations);
+  const [editRowsModel, setEditRowsModel] = useState<GridEditRowsModel>({});
   const [filename, setFilename] = useState<string>('PCA Interpretations');
+
+  const handleEditRowsModelChange = useCallback((model: GridEditRowsModel) => {
+    setEditRowsModel(model);
+  }, []);
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', type: 'string', width: 120 },
@@ -43,6 +47,20 @@ const OutputDataTablePMD: FC<IOutputDataTablePMD> = ({ data }) => {
   useEffect(() => {
     dispatch(setOutputFilename(filename));
   }, [filename]);
+
+  useEffect(() => {
+    if (data && Object.keys(editRowsModel).length !== 0) {
+      const updatedData = data.map((interpretation, index) => {
+        const rowId = Object.keys(editRowsModel)[0];
+        const newComment = editRowsModel[rowId]?.comment?.value as string;
+        return {
+          ...interpretation,
+          comment: newComment
+        };
+      });
+      if (!equal(updatedData, data)) dispatch(setAllInterpretations(updatedData));
+    };
+  }, [data, editRowsModel]);
 
   if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
 
@@ -90,6 +108,8 @@ const OutputDataTablePMD: FC<IOutputDataTablePMD> = ({ data }) => {
         <DataGrid 
           rows={rows} 
           columns={columns} 
+          editRowsModel={editRowsModel}
+          onEditRowsModelChange={handleEditRowsModelChange}
           sx={GetDataTableBaseStyle()}
           hideFooter={true}
           density={'compact'}
