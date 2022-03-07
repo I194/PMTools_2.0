@@ -5,7 +5,7 @@ import ButtonGroupWithLabel from '../../Sub/ButtonGroupWithLabel/ButtonGroupWith
 import { Button } from '@mui/material';
 import { Reference } from '../../../utils/graphs/types';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
-import { setReference, setStatisticsMode, updateCurrentFileInterpretations, updateCurrentInterpretation } from '../../../services/reducers/pcaPage';
+import { setReference, setSelectedStepsIDs, setStatisticsMode, updateCurrentFileInterpretations, updateCurrentInterpretation } from '../../../services/reducers/pcaPage';
 import { IPmdData } from '../../../utils/GlobalTypes';
 import ModalWrapper from '../../Sub/Modal/ModalWrapper';
 import ToolsPMDSkeleton from './ToolsPMDSkeleton';
@@ -75,8 +75,11 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   const handleFileSelect = (option: string) => {
     const pmdID = allDataPMD.findIndex(pmd => pmd.metadata.name === option);
     dispatch(setCurrentPMDid(pmdID));
+    // cleaners
     dispatch(updateCurrentFileInterpretations(option));
     dispatch(updateCurrentInterpretation());
+    dispatch(setSelectedStepsIDs(null));
+    dispatch(setStatisticsMode(null));
   };
 
   return (

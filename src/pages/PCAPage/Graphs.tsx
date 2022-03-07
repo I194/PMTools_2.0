@@ -33,7 +33,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
       const minBoxSize = Math.min(smallGraphWidth, smallGraphHeight);
       setSmallGraphSize(minBoxSize - 80);
     };
-  }, [graphLargeRef, graphSmallTopRef, wv, wh]);
+  }, [graphLargeRef, graphSmallTopRef, graphSmallBotRef, wv, wh]);
 
   if (!dataToShow) return (
     <GraphsSkeleton 
@@ -47,7 +47,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
     <GraphsSkeleton 
       graphLarge={{
         node: <ZijdGraph 
-          graphId='zijd'
+          graphId={`${dataToShow.metadata.name}-zijd`}
           width={largeGraphSize}
           height={largeGraphSize} 
           data={dataToShow}
@@ -56,7 +56,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
       }}
       graphSmallTop={{
         node: <StereoGraph 
-          graphId='stereo' 
+          graphId={`${dataToShow.metadata.name}-stereo`} 
           width={smallGraphSize}
           height={smallGraphSize}
           data={dataToShow}
@@ -65,7 +65,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
       }}
       graphSmallBot={{
         node: <MagGraph 
-          graphId='mag' 
+          graphId={`${dataToShow.metadata.name}-mag`}
           width={smallGraphSize}
           height={smallGraphSize}
           data={dataToShow}
