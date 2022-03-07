@@ -91,4 +91,33 @@ export const useGraphSelectedIndexes = () => {
   }, [selectedStepsIDs]);
 
   return selectedIndexes;
+};
+
+export const useDebounce = (value: any, delay: number) => {
+  // The hook will only return the latest value (what we passed in) ...
+  // ... if it's been more than 500ms since it was last called.
+  // Otherwise, it will return the previous value of searchTerm.
+  // The goal (common example) is to only have the API call fire when user stops typing 
+  
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(
+    () => {
+      // Set debouncedValue to value (passed in) after the specified delay
+      const handler = setTimeout(() => {
+        setDebouncedValue(value);
+      }, delay);
+
+      // Return a cleanup function that will be called every time useEffect is re-called. 
+      return () => {
+        clearTimeout(handler);
+      };
+    },
+    // Only re-call effect if value changes
+    // You could also add the "delay" var to inputs array if you ...
+    // ... need to be able to change that dynamically.
+    [value] 
+  );
+
+  return debouncedValue;
 }

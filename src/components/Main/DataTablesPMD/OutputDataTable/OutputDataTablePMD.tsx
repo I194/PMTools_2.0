@@ -11,6 +11,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
 import { setAllInterpretations, setOutputFilename } from "../../../../services/reducers/pcaPage";
+import { useDebounce } from "../../../../utils/GlobalHooks";
 
 const OutputDataTablePMD: FC = () => {
   
@@ -19,6 +20,7 @@ const OutputDataTablePMD: FC = () => {
   const data = useAppSelector(state => state.pcaPageReducer.allInterpretations);
   const [editRowsModel, setEditRowsModel] = useState<GridEditRowsModel>({});
   const [filename, setFilename] = useState<string>('PCA Interpretations');
+  const debouncedFilename = useDebounce(filename, 500);
 
   const handleEditRowsModelChange = useCallback((model: GridEditRowsModel) => {
     setEditRowsModel(model);
@@ -45,8 +47,12 @@ const OutputDataTablePMD: FC = () => {
   });
 
   useEffect(() => {
-    dispatch(setOutputFilename(filename));
-  }, [filename]);
+    if (debouncedFilename) {
+      dispatch(setOutputFilename(debouncedFilename as string));
+    } else {
+      dispatch(setOutputFilename(filename));
+    };
+  }, [debouncedFilename]);
 
   useEffect(() => {
     if (data && Object.keys(editRowsModel).length !== 0) {
