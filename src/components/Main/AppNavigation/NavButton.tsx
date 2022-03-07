@@ -13,7 +13,7 @@ const NavButton: FC<INavButton> = ({ label, to, external }) => {
 
   const onClickExternal = () => {
     window.location.href = to;
-  } 
+  };
   
   if (external) {
     return (
@@ -29,20 +29,30 @@ const NavButton: FC<INavButton> = ({ label, to, external }) => {
         { label }
       </Button>
     )
-  }
+  };
 
   return (
     <NavLink to={to}>
-      <Button
-        variant="contained" 
-        sx={{
-          textTransform: 'none',
-          marginRight: '16px',
-        }}
-        component="span"
-      >
-        { label }
-      </Button>
+      {
+        ({ isActive }) => {
+          console.log(isActive);
+          return (
+            <Button
+            variant="contained" 
+            color={ isActive ? 'secondary' : 'primary' }
+            sx={{
+              textTransform: 'none',
+              marginRight: '16px',
+              // textDecoration: isActive ? 'underline' : 'none',
+              fontWeight: isActive ? 700 : 500,
+            }}
+            component="span"
+            >
+              { label }
+            </Button>
+          );
+        }
+      }
     </NavLink>
   )
 }
