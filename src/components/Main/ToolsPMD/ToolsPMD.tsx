@@ -10,6 +10,7 @@ import { IPmdData } from '../../../utils/GlobalTypes';
 import ModalWrapper from '../../Sub/Modal/ModalWrapper';
 import ToolsPMDSkeleton from './ToolsPMDSkeleton';
 import OutputDataTablePMD from '../DataTablesPMD/OutputDataTable/OutputDataTablePMD';
+import StatModeButton from './StatModeButton';
 
 const labelToReference = (label: string) => {
   if (label === 'Образец') return 'specimen';
@@ -31,7 +32,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
 
   const dispatch = useAppDispatch();
 
-  const { reference, statisticsMode } = useAppSelector(state => state.pcaPageReducer); 
+  const { reference, currentInterpretation } = useAppSelector(state => state.pcaPageReducer); 
 
   const [coordinateSystem, setCoordinateSystem] = useState<Reference>('geographic');
   const [allFilesStatOpen, setAllFilesStatOpen] = useState<boolean>(false);
@@ -51,16 +52,12 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
     dispatch(setReference(labelToReference(option)));
   };
 
-  const onStatisticsModeClick = (statisticsMode: 'pca' | 'pca0' | 'gc' | 'gcn') => {
-    dispatch(setStatisticsMode(statisticsMode));
-  };
-
   const handleStatisticsModeSelect = useCallback((e) => {
     const key = (e.key as string).toLowerCase();
-    if (key === 'd') onStatisticsModeClick('pca');
-    if (key === 'o') onStatisticsModeClick('pca0');
-    if (key === 'g') onStatisticsModeClick('gc');
-    if (key === 'i') onStatisticsModeClick('gcn');
+    if (key === 'd') dispatch(setStatisticsMode('pca'));
+    if (key === 'o') dispatch(setStatisticsMode('pca0'));
+    if (key === 'g') dispatch(setStatisticsMode('gc'));
+    if (key === 'i') dispatch(setStatisticsMode('gcn'));
   }, []);
 
   const onStatisticsApply = useCallback(() => {
@@ -84,14 +81,14 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
         onOptionSelect={handleReferenceSelect}
       />
       <ButtonGroupWithLabel label='Статистический метод'>
-        <Button onClick={() => onStatisticsModeClick('pca')}>PCA</Button>
-        <Button onClick={() => onStatisticsModeClick('pca0')}>PCA₀</Button>
-        <Button onClick={() => onStatisticsModeClick('gc')}>GC</Button>
-        <Button onClick={() => onStatisticsModeClick('gcn')}>GCN</Button>
+        <StatModeButton mode='pca'/>
+        <StatModeButton mode='pca0'/>
+        <StatModeButton mode='gc'/>
+        <StatModeButton mode='gcn'/>
       </ButtonGroupWithLabel>
       <ButtonGroupWithLabel label='Рассчитанная статистика'>
-        <Button color='success' onClick={() => onStatisticsApply()} disabled={!statisticsMode}>Применить</Button>
-        <Button color='error' onClick={() => onStatisticsDecline()} disabled={!statisticsMode}>Отменить</Button>
+        <Button color='success' onClick={() => onStatisticsApply()} disabled={!currentInterpretation}>Применить</Button>
+        <Button color='error' onClick={() => onStatisticsDecline()} disabled={!currentInterpretation}>Отменить</Button>
       </ButtonGroupWithLabel>
       <ButtonGroupWithLabel label='Смотреть статистику'>
         <Button onClick={() => setAllFilesStatOpen(true)}>По всем файлам</Button>
