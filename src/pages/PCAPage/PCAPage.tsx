@@ -10,7 +10,7 @@ import { useTheme } from '@mui/material/styles';
 import {
   bgColorMain,
 } from '../../utils/ThemeConstants';
-import { setCurrentStatistics, showStepsInput } from '../../services/reducers/pcaPage';
+import { addInterpretation, setStatisticsMode, showStepsInput, updateCurrentInterpretation } from '../../services/reducers/pcaPage';
 import calculateStatisticsPMD from '../../utils/statistics/calculateStatisticsPMD';
 
 const PCAPage: FC = ({}) => {
@@ -47,8 +47,9 @@ const PCAPage: FC = ({}) => {
     if (statisticsMode && selectedStepsIDs && selectedStepsIDs.length >= 2 && dataToShow) {
       const statistics = calculateStatisticsPMD(dataToShow, statisticsMode, selectedStepsIDs);
       statistics.interpretation.id += `_${currentFileInterpretations.length}`;
-      dispatch(setCurrentStatistics(statistics));
-    } else dispatch(setCurrentStatistics(null));
+      dispatch(addInterpretation(statistics));
+      // dispatch(setStatisticsMode(null));
+    } else dispatch(updateCurrentInterpretation());
   }, [statisticsMode, selectedStepsIDs, dataToShow]);
 
   return (

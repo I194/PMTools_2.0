@@ -4,13 +4,10 @@ const parsePMD = (data: string, name: string) => {
   const eol = new RegExp("\r?\n");
   // Get all lines except the last one (it's garbage) and the first one (it's empty)
   const lines = data.split(eol).slice(1).filter(line => line.length > 1);
-
-  // const headLine = lines[0].replace(/\s+/g, ' ').split(' ');
-  // const metadata = headLine.map((param: string) => )
   
-  const headLine = lines[0]; // line with speciment name and orientation params - metadata in other words
+  const headLine = lines[0]; // line with specimen name and orientation params - metadata in other words
   const metadata = {
-    name: headLine.slice(0, 10).trim() || name,
+    name: name, // inner pmd name lay here: headLine.slice(0, 10).trim(),
     a: +headLine.slice(12, 20).trim(),
     b: +headLine.slice(22, 30).trim(),
     s: +headLine.slice(32, 40).trim(),

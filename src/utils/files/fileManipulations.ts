@@ -13,7 +13,6 @@ export const getDirectionalData = (file: File, as: string) => {
 
       const handleRawData = (rawData: string | ArrayBuffer | null) => {
         const pmFile = new PMFile(file.name, file.type, file.size, file.webkitRelativePath, rawData);
-        console.log(ext)
         switch (ext) {
           case 'pmd': return pmFile.parsePMD();
           case 'dir': return pmFile.parseDIR();

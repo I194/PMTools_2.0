@@ -64,6 +64,7 @@ export interface IDirData extends IObjectKeys {
 }
 
 export type StatisitcsInterpretation = {
+  parentFile: string;
   id: string;
   code: StatisticsModePCA | StatisticsModeDIR;
   stepRange: string;
@@ -100,6 +101,6 @@ export type DataGridPMDRow = {
   comment: string;
 };
 
-export type DataGridDIRRow = Omit<StatisitcsInterpretation, 'demagType'>
+export type DataGridDIRRow = Omit<StatisitcsInterpretation, 'demagType' | 'parentFile'>
 
 export type ThemeMode = 'dark' | 'light';

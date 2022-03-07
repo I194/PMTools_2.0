@@ -27,6 +27,8 @@ const OutputDataTablePMD: FC = () => {
   const [filename, setFilename] = useState<string>('PCA Interpretations');
   const debouncedFilename = useDebounce(filename, 500);
 
+  console.log(data);
+
   const handleEditRowsModelChange = useCallback((model: GridEditRowsModel) => {
     setEditRowsModel(model);
   }, []);

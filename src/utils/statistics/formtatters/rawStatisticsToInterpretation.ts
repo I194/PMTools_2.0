@@ -30,6 +30,7 @@ const rawStatisticsToInterpretation = (
   const demagType = selectedSteps[0].demagType;
 
   const interpretation: StatisitcsInterpretation = {
+    parentFile: metadata.name,
     id,
     code,
     stepRange,

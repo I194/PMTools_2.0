@@ -5,7 +5,7 @@ import ButtonGroupWithLabel from '../../Sub/ButtonGroupWithLabel/ButtonGroupWith
 import { Button } from '@mui/material';
 import { Reference } from '../../../utils/graphs/types';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
-import { addCurrentFileInterpretation, setCurrentStatistics, setReference, setStatisticsMode } from '../../../services/reducers/pcaPage';
+import { setReference, setStatisticsMode } from '../../../services/reducers/pcaPage';
 import { IPmdData } from '../../../utils/GlobalTypes';
 import ModalWrapper from '../../Sub/Modal/ModalWrapper';
 import ToolsPMDSkeleton from './ToolsPMDSkeleton';
@@ -61,16 +61,6 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
     if ((shiftKey || altKey) && key === 'i') dispatch(setStatisticsMode('gcn'));
   }, []);
 
-  const onStatisticsApply = useCallback(() => {
-    dispatch(addCurrentFileInterpretation());
-    dispatch(setStatisticsMode(null));
-  }, []);
-
-  const onStatisticsDecline = useCallback(() => {
-    dispatch(setCurrentStatistics(null))
-    dispatch(setStatisticsMode(null));
-  }, []);
-
   if (!data) return <ToolsPMDSkeleton />;
 
   return (
@@ -86,10 +76,6 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
         <StatModeButton mode='pca0'/>
         <StatModeButton mode='gc'/>
         <StatModeButton mode='gcn'/>
-      </ButtonGroupWithLabel>
-      <ButtonGroupWithLabel label='Рассчитанная статистика'>
-        <Button color='success' onClick={() => onStatisticsApply()} disabled={!currentInterpretation}>Применить</Button>
-        <Button color='error' onClick={() => onStatisticsDecline()} disabled={!currentInterpretation}>Отменить</Button>
       </ButtonGroupWithLabel>
       <ButtonGroupWithLabel label='Смотреть статистику'>
         <Button onClick={() => setAllFilesStatOpen(true)}>По всем файлам</Button>

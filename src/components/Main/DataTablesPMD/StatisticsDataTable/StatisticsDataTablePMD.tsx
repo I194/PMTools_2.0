@@ -1,15 +1,27 @@
-import React, { FC } from "react";
-import { DataGrid, GridColDef, GridToolbar } from '@mui/x-data-grid';
+import React, { FC, useEffect, useState } from "react";
+import styles from './StatisticsDataTablePMD.module.scss';
+import { useTheme } from '@mui/material/styles';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import StatisticsDataTablePMDSkeleton from './StatisticsDataTablePMDSkeleton';
 import { GetDataTableBaseStyle } from "../styleConstants";
 import { DataGridDIRRow, StatisitcsInterpretation } from "../../../../utils/GlobalTypes";
 import PMDStatisticsDataTableToolbar from "../../../Sub/DataTable/Toolbar/PMDStatisticsDataTableToolbar";
+import { useAppSelector } from "../../../../services/store/hooks";
 
 interface IStatisticsDataTablePMD {
   data: Array<StatisitcsInterpretation> | null;
 };
 
 const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
+
+  const theme = useTheme();
+
+  const { currentInterpretation } = useAppSelector(state => state.pcaPageReducer);
+  const [currentClass, setCurrentClass] = useState(styles.current_dark);
+
+  useEffect(() => {
+    setCurrentClass(theme.palette.mode === 'dark' ? styles.current_dark : styles.current_light);
+  }, [theme])
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', type: 'string', width: 90 },
@@ -21,7 +33,6 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
     { field: 'Dstrat', headerName: 'Dstrat', type: 'number', width: 70 },
     { field: 'Istrat', headerName: 'Istrat', type: 'number', width: 70 },
     { field: 'confidenceRadius', headerName: 'MAD', type: 'string', width: 70 },
-    { field: 'comment', headerName: 'Comment', type: 'string', width: 200, editable: true }
   ];
 
   columns.forEach((col) => {
@@ -33,8 +44,8 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
 
   if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
 
-  const rows: Array<DataGridDIRRow> = data.map((statistics, index) => {
-    const { id, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadius, comment } = statistics;
+  const rows: Array<Omit<DataGridDIRRow, 'comment'>> = data.map((statistics, index) => {
+    const { id, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadius } = statistics;
     return {
       id,
       code, 
@@ -45,7 +56,6 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
       Dstrat: +Dstrat.toFixed(1),
       Istrat: +Istrat.toFixed(1),
       confidenceRadius: +confidenceRadius.toFixed(1),
-      comment
     };
   });
 
@@ -58,6 +68,9 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
         hideFooter={true}
         density={'compact'}
         disableSelectionOnClick={true}
+        getRowClassName={
+          (params) => params.row.id === currentInterpretation?.id ? currentClass : ''
+        }
       />
     </StatisticsDataTablePMDSkeleton>
   );

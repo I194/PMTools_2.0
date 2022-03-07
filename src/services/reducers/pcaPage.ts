@@ -49,18 +49,11 @@ const pcaPage = createSlice({
     showStepsInput (state, action) {
       state.showStepsInput = action.payload;
     },
-    setCurrentStatistics (state, action) {
+    addInterpretation (state, action) {
       state.currentRawStatistics = action.payload?.rawStatistics;
       state.currentInterpretation = action.payload?.interpretation;
-    },
-    addCurrentFileInterpretation (state) {
-      if (!state.currentInterpretation) return;
-      console.log('a')
-      state.currentFileInterpretations.push(state.currentInterpretation);
-      state.allInterpretations.push(state.currentInterpretation);
-    },
-    setAllInterpretations (state, action) {
-      state.allInterpretations = action.payload;
+      state.currentFileInterpretations.push(action.payload?.interpretation);
+      state.allInterpretations.push(action.payload?.interpretation);
     },
     deleteInterpretation (state, action) {
       const interpretationId = action.payload;
@@ -69,8 +62,20 @@ const pcaPage = createSlice({
       );
       state.allInterpretations = updatedInterpretations;
     },
-    setCurrentFileInterpretations (state, action) {
-      state.currentFileInterpretations = action.payload;
+    setAllInterpretations (state, action) {
+      state.allInterpretations = action.payload;
+    },
+    updateCurrentFileInterpretations (state, action) {
+      const filename = action.payload;
+      state.currentFileInterpretations = state.allInterpretations.filter(
+        interpretation => interpretation.parentFile === filename
+      );
+    },
+    updateCurrentInterpretation (state) {
+      if (!state.currentFileInterpretations.length) state.currentInterpretation = null;
+      state.currentInterpretation = state.currentFileInterpretations[
+        state.currentFileInterpretations.length - 1
+      ];
     },
     setOutputFilename (state, action) {
       state.outputFilename = action.payload;
@@ -86,12 +91,12 @@ export const {
   setSelectedStepsIDs,
   setStatisticsMode,
   showStepsInput,
-  setCurrentStatistics,
-  addCurrentFileInterpretation,
-  setOutputFilename,
-  setAllInterpretations,
+  addInterpretation,
   deleteInterpretation,
-  setCurrentFileInterpretations,
+  setAllInterpretations,
+  updateCurrentFileInterpretations,
+  updateCurrentInterpretation,
+  setOutputFilename,
 } = pcaPage.actions;
 
 const pcaPageReducer = pcaPage.reducer;
