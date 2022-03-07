@@ -1,15 +1,22 @@
 import React, { FC, useCallback, useEffect, useState } from "react";
 import styles from './OutputDataTablePMD.module.scss';
-import equal from "deep-equal"
-import { DataGrid, GridColDef, GridEditRowsModel, gridFilteredSortedRowIdsSelector, gridVisibleColumnFieldsSelector, useGridApiContext } from '@mui/x-data-grid';
-import StatisticsDataTablePMDSkeleton from './OutputDataTablePMDSkeleton';
-import { GetDataTableBaseStyle } from "../styleConstants";
-import { DataGridDIRRow, StatisitcsInterpretation } from "../../../../utils/GlobalTypes";
-import PMDOutputDataTableToolbar from '../../../Sub/DataTable/Toolbar/PMDOutputDataTableToolbar';
-import TextField from '@mui/material/TextField';
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
-import { setAllInterpretations, setOutputFilename } from "../../../../services/reducers/pcaPage";
 import { useDebounce } from "../../../../utils/GlobalHooks";
+import equal from "deep-equal"
+import { GetDataTableBaseStyle } from "../styleConstants";
+import StatisticsDataTablePMDSkeleton from './OutputDataTablePMDSkeleton';
+import PMDOutputDataTableToolbar from '../../../Sub/DataTable/Toolbar/PMDOutputDataTableToolbar';
+import { DataGridDIRRow } from "../../../../utils/GlobalTypes";
+import { deleteInterpretation, setAllInterpretations, setOutputFilename } from "../../../../services/reducers/pcaPage";
+import TextField from '@mui/material/TextField';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import { 
+  DataGrid, 
+  GridActionsCellItem, 
+  GridColumnHeaderParams, 
+  GridColumns, 
+  GridEditRowsModel, 
+} from '@mui/x-data-grid';
 
 const OutputDataTablePMD: FC = () => {
   
@@ -23,8 +30,18 @@ const OutputDataTablePMD: FC = () => {
   const handleEditRowsModelChange = useCallback((model: GridEditRowsModel) => {
     setEditRowsModel(model);
   }, []);
+  
+  const handleRowDelete = (id: string) => (event: any) => {
+    event.stopPropagation();
+    dispatch(deleteInterpretation(id));
+  };
 
-  const columns: GridColDef[] = [
+  const handleDeleteAllRows = (event: any) => {
+    event.stopPropagation();
+    dispatch(setAllInterpretations([]));
+  };
+
+  const columns: GridColumns = [
     { field: 'id', headerName: 'ID', type: 'string', width: 120 },
     { field: 'code', headerName: 'Code', type: 'string', width: 70 },
     { field: 'stepRange', headerName: 'StepRange', type: 'string', width: 120 },
@@ -34,7 +51,31 @@ const OutputDataTablePMD: FC = () => {
     { field: 'Dstrat', headerName: 'Dstrat', type: 'number', width: 70 },
     { field: 'Istrat', headerName: 'Istrat', type: 'number', width: 70 },
     { field: 'confidenceRadius', headerName: 'MAD', type: 'string', width: 70 },
-    { field: 'comment', headerName: 'Comment', type: 'string', flex: 1, editable: true }
+    { field: 'comment', headerName: 'Comment', type: 'string', flex: 1, editable: true },
+    {
+      field: 'actions',
+      type: 'actions',
+      width: 40,
+      // cellClassName: 'actions',
+      renderHeader: (params: GridColumnHeaderParams) => (
+        <GridActionsCellItem
+          icon={<DeleteIcon />}
+          label="Delete all interpretations"
+          onClick={handleDeleteAllRows}
+          color="inherit"
+        />
+      ),
+      getActions: ({ id }) => {
+        return [
+          <GridActionsCellItem
+            icon={<DeleteIcon />}
+            label="Delete interpretation"
+            onClick={handleRowDelete(id as string)}
+            color="inherit"
+          />,
+        ];
+      },
+    }
   ];
 
   columns.forEach((col) => {

@@ -62,6 +62,13 @@ const pcaPage = createSlice({
     setAllInterpretations (state, action) {
       state.allInterpretations = action.payload;
     },
+    deleteInterpretation (state, action) {
+      const interpretationId = action.payload;
+      const updatedInterpretations = state.allInterpretations.filter(
+        interpretation => interpretation.id !== interpretationId 
+      );
+      state.allInterpretations = updatedInterpretations;
+    },
     setCurrentFileInterpretations (state, action) {
       state.currentFileInterpretations = action.payload;
     },
@@ -83,6 +90,7 @@ export const {
   addCurrentFileInterpretation,
   setOutputFilename,
   setAllInterpretations,
+  deleteInterpretation,
   setCurrentFileInterpretations,
 } = pcaPage.actions;
 
