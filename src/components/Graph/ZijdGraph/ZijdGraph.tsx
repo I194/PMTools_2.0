@@ -27,7 +27,7 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data }) => {
   const { viewWidth, viewHeight, ...areaConstants} = useMemo(() => zijdAreaConstants(width, height), [width, height]);
   const { unitLabel, ...dataConstants } = useMemo(
     () => dataToZijd(data, width / 2, reference, areaConstants.unitCount, currentInterpretation?.rawData),
-  [reference, width, currentInterpretation]);
+  [reference, width, currentInterpretation, data]);
 
   return (
     <>

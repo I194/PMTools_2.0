@@ -14,18 +14,23 @@ interface IDropdownSelect {
 const DropdownSelect: FC<IDropdownSelect> = ({ label, options, onOptionSelect, defaultValue }) => {
 
   const [selectedOption, setSelectedOption] = useState(defaultValue || '');
+  const [open, setOpen] = React.useState(false);
 
   const handleSelect = (event: SelectChangeEvent) => {
     setSelectedOption(event.target.value);
     onOptionSelect(event.target.value);
+    setOpen(false);
   };
 
   return (
-    <FormControl variant="standard" sx={{ minWidth: 200 }}>
+    <FormControl variant="standard" sx={{ minWidth: 200, ml: '16px' }}>
       <InputLabel>{ label }</InputLabel>
       <Select
         value={selectedOption}
         onChange={handleSelect}
+        open={open}
+        onClose={() => setOpen(false)}
+        onOpen={() => setOpen(true)}
         sx={{
           margin: 0,
         }}

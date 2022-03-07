@@ -22,7 +22,7 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
   const selectableNodes = useGraphSelectableNodes(graphId, false);
   const selectedIndexes = useGraphSelectedIndexes();
 
-  const dataConstants = useMemo(() => dataToMag(data, width), [width]);
+  const dataConstants = useMemo(() => dataToMag(data, width), [width, data]);
   const {viewHeight, viewWidth, ...areaConstants} = magAreaConstants(width, height, dataConstants.stepLabels);
 
   return (

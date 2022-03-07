@@ -5,12 +5,13 @@ import ButtonGroupWithLabel from '../../Sub/ButtonGroupWithLabel/ButtonGroupWith
 import { Button } from '@mui/material';
 import { Reference } from '../../../utils/graphs/types';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
-import { setReference, setStatisticsMode } from '../../../services/reducers/pcaPage';
+import { setReference, setStatisticsMode, updateCurrentFileInterpretations, updateCurrentInterpretation } from '../../../services/reducers/pcaPage';
 import { IPmdData } from '../../../utils/GlobalTypes';
 import ModalWrapper from '../../Sub/Modal/ModalWrapper';
 import ToolsPMDSkeleton from './ToolsPMDSkeleton';
 import OutputDataTablePMD from '../DataTablesPMD/OutputDataTable/OutputDataTablePMD';
 import StatModeButton from './StatModeButton';
+import { setCurrentPMDid } from '../../../services/reducers/parsedData';
 
 const labelToReference = (label: string) => {
   if (label === 'Образец') return 'specimen';
@@ -32,10 +33,18 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
 
   const dispatch = useAppDispatch();
 
+  const { treatmentData } = useAppSelector(state => state.parsedDataReducer);
   const { reference, currentInterpretation } = useAppSelector(state => state.pcaPageReducer); 
 
+  const [allDataPMD, setAllDataPMD] = useState<Array<IPmdData>>([]);
   const [coordinateSystem, setCoordinateSystem] = useState<Reference>('geographic');
   const [allFilesStatOpen, setAllFilesStatOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (treatmentData) {
+      setAllDataPMD(treatmentData);
+    };
+  }, [treatmentData]);
 
   useEffect(() => {
     window.addEventListener("keydown", handleStatisticsModeSelect);
@@ -63,8 +72,21 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
 
   if (!data) return <ToolsPMDSkeleton />;
 
+  const handleFileSelect = (option: string) => {
+    const pmdID = allDataPMD.findIndex(pmd => pmd.metadata.name === option);
+    dispatch(setCurrentPMDid(pmdID));
+    dispatch(updateCurrentFileInterpretations(option));
+    dispatch(updateCurrentInterpretation());
+  };
+
   return (
     <ToolsPMDSkeleton>
+      <DropdownSelect 
+        label={'Текущий файл'}
+        options={allDataPMD.map(pmd => pmd.metadata.name)}
+        defaultValue={allDataPMD[0].metadata.name}
+        onOptionSelect={handleFileSelect}
+      />
       <DropdownSelect 
         label={'Система координат'}
         options={['Образец', 'Географическая', 'Стратиграфическая']}

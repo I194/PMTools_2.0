@@ -20,7 +20,7 @@ const PCAPage: FC = ({}) => {
   const theme = useTheme();
 
   const files = useAppSelector(state => state.filesReducer.treatmentFiles);
-  const { treatmentData, loading } = useAppSelector(state => state.parsedDataReducer);
+  const { treatmentData, currentDataPMDid } = useAppSelector(state => state.parsedDataReducer);
   const { statisticsMode, selectedStepsIDs, currentFileInterpretations } = useAppSelector(state => state.pcaPageReducer);
 
   const [dataToShow, setDataToShow] = useState<IPmdData | null>(null);
@@ -31,16 +31,17 @@ const PCAPage: FC = ({}) => {
 
   useEffect(() => {
     if (treatmentData && treatmentData.length > 0) {
+      const pmdID = currentDataPMDid || 0;
       const modifiedTreatmentData: IPmdData = {
-        ...treatmentData[0],
+        ...treatmentData[pmdID],
         metadata: {
-          ...treatmentData[0].metadata,
-          b: 90 - treatmentData[0].metadata.b // core hade is measured, we use the plunge (90 - hade)
+          ...treatmentData[pmdID].metadata,
+          b: 90 - treatmentData[pmdID].metadata.b // core hade is measured, we use the plunge (90 - hade)
         }
       };
       setDataToShow(modifiedTreatmentData);
     } else setDataToShow(null);
-  }, [treatmentData]);
+  }, [treatmentData, currentDataPMDid]);
 
   useEffect(() => {
     if (statisticsMode && !selectedStepsIDs) dispatch(showStepsInput(true));

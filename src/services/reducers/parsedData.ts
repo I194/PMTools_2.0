@@ -8,7 +8,9 @@ interface IInitialState {
   errorInfo: any;
   treatmentData: IPmdData[] | null;
   dirStatData: IDirData[] | null;
-}
+  currentDataPMDid: number | null;
+  currentDataDIRid: number | null;
+};
 
 const initialState: IInitialState = {
   loading: 'idle',
@@ -16,7 +18,9 @@ const initialState: IInitialState = {
   errorInfo: null,
   treatmentData: null,
   dirStatData: null,
-}
+  currentDataPMDid: null,
+  currentDataDIRid: null,
+};
 
 const parsedDataSlice = createSlice({
   name: 'parsedData',
@@ -27,7 +31,13 @@ const parsedDataSlice = createSlice({
     },
     setDirStatData (state, action) {
       state.dirStatData = action.payload;
-    }
+    },
+    setCurrentPMDid (state, action) {
+      state.currentDataPMDid = action.payload;
+    },
+    setCurrentDIRid (state, action) {
+      state.currentDataDIRid = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(filesToData.pending, (state) => {
@@ -55,7 +65,9 @@ const parsedDataSlice = createSlice({
 
 export const { 
   setTreatmentData,
-  setDirStatData
+  setDirStatData,
+  setCurrentPMDid,
+  setCurrentDIRid,
 } = parsedDataSlice.actions;
 
 const parsedDataReducer = parsedDataSlice.reducer;

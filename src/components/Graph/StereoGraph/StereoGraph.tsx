@@ -27,7 +27,7 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
   const {viewHeight, viewWidth, ...areaConstants} = stereoAreaConstants(width, height);
   const dataConstants = useMemo(() => 
     dataToStereoPMD(data, width / 2, reference, currentInterpretation?.rawData),
-  [reference, width, currentInterpretation]);
+  [reference, width, currentInterpretation, data]);
 
   return (
     <>
