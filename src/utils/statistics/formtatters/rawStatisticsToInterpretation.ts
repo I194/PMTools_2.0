@@ -41,7 +41,8 @@ const rawStatisticsToInterpretation = (
     Istrat: +Istrat.toFixed(1),
     confidenceRadius: +confidenceRadius.toFixed(1),
     comment,
-    demagType
+    demagType,
+    rawData: statistics
   };
 
   return interpretation;

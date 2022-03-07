@@ -48,7 +48,7 @@ const PCAPage: FC = ({}) => {
       const statistics = calculateStatisticsPMD(dataToShow, statisticsMode, selectedStepsIDs);
       statistics.interpretation.id += `_${currentFileInterpretations.length}`;
       dispatch(addInterpretation(statistics));
-      // dispatch(setStatisticsMode(null));
+      dispatch(setStatisticsMode(null));
     } else dispatch(updateCurrentInterpretation());
   }, [statisticsMode, selectedStepsIDs, dataToShow]);
 

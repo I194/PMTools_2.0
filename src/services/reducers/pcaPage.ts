@@ -9,7 +9,6 @@ interface IInitialState {
   reference: Reference;
   selectedStepsIDs: Array<number> | null;
   statisticsMode: StatisticsModePCA;
-  currentRawStatistics: RawStatisticsPCA | null;
   currentInterpretation: StatisitcsInterpretation | null;
   currentFileInterpretations: Array<StatisitcsInterpretation>;
   allInterpretations: Array<StatisitcsInterpretation>;
@@ -22,7 +21,6 @@ const initialState: IInitialState = {
   reference: 'geographic',
   selectedStepsIDs: null,
   statisticsMode: null,
-  currentRawStatistics: null,
   currentInterpretation: null,
   currentFileInterpretations: [],
   allInterpretations: [],
@@ -50,7 +48,6 @@ const pcaPage = createSlice({
       state.showStepsInput = action.payload;
     },
     addInterpretation (state, action) {
-      state.currentRawStatistics = action.payload?.rawStatistics;
       state.currentInterpretation = action.payload?.interpretation;
       state.currentFileInterpretations.push(action.payload?.interpretation);
       state.allInterpretations.push(action.payload?.interpretation);
@@ -64,6 +61,11 @@ const pcaPage = createSlice({
     },
     setAllInterpretations (state, action) {
       state.allInterpretations = action.payload;
+    },
+    deleteAllInterpretations (state) {
+      state.allInterpretations = [];
+      state.currentFileInterpretations = [];
+      state.currentInterpretation = null;
     },
     updateCurrentFileInterpretations (state, action) {
       const filename = action.payload;
@@ -94,6 +96,7 @@ export const {
   addInterpretation,
   deleteInterpretation,
   setAllInterpretations,
+  deleteAllInterpretations,
   updateCurrentFileInterpretations,
   updateCurrentInterpretation,
   setOutputFilename,

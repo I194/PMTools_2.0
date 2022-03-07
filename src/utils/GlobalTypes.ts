@@ -77,6 +77,7 @@ export type StatisitcsInterpretation = {
   k?: number; // not exist for MAD as a confidene value
   comment: string;
   demagType: 'thermal' | 'alternating field' | undefined;
+  rawData: RawStatisticsPCA;
 };
 
 export type RawStatisticsPCA = {
@@ -101,6 +102,6 @@ export type DataGridPMDRow = {
   comment: string;
 };
 
-export type DataGridDIRRow = Omit<StatisitcsInterpretation, 'demagType' | 'parentFile'>
+export type DataGridDIRRow = Omit<StatisitcsInterpretation, 'demagType' | 'parentFile' | 'rawData'>
 
 export type ThemeMode = 'dark' | 'light';

@@ -11,7 +11,7 @@ const dataToStereoPMD = (
   data: IPmdData, 
   graphSize: number, 
   reference: Reference,
-  statistics: RawStatisticsPCA | null,
+  statistics?: RawStatisticsPCA,
 ) => {
   const steps = data.steps;
 

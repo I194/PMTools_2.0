@@ -7,7 +7,7 @@ import { GetDataTableBaseStyle } from "../styleConstants";
 import StatisticsDataTablePMDSkeleton from './OutputDataTablePMDSkeleton';
 import PMDOutputDataTableToolbar from '../../../Sub/DataTable/Toolbar/PMDOutputDataTableToolbar';
 import { DataGridDIRRow } from "../../../../utils/GlobalTypes";
-import { deleteInterpretation, setAllInterpretations, setOutputFilename } from "../../../../services/reducers/pcaPage";
+import { deleteAllInterpretations, deleteInterpretation, setAllInterpretations, setOutputFilename, updateCurrentFileInterpretations, updateCurrentInterpretation } from "../../../../services/reducers/pcaPage";
 import TextField from '@mui/material/TextField';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { 
@@ -27,8 +27,6 @@ const OutputDataTablePMD: FC = () => {
   const [filename, setFilename] = useState<string>('PCA Interpretations');
   const debouncedFilename = useDebounce(filename, 500);
 
-  console.log(data);
-
   const handleEditRowsModelChange = useCallback((model: GridEditRowsModel) => {
     setEditRowsModel(model);
   }, []);
@@ -36,11 +34,15 @@ const OutputDataTablePMD: FC = () => {
   const handleRowDelete = (id: string) => (event: any) => {
     event.stopPropagation();
     dispatch(deleteInterpretation(id));
+    dispatch(updateCurrentFileInterpretations(
+      data.filter(interpretation => interpretation.id === id)[0].parentFile
+    ));
+    dispatch(updateCurrentInterpretation());
   };
 
   const handleDeleteAllRows = (event: any) => {
     event.stopPropagation();
-    dispatch(setAllInterpretations([]));
+    dispatch(deleteAllInterpretations());
   };
 
   const columns: GridColumns = [
@@ -58,7 +60,6 @@ const OutputDataTablePMD: FC = () => {
       field: 'actions',
       type: 'actions',
       width: 40,
-      // cellClassName: 'actions',
       renderHeader: (params: GridColumnHeaderParams) => (
         <GridActionsCellItem
           icon={<DeleteIcon />}

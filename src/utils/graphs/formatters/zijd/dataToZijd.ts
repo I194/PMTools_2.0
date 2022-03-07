@@ -10,8 +10,8 @@ const dataToZijd = (
   data: IPmdData, 
   graphSize: number, 
   reference: Reference, 
-  statistics: RawStatisticsPCA | null,
-  unitCount: number
+  unitCount: number,
+  statistics?: RawStatisticsPCA,
 ) => {
   const steps = data.steps;
 
