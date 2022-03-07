@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
-import { Box } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -38,6 +39,17 @@ const ModalWrapper: FC<IModal> = ({ open, setOpen, children }) => {
         aria-describedby="keep-mounted-modal-description"
       >
         <Box sx={{ ...style }}>
+          <IconButton 
+            color="error" 
+            sx={{
+              position: 'absolute',
+              right: '8px',
+              top: '8px',
+            }}
+            onClick={handleClose}
+          >
+            <CloseOutlinedIcon />
+          </IconButton>
           { children }
           <Button variant='outlined' onClick={handleClose} sx={{mt: 2}}>Закрыть</Button>
         </Box>

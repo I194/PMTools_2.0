@@ -7,8 +7,6 @@ import { GetDataTableBaseStyle } from "../styleConstants";
 import { DataGridDIRRow, StatisitcsInterpretation } from "../../../../utils/GlobalTypes";
 import PMDOutputDataTableToolbar from '../../../Sub/DataTable/Toolbar/PMDOutputDataTableToolbar';
 import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
 import { setAllInterpretations, setOutputFilename } from "../../../../services/reducers/pcaPage";
 import { useDebounce } from "../../../../utils/GlobalHooks";
@@ -100,15 +98,6 @@ const OutputDataTablePMD: FC = () => {
           onChange={handleFilenameChange}
           variant="standard"
         />
-        <IconButton 
-          color="error" 
-          sx={{
-            position: 'absolute',
-            right: '8px'
-          }}
-        >
-          <CloseOutlinedIcon />
-        </IconButton>
       </div>
       <StatisticsDataTablePMDSkeleton>
         <DataGrid 
