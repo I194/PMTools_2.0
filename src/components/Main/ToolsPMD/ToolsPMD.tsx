@@ -54,10 +54,11 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
 
   const handleStatisticsModeSelect = useCallback((e) => {
     const key = (e.key as string).toLowerCase();
-    if (key === 'd') dispatch(setStatisticsMode('pca'));
-    if (key === 'o') dispatch(setStatisticsMode('pca0'));
-    if (key === 'g') dispatch(setStatisticsMode('gc'));
-    if (key === 'i') dispatch(setStatisticsMode('gcn'));
+    const { ctrlKey, shiftKey, altKey } = e; 
+    if ((shiftKey || altKey) && key === 'd') dispatch(setStatisticsMode('pca'));
+    if ((shiftKey || altKey) && key === 'o') dispatch(setStatisticsMode('pca0'));
+    if ((shiftKey || altKey) && key === 'g') dispatch(setStatisticsMode('gc'));
+    if ((shiftKey || altKey) && key === 'i') dispatch(setStatisticsMode('gcn'));
   }, []);
 
   const onStatisticsApply = useCallback(() => {

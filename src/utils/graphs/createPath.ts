@@ -14,7 +14,6 @@ const nodes = {
 const createStraightPath = (dots: Array<[number, number]>, close?: boolean) => {
   // Straight path looks like this:
   // d="M20,20 L25,70 L50,40 L39,72, L110,119, L118,129, L134,141, L150,150"
-  console.log(dots);
   return dots.map((dot, index) => {
     if (index === 0) return `${nodes.start}${dot[0]},${dot[1]}`;
     if (index === dots.length - 1) return `${nodes.lineTo}${dot[0]},${dot[1]}${close ? nodes.close : ''}`;
