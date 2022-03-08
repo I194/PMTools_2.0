@@ -14,6 +14,7 @@ interface ISelectableGraph {
   selectableNodes: ChildNode[];
   nodesDuplicated: boolean;
   menuItems?: Array<TMenuItem>;
+  extraID?: string;
 }
 
 const SelectableGraph: FC<ISelectableGraph> = ({
@@ -22,7 +23,8 @@ const SelectableGraph: FC<ISelectableGraph> = ({
   width,
   height,
   selectableNodes,
-  menuItems
+  menuItems,
+  extraID,
 }) => {
 
   const dispatch = useAppDispatch();
@@ -33,25 +35,40 @@ const SelectableGraph: FC<ISelectableGraph> = ({
     if (timesClicked === 2) dispatch(setSelectedStepsIDs(null));
   };
 
+  const [ID, setID] = useState<string>(`${graphId}-graph`);
+  const [selectableTargets, setSelectableTargets] = useState<(string | HTMLElement)[]>([]);
+
+  useEffect(() => {
+    if (extraID) {
+      setID(`${graphId}-graph-${extraID}`);
+    };
+  }, [extraID]);
+
+  useEffect(() => {
+    setSelectableTargets(
+      selectableNodes.map(node => document.getElementById((node.lastChild as any).id) || '') 
+    );
+  }, [selectableNodes]);
+
   return (
     <>
       <ContextMenu items={menuItems}>
-        <ExportButton graphId={`${graphId}-graph`} />
+        <ExportButton graphId={ID} />
         <svg
           xmlns="http://www.w3.org/2000/svg" 
           version="1.1" 
           width={width} 
           height={height} 
-          id={`${graphId}-graph`} 
+          id={ID} 
           onClick={handleDoubleClick}
         >
           {children}
         </svg>
       </ContextMenu>
       <Selecto
-        dragContainer={`#${graphId}-graph`}
-        boundContainer={document.getElementById(`${graphId}-graph`)}
-        selectableTargets={selectableNodes.map(node => document.getElementById((node.lastChild as any).id) || '')}
+        dragContainer={'#'+ID}
+        boundContainer={document.getElementById(ID)}
+        selectableTargets={selectableTargets}
         hitRate={100}
         selectByClick={true}
         selectFromInside={true}

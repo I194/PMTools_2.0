@@ -38,6 +38,7 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data }) => {
         selectableNodes={selectableNodes}
         nodesDuplicated={true}
         menuItems={menuItems}
+        extraID={data.metadata.name}
       >
         <g>
           <AxesAndData 

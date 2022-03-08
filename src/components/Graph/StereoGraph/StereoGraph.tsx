@@ -38,6 +38,7 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
         selectableNodes={selectableNodes}
         nodesDuplicated={false}
         menuItems={menuItems}
+        extraID={data.metadata.name}
       >
         <g>
           <AxesAndData 

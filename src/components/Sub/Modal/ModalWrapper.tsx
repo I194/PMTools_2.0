@@ -24,10 +24,13 @@ const style = {
 interface IModal {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  size?: {width: string, height: string};
 };
 
-const ModalWrapper: FC<IModal> = ({ open, setOpen, children }) => {
+const ModalWrapper: FC<IModal> = ({ open, setOpen, size, children }) => {
   const handleClose = () => setOpen(false);
+
+  const definedSize = size ? size : {};
 
   return (
     <div>
@@ -38,7 +41,7 @@ const ModalWrapper: FC<IModal> = ({ open, setOpen, children }) => {
         aria-labelledby="keep-mounted-modal-title"
         aria-describedby="keep-mounted-modal-description"
       >
-        <Box sx={{ ...style }}>
+        <Box sx={{ ...style, ...size }}>
           <IconButton 
             color="error" 
             sx={{

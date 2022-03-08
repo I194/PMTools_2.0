@@ -47,7 +47,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
     <GraphsSkeleton 
       graphLarge={{
         node: <ZijdGraph 
-          graphId={`${dataToShow.metadata.name}-zijd`}
+          graphId={`zijd`}
           width={largeGraphSize}
           height={largeGraphSize} 
           data={dataToShow}
@@ -56,7 +56,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
       }}
       graphSmallTop={{
         node: <StereoGraph 
-          graphId={`${dataToShow.metadata.name}-stereo`} 
+          graphId={`stereo`} 
           width={smallGraphSize}
           height={smallGraphSize}
           data={dataToShow}
@@ -65,7 +65,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
       }}
       graphSmallBot={{
         node: <MagGraph 
-          graphId={`${dataToShow.metadata.name}-mag`}
+          graphId={`mag`}
           width={smallGraphSize}
           height={smallGraphSize}
           data={dataToShow}

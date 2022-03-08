@@ -17,11 +17,10 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
 
   const dispatch = useAppDispatch();
 
+  const { selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer);
   // selectionModel is array of ID's of rows
   const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
   const [selectedRows, setSelectedRows] = useState<Array<DataGridPMDRow>>([]);
-
-  const { selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer);
 
   useEffect(() => {
     if (selectedStepsIDs) setSelectionModel(selectedStepsIDs);

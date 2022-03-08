@@ -2,7 +2,7 @@ import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import styles from './ToolsPMD.module.scss';
 import DropdownSelect from '../../Sub/DropdownSelect/DropdownSelect';
 import ButtonGroupWithLabel from '../../Sub/ButtonGroupWithLabel/ButtonGroupWithLabel';
-import { Button } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import { Reference } from '../../../utils/graphs/types';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
 import { setReference, setSelectedStepsIDs, setStatisticsMode, updateCurrentFileInterpretations, updateCurrentInterpretation } from '../../../services/reducers/pcaPage';
@@ -34,17 +34,27 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   const dispatch = useAppDispatch();
 
   const { treatmentData } = useAppSelector(state => state.parsedDataReducer);
-  const { reference, currentInterpretation } = useAppSelector(state => state.pcaPageReducer); 
+  const { reference, selectedStepsIDs, statisticsMode } = useAppSelector(state => state.pcaPageReducer); 
 
   const [allDataPMD, setAllDataPMD] = useState<Array<IPmdData>>([]);
   const [coordinateSystem, setCoordinateSystem] = useState<Reference>('geographic');
   const [allFilesStatOpen, setAllFilesStatOpen] = useState<boolean>(false);
+  const [showStepsInput, setShowStepsInput] = useState<boolean>(false);
+  const [enteredSteps, setEnteredSteps] = useState<Array<number> | null>(null);
 
   useEffect(() => {
     if (treatmentData) {
       setAllDataPMD(treatmentData);
     };
   }, [treatmentData]);
+
+  useEffect(() => {
+    if (!selectedStepsIDs && statisticsMode) {
+      setShowStepsInput(true);
+    } else {
+      setShowStepsInput(false);
+    }
+  }, [selectedStepsIDs, statisticsMode]);
 
   useEffect(() => {
     window.addEventListener("keydown", handleStatisticsModeSelect);
@@ -110,6 +120,19 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
         setOpen={setAllFilesStatOpen}
       >
         <OutputDataTablePMD />
+      </ModalWrapper>
+      <ModalWrapper
+        open={showStepsInput}
+        setOpen={setShowStepsInput}
+        size={{width: '24vw', height: '20vh'}}
+      >
+        <TextField
+          label="Введите шаги"
+          helperText="Валидные примеры: 1-9 || 2,4,8,9 || 2-4,8,9 || 2-4,8,9-11"
+          value={enteredSteps}
+          onChange={() => null}
+          variant="standard"
+        />
       </ModalWrapper>
     </ToolsPMDSkeleton>
   )
