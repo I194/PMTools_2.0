@@ -2,7 +2,8 @@ import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import styles from './ToolsPMD.module.scss';
 import DropdownSelect from '../../Sub/DropdownSelect/DropdownSelect';
 import ButtonGroupWithLabel from '../../Sub/ButtonGroupWithLabel/ButtonGroupWithLabel';
-import { Button, TextField } from '@mui/material';
+import { Button, TextField, IconButton } from '@mui/material';
+import DirectionsIcon from '@mui/icons-material/Directions';
 import { Reference } from '../../../utils/graphs/types';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
 import { setReference, setSelectedStepsIDs, setStatisticsMode, updateCurrentFileInterpretations, updateCurrentInterpretation } from '../../../services/reducers/pcaPage';
@@ -12,6 +13,8 @@ import ToolsPMDSkeleton from './ToolsPMDSkeleton';
 import OutputDataTablePMD from '../DataTablesPMD/OutputDataTable/OutputDataTablePMD';
 import StatModeButton from './StatModeButton';
 import { setCurrentPMDid } from '../../../services/reducers/parsedData';
+import InputApply from '../../Sub/InputApply/InputApply';
+import parseIDsInput from '../../../utils/parsers/parseIDsInput';
 
 const labelToReference = (label: string) => {
   if (label === 'Образец') return 'specimen';
@@ -49,7 +52,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   }, [treatmentData]);
 
   useEffect(() => {
-    if (!selectedStepsIDs && statisticsMode) {
+    if ((!selectedStepsIDs || !selectedStepsIDs.length) && statisticsMode) {
       setShowStepsInput(true);
     } else {
       setShowStepsInput(false);
@@ -79,6 +82,12 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
     if ((shiftKey || altKey) && key === 'g') dispatch(setStatisticsMode('gc'));
     if ((shiftKey || altKey) && key === 'i') dispatch(setStatisticsMode('gcn'));
   }, []);
+
+  const handleEnteredStepsApply = (steps: string) => {
+    console.log(parseIDsInput(steps));
+    dispatch(setSelectedStepsIDs(parseIDsInput(steps)))
+    setShowStepsInput(false);
+  }
 
   if (!data) return <ToolsPMDSkeleton />;
 
@@ -124,14 +133,12 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
       <ModalWrapper
         open={showStepsInput}
         setOpen={setShowStepsInput}
-        size={{width: '24vw', height: '20vh'}}
+        size={{width: '26vw', height: '20vh'}}
       >
-        <TextField
+        <InputApply 
           label="Введите шаги"
-          helperText="Валидные примеры: 1-9 || 2,4,8,9 || 2-4,8,9 || 2-4,8,9-11"
-          value={enteredSteps}
-          onChange={() => null}
-          variant="standard"
+          helperText="Валидные примеры: 1-9 || 2,4,8,9 || 2-4;8,9 || 2-4;8,9;12-14"
+          onApply={handleEnteredStepsApply}
         />
       </ModalWrapper>
     </ToolsPMDSkeleton>

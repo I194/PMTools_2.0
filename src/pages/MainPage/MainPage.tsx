@@ -13,8 +13,7 @@ const MainPage: FC = ({}) => {
       className={styles.mainPage}
       style={{backgroundColor: bgColorMain(theme.palette.mode)}}
     >
-      hi
-      що hi
+      главная страница
     </div>
   )
 }
