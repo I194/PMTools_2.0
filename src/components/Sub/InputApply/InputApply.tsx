@@ -7,19 +7,26 @@ interface IInputApply {
   label?: string;
   helperText?: string;
   onApply: (value: string) => void;
+  disabled?: boolean;
 };
 
 const InputApply: FC<IInputApply> = ({
   label,
   helperText,
   onApply,
+  disabled,
 }) => {
 
   const [value, setValue] = useState<string>('');
 
+  const handleApply = () => {
+    onApply(value);
+    setValue('');
+  };
+
   const handleEnterPress = (event: any) => {
     if (event.key === 'Enter') {
-      onApply(value);
+      handleApply();
     };
   };
 
@@ -32,9 +39,11 @@ const InputApply: FC<IInputApply> = ({
         onChange={(event) => setValue(event.target.value)}
         onKeyPress={handleEnterPress}
         variant="standard"
+        autoFocus={true}
+        disabled={disabled}
       />
       <IconButton
-        onClick={() => onApply(value)}
+        onClick={handleApply}
       >
         {<DirectionsIcon />}
       </IconButton>

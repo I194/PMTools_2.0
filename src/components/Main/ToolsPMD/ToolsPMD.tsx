@@ -43,7 +43,6 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   const [coordinateSystem, setCoordinateSystem] = useState<Reference>('geographic');
   const [allFilesStatOpen, setAllFilesStatOpen] = useState<boolean>(false);
   const [showStepsInput, setShowStepsInput] = useState<boolean>(false);
-  const [enteredSteps, setEnteredSteps] = useState<Array<number> | null>(null);
 
   useEffect(() => {
     if (treatmentData) {
@@ -54,8 +53,10 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   useEffect(() => {
     if ((!selectedStepsIDs || !selectedStepsIDs.length) && statisticsMode) {
       setShowStepsInput(true);
+      window.removeEventListener("keydown", handleStatisticsModeSelect);
     } else {
       setShowStepsInput(false);
+      window.addEventListener("keydown", handleStatisticsModeSelect);
     }
   }, [selectedStepsIDs, statisticsMode]);
 
@@ -75,6 +76,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   };
 
   const handleStatisticsModeSelect = useCallback((e) => {
+    e.preventDefault();
     const key = (e.key as string).toLowerCase();
     const { ctrlKey, shiftKey, altKey } = e; 
     if ((shiftKey || altKey) && key === 'd') dispatch(setStatisticsMode('pca'));
@@ -84,10 +86,9 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   }, []);
 
   const handleEnteredStepsApply = (steps: string) => {
-    console.log(parseIDsInput(steps));
-    dispatch(setSelectedStepsIDs(parseIDsInput(steps)))
+    dispatch(setSelectedStepsIDs(parseIDsInput(steps)));
     setShowStepsInput(false);
-  }
+  };
 
   if (!data) return <ToolsPMDSkeleton />;
 
@@ -130,17 +131,23 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
       >
         <OutputDataTablePMD />
       </ModalWrapper>
-      <ModalWrapper
-        open={showStepsInput}
-        setOpen={setShowStepsInput}
-        size={{width: '26vw', height: '20vh'}}
-      >
-        <InputApply 
-          label="Введите шаги"
-          helperText="Валидные примеры: 1-9 || 2,4,8,9 || 2-4;8,9 || 2-4;8,9;12-14"
-          onApply={handleEnteredStepsApply}
-        />
-      </ModalWrapper>
+      {
+        showStepsInput && 
+        <ModalWrapper
+          open={showStepsInput}
+          setOpen={setShowStepsInput}
+          size={{width: '26vw', height: '20vh'}}
+          position={{left: '50%', top: '20%'}}
+          onClose={() => {dispatch(setStatisticsMode(null))}}
+          isDraggable={true}
+        >
+          <InputApply 
+            label="Введите шаги"
+            helperText="Валидные примеры: 1-9 || 2,4,8,9 || 2-4;8,9 || 2-4;8,9;12-14"
+            onApply={handleEnteredStepsApply}
+          />
+        </ModalWrapper>
+      }
     </ToolsPMDSkeleton>
   )
 }
