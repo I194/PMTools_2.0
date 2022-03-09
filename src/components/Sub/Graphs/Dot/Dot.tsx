@@ -113,21 +113,41 @@ const Dot: FC<IDot> = ({
           </g>,
 
           confidenceCircle &&
-          <path 
-            d={createStraightPath(confidenceCircle.xyData)}
-            fill='transparent'
-            stroke={confidenceCircle.color}
-            strokeLinejoin="round"
-            strokeLinecap="round"
-          />,
-          greatCircle &&
-          <path 
-            d={createStraightPath(greatCircle.xyData)}
-            fill='transparent'
-            stroke={greatCircle.color}
-            strokeLinejoin="round"
-            strokeLinecap="round"
-          />
+          [
+            <path 
+              d={createStraightPath(confidenceCircle.xyDataSplitted.neg)}
+              fill='transparent'
+              stroke={confidenceCircle.color}
+              strokeLinejoin="round"
+              strokeLinecap="round"
+            />,
+            <path 
+              d={createStraightPath(confidenceCircle.xyDataSplitted.pos)}
+              fill='transparent'
+              stroke={confidenceCircle.color}
+              stroke-dasharray="4"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+            />,
+          ],
+          greatCircle && 
+          [
+            <path 
+              d={createStraightPath(greatCircle.xyDataSplitted.neg)}
+              fill='transparent'
+              stroke={greatCircle.color}
+              strokeLinejoin="round"
+              strokeLinecap="round"
+            />,
+            <path 
+              d={createStraightPath(greatCircle.xyDataSplitted.pos)}
+              fill='transparent'
+              stroke={greatCircle.color}
+              stroke-dasharray="4"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+            />
+          ]
         ]
       }
       <circle 

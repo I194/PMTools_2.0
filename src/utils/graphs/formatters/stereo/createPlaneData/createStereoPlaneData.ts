@@ -1,8 +1,6 @@
 import Direction from "../../../classes/Direction";
-import { dirToCartesian2D } from "../../../dirToCartesian";
 import createConfidenceEllipse from "./createConfidenceEllipse";
-import flipGreatCircle from "./flipGreatCircle";
-import flipSmallCircle from "./flipSmallCircle";
+import splitCircle from "./splitCircle";
 
 const createStereoPlaneData = (
   direction: Direction, 
@@ -30,21 +28,17 @@ const createStereoPlaneData = (
 
   const ellipse = createConfidenceEllipse(angle, angle2, N).map(rotateEllipse);
 
-  // Flip the ellipse when requested. Never flip great circles (angle = 90)
-  
-  // if (angle === 90) {
-  //   return flipSmallCircle(inc, ellipse);
-  // } else {
-  //   return flipGreatCircle(ellipse);
-  // };
+  const splittedEllipse = splitCircle(ellipse);
 
-  const xyData: Array<[number, number]> = ellipse.map((point) => {
-    const [pointDec, pointInc] = point.toArray();
-    const coords = dirToCartesian2D(pointDec - 90, pointInc, graphSize);
-    return [coords.x, coords.y];
-  });
+  const xyData: Array<[number, number]> = ellipse.map(point => point.toCartesian2DForGraph(graphSize));
+  const xyDataNeg: Array<[number, number]> = splittedEllipse.negative.map(point => point.toCartesian2DForGraph(graphSize));
+  const xyDataPos: Array<[number, number]> = splittedEllipse.positive.map(point => point.toCartesian2DForGraph(graphSize));
 
-  return xyData;
+  return {
+    all: xyData,
+    neg: xyDataNeg,
+    pos: xyDataPos,
+  };
 };
 
 export default createStereoPlaneData;

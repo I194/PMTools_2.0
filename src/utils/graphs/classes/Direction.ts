@@ -1,3 +1,4 @@
+import { dirToCartesian2D } from "../dirToCartesian";
 import Coordinates from "./Coordinates";
 
 class Direction {
@@ -36,6 +37,13 @@ class Direction {
     const z = this.length * Math.sin(inc);
 
     return new Coordinates(x, y, z);
+  };
+
+  toCartesian2DForGraph = (graphSize: number) => {
+    const [pointDec, pointInc] = this.toArray();
+    const coords = dirToCartesian2D(pointDec - 90, pointInc, graphSize);
+    const res: [number, number] = [coords.x, coords.y];
+    return res;
   };
 
   angle = (direction: Direction) => {

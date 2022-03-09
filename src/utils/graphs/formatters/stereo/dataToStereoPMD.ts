@@ -59,12 +59,14 @@ const dataToStereoPMD = (
       dirData: direction.toArray(),
       xyData: [meanXYData.x, meanXYData.y],
       confidenceCircle: {
-        xyData: confidenceCircle, 
+        xyData: confidenceCircle.all, 
+        xyDataSplitted: confidenceCircle, 
         color: graphSelectedDotColor('mean')
       },
       greatCircle: (statistics.code === 'gc' || statistics.code === 'gcn') 
         ? {
-            xyData: greatCircle, 
+            xyData: greatCircle.all, 
+            xyDataSplitted: greatCircle, 
             color: graphSelectedDotColor('mean')
           }
         : undefined,

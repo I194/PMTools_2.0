@@ -13,6 +13,7 @@ export type PCALines = {
 
 export type PlaneData = {
   xyData: Array<[number, number]>;
+  xyDataSplitted: {neg: Array<[number, number]>, pos: Array<[number, number]>};
   color: string;
 };
  
