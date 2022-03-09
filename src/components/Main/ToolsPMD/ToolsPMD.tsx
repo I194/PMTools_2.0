@@ -53,10 +53,8 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   useEffect(() => {
     if ((!selectedStepsIDs || !selectedStepsIDs.length) && statisticsMode) {
       setShowStepsInput(true);
-      window.removeEventListener("keydown", handleStatisticsModeSelect);
     } else {
       setShowStepsInput(false);
-      window.addEventListener("keydown", handleStatisticsModeSelect);
     }
   }, [selectedStepsIDs, statisticsMode]);
 
@@ -76,13 +74,25 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   };
 
   const handleStatisticsModeSelect = useCallback((e) => {
-    e.preventDefault();
-    const key = (e.key as string).toLowerCase();
+    const key = (e.code as string);
     const { ctrlKey, shiftKey, altKey } = e; 
-    if ((shiftKey || altKey) && key === 'd') dispatch(setStatisticsMode('pca'));
-    if ((shiftKey || altKey) && key === 'o') dispatch(setStatisticsMode('pca0'));
-    if ((shiftKey || altKey) && key === 'g') dispatch(setStatisticsMode('gc'));
-    if ((shiftKey || altKey) && key === 'i') dispatch(setStatisticsMode('gcn'));
+    console.log(e)
+    if ((shiftKey || altKey) && key === 'KeyD') {
+      e.preventDefault();
+      dispatch(setStatisticsMode('pca'))
+    };
+    if ((shiftKey || altKey) && key === 'KeyO') {
+      e.preventDefault();
+      dispatch(setStatisticsMode('pca0'))
+    };
+    if ((shiftKey || altKey) && key === 'KeyG') {
+      e.preventDefault();
+      dispatch(setStatisticsMode('gc'))
+    };
+    if ((shiftKey || altKey) && key === 'KeyI') {
+      e.preventDefault();
+      dispatch(setStatisticsMode('gcn'))
+    };
   }, []);
 
   const handleEnteredStepsApply = (steps: string) => {
@@ -142,7 +152,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
           isDraggable={true}
         >
           <InputApply 
-            label="Введите шаги"
+            label={`Введите шаги (${statisticsMode})`}
             helperText="Валидные примеры: 1-9 || 2,4,8,9 || 2-4;8,9 || 2-4;8,9;12-14"
             onApply={handleEnteredStepsApply}
           />
