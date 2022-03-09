@@ -17,10 +17,12 @@ import {
   GridColumns, 
   GridEditRowsModel, 
 } from '@mui/x-data-grid';
+import { useTheme } from '@mui/material/styles';
 
 const OutputDataTablePMD: FC = () => {
   
   const dispatch = useAppDispatch();
+  const theme = useTheme();
 
   const data = useAppSelector(state => state.pcaPageReducer.allInterpretations);
   const [editRowsModel, setEditRowsModel] = useState<GridEditRowsModel>({});
@@ -55,7 +57,7 @@ const OutputDataTablePMD: FC = () => {
     { field: 'Dstrat', headerName: 'Dstrat', type: 'number', width: 70 },
     { field: 'Istrat', headerName: 'Istrat', type: 'number', width: 70 },
     { field: 'confidenceRadius', headerName: 'MAD', type: 'string', width: 70 },
-    { field: 'comment', headerName: 'Comment', type: 'string', flex: 1, editable: true },
+    { field: 'comment', headerName: 'Comment', type: 'string', flex: 1, editable: true, cellClassName: styles[`editableCell_${theme.palette.mode}`] },
     {
       field: 'actions',
       type: 'actions',
@@ -101,6 +103,7 @@ const OutputDataTablePMD: FC = () => {
       const updatedData = data.map((interpretation, index) => {
         const rowId = Object.keys(editRowsModel)[0];
         const newComment = editRowsModel[rowId]?.comment?.value as string;
+        if (rowId !== interpretation.id) return interpretation;
         return {
           ...interpretation,
           comment: newComment
