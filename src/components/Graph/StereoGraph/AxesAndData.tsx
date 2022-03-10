@@ -22,6 +22,7 @@ interface IAxesAndData {
     meanDirection: MeanDirection;
   };
   selectedIndexes: Array<number>;
+  inInterpretationIndexes: Array<number>;
   settings: GraphSettings;
 };
 
@@ -30,6 +31,7 @@ const AxesAndData: FC<IAxesAndData> = ({
   areaConstants,
   dataConstants,
   selectedIndexes,
+  inInterpretationIndexes,
   settings,
 }) => {
 
@@ -48,8 +50,6 @@ const AxesAndData: FC<IAxesAndData> = ({
     xyData,
     meanDirection,
   } = dataConstants;
-
-  console.log(meanDirection)
 
   return (
     <g 
@@ -116,6 +116,7 @@ const AxesAndData: FC<IAxesAndData> = ({
           directionalData={directionalData}
           tooltipData={tooltipData}
           selectedIndexes={selectedIndexes}
+          inInterpretationIndexes={inInterpretationIndexes}
           dotFillColor='black'
           differentColors={true}
           colorsType="stereo"

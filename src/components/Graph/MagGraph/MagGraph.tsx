@@ -7,6 +7,8 @@ import dataToMag from "../../../utils/graphs/formatters/mag/dataToMag";
 import { SelectableGraph } from "../../Sub/Graphs";
 import { magAreaConstants } from "./MagConstants";
 import AxesAndData from "./AxesAndData";
+import getInterpretationIndexes from "../../../utils/graphs/formatters/getInterpretationIndexes";
+import { useAppSelector } from "../../../services/store/hooks";
 
 export interface IMagGraph extends IGraph {
   data: IPmdData;
@@ -18,12 +20,14 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
   // 2. zoom&pan
 
+  const { currentInterpretation } = useAppSelector(state => state.pcaPageReducer); 
   const { menuItems, settings } = usePMDGraphSettings();
   const selectableNodes = useGraphSelectableNodes(graphId, false);
   const selectedIndexes = useGraphSelectedIndexes();
 
   const dataConstants = useMemo(() => dataToMag(data, width), [width, data]);
   const {viewHeight, viewWidth, ...areaConstants} = magAreaConstants(width, height, dataConstants.stepLabels);
+  const inInterpretationIndexes = getInterpretationIndexes(currentInterpretation, data);
 
   return (
     <>
@@ -44,6 +48,7 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
             areaConstants={areaConstants}
             dataConstants={dataConstants}
             selectedIndexes={selectedIndexes}
+            inInterpretationIndexes={inInterpretationIndexes}
             settings={settings}
           />
         </g>

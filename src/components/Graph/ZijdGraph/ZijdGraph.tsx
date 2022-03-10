@@ -8,7 +8,7 @@ import dataToZijd from "../../../utils/graphs/formatters/zijd/dataToZijd";
 import { SelectableGraph, GraphSymbols, Unit} from "../../Sub/Graphs";
 import { zijdAreaConstants } from "./ZijdConstants";
 import AxesAndData from "./AxesAndData";
-import projectionByReference from "../../../utils/graphs/formatters/zijd/projectionByReference";
+import getInterpretationIndexes from "../../../utils/graphs/formatters/getInterpretationIndexes";
 
 export interface IZijdGraph extends IGraph {
   data: IPmdData;
@@ -30,6 +30,8 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data }) => {
     () => dataToZijd(data, width / 2, reference, projection, areaConstants.unitCount, currentInterpretation?.rawData),
   [reference, projection, width, currentInterpretation, data]);
 
+  const inInterpretationIndexes = getInterpretationIndexes(currentInterpretation, data);
+
   return (
     <>
       <SelectableGraph
@@ -49,6 +51,7 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data }) => {
             areaConstants={areaConstants}
             dataConstants={dataConstants}
             selectedIndexes={selectedIndexes}
+            inInterpretationIndexes={inInterpretationIndexes}
             settings={settings}
           />
           <GraphSymbols 

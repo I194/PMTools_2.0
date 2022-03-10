@@ -24,6 +24,7 @@ interface IAxesAndData {
     demagnetizationType: "thermal" | "alternating field" | undefined;
   };
   selectedIndexes: Array<number>;
+  inInterpretationIndexes: Array<number>;
   settings: GraphSettings;
 }
 
@@ -32,6 +33,7 @@ const AxesAndData: FC<IAxesAndData> = ({
   areaConstants,
   dataConstants,
   selectedIndexes,
+  inInterpretationIndexes,
   settings,
 }) => {
 
@@ -129,6 +131,7 @@ const AxesAndData: FC<IAxesAndData> = ({
           data={xyData}
           tooltipData={tooltipData}
           selectedIndexes={selectedIndexes}
+          inInterpretationIndexes={inInterpretationIndexes}
           dotFillColor='black'
           differentColors={true}
           colorsType="stereo"

@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { StringLiteralLike } from "typescript";
 import { Dot } from "..";
 import { createStraightPath } from "../../../../utils/graphs/createPath";
 import { DotSettings, DotType, TooltipDot } from "../../../../utils/graphs/types";
@@ -12,6 +13,8 @@ interface IData {
   directionalData?: Array<[number, number]>;
   tooltipData?: Array<TooltipDot>;
   selectedIndexes: Array<number>;
+  inInterpretationIndexes: Array<number>;
+  dotHighlightedColor?: string;
   dotFillColor: string;
   differentColors?: boolean; 
   colorsType?: 'stereo' | 'colouredStereo';
@@ -26,6 +29,8 @@ const Data: FC<IData> = ({
   directionalData,
   tooltipData,
   selectedIndexes,
+  inInterpretationIndexes,
+  dotHighlightedColor,
   dotFillColor,
   differentColors,
   colorsType,
@@ -77,7 +82,16 @@ const Data: FC<IData> = ({
                     )
                   : dotFillColor
               }
-              strokeColor="black"
+              strokeColor={
+                inInterpretationIndexes.includes(index) 
+                  ? dotHighlightedColor || 'orange' 
+                  : "black"
+              }
+              strokeWidth={
+                inInterpretationIndexes.includes(index) 
+                  ? 2 
+                  : 1
+              }
               settings={settings}
             />
           )

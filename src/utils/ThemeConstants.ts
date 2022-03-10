@@ -31,6 +31,9 @@ export const successColor = (themeMode: ThemeMode) => themeMode === 'dark'
 export const errorColor = (themeMode: ThemeMode) => themeMode === 'dark'
   ? '#f44336'
   : '#d32f2f';
+export const warningColor = (themeMode: ThemeMode) => themeMode === 'dark'
+  ? '#f57c00'
+  : '#ffb74d';
 
 export const graphSelectedDotColor = (dotType: DotType) => {
   if (dotType === 'all') return '#1125ff';

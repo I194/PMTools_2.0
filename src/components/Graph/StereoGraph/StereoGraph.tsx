@@ -8,6 +8,7 @@ import dataToStereoPMD from "../../../utils/graphs/formatters/stereo/dataToStere
 import { SelectableGraph, GraphSymbols } from "../../Sub/Graphs";
 import { stereoAreaConstants } from "./StereoConstants";
 import AxesAndData from "./AxesAndData";
+import getInterpretationIndexes from "../../../utils/graphs/formatters/getInterpretationIndexes";
 
 export interface IStereoGraph extends IGraph {
   data: IPmdData;
@@ -29,6 +30,8 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
     dataToStereoPMD(data, width / 2, reference, currentInterpretation?.rawData),
   [reference, width, currentInterpretation, data]);
 
+  const inInterpretationIndexes = getInterpretationIndexes(currentInterpretation, data);
+
   return (
     <>
       <SelectableGraph
@@ -47,6 +50,7 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
             height={height}
             areaConstants={areaConstants}
             dataConstants={dataConstants}
+            inInterpretationIndexes={inInterpretationIndexes}
             selectedIndexes={selectedIndexes}
             settings={settings}
           />

@@ -69,6 +69,7 @@ export type StatisitcsInterpretation = {
   parentFile: string;
   id: string;
   code: StatisticsModePCA | StatisticsModeDIR;
+  steps: Array<PMDStep>;
   stepRange: string;
   stepCount: number;
   Dgeo: number;
@@ -104,6 +105,6 @@ export type DataGridPMDRow = {
   comment: string;
 };
 
-export type DataGridDIRRow = Omit<StatisitcsInterpretation, 'demagType' | 'parentFile' | 'rawData'>
+export type DataGridDIRRow = Omit<StatisitcsInterpretation, 'demagType' | 'parentFile' | 'rawData' | 'steps'>
 
 export type ThemeMode = 'dark' | 'light';

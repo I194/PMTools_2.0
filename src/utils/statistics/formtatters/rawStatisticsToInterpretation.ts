@@ -33,6 +33,7 @@ const rawStatisticsToInterpretation = (
     parentFile: metadata.name,
     id,
     code,
+    steps: selectedSteps,
     stepRange,
     stepCount,
     Dgeo: +Dgeo.toFixed(1),

@@ -3,6 +3,8 @@ import { useAppSelector } from "../../../services/store/hooks";
 import projectionByReference from "../../../utils/graphs/formatters/zijd/projectionByReference";
 import { GraphSettings, PCALines, TooltipDot } from "../../../utils/graphs/types";
 import { Axis, Data } from "../../Sub/Graphs";
+import { useTheme } from '@mui/material/styles';
+import { warningColor } from "../../../utils/ThemeConstants";
 
 interface IAxesAndData {
   graphId: string;
@@ -23,6 +25,7 @@ interface IAxesAndData {
     tooltipData: Array<TooltipDot>;
     pcaLines: PCALines;
   };
+  inInterpretationIndexes: Array<number>;
   selectedIndexes: Array<number>;
   settings: GraphSettings;
 }
@@ -32,8 +35,11 @@ const AxesAndData: FC<IAxesAndData> = ({
   areaConstants, 
   dataConstants,
   selectedIndexes,
+  inInterpretationIndexes,
   settings,
 }) => {
+
+  const theme = useTheme();
   
   const {
     graphAreaMargin,
@@ -101,6 +107,8 @@ const AxesAndData: FC<IAxesAndData> = ({
           directionalData={directionalData}
           tooltipData={tooltipData}
           selectedIndexes={selectedIndexes}
+          inInterpretationIndexes={inInterpretationIndexes}
+          dotHighlightedColor={warningColor(theme.palette.mode)}
           dotFillColor='black'
           settings={settings.dots}
         />
@@ -112,6 +120,8 @@ const AxesAndData: FC<IAxesAndData> = ({
           directionalData={directionalData}
           tooltipData={tooltipData}
           selectedIndexes={selectedIndexes}
+          inInterpretationIndexes={inInterpretationIndexes}
+          dotHighlightedColor={warningColor(theme.palette.mode)}
           dotFillColor='white'
           settings={settings.dots}
         />

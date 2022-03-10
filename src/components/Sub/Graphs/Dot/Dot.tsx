@@ -19,6 +19,7 @@ interface IDot {
   showText?: boolean;
   fillColor: string;
   strokeColor: string;
+  strokeWidth?: number;
   confidenceCircle?: PlaneData;
   greatCircle?: PlaneData;
   settings: DotSettings;
@@ -36,6 +37,7 @@ const Dot: FC<IDot> = ({
   showText, 
   fillColor, 
   strokeColor,
+  strokeWidth,
   confidenceCircle,
   greatCircle,
   settings,
@@ -169,6 +171,7 @@ const Dot: FC<IDot> = ({
         style={{
           fill: fillColor, 
           stroke: strokeColor,
+          strokeWidth: strokeWidth || 1,
           cursor: 'pointer'
         }}
         onMouseOver={() => handleOver(id)}
