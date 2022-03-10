@@ -66,7 +66,7 @@ const dataToZijd = (
     rotatedEdges = toReferenceCoordinates(reference, data.metadata, edges).multiplyAll(scaling);
   };
 
-  const pcaLines = createPCALines(rotatedCenterMass, rotatedEdges, {y: 'W, UP', x: 'N, N'}, graphSize);
+  const pcaLines = createPCALines(rotatedCenterMass, rotatedEdges, projection, graphSize);
 
   // tooltip data for each dot on graph
   const tooltipData: Array<TooltipDot> = steps.map((step, index) => {

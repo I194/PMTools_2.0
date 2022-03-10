@@ -1,5 +1,6 @@
 import { PCALines, Projection } from "../../types";
 import Coordinates from "../../classes/Coordinates";
+import axesLabelsByProjection from "./stepByProjection";
 
 const createPCALines = (
   centerMass: Coordinates | null,
@@ -9,58 +10,38 @@ const createPCALines = (
 ) => {
   if (!centerMass || !coordinates) return null;
 
-  const coordsByProjection = {
-    'W, UP': {
-      hor: {
-        x1: centerMass.x + coordinates.x, 
-        y1: centerMass.y + coordinates.y,
-        x2: centerMass.x - coordinates.x,
-        y2: centerMass.y - coordinates.y
-      },
-      ver: {
-        x1: centerMass.x + coordinates.x, 
-        y1: centerMass.z + coordinates.z,
-        x2: centerMass.x - coordinates.x,
-        y2: centerMass.z - coordinates.z
-      }
+  const axesLabels = axesLabelsByProjection(projection);
+  // домножаем на -1 по оси Y, ибо в .svg ось Y отсчитывается сверху вниз, а не снизу вверх, как в декартовых координатах
+  const horX = axesLabels.xAxis[0];
+  const horY = axesLabels.yAxis[0];
+  const verX = axesLabels.xAxis[1];
+  const verY = axesLabels.yAxis[1];
+
+  const coords = {
+    hor: {
+      x1: horX.sign * centerMass[horX.axisName] + coordinates[horX.axisName], 
+      y1: -horY.sign * centerMass[horY.axisName] + coordinates[horY.axisName],
+      x2: horX.sign * centerMass[horX.axisName] - coordinates[horX.axisName], 
+      y2: -horY.sign * centerMass[horY.axisName] - coordinates[horY.axisName],
     },
-    'N, UP': {
-      hor: {
-        x1: centerMass.y + coordinates.y, 
-        y1: centerMass.x + coordinates.x,
-        x2: centerMass.y - coordinates.y,
-        y2: centerMass.x - coordinates.x
-      },
-      ver: {
-        x1: centerMass.y + coordinates.y, 
-        y1: -centerMass.z - coordinates.z,
-        x2: centerMass.y - coordinates.y,
-        y2: -centerMass.z + coordinates.z
-      }
-    },
-    'N, N': {
-      hor: {
-        x1: centerMass.y + coordinates.y, 
-        y1: centerMass.x + coordinates.x,
-        x2: centerMass.y - coordinates.y,
-        y2: centerMass.x - coordinates.x
-      },
-      ver: {
-        x1: -centerMass.z - coordinates.z,
-        y1: centerMass.x + coordinates.x,
-        x2: -centerMass.z + coordinates.z,
-        y2: centerMass.x - coordinates.x
-      }
-    },
+    ver: {
+      x1: verX.sign * centerMass[verX.axisName] + coordinates[verX.axisName],
+      y1: -verY.sign * centerMass[verY.axisName] + coordinates[verY.axisName],
+      x2: verX.sign * centerMass[verX.axisName] - coordinates[verX.axisName],
+      y2: -verY.sign * centerMass[verY.axisName] - coordinates[verY.axisName],
+    }
+  };
+  
+  let pcaLines: PCALines = {
+    horX: [coords.hor.x1 + graphSize, coords.hor.x2 + graphSize],
+    horY: [coords.hor.y1 + graphSize, coords.hor.y2 + graphSize],
+    verX: [coords.ver.x1 + graphSize, coords.ver.x2 + graphSize],
+    verY: [coords.ver.y1 + graphSize, coords.ver.y2 + graphSize],
   };
 
-  const yProj = projection.y;
-
-  const pcaLines: PCALines = {
-    horX: [coordsByProjection[yProj].hor.x1 + graphSize, coordsByProjection[yProj].hor.x2 + graphSize],
-    horY: [coordsByProjection[yProj].hor.y1 + graphSize, coordsByProjection[yProj].hor.y2 + graphSize],
-    verX: [coordsByProjection[yProj].ver.x1 + graphSize, coordsByProjection[yProj].ver.x2 + graphSize],
-    verY: [coordsByProjection[yProj].ver.y1 + graphSize, coordsByProjection[yProj].ver.y2 + graphSize],
+  // это костыль, не знаю почему без него неправильно. Но без него правда неправильно. Пока что.
+  if (projection.y !== 'W, UP') {
+    pcaLines.horX = [coords.hor.x2 + graphSize, coords.hor.x1 + graphSize];
   };
 
   return pcaLines;
