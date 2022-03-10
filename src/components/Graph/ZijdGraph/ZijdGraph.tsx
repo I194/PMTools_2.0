@@ -8,6 +8,7 @@ import dataToZijd from "../../../utils/graphs/formatters/zijd/dataToZijd";
 import { SelectableGraph, GraphSymbols, Unit} from "../../Sub/Graphs";
 import { zijdAreaConstants } from "./ZijdConstants";
 import AxesAndData from "./AxesAndData";
+import projectionByReference from "../../../utils/graphs/formatters/zijd/projectionByReference";
 
 export interface IZijdGraph extends IGraph {
   data: IPmdData;
@@ -19,15 +20,15 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data }) => {
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
   // 2. zoom&pan
 
-  const { reference, currentInterpretation } = useAppSelector(state => state.pcaPageReducer); 
+  const { reference, projection, currentInterpretation } = useAppSelector(state => state.pcaPageReducer); 
   const { menuItems, settings } = usePMDGraphSettings();
   const selectableNodes = useGraphSelectableNodes(graphId, true);
   const selectedIndexes = useGraphSelectedIndexes();
 
   const { viewWidth, viewHeight, ...areaConstants} = useMemo(() => zijdAreaConstants(width, height), [width, height]);
   const { unitLabel, ...dataConstants } = useMemo(
-    () => dataToZijd(data, width / 2, reference, areaConstants.unitCount, currentInterpretation?.rawData),
-  [reference, width, currentInterpretation, data]);
+    () => dataToZijd(data, width / 2, reference, projection, areaConstants.unitCount, currentInterpretation?.rawData),
+  [reference, projection, width, currentInterpretation, data]);
 
   return (
     <>

@@ -54,11 +54,13 @@ const createPCALines = (
     },
   };
 
+  const yProj = projection.y;
+
   const pcaLines: PCALines = {
-    horX: [coordsByProjection[projection].hor.x1 + graphSize, coordsByProjection[projection].hor.x2 + graphSize],
-    horY: [coordsByProjection[projection].hor.y1 + graphSize, coordsByProjection[projection].hor.y2 + graphSize],
-    verX: [coordsByProjection[projection].ver.x1 + graphSize, coordsByProjection[projection].ver.x2 + graphSize],
-    verY: [coordsByProjection[projection].ver.y1 + graphSize, coordsByProjection[projection].ver.y2 + graphSize],
+    horX: [coordsByProjection[yProj].hor.x1 + graphSize, coordsByProjection[yProj].hor.x2 + graphSize],
+    horY: [coordsByProjection[yProj].hor.y1 + graphSize, coordsByProjection[yProj].hor.y2 + graphSize],
+    verX: [coordsByProjection[yProj].ver.x1 + graphSize, coordsByProjection[yProj].ver.x2 + graphSize],
+    verY: [coordsByProjection[yProj].ver.y1 + graphSize, coordsByProjection[yProj].ver.y2 + graphSize],
   };
 
   return pcaLines;

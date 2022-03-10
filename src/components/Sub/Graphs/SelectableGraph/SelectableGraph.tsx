@@ -6,6 +6,7 @@ import ExportButton from "../Buttons/ExportButton/ExportButton";
 import { TMenuItem } from "../../../../utils/graphs/types";
 import { useAppDispatch } from "../../../../services/store/hooks";
 import { setSelectedStepsIDs } from "../../../../services/reducers/pcaPage";
+import ProjectionSelect from "../Buttons/ProjectionSelect/ProjectionSelect";
 
 interface ISelectableGraph {
   graphId: string;
@@ -53,6 +54,10 @@ const SelectableGraph: FC<ISelectableGraph> = ({
   return (
     <>
       <ContextMenu items={menuItems}>
+        {
+          graphId === 'zijd' && 
+          <ProjectionSelect />
+        }
         <ExportButton graphId={ID} />
         <svg
           xmlns="http://www.w3.org/2000/svg" 

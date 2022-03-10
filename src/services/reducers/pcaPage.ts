@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IPmdData, IDirData } from "../../utils/GlobalTypes";
 import { RawStatisticsPCA, StatisitcsInterpretation } from "../../utils/GlobalTypes";
-import { Reference, StatisticsModePCA } from "../../utils/graphs/types";
-import { filesToData } from "../axios/filesAndData";
+import { Projection, Reference, StatisticsModePCA } from "../../utils/graphs/types";
 
 interface IInitialState {
   currentFile: IPmdData | null;
   reference: Reference;
+  projection: Projection;
   selectedStepsIDs: Array<number> | null;
   statisticsMode: StatisticsModePCA;
   currentInterpretation: StatisitcsInterpretation | null;
@@ -19,6 +19,7 @@ interface IInitialState {
 const initialState: IInitialState = {
   currentFile: null,
   reference: 'geographic',
+  projection: {y: 'W, UP', x: 'N, N'},
   selectedStepsIDs: null,
   statisticsMode: null,
   currentInterpretation: null,
@@ -37,6 +38,9 @@ const pcaPage = createSlice({
     },
     setReference (state, action) {
       state.reference = action.payload;
+    },
+    setProjection (state, action) {
+      state.projection = action.payload;
     },
     setSelectedStepsIDs (state, action) {
       state.selectedStepsIDs = action.payload;
@@ -90,6 +94,7 @@ const pcaPage = createSlice({
 export const { 
   setCurrentFile,
   setReference,
+  setProjection,
   setSelectedStepsIDs,
   setStatisticsMode,
   showStepsInput,

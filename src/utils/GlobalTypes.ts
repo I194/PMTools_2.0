@@ -14,7 +14,22 @@ export type PMDGraph = React.FC<IZijdGraph> | React.FC<IStereoGraph> | React.FC<
 
 interface IObjectKeys {
   [key: string | number | symbol]: any;
-}
+};
+
+export type PMDStep = {
+  step: string;
+  x: number;
+  y: number;
+  z: number;
+  mag: number;
+  Dgeo: number;
+  Igeo: number;
+  Dstrat: number;
+  Istrat: number;
+  a95: number;
+  comment: string;
+  demagType: 'thermal' | 'alternating field' | undefined;
+};
 
 export interface IPmdData extends IObjectKeys {
   metadata: {
@@ -25,20 +40,7 @@ export interface IPmdData extends IObjectKeys {
     d: number; // bedding dip
     v: number; // volume
   };
-  steps: {
-    step: string;
-    x: number;
-    y: number;
-    z: number;
-    mag: number;
-    Dgeo: number;
-    Igeo: number;
-    Dstrat: number;
-    Istrat: number;
-    a95: number;
-    comment: string;
-    demagType: 'thermal' | 'alternating field' | undefined;
-  }[];
+  steps: Array<PMDStep>;
   format: string;
   created: string;
 }

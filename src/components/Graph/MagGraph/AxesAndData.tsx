@@ -81,7 +81,6 @@ const AxesAndData: FC<IAxesAndData> = ({
           graphId={graphId}
           type='x'
           name={axisNameX}
-          mirrorNamePosition={{x: -24, y: zeroY + 5}} 
           zero={zeroY}
           length={width}
           unit={unitX}
@@ -96,7 +95,7 @@ const AxesAndData: FC<IAxesAndData> = ({
           type='y'
           name='M/Mmax'
           mirrorName={`Mmax = ${maxMAG.toExponential(2).toUpperCase()} A/m`}
-          mirrorNamePosition={{x: zeroX + 80, y: -10}} 
+          mirrorNamePosition={{x: zeroX + width / 2, y: -10}} 
           zero={zeroX}
           length={height}
           unit={unitY}

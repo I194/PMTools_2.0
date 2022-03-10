@@ -1,4 +1,6 @@
 import React, { FC } from "react";
+import { useAppSelector } from "../../../services/store/hooks";
+import projectionByReference from "../../../utils/graphs/formatters/zijd/projectionByReference";
 import { GraphSettings, PCALines, TooltipDot } from "../../../utils/graphs/types";
 import { Axis, Data } from "../../Sub/Graphs";
 
@@ -41,6 +43,9 @@ const AxesAndData: FC<IAxesAndData> = ({
     zeroY,
   } = areaConstants;
 
+  const { reference, projection } = useAppSelector(state => state.pcaPageReducer);
+  const axesLabels = projectionByReference(projection, reference);
+
   const {
     horizontalProjectionData,
     verticalProjectionData,
@@ -49,7 +54,7 @@ const AxesAndData: FC<IAxesAndData> = ({
     labels,
     pcaLines,
   } = dataConstants;
-  console.log(pcaLines);
+
   return (
     <g 
       id={`${graphId}-axes-and-data`}
@@ -59,7 +64,8 @@ const AxesAndData: FC<IAxesAndData> = ({
         <Axis 
           graphId={graphId}
           type='x'
-          name='N, N'
+          name={axesLabels.x}
+          namePosition={{x: width + 20, y: zeroY}}
           zero={zeroY}
           length={width}
           unit={unit}
@@ -70,8 +76,7 @@ const AxesAndData: FC<IAxesAndData> = ({
         <Axis 
           graphId={graphId}
           type='y'
-          name='W, UP'
-          namePosition={{x: zeroX - 20, y: -10}}
+          name={axesLabels.y}
           zero={zeroX}
           length={height}
           unit={unit}

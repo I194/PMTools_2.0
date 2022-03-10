@@ -1,15 +1,17 @@
 import { IPmdData } from "../../../GlobalTypes";
 import Coordinates from "../../classes/Coordinates";
-import { PCALines, Reference, StatisticsModePCA, TooltipDot } from "../../types";
+import { PCALines, Projection, Reference, StatisticsModePCA, TooltipDot } from "../../types";
 import { RawStatisticsPCA } from "../../../GlobalTypes";
 import toReferenceCoordinates from "../toReferenceCoordinates";
 import createPCALines from "./pcaToZijd";
 import Graphs from "../../../../pages/PCAPage/Graphs";
+import axesLabelsByProjection from "./stepByProjection";
 
 const dataToZijd = (
   data: IPmdData, 
   graphSize: number, 
   reference: Reference, 
+  projection: Projection,
   unitCount: number,
   statistics?: RawStatisticsPCA,
 ) => {
@@ -36,14 +38,16 @@ const dataToZijd = (
 
   adjustedCoords.forEach((step) => {
     // depends on selected projection system
-    const horX = step.x + graphSize;
-    const horY = step.y + graphSize;
-    const verX = step.x + graphSize;
-    const verZ = step.z + graphSize;
+    const axesLabels = axesLabelsByProjection(projection);
+    // домножаем на -1 по оси Y, ибо в .svg ось Y отсчитывается сверху вниз, а не снизу вверх, как в декартовых координатах
+    const horX = step[axesLabels.xAxis[0].axisName] * axesLabels.xAxis[0].sign + graphSize;
+    const horY = step[axesLabels.yAxis[0].axisName] * -axesLabels.yAxis[0].sign + graphSize;
+    const verX = step[axesLabels.xAxis[1].axisName] * axesLabels.xAxis[1].sign + graphSize;
+    const verY = step[axesLabels.yAxis[1].axisName] * -axesLabels.yAxis[1].sign + graphSize;
     const direction = step.toDirection();
 
     horizontalProjectionData.push([horX, horY]);
-    verticalProjectionData.push([verX, verZ]);
+    verticalProjectionData.push([verX, verY]);
     directionalData.push([direction.declination, direction.inclination]);
   });
 
@@ -62,7 +66,7 @@ const dataToZijd = (
     rotatedEdges = toReferenceCoordinates(reference, data.metadata, edges).multiplyAll(scaling);
   };
 
-  const pcaLines = createPCALines(rotatedCenterMass, rotatedEdges, 'W, UP', graphSize);
+  const pcaLines = createPCALines(rotatedCenterMass, rotatedEdges, {y: 'W, UP', x: 'N, N'}, graphSize);
 
   // tooltip data for each dot on graph
   const tooltipData: Array<TooltipDot> = steps.map((step, index) => {

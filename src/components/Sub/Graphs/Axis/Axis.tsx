@@ -52,9 +52,9 @@ const Axis: FC<IAxis> = ({
       y2: zero,
       text: {
         x: length + 10,
-        y: zero + 5,
-        xMirror: -20,
-        yMirror: zero + 4
+        y: zero,
+        xMirror: -10,
+        yMirror: zero
       }
     },
     y: {
@@ -63,10 +63,10 @@ const Axis: FC<IAxis> = ({
       x2: zero,
       y2: length,
       text: {
-        x: zero - 6,
+        x: zero,
         y: -10,
-        xMirror: zero - 6,
-        yMirror: length + 20
+        xMirror: zero,
+        yMirror: length + 10
       }
     }
   }
@@ -111,6 +111,8 @@ const Axis: FC<IAxis> = ({
         id={`${graphId}-${type}-name`} 
         x={ namePosition ? namePosition.x : axisPos[type].text.x } 
         y={ namePosition ? namePosition.y : axisPos[type].text.y }
+        textAnchor='middle' // Horizontal alignment
+        alignmentBaseline="middle" // Vertical alignment
         fontSize={'0.9vw'}
       >
         {name}
@@ -121,6 +123,8 @@ const Axis: FC<IAxis> = ({
               id={`${graphId}-${type}-name`} 
               x={ mirrorNamePosition ? mirrorNamePosition.x : axisPos[type].text.xMirror } 
               y={ mirrorNamePosition ? mirrorNamePosition.y : axisPos[type].text.yMirror }
+              textAnchor='middle' // Horizontal alignment
+              alignmentBaseline="middle" // Vertical alignment
               fontSize={'0.9vw'}
             >
               {mirrorName}

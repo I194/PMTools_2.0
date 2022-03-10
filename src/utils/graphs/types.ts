@@ -1,6 +1,6 @@
 export type Reference = 'specimen' | 'geographic' | 'stratigraphic';
 
-export type Projection = 'W, UP' | 'N, UP' | 'N, N';
+export type Projection = {y: 'W, UP', x: 'N, N'} | {y: 'N, UP', x: 'E, E'} | {y: 'N, N', x: 'E, UP'};
 
 export type StatisticsModePCA = 'pca' | 'pca0' | 'gc' | 'gcn' | null;
 

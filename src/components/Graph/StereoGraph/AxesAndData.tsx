@@ -23,7 +23,7 @@ interface IAxesAndData {
   };
   selectedIndexes: Array<number>;
   settings: GraphSettings;
-}
+};
 
 const AxesAndData: FC<IAxesAndData> = ({ 
   graphId, width, height,
@@ -71,7 +71,6 @@ const AxesAndData: FC<IAxesAndData> = ({
           type='x'
           name='E'
           mirrorName='W'
-          mirrorNamePosition={{x: -24, y: zeroY + 5}} 
           zero={zeroY}
           length={width}
           unit={unit}
@@ -85,7 +84,6 @@ const AxesAndData: FC<IAxesAndData> = ({
           type='y'
           name='N'
           mirrorName='S'
-          mirrorNamePosition={{x: zeroX - 4.5, y: height + 20}} 
           zero={zeroX}
           length={height}
           unit={unit}
