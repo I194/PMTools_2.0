@@ -8,6 +8,7 @@ interface IInitialState {
   reference: Reference;
   projection: Projection;
   selectedStepsIDs: Array<number> | null;
+  hiddenStepsIDs: Array<number>;
   statisticsMode: StatisticsModePCA;
   currentInterpretation: StatisitcsInterpretation | null;
   currentFileInterpretations: Array<StatisitcsInterpretation>;
@@ -21,6 +22,7 @@ const initialState: IInitialState = {
   reference: 'geographic',
   projection: {y: 'W, UP', x: 'N, N'},
   selectedStepsIDs: null,
+  hiddenStepsIDs: [],
   statisticsMode: null,
   currentInterpretation: null,
   currentFileInterpretations: [],
@@ -44,6 +46,9 @@ const pcaPage = createSlice({
     },
     setSelectedStepsIDs (state, action) {
       state.selectedStepsIDs = action.payload;
+    },
+    setHiddenStepsIDs (state, action) {
+      state.hiddenStepsIDs = action.payload;
     },
     setStatisticsMode (state, action) {
       state.statisticsMode = action.payload;
@@ -96,6 +101,7 @@ export const {
   setReference,
   setProjection,
   setSelectedStepsIDs,
+  setHiddenStepsIDs,
   setStatisticsMode,
   showStepsInput,
   addInterpretation,

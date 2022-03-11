@@ -3,9 +3,13 @@ import Coordinates from "../../classes/Coordinates";
 import { Reference, TooltipDot } from "../../types";
 import toReferenceCoordinates from "../toReferenceCoordinates";
 
-const dataToMag = (data: IPmdData, graphSize: number) => {
+const dataToMag = (
+  data: IPmdData, 
+  graphSize: number,
+  hiddenStepsIDs: Array<number>,
+) => {
 
-  const steps = data.steps;
+  const steps = data.steps.filter((step, index) => !hiddenStepsIDs.includes(index + 1));
   
   const labels = steps.map((step) => step.step);
 

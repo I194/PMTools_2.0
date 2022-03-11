@@ -20,15 +20,15 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
   // 2. zoom&pan
 
-  const { reference, currentInterpretation } = useAppSelector(state => state.pcaPageReducer); 
+  const { reference, currentInterpretation, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
   const { menuItems, settings } = usePMDGraphSettings();
   const selectableNodes = useGraphSelectableNodes(graphId, false); 
   const selectedIndexes = useGraphSelectedIndexes();
 
   const {viewHeight, viewWidth, ...areaConstants} = stereoAreaConstants(width, height);
   const dataConstants = useMemo(() => 
-    dataToStereoPMD(data, width / 2, reference, currentInterpretation?.rawData),
-  [reference, width, currentInterpretation, data]);
+    dataToStereoPMD(data, width / 2, reference, hiddenStepsIDs, currentInterpretation?.rawData),
+  [reference, width, currentInterpretation, data, hiddenStepsIDs]);
 
   const inInterpretationIndexes = getInterpretationIndexes(currentInterpretation, data);
 

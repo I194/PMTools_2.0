@@ -11,9 +11,10 @@ const dataToStereoPMD = (
   data: IPmdData, 
   graphSize: number, 
   reference: Reference,
+  hiddenStepsIDs: Array<number>,
   statistics?: RawStatisticsPCA,
 ) => {
-  const steps = data.steps;
+  const steps = data.steps.filter((step, index) => !hiddenStepsIDs.includes(index + 1));
 
   // annotations for dots ('id' field added right in the Data.tsx as dot index)
   const labels = steps.map((step) => step.step);

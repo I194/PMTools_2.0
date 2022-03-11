@@ -21,7 +21,7 @@ const PCAPage: FC = ({}) => {
 
   const files = useAppSelector(state => state.filesReducer.treatmentFiles);
   const { treatmentData, currentDataPMDid } = useAppSelector(state => state.parsedDataReducer);
-  const { statisticsMode, selectedStepsIDs, currentFileInterpretations } = useAppSelector(state => state.pcaPageReducer);
+  const { statisticsMode, selectedStepsIDs, hiddenStepsIDs, currentFileInterpretations } = useAppSelector(state => state.pcaPageReducer);
 
   const [dataToShow, setDataToShow] = useState<IPmdData | null>(null);
 
@@ -32,9 +32,14 @@ const PCAPage: FC = ({}) => {
   useEffect(() => {
     if (treatmentData && treatmentData.length > 0) {
       const pmdID = currentDataPMDid || 0;
+      // const visibleData = {
+      //   ...treatmentData[pmdID],
+      //   steps: treatmentData[pmdID].steps.filter((step, index) => !hiddenStepsIDs.includes(index + 1))
+      // };
+      // setDataToShow(visibleData);
       setDataToShow(treatmentData[pmdID]);
     } else setDataToShow(null);
-  }, [treatmentData, currentDataPMDid]);
+  }, [treatmentData, currentDataPMDid, hiddenStepsIDs]);
 
   useEffect(() => {
     if (statisticsMode && !selectedStepsIDs) dispatch(showStepsInput(true));
@@ -45,6 +50,15 @@ const PCAPage: FC = ({}) => {
       dispatch(setStatisticsMode(null));
     } else dispatch(updateCurrentInterpretation());
   }, [statisticsMode, selectedStepsIDs, dataToShow]);
+
+  // useEffect(() => {
+  //   if (dataToShow) {
+  //     const visibleData = {
+  //       ...dataToShow,
+  //       steps: dataToShow.steps.filter((step, index) => !hiddenStepsIDs.includes(index))
+  //     };
+  //   }
+  // }, [dataToShow, hiddenStepsIDs]);
 
   return (
     <>

@@ -1,13 +1,15 @@
 import React, { FC, useEffect, useState } from "react";
 import styles from './DataTablePMD.module.scss';
 import { IPmdData } from "../../../../utils/GlobalTypes";
-import { DataGrid, GridColDef, GridSelectionModel, GridValueFormatterParams } from '@mui/x-data-grid';
+import { DataGrid, GridActionsCellItem, GridColDef, GridColumnHeaderParams, GridColumns, GridSelectionModel, GridValueFormatterParams } from '@mui/x-data-grid';
 import DataTablePMDSkeleton from './DataTablePMDSkeleton';
 import { DataGridPMDRow } from "../../../../utils/GlobalTypes";
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
-import { setSelectedStepsIDs } from "../../../../services/reducers/pcaPage";
+import { setSelectedStepsIDs, setHiddenStepsIDs } from "../../../../services/reducers/pcaPage";
 import { GetDataTableBaseStyle } from "../styleConstants";
 import PMDInputDataTableToolbar from "../../../Sub/DataTable/Toolbar/PMDInputDataTableToolbar";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 interface IDataTablePMD {
   data: IPmdData | null;
@@ -17,7 +19,7 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
 
   const dispatch = useAppDispatch();
 
-  const { selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer);
+  const { selectedStepsIDs, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer);
   // selectionModel is array of ID's of rows
   const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
   const [selectedRows, setSelectedRows] = useState<Array<DataGridPMDRow>>([]);
@@ -27,8 +29,43 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
     else setSelectionModel([]); 
   }, [selectedStepsIDs]);
 
-  const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', type: 'string', width: 40 },
+  const toggleRowVisibility = (id: number) => (event: any) => {
+    event.stopPropagation();
+    const newHiddenStepsIDs = hiddenStepsIDs.includes(id) 
+      ? hiddenStepsIDs.filter(hiddenId => hiddenId !== id) 
+      : [...hiddenStepsIDs, id];
+    dispatch(setHiddenStepsIDs(newHiddenStepsIDs))
+  };
+
+  const toggleAllRowsVisibility = (event: any) => {
+    dispatch(setHiddenStepsIDs([]));
+  };
+
+  const columns: GridColumns = [
+    {
+      field: 'actions',
+      type: 'actions',
+      width: 40,
+      renderHeader: (params: GridColumnHeaderParams) => (
+        <GridActionsCellItem
+          icon={<VisibilityIcon />}
+          label="Hide all steps"
+          onClick={toggleAllRowsVisibility}
+          color="inherit"
+        />
+      ),
+      getActions: ({ id }) => {
+        return [
+          <GridActionsCellItem
+            icon={hiddenStepsIDs.includes(id as number) ? <VisibilityOffIcon /> : <VisibilityIcon />} 
+            label="Toggle step visibility"
+            onClick={toggleRowVisibility(id as number)}
+            color="inherit"
+          />,
+        ];
+      },
+    },
+    { field: 'id', headerName: 'ID', type: 'number', width: 40 },
     { field: 'step', headerName: 'Step', type: 'string', width: 70 },
     { field: 'Dgeo', headerName: 'Dgeo', type: 'string', width: 70 },
     { field: 'Igeo', headerName: 'Igeo', type: 'number', width: 70 },

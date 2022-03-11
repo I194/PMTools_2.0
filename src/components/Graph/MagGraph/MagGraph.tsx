@@ -20,12 +20,12 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
   // 2. zoom&pan
 
-  const { currentInterpretation } = useAppSelector(state => state.pcaPageReducer); 
+  const { currentInterpretation, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
   const { menuItems, settings } = usePMDGraphSettings();
   const selectableNodes = useGraphSelectableNodes(graphId, false);
   const selectedIndexes = useGraphSelectedIndexes();
 
-  const dataConstants = useMemo(() => dataToMag(data, width), [width, data]);
+  const dataConstants = useMemo(() => dataToMag(data, width, hiddenStepsIDs), [width, data, hiddenStepsIDs]);
   const {viewHeight, viewWidth, ...areaConstants} = magAreaConstants(width, height, dataConstants.stepLabels);
   const inInterpretationIndexes = getInterpretationIndexes(currentInterpretation, data);
 
