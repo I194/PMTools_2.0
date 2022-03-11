@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton';
 
 interface IInputSelect {
   placeholder: string;
-  leftIconButton: {icon: ReactNode, onClick: () => void, disabled?: boolean};
+  leftIconButton?: {icon: ReactNode, onClick: () => void, disabled?: boolean};
   rightIconButtons: Array<{icon: ReactNode, onClick: () => void, disabled?: boolean}>;
   inputText: string;
   setInputText: React.Dispatch<React.SetStateAction<string>>;
@@ -43,16 +43,19 @@ const InputSelect: FC<IInputSelect> = ({ placeholder, leftIconButton, rightIconB
         height: '56px',
         boxSizing: 'border-box'
       }}
-    >
-      <IconButton 
-        onClick={leftIconButton.onClick}
-        color='primary'
-        disabled={leftIconButton.disabled}
-        sx={{ p: '10px' }} 
-        aria-label="menu"
-      >
-        { leftIconButton.icon }
-      </IconButton>
+    > 
+      {
+        leftIconButton && 
+        <IconButton 
+          onClick={leftIconButton.onClick}
+          color='primary'
+          disabled={leftIconButton.disabled}
+          sx={{ p: '10px' }} 
+          aria-label="menu"
+        >
+          { leftIconButton.icon }
+        </IconButton>
+      }
       <InputBase
         sx={{ 
           ml: 1,

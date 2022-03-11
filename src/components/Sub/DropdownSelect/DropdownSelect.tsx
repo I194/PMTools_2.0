@@ -4,14 +4,23 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-interface IDropdownSelect {
+export interface IDropdownSelect {
   label: string;
   options: Array<string>;
   onOptionSelect: (option: string) => void;
   defaultValue?: string;
-}
+  minWidth?: string;
+  m?: string;
+};
 
-const DropdownSelect: FC<IDropdownSelect> = ({ label, options, onOptionSelect, defaultValue }) => {
+const DropdownSelect: FC<IDropdownSelect> = ({ 
+  label, 
+  options, 
+  onOptionSelect, 
+  defaultValue, 
+  minWidth,
+  m,
+}) => {
 
   const [selectedOption, setSelectedOption] = useState(defaultValue || '');
   const [open, setOpen] = React.useState(false);
@@ -23,7 +32,7 @@ const DropdownSelect: FC<IDropdownSelect> = ({ label, options, onOptionSelect, d
   };
 
   return (
-    <FormControl variant="standard" sx={{ minWidth: 200, ml: '16px' }}>
+    <FormControl variant="standard" sx={{ minWidth: minWidth || '200px', m: m || '0 0 0 16px' }}>
       <InputLabel>{ label }</InputLabel>
       <Select
         value={selectedOption}

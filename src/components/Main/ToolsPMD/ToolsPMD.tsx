@@ -15,6 +15,7 @@ import StatModeButton from './StatModeButton';
 import { setCurrentPMDid } from '../../../services/reducers/parsedData';
 import InputApply from '../../Sub/InputApply/InputApply';
 import parseIDsInput from '../../../utils/parsers/parseIDsInput';
+import DropdownSelectWithButtons from '../../Sub/DropdownSelect/DropdownSelectWithButtons';
 
 const labelToReference = (label: string) => {
   if (label === 'Образец') return 'specimen';
@@ -114,11 +115,13 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
 
   return (
     <ToolsPMDSkeleton>
-      <DropdownSelect 
+      <DropdownSelectWithButtons 
         label={'Текущий файл'}
         options={allDataPMD.map(pmd => pmd.metadata.name)}
         defaultValue={allDataPMD[0].metadata.name}
         onOptionSelect={handleFileSelect}
+        minWidth={'120px'}
+        useArrowListeners={true}
       />
       <DropdownSelect 
         label={'Система координат'}
