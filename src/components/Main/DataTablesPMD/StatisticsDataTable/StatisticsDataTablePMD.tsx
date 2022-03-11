@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import styles from './StatisticsDataTablePMD.module.scss';
 import { useTheme } from '@mui/material/styles';
-import { DataGrid, GridActionsCellItem, GridColumns, GridColumnHeaderParams } from '@mui/x-data-grid';
+import { DataGrid, GridActionsCellItem, GridColumns, GridColumnHeaderParams, GridValueFormatterParams } from '@mui/x-data-grid';
 import StatisticsDataTablePMDSkeleton from './StatisticsDataTablePMDSkeleton';
 import { GetDataTableBaseStyle } from "../styleConstants";
 import { DataGridDIRRow, StatisitcsInterpretation } from "../../../../utils/GlobalTypes";
@@ -50,11 +50,21 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
     { field: 'code', headerName: 'Code', type: 'string', flex: 1 },
     { field: 'stepRange', headerName: 'StepRange', type: 'string', width: 90 },
     { field: 'stepCount', headerName: 'N', type: 'number', minWidth: 30, width: 30 },
-    { field: 'Dgeo', headerName: 'Dgeo', type: 'number', flex: 1 },
-    { field: 'Igeo', headerName: 'Igeo', type: 'number', flex: 1 },
-    { field: 'Dstrat', headerName: 'Dstrat', type: 'number', flex: 1 },
-    { field: 'Istrat', headerName: 'Istrat', type: 'number', flex: 1 },
-    { field: 'confidenceRadius', headerName: 'MAD', type: 'string', flex: 1 },
+    { field: 'Dgeo', headerName: 'Dgeo', type: 'number', flex: 1,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
+    { field: 'Igeo', headerName: 'Igeo', type: 'number', flex: 1,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
+    { field: 'Dstrat', headerName: 'Dstrat', type: 'number', flex: 1,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
+    { field: 'Istrat', headerName: 'Istrat', type: 'number', flex: 1,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
+    { field: 'confidenceRadius', headerName: 'MAD', type: 'string', flex: 1,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
     {
       field: 'actions',
       type: 'actions',

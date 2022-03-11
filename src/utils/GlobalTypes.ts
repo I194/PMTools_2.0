@@ -96,12 +96,12 @@ export type RawStatisticsPCA = {
 export type DataGridPMDRow = {
   id: number;
   step: string;
-  Dgeo: number;
-  Igeo: number;
-  Dstrat: number;
-  Istrat: number;
+  Dgeo: string;
+  Igeo: string;
+  Dstrat: string;
+  Istrat: string;
   mag: string;
-  a95: number;
+  a95: string;
   comment: string;
 };
 

@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import styles from './DataTablePMD.module.scss';
 import { IPmdData } from "../../../../utils/GlobalTypes";
-import { DataGrid, GridColDef, GridSelectionModel } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridSelectionModel, GridValueFormatterParams } from '@mui/x-data-grid';
 import DataTablePMDSkeleton from './DataTablePMDSkeleton';
 import { DataGridPMDRow } from "../../../../utils/GlobalTypes";
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
@@ -30,11 +30,11 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', type: 'string', width: 40 },
     { field: 'step', headerName: 'Step', type: 'string', width: 70 },
-    { field: 'Dgeo', headerName: 'Dgeo', type: 'number', width: 70 },
+    { field: 'Dgeo', headerName: 'Dgeo', type: 'string', width: 70 },
     { field: 'Igeo', headerName: 'Igeo', type: 'number', width: 70 },
     { field: 'Dstrat', headerName: 'Dstrat', type: 'number', width: 70 },
     { field: 'Istrat', headerName: 'Istrat', type: 'number', width: 70 },
-    { field: 'mag', headerName: 'MAG', type: 'number', width: 70 },
+    { field: 'mag', headerName: 'MAG', type: 'string', width: 90},
     { field: 'a95', headerName: 'a95', type: 'number', width: 50 },
     { field: 'comment', headerName: 'Comment', type: 'string', width: 200 }
   ];
@@ -52,12 +52,12 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
     return {
       id: index + 1,
       step,
-      Dgeo,
-      Igeo,
-      Dstrat,
-      Istrat,
+      Dgeo: Dgeo.toFixed(1),
+      Igeo: Igeo.toFixed(1),
+      Dstrat: Dstrat.toFixed(1),
+      Istrat: Istrat.toFixed(1),
       mag: mag.toExponential(2).toLocaleUpperCase(),
-      a95,
+      a95: a95.toFixed(1),
       comment
     };
   });
