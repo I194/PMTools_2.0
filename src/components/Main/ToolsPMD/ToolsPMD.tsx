@@ -77,7 +77,6 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   const handleStatisticsModeSelect = useCallback((e) => {
     const key = (e.code as string);
     const { ctrlKey, shiftKey, altKey } = e; 
-    console.log(e)
     if ((shiftKey || altKey) && key === 'KeyD') {
       e.preventDefault();
       dispatch(setStatisticsMode('pca'))
@@ -141,6 +140,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
       <ModalWrapper
         open={allFilesStatOpen}
         setOpen={setAllFilesStatOpen}
+        size={{width: '60vw', height: '60vh'}}
       >
         <OutputDataTablePMD />
       </ModalWrapper>

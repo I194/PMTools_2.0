@@ -32,14 +32,7 @@ const PCAPage: FC = ({}) => {
   useEffect(() => {
     if (treatmentData && treatmentData.length > 0) {
       const pmdID = currentDataPMDid || 0;
-      const modifiedTreatmentData: IPmdData = {
-        ...treatmentData[pmdID],
-        metadata: {
-          ...treatmentData[pmdID].metadata,
-          b: 90 - treatmentData[pmdID].metadata.b // core hade is measured, we use the plunge (90 - hade)
-        }
-      };
-      setDataToShow(modifiedTreatmentData);
+      setDataToShow(treatmentData[pmdID]);
     } else setDataToShow(null);
   }, [treatmentData, currentDataPMDid]);
 

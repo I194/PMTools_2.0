@@ -27,6 +27,7 @@ const parsedDataSlice = createSlice({
   initialState,
   reducers: {
     setTreatmentData (state, action) {
+      console.log(action.payload);
       state.treatmentData = action.payload;
     },
     setDirStatData (state, action) {
@@ -46,7 +47,16 @@ const parsedDataSlice = createSlice({
     });
     builder.addCase(filesToData.fulfilled, (state, action) => {
       if (action.payload.format === 'pmd') {
-        state.treatmentData = action.payload.data as IPmdData[];
+        // core hade is measured, we use the plunge (90 - hade)
+        state.treatmentData = (action.payload.data as IPmdData[]).map((pmdData) => {
+          return {
+            ...pmdData,
+            metadata: {
+              ...pmdData.metadata,
+              b: 90 - pmdData.metadata.b
+            }
+          }
+        });
       };
       if (action.payload.format === 'dir') {
         state.dirStatData = action.payload.data as IDirData[];

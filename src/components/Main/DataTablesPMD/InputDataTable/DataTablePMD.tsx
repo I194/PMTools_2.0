@@ -56,7 +56,7 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
       Igeo: Igeo.toFixed(1),
       Dstrat: Dstrat.toFixed(1),
       Istrat: Istrat.toFixed(1),
-      mag: mag.toExponential(2).toLocaleUpperCase(),
+      mag: mag.toExponential(2).toUpperCase(),
       a95: a95.toFixed(1),
       comment
     };

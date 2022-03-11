@@ -6,7 +6,7 @@ import { styled } from '@mui/material/styles';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import Draggable from 'react-draggable';
 
-const style = {
+let style = {
   position: 'absolute' as 'absolute',
   display: 'flex',
   justifyContent: 'center',
@@ -15,8 +15,6 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '60vw',
-  height: '60vh',
   bgcolor: 'background.paper',
   borderRadius: '6px',
   boxShadow: 24,
@@ -27,9 +25,10 @@ interface IModal {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onClose?: () => void;
-  size?: {width: string, height: string};
-  position?: {left: string, top: string};
+  size?: {width?: string, height?: string};
+  position?: {left?: string, top?: string};
   isDraggable?: boolean;
+  showBottomClose?: boolean;
 };
 
 const ModalWrapper: FC<IModal> = ({ 
@@ -39,6 +38,7 @@ const ModalWrapper: FC<IModal> = ({
   size, 
   position, 
   isDraggable,
+  showBottomClose,
   children
 }) => {
 
@@ -56,10 +56,10 @@ const ModalWrapper: FC<IModal> = ({
       aria-describedby="keep-mounted-modal-description"
       disablePortal={isDraggable}
       hideBackdrop={isDraggable}
-      sx={{
+      sx={isDraggable ? {
         ...size,
         ...position,
-      }}
+      }: {}}
       
     >
       <Box 
@@ -81,7 +81,10 @@ const ModalWrapper: FC<IModal> = ({
           <CloseOutlinedIcon />
         </IconButton>
         { children }
-        <Button variant='outlined' onClick={handleClose} sx={{mt: 2}}>Закрыть</Button>
+        {
+          showBottomClose && 
+          <Button variant='outlined' onClick={handleClose} sx={{mt: 2}}>Закрыть</Button>
+        }
       </Box>
     </Modal>
   )
