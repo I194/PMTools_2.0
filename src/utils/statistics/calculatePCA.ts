@@ -52,10 +52,11 @@ const calculatePCA = (
   let vectorTAU1 = new Coordinates(...eig.v1); // eigenvector for directions
   let vectorTAU3 = new Coordinates(...eig.v3); // eigenvector for planes
   let MAD = 0;
-  let eigenVectorCoordinates = type === 'directions' ? vectorTAU1 : vectorTAU3;
 
   if (directionVector.dot(vectorTAU1) < 0) vectorTAU1 = vectorTAU1.reflect();
   if (vectorTAU3.z > 0) vectorTAU3 = vectorTAU3.reflect();
+
+  let eigenVectorCoordinates = type === 'directions' ? vectorTAU1 : vectorTAU3;
 
   if (type === 'directions') {
     // Calculation of maximum angle of deviation

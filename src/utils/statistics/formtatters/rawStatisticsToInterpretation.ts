@@ -17,6 +17,8 @@ const rawStatisticsToInterpretation = (
   const stepRange: string = `${selectedSteps[0].step}-${selectedSteps[selectedSteps.length - 1].step}`;
   const stepCount: number = selectedSteps.length;
 
+  console.log(statistics.component.edges)
+
   const [Dgeo, Igeo] = toReferenceCoordinates(
     'geographic', metadata, statistics.component.edges
   ).toDirection().toArray();
