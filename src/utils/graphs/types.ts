@@ -68,3 +68,8 @@ export type GraphSettings = {
   area: GraphAreaSettings;
   dots: DotSettings;
 };
+
+export type Pan = {
+  left: number;
+  top: number;
+};

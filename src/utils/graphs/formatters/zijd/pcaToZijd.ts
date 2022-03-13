@@ -17,6 +17,9 @@ const createPCALines = (
   const verX = axesLabels.xAxis[1];
   const verY = axesLabels.yAxis[1];
 
+  // растягиваем по всему графику
+  // coordinates = coordinates.multiplyAll(10);
+
   const coords = {
     hor: {
       x1: horX.sign * centerMass[horX.axisName] + coordinates[horX.axisName], 
@@ -43,6 +46,9 @@ const createPCALines = (
   if (projection.y !== 'W, UP') {
     pcaLines.horX = [coords.hor.x2 + graphSize, coords.hor.x1 + graphSize];
   };
+
+  // pcaLines.horX = pcaLines.horX.map(edges => edges / 10 ) as [number, number];
+  // pcaLines.horY = pcaLines.horY.map(edges => edges / 10 ) as [number, number];
 
   return pcaLines;
 };

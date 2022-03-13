@@ -10,6 +10,7 @@ import axesLabelsByProjection from "./stepByProjection";
 const dataToZijd = (
   data: IPmdData, 
   graphSize: number, 
+  zoom: number,
   reference: Reference, 
   projection: Projection,
   unitCount: number,
@@ -30,7 +31,7 @@ const dataToZijd = (
     return inReferenceCoords;
   });
 
-  const maxCoord = Math.max(...rotatedCoords.map((step) => Math.max(Math.abs(step.x), Math.abs(step.y), Math.abs(step.z))));
+  const maxCoord = Math.max(...rotatedCoords.map((step) => Math.max(Math.abs(step.x), Math.abs(step.y), Math.abs(step.z)))) / zoom;
   const adjustedCoords = rotatedCoords.map((coords) => coords.multiplyAll(graphSize / (maxCoord)));
 
   const horizontalProjectionData: Array<[number, number]> = []; // "x" is Y, "y" is X 

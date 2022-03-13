@@ -51,10 +51,10 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
     if (!useArrowListeners) return null; 
     const key = (e.code as string);
     const { ctrlKey, shiftKey, altKey } = e; 
-    if ((shiftKey || altKey) && key === 'ArrowLeft') {
+    if ((shiftKey) && key === 'ArrowLeft') {
       handleLeftCkick();
     };
-    if ((shiftKey || altKey) && key === 'ArrowRight') {
+    if ((shiftKey) && key === 'ArrowRight') {
       handleRightCkick();
     };
   }

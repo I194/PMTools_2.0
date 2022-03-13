@@ -10,6 +10,7 @@ interface IAxesAndData {
   graphId: string;
   width: number;
   height: number;
+  pan: {left: number, top: number};
   areaConstants: {
     graphAreaMargin: number;
     zeroX: number;
@@ -31,7 +32,7 @@ interface IAxesAndData {
 }
 
 const AxesAndData: FC<IAxesAndData> = ({ 
-  graphId, width, height,
+  graphId, width, height, pan,
   areaConstants, 
   dataConstants,
   selectedIndexes,
@@ -65,6 +66,9 @@ const AxesAndData: FC<IAxesAndData> = ({
     <g 
       id={`${graphId}-axes-and-data`}
       transform={`translate(${graphAreaMargin}, ${graphAreaMargin})`}
+      // viewBox={`0 0 ${width} ${height}`}
+      // width={width + graphAreaMargin * 2}
+      // height={height + graphAreaMargin * 2}
     >
       <g id={`${graphId}-axes`}>
         <Axis 
@@ -98,7 +102,10 @@ const AxesAndData: FC<IAxesAndData> = ({
           Однако hover всё равно работать не будет и потому лучше использовать onMouseOver
           Как раз при этом достигается условие zero-css (я его только что сам придумал)
       */}
-      <g id={`${graphId}-data`}>
+      <g 
+        id={`${graphId}-data`}
+        transform={`translate(${pan.left}, ${pan.top})`}
+      >
         <Data 
           graphId={graphId}
           type='h'
@@ -125,30 +132,30 @@ const AxesAndData: FC<IAxesAndData> = ({
           dotFillColor='white'
           settings={settings.dots}
         />
+        {
+          pcaLines &&
+          <g id={`${graphId}-pcaLines`}>
+            <line 
+              id={`${graphId}-pcaLine-h`} 
+              x1={pcaLines.horX[0]} 
+              y1={pcaLines.horY[0]} 
+              x2={pcaLines.horX[1]} 
+              y2={pcaLines.horY[1]} 
+              stroke="#9933ff" 
+              strokeWidth="1" 
+            />
+            <line 
+              id={`${graphId}-pcaLine-v`} 
+              x1={pcaLines.verX[0]} 
+              y1={pcaLines.verY[0]} 
+              x2={pcaLines.verX[1]} 
+              y2={pcaLines.verY[1]} 
+              stroke="#119dff" 
+              strokeWidth="1" 
+            />
+          </g>
+        }
       </g>
-      {
-        pcaLines &&
-        <g id={`${graphId}-pcaLines`}>
-          <line 
-            id={`${graphId}-pcaLine-h`} 
-            x1={pcaLines.horX[0]} 
-            y1={pcaLines.horY[0]} 
-            x2={pcaLines.horX[1]} 
-            y2={pcaLines.horY[1]} 
-            stroke="#9933ff" 
-            strokeWidth="1" 
-          />
-          <line 
-            id={`${graphId}-pcaLine-v`} 
-            x1={pcaLines.verX[0]} 
-            y1={pcaLines.verY[0]} 
-            x2={pcaLines.verX[1]} 
-            y2={pcaLines.verY[1]} 
-            stroke="#119dff" 
-            strokeWidth="1" 
-          />
-        </g>
-      }
     </g>
   )
 }

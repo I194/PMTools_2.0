@@ -3,10 +3,11 @@ import styles from "./SelectableGraph.module.scss";
 import Selecto from "react-selecto";
 import ContextMenu from "../ContextMenu/ContextMenu";
 import ExportButton from "../Buttons/ExportButton/ExportButton";
-import { TMenuItem } from "../../../../utils/graphs/types";
+import { Pan, TMenuItem } from "../../../../utils/graphs/types";
 import { useAppDispatch } from "../../../../services/store/hooks";
 import { setSelectedStepsIDs } from "../../../../services/reducers/pcaPage";
 import ProjectionSelect from "../Buttons/ProjectionSelect/ProjectionSelect";
+import ResetZoomPan from "../Buttons/ResetZoomPan/ResetZoomPan";
 
 interface ISelectableGraph {
   graphId: string;
@@ -16,6 +17,10 @@ interface ISelectableGraph {
   nodesDuplicated: boolean;
   menuItems?: Array<TMenuItem>;
   extraID?: string;
+  onWheel?: (e: React.WheelEvent<SVGSVGElement>) => void;
+  hotkeysListener?: (e: KeyboardEvent) => void;
+  currentPan?: Pan;
+  onResetZoomPan?: () => void;
 }
 
 const SelectableGraph: FC<ISelectableGraph> = ({
@@ -26,6 +31,10 @@ const SelectableGraph: FC<ISelectableGraph> = ({
   selectableNodes,
   menuItems,
   extraID,
+  onWheel,
+  hotkeysListener,
+  currentPan,
+  onResetZoomPan,
 }) => {
 
   const dispatch = useAppDispatch();
@@ -35,6 +44,10 @@ const SelectableGraph: FC<ISelectableGraph> = ({
     const timesClicked = event.detail;
     if (timesClicked === 2) dispatch(setSelectedStepsIDs(null));
   };
+
+  const handleHotkeys = useCallback((e: KeyboardEvent) => {
+    if (hotkeysListener) hotkeysListener(e);
+  }, [currentPan]);
 
   const [ID, setID] = useState<string>(`${graphId}-graph`);
   const [selectableTargets, setSelectableTargets] = useState<(string | HTMLElement)[]>([]);
@@ -51,12 +64,22 @@ const SelectableGraph: FC<ISelectableGraph> = ({
     );
   }, [selectableNodes]);
 
+  useEffect(() => {
+    window.addEventListener("keydown", handleHotkeys);
+    return () => {
+      window.removeEventListener("keydown", handleHotkeys);
+    };
+  }, [currentPan]);
+
   return (
     <>
       <ContextMenu items={menuItems}>
         {
           graphId === 'zijd' && 
-          <ProjectionSelect />
+          <>
+            <ProjectionSelect />
+            <ResetZoomPan onClick={onResetZoomPan!} />
+          </>
         }
         <ExportButton graphId={ID} />
         <svg
@@ -66,6 +89,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
           height={height} 
           id={ID} 
           onClick={handleDoubleClick}
+          onWheel={onWheel}
         >
           {children}
         </svg>
