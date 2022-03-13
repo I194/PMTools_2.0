@@ -113,7 +113,7 @@ const Axis: FC<IAxis> = ({
         y={ namePosition ? namePosition.y : axisPos[type].text.y }
         textAnchor='middle' // Horizontal alignment
         alignmentBaseline="middle" // Vertical alignment
-        fontSize={'0.9vw'}
+        fontSize={'16px'}
       >
         {name}
       </text>
@@ -125,7 +125,7 @@ const Axis: FC<IAxis> = ({
               y={ mirrorNamePosition ? mirrorNamePosition.y : axisPos[type].text.yMirror }
               textAnchor='middle' // Horizontal alignment
               alignmentBaseline="middle" // Vertical alignment
-              fontSize={'0.9vw'}
+              fontSize={'16px'}
             >
               {mirrorName}
             </text>

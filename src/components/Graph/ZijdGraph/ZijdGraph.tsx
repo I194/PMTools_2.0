@@ -88,6 +88,7 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data }) => {
         onWheel={onWheel}
         hotkeysListener={panListener}
         currentPan={pan}
+        currentZoom={zoom}
         onResetZoomPan={onResetZoomPan}
       >
         <g>

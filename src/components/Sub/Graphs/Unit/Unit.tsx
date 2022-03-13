@@ -14,7 +14,7 @@ const Unit: FC<IUnit> = ({ label, viewHeight, viewWidth }) => {
       x={`75%`} 
       y={viewHeight - 4} 
       className={styles.unitText}
-      fontSize={ '1vw' }
+      fontSize={ '18px' }
     >
       Unit={label}
     </text>

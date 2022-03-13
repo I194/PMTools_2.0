@@ -4,13 +4,14 @@ import Button from '@mui/material/Button';
 
 interface IResetZoomPan {
   onClick: () => void;
+  isUseful: boolean;
 }
 
-const ResetZoomPan: FC<IResetZoomPan> = ({ onClick }) => {
+const ResetZoomPan: FC<IResetZoomPan> = ({ onClick, isUseful }) => {
   return (
     <div className={styles.projectionSelect}>
       <Button
-        color='primary'
+        color={isUseful ? 'warning' : 'primary'}
         onClick={onClick}
         variant='outlined'
         sx={{m: '4px', height: '24px'}} 

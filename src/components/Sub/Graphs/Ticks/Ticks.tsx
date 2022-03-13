@@ -51,7 +51,7 @@ const Ticks: FC<ITicks> = ({
                       x={axis === 'x' ? posAA : zero + positionsAcrossAxis['outer'].x1 * 2}
                       y={axis === 'y' ? posAA + 5 : zero + positionsAcrossAxis['outer'].y2 * 4}
                       textAnchor={axis === 'y' ? 'end' : 'middle'}
-                      fontSize={'0.8vw'}
+                      fontSize={'16px'}
                     > 
                       {labels[index]}
                     </text>

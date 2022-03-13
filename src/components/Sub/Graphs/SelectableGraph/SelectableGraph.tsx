@@ -20,6 +20,7 @@ interface ISelectableGraph {
   onWheel?: (e: React.WheelEvent<SVGSVGElement>) => void;
   hotkeysListener?: (e: KeyboardEvent) => void;
   currentPan?: Pan;
+  currentZoom?: number;
   onResetZoomPan?: () => void;
 }
 
@@ -34,6 +35,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
   onWheel,
   hotkeysListener,
   currentPan,
+  currentZoom,
   onResetZoomPan,
 }) => {
 
@@ -78,7 +80,10 @@ const SelectableGraph: FC<ISelectableGraph> = ({
           graphId === 'zijd' && 
           <>
             <ProjectionSelect />
-            <ResetZoomPan onClick={onResetZoomPan!} />
+            <ResetZoomPan 
+              onClick={onResetZoomPan!} 
+              isUseful={currentZoom! > 1 || currentPan?.left !== 0 || currentPan.top !== 0} 
+            />
           </>
         }
         <ExportButton graphId={ID} />
