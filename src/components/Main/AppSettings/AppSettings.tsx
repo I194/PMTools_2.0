@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useCallback } from "react";
 import styles from './AppSettings.module.scss';
 import { MenuList, MenuItem, Button, Input } from '@mui/material';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
@@ -12,28 +12,24 @@ import {
   textColor
 } from '../../../utils/ThemeConstants';
 
+import {useDropzone} from 'react-dropzone'
+
 interface IAppSettings {
+  onFileUpload: (event: any, files?: Array<File>) => void;
+  dndInputProps: any;
+  currentPage: string;
+};
 
-}
-
-const AppSettings: FC<IAppSettings> = () => {
-
-  const dispatch = useAppDispatch();
-  const location = useLocation();
-
+const AppSettings: FC<IAppSettings> = ({
+  onFileUpload,
+  dndInputProps,
+  currentPage,
+}) => {
   const theme = useTheme();
 
-  const currentPage = location.pathname.slice(1, location.pathname.length);
   const availableFormats = {
     pca: ['.pmd', '.csv', '.xlsx'],
     dir: ['.dir', '.pmm', '.csv', 'xlsx'], 
-  };
-
-  const handleFileUpload = (event: any) => {
-    const files = Array.from(event.currentTarget.files);
-    if (currentPage === 'pca') dispatch(setTreatmentFiles(files));
-    if (currentPage === 'dir') dispatch(setDirStatFiles(files));
-    dispatch(setInputFiles(files));
   };
 
   return (
@@ -72,12 +68,13 @@ const AppSettings: FC<IAppSettings> = () => {
             id="upload-file"
             type={'file'}  
             inputProps={{
+              ...dndInputProps,
               multiple: true,
               accept: availableFormats[currentPage].join(', '),
             }}
             disableUnderline={true}
             sx={{display: 'none'}}
-            onChange={handleFileUpload}
+            onChange={onFileUpload}
           />
         }
         <Button 

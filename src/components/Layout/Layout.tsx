@@ -1,62 +1,100 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import styles from "./Layout.module.scss";
-import { Outlet, RouteProps, } from "react-router-dom";
+import { Outlet, RouteProps, useLocation, } from "react-router-dom";
 import { AppSettings, AppNavigation } from "../Main";
 import { useTheme } from '@mui/material/styles';
 import {
   bgColorMain,
   bgColorBlocks,
-  boxShadowStyle
+  boxShadowStyle,
+  textColor
 } from '../../utils/ThemeConstants';
+import { useAppDispatch } from "../../services/store/hooks";
+import { setDirStatFiles, setInputFiles, setTreatmentFiles } from "../../services/reducers/files";
+import { useDropzone } from "react-dropzone";
 
 const Layout: FC<RouteProps> = () => {
 
+  const dispatch = useAppDispatch();
+  const location = useLocation();
   const theme = useTheme();
+
+  const currentPage = location.pathname.slice(1, location.pathname.length);
+
+  const handleFileUpload = (event: any, files?: Array<File>) => {
+    const acceptedFiles = files ? files : Array.from(event.currentTarget.files);
+    if (currentPage === 'pca') dispatch(setTreatmentFiles(acceptedFiles));
+    if (currentPage === 'dir') dispatch(setDirStatFiles(acceptedFiles));
+    dispatch(setInputFiles(acceptedFiles));
+  };
+
+  const onDrop = useCallback(acceptedFiles => {
+    handleFileUpload(undefined, acceptedFiles);
+  }, []);
+
+  const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, noClick: true})
+  const rootProps = (currentPage === 'pca' || currentPage === 'dir' ? {...getRootProps()} : undefined);
  
   return (
-    <div 
-      className={styles.appContainer}
-      style={{backgroundColor: bgColorMain(theme.palette.mode)}}
-    >
+    <>
+      {
+        isDragActive && 
+        <div className={styles.dropFiles} style={{color: textColor(theme.palette.mode)}}>
+          Отпустите файлы для загрузки
+        </div>
+      }
       <div 
-        className={styles.top}
-        style={{backgroundColor: bgColorMain(theme.palette.mode)}}
+        {...rootProps}
+        className={styles.appContainer}
+        style={{
+          backgroundColor: bgColorMain(theme.palette.mode),
+          WebkitFilter: isDragActive ? 'blur(2px)' : 'none', 
+        }}
       >
         <div 
-          className={styles.settings}
+          className={styles.top}
           style={{backgroundColor: bgColorMain(theme.palette.mode)}}
         >
           <div 
-            className={styles.appSettings} 
-            style={{
-              backgroundColor: bgColorBlocks(theme.palette.mode),
-              WebkitBoxShadow: boxShadowStyle(theme.palette.mode),
-              MozBoxShadow: boxShadowStyle(theme.palette.mode),
-              boxShadow: boxShadowStyle(theme.palette.mode),
-            }}
+            className={styles.settings}
+            style={{backgroundColor: bgColorMain(theme.palette.mode)}}
           >
-            <AppSettings />
+            <div 
+              className={styles.appSettings} 
+              style={{
+                backgroundColor: bgColorBlocks(theme.palette.mode),
+                WebkitBoxShadow: boxShadowStyle(theme.palette.mode),
+                MozBoxShadow: boxShadowStyle(theme.palette.mode),
+                boxShadow: boxShadowStyle(theme.palette.mode),
+              }}
+            >
+              <AppSettings 
+                onFileUpload={handleFileUpload} 
+                dndInputProps={{...getInputProps()}}
+                currentPage={currentPage}
+              />
+            </div>
           </div>
-        </div>
-        <div 
-          className={styles.navigation}
-          style={{backgroundColor: bgColorMain(theme.palette.mode)}}
-        >
           <div 
-            className={styles.pages}
-            style={{
-              backgroundColor: bgColorBlocks(theme.palette.mode),
-              WebkitBoxShadow: boxShadowStyle(theme.palette.mode),
-              MozBoxShadow: boxShadowStyle(theme.palette.mode),
-              boxShadow: boxShadowStyle(theme.palette.mode),
-            }}
+            className={styles.navigation}
+            style={{backgroundColor: bgColorMain(theme.palette.mode)}}
           >
-            <AppNavigation />
+            <div 
+              className={styles.pages}
+              style={{
+                backgroundColor: bgColorBlocks(theme.palette.mode),
+                WebkitBoxShadow: boxShadowStyle(theme.palette.mode),
+                MozBoxShadow: boxShadowStyle(theme.palette.mode),
+                boxShadow: boxShadowStyle(theme.palette.mode),
+              }}
+            >
+              <AppNavigation />
+            </div>
           </div>
         </div>
+        <Outlet />
       </div>
-      <Outlet />
-    </div>
+    </>
   );
 };
 
