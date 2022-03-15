@@ -37,7 +37,7 @@ const Dot: FC<IDot> = ({
   showText, 
   fillColor, 
   strokeColor,
-  strokeWidth,
+  strokeWidth = 1,
   confidenceCircle,
   greatCircle,
   settings,
@@ -171,7 +171,7 @@ const Dot: FC<IDot> = ({
         style={{
           fill: fillColor, 
           stroke: strokeColor,
-          strokeWidth: strokeWidth || 1,
+          strokeWidth: strokeWidth,
           cursor: 'pointer'
         }}
         onMouseOver={() => handleOver(id)}

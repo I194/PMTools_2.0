@@ -10,6 +10,7 @@ import { zijdAreaConstants } from "./ZijdConstants";
 import AxesAndData from "./AxesAndData";
 import getInterpretationIndexes from "../../../utils/graphs/formatters/getInterpretationIndexes";
 import { Pan } from "../../../utils/graphs/types";
+import CoordinateSystem from "../../Sub/Graphs/CoordinateSystem/CoordinateSystem";
 
 export interface IZijdGraph extends IGraph {
   data: IPmdData;
@@ -103,6 +104,7 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data }) => {
             inInterpretationIndexes={inInterpretationIndexes}
             settings={settings}
           />
+          <CoordinateSystem />  
           <GraphSymbols 
             title1="Horizontal" id1={`${graphId}-h-data`} 
             title2="Vertical" id2={`${graphId}-v-data`}

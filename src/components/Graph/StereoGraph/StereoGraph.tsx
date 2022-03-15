@@ -9,6 +9,7 @@ import { SelectableGraph, GraphSymbols } from "../../Sub/Graphs";
 import { stereoAreaConstants } from "./StereoConstants";
 import AxesAndData from "./AxesAndData";
 import getInterpretationIndexes from "../../../utils/graphs/formatters/getInterpretationIndexes";
+import CoordinateSystem from "../../Sub/Graphs/CoordinateSystem/CoordinateSystem";
 
 export interface IStereoGraph extends IGraph {
   data: IPmdData;
@@ -54,6 +55,7 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
             selectedIndexes={selectedIndexes}
             settings={settings}
           />
+          <CoordinateSystem top={-15}/>  
           <GraphSymbols 
             title1="Down" id1={`${graphId}-d-data`} 
             title2="Up" id2={`${graphId}-u-data`}
