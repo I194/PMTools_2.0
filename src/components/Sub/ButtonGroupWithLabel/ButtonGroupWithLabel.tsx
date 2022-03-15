@@ -11,6 +11,7 @@ const ButtonGroupWithLabel: FC<IButtonGroupWithLabel> = ({ label, children }) =>
         variant="standard" 
         sx={{
           m: '0 0 0 16px',
+          minWidth: 'fit-content'
         }}
       >
         <InputLabel sx={{transform: 'translate(0, -1.5px) scale(0.75)',}}>{ label }</InputLabel>

@@ -22,8 +22,6 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
   const [selectedOption, setSelectedOption] = useState(defaultValue || '');
   const [open, setOpen] = React.useState(false);
 
-  console.log(selectedOption)
-
   const handleSelect = (event: SelectChangeEvent) => {
     setSelectedOption(event.target.value);
     onOptionSelect(event.target.value);

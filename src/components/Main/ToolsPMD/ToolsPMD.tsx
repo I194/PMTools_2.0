@@ -16,6 +16,7 @@ import { setCurrentPMDid } from '../../../services/reducers/parsedData';
 import InputApply from '../../Sub/InputApply/InputApply';
 import parseIDsInput from '../../../utils/parsers/parseIDsInput';
 import DropdownSelectWithButtons from '../../Sub/DropdownSelect/DropdownSelectWithButtons';
+import ShowHideDotsButtons from './ShowHideDotsButtons';
 
 const labelToReference = (label: string) => {
   if (label === 'Образец') return 'specimen';
@@ -137,6 +138,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
       <ButtonGroupWithLabel label='Смотреть статистику'>
         <Button onClick={() => setAllFilesStatOpen(true)}>По всем файлам</Button>
       </ButtonGroupWithLabel>
+      <ShowHideDotsButtons setShowStepsInput={setShowStepsInput}/>
       <ModalWrapper
         open={allFilesStatOpen}
         setOpen={setAllFilesStatOpen}

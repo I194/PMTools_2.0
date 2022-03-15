@@ -35,7 +35,6 @@ const NavButton: FC<INavButton> = ({ label, to, external }) => {
     <NavLink to={to}>
       {
         ({ isActive }) => {
-          console.log(isActive);
           return (
             <Button
             variant="contained" 

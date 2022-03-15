@@ -65,8 +65,6 @@ const MetaDataTablePMD: FC<IMetaDataTablePMD> = ({ data}) => {
 
   const rows = [{...data, id: 0, isRowSelectable: false}];
 
-  console.log(data);
-
   if (!data) return <MetaDataTablePMDSkeleton />;
 
   return (
