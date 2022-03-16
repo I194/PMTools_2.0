@@ -13,6 +13,7 @@ import {
 } from '../../../utils/ThemeConstants';
 
 import {useDropzone} from 'react-dropzone'
+import { useMediaQuery } from "react-responsive";
 
 interface IAppSettings {
   onFileUpload: (event: any, files?: Array<File>) => void;
@@ -27,6 +28,8 @@ const AppSettings: FC<IAppSettings> = ({
 }) => {
   const theme = useTheme();
 
+  const isSmallScreen = useMediaQuery({ query: '(max-width: 1464px)' })
+
   const availableFormats = {
     pca: ['.pmd', '.csv', '.xlsx'],
     dir: ['.dir', '.pmm', '.csv', 'xlsx'], 
@@ -39,22 +42,28 @@ const AppSettings: FC<IAppSettings> = ({
         startIcon={<SettingsOutlinedIcon />}
         sx={{
           textTransform: 'none', 
-          marginRight: '16px'
+          marginRight: '16px',
+          '.MuiButton-startIcon': isSmallScreen ? {
+            margin: 0,
+          } : {},
         }}
         component="span"
       >
-        Настройки
+      { isSmallScreen ? '' : 'Настройки'}
       </Button>
       <Button
         variant="contained" 
         startIcon={<HelpOutlineOutlinedIcon />}
         sx={{
           textTransform: 'none', 
-          marginRight: '16px'
+          marginRight: '16px',
+          '.MuiButton-startIcon': isSmallScreen ? {
+            margin: 0,
+          } : {},
         }}
         component="span"
       >
-        Помощь
+        { isSmallScreen ? '' : 'Помощь'}
       </Button>
       <label 
         htmlFor="upload-file" 

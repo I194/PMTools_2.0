@@ -9,8 +9,11 @@ import { useAppDispatch, useAppSelector } from "../../../services/store/hooks";
 import { setColorMode } from "../../../services/reducers/appSettings";
 import { IconButton } from "@mui/material";
 import { useSystemTheme } from "../../../utils/GlobalHooks";
+import { useMediaQuery } from "react-responsive";
 
 const AppNavigation: FC = ({}) => {
+  
+  const isSmallScreen = useMediaQuery({ query: '(max-width: 1464px)' });
 
   const dispatch = useAppDispatch();
   const { colorMode } = useAppSelector(state => state.appSettingsReducer);
@@ -29,11 +32,11 @@ const AppNavigation: FC = ({}) => {
   return (
     <div className={styles.navButtons}>
       <NavButton 
-        label={'Магнитные чистки (PCA)'}
+        label={isSmallScreen ? 'PCA' : 'Магнитные чистки (PCA)'}
         to={'pca'}
       />
       <NavButton 
-        label={'Статистика направлений (DIR)'}
+        label={isSmallScreen ? 'DIR' : 'Статистика направлений (DIR)'}
         to={'dir'}
       />
       <NavButton 
