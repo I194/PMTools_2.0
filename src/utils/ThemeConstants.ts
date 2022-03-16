@@ -5,7 +5,7 @@ export const bgColorMain = (themeMode: ThemeMode) => themeMode === 'dark'
   ? '#000' 
   : '#e8eaf6';
 export const bgColorBlocks = (themeMode: ThemeMode) => themeMode === 'dark' 
-  ? '#212121' 
+  ? '#313131' 
   : '#fff';
 export const separatorColor = (themeMode: ThemeMode) => themeMode === 'dark' 
   ? '#e2e2e2' 
