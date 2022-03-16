@@ -21,6 +21,7 @@ const InputApply: FC<IInputApply> = ({
 
   const handleApply = () => {
     onApply(value);
+    // очищение поля ввода
     setValue('');
   };
 

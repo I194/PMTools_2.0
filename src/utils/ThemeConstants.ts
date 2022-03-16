@@ -2,7 +2,7 @@ import { ThemeMode } from "./GlobalTypes";
 import { DotType } from "./graphs/types";
 
 export const bgColorMain = (themeMode: ThemeMode) => themeMode === 'dark' 
-  ? '#000' 
+  ? '#101010' 
   : '#e8eaf6';
 export const bgColorBlocks = (themeMode: ThemeMode) => themeMode === 'dark' 
   ? '#313131' 

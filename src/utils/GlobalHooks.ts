@@ -18,7 +18,6 @@ export const useWindowSize = () => {
 export const useSystemTheme = () => {
   const [systemTheme, setSystemTheme] = useState<'dark' | 'light'>('dark');
   useLayoutEffect(() => {
-    console.log(systemTheme)
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       setSystemTheme('dark');
     } else setSystemTheme('light');

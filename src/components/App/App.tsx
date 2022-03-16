@@ -7,7 +7,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useAppSelector } from '../../services/store/hooks';
 
 function App() {
-
+  
   const { colorMode } = useAppSelector(state => state.appSettingsReducer);
 
   const theme = createTheme({
