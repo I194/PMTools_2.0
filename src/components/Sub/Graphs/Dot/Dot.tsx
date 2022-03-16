@@ -152,7 +152,7 @@ const Dot: FC<IDot> = ({
           ]
         ]
       }
-      <circle 
+      {/* <circle 
         cx={x} 
         cy={y} 
         r={r ? r * 1.5 : 6}
@@ -162,7 +162,7 @@ const Dot: FC<IDot> = ({
         }} 
         onMouseOver={() => handleOver(id)}
         onMouseOut={() => handleOut(id)}
-      />
+      /> */}
       <circle 
         cx={x} 
         cy={y} 
