@@ -1,10 +1,5 @@
-import { IPmdData } from "../GlobalTypes";
-import enteredIndexesToIDs from "./enteredIndexesToIDs";
-
-const parseIDsInput = (
-  enteredIDs: string, 
-  hiddenStepsIDs: Array<number>, 
-  pmdData: IPmdData
+const parseDotsIndexesInput = (
+  enteredIDs: string
 ) => {
   // parse id's input (like steps to select)
   // example of valid enteredIDs: 
@@ -32,14 +27,12 @@ const parseIDsInput = (
     dashIDs.push(...IDs);
   });
 
-  const uniqueIDs = [...new Set([
+  const uniqueIndexes = [...new Set([
     ...commaIDs, 
     ...dashIDs
   ])];
 
-  const fixedIDs = enteredIndexesToIDs(uniqueIDs, hiddenStepsIDs, pmdData);
-
-  return fixedIDs;
+  return uniqueIndexes;
 };
 
-export default parseIDsInput;
+export default parseDotsIndexesInput;

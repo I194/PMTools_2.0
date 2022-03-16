@@ -1,70 +1,66 @@
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import styles from './ToolsPMD.module.scss';
 import DropdownSelect from '../../Sub/DropdownSelect/DropdownSelect';
 import ButtonGroupWithLabel from '../../Sub/ButtonGroupWithLabel/ButtonGroupWithLabel';
 import { Button } from '@mui/material';
-import { Reference } from '../../../utils/graphs/types';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
 import { setReference, setSelectedStepsIDs, setStatisticsMode, updateCurrentFileInterpretations, updateCurrentInterpretation } from '../../../services/reducers/pcaPage';
-import { IPmdData } from '../../../utils/GlobalTypes';
+import { IDirData } from '../../../utils/GlobalTypes';
 import ModalWrapper from '../../Sub/Modal/ModalWrapper';
-import ToolsPMDSkeleton from './ToolsPMDSkeleton';
+import ToolsPMDSkeleton from './ToolsDIRSkeleton';
 import OutputDataTablePMD from '../DataTablesPMD/OutputDataTable/OutputDataTablePMD';
 import StatModeButton from './StatModeButton';
-import { setCurrentPMDid } from '../../../services/reducers/parsedData';
+import { setCurrentDIRid } from '../../../services/reducers/parsedData';
 import InputApply from '../../Sub/InputApply/InputApply';
 import parseDotsIndexesInput from '../../../utils/parsers/parseDotsIndexesInput';
 import DropdownSelectWithButtons from '../../Sub/DropdownSelect/DropdownSelectWithButtons';
 import ShowHideDotsButtons from './ShowHideDotsButtons';
 import labelToReference from '../../../utils/parsers/labelToReference';
-import { enteredIndexesToIDsPMD } from '../../../utils/parsers/enteredIndexesToIDs';
+import { enteredIndexesToIDsDIR } from '../../../utils/parsers/enteredIndexesToIDs';
 
-interface IToolsPMD {
-  data: IPmdData | null;
+interface IToolsDIR {
+  data: IDirData | null;
 };
 
-const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
+const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
 
   const dispatch = useAppDispatch();
 
-  const { treatmentData } = useAppSelector(state => state.parsedDataReducer);
-  const { reference, selectedStepsIDs, statisticsMode, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
+  const { dirStatData } = useAppSelector(state => state.parsedDataReducer);
+  const { selectedDirectionsIDs, hiddenDirectionsIDs, statisticsMode } = useAppSelector(state => state.dirPageReducer); 
 
-  const [allDataPMD, setAllDataPMD] = useState<Array<IPmdData>>([]);
-  const [coordinateSystem, setCoordinateSystem] = useState<Reference>('geographic');
+  const [allDirData, setAllDirData] = useState<Array<IDirData>>([]);
   const [allFilesStatOpen, setAllFilesStatOpen] = useState<boolean>(false);
   const [showStepsInput, setShowStepsInput] = useState<boolean>(false);
 
+  // для списка всех файлов
   useEffect(() => {
-    if (treatmentData) {
-      setAllDataPMD(treatmentData);
+    if (dirStatData) {
+      setAllDirData(dirStatData);
     };
-  }, [treatmentData]);
+  }, [dirStatData]);
 
+  // открывает окно ввода номеров точек (точки, номера которых будут введены, будут выбраны)
   useEffect(() => {
-    if ((!selectedStepsIDs || !selectedStepsIDs.length) && statisticsMode) {
+    if ((!selectedDirectionsIDs || !selectedDirectionsIDs.length) && statisticsMode) {
       setShowStepsInput(true);
     } else {
       setShowStepsInput(false);
     }
-  }, [selectedStepsIDs, statisticsMode]);
+  }, [selectedDirectionsIDs, statisticsMode]);
 
+  // добавляет слушатель нажатий на клавиатуру (для использования сочетаний клавиш)
   useEffect(() => {
-    window.addEventListener("keydown", handleStatisticsModeSelect);
+    window.addEventListener("keydown", handleHotkeys);
     return () => {
-      window.removeEventListener("keydown", handleStatisticsModeSelect);
+      window.removeEventListener("keydown", handleHotkeys);
     };
   }, []);
-  
-  useEffect(() => {
-    setCoordinateSystem(reference);
-  }, [reference]);
 
-  const handleReferenceSelect = (option: string) => {
-    dispatch(setReference(labelToReference(option)));
-  };
+  if (!data) return <ToolsPMDSkeleton />;
 
-  const handleStatisticsModeSelect = useCallback((e) => {
+  // обработчик нажатий на клавиатуру
+  const handleHotkeys = useCallback((e) => {
     const key = (e.code as string);
     const { ctrlKey, shiftKey, altKey } = e; 
     if ((shiftKey || altKey) && key === 'KeyD') {
@@ -85,18 +81,23 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
     };
   }, []);
 
-  const handleEnteredStepsApply = (steps: string) => {
+  // обработчик выбранной системы координат 
+  const handleReferenceSelect = (option: string) => {
+    dispatch(setReference(labelToReference(option)));
+  };
+
+  // обработчик введённых номеров точек
+  const handleEnteredDotsIndexesApply = (steps: string) => {
     const parsedIndexes = parseDotsIndexesInput(steps);
-    const IDs = enteredIndexesToIDsPMD(parsedIndexes, hiddenStepsIDs, data!);
+    const IDs = enteredIndexesToIDsDIR(parsedIndexes, hiddenDirectionsIDs, data);
     dispatch(setSelectedStepsIDs(IDs));
     setShowStepsInput(false);
   };
 
-  if (!data) return <ToolsPMDSkeleton />;
-
+  // обработчик выбранного файла
   const handleFileSelect = (option: string) => {
-    const pmdID = allDataPMD.findIndex(pmd => pmd.metadata.name === option);
-    dispatch(setCurrentPMDid(pmdID));
+    const dirID = allDirData.findIndex(dir => dir.name === option);
+    dispatch(setCurrentDIRid(dirID));
     // cleaners
     dispatch(updateCurrentFileInterpretations(option));
     dispatch(updateCurrentInterpretation());
@@ -108,8 +109,8 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
     <ToolsPMDSkeleton>
       <DropdownSelectWithButtons 
         label={'Текущий файл'}
-        options={allDataPMD.map(pmd => pmd.metadata.name)}
-        defaultValue={allDataPMD[0].metadata.name}
+        options={allDirData.map(dir => dir.name)}
+        defaultValue={allDirData[0].name}
         onOptionSelect={handleFileSelect}
         minWidth={'120px'}
         useArrowListeners={true}
@@ -129,7 +130,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
       <ButtonGroupWithLabel label='Смотреть статистику'>
         <Button onClick={() => setAllFilesStatOpen(true)}>По всем файлам</Button>
       </ButtonGroupWithLabel>
-      <ShowHideDotsButtons setShowStepsInput={setShowStepsInput} pmdData={data}/>
+      <ShowHideDotsButtons setShowStepsInput={setShowStepsInput} dirData={data}/>
       <ModalWrapper
         open={allFilesStatOpen}
         setOpen={setAllFilesStatOpen}
@@ -148,9 +149,9 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
           isDraggable={true}
         >
           <InputApply 
-            label={`Введите номера шагов (${statisticsMode})`}
+            label={`Введите номера точек (${statisticsMode})`}
             helperText="Валидные примеры: 1-9 || 2,4,8,9 || 2-4;8,9 || 2-4;8,9;12-14"
-            onApply={handleEnteredStepsApply}
+            onApply={handleEnteredDotsIndexesApply}
           />
         </ModalWrapper>
       }
@@ -158,4 +159,4 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   )
 }
 
-export default ToolsPMD;
+export default ToolsDIR;

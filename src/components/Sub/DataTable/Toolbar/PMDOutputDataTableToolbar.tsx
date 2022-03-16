@@ -17,9 +17,10 @@ const PMDOutputDataTableToolbar = () => {
   if (!allInterpretations) return null;
   const data: IDirData = {
     name: outputFilename,
-    interpretations: allInterpretations.map((interpretation) => {
+    interpretations: allInterpretations.map((interpretation, index) => {
       return {
-        id: interpretation.id,
+        id: index + 1,
+        label: interpretation.label,
         code: interpretation.code || '',
         stepRange: interpretation.stepRange,
         stepCount: interpretation.stepCount,

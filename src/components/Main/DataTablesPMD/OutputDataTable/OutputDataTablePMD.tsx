@@ -34,11 +34,11 @@ const OutputDataTablePMD: FC = () => {
     setEditRowsModel(model);
   }, []);
   
-  const handleRowDelete = (id: string) => (event: any) => {
+  const handleRowDelete = (label: string) => (event: any) => {
     event.stopPropagation();
-    dispatch(deleteInterpretation(id));
+    dispatch(deleteInterpretation(label));
     dispatch(updateCurrentFileInterpretations(
-      data.filter(interpretation => interpretation.id === id)[0].parentFile
+      data.filter(interpretation => interpretation.label === label)[0].parentFile
     ));
     dispatch(updateCurrentInterpretation());
   };
@@ -49,7 +49,7 @@ const OutputDataTablePMD: FC = () => {
   };
 
   const columns: GridColumns = [
-    { field: 'id', headerName: 'ID', type: 'string', width: 120 },
+    { field: 'id', headerName: 'Label', type: 'string', width: 120 },
     { field: 'code', headerName: 'Code', type: 'string', width: 70 },
     { field: 'stepRange', headerName: 'StepRange', type: 'string', width: 120 },
     { field: 'stepCount', headerName: 'N', type: 'number', width: 40 },
@@ -114,7 +114,7 @@ const OutputDataTablePMD: FC = () => {
       const updatedData = data.map((interpretation, index) => {
         const rowId = Object.keys(editRowsModel)[0];
         const newComment = editRowsModel[rowId]?.comment?.value as string;
-        if (rowId !== interpretation.id) return interpretation;
+        if (rowId !== interpretation.label) return interpretation;
         return {
           ...interpretation,
           comment: newComment
@@ -127,9 +127,9 @@ const OutputDataTablePMD: FC = () => {
   if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
 
   const rows: Array<DataGridDIRRow> = data.map((statistics, index) => {
-    const { id, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadius, comment } = statistics;
+    const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadius, comment } = statistics;
     return {
-      id,
+      label,
       code, 
       stepRange,
       stepCount,

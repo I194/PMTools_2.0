@@ -32,11 +32,6 @@ const PCAPage: FC = ({}) => {
   useEffect(() => {
     if (treatmentData && treatmentData.length > 0) {
       const pmdID = currentDataPMDid || 0;
-      // const visibleData = {
-      //   ...treatmentData[pmdID],
-      //   steps: treatmentData[pmdID].steps.filter((step, index) => !hiddenStepsIDs.includes(index + 1))
-      // };
-      // setDataToShow(visibleData);
       setDataToShow(treatmentData[pmdID]);
     } else setDataToShow(null);
   }, [treatmentData, currentDataPMDid, hiddenStepsIDs]);
@@ -45,20 +40,11 @@ const PCAPage: FC = ({}) => {
     if (statisticsMode && !selectedStepsIDs) dispatch(showStepsInput(true));
     if (statisticsMode && selectedStepsIDs && selectedStepsIDs.length >= 2 && dataToShow) {
       const statistics = calculateStatisticsPMD(dataToShow, statisticsMode, selectedStepsIDs);
-      statistics.interpretation.id += `_${currentFileInterpretations.length}`;
+      statistics.interpretation.label += `_${currentFileInterpretations.length}`;
       dispatch(addInterpretation(statistics));
       dispatch(setStatisticsMode(null));
     } else dispatch(updateCurrentInterpretation());
   }, [statisticsMode, selectedStepsIDs, dataToShow]);
-
-  // useEffect(() => {
-  //   if (dataToShow) {
-  //     const visibleData = {
-  //       ...dataToShow,
-  //       steps: dataToShow.steps.filter((step, index) => !hiddenStepsIDs.includes(index))
-  //     };
-  //   }
-  // }, [dataToShow, hiddenStepsIDs]);
 
   return (
     <>

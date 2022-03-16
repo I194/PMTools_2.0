@@ -38,7 +38,7 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
     event.stopPropagation();
     if (data) {
       data.forEach(interpretation => {
-        dispatch(deleteInterpretation(interpretation.id));
+        dispatch(deleteInterpretation(interpretation.label));
       });
       dispatch(updateCurrentFileInterpretations(data[0].parentFile));
       dispatch(updateCurrentInterpretation());
@@ -46,7 +46,7 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
   };
 
   const columns: GridColumns = [
-    { field: 'id', headerName: 'ID', type: 'string', flex: 1 },
+    { field: 'id', headerName: 'Label', type: 'string', flex: 1 },
     { field: 'code', headerName: 'Code', type: 'string', flex: 1 },
     { field: 'stepRange', headerName: 'StepRange', type: 'string', width: 90 },
     { field: 'stepCount', headerName: 'N', type: 'number', minWidth: 30, width: 30 },
@@ -101,9 +101,9 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
   if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
 
   const rows: Array<Omit<DataGridDIRRow, 'comment'>> = data.map((statistics, index) => {
-    const { id, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadius } = statistics;
+    const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadius } = statistics;
     return {
-      id,
+      label,
       code, 
       stepRange,
       stepCount,
@@ -133,7 +133,7 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
         density={'compact'}
         disableSelectionOnClick={true}
         getRowClassName={
-          (params) => params.row.id === currentInterpretation?.id ? currentClass : ''
+          (params) => params.row.id === currentInterpretation?.label ? currentClass : ''
         }
       />
     </StatisticsDataTablePMDSkeleton>

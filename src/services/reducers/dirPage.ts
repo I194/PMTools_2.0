@@ -1,38 +1,36 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IPmdData, IDirData } from "../../utils/GlobalTypes";
-import { RawStatisticsPCA, StatisitcsInterpretation } from "../../utils/GlobalTypes";
-import { Projection, Reference, StatisticsModePCA } from "../../utils/graphs/types";
+import { IDirData } from "../../utils/GlobalTypes";
+import { StatisitcsInterpretation } from "../../utils/GlobalTypes";
+import { Reference, StatisticsModeDIR } from "../../utils/graphs/types";
 
 interface IInitialState {
-  currentFile: IPmdData | null;
+  currentFile: IDirData | null;
   reference: Reference;
-  projection: Projection;
-  selectedStepsIDs: Array<number> | null;
-  hiddenStepsIDs: Array<number>;
-  statisticsMode: StatisticsModePCA;
+  selectedDirectionsIDs: Array<number> | null;
+  hiddenDirectionsIDs: Array<number>;
+  statisticsMode: StatisticsModeDIR;
   currentInterpretation: StatisitcsInterpretation | null;
   currentFileInterpretations: Array<StatisitcsInterpretation>;
   allInterpretations: Array<StatisitcsInterpretation>;
   outputFilename: string;
-  showStepsInput: boolean;
-}
+  showSelectionInput: boolean;
+};
 
 const initialState: IInitialState = {
   currentFile: null,
   reference: 'geographic',
-  projection: {y: 'W, UP', x: 'N, N'},
-  selectedStepsIDs: null,
-  hiddenStepsIDs: [],
+  selectedDirectionsIDs: null,
+  hiddenDirectionsIDs: [],
   statisticsMode: null,
   currentInterpretation: null,
   currentFileInterpretations: [],
   allInterpretations: [],
   outputFilename: '',
-  showStepsInput: false,
-}
+  showSelectionInput: false,
+};
 
-const pcaPage = createSlice({
-  name: 'pcaPage',
+const dirPage = createSlice({
+  name: 'dirPage',
   initialState,
   reducers: {
     setCurrentFile (state, action) {
@@ -41,25 +39,23 @@ const pcaPage = createSlice({
     setReference (state, action) {
       state.reference = action.payload;
     },
-    setProjection (state, action) {
-      state.projection = action.payload;
+    setSelectedDirectionsIDs (state, action) {
+      state.selectedDirectionsIDs = action.payload;
     },
-    setSelectedStepsIDs (state, action) {
-      state.selectedStepsIDs = action.payload;
-    },
-    setHiddenStepsIDs (state, action: {payload: Array<number>}) {
-      state.hiddenStepsIDs = action.payload;
+    sethiddenDirectionsIDs (state, action: {payload: Array<number>}) {
+      state.hiddenDirectionsIDs = action.payload;
     },
     addHiddenStepsIDs (state, action: {payload: Array<number>}) {
-      const updatedHiddenStepsIDs = [...new Set([...state.hiddenStepsIDs, ...action.payload])];
-      state.hiddenStepsIDs = updatedHiddenStepsIDs;
+      const updatedHiddenDirectionsIDs = [...new Set([...state.hiddenDirectionsIDs, ...action.payload])];
+      state.hiddenDirectionsIDs = updatedHiddenDirectionsIDs;
+    },
+    showStepsInput (state, action) {
+      state.showSelectionInput = action.payload;
     },
     setStatisticsMode (state, action) {
       state.statisticsMode = action.payload;
     },
-    showStepsInput (state, action) {
-      state.showStepsInput = action.payload;
-    },
+    // interpretations manipulations below
     addInterpretation (state, action) {
       state.currentInterpretation = action.payload?.interpretation;
       state.currentFileInterpretations.push(action.payload?.interpretation);
@@ -103,9 +99,8 @@ const pcaPage = createSlice({
 export const { 
   setCurrentFile,
   setReference,
-  setProjection,
-  setSelectedStepsIDs,
-  setHiddenStepsIDs,
+  setSelectedDirectionsIDs,
+  sethiddenDirectionsIDs,
   addHiddenStepsIDs,
   setStatisticsMode,
   showStepsInput,
@@ -116,7 +111,7 @@ export const {
   updateCurrentFileInterpretations,
   updateCurrentInterpretation,
   setOutputFilename,
-} = pcaPage.actions;
+} = dirPage.actions;
 
-const pcaPageReducer = pcaPage.reducer;
-export default pcaPageReducer;
+const dirPageReducer = dirPage.reducer;
+export default dirPageReducer;
