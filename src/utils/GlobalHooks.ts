@@ -47,7 +47,7 @@ export const usePMDGraphSettings = () => {
 export const useGraphSelectableNodes = (graphId: string, isZijd?: boolean) => {
   // возвращает все точки на графике как NodeList преобразованный в массив Array<ChildNode>
   // необходимо для реализации react-drag-to-select
-  const { reference } = useAppSelector(state => state.pcaPageReducer); 
+  const { reference, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
   const [selectableNodes, setSelectableNodes] = useState<Array<ChildNode>>([]);
 
   const graphElement = document.getElementById(`${graphId}-graph`);
@@ -70,7 +70,7 @@ export const useGraphSelectableNodes = (graphId: string, isZijd?: boolean) => {
       };
     };
     setSelectableNodes(nodes);
-  }, [graphElement, isZijd, reference]);
+  }, [graphElement, isZijd, reference, hiddenStepsIDs]);
 
   return selectableNodes;
 };
