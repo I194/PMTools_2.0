@@ -1,14 +1,14 @@
 import React, { FC, useMemo } from "react";
 import styles from "./ZijdGraph.module.scss";
 import { useAppSelector } from "../../../services/store/hooks";
-import { useGraphSelectableNodes, useGraphSelectedIndexes, usePMDGraphSettings } from "../../../utils/GlobalHooks";
+import { useGraphSelectableNodes, useGraphSelectedIDs, usePMDGraphSettings } from "../../../utils/GlobalHooks";
 import { IGraph } from "../../../utils/GlobalTypes";
 import { IPmdData } from "../../../utils/GlobalTypes";
 import dataToStereoPMD from "../../../utils/graphs/formatters/stereo/dataToStereoPMD";
 import { SelectableGraph, GraphSymbols } from "../../Sub/Graphs";
 import { stereoAreaConstants } from "./StereoConstants";
 import AxesAndData from "./AxesAndData";
-import getInterpretationIndexes from "../../../utils/graphs/formatters/getInterpretationIndexes";
+import getInterpretationIDs from "../../../utils/graphs/formatters/getInterpretationIDs";
 import CoordinateSystem from "../../Sub/Graphs/CoordinateSystem/CoordinateSystem";
 
 export interface IStereoGraph extends IGraph {
@@ -24,14 +24,14 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
   const { reference, currentInterpretation, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
   const { menuItems, settings } = usePMDGraphSettings();
   const selectableNodes = useGraphSelectableNodes(graphId, false); 
-  const selectedIndexes = useGraphSelectedIndexes();
+  const selectedIDs = useGraphSelectedIDs();
 
   const {viewHeight, viewWidth, ...areaConstants} = stereoAreaConstants(width, height);
   const dataConstants = useMemo(() => 
     dataToStereoPMD(data, width / 2, reference, hiddenStepsIDs, currentInterpretation?.rawData),
   [reference, width, currentInterpretation, data, hiddenStepsIDs]);
 
-  const inInterpretationIndexes = getInterpretationIndexes(currentInterpretation, data);
+  const inInterpretationIDs = getInterpretationIDs(currentInterpretation, data);
 
   return (
     <>
@@ -51,8 +51,8 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
             height={height}
             areaConstants={areaConstants}
             dataConstants={dataConstants}
-            inInterpretationIndexes={inInterpretationIndexes}
-            selectedIndexes={selectedIndexes}
+            inInterpretationIDs={inInterpretationIDs}
+            selectedIDs={selectedIDs}
             settings={settings}
           />
           <CoordinateSystem top={-15}/>  

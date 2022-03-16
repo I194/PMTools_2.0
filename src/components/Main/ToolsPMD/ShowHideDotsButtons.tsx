@@ -1,17 +1,19 @@
 import React, { FC, useEffect, useState } from "react";
 import styles from './ToolsPMD.module.scss';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
-import { setHiddenStepsIDs, setSelectedStepsIDs, setStatisticsMode } from "../../../services/reducers/pcaPage";
+import { addHiddenStepsIDs, setHiddenStepsIDs, setSelectedStepsIDs, setStatisticsMode } from "../../../services/reducers/pcaPage";
 import { Button } from "@mui/material";
 import ButtonGroupWithLabel from "../../Sub/ButtonGroupWithLabel/ButtonGroupWithLabel";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { IPmdData } from "../../../utils/GlobalTypes";
 
 interface IShowHideDotsButtons {
   setShowStepsInput: React.Dispatch<React.SetStateAction<boolean>>;
+  pmdData: IPmdData;
 };
 
-const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowStepsInput }) => {
+const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowStepsInput, pmdData }) => {
 
   const dispatch = useAppDispatch();
   const { hiddenStepsIDs, selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
@@ -29,16 +31,13 @@ const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowStepsInput }) =>
   };
 
   useEffect(() => {
-    console.log(hideSteps, selectedStepsIDs);
     if (hideSteps && selectedStepsIDs && selectedStepsIDs.length) {
-      dispatch(setHiddenStepsIDs(selectedStepsIDs));
+      dispatch(addHiddenStepsIDs(selectedStepsIDs));
       setHideSteps(false);
       dispatch(setSelectedStepsIDs(null));
       dispatch(setStatisticsMode(null));
     };
   }, [hideSteps, selectedStepsIDs]);
-
-  console.log('here', selectedStepsIDs);
 
   return (
     <ButtonGroupWithLabel label='Шаги'>

@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { GraphSettings, MeanDirection, TooltipDot } from "../../../utils/graphs/types";
+import { DotsData, GraphSettings, MeanDirection, TooltipDot } from "../../../utils/graphs/types";
 import { graphSelectedDotColor } from "../../../utils/ThemeConstants";
 import { Axis, Data, Dot } from "../../Sub/Graphs";
 
@@ -16,13 +16,13 @@ interface IAxesAndData {
   };
   dataConstants: {
     labels: Array<string>;
-    xyData: Array<[number, number]>;
+    dotsData: DotsData;
     directionalData: Array<[number, number]>;
     tooltipData: Array<TooltipDot>;
     meanDirection: MeanDirection;
   };
-  selectedIndexes: Array<number>;
-  inInterpretationIndexes: Array<number>;
+  selectedIDs: Array<number>;
+  inInterpretationIDs: Array<number>;
   settings: GraphSettings;
 };
 
@@ -30,8 +30,8 @@ const AxesAndData: FC<IAxesAndData> = ({
   graphId, width, height,
   areaConstants,
   dataConstants,
-  selectedIndexes,
-  inInterpretationIndexes,
+  selectedIDs,
+  inInterpretationIDs,
   settings,
 }) => {
 
@@ -47,7 +47,7 @@ const AxesAndData: FC<IAxesAndData> = ({
     directionalData,
     tooltipData,
     labels,
-    xyData,
+    dotsData,
     meanDirection,
   } = dataConstants;
 
@@ -112,11 +112,11 @@ const AxesAndData: FC<IAxesAndData> = ({
           graphId={graphId}
           type='all'
           labels={labels}
-          data={xyData}
+          data={dotsData}
           directionalData={directionalData}
           tooltipData={tooltipData}
-          selectedIndexes={selectedIndexes}
-          inInterpretationIndexes={inInterpretationIndexes}
+          selectedIDs={selectedIDs}
+          inInterpretationIDs={inInterpretationIDs}
           dotFillColor='black'
           differentColors={true}
           colorsType="stereo"

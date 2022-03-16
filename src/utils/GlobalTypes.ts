@@ -17,6 +17,7 @@ interface IObjectKeys {
 };
 
 export type PMDStep = {
+  readonly id: number;
   step: string;
   x: number;
   y: number;

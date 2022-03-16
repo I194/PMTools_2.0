@@ -66,6 +66,7 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
       },
     },
     { field: 'id', headerName: 'ID', type: 'number', width: 40 },
+    { field: 'index', headerName: '№', type: 'string', width: 40 },
     { field: 'step', headerName: 'Step', type: 'string', width: 70 },
     { field: 'Dgeo', headerName: 'Dgeo', type: 'string', width: 70 },
     { field: 'Igeo', headerName: 'Igeo', type: 'number', width: 70 },
@@ -83,11 +84,12 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
   });
   
   if (!data) return <DataTablePMDSkeleton />;
-
+  let visibleIndex = 1;
   const rows: Array<DataGridPMDRow> = data.steps.map((stepData, index) => {
-    const { step, Dgeo, Igeo, Dstrat, Istrat, mag, a95, comment } = stepData;
+    const { id, step, Dgeo, Igeo, Dstrat, Istrat, mag, a95, comment } = stepData;
     return {
-      id: index + 1,
+      id,
+      index: hiddenStepsIDs.includes(id) ? '-' : visibleIndex++,
       step,
       Dgeo: Dgeo.toFixed(1),
       Igeo: Igeo.toFixed(1),
@@ -119,6 +121,9 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
         }}
         sx={GetDataTableBaseStyle()}
         hideFooter={true}
+        getRowClassName={
+          (params) =>  hiddenStepsIDs.includes(params.row.id) ? styles.hiddenRow : ''
+        }
       />
     </DataTablePMDSkeleton>
   )

@@ -2,18 +2,18 @@ import React, { FC } from "react";
 import { StringLiteralLike } from "typescript";
 import { Dot } from "..";
 import { createStraightPath } from "../../../../utils/graphs/createPath";
-import { DotSettings, DotType, TooltipDot } from "../../../../utils/graphs/types";
+import { DotsData, DotSettings, DotType, TooltipDot } from "../../../../utils/graphs/types";
 import DotTooltip from "../Tooltip/DotTooltip";
 
 interface IData {
   graphId: string;
   type: DotType;
   labels?: Array<string>;
-  data: Array<[number, number]>;
+  data: DotsData;
   directionalData?: Array<[number, number]>;
   tooltipData?: Array<TooltipDot>;
-  selectedIndexes: Array<number>;
-  inInterpretationIndexes: Array<number>;
+  selectedIDs: Array<number>;
+  inInterpretationIDs: Array<number>;
   dotHighlightedColor?: string;
   dotFillColor: string;
   differentColors?: boolean; 
@@ -28,8 +28,8 @@ const Data: FC<IData> = ({
   data,
   directionalData,
   tooltipData,
-  selectedIndexes,
-  inInterpretationIndexes,
+  selectedIDs,
+  inInterpretationIDs,
   dotHighlightedColor,
   dotFillColor,
   differentColors,
@@ -53,7 +53,7 @@ const Data: FC<IData> = ({
     <g id={`${graphId}-${type}-data`}>
       <path 
         id={`${graphId}-${type}-path`}
-        d={createStraightPath(data)}
+        d={createStraightPath(data.map(dot => dot.xyData))}
         fill="none" 
         stroke="black" 
       />
@@ -61,21 +61,21 @@ const Data: FC<IData> = ({
         id={`${graphId}-${type}-dots`}
       >
         {
-          data.map((xy, index) => (
+          data.map(({id, xyData}, index) => (
             <Dot 
-              x={xy[0]} 
-              y={xy[1]} 
-              id={`${graphId}-${type}-dot-${index}`} 
+              x={xyData[0]} 
+              y={xyData[1]} 
+              id={`${graphId}-${type}-dot-${id}`} 
               key={index} 
               type={type}
               annotation={{id: (index + 1).toString(), label: labels ? labels[index] : ''}}
-              selected={selectedIndexes.includes(index)}
+              selected={selectedIDs.includes(id)}
               tooltip={tooltipData ? tooltipData[index] : undefined}
               fillColor={
                 differentColors && colorsType
                   ? colorByType(
                       colorsType, 
-                      xy, 
+                      xyData, 
                       directionalData ? directionalData[index][0] : 1, 
                       directionalData ? directionalData[index][1] : 1,
                       index
@@ -83,12 +83,12 @@ const Data: FC<IData> = ({
                   : dotFillColor
               }
               strokeColor={
-                inInterpretationIndexes.includes(index) 
+                inInterpretationIDs.includes(id) 
                   ? dotHighlightedColor || 'orange' 
                   : "black"
               }
               strokeWidth={
-                inInterpretationIndexes.includes(index) 
+                inInterpretationIDs.includes(id) 
                   ? 2 
                   : 1
               }

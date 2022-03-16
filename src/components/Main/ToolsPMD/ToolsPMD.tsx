@@ -39,7 +39,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   const dispatch = useAppDispatch();
 
   const { treatmentData } = useAppSelector(state => state.parsedDataReducer);
-  const { reference, selectedStepsIDs, statisticsMode } = useAppSelector(state => state.pcaPageReducer); 
+  const { reference, selectedStepsIDs, statisticsMode, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
 
   const [allDataPMD, setAllDataPMD] = useState<Array<IPmdData>>([]);
   const [coordinateSystem, setCoordinateSystem] = useState<Reference>('geographic');
@@ -97,7 +97,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   }, []);
 
   const handleEnteredStepsApply = (steps: string) => {
-    dispatch(setSelectedStepsIDs(parseIDsInput(steps)));
+    dispatch(setSelectedStepsIDs(parseIDsInput(steps, hiddenStepsIDs, data!)));
     setShowStepsInput(false);
   };
 
@@ -138,7 +138,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
       <ButtonGroupWithLabel label='Смотреть статистику'>
         <Button onClick={() => setAllFilesStatOpen(true)}>По всем файлам</Button>
       </ButtonGroupWithLabel>
-      <ShowHideDotsButtons setShowStepsInput={setShowStepsInput}/>
+      <ShowHideDotsButtons setShowStepsInput={setShowStepsInput} pmdData={data}/>
       <ModalWrapper
         open={allFilesStatOpen}
         setOpen={setAllFilesStatOpen}

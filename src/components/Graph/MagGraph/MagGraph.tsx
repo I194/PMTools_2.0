@@ -1,13 +1,13 @@
 import React, { FC, useMemo } from "react";
 import styles from "./MagGraph.module.scss";
-import { useGraphSelectableNodes, useGraphSelectedIndexes, usePMDGraphSettings } from "../../../utils/GlobalHooks";
+import { useGraphSelectableNodes, useGraphSelectedIDs, usePMDGraphSettings } from "../../../utils/GlobalHooks";
 import { IGraph } from "../../../utils/GlobalTypes";
 import { IPmdData } from "../../../utils/GlobalTypes";
 import dataToMag from "../../../utils/graphs/formatters/mag/dataToMag";
 import { SelectableGraph } from "../../Sub/Graphs";
 import { magAreaConstants } from "./MagConstants";
 import AxesAndData from "./AxesAndData";
-import getInterpretationIndexes from "../../../utils/graphs/formatters/getInterpretationIndexes";
+import getInterpretationIDs from "../../../utils/graphs/formatters/getInterpretationIDs";
 import { useAppSelector } from "../../../services/store/hooks";
 
 export interface IMagGraph extends IGraph {
@@ -23,11 +23,11 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
   const { currentInterpretation, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
   const { menuItems, settings } = usePMDGraphSettings();
   const selectableNodes = useGraphSelectableNodes(graphId, false);
-  const selectedIndexes = useGraphSelectedIndexes();
+  const selectedIDs = useGraphSelectedIDs();
 
   const dataConstants = useMemo(() => dataToMag(data, width, hiddenStepsIDs), [width, data, hiddenStepsIDs]);
   const {viewHeight, viewWidth, ...areaConstants} = magAreaConstants(width, height, dataConstants.stepLabels);
-  const inInterpretationIndexes = getInterpretationIndexes(currentInterpretation, data);
+  const inInterpretationIDs = getInterpretationIDs(currentInterpretation, data);
 
   return (
     <>
@@ -47,8 +47,8 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
             height={height}
             areaConstants={areaConstants}
             dataConstants={dataConstants}
-            selectedIndexes={selectedIndexes}
-            inInterpretationIndexes={inInterpretationIndexes}
+            selectedIDs={selectedIDs}
+            inInterpretationIDs={inInterpretationIDs}
             settings={settings}
           />
         </g>

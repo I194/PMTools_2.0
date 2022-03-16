@@ -1,14 +1,14 @@
 import React, { FC, useEffect, useMemo, useState } from "react";
 import styles from "./ZijdGraph.module.scss";
 import { useAppSelector } from '../../../services/store/hooks';
-import { useGraphSelectableNodes, useGraphSelectedIndexes, usePMDGraphSettings } from "../../../utils/GlobalHooks";
+import { useGraphSelectableNodes, useGraphSelectedIDs, usePMDGraphSettings } from "../../../utils/GlobalHooks";
 import { IGraph } from "../../../utils/GlobalTypes";
 import { IPmdData } from "../../../utils/GlobalTypes";
 import dataToZijd from "../../../utils/graphs/formatters/zijd/dataToZijd";
 import { SelectableGraph, GraphSymbols, Unit} from "../../Sub/Graphs";
 import { zijdAreaConstants } from "./ZijdConstants";
 import AxesAndData from "./AxesAndData";
-import getInterpretationIndexes from "../../../utils/graphs/formatters/getInterpretationIndexes";
+import getInterpretationIDs from "../../../utils/graphs/formatters/getInterpretationIDs";
 import { Pan } from "../../../utils/graphs/types";
 import CoordinateSystem from "../../Sub/Graphs/CoordinateSystem/CoordinateSystem";
 
@@ -28,7 +28,7 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data }) => {
   const { reference, projection, currentInterpretation, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
   const { menuItems, settings } = usePMDGraphSettings();
   const selectableNodes = useGraphSelectableNodes(graphId, true);
-  const selectedIndexes = useGraphSelectedIndexes();
+  const selectedIDs = useGraphSelectedIDs();
 
   const { viewWidth, viewHeight, ...areaConstants} = useMemo(() => zijdAreaConstants(width, height), [width, height]);
   const { unitLabel, ...dataConstants } = useMemo(
@@ -44,7 +44,7 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data }) => {
     ),
   [reference, projection, width, currentInterpretation, data, hiddenStepsIDs, zoom]);
 
-  const inInterpretationIndexes = getInterpretationIndexes(currentInterpretation, data);
+  const inInterpretationIDs = getInterpretationIDs(currentInterpretation, data);
 
   const onWheel = (event: React.WheelEvent<SVGSVGElement>) => {
     console.log(event);
@@ -100,8 +100,8 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data }) => {
             pan={pan}
             areaConstants={areaConstants}
             dataConstants={dataConstants}
-            selectedIndexes={selectedIndexes}
-            inInterpretationIndexes={inInterpretationIndexes}
+            selectedIDs={selectedIDs}
+            inInterpretationIDs={inInterpretationIDs}
             settings={settings}
           />
           <CoordinateSystem />  

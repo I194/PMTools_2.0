@@ -48,8 +48,12 @@ const pcaPage = createSlice({
       console.log(action.payload);
       state.selectedStepsIDs = action.payload;
     },
-    setHiddenStepsIDs (state, action) {
+    setHiddenStepsIDs (state, action: {payload: Array<number>}) {
       state.hiddenStepsIDs = action.payload;
+    },
+    addHiddenStepsIDs (state, action: {payload: Array<number>}) {
+      const updatedHiddenStepsIDs = [...new Set([...state.hiddenStepsIDs, ...action.payload])];
+      state.hiddenStepsIDs = updatedHiddenStepsIDs;
     },
     setStatisticsMode (state, action) {
       state.statisticsMode = action.payload;
@@ -103,6 +107,7 @@ export const {
   setProjection,
   setSelectedStepsIDs,
   setHiddenStepsIDs,
+  addHiddenStepsIDs,
   setStatisticsMode,
   showStepsInput,
   addInterpretation,

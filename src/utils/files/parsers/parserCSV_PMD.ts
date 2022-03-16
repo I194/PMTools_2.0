@@ -16,7 +16,7 @@ const parseCSV_PMD = (data: string, name: string) => {
     v: +headLine[4],
   }
 
-  const steps = lines.slice(3).map((line) => {
+  const steps = lines.slice(3).map((line, index) => {
     
     const params = line.replace(/\s+/g, ' ').split(',');
 
@@ -50,6 +50,7 @@ const parseCSV_PMD = (data: string, name: string) => {
     else if (alternatingTypes.indexOf(demagSmbl) > -1) demagType = 'alternating field';
 
     return {
+      id: index + 1,
       step,
       x,
       y,

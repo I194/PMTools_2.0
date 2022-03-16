@@ -73,3 +73,5 @@ export type Pan = {
   left: number;
   top: number;
 };
+
+export type DotsData = Array<{id: number, xyData: [number, number]}>;

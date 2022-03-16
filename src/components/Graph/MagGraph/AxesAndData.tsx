@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { GraphSettings, TooltipDot } from "../../../utils/graphs/types";
+import { DotsData, GraphSettings, TooltipDot } from "../../../utils/graphs/types";
 import { Axis, Data } from "../../Sub/Graphs";
 
 interface IAxesAndData {
@@ -16,15 +16,15 @@ interface IAxesAndData {
     unitCountY: number;
   };
   dataConstants: {
-    xyData: Array<[number, number]>;
+    dotsData: DotsData;
     labels: Array<string>;
     tooltipData: Array<TooltipDot>;
     maxMAG: number;
     stepLabels: Array<string>;
     demagnetizationType: "thermal" | "alternating field" | undefined;
   };
-  selectedIndexes: Array<number>;
-  inInterpretationIndexes: Array<number>;
+  selectedIDs: Array<number>;
+  inInterpretationIDs: Array<number>;
   settings: GraphSettings;
 }
 
@@ -32,8 +32,8 @@ const AxesAndData: FC<IAxesAndData> = ({
   graphId, width, height,
   areaConstants,
   dataConstants,
-  selectedIndexes,
-  inInterpretationIndexes,
+  selectedIDs,
+  inInterpretationIDs,
   settings,
 }) => {
 
@@ -48,7 +48,7 @@ const AxesAndData: FC<IAxesAndData> = ({
   } = areaConstants;
 
   const { 
-    xyData, 
+    dotsData, 
     stepLabels, 
     maxMAG,
     tooltipData,
@@ -129,10 +129,10 @@ const AxesAndData: FC<IAxesAndData> = ({
           graphId={graphId}
           type='all'
           labels={labels}
-          data={xyData}
+          data={dotsData}
           tooltipData={tooltipData}
-          selectedIndexes={selectedIndexes}
-          inInterpretationIndexes={inInterpretationIndexes}
+          selectedIDs={selectedIDs}
+          inInterpretationIDs={inInterpretationIDs}
           dotFillColor='black'
           differentColors={true}
           colorsType="stereo"

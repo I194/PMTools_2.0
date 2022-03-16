@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { useAppSelector } from "../../../services/store/hooks";
 import projectionByReference from "../../../utils/graphs/formatters/zijd/projectionByReference";
-import { GraphSettings, PCALines, TooltipDot } from "../../../utils/graphs/types";
+import { DotsData, GraphSettings, PCALines, TooltipDot } from "../../../utils/graphs/types";
 import { Axis, Data } from "../../Sub/Graphs";
 import { useTheme } from '@mui/material/styles';
 import { warningColor } from "../../../utils/ThemeConstants";
@@ -20,14 +20,14 @@ interface IAxesAndData {
   };
   dataConstants: {
     labels: Array<string>;
-    horizontalProjectionData: Array<[number, number]>;
-    verticalProjectionData: Array<[number, number]>;
+    horizontalProjectionData: DotsData;
+    verticalProjectionData: DotsData;
     directionalData: Array<[number, number]>;
     tooltipData: Array<TooltipDot>;
     pcaLines: PCALines;
   };
-  inInterpretationIndexes: Array<number>;
-  selectedIndexes: Array<number>;
+  inInterpretationIDs: Array<number>;
+  selectedIDs: Array<number>;
   settings: GraphSettings;
 }
 
@@ -35,8 +35,8 @@ const AxesAndData: FC<IAxesAndData> = ({
   graphId, width, height, pan,
   areaConstants, 
   dataConstants,
-  selectedIndexes,
-  inInterpretationIndexes,
+  selectedIDs,
+  inInterpretationIDs,
   settings,
 }) => {
 
@@ -113,8 +113,8 @@ const AxesAndData: FC<IAxesAndData> = ({
           data={horizontalProjectionData}
           directionalData={directionalData}
           tooltipData={tooltipData}
-          selectedIndexes={selectedIndexes}
-          inInterpretationIndexes={inInterpretationIndexes}
+          selectedIDs={selectedIDs}
+          inInterpretationIDs={inInterpretationIDs}
           dotHighlightedColor={warningColor(theme.palette.mode)}
           dotFillColor='black'
           settings={settings.dots}
@@ -126,8 +126,8 @@ const AxesAndData: FC<IAxesAndData> = ({
           data={verticalProjectionData}
           directionalData={directionalData}
           tooltipData={tooltipData}
-          selectedIndexes={selectedIndexes}
-          inInterpretationIndexes={inInterpretationIndexes}
+          selectedIDs={selectedIDs}
+          inInterpretationIDs={inInterpretationIDs}
           dotHighlightedColor={warningColor(theme.palette.mode)}
           dotFillColor='white'
           settings={settings.dots}

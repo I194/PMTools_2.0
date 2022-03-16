@@ -15,7 +15,7 @@ const parsePMD = (data: string, name: string) => {
     v: +headLine.slice(52, headLine.length).trim().toLowerCase().split('m')[0],
   }
 
-  const steps = lines.slice(2).map((line) => {
+  const steps = lines.slice(2).map((line, index) => {
 
     // PAL | Xc (Am2) | Yc (Am2) | Zc (Am2) | MAG (A/m) | Dg | Ig | Ds | Is| a95
     // PAL === Step (mT or temp degrees)
@@ -43,6 +43,7 @@ const parsePMD = (data: string, name: string) => {
     else if (alternatingTypes.indexOf(demagSmbl) > -1) demagType = 'alternating field';
 
     return {
+      id: index + 1,
       step,
       x,
       y,

@@ -1,6 +1,6 @@
 import { IPmdData } from "../../../GlobalTypes";
 import Coordinates from "../../classes/Coordinates";
-import { MeanDirection, Reference, TooltipDot } from "../../types";
+import { DotsData, MeanDirection, Reference, TooltipDot } from "../../types";
 import toReferenceCoordinates from "../toReferenceCoordinates";
 import { dirToCartesian2D } from "../../dirToCartesian";
 import { RawStatisticsPCA } from "../../../GlobalTypes";
@@ -32,9 +32,9 @@ const dataToStereoPMD = (
     return [direction.declination, direction.inclination];
   });
 
-  const xyData: Array<[number, number]> = directionalData.map((di) => {
+  const dotsData: DotsData = directionalData.map((di, index) => {
     const coords = dirToCartesian2D(di[0] - 90, di[1], graphSize);
-    return [coords.x, coords.y];
+    return {id: steps[index].id, xyData: [coords.x, coords.y]};
   });
 
   // mean direction calculation
@@ -80,7 +80,7 @@ const dataToStereoPMD = (
     const xyz = new Coordinates(step.x, step.y, step.z);
     const direction = xyz.toDirection();
     return {
-      id: index + 1,
+      '№': index + 1,
       step: step.step,
       x: step.x,
       y: step.y,
@@ -93,7 +93,7 @@ const dataToStereoPMD = (
   
   return {
     directionalData, 
-    xyData,
+    dotsData,
     tooltipData,
     labels,
     meanDirection,

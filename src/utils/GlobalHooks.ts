@@ -76,21 +76,21 @@ export const useGraphSelectableNodes = (graphId: string, isZijd?: boolean) => {
   return selectableNodes;
 };
 
-export const useGraphSelectedIndexes = () => {
+export const useGraphSelectedIDs = () => {
   // возвращает список индексов выбранных точек на графике (каждый индекс равен id - 1)
   // необходимо для синхронизации выбора точек на всей странице:
   // все графики, использующие этот хук, могут быть синхронизованы с другими элементами, 
   // позволяющими выбирать точки - например, с таблицей точек (шагов)
   const { selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer);
-  const [selectedIndexes, setSelectedIndexes] = useState<Array<number>>([]);
+  const [selectedIDs, setSelectedIDs] = useState<Array<number>>([]);
 
   // проверка на наличие в сторе выбранных шагов (их ID хранятся в selectedStepsIDs)
   useEffect(() => {
-    if (selectedStepsIDs) setSelectedIndexes(selectedStepsIDs.map(id => id - 1));
-    else setSelectedIndexes([]); 
+    if (selectedStepsIDs) setSelectedIDs(selectedStepsIDs.map(id => id));
+    else setSelectedIDs([]); 
   }, [selectedStepsIDs]);
 
-  return selectedIndexes;
+  return selectedIDs;
 };
 
 export const useDebounce = (value: any, delay: number) => {

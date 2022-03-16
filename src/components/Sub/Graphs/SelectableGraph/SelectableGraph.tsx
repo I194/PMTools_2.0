@@ -111,7 +111,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
         onSelectEnd={e => {
           const indexes = new Set(e.selected.map(el => el.id.split('-').pop()));
           const IDs = [...indexes].filter(index => index) as Array<string>;
-          dispatch(setSelectedStepsIDs(IDs.map(id => +id + 1)));
+          dispatch(setSelectedStepsIDs(IDs.map(id => +id)));
         }}
       />
     </>
