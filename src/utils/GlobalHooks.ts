@@ -15,6 +15,17 @@ export const useWindowSize = () => {
   return size;
 };
 
+export const useSystemTheme = () => {
+  const [systemTheme, setSystemTheme] = useState<'dark' | 'light'>('dark');
+  useLayoutEffect(() => {
+    console.log(systemTheme)
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      setSystemTheme('dark');
+    } else setSystemTheme('light');
+  }, []);
+  return systemTheme;
+};
+
 export const usePMDGraphSettings = () => {
   // производит всю работу с хранением и отображением настроек графиков на странице PCA (PMD Graphs)
   const [tooltips, setTooltips] = useState<boolean>(true);

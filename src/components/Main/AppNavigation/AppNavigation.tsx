@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import styles from './AppNavigation.module.scss';
 import NavButton from './NavButton';
 
@@ -8,15 +8,21 @@ import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useAppDispatch, useAppSelector } from "../../../services/store/hooks";
 import { setColorMode } from "../../../services/reducers/appSettings";
 import { IconButton } from "@mui/material";
+import { useSystemTheme } from "../../../utils/GlobalHooks";
 
 const AppNavigation: FC = ({}) => {
 
   const dispatch = useAppDispatch();
   const { colorMode } = useAppSelector(state => state.appSettingsReducer);
+  const systemTheme = useSystemTheme();
 
   const onColorModeClick = () => {
     dispatch(setColorMode(colorMode === 'dark' ? 'light' : 'dark'));
   };
+
+  useEffect(() => {
+    dispatch(setColorMode(systemTheme));
+  }, [systemTheme]);
 
   const theme = useTheme();
 
