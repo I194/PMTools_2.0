@@ -11,7 +11,6 @@ export const pcaMiddleware = () => {
 
         const { dispatch, getState } = store;
         const { type, payload } = action;
-        console.log(type, payload, action);
         // if (type === "pcaPage/setStatisticsMode") {
         //   const { selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer);
         //   if (!selectedStepsIDs) dispatch(showStepsInput(true));

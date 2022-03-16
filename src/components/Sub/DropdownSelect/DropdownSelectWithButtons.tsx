@@ -40,7 +40,6 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
     const newSelectedOption = options[
       (options.findIndex((option) => option === selectedOption ) + 1) % options.length
     ];
-    console.log(selectedOption, newSelectedOption);
     setSelectedOption(newSelectedOption);
     onOptionSelect(newSelectedOption);
   };

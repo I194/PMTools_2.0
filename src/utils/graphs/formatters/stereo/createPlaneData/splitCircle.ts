@@ -34,8 +34,6 @@ const splitCircle = (
 
     sign = pointSign;
   };
-
-  console.log(negative)
   
   return { negative, positive };
 };

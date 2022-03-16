@@ -74,7 +74,7 @@ const Dot: FC<IDot> = ({
       dot.style.setProperty('fill', fillColor);
     };
   };
-  if (greatCircle) console.log(greatCircle.xyData);
+  
   return (
     <g>
       {

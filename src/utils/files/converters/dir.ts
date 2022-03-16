@@ -8,8 +8,6 @@ export const toDIR = async (file: File, parsedData?: IDirData) => {
   
   const data = parsedData ? parsedData : await getDirectionalData(file, 'dir') as IDirData;
 
-  console.log(data.interpretations[0].stepRange, data.interpretations[0].stepRange.length);
-
   const lines = data.interpretations.map((interpretation: any) => {
     const line = Object.keys(dataModel_interpretation).reduce((line, param) => {
       return line + putParamToString(interpretation[param], dataModel_interpretation[param])

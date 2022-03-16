@@ -23,19 +23,18 @@ const SymbolRow: FC<ISymbolRow> = ({title, sourceId, disabled, fill, x, y}) => {
         'display', 
         !sourceIsVisible ? 'block' : 'none' // '!' because state change takes some time and we can't wait 'til it's happens
       ); 
-    }
-  }
+    };
+  };
 
   const handleOver = () => {
     const source = document.getElementById(sourceId);
     if (source) {
-      // console.log(source.childNodes[0])
       (source.childNodes[0] as HTMLElement).style.setProperty(
         'filter', 
         "url(#double)"
       ); 
-    }
-  }
+    };
+  };
 
   const handleOut = () => {
     const source = document.getElementById(sourceId);
@@ -44,8 +43,8 @@ const SymbolRow: FC<ISymbolRow> = ({title, sourceId, disabled, fill, x, y}) => {
         'filter', 
         'none'
       ); 
-    }
-  }
+    };
+  };
 
   const doNothing = () => {};
  

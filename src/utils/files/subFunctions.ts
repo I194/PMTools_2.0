@@ -5,10 +5,9 @@ export function executeFunctionByName (functionName: string, context: any, ...ar
   const func: any = namespaces.pop();
   for (let i = 0; i < namespaces.length; i++) {
     context = context[namespaces[i]];
-  }
-  console.log(context);
+  };
   return context[func].apply(context, args);
-}
+};
 
 export const xlsx_to_csv = function to_csv(workbook: any) {
   var result: string[] = [];
@@ -36,13 +35,12 @@ export const putParamToString = ((param: string|number, len: number, alignRight?
     return ' '.repeat(len - parameter.length) + parameter;
   } else if (len === 0) return '  ' + param; // comment case
   return parameter + ' '.repeat(len - parameter.length);
-}) 
+});
 
 export const getFileName = (fullname: string) => {
   // delete file extension and get file name
   if (!fullname.includes('.')) return fullname;
   const filename = fullname.split('.');
   filename.pop();
-  console.log(filename, filename.join(''))
   return filename.join('');
-}
+};

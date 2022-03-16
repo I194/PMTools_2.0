@@ -45,9 +45,6 @@ var exportSVG = function(svg: any) {
 
 };
 
-
-
 export const handleExportGraph = (id: string) => {
-  console.log(id)
 	exportSVG(document.getElementById(id));
-}
+};

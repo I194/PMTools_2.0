@@ -27,7 +27,6 @@ const parsedDataSlice = createSlice({
   initialState,
   reducers: {
     setTreatmentData (state, action) {
-      console.log(action.payload);
       state.treatmentData = action.payload;
     },
     setDirStatData (state, action) {

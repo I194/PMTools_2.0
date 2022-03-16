@@ -45,7 +45,6 @@ const pcaPage = createSlice({
       state.projection = action.payload;
     },
     setSelectedStepsIDs (state, action) {
-      console.log(action.payload);
       state.selectedStepsIDs = action.payload;
     },
     setHiddenStepsIDs (state, action: {payload: Array<number>}) {

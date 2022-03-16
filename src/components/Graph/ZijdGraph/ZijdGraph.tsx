@@ -47,7 +47,6 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data }) => {
   const inInterpretationIDs = getInterpretationIDs(currentInterpretation, data);
 
   const onWheel = (event: React.WheelEvent<SVGSVGElement>) => {
-    console.log(event);
     let newZoom = zoom + -event.deltaY / width;
     if (newZoom < 1) newZoom = 1;
     if (newZoom > 6) newZoom = 6;

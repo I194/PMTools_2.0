@@ -21,7 +21,6 @@ export const toPMD = async (file: File, parsedData?: IPmdData) => {
   const metaLines = [
     ' ',
     Object.keys(dataModel_metaPMD).reduce((line, param) => {
-      console.log(extraMeta[param], dataModel_metaPMD[param], param)
       if (param === 'v') return (
         line + putParamToString(extraMeta[param].toExponential(1).toUpperCase(), dataModel_metaPMD[param], true)
       );
