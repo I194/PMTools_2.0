@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
 import { IDirData } from '../../utils/GlobalTypes';
 import { bgColorMain } from '../../utils/ThemeConstants';
 import Tables from './Tables';
+import Graphs from './Graphs';
 
 
 const DIRPage: FC = ({}) => {
@@ -61,6 +62,7 @@ const DIRPage: FC = ({}) => {
         style={{backgroundColor: bgColorMain(theme.palette.mode)}}
       > 
         <Tables dataToShow={dataToShow}/>
+        <Graphs dataToShow={dataToShow}/>
       </div>
     </>
   )
