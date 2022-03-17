@@ -1,5 +1,5 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
-import styles from './ToolsPMD.module.scss';
+import styles from './ToolsDIR.module.scss';
 import DropdownSelect from '../../Sub/DropdownSelect/DropdownSelect';
 import ButtonGroupWithLabel from '../../Sub/ButtonGroupWithLabel/ButtonGroupWithLabel';
 import { Button } from '@mui/material';
@@ -57,8 +57,6 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
     };
   }, []);
 
-  if (!data) return <ToolsPMDSkeleton />;
-
   // обработчик нажатий на клавиатуру
   const handleHotkeys = useCallback((e) => {
     const key = (e.code as string);
@@ -89,7 +87,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
   // обработчик введённых номеров точек
   const handleEnteredDotsIndexesApply = (steps: string) => {
     const parsedIndexes = parseDotsIndexesInput(steps);
-    const IDs = enteredIndexesToIDsDIR(parsedIndexes, hiddenDirectionsIDs, data);
+    const IDs = enteredIndexesToIDsDIR(parsedIndexes, hiddenDirectionsIDs, data!);
     dispatch(setSelectedStepsIDs(IDs));
     setShowStepsInput(false);
   };
@@ -104,6 +102,8 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
     dispatch(setSelectedStepsIDs(null));
     dispatch(setStatisticsMode(null));
   };
+  
+  if (!data) return <ToolsPMDSkeleton />;
 
   return (
     <ToolsPMDSkeleton>
@@ -122,8 +122,8 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
         onOptionSelect={handleReferenceSelect}
       />
       <ButtonGroupWithLabel label='Статистический метод'>
-        <StatModeButton mode='pca'/>
-        <StatModeButton mode='pca0'/>
+        <StatModeButton mode='fisher'/>
+        <StatModeButton mode='mcFadden'/>
         <StatModeButton mode='gc'/>
         <StatModeButton mode='gcn'/>
       </ButtonGroupWithLabel>

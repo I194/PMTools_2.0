@@ -49,7 +49,7 @@ const dirPage = createSlice({
       const updatedHiddenDirectionsIDs = [...new Set([...state.hiddenDirectionsIDs, ...action.payload])];
       state.hiddenDirectionsIDs = updatedHiddenDirectionsIDs;
     },
-    showStepsInput (state, action) {
+    showSelectionInput (state, action) {
       state.showSelectionInput = action.payload;
     },
     setStatisticsMode (state, action) {
@@ -103,7 +103,7 @@ export const {
   sethiddenDirectionsIDs,
   addHiddenStepsIDs,
   setStatisticsMode,
-  showStepsInput,
+  showSelectionInput,
   addInterpretation,
   deleteInterpretation,
   setAllInterpretations,

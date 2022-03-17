@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
-import styles from './ToolsPMD.module.scss';
+import styles from './ToolsDIR.module.scss';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
 import { addHiddenStepsIDs, setHiddenStepsIDs, setSelectedStepsIDs, setStatisticsMode } from "../../../services/reducers/pcaPage";
 import { Button } from "@mui/material";
@@ -40,7 +40,7 @@ const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowStepsInput, dirD
   }, [hideDirs, selectedDirectionsIDs]);
 
   return (
-    <ButtonGroupWithLabel label='Шаги'>
+    <ButtonGroupWithLabel label='Направления'>
       <Button
         color={'primary'}
         onClick={onHideClick}

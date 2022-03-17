@@ -2,10 +2,10 @@ import { Button } from '@mui/material';
 import React, { FC } from 'react';
 import { setStatisticsMode } from '../../../services/reducers/pcaPage';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
-import { StatisticsModePCA } from '../../../utils/graphs/types';
+import { StatisticsModeDIR, StatisticsModePCA } from '../../../utils/graphs/types';
 
 interface IStatModeButton {
-  mode: StatisticsModePCA;
+  mode: StatisticsModeDIR;
 };
 
 const StatModeButton: FC<IStatModeButton> = ({mode}) => {
@@ -13,7 +13,7 @@ const StatModeButton: FC<IStatModeButton> = ({mode}) => {
   const dispatch = useAppDispatch();
   const { statisticsMode } = useAppSelector(state => state.pcaPageReducer); 
 
-  const onStatisticsModeClick = (mode: StatisticsModePCA) => {
+  const onStatisticsModeClick = (mode: StatisticsModeDIR) => {
     if (statisticsMode === mode) mode = null;
     dispatch(setStatisticsMode(mode));
   };
