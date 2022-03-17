@@ -1,8 +1,8 @@
 import { Button } from '@mui/material';
 import React, { FC } from 'react';
-import { setStatisticsMode } from '../../../services/reducers/pcaPage';
+import { setStatisticsMode } from '../../../services/reducers/dirPage';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
-import { StatisticsModeDIR, StatisticsModePCA } from '../../../utils/graphs/types';
+import { StatisticsModeDIR } from '../../../utils/graphs/types';
 
 interface IStatModeButton {
   mode: StatisticsModeDIR;

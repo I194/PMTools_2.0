@@ -45,7 +45,7 @@ const dirPage = createSlice({
     sethiddenDirectionsIDs (state, action: {payload: Array<number>}) {
       state.hiddenDirectionsIDs = action.payload;
     },
-    addHiddenStepsIDs (state, action: {payload: Array<number>}) {
+    addHiddenDirectionsIDs (state, action: {payload: Array<number>}) {
       const updatedHiddenDirectionsIDs = [...new Set([...state.hiddenDirectionsIDs, ...action.payload])];
       state.hiddenDirectionsIDs = updatedHiddenDirectionsIDs;
     },
@@ -101,7 +101,7 @@ export const {
   setReference,
   setSelectedDirectionsIDs,
   sethiddenDirectionsIDs,
-  addHiddenStepsIDs,
+  addHiddenDirectionsIDs,
   setStatisticsMode,
   showSelectionInput,
   addInterpretation,

@@ -7,6 +7,7 @@ import { addInterpretation, setStatisticsMode, showSelectionInput, updateCurrent
 import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
 import { IDirData } from '../../utils/GlobalTypes';
 import { bgColorMain } from '../../utils/ThemeConstants';
+import Tables from './Tables';
 
 
 const DIRPage: FC = ({}) => {
@@ -43,7 +44,7 @@ const DIRPage: FC = ({}) => {
       // const statistics = calculateStatisticsPMD(dataToShow, statisticsMode, selectedDirectionsIDs);
       // statistics.interpretation.label += `_${currentFileInterpretations.length}`;
       // dispatch(addInterpretation(statistics));
-      // dispatch(setStatisticsMode(null));
+      dispatch(setStatisticsMode(null));
     } else dispatch(updateCurrentInterpretation());
   }, [statisticsMode, selectedDirectionsIDs, dataToShow]);
 
@@ -54,6 +55,12 @@ const DIRPage: FC = ({}) => {
         style={{backgroundColor: bgColorMain(theme.palette.mode)}}
       >
         <ToolsDIR data={dataToShow}/>
+      </div>
+      <div 
+        className={styles.data}
+        style={{backgroundColor: bgColorMain(theme.palette.mode)}}
+      > 
+        <Tables dataToShow={dataToShow}/>
       </div>
     </>
   )

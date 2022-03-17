@@ -1,12 +1,12 @@
 import React, { FC, useEffect, useState } from "react";
 import styles from './ToolsDIR.module.scss';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
-import { addHiddenStepsIDs, setHiddenStepsIDs, setSelectedStepsIDs, setStatisticsMode } from "../../../services/reducers/pcaPage";
 import { Button } from "@mui/material";
 import ButtonGroupWithLabel from "../../Sub/ButtonGroupWithLabel/ButtonGroupWithLabel";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { IDirData } from "../../../utils/GlobalTypes";
+import { addHiddenDirectionsIDs, sethiddenDirectionsIDs, setSelectedDirectionsIDs, setStatisticsMode } from "../../../services/reducers/dirPage";
 
 interface IShowHideDotsButtons {
   setShowStepsInput: React.Dispatch<React.SetStateAction<boolean>>;
@@ -20,7 +20,7 @@ const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowStepsInput, dirD
   const [hideDirs, setHideDirs] = useState<boolean>(false);
 
   const onShowClick = () => {
-    dispatch(setHiddenStepsIDs([]));
+    dispatch(sethiddenDirectionsIDs([]));
   };
 
   const onHideClick = () => {
@@ -31,10 +31,12 @@ const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowStepsInput, dirD
   };
 
   useEffect(() => {
+    console.log(hideDirs, selectedDirectionsIDs)
     if (hideDirs && selectedDirectionsIDs && selectedDirectionsIDs.length) {
-      dispatch(addHiddenStepsIDs(selectedDirectionsIDs));
+      console.log(selectedDirectionsIDs)
+      dispatch(addHiddenDirectionsIDs(selectedDirectionsIDs));
       setHideDirs(false);
-      dispatch(setSelectedStepsIDs(null));
+      dispatch(setSelectedDirectionsIDs(null));
       dispatch(setStatisticsMode(null));
     };
   }, [hideDirs, selectedDirectionsIDs]);

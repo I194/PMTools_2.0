@@ -4,7 +4,6 @@ import DropdownSelect from '../../Sub/DropdownSelect/DropdownSelect';
 import ButtonGroupWithLabel from '../../Sub/ButtonGroupWithLabel/ButtonGroupWithLabel';
 import { Button } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
-import { setReference, setSelectedStepsIDs, setStatisticsMode, updateCurrentFileInterpretations, updateCurrentInterpretation } from '../../../services/reducers/pcaPage';
 import { IDirData } from '../../../utils/GlobalTypes';
 import ModalWrapper from '../../Sub/Modal/ModalWrapper';
 import ToolsPMDSkeleton from './ToolsDIRSkeleton';
@@ -17,6 +16,7 @@ import DropdownSelectWithButtons from '../../Sub/DropdownSelect/DropdownSelectWi
 import ShowHideDotsButtons from './ShowHideDotsButtons';
 import labelToReference from '../../../utils/parsers/labelToReference';
 import { enteredIndexesToIDsDIR } from '../../../utils/parsers/enteredIndexesToIDs';
+import { setReference, setSelectedDirectionsIDs, setStatisticsMode, updateCurrentInterpretation, updateCurrentFileInterpretations } from '../../../services/reducers/dirPage';
 
 interface IToolsDIR {
   data: IDirData | null;
@@ -31,7 +31,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
 
   const [allDirData, setAllDirData] = useState<Array<IDirData>>([]);
   const [allFilesStatOpen, setAllFilesStatOpen] = useState<boolean>(false);
-  const [showStepsInput, setShowStepsInput] = useState<boolean>(false);
+  const [showIndexesInput, setShowIndexesInput] = useState<boolean>(false);
 
   // для списка всех файлов
   useEffect(() => {
@@ -43,9 +43,9 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
   // открывает окно ввода номеров точек (точки, номера которых будут введены, будут выбраны)
   useEffect(() => {
     if ((!selectedDirectionsIDs || !selectedDirectionsIDs.length) && statisticsMode) {
-      setShowStepsInput(true);
+      setShowIndexesInput(true);
     } else {
-      setShowStepsInput(false);
+      setShowIndexesInput(false);
     }
   }, [selectedDirectionsIDs, statisticsMode]);
 
@@ -61,13 +61,13 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
   const handleHotkeys = useCallback((e) => {
     const key = (e.code as string);
     const { ctrlKey, shiftKey, altKey } = e; 
-    if ((shiftKey || altKey) && key === 'KeyD') {
+    if ((shiftKey || altKey) && key === 'KeyF') {
       e.preventDefault();
-      dispatch(setStatisticsMode('pca'))
+      dispatch(setStatisticsMode('fisher'))
     };
-    if ((shiftKey || altKey) && key === 'KeyO') {
+    if ((shiftKey || altKey) && key === 'KeyM') {
       e.preventDefault();
-      dispatch(setStatisticsMode('pca0'))
+      dispatch(setStatisticsMode('mcFadden'))
     };
     if ((shiftKey || altKey) && key === 'KeyG') {
       e.preventDefault();
@@ -88,8 +88,8 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
   const handleEnteredDotsIndexesApply = (steps: string) => {
     const parsedIndexes = parseDotsIndexesInput(steps);
     const IDs = enteredIndexesToIDsDIR(parsedIndexes, hiddenDirectionsIDs, data!);
-    dispatch(setSelectedStepsIDs(IDs));
-    setShowStepsInput(false);
+    dispatch(setSelectedDirectionsIDs(IDs));
+    setShowIndexesInput(false);
   };
 
   // обработчик выбранного файла
@@ -99,7 +99,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
     // cleaners
     dispatch(updateCurrentFileInterpretations(option));
     dispatch(updateCurrentInterpretation());
-    dispatch(setSelectedStepsIDs(null));
+    dispatch(setSelectedDirectionsIDs(null));
     dispatch(setStatisticsMode(null));
   };
   
@@ -130,7 +130,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
       <ButtonGroupWithLabel label='Смотреть статистику'>
         <Button onClick={() => setAllFilesStatOpen(true)}>По всем файлам</Button>
       </ButtonGroupWithLabel>
-      <ShowHideDotsButtons setShowStepsInput={setShowStepsInput} dirData={data}/>
+      <ShowHideDotsButtons setShowStepsInput={setShowIndexesInput} dirData={data}/>
       <ModalWrapper
         open={allFilesStatOpen}
         setOpen={setAllFilesStatOpen}
@@ -139,10 +139,10 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
         <OutputDataTablePMD />
       </ModalWrapper>
       {
-        showStepsInput && 
+        showIndexesInput && 
         <ModalWrapper
-          open={showStepsInput}
-          setOpen={setShowStepsInput}
+          open={showIndexesInput}
+          setOpen={setShowIndexesInput}
           size={{width: '26vw', height: '20vh'}}
           position={{left: '50%', top: '20%'}}
           onClose={() => {dispatch(setStatisticsMode(null))}}
