@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import styles from './DIRPage.module.scss';
+// import styles from './DIRPage.module.scss';
 import { useTheme } from '@mui/material/styles';
 import ToolsDIR from '../../components/Main/ToolsDIR/ToolsDIR';
 import { filesToData } from '../../services/axios/filesAndData';
@@ -52,7 +52,7 @@ const DIRPage: FC = ({}) => {
 
   return (
     <>
-      <div 
+      {/* <div 
         className={styles.controlPanel}
         style={{backgroundColor: bgColorMain(theme.palette.mode)}}
       >
@@ -64,7 +64,7 @@ const DIRPage: FC = ({}) => {
       > 
         <Tables dataToShow={dataToShow}/>
         <Graphs dataToShow={dataToShow}/>
-      </div>
+      </div> */}
     </>
   )
 }
