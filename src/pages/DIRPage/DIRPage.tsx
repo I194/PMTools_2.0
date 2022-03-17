@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
+import styles from './DIRPage.module.scss';
 import { useTheme } from '@mui/material/styles';
 import ToolsDIR from '../../components/Main/ToolsDIR/ToolsDIR';
 import { filesToData } from '../../services/axios/filesAndData';
