@@ -27,10 +27,11 @@ export const examplePMD = {
   created: 'string',
 }
 
-export const exampleDir: IDirData = {
+export const exampleDir = {
   name: 'string',
   interpretations: [{
-    id: 'string',
+    id: 0,
+    label: 'string',
     code: 'string',
     stepRange: 'string',
     stepCount: 0,

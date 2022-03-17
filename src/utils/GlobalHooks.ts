@@ -54,6 +54,36 @@ export const usePMDGraphSettings = () => {
   return {menuItems, settings};
 };
 
+export const useDIRGraphSettings = () => {
+  // производит всю работу с хранением и отображением настроек графиков на странице PCA (PMD Graphs)
+  const [tooltips, setTooltips] = useState<boolean>(true);
+  const [ticks, setTicks] = useState<boolean>(true);
+  const [annotations, setAnnotations] = useState<boolean>(true);
+  const [directionID, setDirectionID] = useState<boolean>(true);
+  const [directionLabel, setDirectionLabel] = useState<boolean>(true);
+
+  const menuItems: Array<TMenuItem> = [
+    {label: 'Tooltips', onClick: () => setTooltips(!tooltips), state: tooltips},
+    {label: 'Ticks', onClick: () => setTicks(!ticks), state: ticks, divider: true},
+    {label: 'Annotations', onClick: () => setAnnotations(!annotations), state: annotations},
+    {label: 'Step ID', onClick: () => setDirectionID(!directionID), state: directionID},
+    {label: 'Step label', onClick: () => setDirectionLabel(!directionLabel), state: directionLabel},
+  ];
+
+  const settings: GraphSettings = {
+    area: {ticks},
+    dots: {
+      annotations,
+      tooltips,
+      id: directionID,
+      label: directionLabel,
+    },
+  };
+
+  return {menuItems, settings};
+};
+
+
 export const useGraphSelectableNodes = (graphId: string, isZijd?: boolean) => {
   // возвращает все точки на графике как NodeList преобразованный в массив Array<ChildNode>
   // необходимо для реализации react-drag-to-select
@@ -85,19 +115,21 @@ export const useGraphSelectableNodes = (graphId: string, isZijd?: boolean) => {
   return selectableNodes;
 };
 
-export const useGraphSelectedIDs = () => {
+export const useGraphSelectedIDs = (page: 'pca' | 'dir' = 'pca') => {
   // возвращает список индексов выбранных точек на графике (каждый индекс равен id - 1)
   // необходимо для синхронизации выбора точек на всей странице:
   // все графики, использующие этот хук, могут быть синхронизованы с другими элементами, 
   // позволяющими выбирать точки - например, с таблицей точек (шагов)
   const { selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer);
+  const { selectedDirectionsIDs } = useAppSelector(state => state.dirPageReducer);
+  const selectedDataIDs = page === 'pca' ? selectedStepsIDs : selectedDirectionsIDs;
   const [selectedIDs, setSelectedIDs] = useState<Array<number>>([]);
 
   // проверка на наличие в сторе выбранных шагов (их ID хранятся в selectedStepsIDs)
   useEffect(() => {
-    if (selectedStepsIDs) setSelectedIDs(selectedStepsIDs.map(id => id));
+    if (selectedDataIDs) setSelectedIDs(selectedDataIDs.map(id => id));
     else setSelectedIDs([]); 
-  }, [selectedStepsIDs]);
+  }, [selectedDataIDs]);
 
   return selectedIDs;
 };

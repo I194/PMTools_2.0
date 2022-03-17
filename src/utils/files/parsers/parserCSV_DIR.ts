@@ -5,12 +5,12 @@ const parseCSV_DIR = (data: string, name: string) => {
   // Get all lines except the last one (it's garbage)
   let lines = data.split(eol).filter(line => line.length > 1);
 
-  const interpretations = lines.slice(1).map((line) => {
+  const interpretations = lines.slice(1).map((line, index) => {
     
     const params = line.replace(/\s+/g, ' ').split(',');
 
     // id | Code | StepRange | N | Dgeo | Igeo | Dstrat | Istrat | MAD | K | Comment 
-    const id = params[0];
+    const label = params[0];
     const code = params[1];
     const stepRange = params[2];
     const stepCount = Number(params[3]);
@@ -36,7 +36,8 @@ const parseCSV_DIR = (data: string, name: string) => {
     else if (alternatingTypes.indexOf(demagSmbl) > -1) demagType = 'alternating field';
 
     return {
-      id,
+      id: index + 1,
+      label,
       code,
       demagType,
       stepRange,

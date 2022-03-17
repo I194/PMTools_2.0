@@ -3,6 +3,7 @@ import appSettingsReducer from "../reducers/appSettings";
 import filesReducer from "../reducers/files";
 import parsedDataReducer from "../reducers/parsedData";
 import pcaPageReducer from "../reducers/pcaPage";
+import dirPageReducer from "../reducers/dirPage";
 import thunk from 'redux-thunk';
 import { pcaMiddleware } from './middleware';
 
@@ -11,6 +12,7 @@ export const rootReducer = combineReducers({
   filesReducer,
   parsedDataReducer,
   pcaPageReducer,
+  dirPageReducer,
 });
 
 export const setupStore = () => {

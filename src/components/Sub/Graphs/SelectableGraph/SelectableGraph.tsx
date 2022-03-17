@@ -6,8 +6,10 @@ import ExportButton from "../Buttons/ExportButton/ExportButton";
 import { Pan, TMenuItem } from "../../../../utils/graphs/types";
 import { useAppDispatch } from "../../../../services/store/hooks";
 import { setSelectedStepsIDs } from "../../../../services/reducers/pcaPage";
+import { setSelectedDirectionsIDs } from "../../../../services/reducers/dirPage";
 import ProjectionSelect from "../Buttons/ProjectionSelect/ProjectionSelect";
 import ResetZoomPan from "../Buttons/ResetZoomPan/ResetZoomPan";
+import { useLocation } from "react-router-dom";
 
 interface ISelectableGraph {
   graphId: string;
@@ -40,6 +42,9 @@ const SelectableGraph: FC<ISelectableGraph> = ({
 }) => {
 
   const dispatch = useAppDispatch();
+  const location = useLocation();
+
+  const currentPage = location.pathname.slice(1, location.pathname.length);
 
   const handleDoubleClick = (event: any) => {
     event.preventDefault();
@@ -111,7 +116,12 @@ const SelectableGraph: FC<ISelectableGraph> = ({
         onSelectEnd={e => {
           const indexes = new Set(e.selected.map(el => el.id.split('-').pop()));
           const IDs = [...indexes].filter(index => index) as Array<string>;
-          dispatch(setSelectedStepsIDs(IDs.map(id => +id)));
+          if (currentPage === 'pca') {
+            dispatch(setSelectedStepsIDs(IDs.map(id => +id)));
+          };
+          if (currentPage === 'dir') {
+            dispatch(setSelectedDirectionsIDs(IDs.map(id => +id)));
+          };
         }}
       />
     </>

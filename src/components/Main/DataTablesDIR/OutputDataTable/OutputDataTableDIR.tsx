@@ -1,10 +1,10 @@
 import React, { FC, useCallback, useEffect, useState } from "react";
-import styles from './OutputDataTablePMD.module.scss';
+import styles from './OutputDataTableDIR.module.scss';
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
 import { useDebounce } from "../../../../utils/GlobalHooks";
 import equal from "deep-equal"
 import { GetDataTableBaseStyle } from "../styleConstants";
-import StatisticsDataTablePMDSkeleton from './OutputDataTablePMDSkeleton';
+import StatisticsDataTablePMDSkeleton from './OutputDataTableDIRSkeleton';
 import PMDOutputDataTableToolbar from '../../../Sub/DataTable/Toolbar/PMDOutputDataTableToolbar';
 import { DataGridDIRRow } from "../../../../utils/GlobalTypes";
 import { deleteAllInterpretations, deleteInterpretation, setAllInterpretations, setOutputFilename, updateCurrentFileInterpretations, updateCurrentInterpretation } from "../../../../services/reducers/pcaPage";
@@ -20,7 +20,7 @@ import {
 } from '@mui/x-data-grid';
 import { useTheme } from '@mui/material/styles';
 
-const OutputDataTablePMD: FC = () => {
+const OutputDataTableDIR: FC = () => {
   
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -126,9 +126,10 @@ const OutputDataTablePMD: FC = () => {
 
   if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
 
-  const rows: Array<Omit<DataGridDIRRow, 'id'>> = data.map((statistics, index) => {
+  const rows: Array<DataGridDIRRow> = data.map((statistics, index) => {
     const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadius, comment } = statistics;
     return {
+      id: index + 1,
       label,
       code, 
       stepRange,
@@ -177,4 +178,4 @@ const OutputDataTablePMD: FC = () => {
   );
 };
 
-export default OutputDataTablePMD;
+export default OutputDataTableDIR;

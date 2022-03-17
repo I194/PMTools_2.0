@@ -29,6 +29,7 @@ export type TooltipDot = {
   posX?: number;
   posY?: number;
   title?: string;
+  label?: string;
   step?: string;
   id?: number;
   x?: number;

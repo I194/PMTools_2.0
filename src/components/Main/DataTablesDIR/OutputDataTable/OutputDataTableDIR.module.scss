@@ -1,0 +1,22 @@
+.tableFull {
+  position: relative;
+  width: 100%;
+  height: 80%;
+
+  margin-top: 16px;
+  background-color: #212121;
+};
+
+.toolbar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.editableCell_dark {
+  background-color: #ce93d825;
+};
+
+.editableCell_light {
+  background-color: #9c27b025;
+};

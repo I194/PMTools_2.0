@@ -1,19 +1,19 @@
 import React, { FC, useEffect, useState } from "react";
-import styles from './StatisticsDataTablePMD.module.scss';
+import styles from './StatisticsDataTableDIR.module.scss';
 import { useTheme } from '@mui/material/styles';
 import { DataGrid, GridActionsCellItem, GridColumns, GridColumnHeaderParams, GridValueFormatterParams } from '@mui/x-data-grid';
-import StatisticsDataTablePMDSkeleton from './StatisticsDataTablePMDSkeleton';
+import StatisticsDataTablePMDSkeleton from './StatisticsDataTableDIRSkeleton';
 import { GetDataTableBaseStyle } from "../styleConstants";
 import { DataGridDIRRow, StatisitcsInterpretation } from "../../../../utils/GlobalTypes";
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
 import { deleteInterpretation, updateCurrentFileInterpretations, updateCurrentInterpretation } from "../../../../services/reducers/pcaPage";
 
-interface IStatisticsDataTablePMD {
+interface IStatisticsDataTableDIR {
   data: Array<StatisitcsInterpretation> | null;
 };
 
-const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
+const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ data }) => {
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -140,4 +140,4 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
   );
 };
 
-export default StatisticsDataTablePMD;
+export default StatisticsDataTableDIR;

@@ -49,7 +49,8 @@ export interface IPmdData extends IObjectKeys {
 export interface IDirData extends IObjectKeys {
   name: string;
   interpretations: {
-    id: string;
+    readonly id: number;
+    label: string;
     code: string;
     stepRange: string;
     stepCount: number;
@@ -68,7 +69,7 @@ export interface IDirData extends IObjectKeys {
 
 export type StatisitcsInterpretation = {
   parentFile: string;
-  id: string;
+  label: string;
   code: StatisticsModePCA | StatisticsModeDIR;
   steps: Array<PMDStep>;
   stepRange: string;
@@ -106,6 +107,6 @@ export type DataGridPMDRow = {
   comment: string;
 };
 
-export type DataGridDIRRow = Omit<StatisitcsInterpretation, 'demagType' | 'parentFile' | 'rawData' | 'steps'>
+export type DataGridDIRRow = Omit<StatisitcsInterpretation, 'demagType' | 'parentFile' | 'rawData' | 'steps'> & {readonly id: number};
 
 export type ThemeMode = 'dark' | 'light';

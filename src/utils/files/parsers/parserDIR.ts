@@ -5,11 +5,11 @@ const parseDIR = (data: string, name: string) => {
   // Get all lines except the last one (it's garbage)
   const lines = data.split(eol).filter(line => line.length > 1);
 
-  const interpretations = lines.map((line) => {
+  const interpretations = lines.map((line, index) => {
 
     // ID | CODE | STEPRANGE | N | Dg | Ig | kg | Ds | Is | MAD | Comment 
     // it's old format and we can't just split by " " 'cause it can cause issues
-    const id = line.slice(0, 7).trim();
+    const label = line.slice(0, 7).trim();
     const code = line.slice(7, 14).trim();
     const stepRange = line.slice(14, 24).trim();
     const stepCount = Number(line.slice(24, 27).trim());
@@ -33,7 +33,8 @@ const parseDIR = (data: string, name: string) => {
     else if (alternatingTypes.indexOf(demagSmbl) > -1) demagType = 'alternating field';
 
     return {
-      id,
+      id: index + 1,
+      label,
       code,
       stepRange,
       stepCount,

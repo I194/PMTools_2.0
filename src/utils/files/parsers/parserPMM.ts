@@ -8,13 +8,13 @@ const parsePMM = (data: string, name: string) => {
   name = header[0] || name;
 
   // Skip 1 and 2 lines 'cause they're in the header 
-  const interpretations = lines.slice(2).map((line) => {
+  const interpretations = lines.slice(2).map((line, index) => {
     
     const params = line.replace(/\s+/g, '').split(',');
 
     // ID | CODE | STEPRANGE | N | Dg | Ig | kg | a95g | Ds | Is | ks | a95s | comment 
     // 'kg' and 'ks' - idiotic garbage and, moreover, there is no 'a95' - there is only MAD (Maximum Angular Deviation)
-    const id = params[0];
+    const label = params[0];
     const code = params[1];
     const stepRange = params[2];
     const stepCount = Number(params[3]);
@@ -44,7 +44,8 @@ const parsePMM = (data: string, name: string) => {
     else if (alternatingTypes.indexOf(demagSmbl) > -1) demagType = 'alternating field';
 
     return {
-      id,
+      id: index + 1,
+      label,
       code,
       demagType,
       stepRange,

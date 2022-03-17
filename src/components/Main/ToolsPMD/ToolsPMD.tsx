@@ -2,8 +2,7 @@ import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import styles from './ToolsPMD.module.scss';
 import DropdownSelect from '../../Sub/DropdownSelect/DropdownSelect';
 import ButtonGroupWithLabel from '../../Sub/ButtonGroupWithLabel/ButtonGroupWithLabel';
-import { Button, TextField, IconButton } from '@mui/material';
-import DirectionsIcon from '@mui/icons-material/Directions';
+import { Button } from '@mui/material';
 import { Reference } from '../../../utils/graphs/types';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
 import { setReference, setSelectedStepsIDs, setStatisticsMode, updateCurrentFileInterpretations, updateCurrentInterpretation } from '../../../services/reducers/pcaPage';
@@ -14,21 +13,11 @@ import OutputDataTablePMD from '../DataTablesPMD/OutputDataTable/OutputDataTable
 import StatModeButton from './StatModeButton';
 import { setCurrentPMDid } from '../../../services/reducers/parsedData';
 import InputApply from '../../Sub/InputApply/InputApply';
-import parseIDsInput from '../../../utils/parsers/parseIDsInput';
+import parseDotsIndexesInput from '../../../utils/parsers/parseDotsIndexesInput';
 import DropdownSelectWithButtons from '../../Sub/DropdownSelect/DropdownSelectWithButtons';
 import ShowHideDotsButtons from './ShowHideDotsButtons';
-
-const labelToReference = (label: string) => {
-  if (label === 'Образец') return 'specimen';
-  if (label === 'Стратиграфическая') return 'stratigraphic';
-  return 'geographic';
-};
-
-const referenceToLabel = (reference: Reference) => {
-  if (reference === 'specimen') return 'Образец';
-  if (reference === 'stratigraphic') return 'Стратиграфическая';
-  return 'Географическая';
-};
+import labelToReference from '../../../utils/parsers/labelToReference';
+import { enteredIndexesToIDsPMD } from '../../../utils/parsers/enteredIndexesToIDs';
 
 interface IToolsPMD {
   data: IPmdData | null;
@@ -97,7 +86,9 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   }, []);
 
   const handleEnteredStepsApply = (steps: string) => {
-    dispatch(setSelectedStepsIDs(parseIDsInput(steps, hiddenStepsIDs, data!)));
+    const parsedIndexes = parseDotsIndexesInput(steps);
+    const IDs = enteredIndexesToIDsPMD(parsedIndexes, hiddenStepsIDs, data!);
+    dispatch(setSelectedStepsIDs(IDs));
     setShowStepsInput(false);
   };
 
@@ -157,7 +148,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
           isDraggable={true}
         >
           <InputApply 
-            label={`Введите шаги (${statisticsMode})`}
+            label={`Введите номера шагов (${statisticsMode})`}
             helperText="Валидные примеры: 1-9 || 2,4,8,9 || 2-4;8,9 || 2-4;8,9;12-14"
             onApply={handleEnteredStepsApply}
           />

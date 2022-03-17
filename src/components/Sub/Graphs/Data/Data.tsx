@@ -10,6 +10,7 @@ interface IData {
   type: DotType;
   labels?: Array<string>;
   data: DotsData;
+  connectDots?: boolean;
   directionalData?: Array<[number, number]>;
   tooltipData?: Array<TooltipDot>;
   selectedIDs: Array<number>;
@@ -26,6 +27,7 @@ const Data: FC<IData> = ({
   type,
   labels,
   data,
+  connectDots = true,
   directionalData,
   tooltipData,
   selectedIDs,
@@ -51,12 +53,16 @@ const Data: FC<IData> = ({
 
   return (
     <g id={`${graphId}-${type}-data`}>
-      <path 
-        id={`${graphId}-${type}-path`}
-        d={createStraightPath(data.map(dot => dot.xyData))}
-        fill="none" 
-        stroke="black" 
-      />
+      {
+        connectDots &&
+        <path 
+          id={`${graphId}-${type}-path`}
+          d={createStraightPath(data.map(dot => dot.xyData))}
+          fill="none" 
+          stroke="black" 
+        />
+      }
+      
       <g 
         id={`${graphId}-${type}-dots`}
       >

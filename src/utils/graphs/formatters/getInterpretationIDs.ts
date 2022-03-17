@@ -1,4 +1,4 @@
-import { IPmdData, StatisitcsInterpretation } from "../../GlobalTypes";
+import { IDirData, IPmdData, StatisitcsInterpretation } from "../../GlobalTypes";
 import equal from "deep-equal"
 
 const getInterpretationIDs = (
@@ -17,5 +17,23 @@ const getInterpretationIDs = (
 
   return inInterpretationIDs;
 };
+
+// const getInterpretationIDsDIR = (
+//   interpretation: StatisitcsInterpretation | null, 
+//   allData: IDirData, 
+// ) => {
+//   const inInterpretationIDs: Array<number> = [];
+
+//   if (interpretation && interpretation.steps) {
+//     interpretation.steps.forEach((interpretaionStep) => {
+//       allData.interpretations.forEach((direction) => {
+//         if (equal(step, interpretaionStep)) inInterpretationIDs.push(step.id);
+//       });
+//     });
+//   };
+
+//   return inInterpretationIDs;
+// };
+
 
 export default getInterpretationIDs;
