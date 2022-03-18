@@ -127,7 +127,7 @@ const Dot: FC<IDot> = ({
               d={createStraightPath(confidenceCircle.xyDataSplitted.pos)}
               fill='transparent'
               stroke={confidenceCircle.color}
-              stroke-dasharray="4"
+              strokeDasharray="4"
               strokeLinejoin="round"
               strokeLinecap="round"
             />,
@@ -145,7 +145,7 @@ const Dot: FC<IDot> = ({
               d={createStraightPath(greatCircle.xyDataSplitted.pos)}
               fill='transparent'
               stroke={greatCircle.color}
-              stroke-dasharray="4"
+              strokeDasharray="4"
               strokeLinejoin="round"
               strokeLinecap="round"
             />
