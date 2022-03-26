@@ -16,7 +16,7 @@ import InputApply from '../../Sub/InputApply/InputApply';
 import parseDotsIndexesInput from '../../../utils/parsers/parseDotsIndexesInput';
 import DropdownSelectWithButtons from '../../Sub/DropdownSelect/DropdownSelectWithButtons';
 import ShowHideDotsButtons from './ShowHideDotsButtons';
-import labelToReference from '../../../utils/parsers/labelToReference';
+import { referenceToLabel } from '../../../utils/parsers/labelToReference';
 import { enteredIndexesToIDsPMD } from '../../../utils/parsers/enteredIndexesToIDs';
 
 interface IToolsPMD {
@@ -34,6 +34,8 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   const [coordinateSystem, setCoordinateSystem] = useState<Reference>('geographic');
   const [allFilesStatOpen, setAllFilesStatOpen] = useState<boolean>(false);
   const [showStepsInput, setShowStepsInput] = useState<boolean>(false);
+
+  const availableReferences: Array<Reference> = ['specimen', 'geographic', 'stratigraphic'];
 
   useEffect(() => {
     if (treatmentData) {
@@ -60,8 +62,8 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
     setCoordinateSystem(reference);
   }, [reference]);
 
-  const handleReferenceSelect = (option: string) => {
-    dispatch(setReference(labelToReference(option)));
+  const handleReferenceSelect = (selectedReference: Reference) => {
+    dispatch(setReference(selectedReference));
   };
 
   const handleStatisticsModeSelect = useCallback((e) => {
@@ -114,12 +116,18 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
         minWidth={'120px'}
         useArrowListeners={true}
       />
-      <DropdownSelect 
-        label={'Система координат'}
-        options={['Образец', 'Географическая', 'Стратиграфическая']}
-        defaultValue='Географическая'
-        onOptionSelect={handleReferenceSelect}
-      />
+      <ButtonGroupWithLabel label='Система координат'>
+        {
+          availableReferences.map(availRef => (
+            <Button 
+              color={reference === availRef ? 'secondary' : 'primary'}
+              onClick={() => handleReferenceSelect(availRef)}
+            >
+              { referenceToLabel(availRef) }
+            </Button>
+          ))
+        }
+      </ButtonGroupWithLabel>
       <ButtonGroupWithLabel label='Статистический метод'>
         <StatModeButton mode='pca'/>
         <StatModeButton mode='pca0'/>

@@ -14,9 +14,10 @@ import InputApply from '../../Sub/InputApply/InputApply';
 import parseDotsIndexesInput from '../../../utils/parsers/parseDotsIndexesInput';
 import DropdownSelectWithButtons from '../../Sub/DropdownSelect/DropdownSelectWithButtons';
 import ShowHideDotsButtons from './ShowHideDotsButtons';
-import labelToReference from '../../../utils/parsers/labelToReference';
+import { referenceToLabel } from '../../../utils/parsers/labelToReference';
 import { enteredIndexesToIDsDIR } from '../../../utils/parsers/enteredIndexesToIDs';
 import { setReference, setSelectedDirectionsIDs, setStatisticsMode, updateCurrentInterpretation, updateCurrentFileInterpretations } from '../../../services/reducers/dirPage';
+import { Reference } from '../../../utils/graphs/types';
 
 interface IToolsDIR {
   data: IDirData | null;
@@ -27,11 +28,13 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
   const dispatch = useAppDispatch();
 
   const { dirStatData } = useAppSelector(state => state.parsedDataReducer);
-  const { selectedDirectionsIDs, hiddenDirectionsIDs, statisticsMode } = useAppSelector(state => state.dirPageReducer); 
+  const { selectedDirectionsIDs, hiddenDirectionsIDs, statisticsMode, reference } = useAppSelector(state => state.dirPageReducer); 
 
   const [allDirData, setAllDirData] = useState<Array<IDirData>>([]);
   const [allFilesStatOpen, setAllFilesStatOpen] = useState<boolean>(false);
   const [showIndexesInput, setShowIndexesInput] = useState<boolean>(false);
+
+  const availableReferences: Array<Reference> = ['geographic', 'stratigraphic'];
 
   // для списка всех файлов
   useEffect(() => {
@@ -80,8 +83,8 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
   }, []);
 
   // обработчик выбранной системы координат 
-  const handleReferenceSelect = (option: string) => {
-    dispatch(setReference(labelToReference(option)));
+  const handleReferenceSelect = (selectedReference: Reference) => {
+    dispatch(setReference(selectedReference));
   };
 
   // обработчик введённых номеров точек
@@ -115,12 +118,18 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
         minWidth={'120px'}
         useArrowListeners={true}
       />
-      <DropdownSelect 
-        label={'Система координат'}
-        options={['Образец', 'Географическая', 'Стратиграфическая']}
-        defaultValue='Географическая'
-        onOptionSelect={handleReferenceSelect}
-      />
+      <ButtonGroupWithLabel label='Система координат'>
+        {
+          availableReferences.map(availRef => (
+            <Button 
+              color={reference === availRef ? 'secondary' : 'primary'}
+              onClick={() => handleReferenceSelect(availRef)}
+            >
+              { referenceToLabel(availRef) }
+            </Button>
+          ))
+        }
+      </ButtonGroupWithLabel>
       <ButtonGroupWithLabel label='Статистический метод'>
         <StatModeButton mode='fisher'/>
         <StatModeButton mode='mcFadden'/>
