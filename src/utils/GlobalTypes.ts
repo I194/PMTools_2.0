@@ -2,6 +2,7 @@ import { IMagGraph } from "../components/Graph/MagGraph/MagGraph";
 import { IStereoGraph } from "../components/Graph/StereoGraph/StereoGraph";
 import { IZijdGraph } from "../components/Graph/ZijdGraph/ZijdGraph";
 import Coordinates from "./graphs/classes/Coordinates";
+import Direction from "./graphs/classes/Direction";
 import { StatisticsModeDIR, StatisticsModePCA } from "./graphs/types";
 
 export interface IGraph {
@@ -71,7 +72,8 @@ export type StatisitcsInterpretation = {
   parentFile: string;
   label: string;
   code: StatisticsModePCA | StatisticsModeDIR;
-  steps: Array<PMDStep>;
+  steps?: Array<PMDStep>;
+  directions?: IDirData['interpretations'];
   stepRange: string;
   stepCount: number;
   Dgeo: number;
@@ -82,7 +84,7 @@ export type StatisitcsInterpretation = {
   k?: number; // not exist for MAD as a confidene value
   comment: string;
   demagType: 'thermal' | 'alternating field' | undefined;
-  rawData: RawStatisticsPCA;
+  rawData: RawStatisticsPCA | RawStatisticsDIR;
 };
 
 export type RawStatisticsPCA = {
@@ -93,6 +95,20 @@ export type RawStatisticsPCA = {
   code: StatisticsModePCA;
   intensity: number;
   MAD: number;
+};
+
+export type RawStatisticsDIR = {
+  code: StatisticsModeDIR;
+  mean: {
+    geographic: {
+      direction: Direction;
+      MAD: number;
+    },
+    stratigraphic: {
+      direction: Direction;
+      MAD: number;
+    };
+  };
 };
 
 export type DataGridPMDRow = {

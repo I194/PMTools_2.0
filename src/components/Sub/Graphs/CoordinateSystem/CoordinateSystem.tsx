@@ -1,16 +1,15 @@
 import React, { FC } from "react";
 import styles from "./CoordinateSystem.module.scss";
 import { useAppSelector } from '../../../../services/store/hooks';
+import { Reference } from "../../../../utils/graphs/types";
 
 interface ICoordinateSystem {
+  reference: Reference;
   left?: number;
   top?: number;
 };
 
-const CoordinateSystem: FC<ICoordinateSystem> = ({ left=0, top=0 }) => {
-
-  const { reference } = useAppSelector(state => state.pcaPageReducer);
-
+const CoordinateSystem: FC<ICoordinateSystem> = ({ reference, left=0, top=0 }) => {
   return (
     <text 
       id='graph-reference' 

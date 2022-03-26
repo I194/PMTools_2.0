@@ -2,7 +2,7 @@ import React, { FC, useEffect, useMemo, useState } from "react";
 import styles from "./ZijdGraph.module.scss";
 import { useAppSelector } from '../../../services/store/hooks';
 import { useGraphSelectableNodes, useGraphSelectedIDs, usePMDGraphSettings } from "../../../utils/GlobalHooks";
-import { IGraph } from "../../../utils/GlobalTypes";
+import { IGraph, RawStatisticsPCA } from "../../../utils/GlobalTypes";
 import { IPmdData } from "../../../utils/GlobalTypes";
 import dataToZijd from "../../../utils/graphs/formatters/zijd/dataToZijd";
 import { SelectableGraph, GraphSymbols, Unit} from "../../Sub/Graphs";
@@ -40,7 +40,7 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data }) => {
       projection, 
       areaConstants.unitCount, 
       hiddenStepsIDs, 
-      currentInterpretation?.rawData
+      currentInterpretation?.rawData as RawStatisticsPCA
     ),
   [reference, projection, width, currentInterpretation, data, hiddenStepsIDs, zoom]);
 
@@ -103,7 +103,7 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data }) => {
             inInterpretationIDs={inInterpretationIDs}
             settings={settings}
           />
-          <CoordinateSystem />  
+          <CoordinateSystem reference={reference}/>  
           <GraphSymbols 
             title1="Horizontal" id1={`${graphId}-h-data`} 
             title2="Vertical" id2={`${graphId}-v-data`}

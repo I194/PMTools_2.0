@@ -9,6 +9,7 @@ import { IDirData } from '../../utils/GlobalTypes';
 import { bgColorMain } from '../../utils/ThemeConstants';
 import Tables from './Tables';
 import Graphs from './Graphs';
+import calculateStatisticsDIR from '../../utils/statistics/calculateStatisticsDIR';
 
 
 const DIRPage: FC = ({}) => {
@@ -42,9 +43,9 @@ const DIRPage: FC = ({}) => {
   useEffect(() => {
     if (statisticsMode && !selectedDirectionsIDs) dispatch(showSelectionInput(true));
     if (statisticsMode && selectedDirectionsIDs && selectedDirectionsIDs.length >= 2 && dataToShow) {
-      // const statistics = calculateStatisticsPMD(dataToShow, statisticsMode, selectedDirectionsIDs);
-      // statistics.interpretation.label += `_${currentFileInterpretations.length}`;
-      // dispatch(addInterpretation(statistics));
+      const statistics = calculateStatisticsDIR(dataToShow, statisticsMode, selectedDirectionsIDs);
+      statistics.interpretation.label += `_${currentFileInterpretations.length}`;
+      dispatch(addInterpretation(statistics));
       dispatch(setStatisticsMode(null));
     } else dispatch(updateCurrentInterpretation());
   }, [statisticsMode, selectedDirectionsIDs, dataToShow]);

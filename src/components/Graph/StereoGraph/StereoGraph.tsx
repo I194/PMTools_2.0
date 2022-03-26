@@ -2,7 +2,7 @@ import React, { FC, useMemo } from "react";
 import styles from "./ZijdGraph.module.scss";
 import { useAppSelector } from "../../../services/store/hooks";
 import { useGraphSelectableNodes, useGraphSelectedIDs, usePMDGraphSettings } from "../../../utils/GlobalHooks";
-import { IGraph } from "../../../utils/GlobalTypes";
+import { IGraph, RawStatisticsPCA } from "../../../utils/GlobalTypes";
 import { IPmdData } from "../../../utils/GlobalTypes";
 import dataToStereoPMD from "../../../utils/graphs/formatters/stereo/dataToStereoPMD";
 import { SelectableGraph, GraphSymbols } from "../../Sub/Graphs";
@@ -28,7 +28,7 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
 
   const {viewHeight, viewWidth, ...areaConstants} = stereoAreaConstants(width, height);
   const dataConstants = useMemo(() => 
-    dataToStereoPMD(data, width / 2, reference, hiddenStepsIDs, currentInterpretation?.rawData),
+    dataToStereoPMD(data, width / 2, reference, hiddenStepsIDs, currentInterpretation?.rawData as RawStatisticsPCA),
   [reference, width, currentInterpretation, data, hiddenStepsIDs]);
 
   const inInterpretationIDs = getInterpretationIDs(currentInterpretation, data);
@@ -55,7 +55,7 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
             selectedIDs={selectedIDs}
             settings={settings}
           />
-          <CoordinateSystem top={-15}/>  
+          <CoordinateSystem reference={reference} top={-15}/>  
           <GraphSymbols 
             title1="Down" id1={`${graphId}-d-data`} 
             title2="Up" id2={`${graphId}-u-data`}

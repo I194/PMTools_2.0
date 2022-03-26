@@ -1,8 +1,8 @@
 import { IPmdData } from "../GlobalTypes";
 import { RawStatisticsPCA } from "../GlobalTypes";
 import { StatisticsModePCA } from "../graphs/types";
-import calculatePCA from "./calculatePCA";
-import rawStatisticsToInterpretation from "./formtatters/rawStatisticsToInterpretation";
+import calculatePCA_pmd from "./calculation/calculatePCA_pmd";
+import rawStatisticsPMDToInterpretation from "./formtatters/rawStatisticsPMDToInterpretation";
 
 const calculateStatisticsPMD = (
   data: IPmdData,
@@ -29,10 +29,10 @@ const calculateStatisticsPMD = (
 
   const rawStatistics: RawStatisticsPCA = {
     code: mode, 
-    ...calculatePCA(selectedSteps, anchored, normalized, type)
+    ...calculatePCA_pmd(selectedSteps, anchored, normalized, type)
   };
 
-  const interpretation = rawStatisticsToInterpretation(rawStatistics, selectedSteps, data.metadata, mode);
+  const interpretation = rawStatisticsPMDToInterpretation(rawStatistics, selectedSteps, data.metadata, mode);
   
   return {rawStatistics, interpretation};
 };

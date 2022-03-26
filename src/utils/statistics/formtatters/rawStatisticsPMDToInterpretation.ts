@@ -3,7 +3,7 @@ import { RawStatisticsPCA, StatisitcsInterpretation } from "../../GlobalTypes";
 import toReferenceCoordinates from "../../graphs/formatters/toReferenceCoordinates";
 import { StatisticsModePCA } from "../../graphs/types";
 
-const rawStatisticsToInterpretation = (
+const rawStatisticsPMDToInterpretation = (
   statistics: RawStatisticsPCA, 
   selectedSteps: IPmdData['steps'],
   metadata: IPmdData['metadata'],
@@ -49,4 +49,4 @@ const rawStatisticsToInterpretation = (
   return interpretation;
 };
 
-export default rawStatisticsToInterpretation;
+export default rawStatisticsPMDToInterpretation;
