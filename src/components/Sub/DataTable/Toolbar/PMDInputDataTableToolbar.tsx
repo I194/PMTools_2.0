@@ -12,10 +12,10 @@ import ExportPMD from './Buttons/ExportButton/ExportPMD';
 
 const PMDInputDataTableToolbar = () => {
 
-  const { treatmentData } = useAppSelector(state => state.parsedDataReducer);
+  const { treatmentData, currentDataPMDid } = useAppSelector(state => state.parsedDataReducer);
 
   if (!treatmentData) return null;
-  const data = treatmentData[0];
+  const data = treatmentData[currentDataPMDid || 0];
 
   return (
     <GridToolbarContainer>

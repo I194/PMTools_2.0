@@ -12,10 +12,10 @@ import ExportPMD from './Buttons/ExportButton/ExportPMD';
 
 const DIRInputDataTableToolbar = () => {
 
-  const { dirStatData } = useAppSelector(state => state.parsedDataReducer);
+  const { dirStatData, currentDataDIRid } = useAppSelector(state => state.parsedDataReducer);
 
   if (!dirStatData) return null;
-  const data = dirStatData[0];
+  const data = dirStatData[currentDataDIRid || 0];
 
   return (
     <GridToolbarContainer>
