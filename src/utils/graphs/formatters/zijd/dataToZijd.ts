@@ -54,7 +54,7 @@ const dataToZijd = (
   });
 
   // 'calculation' of unit label, using in Unit component
-  const unitLabel = (maxCoord / unitCount).toExponential(2).toUpperCase();
+  const unitLabel = ((maxCoord / data.metadata.v) / unitCount).toExponential(2).toUpperCase();
 
   // pcaLines calculation  
   let rotatedCenterMass: Coordinates | null = null;
