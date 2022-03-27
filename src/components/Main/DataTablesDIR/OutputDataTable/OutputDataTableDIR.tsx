@@ -7,7 +7,7 @@ import { GetDataTableBaseStyle } from "../styleConstants";
 import StatisticsDataTablePMDSkeleton from './OutputDataTableDIRSkeleton';
 import PMDOutputDataTableToolbar from '../../../Sub/DataTable/Toolbar/PMDOutputDataTableToolbar';
 import { DataGridDIRRow } from "../../../../utils/GlobalTypes";
-import { deleteAllInterpretations, deleteInterpretation, setAllInterpretations, setOutputFilename, updateCurrentFileInterpretations, updateCurrentInterpretation } from "../../../../services/reducers/pcaPage";
+import { deleteAllInterpretations, deleteInterpretation, setAllInterpretations, setOutputFilename, updateCurrentFileInterpretations, updateCurrentInterpretation } from "../../../../services/reducers/dirPage";
 import TextField from '@mui/material/TextField';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { 
@@ -25,7 +25,8 @@ const OutputDataTableDIR: FC = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
 
-  const data = useAppSelector(state => state.pcaPageReducer.allInterpretations);
+  const data = useAppSelector(state => state.dirPageReducer.allInterpretations);
+  const { dirStatData, currentDataDIRid } = useAppSelector(state => state.parsedDataReducer);
   const [editRowsModel, setEditRowsModel] = useState<GridEditRowsModel>({});
   const [filename, setFilename] = useState<string>('PCA Interpretations');
   const debouncedFilename = useDebounce(filename, 500);
@@ -37,10 +38,18 @@ const OutputDataTableDIR: FC = () => {
   const handleRowDelete = (label: string) => (event: any) => {
     event.stopPropagation();
     dispatch(deleteInterpretation(label));
-    dispatch(updateCurrentFileInterpretations(
-      data.filter(interpretation => interpretation.label === label)[0].parentFile
-    ));
-    dispatch(updateCurrentInterpretation());
+    
+    // это всё надо упростить и перенести в мидлвару
+    // и ещё заполнять поле currentFile при обновлении currentDataDIR/PMDid (тоже в мидлваре)
+    const currentFileName = dirStatData![currentDataDIRid || 0]?.name;
+    const deletedRowParentFile = data.filter(
+      interpretation => interpretation.label === label
+    )[0].parentFile;
+
+    if (deletedRowParentFile === currentFileName) {
+      dispatch(updateCurrentFileInterpretations(deletedRowParentFile));
+      dispatch(updateCurrentInterpretation());
+    };
   };
 
   const handleDeleteAllRows = (event: any) => {
@@ -126,11 +135,10 @@ const OutputDataTableDIR: FC = () => {
 
   if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
 
-  const rows: Array<DataGridDIRRow> = data.map((statistics, index) => {
+  const rows: Array<Omit<DataGridDIRRow, 'id' | 'label'>> = data.map((statistics, index) => {
     const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadius, comment } = statistics;
     return {
-      id: index + 1,
-      label,
+      id: label,
       code, 
       stepRange,
       stepCount,

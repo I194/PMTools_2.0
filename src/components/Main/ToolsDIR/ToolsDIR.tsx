@@ -18,6 +18,7 @@ import { referenceToLabel } from '../../../utils/parsers/labelToReference';
 import { enteredIndexesToIDsDIR } from '../../../utils/parsers/enteredIndexesToIDs';
 import { setReference, setSelectedDirectionsIDs, setStatisticsMode, updateCurrentInterpretation, updateCurrentFileInterpretations } from '../../../services/reducers/dirPage';
 import { Reference } from '../../../utils/graphs/types';
+import OutputDataTableDIR from '../DataTablesDIR/OutputDataTable/OutputDataTableDIR';
 
 interface IToolsDIR {
   data: IDirData | null;
@@ -145,7 +146,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
         setOpen={setAllFilesStatOpen}
         size={{width: '60vw', height: '60vh'}}
       >
-        <OutputDataTablePMD />
+        <OutputDataTableDIR />
       </ModalWrapper>
       {
         showIndexesInput && 

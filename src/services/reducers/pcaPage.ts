@@ -87,7 +87,10 @@ const pcaPage = createSlice({
       );
     },
     updateCurrentInterpretation (state) {
-      if (!state.currentFileInterpretations.length) state.currentInterpretation = null;
+      if (!state.currentFileInterpretations.length) {
+        state.currentInterpretation = null;
+        return;
+      };
       state.currentInterpretation = state.currentFileInterpretations[
         state.currentFileInterpretations.length - 1
       ];

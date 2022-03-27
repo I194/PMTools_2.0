@@ -26,6 +26,7 @@ const OutputDataTablePMD: FC = () => {
   const theme = useTheme();
 
   const data = useAppSelector(state => state.pcaPageReducer.allInterpretations);
+  const { treatmentData, currentDataPMDid } = useAppSelector(state => state.parsedDataReducer);
   const [editRowsModel, setEditRowsModel] = useState<GridEditRowsModel>({});
   const [filename, setFilename] = useState<string>('PCA Interpretations');
   const debouncedFilename = useDebounce(filename, 500);
@@ -37,10 +38,19 @@ const OutputDataTablePMD: FC = () => {
   const handleRowDelete = (label: string) => (event: any) => {
     event.stopPropagation();
     dispatch(deleteInterpretation(label));
-    dispatch(updateCurrentFileInterpretations(
-      data.filter(interpretation => interpretation.label === label)[0].parentFile
-    ));
-    dispatch(updateCurrentInterpretation());
+        
+    // это всё надо упростить и перенести в мидлвару
+    // и ещё заполнять поле currentFile при обновлении currentDataDIR/PMDid (тоже в мидлваре)
+    const currentFileName = treatmentData![currentDataPMDid || 0]?.metadata.name;
+    const deletedRowParentFile = data.filter(
+      interpretation => interpretation.label === label
+    )[0].parentFile;
+    console.log(deletedRowParentFile, currentFileName, treatmentData, currentDataPMDid);
+
+    if (deletedRowParentFile === currentFileName) {
+      dispatch(updateCurrentFileInterpretations(deletedRowParentFile));
+      dispatch(updateCurrentInterpretation());
+    };
   };
 
   const handleDeleteAllRows = (event: any) => {

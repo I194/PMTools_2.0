@@ -24,13 +24,11 @@ const StereoGraphDIR: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
   const { menuItems, settings } = usePMDGraphSettings();
   const selectableNodes = useGraphSelectableNodes(graphId, false); 
   const selectedIDs = useGraphSelectedIDs('dir');
-
+  console.log(currentInterpretation);
   const {viewHeight, viewWidth, ...areaConstants} = stereoAreaConstants(width, height);
   const dataConstants = useMemo(() => 
     dataToStereoDIR(data, width / 2, reference, hiddenDirectionsIDs, currentInterpretation?.rawData as RawStatisticsDIR),
   [reference, width, currentInterpretation, data, hiddenDirectionsIDs]);
-
-  // const inInterpretationIDs = getInterpretationIDs(currentInterpretation, data);
 
   return (
     <>
