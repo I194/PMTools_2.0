@@ -26,8 +26,8 @@ const PCAPage: FC = ({}) => {
   const [dataToShow, setDataToShow] = useState<IPmdData | null>(null);
 
   useEffect(() => {
-    if (files && !treatmentData) dispatch(filesToData({files, format: 'pmd'}));
-  }, [files]);
+    if (files) dispatch(filesToData({files, format: 'pmd'}));
+  }, [files, files?.length]); 
 
   useEffect(() => {
     if (treatmentData && treatmentData.length > 0) {

@@ -23,15 +23,28 @@ const filesSlice = createSlice({
     setInputFiles (state, action) {
       state.inputFiles = action.payload;
     },
+    addInputFiles (state, action) {
+      if (state.inputFiles) state.inputFiles.push(...action.payload);
+      else state.inputFiles = action.payload;
+    },
     setOutputFiles (state, action) {
       state.outputFiles = action.payload;
     },
     setTreatmentFiles (state, action) {
       state.treatmentFiles = action.payload;
     },
+    addTreatmentFiles (state, action) {
+      console.log(state.treatmentFiles)
+      if (state.treatmentFiles) state.treatmentFiles.push(...action.payload);
+      else state.treatmentFiles = action.payload;
+    },
     setDirStatFiles (state, action) {
       state.dirStatFiles = action.payload;
-    }
+    },
+    addDirStatFiles (state, action) {
+      if (state.dirStatFiles) state.dirStatFiles.push(...action.payload);
+      else state.dirStatFiles = action.payload;
+    },
   },
   extraReducers: (builder) => {
     // Пример работы с асинхронными запросами
@@ -55,9 +68,12 @@ const filesSlice = createSlice({
 
 export const { 
   setInputFiles, 
+  addInputFiles,
   setOutputFiles, 
   setTreatmentFiles,
-  setDirStatFiles
+  addTreatmentFiles,
+  setDirStatFiles,
+  addDirStatFiles,
 } = filesSlice.actions;
 
 const filesReducer = filesSlice.reducer;

@@ -30,8 +30,8 @@ const DIRPage: FC = ({}) => {
   const [dataToShow, setDataToShow] = useState<IDirData | null>(null);
 
   useEffect(() => {
-    if (files && !dirStatData) dispatch(filesToData({files, format: 'dir'}));
-  }, [files]);
+    if (files) dispatch(filesToData({files, format: 'dir'}));
+  }, [files, files?.length]);
 
   useEffect(() => {
     if (dirStatData && dirStatData.length > 0) {
