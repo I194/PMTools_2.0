@@ -78,7 +78,7 @@ export const dataModel_metaPMD: any = {
 
 // count of symbols for each property (column) in line (row)
 export const dataModel_interpretation: any = {
-  id: 7,
+  label: 7,
   code: 8,
   stepRange: 9,
   stepCount: 3,

@@ -11,6 +11,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { StatisticsModeDIR } from "../../../../utils/graphs/types";
 import DataTableDIRSkeleton from "./DataTableDIRSkeleton";
+import DIRInputDataTableToolbar from "../../../Sub/DataTable/Toolbar/DIRInputDataTableToolbar";
 
 interface IDataTableDIR {
   data: IDirData | null;
@@ -135,7 +136,7 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
           setSelectedRows(selectedRows);
         }}
         components={{
-          Toolbar: PMDInputDataTableToolbar, 
+          Toolbar: DIRInputDataTableToolbar, 
         }}
         sx={GetDataTableBaseStyle()}
         hideFooter={true}

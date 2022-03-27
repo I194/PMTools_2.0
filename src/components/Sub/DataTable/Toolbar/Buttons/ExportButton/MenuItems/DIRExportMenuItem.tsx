@@ -19,28 +19,28 @@ const DIRExportMenuItem: FC<DIRExport> = ({as, data}, props: GridExportMenuItemP
   const exportAs = {
     dir: {
       export: () => {
-        data.created = new Date().toLocaleString();
+        if (!data.created) data.created = new Date().toLocaleString();
         toDIR(blankFile, data)
       }, 
       label: 'Export as DIR'
     },
     pmm: {
       export: () => {
-        data.created = new Date().toLocaleString();
+        if (!data.created) data.created = new Date().toLocaleString();
         toPMM(blankFile, data)
       }, 
       label: 'Export as PMM'
     },
     csv: {
       export: () => {
-        data.created = new Date().toLocaleString();
+        if (!data.created) data.created = new Date().toLocaleString();
         toCSV_DIR(blankFile, data)
       }, 
       label: 'Export as CSV'
     },
     xlsx: {
       export: () => {
-        data.created = new Date().toLocaleString();
+        if (!data.created) data.created = new Date().toLocaleString();
         toXLSX_DIR(blankFile, data)
       }, 
       label: 'Export as XLSX'
