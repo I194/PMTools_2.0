@@ -19,6 +19,7 @@ import {
   GridValueFormatterParams, 
 } from '@mui/x-data-grid';
 import { useTheme } from '@mui/material/styles';
+import DIROutputDataTableToolbar from "../../../Sub/DataTable/Toolbar/DIROutputDataTableToolbar";
 
 const OutputDataTableDIR: FC = () => {
   
@@ -28,7 +29,7 @@ const OutputDataTableDIR: FC = () => {
   const data = useAppSelector(state => state.dirPageReducer.allInterpretations);
   const { dirStatData, currentDataDIRid } = useAppSelector(state => state.parsedDataReducer);
   const [editRowsModel, setEditRowsModel] = useState<GridEditRowsModel>({});
-  const [filename, setFilename] = useState<string>('PCA Interpretations');
+  const [filename, setFilename] = useState<string>('DIR Interpretations');
   const debouncedFilename = useDebounce(filename, 500);
 
   const handleEditRowsModelChange = useCallback((model: GridEditRowsModel) => {
@@ -176,7 +177,7 @@ const OutputDataTableDIR: FC = () => {
           hideFooter={true}
           density={'compact'}
           components={{
-            Toolbar: PMDOutputDataTableToolbar,
+            Toolbar: DIROutputDataTableToolbar,
           }}
           disableSelectionOnClick={true}
         />
