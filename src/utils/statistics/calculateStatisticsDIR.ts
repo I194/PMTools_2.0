@@ -3,6 +3,8 @@ import { RawStatisticsPCA } from "../GlobalTypes";
 import Coordinates from "../graphs/classes/Coordinates";
 import Direction from "../graphs/classes/Direction";
 import { StatisticsModeDIR } from "../graphs/types";
+import calculateFisherMean from "./calculation/calculateFisherMean";
+import calculateMcFaddenMean from "./calculation/calculateMcFaddenCombineMean";
 import calculatePCA_dir from "./calculation/calculatePCA_dir";
 import rawStatisticsDIRToInterpretation from "./formtatters/rawStatisticsDIRToInterpretation";
 
@@ -23,8 +25,9 @@ const calculateStatisticsDIR = (
 
   if (mode === 'gc') meanByMode = calculatePCA_dir(selectedDirections, false);
   if (mode === 'gcn') meanByMode = calculatePCA_dir(selectedDirections, true);
-  // if (mode === 'fisher') meanByMode = 
-  
+  if (mode === 'fisher') meanByMode = calculateFisherMean(selectedDirections);
+  if (mode === 'mcFadden') meanByMode = calculateMcFaddenMean(selectedDirections);
+
   const rawStatistics: RawStatisticsDIR = {
     code: mode, 
     mean: meanByMode

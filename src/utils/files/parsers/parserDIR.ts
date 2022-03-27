@@ -1,3 +1,5 @@
+import { IDirData } from "../../GlobalTypes";
+
 const parseDIR = (data: string, name: string) => {
   
   // eslint-disable-next-line no-control-regex
@@ -5,7 +7,7 @@ const parseDIR = (data: string, name: string) => {
   // Get all lines except the last one (it's garbage)
   const lines = data.split(eol).filter(line => line.length > 1);
 
-  const interpretations = lines.map((line, index) => {
+  const interpretations: IDirData['interpretations'] = lines.map((line, index) => {
 
     // ID | CODE | STEPRANGE | N | Dg | Ig | kg | Ds | Is | MAD | Comment 
     // it's old format and we can't just split by " " 'cause it can cause issues
@@ -36,6 +38,7 @@ const parseDIR = (data: string, name: string) => {
       id: index + 1,
       label,
       code,
+      gcNormal: code.slice(0, 2) === 'GC',
       stepRange,
       stepCount,
       Dgeo,

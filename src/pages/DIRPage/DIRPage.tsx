@@ -49,7 +49,6 @@ const DIRPage: FC = ({}) => {
       dispatch(setStatisticsMode(null));
     } else dispatch(updateCurrentInterpretation());
   }, [statisticsMode, selectedDirectionsIDs, dataToShow]);
-  console.log('test');
 
   return (
     <>

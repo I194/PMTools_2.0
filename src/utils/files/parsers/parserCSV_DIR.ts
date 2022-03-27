@@ -1,3 +1,5 @@
+import { IDirData } from "../../GlobalTypes";
+
 const parseCSV_DIR = (data: string, name: string) => {
   
   // eslint-disable-next-line no-control-regex
@@ -5,7 +7,7 @@ const parseCSV_DIR = (data: string, name: string) => {
   // Get all lines except the last one (it's garbage)
   let lines = data.split(eol).filter(line => line.length > 1);
 
-  const interpretations = lines.slice(1).map((line, index) => {
+  const interpretations: IDirData['interpretations'] = lines.slice(1).map((line, index) => {
     
     const params = line.replace(/\s+/g, ' ').split(',');
 
@@ -39,6 +41,7 @@ const parseCSV_DIR = (data: string, name: string) => {
       id: index + 1,
       label,
       code,
+      gcNormal: code.slice(0, 2) === 'GC',
       demagType,
       stepRange,
       stepCount,

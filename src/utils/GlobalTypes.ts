@@ -53,6 +53,7 @@ export interface IDirData extends IObjectKeys {
     readonly id: number;
     label: string;
     code: string;
+    gcNormal?: boolean;
     stepRange: string;
     stepCount: number;
     Dgeo: number;
