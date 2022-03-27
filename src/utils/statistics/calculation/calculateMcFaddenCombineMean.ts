@@ -22,8 +22,8 @@ const calculateMcFaddenMean = (
   });
 
   const res: RawStatisticsDIR['mean'] = {
-    geographic: mcFaddenCombineMean(AllDirectionsGeo.directions, AllDirectionsGeo.gcNormals),
-    stratigraphic: mcFaddenCombineMean(AllDirectionsStrat.directions, AllDirectionsStrat.gcNormals),
+    geographic: mcFaddenCombineMean(AllDirectionsGeo.gcNormals, AllDirectionsGeo.directions),
+    stratigraphic: mcFaddenCombineMean(AllDirectionsStrat.gcNormals, AllDirectionsStrat.directions),
   };
   
   return res;
@@ -58,6 +58,7 @@ const mcFaddenCombineMean = (
     dirIndex: number;
   }> = [];
   const newDirData = directionsDirs.slice();
+
   directionsGC.forEach((direction, i) => {
     // for each normal direction...
     const gcPath = getRawPlaneData(direction);
