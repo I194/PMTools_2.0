@@ -16,7 +16,7 @@ const Tables: FC<ITables> = ({ dataToShow }) => {
 
   const theme = useTheme();
   
-  const { currentInterpretation, currentFileInterpretations } = useAppSelector(state => state.pcaPageReducer);
+  const { currentInterpretation, currentFileInterpretations } = useAppSelector(state => state.dirPageReducer);
   const [interpretations, setInterpretations] = useState<StatisitcsInterpretation[] | null>(null);
 
   useEffect(() => {

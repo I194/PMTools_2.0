@@ -7,7 +7,7 @@ import { GetDataTableBaseStyle } from "../styleConstants";
 import { DataGridDIRRow, StatisitcsInterpretation } from "../../../../utils/GlobalTypes";
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
-import { deleteInterpretation, updateCurrentFileInterpretations, updateCurrentInterpretation } from "../../../../services/reducers/pcaPage";
+import { deleteInterpretation, updateCurrentFileInterpretations, updateCurrentInterpretation } from "../../../../services/reducers/dirPage";
 
 interface IStatisticsDataTableDIR {
   data: Array<StatisitcsInterpretation> | null;
@@ -18,7 +18,7 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ data }) => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
 
-  const { currentInterpretation } = useAppSelector(state => state.pcaPageReducer);
+  const { currentInterpretation } = useAppSelector(state => state.dirPageReducer);
   const [currentClass, setCurrentClass] = useState(styles.current_dark);
 
   useEffect(() => {
@@ -100,10 +100,10 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ data }) => {
 
   if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
 
-  const rows: Array<Omit<DataGridDIRRow, 'comment' | 'id'>> = data.map((statistics, index) => {
+  const rows: Array<Omit<DataGridDIRRow, 'comment' | 'id' | 'label'>> = data.map((statistics, index) => {
     const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadius } = statistics;
     return {
-      label,
+      id: label,
       code, 
       stepRange,
       stepCount,
