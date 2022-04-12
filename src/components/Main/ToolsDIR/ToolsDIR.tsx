@@ -34,6 +34,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
   const [allDirData, setAllDirData] = useState<Array<IDirData>>([]);
   const [allFilesStatOpen, setAllFilesStatOpen] = useState<boolean>(false);
   const [showIndexesInput, setShowIndexesInput] = useState<boolean>(false);
+  const [showVGP, setShowVGP] = useState<boolean>(false);
 
   const availableReferences: Array<Reference> = ['geographic', 'stratigraphic'];
 
@@ -125,6 +126,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
             <Button 
               color={reference === availRef ? 'secondary' : 'primary'}
               onClick={() => handleReferenceSelect(availRef)}
+              sx={{width: '80px'}}
             >
               { referenceToLabel(availRef) }
             </Button>
@@ -141,12 +143,24 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
         <Button onClick={() => setAllFilesStatOpen(true)}>По всем файлам</Button>
       </ButtonGroupWithLabel>
       <ShowHideDotsButtons setShowStepsInput={setShowIndexesInput} dirData={data}/>
+      <ButtonGroupWithLabel label='По всем сайтам'>
+        <Button onClick={() => setShowVGP(true)}>Построить VGP</Button>
+      </ButtonGroupWithLabel>
       <ModalWrapper
         open={allFilesStatOpen}
         setOpen={setAllFilesStatOpen}
         size={{width: '60vw', height: '60vh'}}
       >
         <OutputDataTableDIR />
+      </ModalWrapper>
+      <ModalWrapper
+        open={showVGP}
+        setOpen={setShowVGP}
+        size={{width: '80vw', height: '60vh'}}
+        position={{left: '32%', top: '10%'}}
+        isDraggable={true}
+      >
+        {/* <OutputDataTableDIR /> */}
       </ModalWrapper>
       {
         showIndexesInput && 
