@@ -157,7 +157,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
         open={showVGP}
         setOpen={setShowVGP}
         size={{width: '80vw', height: '60vh'}}
-        position={{left: '32%', top: '10%'}}
+        position={{left: '50%', top: '50%'}}
         isDraggable={true}
       >
         {/* <OutputDataTableDIR /> */}
