@@ -26,3 +26,19 @@
   };
 
 };
+
+.latLonInputs {
+  height: 100%;
+  width: 100%;
+
+  overflow-y: auto;
+
+  .inputsRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    width: fit-content;
+    height: fit-content;
+  }
+}

@@ -3,7 +3,7 @@ import styles from './ToolsPMD.module.scss';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
 import { addHiddenStepsIDs, setHiddenStepsIDs, setSelectedStepsIDs, setStatisticsMode } from "../../../services/reducers/pcaPage";
 import { Button } from "@mui/material";
-import ButtonGroupWithLabel from "../../Sub/ButtonGroupWithLabel/ButtonGroupWithLabel";
+import ButtonGroupWithLabel from "../../Sub/Buttons/ButtonGroupWithLabel/ButtonGroupWithLabel";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { IPmdData } from "../../../utils/GlobalTypes";

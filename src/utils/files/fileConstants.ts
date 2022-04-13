@@ -48,6 +48,12 @@ export const exampleDir = {
   created: 'string',
 }
 
+export const exampleSitesLatLon = {
+  coords: [{lat: 0, lon: 0}],
+  format: "CSV_SitesLatLon",
+  created: 'string',
+}
+
 export const dataModel_step: any = {
   step: 4,
   x: 10,

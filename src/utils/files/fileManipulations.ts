@@ -1,6 +1,6 @@
 import PMFile from "./pmFiles";
-import { exampleDir } from "./fileConstants";
-import { IDirData, IPmdData } from "../GlobalTypes";
+import { exampleDir, exampleSitesLatLon } from "./fileConstants";
+import { IDirData, IPmdData, ISitesLatLon } from "../GlobalTypes";
 
 export const getDirectionalData = (file: File, as: string) => {
 
@@ -28,6 +28,35 @@ export const getDirectionalData = (file: File, as: string) => {
             return exampleDir;
           }
           default: return exampleDir;
+        }
+      }
+
+      resolve(handleRawData(reader.result));
+
+    };
+
+    reader.onerror = reject;
+  
+    ext === 'xlsx' ? reader.readAsArrayBuffer(file) : reader.readAsText(file);   
+  })
+
+}
+
+export const getSitesLatLonData = (file: File) => {
+  
+  const ext = (/[.]/.exec(file.name)) ? /[^.]+$/.exec(file.name)?.toString().toLowerCase() : undefined;
+
+  return new Promise<ISitesLatLon>((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+
+      const handleRawData = (rawData: string | ArrayBuffer | null) => {
+        const pmFile = new PMFile(file.name, file.type, file.size, file.webkitRelativePath, rawData);
+        switch (ext) {
+          case 'csv': return pmFile.parseCSV_SitesLatLon();
+          case 'xlsx': return pmFile.parseXLSX_SitesLatLon();
+          default: return exampleSitesLatLon;
         }
       }
 

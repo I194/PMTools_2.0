@@ -33,6 +33,12 @@ export type PMDStep = {
   demagType: 'thermal' | 'alternating field' | undefined;
 };
 
+export interface ISitesLatLon extends IObjectKeys {
+  coords: Array<{lat: number, lon: number}>;
+  format: string;
+  created: string;
+}
+
 export interface IPmdData extends IObjectKeys {
   metadata: {
     name: string;

@@ -1,13 +1,12 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import styles from './ToolsDIR.module.scss';
 import DropdownSelect from '../../Sub/DropdownSelect/DropdownSelect';
-import ButtonGroupWithLabel from '../../Sub/ButtonGroupWithLabel/ButtonGroupWithLabel';
+import ButtonGroupWithLabel from '../../Sub/Buttons/ButtonGroupWithLabel/ButtonGroupWithLabel';
 import { Button } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
 import { IDirData } from '../../../utils/GlobalTypes';
 import ModalWrapper from '../../Sub/Modal/ModalWrapper';
 import ToolsPMDSkeleton from './ToolsDIRSkeleton';
-import OutputDataTablePMD from '../DataTablesPMD/OutputDataTable/OutputDataTablePMD';
 import StatModeButton from './StatModeButton';
 import { setCurrentDIRid } from '../../../services/reducers/parsedData';
 import InputApply from '../../Sub/InputApply/InputApply';
@@ -19,6 +18,7 @@ import { enteredIndexesToIDsDIR } from '../../../utils/parsers/enteredIndexesToI
 import { setReference, setSelectedDirectionsIDs, setStatisticsMode, updateCurrentInterpretation, updateCurrentFileInterpretations } from '../../../services/reducers/dirPage';
 import { Reference } from '../../../utils/graphs/types';
 import OutputDataTableDIR from '../DataTablesDIR/OutputDataTable/OutputDataTableDIR';
+import VGPModalContent from '../VGP/VGPmodalContent';
 
 interface IToolsDIR {
   data: IDirData | null;
@@ -160,7 +160,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
         position={{left: '50%', top: '50%'}}
         isDraggable={true}
       >
-        {/* <OutputDataTableDIR /> */}
+        <VGPModalContent data={data}/>
       </ModalWrapper>
       {
         showIndexesInput && 

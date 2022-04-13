@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IPmdData, IDirData } from "../../utils/GlobalTypes";
-import { filesToData } from "../axios/filesAndData";
+import { IPmdData, IDirData, ISitesLatLon } from "../../utils/GlobalTypes";
+import { filesToData, sitesFileToLatLon } from "../axios/filesAndData";
 
 interface IInitialState {
   loading: 'idle' | 'pending' | 'succeeded' | 'failed';
@@ -8,6 +8,7 @@ interface IInitialState {
   errorInfo: any;
   treatmentData: IPmdData[] | null;
   dirStatData: IDirData[] | null;
+  siteLatLonData: ISitesLatLon | null;
   currentDataPMDid: number | null;
   currentDataDIRid: number | null;
 };
@@ -18,6 +19,7 @@ const initialState: IInitialState = {
   errorInfo: null,
   treatmentData: null,
   dirStatData: null,
+  siteLatLonData: null,
   currentDataPMDid: null,
   currentDataDIRid: null,
 };
@@ -65,6 +67,21 @@ const parsedDataSlice = createSlice({
       state.errorInfo = null;
     });
     builder.addCase(filesToData.rejected, (state, action) => {
+      state.error = true;
+      state.errorInfo = action.payload;
+      state.loading = 'failed';
+    });
+    builder.addCase(sitesFileToLatLon.pending, (state) => {
+      state.loading = 'pending';
+      state.errorInfo = null;
+    });
+    builder.addCase(sitesFileToLatLon.fulfilled, (state, action) => {
+      state.siteLatLonData = action.payload;
+      state.loading = 'succeeded';
+      state.error = false;
+      state.errorInfo = null;
+    });
+    builder.addCase(sitesFileToLatLon.rejected, (state, action) => {
       state.error = true;
       state.errorInfo = action.payload;
       state.loading = 'failed';

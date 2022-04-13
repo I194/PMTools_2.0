@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import styles from './ToolsPMD.module.scss';
 import DropdownSelect from '../../Sub/DropdownSelect/DropdownSelect';
-import ButtonGroupWithLabel from '../../Sub/ButtonGroupWithLabel/ButtonGroupWithLabel';
+import { ButtonGroupWithLabel } from '../../Sub/Buttons';
 import { Button } from '@mui/material';
 import { Reference } from '../../../utils/graphs/types';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';

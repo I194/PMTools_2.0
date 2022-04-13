@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getDirectionalData } from "../../utils/files/fileManipulations";
+import { getDirectionalData, getSitesLatLonData } from "../../utils/files/fileManipulations";
 
 type TFilesToData = {
   files: File[];
@@ -12,6 +12,18 @@ export const filesToData = createAsyncThunk(
     try {
       const res = await Promise.all(files.map((file) => getDirectionalData(file, format)));
       return {format, data: res};
+    } catch (error: any) {
+      return rejectWithValue(error);
+    }
+  }
+);
+
+export const sitesFileToLatLon = createAsyncThunk(
+  'filesAndData/sitesFileToLatLon',
+  async function (file: File, { rejectWithValue }) {
+    try {
+      const res = await getSitesLatLonData(file);
+      return res;
     } catch (error: any) {
       return rejectWithValue(error);
     }
