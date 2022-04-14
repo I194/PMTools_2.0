@@ -13,9 +13,9 @@ const calculateVGP = (
   const poleLatitude = Math.asin(Math.sin(siteLatitude) * Math.cos(p) + Math.cos(siteLatitude) * Math.sin(p) * Math.cos(declination));
   const beta = Math.asin((Math.sin(p) * Math.sin(declination) / Math.cos(poleLatitude)));
 
-  let poleLongitude = siteLongitude - beta;
+  let poleLongitude = siteLongitude + beta;
   if ((Math.cos(p) - Math.sin(poleLatitude) * Math.sin(siteLatitude)) < 0) {
-    siteLongitude + Math.PI - beta;
+    poleLongitude = siteLongitude + Math.PI - beta;
   }
   // Bind the plate longitude between [0, 360]
   if (poleLongitude < 0) {

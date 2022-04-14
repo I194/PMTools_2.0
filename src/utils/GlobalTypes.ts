@@ -75,6 +75,19 @@ export interface IDirData extends IObjectKeys {
   created: string;
 }
 
+export type VGPData = {
+  readonly id: number;
+  label: string;
+  lat: number;
+  lon: number;
+  poleLatitude: number,
+  poleLongitude: number,
+  paleoLatitude: number,
+  dp: number,
+  dm: number,
+}[];
+
+
 export type StatisitcsInterpretation = {
   parentFile: string;
   label: string;

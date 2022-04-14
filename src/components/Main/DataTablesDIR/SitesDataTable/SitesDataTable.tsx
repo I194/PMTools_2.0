@@ -1,22 +1,21 @@
-import React, { FC, useCallback, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useRef, useState } from "react";
 import styles from './SitesDataTable.module.scss';
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
-import equal from "deep-equal"
 import { GetDataTableBaseStyle } from "../styleConstants";
 import SitesDataTableSkeleton from './SitesDataTableSkeleton';
-import { DataGridDIRRow, IDirData, ISitesLatLon } from "../../../../utils/GlobalTypes";
-import { setAllInterpretations,  } from "../../../../services/reducers/dirPage";
+import { IDirData, ISitesLatLon, VGPData } from "../../../../utils/GlobalTypes";
 import { 
   DataGrid, 
-  GridActionsCellItem, 
-  GridColumnHeaderParams, 
   GridColumns, 
   GridEditRowsModel,
   GridValueFormatterParams, 
 } from '@mui/x-data-grid';
 import { useTheme } from '@mui/material/styles';
-import DIROutputDataTableToolbar from "../../../Sub/DataTable/Toolbar/DIROutputDataTableToolbar";
+import { Button } from "@mui/material";
 import SitesInputDataTableToolbar from "../../../Sub/DataTable/Toolbar/SitesInputDataTableToolbar";
+import calculateVGP from "../../../../utils/statistics/calculation/calculateVGP";
+import useApiRef from "../useApiRef";
+import { setVGPData } from "../../../../services/reducers/dirPage";
 
 type SiteRow = {
   id: number;
@@ -37,8 +36,7 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data, latLonData }) => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
 
-  const { dirStatData, currentDataDIRid } = useAppSelector(state => state.parsedDataReducer);
-  const { selectedDirectionsIDs, hiddenDirectionsIDs } = useAppSelector(state => state.dirPageReducer);
+  const { selectedDirectionsIDs, hiddenDirectionsIDs, reference } = useAppSelector(state => state.dirPageReducer);
   const [editRowsModel, setEditRowsModel] = useState<GridEditRowsModel>({});
 
   const handleEditRowsModelChange = useCallback((model: GridEditRowsModel) => {
@@ -65,9 +63,11 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data, latLonData }) => {
     col.hideSortIcons = true;
     col.disableColumnMenu = true;
   });
+  
+  const { apiRef, enhancedColumns } = useApiRef(columns);
 
   if (!data) return <SitesDataTableSkeleton />;
-  console.log(latLonData);
+
   let visibleIndex = 1;
   const rows: Array<SiteRow> = data.interpretations.map((interpretation, index) => {
     const { id, label } = interpretation;
@@ -79,13 +79,39 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data, latLonData }) => {
       lon: latLonData ? latLonData[index]?.lon : 0,
     };
   });
-  
+
+  const calculateVGPs = () => {
+    const rows: Array<SiteRow> = Array.from(apiRef?.current?.getRowModels()?.values() || []);
+    if (!rows.length) return;
+    const vgpData: VGPData = rows.map((row, index) => {
+      let { id, label, lat, lon } = row;
+      // на случай, если были загружены данные из файла и не обновился apiRef
+      if ((lat === 0 || lon === 0) && latLonData && latLonData[index]) {
+        lat = latLonData[index].lat;
+        lon = latLonData[index].lon;
+      };
+      const interpretation = data.interpretations.find(interpretation => interpretation.id === id)!;
+      const dec = reference === 'geographic' ? interpretation.Dgeo : interpretation.Dstrat;
+      const inc = reference === 'geographic' ? interpretation.Igeo : interpretation.Istrat;
+      const a95 = interpretation.mad;
+      const vgp = calculateVGP(dec, inc, a95, lat, lon);
+      return {
+        id,
+        label,
+        lat,
+        lon,
+        ...vgp
+      }
+    });
+    dispatch(setVGPData(vgpData));
+  };
+
   return (
-    <>
+    <div className={styles.container}>
       <SitesDataTableSkeleton>
         <DataGrid 
           rows={rows} 
-          columns={columns} 
+          columns={enhancedColumns} 
           editRowsModel={editRowsModel}
           onEditRowsModelChange={handleEditRowsModelChange}
           sx={{
@@ -105,7 +131,17 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data, latLonData }) => {
           disableSelectionOnClick={true}
         />
       </SitesDataTableSkeleton>
-    </>
+      <Button
+        variant="contained"
+        onClick={calculateVGPs}
+        sx={{
+          textTransform: 'none', 
+          marginTop: '16px',
+        }}
+      >  
+        Рассчитать VGP
+      </Button>
+    </div>
     
   );
 };
