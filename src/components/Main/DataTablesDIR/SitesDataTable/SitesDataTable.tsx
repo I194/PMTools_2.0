@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks
 import equal from "deep-equal"
 import { GetDataTableBaseStyle } from "../styleConstants";
 import SitesDataTableSkeleton from './SitesDataTableSkeleton';
-import { DataGridDIRRow, IDirData } from "../../../../utils/GlobalTypes";
+import { DataGridDIRRow, IDirData, ISitesLatLon } from "../../../../utils/GlobalTypes";
 import { setAllInterpretations,  } from "../../../../services/reducers/dirPage";
 import { 
   DataGrid, 
@@ -16,6 +16,7 @@ import {
 } from '@mui/x-data-grid';
 import { useTheme } from '@mui/material/styles';
 import DIROutputDataTableToolbar from "../../../Sub/DataTable/Toolbar/DIROutputDataTableToolbar";
+import SitesInputDataTableToolbar from "../../../Sub/DataTable/Toolbar/SitesInputDataTableToolbar";
 
 type SiteRow = {
   id: number;
@@ -27,10 +28,11 @@ type SiteRow = {
 
 interface IDataTableDIR {
   data: IDirData | null;
+  latLonData?: ISitesLatLon['coords'];
 };
 
 
-const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
+const SitesDataTable: FC<IDataTableDIR> = ({ data, latLonData }) => {
   
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -47,8 +49,14 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
     { field: 'id', headerName: 'ID', type: 'string', width: 30 },
     { field: 'index', headerName: '№', type: 'string', width: 30 },
     { field: 'label', headerName: 'Label', type: 'string', width: 80 },
-    { field: 'lat', headerName: 'Lat', type: 'number', flex: 1, editable: true, cellClassName: styles[`editableCell_${theme.palette.mode}`] },
-    { field: 'lon', headerName: 'Lon', type: 'number', flex: 1, editable: true, cellClassName: styles[`editableCell_${theme.palette.mode}`] },
+    { field: 'lat', headerName: 'Lat', type: 'number', flex: 1, editable: true, 
+      cellClassName: styles[`editableCell_${theme.palette.mode}`],
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
+    { field: 'lon', headerName: 'Lon', type: 'number', flex: 1, editable: true, 
+      cellClassName: styles[`editableCell_${theme.palette.mode}`],
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
   ];
 
   columns.forEach((col) => {
@@ -58,9 +66,8 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
     col.disableColumnMenu = true;
   });
 
-  console.log(data)
-
   if (!data) return <SitesDataTableSkeleton />;
+  console.log(latLonData);
   let visibleIndex = 1;
   const rows: Array<SiteRow> = data.interpretations.map((interpretation, index) => {
     const { id, label } = interpretation;
@@ -68,8 +75,8 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
       id,
       index: hiddenDirectionsIDs.includes(id) ? '-' : visibleIndex++,
       label,
-      lat: 0,
-      lon: 0,
+      lat: latLonData ? latLonData[index]?.lat : 0,
+      lon: latLonData ? latLonData[index]?.lon : 0,
     };
   });
   
@@ -93,7 +100,7 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
           hideFooter={true}
           density={'compact'}
           components={{
-            Toolbar: DIROutputDataTableToolbar,
+            Toolbar: SitesInputDataTableToolbar,
           }}
           disableSelectionOnClick={true}
         />

@@ -8,6 +8,11 @@ import parseCSV_SitesLatLon from "../../../utils/files/parsers/parserCSV_SitesLa
 import { getSitesLatLonData } from "../../../utils/files/fileManipulations";
 import { useAppDispatch, useAppSelector } from "../../../services/store/hooks";
 import { sitesFileToLatLon } from "../../../services/axios/filesAndData";
+import { useTheme } from '@mui/material/styles';
+import {
+  textColor,
+  primaryColor,
+} from '../../../utils/ThemeConstants';
 
 type Props = {
   data: IDirData;
@@ -15,6 +20,7 @@ type Props = {
 
 const VGPmodalContent: FC<Props> = ({ data }) => {
 
+  const theme = useTheme();
   const dispatch = useAppDispatch();
   const [coords, setCoords] = React.useState<Array<{lat: number, lon: number}>>([]);
 
@@ -32,16 +38,22 @@ const VGPmodalContent: FC<Props> = ({ data }) => {
   return (
     <div className={styles.modalContent}>
       <div className={styles.import}>
-        <Typography>
-          Введите или загрузите координаты сайтов.
+        <Typography color={textColor(theme.palette.mode)}>
+          Введите или загрузите координаты сайтов
         </Typography>
-        <UploadButton 
-          accept={['csv', 'xlsx']}
-          onUpload={handleUpload}
-        />
+        <div className={styles.upload}>
+          <UploadButton 
+            accept={['.csv', '.xlsx']}
+            onUpload={handleUpload}
+            label='Загрузить файл (.csv, .xlsx)'
+          />
+        </div>
+        <Typography color={textColor(theme.palette.mode)}>
+          в файле должны быть столбцы <code style={{color: primaryColor(theme.palette.mode)}}>lat</code> и <code style={{color: primaryColor(theme.palette.mode)}}>lon</code>
+        </Typography>
       </div>
       <div className={styles.input}>
-        <SitesDataTable data={data}/>
+        <SitesDataTable data={data} latLonData={siteLatLonData?.coords}/>
       </div>
     </div>
   );

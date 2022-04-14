@@ -3,8 +3,24 @@
   width: 100%;
   height: 100%;
 
-  .inputCoords {
+  .import {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    .upload {
+      margin: 0 20px;
+    }
+
+    .highlight {
+      color: #00bcd4;
+      font-weight: 500;
+    }
+  }
+
+  .input {
     width: 30%;
-    height: 95%;
+    height: 85%;
   }
 }
