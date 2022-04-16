@@ -75,6 +75,7 @@ const Dot: FC<IDot> = ({
     };
   };
   
+  console.log(tooltip, tooltipData)
   return (
     <g>
       {

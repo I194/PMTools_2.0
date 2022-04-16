@@ -1,12 +1,12 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
-import styles from './DIRPage.module.scss';
-import { useWindowSize } from '../../utils/GlobalHooks';
-import { IDirData } from '../../utils/GlobalTypes';
+import styles from './VGP.module.scss';
+import { useWindowSize } from '../../../utils/GlobalHooks';
+import { VGPData } from '../../../utils/GlobalTypes';
 import GraphsSkeleton from './GraphsSkeleton';
-import StereoGraphDIR from '../../components/Graph/StereoGraphDIR/StereoGraphDIR';
+import StereoGraphVGP from '../../../components/Graph/StereoGraphDIR/StereoGraphVGP';
 
 interface IGraphs {
-  dataToShow: IDirData | null;
+  dataToShow: VGPData | null;
 };
 
 const Graphs: FC<IGraphs> = ({ dataToShow }) => {
@@ -18,7 +18,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
   const [graphSize, setGraphSize] = useState<number>(300);
 
   useEffect(() => {
-    console.log(graphRef.current)
+    console.log(graphRef.current, wv, wh)
     const graphWidth = graphRef.current?.offsetWidth;
     const graphHeight = graphRef.current?.offsetHeight;
     if (graphWidth && graphHeight) {
@@ -36,8 +36,8 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
   return (
     <GraphsSkeleton 
       graph={{
-        node: <StereoGraphDIR 
-          graphId={`stereoDir`} 
+        node: <StereoGraphVGP 
+          graphId={`stereoVGP`} 
           width={graphSize}
           height={graphSize}
           data={dataToShow}

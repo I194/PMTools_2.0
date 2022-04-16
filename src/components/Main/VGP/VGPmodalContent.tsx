@@ -3,6 +3,7 @@ import styles from './VGP.module.scss';
 import { IDirData } from "../../../utils/GlobalTypes";
 import SitesDataTable from '../DataTablesDIR/SitesDataTable/SitesDataTable';
 import VGPDataTable from "../DataTablesDIR/VGPDataTable/VGPDataTable";
+import Graphs from "./Graphs";
 import { Typography, Button, Input } from "@mui/material";
 import { UploadButton } from '../../Sub/Buttons';
 import { useAppDispatch, useAppSelector } from "../../../services/store/hooks";
@@ -24,6 +25,7 @@ const VGPmodalContent: FC<Props> = ({ data }) => {
   const [coords, setCoords] = React.useState<Array<{lat: number, lon: number}>>([]);
 
   const { siteLatLonData } = useAppSelector(state => state.parsedDataReducer);
+  const { vgpData } = useAppSelector(state => state.dirPageReducer);
 
   const handleUpload = async (event: any, files?: Array<File>) => {
     const acceptedFile = files ? files[0] : event.currentTarget.files[0];
@@ -59,6 +61,7 @@ const VGPmodalContent: FC<Props> = ({ data }) => {
         <div className={styles.vgpTable}>
           <VGPDataTable />
         </div>
+        <Graphs dataToShow={vgpData}/>
       </div>
     </div>
   );

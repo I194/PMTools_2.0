@@ -9,12 +9,13 @@ import AxesAndData from "./AxesAndData";
 import getInterpretationIDs from "../../../utils/graphs/formatters/getInterpretationIDs";
 import CoordinateSystem from "../../Sub/Graphs/CoordinateSystem/CoordinateSystem";
 import dataToStereoDIR from "../../../utils/graphs/formatters/stereo/dataToStereoDIR";
+import dataToStereoVGP from "../../../utils/graphs/formatters/stereo/dataToStereoVGP";
 
 export interface IStereoGraph extends IGraph {
-  data: IDirData;
+  data: VGPData;
 };
 
-const StereoGraphDIR: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
+const StereoGraphVGP: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
 
   // ToDo: 
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
@@ -26,7 +27,7 @@ const StereoGraphDIR: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
   const selectedIDs = useGraphSelectedIDs('dir');
   const {viewHeight, viewWidth, ...areaConstants} = stereoAreaConstants(width, height);
   const dataConstants = useMemo(() => 
-    dataToStereoDIR(data, width / 2, reference, hiddenDirectionsIDs, currentInterpretation?.rawData as RawStatisticsDIR),
+    dataToStereoVGP(data, width / 2, hiddenDirectionsIDs),
   [reference, width, currentInterpretation, data, hiddenDirectionsIDs]);
 
   return (
@@ -38,7 +39,7 @@ const StereoGraphDIR: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
         selectableNodes={selectableNodes}
         nodesDuplicated={false}
         menuItems={menuItems}
-        extraID={data.name}
+        extraID={'vgp'}
       >
         <g>
           <AxesAndData 
@@ -64,4 +65,4 @@ const StereoGraphDIR: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
   )
 }
 
-export default StereoGraphDIR;
+export default StereoGraphVGP;

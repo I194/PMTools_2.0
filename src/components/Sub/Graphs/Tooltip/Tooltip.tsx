@@ -54,6 +54,7 @@ const Tooltip: FC<ITooltip> = ({ position, isVisible, data, bgColor, textColor }
               top: isWindowHeightBorder(position.top) ? position.top - 88 : position.top - 24, 
               backgroundColor: bgColor ? bgColor : primaryColor(theme.palette.mode),
               color: textColor ? textColor : textColorInverted(theme.palette.mode),
+              zIndex: 10000,
             }}
           >
             {
