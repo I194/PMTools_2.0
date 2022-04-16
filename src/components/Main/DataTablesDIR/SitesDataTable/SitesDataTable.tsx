@@ -16,6 +16,7 @@ import SitesInputDataTableToolbar from "../../../Sub/DataTable/Toolbar/SitesInpu
 import calculateVGP from "../../../../utils/statistics/calculation/calculateVGP";
 import useApiRef from "../useApiRef";
 import { setVGPData } from "../../../../services/reducers/dirPage";
+import { setSiteLatLonData } from "../../../../services/reducers/parsedData";
 
 type SiteRow = {
   id: number;
@@ -69,6 +70,7 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data, latLonData }) => {
   if (!data) return <SitesDataTableSkeleton />;
 
   let visibleIndex = 1;
+  console.log(latLonData)
   const rows: Array<SiteRow> = data.interpretations.map((interpretation, index) => {
     const { id, label } = interpretation;
     return {
@@ -82,6 +84,7 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data, latLonData }) => {
 
   const calculateVGPs = () => {
     const rows: Array<SiteRow> = Array.from(apiRef?.current?.getRowModels()?.values() || []);
+    console.log(rows)
     if (!rows.length) return;
     const vgpData: VGPData = rows.map((row, index) => {
       let { id, label, lat, lon } = row;
@@ -106,12 +109,20 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data, latLonData }) => {
     dispatch(setVGPData(vgpData));
   };
 
+  const deleteData = () => {
+    dispatch(setVGPData(null));
+    dispatch(setSiteLatLonData(null));
+  };
+
   return (
     <div className={styles.container}>
       <SitesDataTableSkeleton>
         <DataGrid 
           rows={rows} 
           columns={enhancedColumns} 
+          // columnVisibilityModel={{
+          //   hideMe: false
+          // }}
           editRowsModel={editRowsModel}
           onEditRowsModelChange={handleEditRowsModelChange}
           sx={{
@@ -132,16 +143,28 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data, latLonData }) => {
           disableSelectionOnClick={true}
         />
       </SitesDataTableSkeleton>
-      <Button
-        variant="contained"
-        onClick={calculateVGPs}
-        sx={{
-          textTransform: 'none', 
-          marginTop: '16px',
-        }}
-      >  
-        Рассчитать VGP
-      </Button>
+      <div className={styles.buttons}>
+        <Button
+          variant="outlined"
+          onClick={deleteData}
+          sx={{
+            textTransform: 'none', 
+            marginTop: '16px',
+          }}
+        >  
+          Очистить данные
+        </Button>
+        <Button
+          variant="contained"
+          onClick={calculateVGPs}
+          sx={{
+            textTransform: 'none', 
+            marginTop: '16px',
+          }}
+        >  
+          Рассчитать VGP
+        </Button>
+      </div>
     </div>
     
   );

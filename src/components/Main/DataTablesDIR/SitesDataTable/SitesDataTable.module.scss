@@ -29,3 +29,11 @@
 .editableCell_light {
   background-color: #9c27b025;
 };
+
+.buttons {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}

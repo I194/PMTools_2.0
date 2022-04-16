@@ -17,23 +17,34 @@ const UploadButton: FC<Props> = ({ onUpload, accept, label='Загрузить �
 
   const theme = useTheme();
 
+  const inputRef = React.useRef<HTMLInputElement>(null);
+
+  const handleChange = (event: any, files?: Array<File>)  => {
+    onUpload(event, files);
+    if (inputRef.current) {
+      inputRef.current.value = '';
+    }
+  }
+
   return (
     <label 
-      htmlFor="upload-site-latlon" 
+      htmlFor="file-input" 
       style={{
         flex: 'auto'
       }}
     >
       <Input 
-        id="upload-site-latlon"
+        // id="upload-site-latlon-top"
         type={'file'}  
         inputProps={{
           multiple: false,
           accept: accept.join(', '),
+          id: 'file-input',
+          ref: inputRef
         }}
         disableUnderline={true}
         sx={{display: 'none'}}
-        onChange={onUpload}
+        onChange={handleChange}
       />
       <Button 
         variant="outlined" 

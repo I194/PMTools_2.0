@@ -40,6 +40,9 @@ const parsedDataSlice = createSlice({
     setCurrentDIRid (state, action) {
       state.currentDataDIRid = action.payload;
     },
+    setSiteLatLonData (state, action) {
+      state.siteLatLonData = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(filesToData.pending, (state) => {
@@ -94,6 +97,7 @@ export const {
   setDirStatData,
   setCurrentPMDid,
   setCurrentDIRid,
+  setSiteLatLonData,
 } = parsedDataSlice.actions;
 
 const parsedDataReducer = parsedDataSlice.reducer;

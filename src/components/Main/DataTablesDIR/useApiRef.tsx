@@ -6,9 +6,12 @@ const useApiRef = (columns: GridColumns) =>{
   const _columns = useMemo(
     () =>
       columns.concat({
-        field: "_",
+        field: "",
         width: 0,
-        hide: true,
+        minWidth: 0,
+        maxWidth: 0,
+        flex: 1,
+        // hide: true,
         renderCell: (params) => {
           apiRef.current = params.api;
           return null;

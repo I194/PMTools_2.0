@@ -29,6 +29,7 @@ const VGPmodalContent: FC<Props> = ({ data }) => {
     const acceptedFile = files ? files[0] : event.currentTarget.files[0];
     // const latLon = await getSitesLatLonData(acceptedFile);
     // setCoords(latLon.coords);
+    console.log(acceptedFile);
     dispatch(sitesFileToLatLon(acceptedFile));
   };
 
