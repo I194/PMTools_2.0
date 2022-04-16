@@ -2,10 +2,9 @@ import React, { FC } from "react";
 import styles from './VGP.module.scss';
 import { IDirData } from "../../../utils/GlobalTypes";
 import SitesDataTable from '../DataTablesDIR/SitesDataTable/SitesDataTable';
+import VGPDataTable from "../DataTablesDIR/VGPDataTable/VGPDataTable";
 import { Typography, Button, Input } from "@mui/material";
 import { UploadButton } from '../../Sub/Buttons';
-import parseCSV_SitesLatLon from "../../../utils/files/parsers/parserCSV_SitesLatLon";
-import { getSitesLatLonData } from "../../../utils/files/fileManipulations";
 import { useAppDispatch, useAppSelector } from "../../../services/store/hooks";
 import { sitesFileToLatLon } from "../../../services/axios/filesAndData";
 import { useTheme } from '@mui/material/styles';
@@ -52,8 +51,13 @@ const VGPmodalContent: FC<Props> = ({ data }) => {
           в файле должны быть столбцы <code style={{color: primaryColor(theme.palette.mode)}}>lat</code> и <code style={{color: primaryColor(theme.palette.mode)}}>lon</code>
         </Typography>
       </div>
-      <div className={styles.input}>
-        <SitesDataTable data={data} latLonData={siteLatLonData?.coords}/>
+      <div className={styles.data}>
+        <div className={styles.input}>
+          <SitesDataTable data={data} latLonData={siteLatLonData?.coords}/>
+        </div>
+        <div className={styles.vgpTable}>
+          <VGPDataTable />
+        </div>
       </div>
     </div>
   );

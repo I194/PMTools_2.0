@@ -8,6 +8,7 @@ const useApiRef = (columns: GridColumns) =>{
       columns.concat({
         field: "_",
         width: 0,
+        hide: true,
         renderCell: (params) => {
           apiRef.current = params.api;
           return null;

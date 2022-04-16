@@ -19,8 +19,24 @@
     }
   }
 
-  .input {
-    width: 30%;
+  .data {
+    display: flex;
+    flex-direction: row;
+
+    width: 100%;
     height: 90%;
+
+    .input {
+      width: 30%;
+      height: 100%;
+    }
+
+    .vgpTable {
+      width: 30%;
+      height: 100%;
+
+      margin-left: 24px;
+    }
   }
+  
 }

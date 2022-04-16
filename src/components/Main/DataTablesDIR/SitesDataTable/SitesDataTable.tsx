@@ -121,6 +121,7 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data, latLonData }) => {
             },
             '& .MuiDataGrid-columnHeader': {
               padding: '0px 0px',
+              minWidth: '0px!important',
             }
           }}
           hideFooter={true}
