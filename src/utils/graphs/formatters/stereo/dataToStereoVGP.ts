@@ -18,12 +18,14 @@ import { dirToCartesian2D } from "../../dirToCartesian";
 import { graphSelectedDotColor } from "../../../ThemeConstants";
 import createStereoPlaneData from "./createPlaneData/createStereoPlaneData";
 import { VGPData } from "../../../GlobalTypes";
+import { fisherMean } from "../../../statistics/calculation/calculateFisherMean";
+import Direction from "../../classes/Direction";
  
 const dataToStereoVGP = (
   data: VGPData, 
   graphSize: number, 
   hiddenDirectionsIDs: Array<number>,
-  // statistics?: RawStatisticsDIR,
+  showMean?: boolean,
 ) => {
   const directions = data.filter((direction, index) => !hiddenDirectionsIDs.includes(index + 1));
 
@@ -42,6 +44,39 @@ const dataToStereoVGP = (
     return {id: directions[index].id, xyData: [coords.x, coords.y]};
   });
 
+  let meanDirection: MeanDirection = null;
+  if (showMean) {
+    const mean = fisherMean(
+      directions.map(
+        (direction) => new Direction(direction.poleLatitude, direction.poleLongitude, 1)
+      )
+    );
+    const { direction, MAD } = mean;
+
+    const [declination, inclination] = direction.toArray(); // mean dec and inc
+    const meanXYData = dirToCartesian2D(declination - 90, inclination, graphSize);
+    const confidenceCircle = createStereoPlaneData(direction, graphSize, MAD);
+
+    const tooltip: TooltipDot = {
+      title: 'Mean VGP',
+      dec: +declination.toFixed(1),
+      inc: +inclination.toFixed(1),
+      mad: +MAD.toFixed(1),
+      meanType: 'fisher',
+    };
+
+    meanDirection = {
+      dirData: direction.toArray(),
+      xyData: [meanXYData.x, meanXYData.y],
+      confidenceCircle: {
+        xyData: confidenceCircle.all, 
+        xyDataSplitted: confidenceCircle, 
+        color: graphSelectedDotColor('mean')
+      },
+      tooltip,
+    };
+  }
+
   // tooltip data for each dot on graph
   const tooltipData: Array<TooltipDot> = directions.map((direction, index) => {
     return {
@@ -51,13 +86,13 @@ const dataToStereoVGP = (
       inc: +directionalData[index][1].toFixed(1),
     };
   });
-  
+
   return {
     directionalData, 
     dotsData,
     tooltipData,
     labels,
-    meanDirection: null,
+    meanDirection,
   };
 }
 

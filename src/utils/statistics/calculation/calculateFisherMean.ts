@@ -16,7 +16,7 @@ const calculateFisherMean = (
   return res;
 };
 
-const fisherMean = (
+export const fisherMean = (
   directions: Array<Direction>,
 ) => {
 
