@@ -15,6 +15,7 @@ interface IInitialState {
   allInterpretations: Array<StatisitcsInterpretation>;
   outputFilename: string;
   showSelectionInput: boolean;
+  showVGPMean: boolean;
 };
 
 const initialState: IInitialState = {
@@ -29,6 +30,7 @@ const initialState: IInitialState = {
   allInterpretations: [],
   outputFilename: '',
   showSelectionInput: false,
+  showVGPMean: false,
 };
 
 const dirPage = createSlice({
@@ -99,6 +101,9 @@ const dirPage = createSlice({
     setOutputFilename (state, action) {
       state.outputFilename = action.payload;
     },
+    toggleShowVGPMean (state) {
+      state.showVGPMean = !state.showVGPMean;
+    }
   },
   extraReducers: (builder) => {
   }
@@ -120,6 +125,7 @@ export const {
   updateCurrentFileInterpretations,
   updateCurrentInterpretation,
   setOutputFilename,
+  toggleShowVGPMean,
 } = dirPage.actions;
 
 const dirPageReducer = dirPage.reducer;

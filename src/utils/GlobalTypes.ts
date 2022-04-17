@@ -73,7 +73,7 @@ export interface IDirData extends IObjectKeys {
   }[];
   format: string;
   created: string;
-}
+};
 
 export type VGPData = {
   readonly id: number;
@@ -87,6 +87,12 @@ export type VGPData = {
   dm: number,
 }[];
 
+export interface IVGPData extends IObjectKeys {
+  name: string;
+  vgps: VGPData;
+  format: string;
+  created: string;
+};
 
 export type StatisitcsInterpretation = {
   parentFile: string;

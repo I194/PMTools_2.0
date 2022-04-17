@@ -17,6 +17,7 @@ import calculateVGP from "../../../../utils/statistics/calculation/calculateVGP"
 import useApiRef from "../useApiRef";
 import { setVGPData } from "../../../../services/reducers/dirPage";
 import VGPDataTableSkeleton from "./VGPDataTableSkeleton";
+import VGPDataTableToolbar from "../../../Sub/DataTable/Toolbar/VGPDataTableToolbar";
 
 type VGPRow = {
   id: number;
@@ -103,7 +104,7 @@ const VGPDataTable: FC = () => {
           hideFooter={true}
           density={'compact'}
           components={{
-            Toolbar: SitesInputDataTableToolbar,
+            Toolbar: VGPDataTableToolbar,
           }}
           disableSelectionOnClick={true}
         />

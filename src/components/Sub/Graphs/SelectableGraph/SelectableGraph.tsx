@@ -9,6 +9,7 @@ import { setSelectedStepsIDs } from "../../../../services/reducers/pcaPage";
 import { setSelectedDirectionsIDs } from "../../../../services/reducers/dirPage";
 import ProjectionSelect from "../Buttons/ProjectionSelect/ProjectionSelect";
 import ResetZoomPan from "../Buttons/ResetZoomPan/ResetZoomPan";
+import ToggleMean from "../Buttons/ToggleMean/ToggleMean";
 import { useLocation } from "react-router-dom";
 
 interface ISelectableGraph {

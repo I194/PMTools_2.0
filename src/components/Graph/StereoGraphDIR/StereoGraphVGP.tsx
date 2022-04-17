@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from "react";
+import React, { FC, useEffect, useMemo } from "react";
 import styles from "./ZijdGraph.module.scss";
 import { useAppSelector } from "../../../services/store/hooks";
 import { useGraphSelectableNodes, useGraphSelectedIDs, usePMDGraphSettings } from "../../../utils/GlobalHooks";
@@ -27,7 +27,7 @@ const StereoGraphVGP: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
   const selectedIDs = useGraphSelectedIDs('dir');
   const {viewHeight, viewWidth, ...areaConstants} = stereoAreaConstants(width, height);
   const dataConstants = useMemo(() => 
-    dataToStereoVGP(data, width / 2, hiddenDirectionsIDs, true),
+    dataToStereoVGP(data, width / 2, hiddenDirectionsIDs),
   [reference, width, currentInterpretation, data, hiddenDirectionsIDs]);
 
   return (

@@ -28,17 +28,22 @@ type SiteRow = {
 
 interface IDataTableDIR {
   data: IDirData | null;
-  latLonData?: ISitesLatLon['coords'];
 };
 
 
-const SitesDataTable: FC<IDataTableDIR> = ({ data, latLonData }) => {
+const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
   
   const dispatch = useAppDispatch();
   const theme = useTheme();
 
   const { selectedDirectionsIDs, hiddenDirectionsIDs, reference } = useAppSelector(state => state.dirPageReducer);
+  const { siteLatLonData } = useAppSelector(state => state.parsedDataReducer);
+  const [latLonData, setLatLonData] = useState<ISitesLatLon['coords']>([]);
   const [editRowsModel, setEditRowsModel] = useState<GridEditRowsModel>({});
+
+  useEffect(() => {
+    if (siteLatLonData) setLatLonData(siteLatLonData.coords);
+  }, [siteLatLonData])
 
   const handleEditRowsModelChange = useCallback((model: GridEditRowsModel) => {
     setEditRowsModel(model);

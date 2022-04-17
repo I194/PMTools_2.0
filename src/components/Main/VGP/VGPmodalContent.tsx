@@ -24,19 +24,15 @@ const VGPmodalContent: FC<Props> = ({ data }) => {
   const dispatch = useAppDispatch();
   const [coords, setCoords] = React.useState<Array<{lat: number, lon: number}>>([]);
 
-  const { siteLatLonData } = useAppSelector(state => state.parsedDataReducer);
   const { vgpData } = useAppSelector(state => state.dirPageReducer);
 
   const handleUpload = async (event: any, files?: Array<File>) => {
+    console.log(event)
     const acceptedFile = files ? files[0] : event.currentTarget.files[0];
-    // const latLon = await getSitesLatLonData(acceptedFile);
-    // setCoords(latLon.coords);
-    console.log(acceptedFile);
     dispatch(sitesFileToLatLon(acceptedFile));
   };
 
-  console.log(siteLatLonData);
-
+  console.log('test')
   return (
     <div className={styles.modalContent}>
       <div className={styles.import}>
@@ -56,7 +52,7 @@ const VGPmodalContent: FC<Props> = ({ data }) => {
       </div>
       <div className={styles.data}>
         <div className={styles.input}>
-          <SitesDataTable data={data} latLonData={siteLatLonData?.coords}/>
+          <SitesDataTable data={data} />
         </div>
         <div className={styles.vgpTable}>
           <VGPDataTable />
