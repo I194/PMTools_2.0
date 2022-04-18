@@ -12,7 +12,7 @@ const rawStatisticsPMDToInterpretation = (
   // ограничение по длине в 7 символов из-за специфики .dir файлов
   // здесь оставляется 4 первые символа имени файла, далее добавится id
   // получится по итогу такое: aBcD_1 или aBcD_12
-  const label: string = metadata.name.slice(0, 4);  
+  const label: string = metadata.name.slice(0, 6);  
 
   const stepRange: string = `${selectedSteps[0].step}-${selectedSteps[selectedSteps.length - 1].step}`;
   const stepCount: number = selectedSteps.length;

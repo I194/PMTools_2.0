@@ -91,6 +91,8 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
     { field: 'comment', headerName: 'Comment', type: 'string', width: 200 },
+    { field: 'lat', headerName: 'Lat', type: 'number', width: 70, },
+    { field: 'lon', headerName: 'Lon', type: 'number', width: 70, },
   ];
 
   columns.forEach((col) => {

@@ -6,6 +6,7 @@ interface IInitialState {
 
   treatmentFiles: File[] | null;
   dirStatFiles: File[] | null;
+  sitesLatLonFile: File | null;
 }
 
 const initialState: IInitialState = {
@@ -14,6 +15,7 @@ const initialState: IInitialState = {
 
   treatmentFiles: null,
   dirStatFiles: null,
+  sitesLatLonFile: null,
 }
 
 const filesSlice = createSlice({
@@ -45,6 +47,9 @@ const filesSlice = createSlice({
       if (state.dirStatFiles) state.dirStatFiles.push(...action.payload);
       else state.dirStatFiles = action.payload;
     },
+    setSitesLatLonFile (state, action) {
+      state.sitesLatLonFile = action.payload;
+    }
   },
   extraReducers: (builder) => {
     // Пример работы с асинхронными запросами
