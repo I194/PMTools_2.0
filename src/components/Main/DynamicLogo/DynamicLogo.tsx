@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useMemo } from "react";
 import styles from './DynamicLogo.module.scss';
 import * as THREE from 'three'
 
@@ -12,7 +12,7 @@ const Sphere = (props: JSX.IntrinsicElements['mesh']) => {
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false);
 
-  useFrame((state, delta) => (ref.current.rotation.x += 0.01));
+  useFrame((state, delta) => (ref.current.rotation.y += 0.001));
 
   return (
     <mesh
@@ -27,6 +27,7 @@ const Sphere = (props: JSX.IntrinsicElements['mesh']) => {
       <OrbitControls 
         minDistance={4}
         maxDistance={8}
+        enablePan={false}
       />
     </mesh>
   );
