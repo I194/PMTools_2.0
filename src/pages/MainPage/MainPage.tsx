@@ -4,17 +4,21 @@ import { useTheme } from '@mui/material/styles';
 import {
   bgColorMain,
 } from '../../utils/ThemeConstants';
+import { DynamicLogo } from '../../components/Main';
 
 const MainPage: FC = ({}) => {
   const theme = useTheme();
   
   return (
-    <div 
-      className={styles.mainPage}
-      style={{backgroundColor: bgColorMain(theme.palette.mode)}}
-    >
-      главная страница
-    </div>
+    <>
+      <DynamicLogo />
+    </>
+    // <div 
+    //   className={styles.mainPage}
+    //   style={{backgroundColor: bgColorMain(theme.palette.mode)}}
+    // >
+    //   <DynamicLogo />
+    // </div>
   )
 }
 

@@ -8,6 +8,8 @@ import StatisticsDataTableDIR from "./DataTablesDIR/StatisticsDataTable/Statisti
 import ToolsPMD from "./ToolsPMD/ToolsPMD";
 import ToolsDIR from "./ToolsDIR/ToolsDIR";
 
+import DynamicLogo from "./DynamicLogo/DynamicLogo";
+
 export {
   AppSettings,
   AppNavigation,
@@ -18,4 +20,5 @@ export {
   StatisticsDataTableDIR,
   ToolsPMD,
   ToolsDIR,
+  DynamicLogo,
 };
