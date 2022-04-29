@@ -1,25 +1,11 @@
 import React, { FC } from 'react';
+import styles from './ModalWrapper.module.scss';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import { Backdrop, Box, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import Draggable from 'react-draggable';
-
-let style = {
-  position: 'absolute' as 'absolute',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  flexDirection: 'column',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'background.paper',
-  borderRadius: '6px',
-  boxShadow: 24,
-  p: '16px',
-};
 
 interface IModal {
   open: boolean;
@@ -62,12 +48,12 @@ const ModalWrapper: FC<IModal> = ({
       }: {}}
       
     >
-      <Box 
-        sx={{ 
-          ...style, 
+      <div 
+        style={{ 
           ...size,
           ...position
         }}
+        className={styles.container}
       >
         <IconButton 
           color="error" 
@@ -85,7 +71,7 @@ const ModalWrapper: FC<IModal> = ({
           showBottomClose && 
           <Button variant='outlined' onClick={handleClose} sx={{mt: 2}}>Закрыть</Button>
         }
-      </Box>
+      </div>
     </Modal>
   )
 
