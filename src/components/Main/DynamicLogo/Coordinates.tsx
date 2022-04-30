@@ -6,6 +6,8 @@ import Word from "./Word";
 
 const Coordinates = () => {
 
+  //source: https://codesandbox.io/s/yup2o?file=/src/App.js:145-205
+
   const directions = ['N', 'E', 'S', 'W'];
   const count = 4;
   const radius = 2.2;
