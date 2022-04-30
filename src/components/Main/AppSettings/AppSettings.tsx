@@ -83,7 +83,7 @@ const AppSettings: FC<IAppSettings> = ({
             }}
             disableUnderline={true}
             sx={{display: 'none'}}
-            onChange={onFileUpload}
+            // onChange={onFileUpload}
           />
         }
         <Button 

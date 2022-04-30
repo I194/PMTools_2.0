@@ -21,10 +21,14 @@ const Layout: FC<RouteProps> = () => {
   const currentPage = location.pathname.slice(1, location.pathname.length);
 
   const handleFileUpload = (event: any, files?: Array<File>) => {
+    // console.log('FILES', files, event.currentTarget.files);
+    // console.log('FILES', files);
+    // console.log('EVENT', event.currentTarget.files);
     const acceptedFiles = files ? files : Array.from(event.currentTarget.files);
+    console.log('ACCEPTED FILES', acceptedFiles);
     if (currentPage === 'pca') dispatch(addTreatmentFiles(acceptedFiles));
     if (currentPage === 'dir') dispatch(addDirStatFiles(acceptedFiles));
-    dispatch(addInputFiles(acceptedFiles));
+    // dispatch(addInputFiles(acceptedFiles));
   };
 
   const onDrop = useCallback(acceptedFiles => {
