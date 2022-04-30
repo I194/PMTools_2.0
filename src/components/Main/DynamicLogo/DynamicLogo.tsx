@@ -3,7 +3,9 @@ import styles from './DynamicLogo.module.scss';
 import * as THREE from 'three'
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls } from '@react-three/drei';
+import { OrbitControls, Line } from '@react-three/drei';
+import { SphereGeometry } from "three";
+import setArc3D from "./SetArc3D";
  
 const Sphere = (props: JSX.IntrinsicElements['mesh']) => {
 
@@ -11,8 +13,14 @@ const Sphere = (props: JSX.IntrinsicElements['mesh']) => {
 
   const [hovered, hover] = useState(false);
   const [clicked, click] = useState(false);
+  const [sphereRadius, setSphereRadius] = useState(2);
 
   useFrame((state, delta) => (ref.current.rotation.y += 0.001));
+
+  const pointStart = new THREE.Vector3(Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1).normalize().multiplyScalar(sphereRadius);
+  const pointEnd = new THREE.Vector3(Math.random() * 2 - 1, Math.random() * 2 - 1, Math.random() * 2 - 1).normalize().multiplyScalar(sphereRadius);
+
+  const newArc1 = setArc3D(pointStart, pointEnd, 50, "lime", false);
 
   return (
     <mesh
@@ -24,6 +32,7 @@ const Sphere = (props: JSX.IntrinsicElements['mesh']) => {
       onPointerOut={(event) => hover(false)}>
       <sphereGeometry args={[2, 32, 16]}/>
       <meshLambertMaterial color={hovered ? '#ce93d8' : '#90caf9'} wireframe />
+      <Line points={newArc1} color='lime' linewidth={2} alphaWrite={undefined}/>
       <OrbitControls 
         minDistance={4}
         maxDistance={8}
