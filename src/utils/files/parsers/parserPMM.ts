@@ -5,7 +5,7 @@ const parsePMM = (data: string, name: string) => {
   const lines = data.split(eol).slice(1).filter(line => line.length > 1);
 
   const header = lines[0].replace(/"/g, '').split(',');
-  name = header[0] || name;
+  // name = header[0] || name;
 
   // Skip 1 and 2 lines 'cause they're in the header 
   const interpretations = lines.slice(2).map((line, index) => {

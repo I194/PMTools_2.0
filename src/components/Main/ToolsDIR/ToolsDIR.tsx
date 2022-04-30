@@ -15,10 +15,18 @@ import DropdownSelectWithButtons from '../../Sub/DropdownSelect/DropdownSelectWi
 import ShowHideDotsButtons from './ShowHideDotsButtons';
 import { referenceToLabel } from '../../../utils/parsers/labelToReference';
 import { enteredIndexesToIDsDIR } from '../../../utils/parsers/enteredIndexesToIDs';
-import { setReference, setSelectedDirectionsIDs, setStatisticsMode, updateCurrentInterpretation, updateCurrentFileInterpretations } from '../../../services/reducers/dirPage';
+import { 
+  setReference, 
+  setSelectedDirectionsIDs, 
+  setStatisticsMode, 
+  updateCurrentInterpretation, 
+  updateCurrentFileInterpretations, 
+  deleteInterepretationByParentFile,
+} from '../../../services/reducers/dirPage';
 import { Reference } from '../../../utils/graphs/types';
 import OutputDataTableDIR from '../DataTablesDIR/OutputDataTable/OutputDataTableDIR';
 import VGPModalContent from '../VGP/VGPmodalContent';
+import { setDirStatFiles } from '../../../services/reducers/files';
 
 interface IToolsDIR {
   data: IDirData | null;
@@ -28,10 +36,12 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
 
   const dispatch = useAppDispatch();
 
-  const { dirStatData } = useAppSelector(state => state.parsedDataReducer);
+  const { dirStatFiles } = useAppSelector(state => state.filesReducer);
+  const { dirStatData, currentDataDIRid } = useAppSelector(state => state.parsedDataReducer);
   const { selectedDirectionsIDs, hiddenDirectionsIDs, statisticsMode, reference } = useAppSelector(state => state.dirPageReducer); 
 
   const [allDirData, setAllDirData] = useState<Array<IDirData>>([]);
+  const [currentFileName, setCurrentFileName] = useState<string>('');
   const [allFilesStatOpen, setAllFilesStatOpen] = useState<boolean>(false);
   const [showIndexesInput, setShowIndexesInput] = useState<boolean>(false);
   const [showVGP, setShowVGP] = useState<boolean>(false);
@@ -97,18 +107,35 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
     setShowIndexesInput(false);
   };
 
-  // обработчик выбранного файла
+  // при смене текущего файла обновляет данные для отображения
+  useEffect(() => {
+    if (currentDataDIRid !== null && allDirData.length) {
+      const filename = allDirData[currentDataDIRid]?.name;
+      if (filename) {
+        setCurrentFileName(filename);
+        dispatch(updateCurrentFileInterpretations(filename));
+        dispatch(updateCurrentInterpretation());
+        dispatch(setSelectedDirectionsIDs(null));
+        dispatch(setStatisticsMode(null));
+      } else dispatch(setCurrentDIRid(0));
+    }
+  }, [currentDataDIRid, allDirData]);
+  
+  if (!data) return <ToolsPMDSkeleton />;
+
   const handleFileSelect = (option: string) => {
     const dirID = allDirData.findIndex(dir => dir.name === option);
     dispatch(setCurrentDIRid(dirID));
-    // cleaners
-    dispatch(updateCurrentFileInterpretations(option));
-    dispatch(updateCurrentInterpretation());
-    dispatch(setSelectedDirectionsIDs(null));
-    dispatch(setStatisticsMode(null));
   };
-  
-  if (!data) return <ToolsPMDSkeleton />;
+
+  const handleFileDelete = (option: string) => {
+    console.log('what', dirStatFiles, option);
+    if (dirStatFiles) {
+      const updatedFiles = dirStatFiles.filter(file => file.name !== option);
+      dispatch(setDirStatFiles(updatedFiles));
+      dispatch(deleteInterepretationByParentFile(option));
+    };
+  };
 
   return (
     <ToolsPMDSkeleton>
@@ -119,6 +146,8 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
         onOptionSelect={handleFileSelect}
         minWidth={'120px'}
         useArrowListeners={true}
+        showDelete
+        onDelete={handleFileDelete}
       />
       <ButtonGroupWithLabel label='Система координат'>
         {

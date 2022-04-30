@@ -68,11 +68,13 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   useEffect(() => {
     if (currentDataPMDid !== null) {
       const filename = allDataPMD[currentDataPMDid].metadata.name;
-      setCurrentFileName(filename);
-      dispatch(updateCurrentFileInterpretations(filename));
-      dispatch(updateCurrentInterpretation());
-      dispatch(setSelectedStepsIDs(null));
-      dispatch(setStatisticsMode(null));
+      if (filename) {
+        setCurrentFileName(filename);
+        dispatch(updateCurrentFileInterpretations(filename));
+        dispatch(updateCurrentInterpretation());
+        dispatch(setSelectedStepsIDs(null));
+        dispatch(setStatisticsMode(null));
+      } else dispatch(setCurrentPMDid(0));
     }
   }, [currentDataPMDid, allDataPMD]);
 
