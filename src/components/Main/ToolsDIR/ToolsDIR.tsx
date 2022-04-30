@@ -22,6 +22,7 @@ import {
   updateCurrentInterpretation, 
   updateCurrentFileInterpretations, 
   deleteInterepretationByParentFile,
+  sethiddenDirectionsIDs,
 } from '../../../services/reducers/dirPage';
 import { Reference } from '../../../utils/graphs/types';
 import OutputDataTableDIR from '../DataTablesDIR/OutputDataTable/OutputDataTableDIR';
@@ -116,6 +117,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
         dispatch(updateCurrentFileInterpretations(filename));
         dispatch(updateCurrentInterpretation());
         dispatch(setSelectedDirectionsIDs(null));
+        dispatch(sethiddenDirectionsIDs([]));
         dispatch(setStatisticsMode(null));
       } else dispatch(setCurrentDIRid(0));
     }

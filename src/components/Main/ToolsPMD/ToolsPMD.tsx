@@ -5,7 +5,7 @@ import { ButtonGroupWithLabel } from '../../Sub/Buttons';
 import { Button } from '@mui/material';
 import { Reference } from '../../../utils/graphs/types';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
-import { deleteInterepretationByParentFile, setReference, setSelectedStepsIDs, setStatisticsMode, updateCurrentFileInterpretations, updateCurrentInterpretation } from '../../../services/reducers/pcaPage';
+import { deleteInterepretationByParentFile, setHiddenStepsIDs, setReference, setSelectedStepsIDs, setStatisticsMode, updateCurrentFileInterpretations, updateCurrentInterpretation } from '../../../services/reducers/pcaPage';
 import { IPmdData } from '../../../utils/GlobalTypes';
 import ModalWrapper from '../../Sub/Modal/ModalWrapper';
 import ToolsPMDSkeleton from './ToolsPMDSkeleton';
@@ -73,6 +73,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
         dispatch(updateCurrentFileInterpretations(filename));
         dispatch(updateCurrentInterpretation());
         dispatch(setSelectedStepsIDs(null));
+        dispatch(setHiddenStepsIDs([]));
         dispatch(setStatisticsMode(null));
       } else dispatch(setCurrentPMDid(0));
     }
