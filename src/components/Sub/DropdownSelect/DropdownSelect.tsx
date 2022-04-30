@@ -3,6 +3,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { ListItemText, ListItem, IconButton } from '@mui/material';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 export interface IDropdownSelect {
   label: string;
@@ -11,6 +13,8 @@ export interface IDropdownSelect {
   defaultValue?: string;
   minWidth?: string;
   m?: string;
+  showDelete?: boolean;
+  onDelete?: (option: string) => void;
 };
 
 const DropdownSelect: FC<IDropdownSelect> = ({ 
@@ -20,6 +24,8 @@ const DropdownSelect: FC<IDropdownSelect> = ({
   defaultValue, 
   minWidth,
   m,
+  showDelete,
+  onDelete,
 }) => {
 
   const [selectedOption, setSelectedOption] = useState(defaultValue || '');
@@ -29,6 +35,10 @@ const DropdownSelect: FC<IDropdownSelect> = ({
     setSelectedOption(event.target.value);
     onOptionSelect(event.target.value);
     setOpen(false);
+  };
+
+  const handleDeleteClick = (option: string) => {
+    if (onDelete) onDelete(option);
   };
 
   return (
@@ -42,6 +52,9 @@ const DropdownSelect: FC<IDropdownSelect> = ({
         onOpen={() => setOpen(true)}
         sx={{
           margin: 0,
+          '& .MuiListItem-root': {
+            display: 'none',
+          }
         }}
       >
         {
@@ -50,7 +63,17 @@ const DropdownSelect: FC<IDropdownSelect> = ({
               value={option} 
               key={index}
             >
-              { option }
+              <ListItemText primary={option} disableTypography/>
+              {
+                showDelete && 
+                <ListItem
+                  secondaryAction={
+                    <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteClick(option)}>
+                      <DeleteForeverIcon />
+                    </IconButton>
+                  }
+                />
+              }
             </MenuItem>
           ))
         }
