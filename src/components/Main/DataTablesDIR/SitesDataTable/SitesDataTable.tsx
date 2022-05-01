@@ -120,6 +120,9 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
       return {
         id,
         label,
+        dec,
+        inc,
+        a95,
         lat,
         lon,
         age,

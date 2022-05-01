@@ -85,6 +85,9 @@ export interface IDirData extends IObjectKeys {
 export type VGPData = {
   readonly id: number;
   label: string;
+  dec: number;
+  inc: number;
+  a95: number;
   lat: number;
   lon: number;
   poleLatitude: number,
