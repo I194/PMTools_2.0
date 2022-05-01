@@ -16,16 +16,17 @@ export const toCSV_VGP = async (file: File, parsedData: IVGPData) => {
   // dm: number,
   const data = parsedData;
   
-  const columNames = 'id,site,siteLat,siteLon,poleLat,poleLon,paleoLat,dp,dm\n';
+  const rawColumnNames = ['label', 'lat', 'lon', 'poleLatitude', 'poleLongitude', 'paleoLatitude', 'dp', 'dm', 'age', 'plateId'];
+  const columnNames = ['label', 'siteLat', 'siteLon', 'poleLat', 'poleLon', 'paleoLat', 'dp', 'dm', 'age', 'plateId'];
 
   const lines = data.vgps.map((vgp: any) => {
-    const line = Object.keys(vgp).reduce((line, param) => {
-      return line + `${vgp[param]},`
+    const line = rawColumnNames.reduce((line, col) => {
+      return line + `${vgp[col]},`
     }, '')
     return line.slice(0, -1);
   }).join('\n');
 
-  const res = columNames + lines;
+  const res = columnNames.join(',') + '\n' + lines;
   const filename = getFileName(data.name);
 
   download(res, `${filename}.csv`, 'text/csv;charset=utf-8');
@@ -35,11 +36,12 @@ export const toXLSX_VGP = async (file: File, parsedData: IVGPData) => {
 
   const data = parsedData;
 
-  const columnNames = 'id,site,siteLat,siteLon,poleLat,poleLon,paleoLat,dp,dm'.split(',');
+  const rawColumnNames = ['label', 'lat', 'lon', 'poleLatitude', 'poleLongitude', 'paleoLatitude', 'dp', 'dm', 'age', 'plateId'];
+  const columnNames = ['label', 'siteLat', 'siteLon', 'poleLat', 'poleLon', 'paleoLat', 'dp', 'dm', 'age', 'plateId'];
   
   const lines = data.vgps.map((vgp: any) => {
-    return Object.keys(vgp).map((param) => {
-      return vgp[param];
+    return rawColumnNames.map((col) => {
+      return vgp[col];
     });
   });
 

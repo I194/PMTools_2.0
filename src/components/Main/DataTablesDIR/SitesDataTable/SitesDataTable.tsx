@@ -101,15 +101,17 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
 
   const calculateVGPs = () => {
     const rows: Array<SiteRow> = Array.from(apiRef?.current?.getRowModels()?.values() || []);
-    console.log(rows)
     if (!rows.length) return;
     const vgpData: VGPData = rows.map((row, index) => {
-      let { id, label, lat, lon } = row;
+      let { id, label, lat, lon, age, plateId } = row;
       // на случай, если были загружены данные из файла и не обновился apiRef
       if ((lat === 0 || lon === 0) && siteVGPData && siteVGPData[index]) {
         lat = siteVGPData[index].lat;
         lon = siteVGPData[index].lon;
+        age = siteVGPData[index].age;
+        plateId = siteVGPData[index].plateId;
       };
+      console.log(age, plateId)
       const interpretation = data.interpretations.find(interpretation => interpretation.id === id)!;
       const dec = reference === 'geographic' ? interpretation.Dgeo : interpretation.Dstrat;
       const inc = reference === 'geographic' ? interpretation.Igeo : interpretation.Istrat;
@@ -120,6 +122,8 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
         label,
         lat,
         lon,
+        age,
+        plateId,
         ...vgp
       }
     });

@@ -18,7 +18,6 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
   const [graphSize, setGraphSize] = useState<number>(300);
 
   useEffect(() => {
-    console.log(graphRef.current, wv, wh)
     const graphWidth = graphRef.current?.offsetWidth;
     const graphHeight = graphRef.current?.offsetHeight;
     if (graphWidth && graphHeight) {

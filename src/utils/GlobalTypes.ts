@@ -92,6 +92,8 @@ export type VGPData = {
   paleoLatitude: number,
   dp: number,
   dm: number,
+  age: number;
+  plateId: number;
 }[];
 
 export interface IVGPData extends IObjectKeys {
