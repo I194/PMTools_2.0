@@ -1,6 +1,6 @@
 import PMFile from "./pmFiles";
 import { exampleDir, exampleSitesLatLon } from "./fileConstants";
-import { IDirData, IPmdData, ISitesLatLon } from "../GlobalTypes";
+import { IDirData, IPmdData, ISitesData } from "../GlobalTypes";
 
 export const getDirectionalData = (file: File, as: string) => {
 
@@ -46,7 +46,7 @@ export const getSitesLatLonData = (file: File) => {
   
   const ext = (/[.]/.exec(file.name)) ? /[^.]+$/.exec(file.name)?.toString().toLowerCase() : undefined;
 
-  return new Promise<ISitesLatLon>((resolve, reject) => {
+  return new Promise<ISitesData>((resolve, reject) => {
     const reader = new FileReader();
 
     reader.onload = () => {

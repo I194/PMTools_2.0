@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IPmdData, IDirData, ISitesLatLon } from "../../utils/GlobalTypes";
+import { IPmdData, IDirData, ISitesData } from "../../utils/GlobalTypes";
 import { filesToData, sitesFileToLatLon } from "../axios/filesAndData";
 
 interface IInitialState {
@@ -8,7 +8,7 @@ interface IInitialState {
   errorInfo: any;
   treatmentData: IPmdData[] | null;
   dirStatData: IDirData[] | null;
-  siteLatLonData: ISitesLatLon | null;
+  siteData: ISitesData | null;
   currentDataPMDid: number | null;
   currentDataDIRid: number | null;
 };
@@ -19,7 +19,7 @@ const initialState: IInitialState = {
   errorInfo: null,
   treatmentData: null,
   dirStatData: null,
-  siteLatLonData: null,
+  siteData: null,
   currentDataPMDid: null,
   currentDataDIRid: null,
 };
@@ -41,7 +41,7 @@ const parsedDataSlice = createSlice({
       state.currentDataDIRid = action.payload;
     },
     setSiteLatLonData (state, action) {
-      state.siteLatLonData = action.payload;
+      state.siteData = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -79,7 +79,7 @@ const parsedDataSlice = createSlice({
       state.errorInfo = null;
     });
     builder.addCase(sitesFileToLatLon.fulfilled, (state, action) => {
-      state.siteLatLonData = action.payload;
+      state.siteData = action.payload;
       state.loading = 'succeeded';
       state.error = false;
       state.errorInfo = null;

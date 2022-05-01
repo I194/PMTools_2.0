@@ -6,6 +6,12 @@ import { Backdrop, Box, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import Draggable from 'react-draggable';
+import { useTheme } from '@mui/material/styles';
+import {
+  bgColorMain,
+  bgColorBlocks,
+  boxShadowStyle
+} from '../../../utils/ThemeConstants';
 
 interface IModal {
   open: boolean;
@@ -27,6 +33,8 @@ const ModalWrapper: FC<IModal> = ({
   showBottomClose,
   children
 }) => {
+
+  const theme = useTheme();
 
   const handleClose = () => {
     if (onClose) onClose();
@@ -51,7 +59,8 @@ const ModalWrapper: FC<IModal> = ({
       <div 
         style={{ 
           ...size,
-          ...position
+          ...position,
+          backgroundColor: bgColorMain(theme.palette.mode),
         }}
         className={styles.container}
       >

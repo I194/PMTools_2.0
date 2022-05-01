@@ -33,8 +33,15 @@ export type PMDStep = {
   demagType: 'thermal' | 'alternating field' | undefined;
 };
 
-export interface ISitesLatLon extends IObjectKeys {
-  coords: Array<{lat: number, lon: number}>;
+export type SiteVGPData = {
+  lat: number;
+  lon: number;
+  age: number;
+  plateId: number;
+}
+
+export interface ISitesData extends IObjectKeys {
+  data: Array<SiteVGPData>;
   format: string;
   created: string;
 }

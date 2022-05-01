@@ -187,7 +187,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
       <ModalWrapper
         open={showVGP}
         setOpen={setShowVGP}
-        size={{width: '80vw', height: '60vh'}}
+        size={{width: '80vw', height: '64vh'}}
         position={{left: '50%', top: '50%'}}
         isDraggable={true}
       >
