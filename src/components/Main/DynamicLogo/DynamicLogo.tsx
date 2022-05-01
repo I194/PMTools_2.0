@@ -9,8 +9,14 @@ import setArc3D from "./SetArc3D";
 import Direction from "../../../utils/graphs/classes/Direction";
 import SpherePath from "./SpherePath";
 import SphericalPoints from "./SphericalPoints";
+
+import { useTheme } from '@mui/material/styles';
+import {
+  bgColorMain,
+  bgColorBlocks,
+} from '../../../utils/ThemeConstants';
  
-const Sphere = (props: JSX.IntrinsicElements['mesh']) => {
+const Sphere = (props: JSX.IntrinsicElements['mesh'] & {themeMode: 'dark' | 'light'}) => {
 
   const ref = useRef<THREE.Mesh>(null!);
 
@@ -61,7 +67,7 @@ const Sphere = (props: JSX.IntrinsicElements['mesh']) => {
       // onPointerOut={(event) => hover(false)}
     >
       <sphereGeometry args={[2, 72, 36]}/>
-      <meshLambertMaterial color={hovered ? '#ce93d8' : '#90caf9'} wireframe />
+      <meshLambertMaterial color={props.themeMode === 'dark' ? '#525252' : '#90caf9'} wireframe />
       <SpherePath path={path} sphereRadius={sphereRadius} color='#119dff' lineWidth={1}/>
       <SphericalPoints points={points} size={0.2} color='#FF9101'/>
       <OrbitControls 
@@ -75,19 +81,13 @@ const Sphere = (props: JSX.IntrinsicElements['mesh']) => {
 
 
 const DynamicLogo = () => {
-  const [color, colorChange] = useState("blue"); // Состояние отвечает за цвет квадрата
- 
-  // Handler служит для того, чтобы
-  const colorChangeHandler = () => {
-    // Просто поочерёдно меняем цвет с серого на синий и с синего на белый
-    colorChange((prevColor) => (prevColor === "white" ? "blue" : "white"));
-  };
- 
+  
+  const theme = useTheme();
   return (
     <Canvas>
       <ambientLight />
       <pointLight position={[10, 10, 10]} />
-      <Sphere position={[0, 0, 0]} />
+      <Sphere position={[0, 0, 0]} themeMode={theme.palette.mode}/>
     </Canvas>
   );
 };

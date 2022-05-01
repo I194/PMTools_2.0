@@ -35,6 +35,8 @@ const AppSettings: FC<IAppSettings> = ({
     dir: ['.dir', '.pmm', '.csv', 'xlsx'], 
   };
 
+  console.log('theme_app_settings', theme.palette.mode)
+
   return (
     <div className={styles.buttons}>
       <Button

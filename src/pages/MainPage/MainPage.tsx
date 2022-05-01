@@ -8,6 +8,8 @@ import { DynamicLogo } from '../../components/Main';
 
 const MainPage: FC = ({}) => {
   const theme = useTheme();
+
+  console.log(theme.palette.mode);
   
   return (
     <>
