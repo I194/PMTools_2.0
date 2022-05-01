@@ -10,21 +10,23 @@ import Direction from "../../../utils/graphs/classes/Direction";
 type Props = {
   path: Array<{start: Direction, end: Direction}>;
   sphereRadius: number;
+  color: string;
+  lineWidth?: number;
 };
 
 const SpherePath = (props: JSX.IntrinsicElements['mesh'] & Props) => {
 
   const ref = useRef<THREE.Mesh>(null!);
-  const sphereRadius = props.sphereRadius;
+  const { path, sphereRadius, color, lineWidth }= props;
 
   const arcs = useMemo(() => {
-    return props.path.map((directions) => {
-      console.log(directions, directions.end.toCartesian().toArray())
+    return path.map((directions) => {
+      // dec as lat and inc as lon
       const pointStart = new THREE.Vector3(...directions.start.toCartesian().toArray()).normalize().multiplyScalar(sphereRadius);
       const pointEnd = new THREE.Vector3(...directions.end.toCartesian().toArray()).normalize().multiplyScalar(sphereRadius);
       return setArc3D(pointStart, pointEnd, 50, "lime", false);
     });
-  }, [props.path, sphereRadius]);
+  }, [path, sphereRadius]);
 
   return (
     <mesh
@@ -37,8 +39,8 @@ const SpherePath = (props: JSX.IntrinsicElements['mesh'] & Props) => {
             <Line
               key={index}
               points={arc}
-              color='lime'
-              linewidth={2}
+              color={color}
+              linewidth={lineWidth || 2}
               alphaWrite={undefined}
             />
           );
