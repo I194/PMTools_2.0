@@ -29,6 +29,7 @@ class Direction {
   };
 
   toCartesian = () => {
+    // dec as lat and inc as lon
     const dec = this.declination / Direction.RADIANS;
     const inc = this.inclination / Direction.RADIANS;
 
