@@ -10,6 +10,8 @@ const ExportVGP = (props: ButtonProps & {data: IVGPData}) => {
   const { data } = props;
   return (
     <GridToolbarExportContainer {...props}>
+      <VGPExportMenuItem as={'vgp'} data={data}/>
+      <VGPExportMenuItem as={'gpml'} data={data}/>
       <VGPExportMenuItem as={'csv'} data={data}/>
       <VGPExportMenuItem as={'xlsx'} data={data}/>
     </GridToolbarExportContainer>

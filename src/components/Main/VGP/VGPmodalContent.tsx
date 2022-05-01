@@ -12,6 +12,7 @@ import { useTheme } from '@mui/material/styles';
 import {
   textColor,
   primaryColor,
+  successColor,
 } from '../../../utils/ThemeConstants';
 
 type Props = {
@@ -32,7 +33,6 @@ const VGPmodalContent: FC<Props> = ({ data }) => {
     dispatch(sitesFileToLatLon(acceptedFile));
   };
 
-  console.log('test')
   return (
     <div className={styles.modalContent}>
       <div className={styles.import}>
@@ -47,7 +47,12 @@ const VGPmodalContent: FC<Props> = ({ data }) => {
           />
         </div>
         <Typography color={textColor(theme.palette.mode)}>
-          в файле должны быть столбцы <code style={{color: primaryColor(theme.palette.mode)}}>lat</code> и <code style={{color: primaryColor(theme.palette.mode)}}>lon</code>
+          в файле обязательно должны быть столбцы <code style={{color: primaryColor(theme.palette.mode)}}>lat</code> и <code style={{color: primaryColor(theme.palette.mode)}}>lon</code>.
+        </Typography>
+      </div>
+      <div className={styles.import}>
+        <Typography color={textColor(theme.palette.mode)}>
+          Опциональными явялются столбцы <code style={{color: primaryColor(theme.palette.mode)}}>age</code> и <code style={{color: primaryColor(theme.palette.mode)}}>plate_id</code>, они нужны для экспорта в формат <code style={{color: successColor(theme.palette.mode)}}>GPlates</code>.
         </Typography>
       </div>
       <div className={styles.data}>

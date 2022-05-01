@@ -3,11 +3,11 @@ import {
   GridExportMenuItemProps
 } from '@mui/x-data-grid';
 import { FC } from 'react';
-import { toCSV_VGP, toXLSX_VGP } from '../../../../../../../utils/files/converters/vgp';
+import { toCSV_VGP, toGPML, toVGP, toXLSX_VGP } from '../../../../../../../utils/files/converters/vgp';
 import { IDirData, IVGPData } from '../../../../../../../utils/GlobalTypes'; 
 
 interface DIRExport {
-  as: 'csv' | 'xlsx';
+  as: 'vgp' | 'gpml' | 'csv' | 'xlsx';
   data: IVGPData;
 };
 
@@ -17,6 +17,20 @@ const DIRExportMenuItem: FC<DIRExport> = ({as, data}, props: GridExportMenuItemP
   const blankFile = new File([], '');
 
   const exportAs = {
+    vgp: {
+      export: () => {
+        if (!data.created) data.created = new Date().toLocaleString();
+        toVGP(blankFile, data)
+      }, 
+      label: 'Export as VGP'
+    },
+    gpml: {
+      export: () => {
+        if (!data.created) data.created = new Date().toLocaleString();
+        toGPML(blankFile, data)
+      }, 
+      label: 'Export as GPML'
+    },
     csv: {
       export: () => {
         if (!data.created) data.created = new Date().toLocaleString();

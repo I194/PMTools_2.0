@@ -2,7 +2,8 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import styles from './DropdownSelect.module.scss';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import { FormControl, IconButton, InputLabel, MenuItem, Select, SelectChangeEvent,  } from '@mui/material';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { FormControl, IconButton, InputLabel, ListItem, ListItemText, MenuItem, Select, SelectChangeEvent,  } from '@mui/material';
 import DropdownSelect, { IDropdownSelect } from './DropdownSelect';
 
 interface IDropdownSelectWithButtons extends IDropdownSelect {
@@ -16,11 +17,18 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
   defaultValue, 
   minWidth,
   m,
-  useArrowListeners
+  useArrowListeners,
+  showDelete,
+  onDelete,
 }) => {
 
   const [selectedOption, setSelectedOption] = useState(defaultValue || '');
   const [open, setOpen] = React.useState(false);
+
+  useEffect(() => {
+    if (!options.length) setSelectedOption(''); 
+    else if (!options.includes(selectedOption)) setSelectedOption(options[0]);
+  }, [selectedOption, options]);
 
   const handleSelect = (event: SelectChangeEvent) => {
     setSelectedOption(event.target.value);
@@ -28,7 +36,7 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
     setOpen(false);
   };
 
-  const handleLeftCkick = () => {
+  const handleLeftClick = () => {
     let newOptionIndex = (options.findIndex((option) => option === selectedOption ) - 1);
     if (newOptionIndex < 0) newOptionIndex += options.length;
     const newSelectedOption = options[newOptionIndex];
@@ -36,7 +44,7 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
     onOptionSelect(newSelectedOption);
   };
 
-  const handleRightCkick = () => {
+  const handleRightClick = () => {
     const newSelectedOption = options[
       (options.findIndex((option) => option === selectedOption ) + 1) % options.length
     ];
@@ -49,10 +57,10 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
     const key = (e.code as string);
     const { ctrlKey, shiftKey, altKey } = e; 
     if ((shiftKey) && key === 'ArrowLeft') {
-      handleLeftCkick();
+      handleLeftClick();
     };
     if ((shiftKey) && key === 'ArrowRight') {
-      handleRightCkick();
+      handleRightClick();
     };
   }
 
@@ -63,6 +71,12 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
     };
   }, [selectedOption]);
 
+  const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, option: string) => {
+    event.stopPropagation();
+    if (onDelete) {
+      onDelete(option);
+    }
+  };
 
   return (
     <div className={styles.DropdownSelectWithButtons}>
@@ -71,7 +85,7 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
           p: 0,
           mt: '16px'
         }}
-        onClick={handleLeftCkick}
+        onClick={handleLeftClick}
       >
         <KeyboardArrowLeftIcon />
       </IconButton>
@@ -85,6 +99,9 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
           onOpen={() => setOpen(true)}
           sx={{
             margin: 0,
+            '& .MuiListItem-root': {
+              display: 'none',
+            }
           }}
         >
           {
@@ -93,7 +110,17 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
                 value={option} 
                 key={index}
               >
-                { option }
+                <ListItemText primary={option} disableTypography/>
+                {
+                  showDelete && 
+                  <ListItem
+                    secondaryAction={
+                      <IconButton edge="end" aria-label="delete" onClick={(event) => handleDeleteClick(event, option)}>
+                        <DeleteForeverIcon />
+                      </IconButton>
+                    }
+                  />
+                }
               </MenuItem>
             ))
           }
@@ -104,7 +131,7 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
           p: 0,
           mt: '16px'
         }}
-        onClick={handleRightCkick}
+        onClick={handleRightClick}
       >
         <KeyboardArrowRightIcon />
       </IconButton>

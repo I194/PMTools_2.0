@@ -3,7 +3,7 @@ import styles from './SitesDataTable.module.scss';
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
 import { GetDataTableBaseStyle } from "../styleConstants";
 import SitesDataTableSkeleton from './SitesDataTableSkeleton';
-import { IDirData, ISitesLatLon, VGPData } from "../../../../utils/GlobalTypes";
+import { IDirData, ISitesData, VGPData } from "../../../../utils/GlobalTypes";
 import { 
   DataGrid, 
   GridColumns, 
@@ -17,6 +17,7 @@ import calculateVGP from "../../../../utils/statistics/calculation/calculateVGP"
 import useApiRef from "../useApiRef";
 import { setVGPData } from "../../../../services/reducers/dirPage";
 import { setSiteLatLonData } from "../../../../services/reducers/parsedData";
+import { textColor } from "../../../../utils/ThemeConstants";
 
 type SiteRow = {
   id: number;
@@ -24,6 +25,8 @@ type SiteRow = {
   index: number | string;
   lat: number;
   lon: number;
+  age: number;
+  plateId: number;
 };
 
 interface IDataTableDIR {
@@ -37,13 +40,13 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
   const theme = useTheme();
 
   const { selectedDirectionsIDs, hiddenDirectionsIDs, reference } = useAppSelector(state => state.dirPageReducer);
-  const { siteLatLonData } = useAppSelector(state => state.parsedDataReducer);
-  const [latLonData, setLatLonData] = useState<ISitesLatLon['coords']>([]);
+  const { siteData } = useAppSelector(state => state.parsedDataReducer);
+  const [siteVGPData, setSiteVGPData] = useState<ISitesData['data']>([]);
   const [editRowsModel, setEditRowsModel] = useState<GridEditRowsModel>({});
 
   useEffect(() => {
-    if (siteLatLonData) setLatLonData(siteLatLonData.coords);
-  }, [siteLatLonData])
+    if (siteData) setSiteVGPData(siteData.data);
+  }, [siteData])
 
   const handleEditRowsModelChange = useCallback((model: GridEditRowsModel) => {
     setEditRowsModel(model);
@@ -61,6 +64,14 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
       cellClassName: styles[`editableCell_${theme.palette.mode}`],
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
+    { field: 'age', headerName: 'age', type: 'number', flex: 1, editable: true, 
+      cellClassName: styles[`editableCell_${theme.palette.mode}`],
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
+    { field: 'plateId', headerName: 'plate ID', type: 'number', flex: 1, editable: true, 
+      cellClassName: styles[`editableCell_${theme.palette.mode}`],
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(0)
+    },
   ];
 
   columns.forEach((col) => {
@@ -75,29 +86,32 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
   if (!data) return <SitesDataTableSkeleton />;
 
   let visibleIndex = 1;
-  console.log(latLonData)
   const rows: Array<SiteRow> = data.interpretations.map((interpretation, index) => {
     const { id, label } = interpretation;
     return {
       id,
       index: hiddenDirectionsIDs.includes(id) ? '-' : visibleIndex++,
       label,
-      lat: latLonData ? latLonData[index]?.lat : 0,
-      lon: latLonData ? latLonData[index]?.lon : 0,
+      lat: siteVGPData ? siteVGPData[index]?.lat : 0,
+      lon: siteVGPData ? siteVGPData[index]?.lon : 0,
+      age: siteVGPData ? siteVGPData[index]?.age : 0,
+      plateId: siteVGPData ? siteVGPData[index]?.plateId : 0,
     };
   });
 
   const calculateVGPs = () => {
     const rows: Array<SiteRow> = Array.from(apiRef?.current?.getRowModels()?.values() || []);
-    console.log(rows)
     if (!rows.length) return;
     const vgpData: VGPData = rows.map((row, index) => {
-      let { id, label, lat, lon } = row;
+      let { id, label, lat, lon, age, plateId } = row;
       // на случай, если были загружены данные из файла и не обновился apiRef
-      if ((lat === 0 || lon === 0) && latLonData && latLonData[index]) {
-        lat = latLonData[index].lat;
-        lon = latLonData[index].lon;
+      if ((lat === 0 || lon === 0) && siteVGPData && siteVGPData[index]) {
+        lat = siteVGPData[index].lat;
+        lon = siteVGPData[index].lon;
+        age = siteVGPData[index].age;
+        plateId = siteVGPData[index].plateId;
       };
+      console.log(age, plateId)
       const interpretation = data.interpretations.find(interpretation => interpretation.id === id)!;
       const dec = reference === 'geographic' ? interpretation.Dgeo : interpretation.Dstrat;
       const inc = reference === 'geographic' ? interpretation.Igeo : interpretation.Istrat;
@@ -106,8 +120,13 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
       return {
         id,
         label,
+        dec,
+        inc,
+        a95,
         lat,
         lon,
+        age,
+        plateId,
         ...vgp
       }
     });
@@ -155,6 +174,7 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
           sx={{
             textTransform: 'none', 
             marginTop: '16px',
+            color: textColor(theme.palette.mode),
           }}
         >  
           Очистить данные

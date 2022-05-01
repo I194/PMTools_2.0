@@ -8,23 +8,29 @@ const parseCSV_SitesLatLon = (data: string, name: string) => {
   const headLine = lines[0].split(',');
   const latIndex = headLine.findIndex(el => el.toLowerCase() === 'lat');
   const lonIndex = headLine.findIndex(el => el.toLowerCase() === 'lon');
+  const ageIndex = headLine.findIndex(el => el.toLowerCase() === 'age');
+  const plateIdIndex = headLine.findIndex(el => el.toLowerCase() === 'plate_id');
 
-  const coords = lines.slice(1).map((line, index) => {
+  const siteVGPdata = lines.slice(1).map((line, index) => {
     
     const params = line.replace(/\s+/g, ' ').split(',');
 
     const lat = +params[latIndex];
     const lon = +params[lonIndex];
+    const age = +params[ageIndex];
+    const plateId = +params[plateIdIndex];
 
     return {
       lat, 
-      lon
+      lon,
+      age,
+      plateId,
     };
 
   });
   
   return {
-    coords,
+    data: siteVGPdata,
     format: "CSV_SitesLatLon",
     created: new Date().toISOString(),
   };

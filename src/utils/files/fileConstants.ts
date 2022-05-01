@@ -49,7 +49,7 @@ export const exampleDir = {
 }
 
 export const exampleSitesLatLon = {
-  coords: [{lat: 0, lon: 0}],
+  data: [{lat: 0, lon: 0, age: 0, plateId: 0}],
   format: "CSV_SitesLatLon",
   created: 'string',
 }

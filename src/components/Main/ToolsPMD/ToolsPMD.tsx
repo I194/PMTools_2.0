@@ -5,7 +5,7 @@ import { ButtonGroupWithLabel } from '../../Sub/Buttons';
 import { Button } from '@mui/material';
 import { Reference } from '../../../utils/graphs/types';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
-import { setReference, setSelectedStepsIDs, setStatisticsMode, updateCurrentFileInterpretations, updateCurrentInterpretation } from '../../../services/reducers/pcaPage';
+import { deleteInterepretationByParentFile, setHiddenStepsIDs, setReference, setSelectedStepsIDs, setStatisticsMode, updateCurrentFileInterpretations, updateCurrentInterpretation } from '../../../services/reducers/pcaPage';
 import { IPmdData } from '../../../utils/GlobalTypes';
 import ModalWrapper from '../../Sub/Modal/ModalWrapper';
 import ToolsPMDSkeleton from './ToolsPMDSkeleton';
@@ -18,6 +18,7 @@ import DropdownSelectWithButtons from '../../Sub/DropdownSelect/DropdownSelectWi
 import ShowHideDotsButtons from './ShowHideDotsButtons';
 import { referenceToLabel } from '../../../utils/parsers/labelToReference';
 import { enteredIndexesToIDsPMD } from '../../../utils/parsers/enteredIndexesToIDs';
+import { setTreatmentFiles } from '../../../services/reducers/files';
 
 interface IToolsPMD {
   data: IPmdData | null;
@@ -27,10 +28,12 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
 
   const dispatch = useAppDispatch();
 
-  const { treatmentData } = useAppSelector(state => state.parsedDataReducer);
+  const { treatmentFiles } = useAppSelector(state => state.filesReducer)
+  const { treatmentData, currentDataPMDid } = useAppSelector(state => state.parsedDataReducer);
   const { reference, selectedStepsIDs, statisticsMode, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
 
   const [allDataPMD, setAllDataPMD] = useState<Array<IPmdData>>([]);
+  const [currentFileName, setCurrentFileName] = useState<string>('');
   const [coordinateSystem, setCoordinateSystem] = useState<Reference>('geographic');
   const [allFilesStatOpen, setAllFilesStatOpen] = useState<boolean>(false);
   const [showStepsInput, setShowStepsInput] = useState<boolean>(false);
@@ -61,6 +64,20 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   useEffect(() => {
     setCoordinateSystem(reference);
   }, [reference]);
+
+  useEffect(() => {
+    if (currentDataPMDid !== null) {
+      const filename = allDataPMD[currentDataPMDid].metadata.name;
+      if (filename) {
+        setCurrentFileName(filename);
+        dispatch(updateCurrentFileInterpretations(filename));
+        dispatch(updateCurrentInterpretation());
+        dispatch(setSelectedStepsIDs(null));
+        dispatch(setHiddenStepsIDs([]));
+        dispatch(setStatisticsMode(null));
+      } else dispatch(setCurrentPMDid(0));
+    }
+  }, [currentDataPMDid, allDataPMD]);
 
   const handleReferenceSelect = (selectedReference: Reference) => {
     dispatch(setReference(selectedReference));
@@ -99,11 +116,14 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   const handleFileSelect = (option: string) => {
     const pmdID = allDataPMD.findIndex(pmd => pmd.metadata.name === option);
     dispatch(setCurrentPMDid(pmdID));
-    // cleaners
-    dispatch(updateCurrentFileInterpretations(option));
-    dispatch(updateCurrentInterpretation());
-    dispatch(setSelectedStepsIDs(null));
-    dispatch(setStatisticsMode(null));
+  };
+
+  const handleFileDelete = (option: string) => {
+    if (treatmentFiles) {
+      const updatedFiles = treatmentFiles.filter(file => file.name !== option);
+      dispatch(setTreatmentFiles(updatedFiles));
+      dispatch(deleteInterepretationByParentFile(option));
+    };
   };
 
   return (
@@ -111,10 +131,12 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
       <DropdownSelectWithButtons 
         label={'Текущий файл'}
         options={allDataPMD.map(pmd => pmd.metadata.name)}
-        defaultValue={allDataPMD[0].metadata.name}
+        defaultValue={currentFileName}
         onOptionSelect={handleFileSelect}
         minWidth={'120px'}
         useArrowListeners={true}
+        showDelete={true}
+        onDelete={handleFileDelete}
       />
       <ButtonGroupWithLabel label='Система координат'>
         {

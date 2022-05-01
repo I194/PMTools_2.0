@@ -36,7 +36,6 @@ const filesSlice = createSlice({
       state.treatmentFiles = action.payload;
     },
     addTreatmentFiles (state, action) {
-      console.log(state.treatmentFiles)
       if (state.treatmentFiles) state.treatmentFiles.push(...action.payload);
       else state.treatmentFiles = action.payload;
     },

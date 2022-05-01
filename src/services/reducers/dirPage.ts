@@ -75,6 +75,13 @@ const dirPage = createSlice({
       );
       state.allInterpretations = updatedInterpretations;
     },
+    deleteInterepretationByParentFile (state, action) {
+      const parentFile = action.payload;
+      const updatedInterpretations = state.allInterpretations.filter(
+        interpretation => interpretation.parentFile !== parentFile
+      );
+      state.allInterpretations = updatedInterpretations;
+    },
     setAllInterpretations (state, action) {
       state.allInterpretations = action.payload;
     },
@@ -126,6 +133,7 @@ export const {
   updateCurrentInterpretation,
   setOutputFilename,
   toggleShowVGPMean,
+  deleteInterepretationByParentFile,
 } = dirPage.actions;
 
 const dirPageReducer = dirPage.reducer;

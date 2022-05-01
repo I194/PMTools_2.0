@@ -61,7 +61,7 @@ const AxesAndData: FC<IAxesAndData> = ({
   
   for (let i = unitCountY; i >= 0; i--) labelsY.push((i / 10).toString());
 
-  const axisNameX = demagnetizationType === 'thermal' ? `°C` : 'nT';
+  const axisNameX = demagnetizationType === 'thermal' ? `°C` : 'mT';
 
   return (
     <g 
@@ -83,6 +83,7 @@ const AxesAndData: FC<IAxesAndData> = ({
           graphId={graphId}
           type='x'
           name={axisNameX}
+          namePosition={{x: width + 15, y: zeroY}}
           zero={zeroY}
           length={width}
           unit={unitX}
