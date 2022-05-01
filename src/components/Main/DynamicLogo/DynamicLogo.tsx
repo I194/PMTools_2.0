@@ -2,12 +2,13 @@ import React, { useState, useRef, useMemo } from "react";
 import styles from './DynamicLogo.module.scss';
 import * as THREE from 'three'
 
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, ThreeEvent, useFrame } from "@react-three/fiber";
 import { OrbitControls, Line } from '@react-three/drei';
 import { SphereGeometry } from "three";
 import setArc3D from "./SetArc3D";
 import Direction from "../../../utils/graphs/classes/Direction";
 import SpherePath from "./SpherePath";
+import SphericalPoints from "./SphericalPoints";
  
 const Sphere = (props: JSX.IntrinsicElements['mesh']) => {
 
@@ -19,7 +20,7 @@ const Sphere = (props: JSX.IntrinsicElements['mesh']) => {
 
   useFrame((state, delta) => (ref.current.rotation.y += 0.001));
 
-  const points: Array<{lat: number, lon: number}> = [
+  const pointsRaw: Array<{lat: number, lon: number}> = [
     {lat: -17.1, lon: 301.4},
     {lat: -17.2, lon: 297.6},
     {lat: -16.8, lon: 298.0},
@@ -36,13 +37,18 @@ const Sphere = (props: JSX.IntrinsicElements['mesh']) => {
     {lat: 17.8, lon: 344.9},
     {lat: 17.5, lon: 30.0},
   ];
+  const points: Array<THREE.Vector3> = pointsRaw.map(({lat, lon}) => {
+    const direction = new Direction(lat, lon, 1);
+    const point = new THREE.Vector3(...direction.toCartesian().toArray()).normalize().multiplyScalar(sphereRadius);
+    return point;
+  });
 
   // dec as lat and inc as lon
   const path: Array<{start: Direction, end: Direction}> = [];
-  for (let pointIndex = 0; pointIndex < points.length - 1; pointIndex++) {
+  for (let pointIndex = 0; pointIndex < pointsRaw.length - 1; pointIndex++) {
     path.push({
-      start: new Direction(points[pointIndex].lat, points[pointIndex].lon, 1),
-      end: new Direction(points[pointIndex + 1].lat, points[pointIndex + 1].lon, 1),
+      start: new Direction(pointsRaw[pointIndex].lat, pointsRaw[pointIndex].lon, 1),
+      end: new Direction(pointsRaw[pointIndex + 1].lat, pointsRaw[pointIndex + 1].lon, 1),
     });
   };
 
@@ -57,6 +63,7 @@ const Sphere = (props: JSX.IntrinsicElements['mesh']) => {
       <sphereGeometry args={[2, 72, 36]}/>
       <meshLambertMaterial color={hovered ? '#ce93d8' : '#90caf9'} wireframe />
       <SpherePath path={path} sphereRadius={sphereRadius} color='#119dff' lineWidth={1}/>
+      <SphericalPoints points={points} size={0.2} color='#FF9101'/>
       <OrbitControls 
         minDistance={2}
         maxDistance={8}
