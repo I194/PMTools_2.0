@@ -62,12 +62,13 @@ const Sphere = (props: JSX.IntrinsicElements['mesh'] & {themeMode: 'dark' | 'lig
     <mesh
       {...props}
       ref={ref}
-      scale={clicked ? 2 : 1}
+      scale={clicked ? 2 : 1.20}
+      rotation={[0, Math.PI * 1.25, 0]}
       // onPointerOver={(event) => hover(true)}
       // onPointerOut={(event) => hover(false)}
     >
       <sphereGeometry args={[2, 72, 36]}/>
-      <meshLambertMaterial color={props.themeMode === 'dark' ? '#525252' : '#90caf9'} wireframe />
+      <meshLambertMaterial color={props.themeMode === 'dark' ? '#323232' : '#90caf9'} wireframe />
       <SpherePath path={path} sphereRadius={sphereRadius} color='#119dff' lineWidth={1}/>
       <SphericalPoints points={points} size={0.2} color='#FF9101'/>
       <OrbitControls 
