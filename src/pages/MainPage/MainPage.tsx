@@ -5,6 +5,7 @@ import {
   bgColorMain,
 } from '../../utils/ThemeConstants';
 import { DynamicLogo } from '../../components/Main';
+import pmtoolsLogo from './pmtools_logo.png';
 
 const MainPage: FC = ({}) => {
   const theme = useTheme();
@@ -13,14 +14,11 @@ const MainPage: FC = ({}) => {
   
   return (
     <>
+      <div className={styles.logo}>
+        <img src={pmtoolsLogo} alt="Логотип" width={720}/>
+      </div>
       <DynamicLogo />
     </>
-    // <div 
-    //   className={styles.mainPage}
-    //   style={{backgroundColor: bgColorMain(theme.palette.mode)}}
-    // >
-    //   <DynamicLogo />
-    // </div>
   )
 }
 
