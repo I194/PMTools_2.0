@@ -23,7 +23,6 @@ const VGPmodalContent: FC<Props> = ({ data }) => {
 
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const [coords, setCoords] = React.useState<Array<{lat: number, lon: number}>>([]);
 
   const { siteData } = useAppSelector(state => state.parsedDataReducer);
 
@@ -31,8 +30,6 @@ const VGPmodalContent: FC<Props> = ({ data }) => {
     const acceptedFile = files ? files[0] : event.currentTarget.files[0];
     dispatch(sitesFileToLatLon(acceptedFile));
   };
-
-  console.log('looook', siteData)
 
   return (
     <div className={styles.modalContent}>
