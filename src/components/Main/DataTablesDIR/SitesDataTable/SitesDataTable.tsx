@@ -121,7 +121,8 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data, sitesData }) => {
   const calculateVGPs = () => {
     const rows: Array<SiteRow> = Array.from(apiRef?.current?.getRowModels()?.values() || []);
     if (!rows.length) return;
-    const vgpData: VGPData = rows.map((row, index) => {
+    const visibleRows = rows.filter(row => !hiddenDirectionsIDs.includes(row.id));
+    const vgpData: VGPData = visibleRows.map((row, index) => {
       let { id, label, lat, lon, age, plateId } = row;
       // на случай, если были загружены данные из файла и не обновился apiRef
       if ((lat === 0 || lon === 0 || age === 0 || plateId === 0) && sitesData && sitesData[index]) {
@@ -162,9 +163,6 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data, sitesData }) => {
         <DataGrid 
           rows={rows} 
           columns={enhancedColumns} 
-          // columnVisibilityModel={{
-          //   hideMe: false
-          // }}
           // editRowsModel={editRowsModel}
           // onEditRowsModelChange={handleEditRowsModelChange}
           sx={{
@@ -183,6 +181,9 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data, sitesData }) => {
             Toolbar: SitesInputDataTableToolbar,
           }}
           disableSelectionOnClick={true}
+          getRowClassName={
+            (params) =>  hiddenDirectionsIDs.includes(params.row.id) ? styles.hiddenRow : ''
+          }
         />
       </SitesDataTableSkeleton>
       <div className={styles.buttons}>
