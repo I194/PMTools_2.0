@@ -16,14 +16,17 @@ const MainPage: FC = ({}) => {
   return (
     <>
       <div className={styles.logo}>
-        <img src={pmtoolsLogo} alt="Логотип" width='40%'/>
+        {/* <img src={pmtoolsLogo} alt="Логотип" width='42%'/> */}
+        <DynamicLogo />
       </div>
-      <DynamicLogo />
       <div className={styles.about}>
-        <Typography color={textColor(theme.palette.mode)} textAlign='center'>
-          Работайте с результатами палеомагнитных исследований в любой момент, в любом месте, с любого устройства.
+        <Typography variant='h3' color={textColor(theme.palette.mode)} textAlign='center' mb='16px'>
+          Работайте с результатами палеомагнитных исследований. 
         </Typography>
-        <Typography color={textColor(theme.palette.mode)} textAlign='center'>
+        <Typography variant='h4' color={textColor(theme.palette.mode)} textAlign='center' mb='16px'>
+          В любое время, в любом месте, с любого устройства.
+        </Typography>
+        <Typography variant='h4' color={textColor(theme.palette.mode)} textAlign='center'>
           И не беспокойтесь о защите данных.
         </Typography>
       </div>

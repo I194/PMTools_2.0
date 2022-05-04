@@ -1,6 +1,6 @@
-import React, { FC, useCallback } from "react";
+import React, { FC } from "react";
 import styles from "./MainPageLayout.module.scss";
-import { Outlet, RouteProps, useLocation, } from "react-router-dom";
+import { Outlet, RouteProps } from "react-router-dom";
 import { useTheme } from '@mui/material/styles';
 import {
   bgColorMain,
@@ -11,11 +11,15 @@ import {
 
 const MainPageLayout: FC<RouteProps> = () => {
 
-  const location = useLocation();
   const theme = useTheme();
  
   return (
-    <div className={styles.container}>
+    <div 
+      className={styles.container}
+      style={{
+        backgroundColor: bgColorMain(theme.palette.mode),
+      }}
+    >
       <Outlet />
     </div>
   );

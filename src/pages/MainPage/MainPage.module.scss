@@ -1,15 +1,14 @@
 .logo {
   width: 100%;
-  height: fit-content;
+  height: 520px;
 
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  margin-top: 48px;
 }
 
 .about {
+  padding: 0 24px;
   margin-bottom: 24px;
 }

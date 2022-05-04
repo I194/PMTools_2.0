@@ -62,7 +62,7 @@ const Sphere = (props: JSX.IntrinsicElements['mesh'] & {themeMode: 'dark' | 'lig
     <mesh
       {...props}
       ref={ref}
-      scale={clicked ? 2 : 1.20}
+      scale={clicked ? 2 : 1.42}
       rotation={[0, Math.PI * 1.25, 0]}
       // onPointerOver={(event) => hover(true)}
       // onPointerOut={(event) => hover(false)}
@@ -75,6 +75,7 @@ const Sphere = (props: JSX.IntrinsicElements['mesh'] & {themeMode: 'dark' | 'lig
         minDistance={2}
         maxDistance={8}
         enablePan={false}
+        enableZoom={false}
       />
     </mesh>
   );
