@@ -33,11 +33,11 @@ const AppNavigation: FC = ({}) => {
     <div className={styles.navButtons}>
       <NavButton 
         label={isSmallScreen ? 'PCA' : 'Магнитные чистки (PCA)'}
-        to={'pca'}
+        to={'/app/pca'}
       />
       <NavButton 
         label={isSmallScreen ? 'DIR' : 'Статистика направлений (DIR)'}
-        to={'dir'}
+        to={'/app/dir'}
       />
       <NavButton 
         label={'Репозиторий проекта'}

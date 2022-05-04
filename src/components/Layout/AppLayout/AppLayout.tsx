@@ -1,19 +1,19 @@
-import React, { FC, useCallback, useEffect, useState } from "react";
-import styles from "./Layout.module.scss";
+import React, { FC, useCallback } from "react";
+import styles from "./AppLayout.module.scss";
 import { Outlet, RouteProps, useLocation, } from "react-router-dom";
-import { AppSettings, AppNavigation } from "../Main";
+import { useAppDispatch } from "../../../services/store/hooks";
+import { addDirStatFiles, addTreatmentFiles } from "../../../services/reducers/files";
+import { AppSettings, AppNavigation } from "../../Main";
+import { useDropzone } from "react-dropzone";
 import { useTheme } from '@mui/material/styles';
 import {
   bgColorMain,
   bgColorBlocks,
   boxShadowStyle,
   textColor
-} from '../../utils/ThemeConstants';
-import { useAppDispatch } from "../../services/store/hooks";
-import { addDirStatFiles, addInputFiles, addTreatmentFiles, setDirStatFiles, setInputFiles, setTreatmentFiles } from "../../services/reducers/files";
-import { useDropzone } from "react-dropzone";
+} from '../../../utils/ThemeConstants';
 
-const Layout: FC<RouteProps> = () => {
+const AppLayout: FC<RouteProps> = () => {
 
   const dispatch = useAppDispatch();
   const location = useLocation();
@@ -24,7 +24,6 @@ const Layout: FC<RouteProps> = () => {
     const acceptedFiles = files ? files : Array.from(event.currentTarget.files);
     if (currentPage === 'pca') dispatch(addTreatmentFiles(acceptedFiles));
     if (currentPage === 'dir') dispatch(addDirStatFiles(acceptedFiles));
-    // dispatch(addInputFiles(acceptedFiles));
   };
 
   const onDrop = useCallback(acceptedFiles => {
@@ -98,4 +97,4 @@ const Layout: FC<RouteProps> = () => {
   );
 };
 
-export default Layout;
+export default AppLayout;
