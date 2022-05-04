@@ -8,6 +8,7 @@ interface IInputApply {
   helperText?: string;
   onApply: (value: string) => void;
   disabled?: boolean;
+  placeholder?: string;
 };
 
 const InputApply: FC<IInputApply> = ({
@@ -15,6 +16,7 @@ const InputApply: FC<IInputApply> = ({
   helperText,
   onApply,
   disabled,
+  placeholder
 }) => {
 
   const [value, setValue] = useState<string>('');
@@ -42,6 +44,8 @@ const InputApply: FC<IInputApply> = ({
         variant="standard"
         autoFocus={true}
         disabled={disabled}
+        placeholder={placeholder || ''}
+        sx={{width: '100%'}}
       />
       <IconButton
         onClick={handleApply}

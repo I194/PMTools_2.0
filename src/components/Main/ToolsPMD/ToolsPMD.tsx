@@ -104,14 +104,14 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
     };
   }, []);
 
+  if (!data) return <ToolsPMDSkeleton />;
+
   const handleEnteredStepsApply = (steps: string) => {
-    const parsedIndexes = parseDotsIndexesInput(steps);
+    const parsedIndexes = parseDotsIndexesInput(steps || `1-${data.steps.length}`);
     const IDs = enteredIndexesToIDsPMD(parsedIndexes, hiddenStepsIDs, data!);
     dispatch(setSelectedStepsIDs(IDs));
     setShowStepsInput(false);
   };
-
-  if (!data) return <ToolsPMDSkeleton />;
 
   const handleFileSelect = (option: string) => {
     const pmdID = allDataPMD.findIndex(pmd => pmd.metadata.name === option);
@@ -172,7 +172,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
         <ModalWrapper
           open={showStepsInput}
           setOpen={setShowStepsInput}
-          size={{width: '26vw', height: '20vh'}}
+          size={{width: '26vw', height: '14vh'}}
           position={{left: '50%', top: '20%'}}
           onClose={() => {dispatch(setStatisticsMode(null))}}
           isDraggable={true}
@@ -181,6 +181,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
             label={`Введите номера шагов (${statisticsMode})`}
             helperText="Валидные примеры: 1-9 || 2,4,8,9 || 2-4;8,9 || 2-4;8,9;12-14"
             onApply={handleEnteredStepsApply}
+            placeholder={`1-${data.steps.length}`}
           />
         </ModalWrapper>
       }
