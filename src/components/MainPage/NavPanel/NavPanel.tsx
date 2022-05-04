@@ -2,8 +2,8 @@ import React, { FC, useEffect } from "react";
 import styles from './NavPanel.module.scss';
 import { useMediaQuery } from "react-responsive";
 import NavButton from "./NavButton";
-// import pmtoolsLogo from './pmtools_logo.png';
-import { default as pmtoolsLogo } from './PMTools_logo.svg';
+import pmtoolsLogo from './pmtools_logo.png';
+// import { default as pmtoolsLogo } from './PMTools_logo.svg';
 import { NavLink } from "react-router-dom";
 
 const NavPanel = () => {
