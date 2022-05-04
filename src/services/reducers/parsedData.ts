@@ -40,7 +40,7 @@ const parsedDataSlice = createSlice({
     setCurrentDIRid (state, action) {
       state.currentDataDIRid = action.payload;
     },
-    setSiteLatLonData (state, action) {
+    setSiteData (state, action) {
       state.siteData = action.payload;
     },
   },
@@ -97,7 +97,7 @@ export const {
   setDirStatData,
   setCurrentPMDid,
   setCurrentDIRid,
-  setSiteLatLonData,
+  setSiteData,
 } = parsedDataSlice.actions;
 
 const parsedDataReducer = parsedDataSlice.reducer;
