@@ -129,7 +129,7 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
             padding: '0px 0px',
           }
         }}
-        hideFooter={true}
+        hideFooter={rows.length < 100}
         density={'compact'}
         disableSelectionOnClick={true}
         getRowClassName={

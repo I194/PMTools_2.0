@@ -101,7 +101,7 @@ const VGPDataTable: FC = () => {
               padding: '0px 0px',
             }
           }}
-          hideFooter={true}
+          hideFooter={rows.length < 100}
           density={'compact'}
           components={{
             Toolbar: VGPDataTableToolbar,

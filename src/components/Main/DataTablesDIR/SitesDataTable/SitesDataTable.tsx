@@ -159,7 +159,7 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
               minWidth: '0px!important',
             }
           }}
-          hideFooter={true}
+          hideFooter={rows.length < 100}
           density={'compact'}
           components={{
             Toolbar: SitesInputDataTableToolbar,

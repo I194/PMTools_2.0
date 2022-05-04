@@ -141,7 +141,7 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
           Toolbar: DIRInputDataTableToolbar, 
         }}
         sx={GetDataTableBaseStyle()}
-        hideFooter={true}
+        hideFooter={rows.length < 100}
         getRowClassName={
           (params) =>  hiddenDirectionsIDs.includes(params.row.id) ? styles.hiddenRow : ''
         }
