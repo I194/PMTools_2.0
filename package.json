@@ -11,6 +11,7 @@
     "@react-three/drei": "^8.20.2",
     "@react-three/fiber": "^7.0.26",
     "@reduxjs/toolkit": "^1.7.1",
+    "@svgr/webpack": "^6.2.1",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
@@ -67,6 +68,7 @@
   "devDependencies": {
     "@types/deep-equal": "^1.0.1",
     "@types/three": "^0.139.0",
+    "file-loader": "^6.2.0",
     "sass": "^1.51.0"
   }
 }

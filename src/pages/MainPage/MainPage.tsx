@@ -4,8 +4,7 @@ import { useTheme } from '@mui/material/styles';
 import {
   textColor,
 } from '../../utils/ThemeConstants';
-import { DynamicLogo } from '../../components/MainPage';
-import pmtoolsLogo from './pmtools_logo.png';
+import { DynamicLogo, NavPanel } from '../../components/MainPage';
 import { Typography } from '@mui/material';
 
 const MainPage: FC = ({}) => {
@@ -15,6 +14,7 @@ const MainPage: FC = ({}) => {
   
   return (
     <>
+      <NavPanel />
       <div className={styles.logo}>
         {/* <img src={pmtoolsLogo} alt="Логотип" width='42%'/> */}
         <DynamicLogo />
