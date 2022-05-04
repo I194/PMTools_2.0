@@ -68,8 +68,8 @@ export const toVGP = async (file: File, parsedData: IVGPData) => {
 
   const lines = data.vgps.map((vgp: any) => {
     const line = rawColumnNames.reduce((line, col) => {
-      if (col === 'label') return line + `${vgp[col]}\n`;
-      return line + `"${vgp[col]}"\n`;
+      if (col === 'label') return line + `${vgp[col]}\r\n`;
+      return line + `"${Number(vgp[col]).toFixed(2)}"\r\n`;
     }, '')
     return line.slice(0, -1);
   }).join('\n');
