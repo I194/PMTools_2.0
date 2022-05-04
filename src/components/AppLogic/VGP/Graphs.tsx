@@ -3,7 +3,7 @@ import styles from './VGP.module.scss';
 import { useWindowSize } from '../../../utils/GlobalHooks';
 import { VGPData } from '../../../utils/GlobalTypes';
 import GraphsSkeleton from './GraphsSkeleton';
-import StereoGraphVGP from '../../../components/Graph/StereoGraphDIR/StereoGraphVGP';
+import StereoGraphVGP from '../../AppGraphs/StereoGraphDIR/StereoGraphVGP';
 
 interface IGraphs {
   dataToShow: VGPData | null;

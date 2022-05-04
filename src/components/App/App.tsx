@@ -3,7 +3,7 @@ import styles from './App.module.scss';
 import { Route, Routes } from 'react-router-dom';
 import { useAppSelector } from '../../services/store/hooks';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { MainPageLayout, AppLayout } from '../Layout';
+import { MainPageLayout, AppLayout } from '../Layouts';
 import { MainPage, DIRPage, PCAPage, NotFoundPage } from '../../pages';
 
 function App() {

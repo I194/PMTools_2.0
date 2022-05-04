@@ -4,7 +4,7 @@ import { useTheme } from '@mui/material/styles';
 import {
   textColor,
 } from '../../utils/ThemeConstants';
-import { DynamicLogo } from '../../components/Main';
+import { DynamicLogo } from '../../components/MainPage';
 import pmtoolsLogo from './pmtools_logo.png';
 import { Typography } from '@mui/material';
 

@@ -10,11 +10,11 @@ import getInterpretationIDs from "../../../utils/graphs/formatters/getInterpreta
 import CoordinateSystem from "../../Sub/Graphs/CoordinateSystem/CoordinateSystem";
 import dataToStereoDIR from "../../../utils/graphs/formatters/stereo/dataToStereoDIR";
 
-export interface IStereoGraph extends IGraph {
+export interface IStereoGraphDIR extends IGraph {
   data: IDirData;
 };
 
-const StereoGraphDIR: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
+const StereoGraphDIR: FC<IStereoGraphDIR> = ({ graphId, width, height, data }) => {
 
   // ToDo: 
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED

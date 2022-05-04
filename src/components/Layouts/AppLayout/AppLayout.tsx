@@ -3,7 +3,7 @@ import styles from "./AppLayout.module.scss";
 import { Outlet, RouteProps, useLocation, } from "react-router-dom";
 import { useAppDispatch } from "../../../services/store/hooks";
 import { addDirStatFiles, addTreatmentFiles } from "../../../services/reducers/files";
-import { AppSettings, AppNavigation } from "../../Main";
+import { AppSettings, AppNavigation } from "../../AppLogic";
 import { useDropzone } from "react-dropzone";
 import { useTheme } from '@mui/material/styles';
 import {

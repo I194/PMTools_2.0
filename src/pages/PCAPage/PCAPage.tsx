@@ -1,17 +1,22 @@
 import React, { FC, useEffect, useState } from 'react';
 import styles from './PCAPage.module.scss';
 import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
+import { 
+  addInterpretation, 
+  setStatisticsMode, 
+  showStepsInput, 
+  updateCurrentInterpretation 
+} from '../../services/reducers/pcaPage';
 import { filesToData } from '../../services/axios/filesAndData';
 import { IPmdData } from '../../utils/GlobalTypes';
-import { MetaDataTablePMD, ToolsPMD } from '../../components/Main';
+import calculateStatisticsPMD from '../../utils/statistics/calculateStatisticsPMD';
+import { MetaDataTablePMD, ToolsPMD } from '../../components/AppLogic';
 import Graphs from './Graphs';
 import Tables from './Tables';
 import { useTheme } from '@mui/material/styles';
 import {
   bgColorMain,
 } from '../../utils/ThemeConstants';
-import { addInterpretation, setStatisticsMode, showStepsInput, updateCurrentInterpretation } from '../../services/reducers/pcaPage';
-import calculateStatisticsPMD from '../../utils/statistics/calculateStatisticsPMD';
 
 const PCAPage: FC = ({}) => {
 

@@ -3,7 +3,7 @@ import styles from './DIRPage.module.scss';
 import { useWindowSize } from '../../utils/GlobalHooks';
 import { IDirData } from '../../utils/GlobalTypes';
 import GraphsSkeleton from './GraphsSkeleton';
-import StereoGraphDIR from '../../components/Graph/StereoGraphDIR/StereoGraphDIR';
+import { StereoGraphDIR }from '../../components/AppGraphs';
 
 interface IGraphs {
   dataToShow: IDirData | null;

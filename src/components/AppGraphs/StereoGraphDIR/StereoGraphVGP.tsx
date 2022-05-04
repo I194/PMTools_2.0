@@ -11,11 +11,11 @@ import CoordinateSystem from "../../Sub/Graphs/CoordinateSystem/CoordinateSystem
 import dataToStereoDIR from "../../../utils/graphs/formatters/stereo/dataToStereoDIR";
 import dataToStereoVGP from "../../../utils/graphs/formatters/stereo/dataToStereoVGP";
 
-export interface IStereoGraph extends IGraph {
+export interface IStereoGraphVGP extends IGraph {
   data: VGPData;
 };
 
-const StereoGraphVGP: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
+const StereoGraphVGP: FC<IStereoGraphVGP> = ({ graphId, width, height, data }) => {
 
   // ToDo: 
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED

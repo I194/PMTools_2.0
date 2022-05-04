@@ -1,9 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
 import styles from './PCAPage.module.scss';
-import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
-import { useTheme } from '@mui/material/styles';
-import { DataTablePMD, StatisticsDataTablePMD } from '../../components/Main';
+import { useAppSelector } from '../../services/store/hooks';
 import { IPmdData, StatisitcsInterpretation } from "../../utils/GlobalTypes";
+import { DataTablePMD, StatisticsDataTablePMD } from '../../components/AppLogic';
+import { useTheme } from '@mui/material/styles';
 import {
   bgColorMain,
 } from '../../utils/ThemeConstants';
