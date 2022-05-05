@@ -15,7 +15,6 @@ code {
 ::-webkit-scrollbar {
   width: 4px;
   height: 4px;
-  background-color: transparent;
 }
 
 *:hover::-webkit-scrollbar {
@@ -24,6 +23,10 @@ code {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #9facb3;
+  background-color: #474c50;
   border-radius: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #202020;
 }

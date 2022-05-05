@@ -18,7 +18,7 @@ const AppLayout: FC<RouteProps> = () => {
   const dispatch = useAppDispatch();
   const location = useLocation();
   const theme = useTheme();
-  const currentPage = location.pathname.slice(1, location.pathname.length);
+  const currentPage = location.pathname.split('/').pop() || location.pathname;
 
   const handleFileUpload = (event: any, files?: Array<File>) => {;
     const acceptedFiles = files ? files : Array.from(event.currentTarget.files);
