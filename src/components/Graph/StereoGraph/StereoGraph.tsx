@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from "react";
 import styles from "./ZijdGraph.module.scss";
 import { useAppSelector } from "../../../services/store/hooks";
-import { useGraphSelectableNodes, useGraphSelectedIDs, usePMDGraphSettings } from "../../../utils/GlobalHooks";
+import { useGraphSelectableNodesPCA, useGraphSelectedIDs, usePMDGraphSettings } from "../../../utils/GlobalHooks";
 import { IGraph, RawStatisticsPCA } from "../../../utils/GlobalTypes";
 import { IPmdData } from "../../../utils/GlobalTypes";
 import dataToStereoPMD from "../../../utils/graphs/formatters/stereo/dataToStereoPMD";
@@ -23,7 +23,7 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
 
   const { reference, currentInterpretation, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
   const { menuItems, settings } = usePMDGraphSettings();
-  const selectableNodes = useGraphSelectableNodes(graphId, false); 
+  const selectableNodes = useGraphSelectableNodesPCA(graphId, false); 
   const selectedIDs = useGraphSelectedIDs();
 
   const {viewHeight, viewWidth, ...areaConstants} = stereoAreaConstants(width, height);

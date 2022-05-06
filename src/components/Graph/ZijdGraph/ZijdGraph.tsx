@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useMemo, useState } from "react";
 import styles from "./ZijdGraph.module.scss";
 import { useAppSelector } from '../../../services/store/hooks';
-import { useGraphSelectableNodes, useGraphSelectedIDs, usePMDGraphSettings } from "../../../utils/GlobalHooks";
+import { useGraphSelectableNodesPCA, useGraphSelectedIDs, usePMDGraphSettings } from "../../../utils/GlobalHooks";
 import { IGraph, RawStatisticsPCA } from "../../../utils/GlobalTypes";
 import { IPmdData } from "../../../utils/GlobalTypes";
 import dataToZijd from "../../../utils/graphs/formatters/zijd/dataToZijd";
@@ -27,7 +27,7 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data }) => {
 
   const { reference, projection, currentInterpretation, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
   const { menuItems, settings } = usePMDGraphSettings();
-  const selectableNodes = useGraphSelectableNodes(graphId, true);
+  const selectableNodes = useGraphSelectableNodesPCA(graphId, true);
   const selectedIDs = useGraphSelectedIDs();
 
   const { viewWidth, viewHeight, ...areaConstants} = useMemo(() => zijdAreaConstants(width, height), [width, height]);

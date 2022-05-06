@@ -1,6 +1,6 @@
 import React, { FC, useMemo } from "react";
 import styles from "./MagGraph.module.scss";
-import { useGraphSelectableNodes, useGraphSelectedIDs, usePMDGraphSettings } from "../../../utils/GlobalHooks";
+import { useGraphSelectableNodesPCA, useGraphSelectedIDs, usePMDGraphSettings } from "../../../utils/GlobalHooks";
 import { IGraph } from "../../../utils/GlobalTypes";
 import { IPmdData } from "../../../utils/GlobalTypes";
 import dataToMag from "../../../utils/graphs/formatters/mag/dataToMag";
@@ -22,7 +22,7 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
 
   const { currentInterpretation, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
   const { menuItems, settings } = usePMDGraphSettings();
-  const selectableNodes = useGraphSelectableNodes(graphId, false);
+  const selectableNodes = useGraphSelectableNodesPCA(graphId, false);
   const selectedIDs = useGraphSelectedIDs();
 
   const dataConstants = useMemo(() => dataToMag(data, width, hiddenStepsIDs), [width, data, hiddenStepsIDs]);
