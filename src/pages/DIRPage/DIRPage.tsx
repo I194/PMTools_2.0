@@ -10,6 +10,8 @@ import { bgColorMain } from '../../utils/ThemeConstants';
 import Tables from './Tables';
 import Graphs from './Graphs';
 import calculateStatisticsDIR from '../../utils/statistics/calculateStatisticsDIR';
+import ModalWrapper from '../../components/Sub/Modal/ModalWrapper';
+import UploadModal from '../../components/Sub/Modal/UploadModal/UploadModal';
 
 
 const DIRPage: FC = ({}) => {
@@ -28,6 +30,7 @@ const DIRPage: FC = ({}) => {
   } = useAppSelector(state => state.dirPageReducer);
 
   const [dataToShow, setDataToShow] = useState<IDirData | null>(null);
+  const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
 
   useEffect(() => {
     if (files) dispatch(filesToData({files, format: 'dir'}));
@@ -50,6 +53,11 @@ const DIRPage: FC = ({}) => {
     } else dispatch(updateCurrentInterpretation());
   }, [statisticsMode, selectedDirectionsIDs, dataToShow]);
 
+  useEffect(() => {
+    if (!dataToShow) setShowUploadModal(true);
+    else setShowUploadModal(false);
+  }, [dataToShow]);
+
   return (
     <>
       <div 
@@ -65,6 +73,14 @@ const DIRPage: FC = ({}) => {
         <Tables dataToShow={dataToShow}/>
         <Graphs dataToShow={dataToShow}/>
       </div>
+      <ModalWrapper
+        open={showUploadModal}
+        setOpen={setShowUploadModal}
+        size={{width: '60vw', height: '60vh'}}
+        showBottomClose
+      >
+        <UploadModal page='dir' />
+      </ModalWrapper>
     </>
   )
 }
