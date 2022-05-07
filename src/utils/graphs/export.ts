@@ -15,7 +15,7 @@ export const download = (data: string | ArrayBuffer, filename: string, type: str
   }, 0); 
 }
 
-var exportSVG = function(svg: any) {
+var exportSVG = function(svg: any, name?: string) {
   // first create a clone of our svg node so we don't mess the original one
   var clone = svg.cloneNode(true);
   // create a doctype
@@ -41,10 +41,10 @@ var exportSVG = function(svg: any) {
   // a.innerHTML = 'download the svg file';
   // document.body.appendChild(a);
 
-  download(svgData, 'graph.svg', '.svg');
+  download(svgData, `${name || 'graph'}.svg`, '.svg');
 
 };
 
-export const handleExportGraph = (id: string) => {
-	exportSVG(document.getElementById(id));
+export const handleExportGraph = (id: string, name?: string) => {
+	exportSVG(document.getElementById(id), name);
 };

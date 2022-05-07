@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from "react";
 import styles from "./ZijdGraph.module.scss";
 import { useAppSelector } from "../../../services/store/hooks";
-import { useGraphSelectableNodes, useGraphSelectedIDs, usePMDGraphSettings } from "../../../utils/GlobalHooks";
+import { useGraphSelectableNodesDIR, useGraphSelectedIDs, usePMDGraphSettings } from "../../../utils/GlobalHooks";
 import { IDirData, IGraph, RawStatisticsDIR, VGPData } from "../../../utils/GlobalTypes";
 import { SelectableGraph, GraphSymbols } from "../../Sub/Graphs";
 import { stereoAreaConstants } from "./StereoConstants";
@@ -22,7 +22,8 @@ const StereoGraphDIR: FC<IStereoGraphDIR> = ({ graphId, width, height, data }) =
 
   const { reference, currentInterpretation, hiddenDirectionsIDs } = useAppSelector(state => state.dirPageReducer);
   const { menuItems, settings } = usePMDGraphSettings();
-  const selectableNodes = useGraphSelectableNodes(graphId, false); 
+  const selectableNodes = useGraphSelectableNodesDIR(graphId); 
+
   const selectedIDs = useGraphSelectedIDs('dir');
   const {viewHeight, viewWidth, ...areaConstants} = stereoAreaConstants(width, height);
   const dataConstants = useMemo(() => 
@@ -39,6 +40,7 @@ const StereoGraphDIR: FC<IStereoGraphDIR> = ({ graphId, width, height, data }) =
         nodesDuplicated={false}
         menuItems={menuItems}
         extraID={data.name}
+        graphName={`${data.name}_stereo_dir`}
       >
         <g>
           <AxesAndData 

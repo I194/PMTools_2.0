@@ -3,13 +3,23 @@ import styles from './VGP.module.scss';
 import { useWindowSize } from '../../../utils/GlobalHooks';
 import { VGPData } from '../../../utils/GlobalTypes';
 import GraphsSkeleton from './GraphsSkeleton';
-import StereoGraphVGP from '../../AppGraphs/StereoGraphDIR/StereoGraphVGP';
+import { StereoGraphVGP } from '../../AppGraphs';
+import { useAppDispatch, useAppSelector } from "../../../services/store/hooks";
 
-interface IGraphs {
-  dataToShow: VGPData | null;
-};
+// interface IGraphs {
+//   dataToShow: VGPData | null;
+// };
 
-const Graphs: FC<IGraphs> = ({ dataToShow }) => {
+const Graphs: FC = () => {
+
+  
+  const { vgpData } = useAppSelector(state => state.dirPageReducer);
+
+  const [dataToShow, setDataToShow] = useState<VGPData | null>(null);
+
+  useEffect(() => {
+    if (vgpData) setDataToShow(vgpData);
+  }, [vgpData]);
 
   const [wv, wh] = useWindowSize();
 

@@ -23,12 +23,10 @@ const VGPmodalContent: FC<Props> = ({ data }) => {
 
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const [coords, setCoords] = React.useState<Array<{lat: number, lon: number}>>([]);
 
-  const { vgpData } = useAppSelector(state => state.dirPageReducer);
+  const { siteData } = useAppSelector(state => state.parsedDataReducer);
 
   const handleUpload = async (event: any, files?: Array<File>) => {
-    console.log(event)
     const acceptedFile = files ? files[0] : event.currentTarget.files[0];
     dispatch(sitesFileToLatLon(acceptedFile));
   };
@@ -57,12 +55,12 @@ const VGPmodalContent: FC<Props> = ({ data }) => {
       </div>
       <div className={styles.data}>
         <div className={styles.input}>
-          <SitesDataTable data={data} />
+          <SitesDataTable data={data} sitesData={siteData?.data} />
         </div>
         <div className={styles.vgpTable}>
           <VGPDataTable />
         </div>
-        <Graphs dataToShow={vgpData}/>
+        <Graphs/>
       </div>
     </div>
   );

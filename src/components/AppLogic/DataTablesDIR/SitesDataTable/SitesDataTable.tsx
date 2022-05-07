@@ -16,7 +16,7 @@ import SitesInputDataTableToolbar from "../../../Sub/DataTable/Toolbar/SitesInpu
 import calculateVGP from "../../../../utils/statistics/calculation/calculateVGP";
 import useApiRef from "../useApiRef";
 import { setVGPData } from "../../../../services/reducers/dirPage";
-import { setSiteLatLonData } from "../../../../services/reducers/parsedData";
+import { setSiteData } from "../../../../services/reducers/parsedData";
 import { textColor } from "../../../../utils/ThemeConstants";
 
 type SiteRow = {
@@ -31,26 +31,45 @@ type SiteRow = {
 
 interface IDataTableDIR {
   data: IDirData | null;
+  sitesData?: ISitesData['data'];
 };
 
 
-const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
+const SitesDataTable: FC<IDataTableDIR> = ({ data, sitesData }) => {
   
   const dispatch = useAppDispatch();
   const theme = useTheme();
 
-  const { selectedDirectionsIDs, hiddenDirectionsIDs, reference } = useAppSelector(state => state.dirPageReducer);
-  const { siteData } = useAppSelector(state => state.parsedDataReducer);
-  const [siteVGPData, setSiteVGPData] = useState<ISitesData['data']>([]);
-  const [editRowsModel, setEditRowsModel] = useState<GridEditRowsModel>({});
+  const { hiddenDirectionsIDs, reference } = useAppSelector(state => state.dirPageReducer);
+  // const { siteData } = useAppSelector(state => state.parsedDataReducer);
+  // const [siteVGPData, setSiteVGPData] = useState<ISitesData['data']>([]);
+  // const [editRowsModel, setEditRowsModel] = useState<GridEditRowsModel>({});
 
-  useEffect(() => {
-    if (siteData) setSiteVGPData(siteData.data);
-  }, [siteData])
+  // useEffect(() => {
+  //   console.log(siteData, siteVGPData)
+  //   if (siteData && !siteVGPData.length) setSiteVGPData(siteData.data);
+  // }, [siteData])
 
-  const handleEditRowsModelChange = useCallback((model: GridEditRowsModel) => {
-    setEditRowsModel(model);
-  }, []);
+  // useEffect(() => {
+  //   if (siteData && Object.keys(editRowsModel).length !== 0) {
+  //     const updatedData = siteData.data.map((site, index) => {
+  //       const rowId = Object.keys(editRowsModel)[0];
+  //       const newComment = editRowsModel[rowId]?.comment?.value as string;
+  //       if (rowId !== site.label) return interpretation;
+  //       return {
+  //         ...interpretation,
+  //         comment: newComment
+  //       };
+  //     });
+  //     if (!equal(updatedData, siteData)) dispatch(setAllInterpretations(updatedData));
+  //   };
+  // }, [siteData, editRowsModel]);
+
+  // const handleEditRowsModelChange = useCallback((model: GridEditRowsModel) => {
+  //   setEditRowsModel(model);
+  // }, []);
+
+  // console.log('what', sitesData)
 
   const columns: GridColumns = [
     { field: 'id', headerName: 'ID', type: 'string', width: 30 },
@@ -92,26 +111,26 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
       id,
       index: hiddenDirectionsIDs.includes(id) ? '-' : visibleIndex++,
       label,
-      lat: siteVGPData ? siteVGPData[index]?.lat : 0,
-      lon: siteVGPData ? siteVGPData[index]?.lon : 0,
-      age: siteVGPData ? siteVGPData[index]?.age : 0,
-      plateId: siteVGPData ? siteVGPData[index]?.plateId : 0,
+      lat: sitesData ? sitesData[index]?.lat || 0 : 0,
+      lon: sitesData ? sitesData[index]?.lon || 0 : 0,
+      age: sitesData ? sitesData[index]?.age || 0 : 0,
+      plateId: sitesData ? sitesData[index]?.plateId || 0 : 0,
     };
   });
 
   const calculateVGPs = () => {
     const rows: Array<SiteRow> = Array.from(apiRef?.current?.getRowModels()?.values() || []);
     if (!rows.length) return;
-    const vgpData: VGPData = rows.map((row, index) => {
+    const visibleRows = rows.filter(row => !hiddenDirectionsIDs.includes(row.id));
+    const vgpData: VGPData = visibleRows.map((row, index) => {
       let { id, label, lat, lon, age, plateId } = row;
       // на случай, если были загружены данные из файла и не обновился apiRef
-      if ((lat === 0 || lon === 0) && siteVGPData && siteVGPData[index]) {
-        lat = siteVGPData[index].lat;
-        lon = siteVGPData[index].lon;
-        age = siteVGPData[index].age;
-        plateId = siteVGPData[index].plateId;
+      if ((lat === 0 || lon === 0 || age === 0 || plateId === 0) && sitesData && sitesData[index]) {
+        lat = sitesData[index].lat;
+        lon = sitesData[index].lon;
+        age = sitesData[index].age;
+        plateId = sitesData[index].plateId;
       };
-      console.log(age, plateId)
       const interpretation = data.interpretations.find(interpretation => interpretation.id === id)!;
       const dec = reference === 'geographic' ? interpretation.Dgeo : interpretation.Dstrat;
       const inc = reference === 'geographic' ? interpretation.Igeo : interpretation.Istrat;
@@ -135,7 +154,7 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
 
   const deleteData = () => {
     dispatch(setVGPData(null));
-    dispatch(setSiteLatLonData(null));
+    dispatch(setSiteData(null));
   };
 
   return (
@@ -144,11 +163,8 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
         <DataGrid 
           rows={rows} 
           columns={enhancedColumns} 
-          // columnVisibilityModel={{
-          //   hideMe: false
-          // }}
-          editRowsModel={editRowsModel}
-          onEditRowsModelChange={handleEditRowsModelChange}
+          // editRowsModel={editRowsModel}
+          // onEditRowsModelChange={handleEditRowsModelChange}
           sx={{
             ...GetDataTableBaseStyle(),
             '& .MuiDataGrid-cell': {
@@ -159,12 +175,15 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
               minWidth: '0px!important',
             }
           }}
-          hideFooter={true}
+          hideFooter={rows.length < 100}
           density={'compact'}
           components={{
             Toolbar: SitesInputDataTableToolbar,
           }}
           disableSelectionOnClick={true}
+          getRowClassName={
+            (params) =>  hiddenDirectionsIDs.includes(params.row.id) ? styles.hiddenRow : ''
+          }
         />
       </SitesDataTableSkeleton>
       <div className={styles.buttons}>

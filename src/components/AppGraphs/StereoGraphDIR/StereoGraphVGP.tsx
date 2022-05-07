@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useMemo } from "react";
 import styles from "./ZijdGraph.module.scss";
 import { useAppSelector } from "../../../services/store/hooks";
-import { useGraphSelectableNodes, useGraphSelectedIDs, usePMDGraphSettings } from "../../../utils/GlobalHooks";
+import { useGraphSelectableNodesDIR, useGraphSelectedIDs, usePMDGraphSettings } from "../../../utils/GlobalHooks";
 import { IDirData, IGraph, RawStatisticsDIR, VGPData } from "../../../utils/GlobalTypes";
 import { SelectableGraph, GraphSymbols } from "../../Sub/Graphs";
 import { stereoAreaConstants } from "./StereoConstants";
@@ -21,9 +21,9 @@ const StereoGraphVGP: FC<IStereoGraphVGP> = ({ graphId, width, height, data }) =
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
   // 2. zoom&pan
 
-  const { reference, currentInterpretation, hiddenDirectionsIDs } = useAppSelector(state => state.dirPageReducer);
+  const { reference, currentInterpretation, hiddenDirectionsIDs, currentFile } = useAppSelector(state => state.dirPageReducer);
   const { menuItems, settings } = usePMDGraphSettings();
-  const selectableNodes = useGraphSelectableNodes(graphId, false); 
+  const selectableNodes = useGraphSelectableNodesDIR(graphId); 
   const selectedIDs = useGraphSelectedIDs('dir');
   const {viewHeight, viewWidth, ...areaConstants} = stereoAreaConstants(width, height);
   const dataConstants = useMemo(() => 
@@ -40,6 +40,7 @@ const StereoGraphVGP: FC<IStereoGraphVGP> = ({ graphId, width, height, data }) =
         nodesDuplicated={false}
         menuItems={menuItems}
         extraID={'vgp'}
+        graphName={`stereo_vgp`}
       >
         <g>
           <AxesAndData 

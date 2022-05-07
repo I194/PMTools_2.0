@@ -1,19 +1,18 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import styles from './ToolsDIR.module.scss';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
 import { Button } from "@mui/material";
 import ButtonGroupWithLabel from "../../Sub/Buttons/ButtonGroupWithLabel/ButtonGroupWithLabel";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { IDirData } from "../../../utils/GlobalTypes";
 import { addHiddenDirectionsIDs, sethiddenDirectionsIDs, setSelectedDirectionsIDs, setStatisticsMode } from "../../../services/reducers/dirPage";
 
 interface IShowHideDotsButtons {
-  setShowStepsInput: React.Dispatch<React.SetStateAction<boolean>>;
-  dirData: IDirData;
+  setShowIndexesInput: React.Dispatch<React.SetStateAction<boolean>>;
+  showIndexesInput: boolean;
 };
 
-const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowStepsInput, dirData }) => {
+const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowIndexesInput, showIndexesInput }) => {
 
   const dispatch = useAppDispatch();
   const { selectedDirectionsIDs, hiddenDirectionsIDs } = useAppSelector(state => state.dirPageReducer); 
@@ -25,7 +24,7 @@ const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowStepsInput, dirD
 
   const onHideClick = () => {
     if (!selectedDirectionsIDs || !selectedDirectionsIDs.length) {
-      setShowStepsInput(true);
+      setShowIndexesInput(true);
     };
     setHideDirs(true);
   };
@@ -40,6 +39,26 @@ const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowStepsInput, dirD
       dispatch(setStatisticsMode(null));
     };
   }, [hideDirs, selectedDirectionsIDs]);
+
+  useEffect(() => {
+    if (showIndexesInput) window.removeEventListener("keydown", handleShowHideClick);
+    else window.addEventListener("keydown", handleShowHideClick);
+    return () => {
+      window.removeEventListener("keydown", handleShowHideClick);
+    };
+  }, [showIndexesInput]);
+
+  const handleShowHideClick = useCallback((e) => {
+    const key = (e.code as string);
+    if (key === 'KeyS') {
+      e.preventDefault();
+      onShowClick();
+    };
+    if (key === 'KeyH') {
+      e.preventDefault();
+      onHideClick();
+    };
+  }, []);
 
   return (
     <ButtonGroupWithLabel label='Направления'>

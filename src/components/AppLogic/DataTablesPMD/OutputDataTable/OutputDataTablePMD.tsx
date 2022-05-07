@@ -177,7 +177,7 @@ const OutputDataTablePMD: FC = () => {
           editRowsModel={editRowsModel}
           onEditRowsModelChange={handleEditRowsModelChange}
           sx={GetDataTableBaseStyle()}
-          hideFooter={true}
+          hideFooter={rows.length < 100}
           density={'compact'}
           components={{
             Toolbar: PMDOutputDataTableToolbar,

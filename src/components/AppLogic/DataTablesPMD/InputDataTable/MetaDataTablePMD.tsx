@@ -73,7 +73,7 @@ const MetaDataTablePMD: FC<IMetaDataTablePMD> = ({ data}) => {
         <DataGrid 
           rows={rows} 
           columns={columns} 
-          hideFooter={true}
+          hideFooter={rows.length < 100}
           autoHeight={true}
           getRowHeight={() => 24}
           density={'compact'}

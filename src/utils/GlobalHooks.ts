@@ -84,7 +84,7 @@ export const useDIRGraphSettings = () => {
 };
 
 
-export const useGraphSelectableNodes = (graphId: string, isZijd?: boolean) => {
+export const useGraphSelectableNodesPCA = (graphId: string, isZijd?: boolean) => {
   // возвращает все точки на графике как NodeList преобразованный в массив Array<ChildNode>
   // необходимо для реализации react-drag-to-select
   const { reference, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
@@ -111,6 +111,32 @@ export const useGraphSelectableNodes = (graphId: string, isZijd?: boolean) => {
     };
     setSelectableNodes(nodes);
   }, [graphElement, isZijd, reference, hiddenStepsIDs]);
+
+  return selectableNodes;
+};
+
+
+export const useGraphSelectableNodesDIR = (graphId: string) => {
+  // возвращает все точки на графике как NodeList преобразованный в массив Array<ChildNode>
+  // необходимо для реализации react-drag-to-select
+  const { reference, hiddenDirectionsIDs } = useAppSelector(state => state.dirPageReducer); 
+  const [selectableNodes, setSelectableNodes] = useState<Array<ChildNode>>([]);
+
+  const graphElement = document.getElementById(`${graphId}-graph`);
+
+  const elements = {
+    containerH: document.getElementById(`${graphId}-h-dots`),
+    containerV: document.getElementById(`${graphId}-v-dots`),
+    containerAll: document.getElementById(`${graphId}-all-dots`),
+  };
+
+  useEffect(() => {
+    const nodes: Array<ChildNode> = [];
+    if (elements.containerAll) {
+      nodes.push(...elements.containerAll.childNodes);
+    };
+    setSelectableNodes(nodes);
+  }, [graphElement, reference, hiddenDirectionsIDs]);
 
   return selectableNodes;
 };

@@ -67,31 +67,35 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
 
   // добавляет слушатель нажатий на клавиатуру (для использования сочетаний клавиш)
   useEffect(() => {
-    window.addEventListener("keydown", handleHotkeys);
+    if (showIndexesInput) window.removeEventListener("keydown", handleHotkeys);
+    else window.addEventListener("keydown", handleHotkeys);
     return () => {
       window.removeEventListener("keydown", handleHotkeys);
     };
-  }, []);
+  }, [showIndexesInput]);
 
   // обработчик нажатий на клавиатуру
   const handleHotkeys = useCallback((e) => {
     const key = (e.code as string);
-    const { ctrlKey, shiftKey, altKey } = e; 
-    if ((shiftKey || altKey) && key === 'KeyF') {
+    if (key === 'KeyF') {
       e.preventDefault();
       dispatch(setStatisticsMode('fisher'))
     };
-    if ((shiftKey || altKey) && key === 'KeyM') {
+    if (key === 'KeyM') {
       e.preventDefault();
       dispatch(setStatisticsMode('mcFadden'))
     };
-    if ((shiftKey || altKey) && key === 'KeyG') {
+    if (key === 'KeyG') {
       e.preventDefault();
       dispatch(setStatisticsMode('gc'))
     };
-    if ((shiftKey || altKey) && key === 'KeyI') {
+    if (key === 'KeyI') {
       e.preventDefault();
       dispatch(setStatisticsMode('gcn'))
+    };
+    if (key === 'KeyU') {
+      e.preventDefault();
+      dispatch(setSelectedDirectionsIDs([]));
     };
   }, []);
 
@@ -102,7 +106,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
 
   // обработчик введённых номеров точек
   const handleEnteredDotsIndexesApply = (steps: string) => {
-    const parsedIndexes = parseDotsIndexesInput(steps);
+    const parsedIndexes = parseDotsIndexesInput(steps || `1-${data?.interpretations.length}`);
     const IDs = enteredIndexesToIDsDIR(parsedIndexes, hiddenDirectionsIDs, data!);
     dispatch(setSelectedDirectionsIDs(IDs));
     setShowIndexesInput(false);
@@ -173,7 +177,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
       <ButtonGroupWithLabel label='Смотреть статистику'>
         <Button onClick={() => setAllFilesStatOpen(true)}>По всем файлам</Button>
       </ButtonGroupWithLabel>
-      <ShowHideDotsButtons setShowStepsInput={setShowIndexesInput} dirData={data}/>
+      <ShowHideDotsButtons setShowIndexesInput={setShowIndexesInput} showIndexesInput={showIndexesInput}/>
       <ButtonGroupWithLabel label='По всем сайтам'>
         <Button onClick={() => setShowVGP(true)}>Построить VGP</Button>
       </ButtonGroupWithLabel>
@@ -198,7 +202,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
         <ModalWrapper
           open={showIndexesInput}
           setOpen={setShowIndexesInput}
-          size={{width: '26vw', height: '20vh'}}
+          size={{width: '26vw', height: '14vh'}}
           position={{left: '50%', top: '20%'}}
           onClose={() => {dispatch(setStatisticsMode(null))}}
           isDraggable={true}
@@ -207,6 +211,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
             label={`Введите номера точек (${statisticsMode})`}
             helperText="Валидные примеры: 1-9 || 2,4,8,9 || 2-4;8,9 || 2-4;8,9;12-14"
             onApply={handleEnteredDotsIndexesApply}
+            placeholder={`1-${data.interpretations.length}`}
           />
         </ModalWrapper>
       }

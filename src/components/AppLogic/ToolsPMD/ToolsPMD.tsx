@@ -55,11 +55,12 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   }, [selectedStepsIDs, statisticsMode]);
 
   useEffect(() => {
-    window.addEventListener("keydown", handleStatisticsModeSelect);
+    if (showStepsInput) window.removeEventListener("keydown", handleHotkeys);
+    else window.addEventListener("keydown", handleHotkeys);
     return () => {
-      window.removeEventListener("keydown", handleStatisticsModeSelect);
+      window.removeEventListener("keydown", handleHotkeys);
     };
-  }, []);
+  }, [showStepsInput]);
   
   useEffect(() => {
     setCoordinateSystem(reference);
@@ -83,35 +84,39 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
     dispatch(setReference(selectedReference));
   };
 
-  const handleStatisticsModeSelect = useCallback((e) => {
+  const handleHotkeys = useCallback((e) => {
     const key = (e.code as string);
     const { ctrlKey, shiftKey, altKey } = e; 
-    if ((shiftKey || altKey) && key === 'KeyD') {
+    if (key === 'KeyD') {
       e.preventDefault();
       dispatch(setStatisticsMode('pca'))
     };
-    if ((shiftKey || altKey) && key === 'KeyO') {
+    if (key === 'KeyO') {
       e.preventDefault();
       dispatch(setStatisticsMode('pca0'))
     };
-    if ((shiftKey || altKey) && key === 'KeyG') {
+    if (key === 'KeyG') {
       e.preventDefault();
       dispatch(setStatisticsMode('gc'))
     };
-    if ((shiftKey || altKey) && key === 'KeyI') {
+    if (key === 'KeyI') {
       e.preventDefault();
       dispatch(setStatisticsMode('gcn'))
     };
+    if (key === 'KeyU') {
+      e.preventDefault();
+      dispatch(setSelectedStepsIDs(null));
+    };
   }, []);
 
+  if (!data) return <ToolsPMDSkeleton />;
+
   const handleEnteredStepsApply = (steps: string) => {
-    const parsedIndexes = parseDotsIndexesInput(steps);
+    const parsedIndexes = parseDotsIndexesInput(steps || `1-${data.steps.length}`);
     const IDs = enteredIndexesToIDsPMD(parsedIndexes, hiddenStepsIDs, data!);
     dispatch(setSelectedStepsIDs(IDs));
     setShowStepsInput(false);
   };
-
-  if (!data) return <ToolsPMDSkeleton />;
 
   const handleFileSelect = (option: string) => {
     const pmdID = allDataPMD.findIndex(pmd => pmd.metadata.name === option);
@@ -159,7 +164,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
       <ButtonGroupWithLabel label='Смотреть статистику'>
         <Button onClick={() => setAllFilesStatOpen(true)}>По всем файлам</Button>
       </ButtonGroupWithLabel>
-      <ShowHideDotsButtons setShowStepsInput={setShowStepsInput} pmdData={data}/>
+      <ShowHideDotsButtons setShowStepsInput={setShowStepsInput} showStepsInput={showStepsInput}/>
       <ModalWrapper
         open={allFilesStatOpen}
         setOpen={setAllFilesStatOpen}
@@ -172,15 +177,16 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
         <ModalWrapper
           open={showStepsInput}
           setOpen={setShowStepsInput}
-          size={{width: '26vw', height: '20vh'}}
+          size={{width: '26vw', height: '14vh'}}
           position={{left: '50%', top: '20%'}}
           onClose={() => {dispatch(setStatisticsMode(null))}}
           isDraggable={true}
         >
           <InputApply 
-            label={`Введите номера шагов (${statisticsMode})`}
+            label={`Введите номера шагов (${statisticsMode || 'hide steps'})`}
             helperText="Валидные примеры: 1-9 || 2,4,8,9 || 2-4;8,9 || 2-4;8,9;12-14"
             onApply={handleEnteredStepsApply}
+            placeholder={`1-${data.steps.length}`}
           />
         </ModalWrapper>
       }

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import styles from './ToolsPMD.module.scss';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
 import { addHiddenStepsIDs, setHiddenStepsIDs, setSelectedStepsIDs, setStatisticsMode } from "../../../services/reducers/pcaPage";
@@ -10,10 +10,10 @@ import { IPmdData } from "../../../utils/GlobalTypes";
 
 interface IShowHideDotsButtons {
   setShowStepsInput: React.Dispatch<React.SetStateAction<boolean>>;
-  pmdData: IPmdData;
+  showStepsInput: boolean;
 };
 
-const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowStepsInput, pmdData }) => {
+const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowStepsInput, showStepsInput }) => {
 
   const dispatch = useAppDispatch();
   const { hiddenStepsIDs, selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
@@ -33,11 +33,31 @@ const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowStepsInput, pmdD
   useEffect(() => {
     if (hideSteps && selectedStepsIDs && selectedStepsIDs.length) {
       dispatch(addHiddenStepsIDs(selectedStepsIDs));
-      setHideSteps(false);
       dispatch(setSelectedStepsIDs(null));
       dispatch(setStatisticsMode(null));
+      setHideSteps(false);
     };
   }, [hideSteps, selectedStepsIDs]);
+
+  useEffect(() => {
+    if (showStepsInput) window.removeEventListener("keydown", handleShowHideClick);
+    else window.addEventListener("keydown", handleShowHideClick);
+    return () => {
+      window.removeEventListener("keydown", handleShowHideClick);
+    };
+  }, [showStepsInput]);
+
+  const handleShowHideClick = useCallback((e) => {
+    const key = (e.code as string);
+    if (key === 'KeyS') {
+      e.preventDefault();
+      onShowClick();
+    };
+    if (key === 'KeyH') {
+      e.preventDefault();
+      onHideClick();
+    };
+  }, []);
 
   return (
     <ButtonGroupWithLabel label='Шаги'>

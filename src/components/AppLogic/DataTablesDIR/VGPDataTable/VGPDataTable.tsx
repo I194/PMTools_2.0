@@ -27,6 +27,10 @@ type VGPRow = {
   paleoLatitude: number,
   dp: number,
   dm: number,
+  sLat: number,
+  sLon: number,
+  age: number,
+  plateId: number,
 };
 
 const VGPDataTable: FC = () => {
@@ -44,19 +48,31 @@ const VGPDataTable: FC = () => {
   const columns: GridColumns = [
     { field: 'id', headerName: 'ID', type: 'string', width: 30 },
     { field: 'index', headerName: '№', type: 'string', width: 30 },
-    { field: 'poleLatitude', headerName: 'pole lat', type: 'number', flex: 1,
+    { field: 'poleLatitude', headerName: 'pole lat', type: 'number', width: 80,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
-    { field: 'poleLongitude', headerName: 'pole lon', type: 'number', flex: 1,
+    { field: 'poleLongitude', headerName: 'pole lon', type: 'number', width: 80,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
-    { field: 'paleoLatitude', headerName: 'paleo lat', type: 'number', flex: 1,
+    { field: 'paleoLatitude', headerName: 'paleo lat', type: 'number', width: 80,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
     { field: 'dp', headerName: 'dp', type: 'number', width: 60,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
     { field: 'dm', headerName: 'dm', type: 'number', width: 60,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
+    { field: 'sLat', headerName: 'site Lat', type: 'number', width: 80,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
+    { field: 'sLon', headerName: 'site Lon', type: 'number', width: 80,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
+    { field: 'age', headerName: 'age', type: 'number', width: 60,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
+    { field: 'plateId', headerName: 'plate ID', type: 'number', width: 60,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
   ];
@@ -81,6 +97,10 @@ const VGPDataTable: FC = () => {
       paleoLatitude,
       dp,
       dm,
+      sLat: vgp.lat,
+      sLon: vgp.lon,
+      age: vgp.age,
+      plateId: vgp.plateId,
     };
   });
 
@@ -101,7 +121,7 @@ const VGPDataTable: FC = () => {
               padding: '0px 0px',
             }
           }}
-          hideFooter={true}
+          hideFooter={rows.length < 100}
           density={'compact'}
           components={{
             Toolbar: VGPDataTableToolbar,

@@ -120,7 +120,7 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
           Toolbar: PMDInputDataTableToolbar, 
         }}
         sx={GetDataTableBaseStyle()}
-        hideFooter={true}
+        hideFooter={rows.length < 100}
         getRowClassName={
           (params) =>  hiddenStepsIDs.includes(params.row.id) ? styles.hiddenRow : ''
         }
