@@ -67,31 +67,35 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
 
   // добавляет слушатель нажатий на клавиатуру (для использования сочетаний клавиш)
   useEffect(() => {
-    window.addEventListener("keydown", handleHotkeys);
+    if (showIndexesInput) window.removeEventListener("keydown", handleHotkeys);
+    else window.addEventListener("keydown", handleHotkeys);
     return () => {
       window.removeEventListener("keydown", handleHotkeys);
     };
-  }, []);
+  }, [showIndexesInput]);
 
   // обработчик нажатий на клавиатуру
   const handleHotkeys = useCallback((e) => {
     const key = (e.code as string);
-    const { ctrlKey, shiftKey, altKey } = e; 
-    if ((shiftKey || altKey) && key === 'KeyF') {
+    if (key === 'KeyF') {
       e.preventDefault();
       dispatch(setStatisticsMode('fisher'))
     };
-    if ((shiftKey || altKey) && key === 'KeyM') {
+    if (key === 'KeyM') {
       e.preventDefault();
       dispatch(setStatisticsMode('mcFadden'))
     };
-    if ((shiftKey || altKey) && key === 'KeyG') {
+    if (key === 'KeyG') {
       e.preventDefault();
       dispatch(setStatisticsMode('gc'))
     };
-    if ((shiftKey || altKey) && key === 'KeyI') {
+    if (key === 'KeyI') {
       e.preventDefault();
       dispatch(setStatisticsMode('gcn'))
+    };
+    if (key === 'KeyU') {
+      e.preventDefault();
+      dispatch(setSelectedDirectionsIDs([]));
     };
   }, []);
 
@@ -173,7 +177,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
       <ButtonGroupWithLabel label='Смотреть статистику'>
         <Button onClick={() => setAllFilesStatOpen(true)}>По всем файлам</Button>
       </ButtonGroupWithLabel>
-      <ShowHideDotsButtons setShowStepsInput={setShowIndexesInput} dirData={data}/>
+      <ShowHideDotsButtons setShowIndexesInput={setShowIndexesInput} showIndexesInput={showIndexesInput}/>
       <ButtonGroupWithLabel label='По всем сайтам'>
         <Button onClick={() => setShowVGP(true)}>Построить VGP</Button>
       </ButtonGroupWithLabel>
