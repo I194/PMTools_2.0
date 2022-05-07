@@ -5,10 +5,35 @@ import NavButton from "./NavButton";
 import pmtoolsLogo from './pmtools_logo.png';
 // import { default as pmtoolsLogo } from './PMTools_logo.svg';
 import { NavLink } from "react-router-dom";
+import { IconButton } from "@mui/material";
+import { useTheme } from '@mui/material/styles';
+import { useSystemTheme } from "../../../utils/GlobalHooks";
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+import LanguageIcon from '@mui/icons-material/Language';
+import { useAppDispatch, useAppSelector } from "../../../services/store/hooks";
+import { setColorMode } from "../../../services/reducers/appSettings";
 
 const NavPanel = () => {
-  
+
+  const dispatch = useAppDispatch();
+
   const isSmallScreen = useMediaQuery({ query: '(max-width: 1464px)' });
+  const { colorMode } = useAppSelector(state => state.appSettingsReducer);
+  const systemTheme = useSystemTheme();
+  const theme = useTheme();
+
+  const onColorModeClick = () => {
+    dispatch(setColorMode(colorMode === 'dark' ? 'light' : 'dark'));
+  };
+
+  const onLanguageClick = () => {
+    console.log('language click');
+  };
+
+  useEffect(() => {
+    dispatch(setColorMode(systemTheme));
+  }, [systemTheme]);
 
   return (
     <div className={styles.container}>
@@ -36,6 +61,14 @@ const NavPanel = () => {
         label='Источники'
         to={'/references'}
       />
+      <div className={styles.settings}>  
+        <IconButton onClick={onColorModeClick} color="inherit">
+          {theme.palette.mode === 'dark' ? <Brightness7Icon color="primary" /> : <Brightness4Icon color="primary" />}
+        </IconButton>
+        <IconButton onClick={onLanguageClick} color="inherit" disabled>
+          <LanguageIcon />
+        </IconButton>
+      </div>
     </div>
   );
 }
