@@ -1,0 +1,71 @@
+.container {
+  position: relative;
+  padding: 72px 240px 52px 240px;
+  margin: 48px 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.tabs {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  width: 100%;
+  min-height: 120px;
+}
+
+.icon {
+  position: absolute;
+  top: -60px;
+  left: calc(50% - 36px);
+
+  width: 72px;
+  height: 72px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 12px;
+
+  background-color: #fff;
+}
+
+.indicator {
+  position: absolute;
+  width: 100%;
+  height: 10px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 0 168px;
+  bottom: -32px;
+  box-sizing: border-box;
+
+  &:hover {
+    & .indicatorItem {
+      height: 9px;
+    }
+  }
+
+  & .indicatorItem {
+    height: 7px;
+    border-radius: 4px;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  & .active {
+    box-shadow: 0px 0px 5px 1px #119dff;
+  }
+}

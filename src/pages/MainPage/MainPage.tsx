@@ -4,13 +4,11 @@ import { useTheme } from '@mui/material/styles';
 import {
   textColor,
 } from '../../utils/ThemeConstants';
-import { DynamicLogo, NavPanel, About } from '../../components/MainPage';
+import { DynamicLogo, NavPanel, About, Description } from '../../components/MainPage';
 import { Typography } from '@mui/material';
 
 const MainPage: FC = ({}) => {
   const theme = useTheme();
-
-  console.log(theme.palette.mode);
   
   return (
     <>
@@ -19,6 +17,7 @@ const MainPage: FC = ({}) => {
         <DynamicLogo />
       </div>
       <About />
+      <Description />
     </>
   )
 }
