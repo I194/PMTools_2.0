@@ -15,7 +15,7 @@ const MainPageLayout: FC<RouteProps> = () => {
  
   return (
     <div 
-      className={styles.container}
+      className={`${styles.container} ${styles[theme.palette.mode]}`}
       style={{
         backgroundColor: bgColorMain(theme.palette.mode),
       }}
