@@ -39,6 +39,7 @@ const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
         nodesDuplicated={false}
         menuItems={menuItems}
         extraID={data.metadata.name}
+        graphName={`${data.metadata.name}_mag_pca`}
       >
         <g>
           <AxesAndData 

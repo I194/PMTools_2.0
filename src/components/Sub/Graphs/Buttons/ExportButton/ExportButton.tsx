@@ -6,15 +6,16 @@ import { handleExportGraph } from '../../../../../utils/graphs/export';
 
 interface IExportButton {
   graphId: string;
+  name?: string;
 }
 
-const ExportButton: FC<IExportButton> = ({ graphId }) => {
+const ExportButton: FC<IExportButton> = ({ graphId, name }) => {
   return (
     <div className={style.exportButton}>
       <IconButton 
         color="primary" 
         component="span"
-        onClick={() => handleExportGraph(graphId)}
+        onClick={() => handleExportGraph(graphId, name)}
         sx={{p: '4px'}}
       >
         <FileDownloadOutlinedIcon />

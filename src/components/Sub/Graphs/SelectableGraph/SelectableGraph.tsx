@@ -14,6 +14,7 @@ import { useLocation } from "react-router-dom";
 
 interface ISelectableGraph {
   graphId: string;
+  graphName?: string;
   width: number;
   height: number;
   selectableNodes: ChildNode[];
@@ -30,6 +31,7 @@ interface ISelectableGraph {
 const SelectableGraph: FC<ISelectableGraph> = ({
   children,
   graphId,
+  graphName,
   width,
   height,
   selectableNodes,
@@ -92,7 +94,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
             />
           </>
         }
-        <ExportButton graphId={ID} />
+        <ExportButton graphId={ID} name={graphName} />
         <svg
           xmlns="http://www.w3.org/2000/svg" 
           version="1.1" 

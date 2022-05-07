@@ -24,7 +24,6 @@ const StereoGraphDIR: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
   const { menuItems, settings } = usePMDGraphSettings();
   const selectableNodes = useGraphSelectableNodesDIR(graphId); 
 
-  console.log('nodes',selectableNodes)
   const selectedIDs = useGraphSelectedIDs('dir');
   const {viewHeight, viewWidth, ...areaConstants} = stereoAreaConstants(width, height);
   const dataConstants = useMemo(() => 
@@ -41,6 +40,7 @@ const StereoGraphDIR: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
         nodesDuplicated={false}
         menuItems={menuItems}
         extraID={data.name}
+        graphName={`${data.name}_stereo_dir`}
       >
         <g>
           <AxesAndData 

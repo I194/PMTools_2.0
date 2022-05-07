@@ -90,6 +90,7 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data }) => {
         currentPan={pan}
         currentZoom={zoom}
         onResetZoomPan={onResetZoomPan}
+        graphName={`${data.metadata.name}_zijd_pca`}
       >
         <g>
           <AxesAndData 

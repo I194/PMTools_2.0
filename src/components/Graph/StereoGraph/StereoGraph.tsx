@@ -43,6 +43,7 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
         nodesDuplicated={false}
         menuItems={menuItems}
         extraID={data.metadata.name}
+        graphName={`${data.metadata.name}_stereo_pca`}
       >
         <g>
           <AxesAndData 
