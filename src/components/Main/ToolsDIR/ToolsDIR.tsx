@@ -50,6 +50,24 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
 
   const availableReferences: Array<Reference> = ['geographic', 'stratigraphic'];
 
+  const [fisherHotkey, setFisherHotkey] = useState<{key: string, code: string}>({key: 'F', code: 'KeyF'});
+  const [mcFaddenHotkey, setMcFaddenHotkey] = useState<{key: string, code: string}>({key: 'M', code: 'KeyM'});
+  const [gcHotkey, setGcHotkey] = useState<{key: string, code: string}>({key: 'G', code: 'KeyG'});
+  const [gcnHotkey, setGcnHotkey] = useState<{key: string, code: string}>({key: 'I', code: 'KeyI'});
+  const [unselectHotkey, setUnselectHotkey] = useState<{key: string, code: string}>({key: 'U', code: 'KeyU'});
+
+  useEffect(() => {
+    const statHotkeys = hotkeys.find(block => block.title === 'Статистические методы')?.hotkeys;
+    const selectionHotkeys = hotkeys.find(block => block.title === 'Выделение точек')?.hotkeys;
+    if (statHotkeys && selectionHotkeys) {
+      setFisherHotkey(statHotkeys.find(hotkey => hotkey.label === 'Fisher')!.hotkey);
+      setMcFaddenHotkey(statHotkeys.find(hotkey => hotkey.label === 'McFadden')!.hotkey);
+      setGcHotkey(statHotkeys.find(hotkey => hotkey.label === 'GC')!.hotkey);
+      setGcnHotkey(statHotkeys.find(hotkey => hotkey.label === 'GCN')!.hotkey);
+      setUnselectHotkey(selectionHotkeys.find(hotkey => hotkey.label === 'Убрать выделение')!.hotkey);
+    }
+  }, [hotkeys]);
+
   // для списка всех файлов
   useEffect(() => {
     if (dirStatData) {
@@ -78,33 +96,24 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
   // обработчик нажатий на клавиатуру
   const handleHotkeys = (event: KeyboardEvent) => {
     const keyCode = event.code;
-    const statHotkeys = hotkeys.find(block => block.title === 'Статистические методы')?.hotkeys;
-    const selectionHotkeys = hotkeys.find(block => block.title === 'Выделение точек')?.hotkeys;
-    if (!statHotkeys || !selectionHotkeys) return;
 
-    const fisherHotkey = statHotkeys.find(hotkey => hotkey.label === 'Fisher')?.hotkey.code;
-    const mcFaddenHotkey = statHotkeys.find(hotkey => hotkey.label === 'McFadden')?.hotkey.code;
-    const gcHotkey = statHotkeys.find(hotkey => hotkey.label === 'GC')?.hotkey.code;
-    const gcnHotkey = statHotkeys.find(hotkey => hotkey.label === 'GCN')?.hotkey.code;
-    const unselectHotkey = selectionHotkeys.find(hotkey => hotkey.label === 'Убрать выделение')?.hotkey.code
-
-    if (keyCode === fisherHotkey) {
+    if (keyCode === fisherHotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('fisher'))
     };
-    if (keyCode === mcFaddenHotkey) {
+    if (keyCode === mcFaddenHotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('mcFadden'))
     };
-    if (keyCode === gcHotkey) {
+    if (keyCode === gcHotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('gc'))
     };
-    if (keyCode === gcnHotkey) {
+    if (keyCode === gcnHotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('gcn'))
     };
-    if (keyCode === unselectHotkey) {
+    if (keyCode === unselectHotkey.code) {
       event.preventDefault();
       dispatch(setSelectedDirectionsIDs([]));
     };
@@ -146,7 +155,6 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
   };
 
   const handleFileDelete = (option: string) => {
-    console.log('what', dirStatFiles, option);
     if (dirStatFiles) {
       const updatedFiles = dirStatFiles.filter(file => file.name !== option);
       dispatch(setDirStatFiles(updatedFiles));
@@ -180,10 +188,10 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
         }
       </ButtonGroupWithLabel>
       <ButtonGroupWithLabel label='Статистический метод'>
-        <StatModeButton mode='fisher'/>
-        <StatModeButton mode='mcFadden'/>
-        <StatModeButton mode='gc'/>
-        <StatModeButton mode='gcn'/>
+        <StatModeButton mode='fisher' hotkey={fisherHotkey.key}/>
+        <StatModeButton mode='mcFadden' hotkey={mcFaddenHotkey.key}/>
+        <StatModeButton mode='gc' hotkey={gcHotkey.key}/>
+        <StatModeButton mode='gcn' hotkey={gcnHotkey.key}/>
       </ButtonGroupWithLabel>
       <ButtonGroupWithLabel label='Смотреть статистику'>
         <Button onClick={() => setAllFilesStatOpen(true)}>По всем файлам</Button>

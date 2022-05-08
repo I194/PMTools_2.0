@@ -2,7 +2,7 @@ import React, { FC, useCallback, useEffect, useState } from "react";
 import styles from './ToolsPMD.module.scss';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
 import { addHiddenStepsIDs, setHiddenStepsIDs, setSelectedStepsIDs, setStatisticsMode } from "../../../services/reducers/pcaPage";
-import { Button } from "@mui/material";
+import { Button, Tooltip, Typography } from "@mui/material";
 import ButtonGroupWithLabel from "../../Sub/Buttons/ButtonGroupWithLabel/ButtonGroupWithLabel";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -30,6 +30,17 @@ const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowStepsInput, show
     setHideSteps(true);
   };
 
+  const [showHotkey, setShowHotkey] = useState<{key: string, code: string}>({key: 'S', code: 'KeyS'});
+  const [hideHotkey, setHideHotkey] = useState<{key: string, code: string}>({key: 'H', code: 'KeyH'});
+
+  useEffect(() => {
+    const visibilityHotkeys = hotkeys.find(block => block.title === 'Видимость точек')?.hotkeys;
+    if (visibilityHotkeys) {
+      setShowHotkey(visibilityHotkeys.find(hotkey => hotkey.label === 'Показать точки')!.hotkey);
+      setHideHotkey(visibilityHotkeys.find(hotkey => hotkey.label === 'Скрыть точки')!.hotkey);
+    };
+  }, [hotkeys]);
+
   useEffect(() => {
     if ((!selectedStepsIDs || !selectedStepsIDs.length) && hideSteps) {
       setShowStepsInput(true);
@@ -52,17 +63,12 @@ const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowStepsInput, show
 
   const handleHotkeys = (event: KeyboardEvent) => {
     const keyCode = event.code;
-    const visibilityHotkeys = hotkeys.find(block => block.title === 'Видимость точек')?.hotkeys;
-    if (!visibilityHotkeys) return;
 
-    const showHotkey = visibilityHotkeys.find(hotkey => hotkey.label === 'Показать точки')?.hotkey.code;
-    const hideHotkey = visibilityHotkeys.find(hotkey => hotkey.label === 'Скрыть точки')?.hotkey.code;
-
-    if (keyCode === showHotkey) {
+    if (keyCode === showHotkey.code) {
       event.preventDefault();
       onShowClick();
     };
-    if (keyCode === hideHotkey) {
+    if (keyCode === hideHotkey.code) {
       event.preventDefault();
       onHideClick();
     };
@@ -70,18 +76,30 @@ const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowStepsInput, show
 
   return (
     <ButtonGroupWithLabel label='Шаги'>
-      <Button
-        color={'primary'}
-        onClick={onHideClick}
+      <Tooltip
+        title={<Typography variant='body1'>{showHotkey.key}</Typography>}
+        enterDelay={1000}
+        arrow
       >
-        <VisibilityOffIcon />
-      </Button>
-      <Button
-        color={hiddenStepsIDs.length ? 'warning' : 'primary'}
-        onClick={onShowClick}
+        <Button
+          color={'primary'}
+          onClick={onHideClick}
+        >
+          <VisibilityOffIcon />
+        </Button>
+      </Tooltip>
+      <Tooltip
+        title={<Typography variant='body1'>{hideHotkey.key}</Typography>}
+        enterDelay={1000}
+        arrow
       >
-        <VisibilityIcon /> 
-      </Button>
+        <Button
+          color={hiddenStepsIDs.length ? 'warning' : 'primary'}
+          onClick={onShowClick}
+        >
+          <VisibilityIcon /> 
+        </Button>
+      </Tooltip>
     </ButtonGroupWithLabel>
   );
 };

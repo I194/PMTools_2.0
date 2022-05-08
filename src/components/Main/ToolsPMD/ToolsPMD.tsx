@@ -41,6 +41,24 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
 
   const availableReferences: Array<Reference> = ['specimen', 'geographic', 'stratigraphic'];
 
+  const [pcaHotkey, setPcaHotkey] = useState<{key: string, code: string}>({key: 'D', code: 'KeyD'});
+  const [pca0Hotkey, setPca0Hotkey] = useState<{key: string, code: string}>({key: 'O', code: 'KeyO'});
+  const [gcHotkey, setGcHotkey] = useState<{key: string, code: string}>({key: 'G', code: 'KeyG'});
+  const [gcnHotkey, setGcnHotkey] = useState<{key: string, code: string}>({key: 'I', code: 'KeyI'});
+  const [unselectHotkey, setUnselectHotkey] = useState<{key: string, code: string}>({key: 'U', code: 'KeyU'});
+
+  useEffect(() => {
+    const statHotkeys = hotkeys.find(block => block.title === 'Статистические методы')?.hotkeys;
+    const selectionHotkeys = hotkeys.find(block => block.title === 'Выделение точек')?.hotkeys;
+    if (statHotkeys && selectionHotkeys) {
+      setPcaHotkey(statHotkeys.find(hotkey => hotkey.label === 'PCA')!.hotkey);
+      setPca0Hotkey(statHotkeys.find(hotkey => hotkey.label === 'PCA0')!.hotkey);
+      setGcHotkey(statHotkeys.find(hotkey => hotkey.label === 'GC')!.hotkey);
+      setGcnHotkey(statHotkeys.find(hotkey => hotkey.label === 'GCN')!.hotkey);
+      setUnselectHotkey(selectionHotkeys.find(hotkey => hotkey.label === 'Убрать выделение')!.hotkey);
+    }
+  }, [hotkeys]);
+
   useEffect(() => {
     if (treatmentData) {
       setAllDataPMD(treatmentData);
@@ -49,7 +67,6 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
 
   useEffect(() => {
     if ((!selectedStepsIDs || !selectedStepsIDs.length) && statisticsMode) {
-      console.log('what', selectedStepsIDs, statisticsMode);
       setShowStepsInput(true);
     } else {
       setShowStepsInput(false);
@@ -57,7 +74,6 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   }, [selectedStepsIDs, statisticsMode]);
 
   useEffect(() => {
-    console.log('what', hotkeysActive)
     if (hotkeysActive) window.addEventListener("keydown", handleHotkeys);
     else window.removeEventListener("keydown", handleHotkeys);
     return () => {
@@ -89,33 +105,24 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
 
   const handleHotkeys = (event: KeyboardEvent) => {
     const keyCode = event.code;
-    const statHotkeys = hotkeys.find(block => block.title === 'Статистические методы')?.hotkeys;
-    const selectionHotkeys = hotkeys.find(block => block.title === 'Выделение точек')?.hotkeys;
-    if (!statHotkeys || !selectionHotkeys) return;
 
-    const pcaHotkey = statHotkeys.find(hotkey => hotkey.label === 'PCA')?.hotkey.code;
-    const pca0Hotkey = statHotkeys.find(hotkey => hotkey.label === 'PCA0')?.hotkey.code;
-    const gcHotkey = statHotkeys.find(hotkey => hotkey.label === 'GC')?.hotkey.code;
-    const gcnHotkey = statHotkeys.find(hotkey => hotkey.label === 'GCN')?.hotkey.code;
-    const unselectHotkey = selectionHotkeys.find(hotkey => hotkey.label === 'Убрать выделение')?.hotkey.code;
-
-    if (keyCode === pcaHotkey) {
+    if (keyCode === pcaHotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('pca'))
     };
-    if (keyCode === pca0Hotkey) {
+    if (keyCode === pca0Hotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('pca0'))
     };
-    if (keyCode === gcHotkey) {
+    if (keyCode === gcHotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('gc'))
     };
-    if (keyCode === gcnHotkey) {
+    if (keyCode === gcnHotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('gcn'))
     };
-    if (keyCode === unselectHotkey) {
+    if (keyCode === unselectHotkey.code) {
       event.preventDefault();
       dispatch(setSelectedStepsIDs(null));
     };
@@ -168,10 +175,10 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
         }
       </ButtonGroupWithLabel>
       <ButtonGroupWithLabel label='Статистический метод'>
-        <StatModeButton mode='pca'/>
-        <StatModeButton mode='pca0'/>
-        <StatModeButton mode='gc'/>
-        <StatModeButton mode='gcn'/>
+        <StatModeButton mode='pca' hotkey={pcaHotkey.key}/>
+        <StatModeButton mode='pca0' hotkey={pca0Hotkey.key}/>
+        <StatModeButton mode='gc' hotkey={gcHotkey.key}/>
+        <StatModeButton mode='gcn' hotkey={gcnHotkey.key}/>
       </ButtonGroupWithLabel>
       <ButtonGroupWithLabel label='Смотреть статистику'>
         <Button onClick={() => setAllFilesStatOpen(true)}>По всем файлам</Button>
