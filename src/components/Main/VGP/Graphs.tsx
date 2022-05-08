@@ -23,22 +23,22 @@ const Graphs: FC = () => {
 
   const [wv, wh] = useWindowSize();
 
-  const graphRef = useRef<HTMLDivElement>(null);
+  const vgpGraphRef = useRef<HTMLDivElement>(null);
 
   const [graphSize, setGraphSize] = useState<number>(300);
 
   useEffect(() => {
-    const graphWidth = graphRef.current?.offsetWidth;
-    const graphHeight = graphRef.current?.offsetHeight;
+    const graphWidth = vgpGraphRef.current?.offsetWidth;
+    const graphHeight = vgpGraphRef.current?.offsetHeight;
     if (graphWidth && graphHeight) {
       const minBoxSize = Math.min(graphWidth, graphHeight);
       setGraphSize(minBoxSize - 112);
     };
-  }, [graphRef, wv, wh]);
+  }, [vgpGraphRef, wv, wh]);
 
   if (!dataToShow) return (
     <GraphsSkeleton 
-      graph={{node: null, ref: graphRef}} 
+      graph={{node: null, ref: vgpGraphRef}} 
     />
   );
 
@@ -51,7 +51,7 @@ const Graphs: FC = () => {
           height={graphSize}
           data={dataToShow}
         />,
-        ref: graphRef
+        ref: vgpGraphRef
       }}
     />
   )
