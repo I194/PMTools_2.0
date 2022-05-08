@@ -77,7 +77,7 @@ const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowStepsInput, show
   return (
     <ButtonGroupWithLabel label='Шаги'>
       <Tooltip
-        title={<Typography variant='body1'>{showHotkey.key}</Typography>}
+        title={<Typography variant='body1'>{hideHotkey.key}</Typography>}
         enterDelay={1000}
         arrow
       >
@@ -89,7 +89,7 @@ const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowStepsInput, show
         </Button>
       </Tooltip>
       <Tooltip
-        title={<Typography variant='body1'>{hideHotkey.key}</Typography>}
+        title={<Typography variant='body1'>{showHotkey.key}</Typography>}
         enterDelay={1000}
         arrow
       >
