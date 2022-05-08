@@ -16,7 +16,10 @@ interface IShowHideDotsButtons {
 const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowStepsInput, showStepsInput }) => {
 
   const dispatch = useAppDispatch();
+
+  const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
   const { hiddenStepsIDs, selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
+
   const [hideSteps, setHideSteps] = useState<boolean>(false);
 
   const onShowClick = () => {
@@ -24,13 +27,13 @@ const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowStepsInput, show
   };
 
   const onHideClick = () => {
-    if (!selectedStepsIDs || !selectedStepsIDs.length) {
-      setShowStepsInput(true);
-    };
     setHideSteps(true);
   };
 
   useEffect(() => {
+    if ((!selectedStepsIDs || !selectedStepsIDs.length) && hideSteps) {
+      setShowStepsInput(true);
+    }
     if (hideSteps && selectedStepsIDs && selectedStepsIDs.length) {
       dispatch(addHiddenStepsIDs(selectedStepsIDs));
       dispatch(setSelectedStepsIDs(null));
@@ -40,24 +43,30 @@ const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowStepsInput, show
   }, [hideSteps, selectedStepsIDs]);
 
   useEffect(() => {
-    if (showStepsInput) window.removeEventListener("keydown", handleShowHideClick);
-    else window.addEventListener("keydown", handleShowHideClick);
+    if (hotkeysActive) window.addEventListener("keydown", handleHotkeys);
+    else window.removeEventListener("keydown", handleHotkeys);
     return () => {
-      window.removeEventListener("keydown", handleShowHideClick);
+      window.removeEventListener("keydown", handleHotkeys);
     };
-  }, [showStepsInput]);
+  }, [hotkeysActive, hotkeys]);
 
-  const handleShowHideClick = useCallback((e) => {
-    const key = (e.code as string);
-    if (key === 'KeyS') {
-      e.preventDefault();
+  const handleHotkeys = (event: KeyboardEvent) => {
+    const keyCode = event.code;
+    const visibilityHotkeys = hotkeys.find(block => block.title === 'Видимость точек')?.hotkeys;
+    if (!visibilityHotkeys) return;
+
+    const showHotkey = visibilityHotkeys.find(hotkey => hotkey.label === 'Показать точки')?.hotkey.code;
+    const hideHotkey = visibilityHotkeys.find(hotkey => hotkey.label === 'Скрыть точки')?.hotkey.code;
+
+    if (keyCode === showHotkey) {
+      event.preventDefault();
       onShowClick();
     };
-    if (key === 'KeyH') {
-      e.preventDefault();
+    if (keyCode === hideHotkey) {
+      event.preventDefault();
       onHideClick();
     };
-  }, []);
+  };
 
   return (
     <ButtonGroupWithLabel label='Шаги'>

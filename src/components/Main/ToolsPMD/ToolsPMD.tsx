@@ -28,7 +28,8 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
 
   const dispatch = useAppDispatch();
 
-  const { treatmentFiles } = useAppSelector(state => state.filesReducer)
+  const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
+  const { treatmentFiles } = useAppSelector(state => state.filesReducer);
   const { treatmentData, currentDataPMDid } = useAppSelector(state => state.parsedDataReducer);
   const { reference, selectedStepsIDs, statisticsMode, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
 
@@ -48,6 +49,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
 
   useEffect(() => {
     if ((!selectedStepsIDs || !selectedStepsIDs.length) && statisticsMode) {
+      console.log('what', selectedStepsIDs, statisticsMode);
       setShowStepsInput(true);
     } else {
       setShowStepsInput(false);
@@ -55,12 +57,13 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   }, [selectedStepsIDs, statisticsMode]);
 
   useEffect(() => {
-    if (showStepsInput) window.removeEventListener("keydown", handleHotkeys);
-    else window.addEventListener("keydown", handleHotkeys);
+    console.log('what', hotkeysActive)
+    if (hotkeysActive) window.addEventListener("keydown", handleHotkeys);
+    else window.removeEventListener("keydown", handleHotkeys);
     return () => {
       window.removeEventListener("keydown", handleHotkeys);
     };
-  }, [showStepsInput]);
+  }, [hotkeysActive, hotkeys]);
   
   useEffect(() => {
     setCoordinateSystem(reference);
@@ -84,30 +87,39 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
     dispatch(setReference(selectedReference));
   };
 
-  const handleHotkeys = useCallback((e) => {
-    const key = (e.code as string);
-    const { ctrlKey, shiftKey, altKey } = e; 
-    if (key === 'KeyD') {
-      e.preventDefault();
+  const handleHotkeys = (event: KeyboardEvent) => {
+    const keyCode = event.code;
+    const statHotkeys = hotkeys.find(block => block.title === 'Статистические методы')?.hotkeys;
+    const selectionHotkeys = hotkeys.find(block => block.title === 'Выделение точек')?.hotkeys;
+    if (!statHotkeys || !selectionHotkeys) return;
+
+    const pcaHotkey = statHotkeys.find(hotkey => hotkey.label === 'PCA')?.hotkey.code;
+    const pca0Hotkey = statHotkeys.find(hotkey => hotkey.label === 'PCA0')?.hotkey.code;
+    const gcHotkey = statHotkeys.find(hotkey => hotkey.label === 'GC')?.hotkey.code;
+    const gcnHotkey = statHotkeys.find(hotkey => hotkey.label === 'GCN')?.hotkey.code;
+    const unselectHotkey = selectionHotkeys.find(hotkey => hotkey.label === 'Убрать выделение')?.hotkey.code;
+
+    if (keyCode === pcaHotkey) {
+      event.preventDefault();
       dispatch(setStatisticsMode('pca'))
     };
-    if (key === 'KeyO') {
-      e.preventDefault();
+    if (keyCode === pca0Hotkey) {
+      event.preventDefault();
       dispatch(setStatisticsMode('pca0'))
     };
-    if (key === 'KeyG') {
-      e.preventDefault();
+    if (keyCode === gcHotkey) {
+      event.preventDefault();
       dispatch(setStatisticsMode('gc'))
     };
-    if (key === 'KeyI') {
-      e.preventDefault();
+    if (keyCode === gcnHotkey) {
+      event.preventDefault();
       dispatch(setStatisticsMode('gcn'))
     };
-    if (key === 'KeyU') {
-      e.preventDefault();
+    if (keyCode === unselectHotkey) {
+      event.preventDefault();
       dispatch(setSelectedStepsIDs(null));
     };
-  }, []);
+  };
 
   if (!data) return <ToolsPMDSkeleton />;
 

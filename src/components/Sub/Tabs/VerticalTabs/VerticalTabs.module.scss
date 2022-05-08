@@ -1,0 +1,20 @@
+.wrapper {
+  margin: 0 40px 0 16px;
+  max-height: 100%;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+.content {
+  // width: calc(100% - 56px - 16px);
+  // margin: 0 40px 0 16px;
+  // max-height: 100%;
+  padding-right: 16px;
+
+  display: flex;
+  flex-direction: column;
+}

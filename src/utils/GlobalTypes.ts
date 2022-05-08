@@ -164,3 +164,17 @@ export type DataGridPMDRow = {
 export type DataGridDIRRow = Omit<StatisitcsInterpretation, 'demagType' | 'parentFile' | 'rawData' | 'steps'> & {readonly id: number};
 
 export type ThemeMode = 'dark' | 'light';
+
+export type HotkeysType = Array<{
+  id: number;
+  title: string;
+  hotkeys: Array<{
+    id: number;
+    label: string;
+    disabled?: boolean;
+    hotkey: {
+      key: string;
+      code: string;
+    };
+  }>;
+}>;

@@ -36,7 +36,8 @@ interface IToolsDIR {
 const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
 
   const dispatch = useAppDispatch();
-
+  
+  const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
   const { dirStatFiles } = useAppSelector(state => state.filesReducer);
   const { dirStatData, currentDataDIRid } = useAppSelector(state => state.parsedDataReducer);
   const { selectedDirectionsIDs, hiddenDirectionsIDs, statisticsMode, reference } = useAppSelector(state => state.dirPageReducer); 
@@ -67,37 +68,47 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
 
   // добавляет слушатель нажатий на клавиатуру (для использования сочетаний клавиш)
   useEffect(() => {
-    if (showIndexesInput) window.removeEventListener("keydown", handleHotkeys);
-    else window.addEventListener("keydown", handleHotkeys);
+    if (hotkeysActive) window.addEventListener("keydown", handleHotkeys);
+    else window.removeEventListener("keydown", handleHotkeys);
     return () => {
       window.removeEventListener("keydown", handleHotkeys);
     };
-  }, [showIndexesInput]);
+  }, [hotkeysActive, hotkeys]);
 
   // обработчик нажатий на клавиатуру
-  const handleHotkeys = useCallback((e) => {
-    const key = (e.code as string);
-    if (key === 'KeyF') {
-      e.preventDefault();
+  const handleHotkeys = (event: KeyboardEvent) => {
+    const keyCode = event.code;
+    const statHotkeys = hotkeys.find(block => block.title === 'Статистические методы')?.hotkeys;
+    const selectionHotkeys = hotkeys.find(block => block.title === 'Выделение точек')?.hotkeys;
+    if (!statHotkeys || !selectionHotkeys) return;
+
+    const fisherHotkey = statHotkeys.find(hotkey => hotkey.label === 'Fisher')?.hotkey.code;
+    const mcFaddenHotkey = statHotkeys.find(hotkey => hotkey.label === 'McFadden')?.hotkey.code;
+    const gcHotkey = statHotkeys.find(hotkey => hotkey.label === 'GC')?.hotkey.code;
+    const gcnHotkey = statHotkeys.find(hotkey => hotkey.label === 'GCN')?.hotkey.code;
+    const unselectHotkey = selectionHotkeys.find(hotkey => hotkey.label === 'Убрать выделение')?.hotkey.code
+
+    if (keyCode === fisherHotkey) {
+      event.preventDefault();
       dispatch(setStatisticsMode('fisher'))
     };
-    if (key === 'KeyM') {
-      e.preventDefault();
+    if (keyCode === mcFaddenHotkey) {
+      event.preventDefault();
       dispatch(setStatisticsMode('mcFadden'))
     };
-    if (key === 'KeyG') {
-      e.preventDefault();
+    if (keyCode === gcHotkey) {
+      event.preventDefault();
       dispatch(setStatisticsMode('gc'))
     };
-    if (key === 'KeyI') {
-      e.preventDefault();
+    if (keyCode === gcnHotkey) {
+      event.preventDefault();
       dispatch(setStatisticsMode('gcn'))
     };
-    if (key === 'KeyU') {
-      e.preventDefault();
+    if (keyCode === unselectHotkey) {
+      event.preventDefault();
       dispatch(setSelectedDirectionsIDs([]));
     };
-  }, []);
+  };
 
   // обработчик выбранной системы координат 
   const handleReferenceSelect = (selectedReference: Reference) => {
@@ -208,7 +219,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
           isDraggable={true}
         >
           <InputApply 
-            label={`Введите номера точек (${statisticsMode})`}
+            label={`Введите номера точек (${statisticsMode || 'hide dirs'})`}
             helperText="Валидные примеры: 1-9 || 2,4,8,9 || 2-4;8,9 || 2-4;8,9;12-14"
             onApply={handleEnteredDotsIndexesApply}
             placeholder={`1-${data.interpretations.length}`}

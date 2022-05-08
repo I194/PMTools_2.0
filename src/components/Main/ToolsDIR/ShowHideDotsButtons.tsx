@@ -15,7 +15,10 @@ interface IShowHideDotsButtons {
 const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowIndexesInput, showIndexesInput }) => {
 
   const dispatch = useAppDispatch();
+  
+  const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
   const { selectedDirectionsIDs, hiddenDirectionsIDs } = useAppSelector(state => state.dirPageReducer); 
+
   const [hideDirs, setHideDirs] = useState<boolean>(false);
 
   const onShowClick = () => {
@@ -23,14 +26,13 @@ const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowIndexesInput, sh
   };
 
   const onHideClick = () => {
-    if (!selectedDirectionsIDs || !selectedDirectionsIDs.length) {
-      setShowIndexesInput(true);
-    };
     setHideDirs(true);
   };
 
   useEffect(() => {
-    console.log(hideDirs, selectedDirectionsIDs)
+    if ((!selectedDirectionsIDs || !selectedDirectionsIDs.length) && hideDirs) {
+      setShowIndexesInput(true);
+    }
     if (hideDirs && selectedDirectionsIDs && selectedDirectionsIDs.length) {
       console.log(selectedDirectionsIDs)
       dispatch(addHiddenDirectionsIDs(selectedDirectionsIDs));
@@ -41,24 +43,31 @@ const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowIndexesInput, sh
   }, [hideDirs, selectedDirectionsIDs]);
 
   useEffect(() => {
-    if (showIndexesInput) window.removeEventListener("keydown", handleShowHideClick);
-    else window.addEventListener("keydown", handleShowHideClick);
+    console.log('what', hotkeysActive)
+    if (hotkeysActive) window.addEventListener("keydown", handleHotkeys);
+    else window.removeEventListener("keydown", handleHotkeys);
     return () => {
-      window.removeEventListener("keydown", handleShowHideClick);
+      window.removeEventListener("keydown", handleHotkeys);
     };
-  }, [showIndexesInput]);
+  }, [hotkeysActive, hotkeys]);
 
-  const handleShowHideClick = useCallback((e) => {
-    const key = (e.code as string);
-    if (key === 'KeyS') {
-      e.preventDefault();
+  const handleHotkeys = (event: KeyboardEvent) => {
+    const keyCode = event.code;
+    const visibilityHotkeys = hotkeys.find(block => block.title === 'Видимость точек')?.hotkeys;
+    if (!visibilityHotkeys) return;
+
+    const showHotkey = visibilityHotkeys.find(hotkey => hotkey.label === 'Показать точки')?.hotkey.code;
+    const hideHotkey = visibilityHotkeys.find(hotkey => hotkey.label === 'Скрыть точки')?.hotkey.code;
+
+    if (keyCode === showHotkey) {
+      event.preventDefault();
       onShowClick();
     };
-    if (key === 'KeyH') {
-      e.preventDefault();
+    if (keyCode === hideHotkey) {
+      event.preventDefault();
       onHideClick();
     };
-  }, []);
+  };
 
   return (
     <ButtonGroupWithLabel label='Направления'>
