@@ -6,14 +6,17 @@ import { Button, Tooltip, Typography } from "@mui/material";
 import ButtonGroupWithLabel from "../../Sub/Buttons/ButtonGroupWithLabel/ButtonGroupWithLabel";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import ModalWrapper from '../../Sub/Modal/ModalWrapper';
+import InputApply from '../../Sub/InputApply/InputApply';
+import parseDotsIndexesInput from "../../../utils/parsers/parseDotsIndexesInput";
+import { enteredIndexesToIDsPMD } from "../../../utils/parsers/enteredIndexesToIDs";
 import { IPmdData } from "../../../utils/GlobalTypes";
 
-interface IShowHideDotsButtons {
-  setShowStepsInput: React.Dispatch<React.SetStateAction<boolean>>;
-  showStepsInput: boolean;
-};
+type Props = {
+  data: IPmdData;
+}
 
-const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowStepsInput, showStepsInput }) => {
+const ShowHideDotsButtons = ({ data }: Props) => {
 
   const dispatch = useAppDispatch();
 
@@ -21,6 +24,7 @@ const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowStepsInput, show
   const { hiddenStepsIDs, selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
 
   const [hideSteps, setHideSteps] = useState<boolean>(false);
+  const [showStepsInput, setShowStepsInput] = useState<boolean>(false);
 
   const onShowClick = () => {
     dispatch(setHiddenStepsIDs([]));
@@ -74,33 +78,60 @@ const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowStepsInput, show
     };
   };
 
+  const handleEnteredStepsApply = (steps: string) => {
+    const parsedIndexes = parseDotsIndexesInput(steps || `1-${data.steps.length}`);
+    const IDs = enteredIndexesToIDsPMD(parsedIndexes, hiddenStepsIDs, data!);
+    dispatch(setSelectedStepsIDs(IDs));
+    setShowStepsInput(false);
+  };
+
   return (
-    <ButtonGroupWithLabel label='Шаги'>
-      <Tooltip
-        title={<Typography variant='body1'>{hideHotkey.key}</Typography>}
-        enterDelay={1000}
-        arrow
-      >
-        <Button
-          color={'primary'}
-          onClick={onHideClick}
+    <>
+      <ButtonGroupWithLabel label='Шаги'>
+        <Tooltip
+          title={<Typography variant='body1'>{hideHotkey.key}</Typography>}
+          enterDelay={1000}
+          arrow
         >
-          <VisibilityOffIcon />
-        </Button>
-      </Tooltip>
-      <Tooltip
-        title={<Typography variant='body1'>{showHotkey.key}</Typography>}
-        enterDelay={1000}
-        arrow
-      >
-        <Button
-          color={hiddenStepsIDs.length ? 'warning' : 'primary'}
-          onClick={onShowClick}
+          <Button
+            color={'primary'}
+            onClick={onHideClick}
+          >
+            <VisibilityOffIcon />
+          </Button>
+        </Tooltip>
+        <Tooltip
+          title={<Typography variant='body1'>{showHotkey.key}</Typography>}
+          enterDelay={1000}
+          arrow
         >
-          <VisibilityIcon /> 
-        </Button>
-      </Tooltip>
-    </ButtonGroupWithLabel>
+          <Button
+            color={hiddenStepsIDs.length ? 'warning' : 'primary'}
+            onClick={onShowClick}
+          >
+            <VisibilityIcon /> 
+          </Button>
+        </Tooltip>
+      </ButtonGroupWithLabel>
+      {
+        showStepsInput && 
+        <ModalWrapper
+          open={showStepsInput}
+          setOpen={setShowStepsInput}
+          size={{width: '26vw', height: '14vh'}}
+          position={{left: '50%', top: '20%'}}
+          onClose={() => {setHideSteps(false)}}
+          isDraggable={true}
+        >
+          <InputApply 
+            label={`Введите номера шагов (hide steps)`}
+            helperText="Валидные примеры: 1-9 || 2,4,8,9 || 2-4;8,9 || 2-4;8,9;12-14"
+            onApply={handleEnteredStepsApply}
+            placeholder={`1-${data.steps.length}`}
+          />
+        </ModalWrapper>
+      }
+    </>
   );
 };
 

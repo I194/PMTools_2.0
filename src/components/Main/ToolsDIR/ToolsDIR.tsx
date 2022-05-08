@@ -196,7 +196,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
       <ButtonGroupWithLabel label='Смотреть статистику'>
         <Button onClick={() => setAllFilesStatOpen(true)}>По всем файлам</Button>
       </ButtonGroupWithLabel>
-      <ShowHideDotsButtons setShowIndexesInput={setShowIndexesInput} showIndexesInput={showIndexesInput}/>
+      <ShowHideDotsButtons data={data} />
       <ButtonGroupWithLabel label='По всем сайтам'>
         <Button onClick={() => setShowVGP(true)}>Построить VGP</Button>
       </ButtonGroupWithLabel>
@@ -227,7 +227,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
           isDraggable={true}
         >
           <InputApply 
-            label={`Введите номера точек (${statisticsMode || 'hide dirs'})`}
+            label={`Введите номера точек (${statisticsMode})`}
             helperText="Валидные примеры: 1-9 || 2,4,8,9 || 2-4;8,9 || 2-4;8,9;12-14"
             onApply={handleEnteredDotsIndexesApply}
             placeholder={`1-${data.interpretations.length}`}

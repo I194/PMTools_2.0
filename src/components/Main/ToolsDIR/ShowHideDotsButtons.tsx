@@ -5,14 +5,23 @@ import { Button, Tooltip, Typography } from "@mui/material";
 import ButtonGroupWithLabel from "../../Sub/Buttons/ButtonGroupWithLabel/ButtonGroupWithLabel";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { addHiddenDirectionsIDs, sethiddenDirectionsIDs, setSelectedDirectionsIDs, setStatisticsMode } from "../../../services/reducers/dirPage";
+import { 
+  addHiddenDirectionsIDs, 
+  sethiddenDirectionsIDs, 
+  setSelectedDirectionsIDs, 
+  setStatisticsMode 
+} from "../../../services/reducers/dirPage";
+import { IDirData } from '../../../utils/GlobalTypes';
+import ModalWrapper from "../../Sub/Modal/ModalWrapper";
+import InputApply from "../../Sub/InputApply/InputApply";
+import parseDotsIndexesInput from "../../../utils/parsers/parseDotsIndexesInput";
+import { enteredIndexesToIDsDIR } from "../../../utils/parsers/enteredIndexesToIDs";
 
-interface IShowHideDotsButtons {
-  setShowIndexesInput: React.Dispatch<React.SetStateAction<boolean>>;
-  showIndexesInput: boolean;
-};
+type Props = {
+  data: IDirData;
+}
 
-const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowIndexesInput, showIndexesInput }) => {
+const ShowHideDotsButtons = ({ data }: Props) => {
 
   const dispatch = useAppDispatch();
   
@@ -20,6 +29,7 @@ const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowIndexesInput, sh
   const { selectedDirectionsIDs, hiddenDirectionsIDs } = useAppSelector(state => state.dirPageReducer); 
 
   const [hideDirs, setHideDirs] = useState<boolean>(false);
+  const [showIndexesInput, setShowIndexesInput] = useState<boolean>(false);
 
   const onShowClick = () => {
     dispatch(sethiddenDirectionsIDs([]));
@@ -75,33 +85,60 @@ const ShowHideDotsButtons: FC<IShowHideDotsButtons> = ({ setShowIndexesInput, sh
     };
   };
 
+  const handleEnteredDotsIndexesApply = (steps: string) => {
+    const parsedIndexes = parseDotsIndexesInput(steps || `1-${data?.interpretations.length}`);
+    const IDs = enteredIndexesToIDsDIR(parsedIndexes, hiddenDirectionsIDs, data!);
+    dispatch(setSelectedDirectionsIDs(IDs));
+    setShowIndexesInput(false);
+  };
+
   return (
-    <ButtonGroupWithLabel label='Направления'>
-      <Tooltip
-        title={<Typography variant='body1'>{hideHotkey.key}</Typography>}
-        enterDelay={1000}
-        arrow
-      >
-        <Button
-          color={'primary'}
-          onClick={onHideClick}
+    <>
+      <ButtonGroupWithLabel label='Направления'>
+        <Tooltip
+          title={<Typography variant='body1'>{hideHotkey.key}</Typography>}
+          enterDelay={1000}
+          arrow
         >
-          <VisibilityOffIcon />
-        </Button>
-      </Tooltip>
-      <Tooltip
-        title={<Typography variant='body1'>{showHotkey.key}</Typography>}
-        enterDelay={1000}
-        arrow
-      >
-        <Button
-          color={hiddenDirectionsIDs.length ? 'warning' : 'primary'}
-          onClick={onShowClick}
+          <Button
+            color={'primary'}
+            onClick={onHideClick}
+          >
+            <VisibilityOffIcon />
+          </Button>
+        </Tooltip>
+        <Tooltip
+          title={<Typography variant='body1'>{showHotkey.key}</Typography>}
+          enterDelay={1000}
+          arrow
         >
-          <VisibilityIcon /> 
-        </Button>
-      </Tooltip>
-    </ButtonGroupWithLabel>
+          <Button
+            color={hiddenDirectionsIDs.length ? 'warning' : 'primary'}
+            onClick={onShowClick}
+          >
+            <VisibilityIcon /> 
+          </Button>
+        </Tooltip>
+      </ButtonGroupWithLabel>
+      {
+        showIndexesInput && 
+        <ModalWrapper
+          open={showIndexesInput}
+          setOpen={setShowIndexesInput}
+          size={{width: '26vw', height: '14vh'}}
+          position={{left: '50%', top: '20%'}}
+          onClose={() => {setHideDirs(false)}}
+          isDraggable={true}
+        >
+          <InputApply 
+            label={`Введите номера точек (hide dirs)`}
+            helperText="Валидные примеры: 1-9 || 2,4,8,9 || 2-4;8,9 || 2-4;8,9;12-14"
+            onApply={handleEnteredDotsIndexesApply}
+            placeholder={`1-${data.interpretations.length}`}
+          />
+        </ModalWrapper>
+      }
+    </>
   );
 };
 
