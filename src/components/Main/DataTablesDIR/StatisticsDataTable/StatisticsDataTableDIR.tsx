@@ -65,6 +65,9 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ data }) => {
     { field: 'confidenceRadius', headerName: 'MAD', type: 'string', flex: 1,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
+    { field: 'accuracy', headerName: 'k', type: 'string', flex: 1,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
     {
       field: 'actions',
       type: 'actions',
@@ -101,7 +104,7 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ data }) => {
   if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
 
   const rows: Array<Omit<DataGridDIRRow, 'comment' | 'id' | 'label'>> = data.map((statistics, index) => {
-    const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadius } = statistics;
+    const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadius, k } = statistics;
     return {
       id: label,
       code, 
@@ -112,6 +115,7 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ data }) => {
       Dstrat: +Dstrat.toFixed(1),
       Istrat: +Istrat.toFixed(1),
       confidenceRadius: +confidenceRadius.toFixed(1),
+      accuracy: k ? +k.toFixed(1) : 0,
     };
   });
 

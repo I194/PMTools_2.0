@@ -141,10 +141,18 @@ export type RawStatisticsDIR = {
     geographic: {
       direction: Direction;
       MAD: number;
+      k?: number;
+      R?: number;
+      N?: number;
+      csd?: number;
     },
     stratigraphic: {
       direction: Direction;
       MAD: number;
+      k?: number;
+      R?: number;
+      N?: number;
+      csd?: number;
     };
   };
 };

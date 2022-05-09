@@ -20,6 +20,7 @@ const rawStatisticsDIRToInterpretation = (
   const [Dstrat, Istrat] = statistics.mean.stratigraphic.direction.toArray();
 
   const confidenceRadius = statistics.mean.geographic.MAD;
+  const accuracy = statistics.mean.geographic.k;
   const comment = '';
   const demagType = selectedDirections[0].demagType;
 
@@ -35,6 +36,7 @@ const rawStatisticsDIRToInterpretation = (
     Dstrat: +Dstrat.toFixed(1),
     Istrat: +Istrat.toFixed(1),
     confidenceRadius: +confidenceRadius.toFixed(1),
+    k: +(accuracy || 0).toFixed(1),
     comment,
     demagType,
     rawData: statistics

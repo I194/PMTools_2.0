@@ -72,6 +72,10 @@ export const fisherMean = (
   const res = {
     direction: meanDirection,
     MAD: a95,
+    k,
+    N,
+    R,
+    csd,
   };
   
   // const res = {

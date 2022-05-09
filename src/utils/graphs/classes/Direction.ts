@@ -51,6 +51,16 @@ class Direction {
     return this.toCartesian().angle(direction.toCartesian());
   };
 
+  flip = () => {
+    // flips lower hemisphere data to upper hemisphere
+    let dec = this.declination;
+    let inc = this.inclination;
+    if (inc < 0) {
+      inc = -inc;
+      dec = (dec + 180) % 360;
+    };
+    return new Direction(dec, inc, this.length);
+  };
 }
 
 export default Direction;
