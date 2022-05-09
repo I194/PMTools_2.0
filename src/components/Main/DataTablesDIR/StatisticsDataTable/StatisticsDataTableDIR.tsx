@@ -115,7 +115,7 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ data }) => {
       Dstrat: +Dstrat.toFixed(1),
       Istrat: +Istrat.toFixed(1),
       confidenceRadius: +confidenceRadius.toFixed(1),
-      accuracy: k ? +k.toFixed(1) : 0,
+      accuracy: +(k || 0).toFixed(1),
     };
   });
 

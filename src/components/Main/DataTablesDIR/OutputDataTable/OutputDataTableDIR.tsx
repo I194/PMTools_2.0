@@ -78,6 +78,9 @@ const OutputDataTableDIR: FC = () => {
     { field: 'confidenceRadius', headerName: 'MAD', type: 'string', width: 70,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
+    { field: 'accuracy', headerName: 'k', type: 'string', width: 70,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
     { field: 'comment', headerName: 'Comment', type: 'string', flex: 1, editable: true, cellClassName: styles[`editableCell_${theme.palette.mode}`] },
     {
       field: 'actions',
@@ -137,7 +140,7 @@ const OutputDataTableDIR: FC = () => {
   if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
 
   const rows: Array<Omit<DataGridDIRRow, 'id' | 'label'>> = data.map((statistics, index) => {
-    const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadius, comment } = statistics;
+    const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadius, k, comment } = statistics;
     return {
       id: label,
       code, 
@@ -148,6 +151,7 @@ const OutputDataTableDIR: FC = () => {
       Dstrat: +Dstrat.toFixed(1),
       Istrat: +Istrat.toFixed(1),
       confidenceRadius: +confidenceRadius.toFixed(1),
+      accuracy: +(k || 0).toFixed(1),
       comment
     };
   });
