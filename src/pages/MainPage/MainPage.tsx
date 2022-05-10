@@ -4,7 +4,7 @@ import { useTheme } from '@mui/material/styles';
 import {
   textColor,
 } from '../../utils/ThemeConstants';
-import { DynamicLogo, NavPanel, About, Description } from '../../components/MainPage';
+import { DynamicLogo, NavPanel, About, Description, FeatureCards } from '../../components/MainPage';
 import { Typography } from '@mui/material';
 
 const MainPage: FC = ({}) => {
@@ -18,6 +18,7 @@ const MainPage: FC = ({}) => {
       </div>
       <About />
       <Description />
+      <FeatureCards />
     </>
   )
 }
