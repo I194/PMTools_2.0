@@ -157,6 +157,34 @@ export type RawStatisticsDIR = {
   };
 };
 
+export type FoldTestResult = {
+  untilts: Array<number>;
+  savedBootstraps: Array<Array<{x: number, y: number}>>;
+};
+
+export type CoordsComparison =  {
+  first: Array<number>;
+  second: Array<number>;
+};
+
+export type ReversalTestResult = {
+  x: CoordsComparison;
+  y: CoordsComparison;
+  z: CoordsComparison;
+};
+
+export type conglomeratesTestResult = {
+  N: number;
+  R: number;
+  Ro_95: number;
+  Ro_99: number;
+  resultDescription: {
+    ru: string;
+    en: string;
+  };
+} | null;
+
+
 export type DataGridPMDRow = {
   id: number;
   step: string;

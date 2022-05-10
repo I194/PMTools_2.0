@@ -38,7 +38,7 @@ const conglomeratesTest = ({
 
   if (N < 5) {
     alert('Слишком мало направлений (менее 5), тест конгломератов провести нельзя.');
-    return;
+    return null;
   } else if (N < 21) {
     Ro_95 = Ro_values[N][95];
      Ro_99 = Ro_values[N][99];

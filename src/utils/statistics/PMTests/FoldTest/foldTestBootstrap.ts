@@ -1,4 +1,4 @@
-import { IDirData } from "../../../GlobalTypes";
+import { FoldTestResult, IDirData } from "../../../GlobalTypes";
 import Coordinates from "../../../graphs/classes/Coordinates";
 import Direction from "../../../graphs/classes/Direction";
 import { Reference } from "../../../graphs/types";
@@ -8,24 +8,16 @@ import { TMatrix } from "../../matrix";
 
 type CoordsWithBeddingPars = {
   coordinates: Coordinates;
-  beddingStrike: number;
+  beddingAzimuth: number; // azimuth = strike + 90 degrees
   beddingDip: number;
 };
 
-type Props = {
-  dataToAnalyze: IDirData;
-  numberOfSimulations?: number;
-  setResult?: React.Dispatch<React.SetStateAction<{
-    untilts: Array<number>;
-    savedBootstraps: Array<Array<{x: number, y: number}>>;
-  }>>;
-}
-
-const foldTestBootstrap = ({
-  dataToAnalyze,
+const foldTestBootstrap = (
+  dataToAnalyze: IDirData,
   numberOfSimulations = 1000,
-  setResult
-}: Props) => {
+  setResult?: React.Dispatch<React.SetStateAction<FoldTestResult>>,
+  setIsRunning?: React.Dispatch<React.SetStateAction<boolean>>
+) => {
   // Fold Test by L. Tauxe* and G.S. Watson, 1994
   // "We combine eigen analysis and parameter estimation techniques
   // for a newly constituted, more versatile fold test.
@@ -50,8 +42,8 @@ const foldTestBootstrap = ({
     const cartesianStrat = directionStrat.toCartesian();
 
     const bedPars = findBed(cartesianGeo, cartesianStrat);
-    cutoffDataGeo.push({coordinates: cartesianGeo, beddingStrike: bedPars.strike, beddingDip: bedPars.dip});
-    cutoffDataStrat.push({coordinates: cartesianStrat, beddingStrike: bedPars.strike, beddingDip: bedPars.dip});
+    cutoffDataGeo.push({coordinates: cartesianGeo, beddingAzimuth: bedPars.azimuth, beddingDip: bedPars.dip});
+    cutoffDataStrat.push({coordinates: cartesianStrat, beddingAzimuth: bedPars.azimuth, beddingDip: bedPars.dip});
   });
 
   // Combine all geographic components to a single array
@@ -82,6 +74,7 @@ const foldTestBootstrap = ({
     if (++iteration > numberOfSimulations) {
       if (setResult) setResult({untilts, savedBootstraps});
       else localStorage.setItem("foldTestBootstrap", JSON.stringify({untilts: untilts, bootstrap: savedBootstraps}))
+      setIsRunning?.(false);
       return {untilts, savedBootstraps};
     };
 
@@ -153,10 +146,11 @@ function findBed(cartesianCoordsGeo: Coordinates, cartesianCoordsStrat: Coordina
     dip = -dip;
     strike += 180;
   };
-  if (strike < 0) strike += 360;
-  if (strike > 360) strike -= 360;
+  let azimuth = strike + 90; // here we changing from strike to azimuth
+  if (azimuth < 0) azimuth += 360;
+  if (azimuth > 360) azimuth -= 360;
 
-  return {strike: strike, dip: dip};
+  return {azimuth, dip};
 };
 
 const FNarccos = (x: number) => {
@@ -187,7 +181,7 @@ const unfold = (
 
     // Do the tilt correction on all points in pseudoDirections
     const tilts: Array<Coordinates> = vectors.map((vector) => (
-      vector.coordinates.correctBedding(vector.beddingStrike, 1E-2 * unfoldingPercentage * vector.beddingDip)
+      vector.coordinates.correctBedding(vector.beddingAzimuth, 1E-2 * unfoldingPercentage * vector.beddingDip)
     ));
 
     // Return the eigen values of a real, symmetrical matrix

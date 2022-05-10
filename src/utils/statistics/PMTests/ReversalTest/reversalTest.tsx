@@ -1,5 +1,5 @@
 import numeric from 'numeric';
-import { IDirData } from "../../../GlobalTypes";
+import { IDirData, ReversalTestResult } from "../../../GlobalTypes";
 import Direction from "../../../graphs/classes/Direction";
 import { makePrincipalComponents } from "../../eigManipulations";
 import { generateDirectionsBootstrap } from "../../bootstrapManipulations";
@@ -64,17 +64,6 @@ const flipData = (
 
 };
 
-type CoordsComparison =  {
-  first: Array<number>;
-  second: Array<number>;
-};
-
-type ResultComparison = {
-  x: CoordsComparison;
-  y: CoordsComparison;
-  z: CoordsComparison;
-}
-
 export const  bootstrapCommonMeanTest = (
   firstDistribution: Array<Direction>,
   secondDistribution: Array<Direction>,
@@ -94,7 +83,7 @@ export const  bootstrapCommonMeanTest = (
   const secondCartesian = numeric.transpose(secondDirections.map(dir => dir.toCartesian().toArray()));
   const [ x2, y2, z2 ] = secondCartesian;
 
-  const comparisons: ResultComparison = {
+  const comparisons: ReversalTestResult = {
     x: {
       first: x1,
       second: x2,

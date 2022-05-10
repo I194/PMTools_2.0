@@ -28,6 +28,8 @@ import { Reference } from '../../../utils/graphs/types';
 import OutputDataTableDIR from '../DataTablesDIR/OutputDataTable/OutputDataTableDIR';
 import VGPModalContent from '../VGP/VGPmodalContent';
 import { setDirStatFiles } from '../../../services/reducers/files';
+import FoldTestContainer from './PMTests/FoldTestContainer';
+import PMTestsModalContent from './PMTests/PMTestsModalContent';
 
 interface IToolsDIR {
   data: IDirData | null;
@@ -47,6 +49,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
   const [allFilesStatOpen, setAllFilesStatOpen] = useState<boolean>(false);
   const [showIndexesInput, setShowIndexesInput] = useState<boolean>(false);
   const [showVGP, setShowVGP] = useState<boolean>(false);
+  const [showPMTests, setShowPMTests] = useState<boolean>(false);
 
   const availableReferences: Array<Reference> = ['geographic', 'stratigraphic'];
 
@@ -200,6 +203,9 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
       <ButtonGroupWithLabel label='По всем сайтам'>
         <Button onClick={() => setShowVGP(true)}>Построить VGP</Button>
       </ButtonGroupWithLabel>
+      <ButtonGroupWithLabel label='Проверка гипотез'>
+        <Button onClick={() => setShowPMTests(true)}>Палеомагнтные тесты</Button>
+      </ButtonGroupWithLabel>
       <ModalWrapper
         open={allFilesStatOpen}
         setOpen={setAllFilesStatOpen}
@@ -215,6 +221,15 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
         isDraggable={true}
       >
         <VGPModalContent data={data}/>
+      </ModalWrapper>
+      <ModalWrapper
+        open={showPMTests}
+        setOpen={setShowPMTests}
+        size={{width: '80vw', height: '64vh'}}
+        position={{left: '50%', top: '50%'}}
+        isDraggable={true}
+      >
+        <PMTestsModalContent data={data}/>
       </ModalWrapper>
       {
         showIndexesInput && 
