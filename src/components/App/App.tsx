@@ -1,10 +1,10 @@
 import React from 'react';
 import styles from './App.module.scss';
 import { Route, Routes } from 'react-router-dom';
-import Layout from '../Layout/Layout';
-import { MainPage, DIRPage, PCAPage, NotFoundPage } from '../../pages';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { useAppSelector } from '../../services/store/hooks';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { MainPageLayout, AppLayout } from '../Layouts';
+import { MainPage, DIRPage, PCAPage, NotFoundPage } from '../../pages';
 
 function App() {
   
@@ -19,12 +19,14 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <Routes>
-        <Route path='/' element={<Layout />}>
+        <Route path='/' element={<MainPageLayout />}>
           <Route index element={<MainPage />}/>
+        </Route>
+        <Route path='/app' element={<AppLayout />}>
           <Route path='pca' element={<PCAPage />}/>
           <Route path='dir' element={<DIRPage />}/>
-          <Route path='*' element={<NotFoundPage />}/>
         </Route>
+        <Route path='*' element={<NotFoundPage />}/>
       </Routes>
     </ThemeProvider>
   );

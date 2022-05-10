@@ -1,6 +1,4 @@
-import { IMagGraph } from "../components/Graph/MagGraph/MagGraph";
-import { IStereoGraph } from "../components/Graph/StereoGraph/StereoGraph";
-import { IZijdGraph } from "../components/Graph/ZijdGraph/ZijdGraph";
+import { IZijdGraph, IStereoGraph, IMagGraph } from '../components/AppGraphs/';
 import Coordinates from "./graphs/classes/Coordinates";
 import Direction from "./graphs/classes/Direction";
 import { StatisticsModeDIR, StatisticsModePCA } from "./graphs/types";

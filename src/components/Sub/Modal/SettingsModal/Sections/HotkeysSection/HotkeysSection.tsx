@@ -7,7 +7,7 @@ import { textColor, bgColorBlocks } from "../../../../../../utils/ThemeConstants
 
 import { useForm } from "react-hook-form";
 import { HotkeysType } from "../../../../../../utils/GlobalTypes";
-import { defaultHotkeys } from "../../../../../Main/AppSettings/hotkeys";
+import { defaultHotkeys } from "../../../../../AppLogic/AppSettings/hotkeys";
 import { useAppDispatch, useAppSelector } from "../../../../../../services/store/hooks";
 import { setHotkeys } from "../../../../../../services/reducers/appSettings";
 

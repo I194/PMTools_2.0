@@ -1,18 +1,22 @@
 import React, { FC, useEffect, useState } from 'react';
 import styles from './DIRPage.module.scss';
-import { useTheme } from '@mui/material/styles';
-import ToolsDIR from '../../components/Main/ToolsDIR/ToolsDIR';
-import { filesToData } from '../../services/axios/filesAndData';
-import { addInterpretation, setStatisticsMode, showSelectionInput, updateCurrentInterpretation } from '../../services/reducers/dirPage';
 import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
+import { 
+  addInterpretation, 
+  setStatisticsMode, 
+  showSelectionInput, 
+  updateCurrentInterpretation 
+} from '../../services/reducers/dirPage';
+import { filesToData } from '../../services/axios/filesAndData';
 import { IDirData } from '../../utils/GlobalTypes';
-import { bgColorMain } from '../../utils/ThemeConstants';
+import calculateStatisticsDIR from '../../utils/statistics/calculateStatisticsDIR';
 import Tables from './Tables';
 import Graphs from './Graphs';
-import calculateStatisticsDIR from '../../utils/statistics/calculateStatisticsDIR';
+import { ToolsDIR } from '../../components/AppLogic';
+import { useTheme } from '@mui/material/styles';
+import { bgColorMain } from '../../utils/ThemeConstants';
 import ModalWrapper from '../../components/Sub/Modal/ModalWrapper';
 import UploadModal from '../../components/Sub/Modal/UploadModal/UploadModal';
-
 
 const DIRPage: FC = ({}) => {
 

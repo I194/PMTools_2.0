@@ -2,25 +2,25 @@ import React, { FC } from 'react';
 import styles from './MainPage.module.scss';
 import { useTheme } from '@mui/material/styles';
 import {
-  bgColorMain,
+  textColor,
 } from '../../utils/ThemeConstants';
-import { DynamicLogo } from '../../components/Main';
+import { DynamicLogo, NavPanel, About, Description, FeatureCards, Footer } from '../../components/MainPage';
+import { Typography } from '@mui/material';
 
 const MainPage: FC = ({}) => {
   const theme = useTheme();
-
-  console.log(theme.palette.mode);
   
   return (
     <>
-      <DynamicLogo />
+      <NavPanel />
+      <div className={styles.logo}>
+        <DynamicLogo />
+      </div>
+      <About />
+      <Description />
+      <FeatureCards />
+      <Footer />
     </>
-    // <div 
-    //   className={styles.mainPage}
-    //   style={{backgroundColor: bgColorMain(theme.palette.mode)}}
-    // >
-    //   <DynamicLogo />
-    // </div>
   )
 }
 

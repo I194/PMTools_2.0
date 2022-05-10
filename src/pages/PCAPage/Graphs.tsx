@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import styles from './PCAPage.module.scss';
 import { useWindowSize } from '../../utils/GlobalHooks';
-import { ZijdGraph, StereoGraph, MagGraph} from '../../components/Graph';
+import { ZijdGraph, StereoGraph, MagGraph} from '../../components/AppGraphs';
 import { IPmdData } from '../../utils/GlobalTypes';
 import GraphsSkeleton from './GraphsSkeleton';
 

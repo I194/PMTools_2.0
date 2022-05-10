@@ -1,8 +1,9 @@
-.mainPage {
+.logo {
+  width: 100%;
+  height: 520px;
+
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  color: white;
 }
