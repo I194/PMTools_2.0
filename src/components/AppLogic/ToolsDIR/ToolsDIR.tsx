@@ -28,6 +28,8 @@ import { Reference } from '../../../utils/graphs/types';
 import OutputDataTableDIR from '../DataTablesDIR/OutputDataTable/OutputDataTableDIR';
 import VGPModalContent from '../VGP/VGPmodalContent';
 import { setDirStatFiles } from '../../../services/reducers/files';
+import FoldTestContainer from './PMTests/FoldTestContainer';
+import PMTestsModalContent from './PMTests/PMTestsModalContent';
 
 interface IToolsDIR {
   data: IDirData | null;
@@ -36,7 +38,8 @@ interface IToolsDIR {
 const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
 
   const dispatch = useAppDispatch();
-
+  
+  const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
   const { dirStatFiles } = useAppSelector(state => state.filesReducer);
   const { dirStatData, currentDataDIRid } = useAppSelector(state => state.parsedDataReducer);
   const { selectedDirectionsIDs, hiddenDirectionsIDs, statisticsMode, reference } = useAppSelector(state => state.dirPageReducer); 
@@ -46,8 +49,27 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
   const [allFilesStatOpen, setAllFilesStatOpen] = useState<boolean>(false);
   const [showIndexesInput, setShowIndexesInput] = useState<boolean>(false);
   const [showVGP, setShowVGP] = useState<boolean>(false);
+  const [showPMTests, setShowPMTests] = useState<boolean>(false);
 
   const availableReferences: Array<Reference> = ['geographic', 'stratigraphic'];
+
+  const [fisherHotkey, setFisherHotkey] = useState<{key: string, code: string}>({key: 'F', code: 'KeyF'});
+  const [mcFaddenHotkey, setMcFaddenHotkey] = useState<{key: string, code: string}>({key: 'M', code: 'KeyM'});
+  const [gcHotkey, setGcHotkey] = useState<{key: string, code: string}>({key: 'G', code: 'KeyG'});
+  const [gcnHotkey, setGcnHotkey] = useState<{key: string, code: string}>({key: 'I', code: 'KeyI'});
+  const [unselectHotkey, setUnselectHotkey] = useState<{key: string, code: string}>({key: 'U', code: 'KeyU'});
+
+  useEffect(() => {
+    const statHotkeys = hotkeys.find(block => block.title === 'Статистические методы')?.hotkeys;
+    const selectionHotkeys = hotkeys.find(block => block.title === 'Выделение точек')?.hotkeys;
+    if (statHotkeys && selectionHotkeys) {
+      setFisherHotkey(statHotkeys.find(hotkey => hotkey.label === 'Fisher')!.hotkey);
+      setMcFaddenHotkey(statHotkeys.find(hotkey => hotkey.label === 'McFadden')!.hotkey);
+      setGcHotkey(statHotkeys.find(hotkey => hotkey.label === 'GC')!.hotkey);
+      setGcnHotkey(statHotkeys.find(hotkey => hotkey.label === 'GCN')!.hotkey);
+      setUnselectHotkey(selectionHotkeys.find(hotkey => hotkey.label === 'Убрать выделение')!.hotkey);
+    }
+  }, [hotkeys]);
 
   // для списка всех файлов
   useEffect(() => {
@@ -67,37 +89,38 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
 
   // добавляет слушатель нажатий на клавиатуру (для использования сочетаний клавиш)
   useEffect(() => {
-    if (showIndexesInput) window.removeEventListener("keydown", handleHotkeys);
-    else window.addEventListener("keydown", handleHotkeys);
+    if (hotkeysActive) window.addEventListener("keydown", handleHotkeys);
+    else window.removeEventListener("keydown", handleHotkeys);
     return () => {
       window.removeEventListener("keydown", handleHotkeys);
     };
-  }, [showIndexesInput]);
+  }, [hotkeysActive, hotkeys]);
 
   // обработчик нажатий на клавиатуру
-  const handleHotkeys = useCallback((e) => {
-    const key = (e.code as string);
-    if (key === 'KeyF') {
-      e.preventDefault();
+  const handleHotkeys = (event: KeyboardEvent) => {
+    const keyCode = event.code;
+
+    if (keyCode === fisherHotkey.code) {
+      event.preventDefault();
       dispatch(setStatisticsMode('fisher'))
     };
-    if (key === 'KeyM') {
-      e.preventDefault();
+    if (keyCode === mcFaddenHotkey.code) {
+      event.preventDefault();
       dispatch(setStatisticsMode('mcFadden'))
     };
-    if (key === 'KeyG') {
-      e.preventDefault();
+    if (keyCode === gcHotkey.code) {
+      event.preventDefault();
       dispatch(setStatisticsMode('gc'))
     };
-    if (key === 'KeyI') {
-      e.preventDefault();
+    if (keyCode === gcnHotkey.code) {
+      event.preventDefault();
       dispatch(setStatisticsMode('gcn'))
     };
-    if (key === 'KeyU') {
-      e.preventDefault();
+    if (keyCode === unselectHotkey.code) {
+      event.preventDefault();
       dispatch(setSelectedDirectionsIDs([]));
     };
-  }, []);
+  };
 
   // обработчик выбранной системы координат 
   const handleReferenceSelect = (selectedReference: Reference) => {
@@ -135,7 +158,6 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
   };
 
   const handleFileDelete = (option: string) => {
-    console.log('what', dirStatFiles, option);
     if (dirStatFiles) {
       const updatedFiles = dirStatFiles.filter(file => file.name !== option);
       dispatch(setDirStatFiles(updatedFiles));
@@ -169,17 +191,20 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
         }
       </ButtonGroupWithLabel>
       <ButtonGroupWithLabel label='Статистический метод'>
-        <StatModeButton mode='fisher'/>
-        <StatModeButton mode='mcFadden'/>
-        <StatModeButton mode='gc'/>
-        <StatModeButton mode='gcn'/>
+        <StatModeButton mode='fisher' hotkey={fisherHotkey.key}/>
+        <StatModeButton mode='mcFadden' hotkey={mcFaddenHotkey.key}/>
+        <StatModeButton mode='gc' hotkey={gcHotkey.key}/>
+        <StatModeButton mode='gcn' hotkey={gcnHotkey.key}/>
       </ButtonGroupWithLabel>
       <ButtonGroupWithLabel label='Смотреть статистику'>
         <Button onClick={() => setAllFilesStatOpen(true)}>По всем файлам</Button>
       </ButtonGroupWithLabel>
-      <ShowHideDotsButtons setShowIndexesInput={setShowIndexesInput} showIndexesInput={showIndexesInput}/>
+      <ShowHideDotsButtons data={data} />
       <ButtonGroupWithLabel label='По всем сайтам'>
         <Button onClick={() => setShowVGP(true)}>Построить VGP</Button>
+      </ButtonGroupWithLabel>
+      <ButtonGroupWithLabel label='Проверка гипотез'>
+        <Button onClick={() => setShowPMTests(true)}>Палеомагнтные тесты</Button>
       </ButtonGroupWithLabel>
       <ModalWrapper
         open={allFilesStatOpen}
@@ -196,6 +221,15 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
         isDraggable={true}
       >
         <VGPModalContent data={data}/>
+      </ModalWrapper>
+      <ModalWrapper
+        open={showPMTests}
+        setOpen={setShowPMTests}
+        size={{width: '80vw', height: '64vh'}}
+        position={{left: '50%', top: '50%'}}
+        isDraggable={true}
+      >
+        <PMTestsModalContent data={data}/>
       </ModalWrapper>
       {
         showIndexesInput && 

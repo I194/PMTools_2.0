@@ -128,6 +128,10 @@ const mcFaddenCombineMean = (
   const res = {
     direction: meanDirection,
     MAD: a95,
+    k,
+    R,
+    N: M + N,
+    csd
   };
 
   return res;

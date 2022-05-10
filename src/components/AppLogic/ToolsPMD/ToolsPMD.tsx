@@ -8,11 +8,11 @@ import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
 import { deleteInterepretationByParentFile, setHiddenStepsIDs, setReference, setSelectedStepsIDs, setStatisticsMode, updateCurrentFileInterpretations, updateCurrentInterpretation } from '../../../services/reducers/pcaPage';
 import { IPmdData } from '../../../utils/GlobalTypes';
 import ModalWrapper from '../../Sub/Modal/ModalWrapper';
+import InputApply from '../../Sub/InputApply/InputApply';
 import ToolsPMDSkeleton from './ToolsPMDSkeleton';
 import OutputDataTablePMD from '../DataTablesPMD/OutputDataTable/OutputDataTablePMD';
 import StatModeButton from './StatModeButton';
 import { setCurrentPMDid } from '../../../services/reducers/parsedData';
-import InputApply from '../../Sub/InputApply/InputApply';
 import parseDotsIndexesInput from '../../../utils/parsers/parseDotsIndexesInput';
 import DropdownSelectWithButtons from '../../Sub/DropdownSelect/DropdownSelectWithButtons';
 import ShowHideDotsButtons from './ShowHideDotsButtons';
@@ -28,7 +28,8 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
 
   const dispatch = useAppDispatch();
 
-  const { treatmentFiles } = useAppSelector(state => state.filesReducer)
+  const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
+  const { treatmentFiles } = useAppSelector(state => state.filesReducer);
   const { treatmentData, currentDataPMDid } = useAppSelector(state => state.parsedDataReducer);
   const { reference, selectedStepsIDs, statisticsMode, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
 
@@ -39,6 +40,24 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   const [showStepsInput, setShowStepsInput] = useState<boolean>(false);
 
   const availableReferences: Array<Reference> = ['specimen', 'geographic', 'stratigraphic'];
+
+  const [pcaHotkey, setPcaHotkey] = useState<{key: string, code: string}>({key: 'D', code: 'KeyD'});
+  const [pca0Hotkey, setPca0Hotkey] = useState<{key: string, code: string}>({key: 'O', code: 'KeyO'});
+  const [gcHotkey, setGcHotkey] = useState<{key: string, code: string}>({key: 'G', code: 'KeyG'});
+  const [gcnHotkey, setGcnHotkey] = useState<{key: string, code: string}>({key: 'I', code: 'KeyI'});
+  const [unselectHotkey, setUnselectHotkey] = useState<{key: string, code: string}>({key: 'U', code: 'KeyU'});
+
+  useEffect(() => {
+    const statHotkeys = hotkeys.find(block => block.title === 'Статистические методы')?.hotkeys;
+    const selectionHotkeys = hotkeys.find(block => block.title === 'Выделение точек')?.hotkeys;
+    if (statHotkeys && selectionHotkeys) {
+      setPcaHotkey(statHotkeys.find(hotkey => hotkey.label === 'PCA')!.hotkey);
+      setPca0Hotkey(statHotkeys.find(hotkey => hotkey.label === 'PCA0')!.hotkey);
+      setGcHotkey(statHotkeys.find(hotkey => hotkey.label === 'GC')!.hotkey);
+      setGcnHotkey(statHotkeys.find(hotkey => hotkey.label === 'GCN')!.hotkey);
+      setUnselectHotkey(selectionHotkeys.find(hotkey => hotkey.label === 'Убрать выделение')!.hotkey);
+    }
+  }, [hotkeys]);
 
   useEffect(() => {
     if (treatmentData) {
@@ -55,12 +74,12 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   }, [selectedStepsIDs, statisticsMode]);
 
   useEffect(() => {
-    if (showStepsInput) window.removeEventListener("keydown", handleHotkeys);
-    else window.addEventListener("keydown", handleHotkeys);
+    if (hotkeysActive) window.addEventListener("keydown", handleHotkeys);
+    else window.removeEventListener("keydown", handleHotkeys);
     return () => {
       window.removeEventListener("keydown", handleHotkeys);
     };
-  }, [showStepsInput]);
+  }, [hotkeysActive, hotkeys]);
   
   useEffect(() => {
     setCoordinateSystem(reference);
@@ -84,30 +103,30 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
     dispatch(setReference(selectedReference));
   };
 
-  const handleHotkeys = useCallback((e) => {
-    const key = (e.code as string);
-    const { ctrlKey, shiftKey, altKey } = e; 
-    if (key === 'KeyD') {
-      e.preventDefault();
+  const handleHotkeys = (event: KeyboardEvent) => {
+    const keyCode = event.code;
+
+    if (keyCode === pcaHotkey.code) {
+      event.preventDefault();
       dispatch(setStatisticsMode('pca'))
     };
-    if (key === 'KeyO') {
-      e.preventDefault();
+    if (keyCode === pca0Hotkey.code) {
+      event.preventDefault();
       dispatch(setStatisticsMode('pca0'))
     };
-    if (key === 'KeyG') {
-      e.preventDefault();
+    if (keyCode === gcHotkey.code) {
+      event.preventDefault();
       dispatch(setStatisticsMode('gc'))
     };
-    if (key === 'KeyI') {
-      e.preventDefault();
+    if (keyCode === gcnHotkey.code) {
+      event.preventDefault();
       dispatch(setStatisticsMode('gcn'))
     };
-    if (key === 'KeyU') {
-      e.preventDefault();
+    if (keyCode === unselectHotkey.code) {
+      event.preventDefault();
       dispatch(setSelectedStepsIDs(null));
     };
-  }, []);
+  };
 
   if (!data) return <ToolsPMDSkeleton />;
 
@@ -156,15 +175,16 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
         }
       </ButtonGroupWithLabel>
       <ButtonGroupWithLabel label='Статистический метод'>
-        <StatModeButton mode='pca'/>
-        <StatModeButton mode='pca0'/>
-        <StatModeButton mode='gc'/>
-        <StatModeButton mode='gcn'/>
+        <StatModeButton mode='pca' hotkey={pcaHotkey.key}/>
+        <StatModeButton mode='pca0' hotkey={pca0Hotkey.key}/>
+        <StatModeButton mode='gc' hotkey={gcHotkey.key}/>
+        <StatModeButton mode='gcn' hotkey={gcnHotkey.key}/>
       </ButtonGroupWithLabel>
       <ButtonGroupWithLabel label='Смотреть статистику'>
         <Button onClick={() => setAllFilesStatOpen(true)}>По всем файлам</Button>
       </ButtonGroupWithLabel>
-      <ShowHideDotsButtons setShowStepsInput={setShowStepsInput} showStepsInput={showStepsInput}/>
+      {/* <ShowHideDotsButtons setShowStepsInput={setShowStepsInput} showStepsInput={showStepsInput}/> */}
+      <ShowHideDotsButtons data={data} />
       <ModalWrapper
         open={allFilesStatOpen}
         setOpen={setAllFilesStatOpen}

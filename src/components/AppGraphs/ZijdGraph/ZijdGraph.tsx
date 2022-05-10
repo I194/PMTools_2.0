@@ -25,6 +25,7 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data }) => {
   const [zoom, setZoom] = useState<number>(1);
   const [pan, setPan] = useState<Pan>({left: 0, top: 0});
 
+  const { hotkeys } = useAppSelector(state => state.appSettingsReducer);
   const { reference, projection, currentInterpretation, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
   const { menuItems, settings } = usePMDGraphSettings();
   const selectableNodes = useGraphSelectableNodesPCA(graphId, true);
@@ -53,19 +54,30 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data }) => {
     setZoom(newZoom);
   };
 
-  const panListener = (e: KeyboardEvent) => {
-    const key = (e.code as string);
-    const { ctrlKey, shiftKey, altKey } = e; 
-    if (ctrlKey && key === 'ArrowLeft') {
+  const handleHotkeysPan = (event: KeyboardEvent) => {
+    const keyCode = event.code;
+    const zijdHotkeys = hotkeys.find(block => block.title === 'Управление диграммой Зийдервельда')?.hotkeys;
+    if (!zijdHotkeys) return;
+
+    const rightHotkey = zijdHotkeys.find(hotkey => hotkey.label === 'Переместиться вправо')?.hotkey.code;
+    const leftHotkey = zijdHotkeys.find(hotkey => hotkey.label === 'Переместиться влево')?.hotkey.code;
+    const upHotkey = zijdHotkeys.find(hotkey => hotkey.label === 'Переместиться вверх')?.hotkey.code;
+    const downHotkey = zijdHotkeys.find(hotkey => hotkey.label === 'Переместиться вниз')?.hotkey.code;
+    
+    if (keyCode === leftHotkey) {
+      event.preventDefault();
       setPan({...pan, left: pan.left - 10});
     };
-    if (ctrlKey && key === 'ArrowRight') {
+    if (keyCode === rightHotkey) {
+      event.preventDefault();
       setPan({...pan, left: pan.left + 10});
     };
-    if (ctrlKey && key === 'ArrowUp') {
+    if (keyCode === upHotkey) {
+      event.preventDefault();
       setPan({...pan, top: pan.top - 10});
     };
-    if (ctrlKey && key === 'ArrowDown') {
+    if (keyCode === downHotkey) {
+      event.preventDefault();
       setPan({...pan, top: pan.top + 10});
     };
   };
@@ -86,7 +98,7 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data }) => {
         menuItems={menuItems}
         extraID={data.metadata.name}
         onWheel={onWheel}
-        hotkeysListener={panListener}
+        hotkeysListener={handleHotkeysPan}
         currentPan={pan}
         currentZoom={zoom}
         onResetZoomPan={onResetZoomPan}

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import styles from './ModalWrapper.module.scss';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
@@ -12,6 +12,8 @@ import {
   bgColorBlocks,
   boxShadowStyle
 } from '../../../utils/ThemeConstants';
+import { useAppDispatch } from '../../../services/store/hooks';
+import { acitvateHotkeys, deactivateHotkeys } from '../../../services/reducers/appSettings';
 
 interface IModal {
   open: boolean;
@@ -34,12 +36,20 @@ const ModalWrapper: FC<IModal> = ({
   children
 }) => {
 
+  const dispatch = useAppDispatch();
   const theme = useTheme();
 
   const handleClose = () => {
-    if (onClose) onClose();
     setOpen(false);
+    dispatch(acitvateHotkeys());
+    if (onClose) onClose();
   };
+
+  useEffect(() => {
+    if (open) dispatch(deactivateHotkeys());
+    else dispatch(acitvateHotkeys());
+    return () => {dispatch(acitvateHotkeys())}
+  }, [open]);
 
   const ModalInnerData = (
     <Modal

@@ -17,6 +17,8 @@ import { useTheme } from '@mui/material/styles';
 import {
   bgColorMain,
 } from '../../utils/ThemeConstants';
+import ModalWrapper from '../../components/Sub/Modal/ModalWrapper';
+import UploadModal from '../../components/Sub/Modal/UploadModal/UploadModal';
 
 const PCAPage: FC = ({}) => {
 
@@ -29,6 +31,7 @@ const PCAPage: FC = ({}) => {
   const { statisticsMode, selectedStepsIDs, hiddenStepsIDs, currentFileInterpretations } = useAppSelector(state => state.pcaPageReducer);
 
   const [dataToShow, setDataToShow] = useState<IPmdData | null>(null);
+  const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
 
   useEffect(() => {
     if (files) dispatch(filesToData({files, format: 'pmd'}));
@@ -52,6 +55,11 @@ const PCAPage: FC = ({}) => {
     } else dispatch(updateCurrentInterpretation());
   }, [statisticsMode, selectedStepsIDs, dataToShow]);
 
+  useEffect(() => {
+    if (!dataToShow) setShowUploadModal(true);
+    else setShowUploadModal(false);
+  }, [dataToShow])
+
   return (
     <>
       <div 
@@ -68,6 +76,14 @@ const PCAPage: FC = ({}) => {
         <Tables dataToShow={dataToShow}/>
         <Graphs dataToShow={dataToShow}/>
       </div>
+      <ModalWrapper
+        open={showUploadModal}
+        setOpen={setShowUploadModal}
+        size={{width: '60vw', height: '60vh'}}
+        showBottomClose
+      >
+        <UploadModal page='pca' />
+      </ModalWrapper>
     </>
   )
 };

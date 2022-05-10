@@ -4,7 +4,7 @@ import Selecto from "react-selecto";
 import ContextMenu from "../ContextMenu/ContextMenu";
 import ExportButton from "../Buttons/ExportButton/ExportButton";
 import { Pan, TMenuItem } from "../../../../utils/graphs/types";
-import { useAppDispatch } from "../../../../services/store/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
 import { setSelectedStepsIDs } from "../../../../services/reducers/pcaPage";
 import { setSelectedDirectionsIDs } from "../../../../services/reducers/dirPage";
 import ProjectionSelect from "../Buttons/ProjectionSelect/ProjectionSelect";
@@ -47,6 +47,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
   const dispatch = useAppDispatch();
   const location = useLocation();
 
+  const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
   const currentPage = location.pathname.slice(1, location.pathname.length);
 
   const handleDoubleClick = (event: any) => {
@@ -75,11 +76,12 @@ const SelectableGraph: FC<ISelectableGraph> = ({
   }, [selectableNodes]);
 
   useEffect(() => {
-    window.addEventListener("keydown", handleHotkeys);
+    if (hotkeysActive) window.addEventListener("keydown", handleHotkeys);
+    else window.removeEventListener("keydown", handleHotkeys);
     return () => {
       window.removeEventListener("keydown", handleHotkeys);
     };
-  }, [currentPan]);
+  }, [hotkeysActive, hotkeys, currentPan]);
 
   return (
     <>

@@ -58,8 +58,8 @@ const NavPanel = () => {
         external={true}
       />
       <NavButton 
-        label='Источники'
-        to={'/references'}
+        label='Авторы и источники'
+        to={'/authors'}
       />
       <div className={styles.settings}>  
         <IconButton onClick={onColorModeClick} color="inherit">

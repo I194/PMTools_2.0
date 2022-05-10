@@ -38,7 +38,8 @@ class Coordinates {
   };
 
   toArray = () => {
-    return new Array(this.x, this.y, this.z);
+    const array: [number, number, number] = [this.x, this.y, this.z];
+    return array;
   };
 
   toDirection = () => {
