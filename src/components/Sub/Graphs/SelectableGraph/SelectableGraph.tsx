@@ -48,7 +48,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
   const location = useLocation();
 
   const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
-  const currentPage = location.pathname.slice(1, location.pathname.length);
+  const currentPage = location.pathname.split('/').pop() || location.pathname;
 
   const handleDoubleClick = (event: any) => {
     event.preventDefault();
