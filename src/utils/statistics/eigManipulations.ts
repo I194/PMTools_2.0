@@ -1,5 +1,6 @@
 import numeric from 'numeric';
 import Coordinates from '../graphs/classes/Coordinates';
+import Direction from '../graphs/classes/Direction';
 import { Matrix3x3, TMatrix } from './matrix';
 
 // Modifies the eigen object in place and normalizes the eigenvalues to within [0, 1]
@@ -128,4 +129,32 @@ export const makePrincipalComponents = (coords: Array<Coordinates>) => {
   const principalDirection = new Coordinates(eig.v1[0], eig.v1[1], eig.v1[2]).toDirection();
 
   return principalDirection.flip();
+};
+
+export const splitPolarities = (
+  data: Array<Direction>, 
+) => {
+  const principalDirection = makePrincipalComponents(data.map(dir => dir.toCartesian()));
+
+  const normalDirections: Array<Direction> = [];
+  const reversedDirections: Array<Direction> = [];
+  const combinedDirections: Array<Direction> = [];
+
+  data.forEach((direction) => {
+    const angle = direction.angle(principalDirection);
+    const { declination, inclination } = direction;
+    if (angle > 90) {
+      let flippedDec = (declination - 180) % 360;
+      if (flippedDec < 0) flippedDec += 360;
+      let flippedInc = -inclination;
+      const flippedDir = new Direction(flippedDec, flippedInc, 1);
+      reversedDirections.push(flippedDir);
+      combinedDirections.push(flippedDir);
+    } else {
+      normalDirections.push(direction);
+      combinedDirections.push(direction);
+    };
+  });
+
+  return { normalDirections, reversedDirections, combinedDirections };
 };

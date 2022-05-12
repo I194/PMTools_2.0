@@ -1,22 +1,17 @@
 import numeric from 'numeric';
 import { IDirData, ReversalTestResult } from "../../../GlobalTypes";
 import Direction from "../../../graphs/classes/Direction";
-import { makePrincipalComponents } from "../../eigManipulations";
+import { makePrincipalComponents, splitPolarities } from "../../eigManipulations";
 import { generateDirectionsBootstrap } from "../../bootstrapManipulations";
 
 type Props = {
   dataToAnalyze: IDirData;
   numberOfSimulations?: number;
-  setResult?: React.Dispatch<React.SetStateAction<{
-    untilts: Array<number>;
-    savedBootstraps: Array<Array<{x: number, y: number}>>;
-  }>>;
 };
 
 const reversalTestBootstrap = ({
   dataToAnalyze,
   numberOfSimulations = 1000,
-  setResult,
 }: Props) => {
   // Conduct a reversal test using bootstrap statistics (Tauxe, 2010) to
   // determine whether two populations of directions could be from an antipodal
@@ -26,7 +21,7 @@ const reversalTestBootstrap = ({
     new Direction(direction.Dgeo, direction.Igeo, 1)
   ));
 
-  const { normalDirections, reversedDirections} = flipData(directions);
+  const { normalDirections, reversedDirections} = splitPolarities(directions);
 
   const result = bootstrapCommonMeanTest(normalDirections, reversedDirections, numberOfSimulations);
 
@@ -34,35 +29,6 @@ const reversalTestBootstrap = ({
 };
 
 export default reversalTestBootstrap;
-
-const flipData = (
-  data: Array<Direction>, 
-) => {
-  const principalDirection = makePrincipalComponents(data.map(dir => dir.toCartesian()));
-
-  const normalDirections: Array<Direction> = [];
-  const reversedDirections: Array<Direction> = [];
-  const combinedDirections: Array<Direction> = [];
-
-  data.forEach((direction) => {
-    const angle = direction.angle(principalDirection);
-    const { declination, inclination } = direction;
-    if (angle > 90) {
-      let flippedDec = (declination - 180) % 360;
-      if (flippedDec < 0) flippedDec += 360;
-      let flippedInc = -inclination;
-      const flippedDir = new Direction(flippedDec, flippedInc, 1);
-      reversedDirections.push(flippedDir);
-      combinedDirections.push(flippedDir);
-    } else {
-      normalDirections.push(direction);
-      combinedDirections.push(direction);
-    };
-  });
-
-  return { normalDirections, reversedDirections, combinedDirections };
-
-};
 
 export const  bootstrapCommonMeanTest = (
   firstDistribution: Array<Direction>,
