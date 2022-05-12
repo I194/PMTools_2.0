@@ -11,6 +11,9 @@ import {
   successColor,
 } from '../../../../utils/ThemeConstants';
 import { VerticalTabs } from "../../../Sub/Tabs";
+import ReversalTestContainer from "./ReversalTestContainer/ReversalTestUncontrolledContainer";
+import ReversalTestUncontrolledContainer from "./ReversalTestContainer/ReversalTestUncontrolledContainer";
+import ReversalTestControlledContainer from "./ReversalTestContainer/ReversalTestControlledContainer";
 
 type Props = {
   data: IDirData;
@@ -33,11 +36,23 @@ const PMTestsModalContent: FC<Props> = ({ data }) => {
       )
     },
     {
-      label: 'Тест обращения (Bootstrap-версия)',
+      label: 'Тесты обращения (автоматические)',
       content: (
-        <>
-          Выбор направлений
-        </>
+        <div className={styles.dataContainer}>
+          <div className={styles.data}>
+            <ReversalTestUncontrolledContainer dataToAnalyze={data}/>
+          </div>
+        </div>
+      )
+    },
+    {
+      label: 'Тест обращения (ручной ввод)',
+      content: (
+        <div className={styles.dataContainer}>
+          <div className={styles.data}>
+            <ReversalTestControlledContainer/>
+          </div>
+        </div>
       )
     },
     {

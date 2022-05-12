@@ -165,10 +165,23 @@ export type CoordsComparison =  {
   second: Array<number>;
 };
 
-export type ReversalTestResult = {
+export type CommonMeanTestBootstrapResult = {
   x: CoordsComparison;
   y: CoordsComparison;
   z: CoordsComparison;
+};
+
+export type ReversalTestClassicResult = {
+  gamma: number;
+  gammaCritical: number;
+  classification: 'A' | 'B' | 'C' | 'N/A' | '-';
+};
+
+
+export type ReversalTestResultAll = {
+  bootstrap?: CommonMeanTestBootstrapResult;
+  classic?: ReversalTestClassicResult;
+  oldFashioned?: ReversalTestClassicResult;
 };
 
 export type conglomeratesTestResult = {

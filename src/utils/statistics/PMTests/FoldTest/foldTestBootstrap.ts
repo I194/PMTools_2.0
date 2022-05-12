@@ -153,7 +153,7 @@ function findBed(cartesianCoordsGeo: Coordinates, cartesianCoordsStrat: Coordina
   return {azimuth, dip};
 };
 
-const FNarccos = (x: number) => {
+export const FNarccos = (x: number) => {
   let arccos;
   if (x >= 1) arccos = 0;
   else if (x <= -1) arccos = 180;
@@ -161,7 +161,7 @@ const FNarccos = (x: number) => {
   return arccos;
 };
 
-const FNarcsin = (x: number) => {
+export const FNarcsin = (x: number) => {
   return 90 - FNarccos(x);
 };
 

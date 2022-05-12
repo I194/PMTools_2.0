@@ -1,18 +1,14 @@
 import numeric from 'numeric';
-import { IDirData, ReversalTestResult } from "../../../GlobalTypes";
+import { IDirData, CommonMeanTestBootstrapResult } from "../../../GlobalTypes";
 import Direction from "../../../graphs/classes/Direction";
-import { makePrincipalComponents, splitPolarities } from "../../eigManipulations";
+import { splitPolarities } from "../../eigManipulations";
 import { generateDirectionsBootstrap } from "../../bootstrapManipulations";
 
-type Props = {
-  dataToAnalyze: IDirData;
-  numberOfSimulations?: number;
-};
-
-const reversalTestBootstrap = ({
-  dataToAnalyze,
+const reversalTestBootstrap = (
+  dataToAnalyze: IDirData,
   numberOfSimulations = 1000,
-}: Props) => {
+  setIsRunning?: React.Dispatch<React.SetStateAction<boolean>>
+) => {
   // Conduct a reversal test using bootstrap statistics (Tauxe, 2010) to
   // determine whether two populations of directions could be from an antipodal
   // common mean.
@@ -24,13 +20,14 @@ const reversalTestBootstrap = ({
   const { normalDirections, reversedDirections} = splitPolarities(directions);
 
   const result = bootstrapCommonMeanTest(normalDirections, reversedDirections, numberOfSimulations);
+  setIsRunning?.(false);
 
   return result;
 };
 
 export default reversalTestBootstrap;
 
-export const  bootstrapCommonMeanTest = (
+export const bootstrapCommonMeanTest = (
   firstDistribution: Array<Direction>,
   secondDistribution: Array<Direction>,
   numberOfSimulations = 1000, 
@@ -49,7 +46,7 @@ export const  bootstrapCommonMeanTest = (
   const secondCartesian = numeric.transpose(secondDirections.map(dir => dir.toCartesian().toArray()));
   const [ x2, y2, z2 ] = secondCartesian;
 
-  const comparisons: ReversalTestResult = {
+  const comparisons: CommonMeanTestBootstrapResult = {
     x: {
       first: x1,
       second: x2,
