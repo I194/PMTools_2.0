@@ -184,7 +184,7 @@ export type ReversalTestResultAll = {
   oldFashioned?: ReversalTestClassicResult;
 };
 
-export type conglomeratesTestResult = {
+export type ConglomeratesTestResult = {
   N: number;
   R: number;
   Ro_95: number;

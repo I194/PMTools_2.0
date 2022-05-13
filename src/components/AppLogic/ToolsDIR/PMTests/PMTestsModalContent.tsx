@@ -14,6 +14,7 @@ import { VerticalTabs } from "../../../Sub/Tabs";
 import ReversalTestContainer from "./ReversalTestContainer/ReversalTestUncontrolledContainer";
 import ReversalTestUncontrolledContainer from "./ReversalTestContainer/ReversalTestUncontrolledContainer";
 import ReversalTestControlledContainer from "./ReversalTestContainer/ReversalTestControlledContainer";
+import ConglomeratesTestContainer from "./ConglomeratesTestContainer";
 
 type Props = {
   data: IDirData;
@@ -58,9 +59,11 @@ const PMTestsModalContent: FC<Props> = ({ data }) => {
     {
       label: 'Тест конгломератов',
       content: (
-        <>
-          Данные
-        </>
+        <div className={styles.dataContainer}>
+          <div className={styles.data}>
+            <ConglomeratesTestContainer dataToAnalyze={data}/>
+          </div>
+        </div>
       )
     }
   ]

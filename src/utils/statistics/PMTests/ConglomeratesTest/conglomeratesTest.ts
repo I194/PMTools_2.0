@@ -1,14 +1,8 @@
-import { IDirData } from "../../../GlobalTypes";
+import { ConglomeratesTestResult, IDirData } from "../../../GlobalTypes";
 import Direction from "../../../graphs/classes/Direction";
 import { fisherMean } from "../../calculation/calculateFisherMean";
 
-type Props = {
-  dataToAnalyze: IDirData;
-};
-
-const conglomeratesTest = ({
-  dataToAnalyze,
-}: Props) => {
+const conglomeratesTest = (dataToAnalyze: IDirData) => {
   // The Watson (1956) test of a directional data set for randomness. 
   // Test compares the resultant vector (R) of a group of directions to values of Ro.
   // If R exceeds Ro, the null-hypothesis of randomness is rejected. 
@@ -51,19 +45,22 @@ const conglomeratesTest = ({
   let resultDescriptionRU = '';
 
   if (R < Ro_95) {
-    resultDescriptionEN = 'This population "passes" a conglomerate test as the null hypothesis of randomness <b>cannot be rejected</b> at the 95% confidence level';
-    resultDescriptionRU = 'Этот набор направлений "проходит" тест конгломератов, то есть гипотеза о случайности распределения <b>не может быть отклонена</b> c 95% уровнем доверия';
+    resultDescriptionEN = 'This population "passes" a conglomerate test as the null hypothesis of randomness cannot be rejected at the 95% confidence level';
+    resultDescriptionRU = 'Этот набор направлений "проходит" тест конгломератов, то есть гипотеза о случайности распределения не может быть отклонена c 95% уровнем доверия';
   };
   if (R > Ro_95) {
-    resultDescriptionEN = 'The null hypothesis of randomness can be <b>rejected</b> at the 95% confidence level';
-    resultDescriptionRU = 'Гипотеза о случайности может быть <b>отклонена</b> с 95% уровнем доверия';
+    resultDescriptionEN = 'The null hypothesis of randomness can be rejected at the 95% confidence level';
+    resultDescriptionRU = 'Гипотеза о случайности может быть отклонена с 95% уровнем доверия';
   }
   if (R > Ro_99) {
-    resultDescriptionEN = 'The null hypothesis of randomness can be <b>rejected</b> at the 99% confidence level';
-    resultDescriptionRU = 'Гипотеза о случайности может быть <b>отклонена</b> с 99% уровнем доверия';
+    resultDescriptionEN = 'The null hypothesis of randomness can be rejected at the 99% confidence level';
+    resultDescriptionRU = 'Гипотеза о случайности может быть отклонена с 99% уровнем доверия';
   };
 
-  return {N, R, Ro_95, Ro_99, resultDescription: { ru: resultDescriptionRU, en: resultDescriptionEN }};
+  const result: ConglomeratesTestResult = {
+    N, R, Ro_95, Ro_99, resultDescription: { ru: resultDescriptionRU, en: resultDescriptionEN }
+  };
+  return result;
 }
 
 export default conglomeratesTest;

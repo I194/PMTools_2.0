@@ -38,8 +38,8 @@ export const usePMDGraphSettings = () => {
     {label: 'Tooltips', onClick: () => setTooltips(!tooltips), state: tooltips},
     {label: 'Ticks', onClick: () => setTicks(!ticks), state: ticks, divider: true},
     {label: 'Annotations', onClick: () => setAnnotations(!annotations), state: annotations},
-    {label: 'Step ID', onClick: () => setStepID(!stepID), state: stepID},
-    {label: 'Step label', onClick: () => setStepLabel(!stepLabel), state: stepLabel},
+    {label: 'Show ID', onClick: () => setStepID(!stepID), state: stepID},
+    {label: 'Show label', onClick: () => setStepLabel(!stepLabel), state: stepLabel},
   ];
 
   const settings: GraphSettings = {
@@ -67,8 +67,8 @@ export const useDIRGraphSettings = () => {
     {label: 'Tooltips', onClick: () => setTooltips(!tooltips), state: tooltips},
     {label: 'Ticks', onClick: () => setTicks(!ticks), state: ticks, divider: true},
     {label: 'Annotations', onClick: () => setAnnotations(!annotations), state: annotations},
-    {label: 'Step ID', onClick: () => setDirectionID(!directionID), state: directionID},
-    {label: 'Step label', onClick: () => setDirectionLabel(!directionLabel), state: directionLabel},
+    {label: 'Show ID', onClick: () => setDirectionID(!directionID), state: directionID},
+    {label: 'Show label', onClick: () => setDirectionLabel(!directionLabel), state: directionLabel},
   ];
 
   const settings: GraphSettings = {
