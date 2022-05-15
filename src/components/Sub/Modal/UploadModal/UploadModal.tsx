@@ -51,8 +51,9 @@ const UploadModal = ({page}: Props) => {
     dir: ['.dir', '.pmm'], 
   };
 
+  // накладывается на глобальный импорт через dnd в appLayout...
   return (
-    <div className={styles.container} {...rootProps}>
+    <div className={styles.container}>
       <div className={styles.upload}>
         <UploadButton 
           accept={availableFormats[page]}
@@ -79,7 +80,7 @@ const UploadModal = ({page}: Props) => {
         }}
       >
         <Typography variant="h4" color={textColor(theme.palette.mode)}>
-          Или перетащите файлы в эту область
+          Или перетащите файлы поверх приложения
         </Typography>
       </div>
     </div>

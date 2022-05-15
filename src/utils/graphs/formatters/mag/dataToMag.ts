@@ -33,7 +33,8 @@ const dataToMag = (
 
   steps.forEach((step) => {
     mag.push(step.mag);
-    stepValues.push(+step.step.match(/\d+/)![0]);
+    const stepValue = step.step.match(/\d+/);
+    stepValues.push(stepValue ? +stepValue[0] : 0);
   });
 
   const maxMAG = Math.max(...mag);
@@ -53,7 +54,7 @@ const dataToMag = (
     stepLabels.push(i.toString());
   };
 
-  const demagnetizationType = data.steps[0].demagType;
+  const demagnetizationType = data.steps[data.steps.length - 1].demagType;
   
   return { 
     dotsData, 

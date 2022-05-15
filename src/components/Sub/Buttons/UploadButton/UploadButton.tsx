@@ -10,16 +10,18 @@ import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
 type Props = {
   onUpload: (event: any, files?: Array<File>) => void;
   accept: Array<string>;
+  dndInputProps?: any;
   label?: string;
 }
 
-const UploadButton: FC<Props> = ({ onUpload, accept, label='Загрузить файл' }) => {
+const UploadButton: FC<Props> = ({ onUpload, accept, dndInputProps, label='Загрузить файл' }) => {
 
   const theme = useTheme();
 
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   const handleChange = (event: any, files?: Array<File>)  => {
+    // if (!!dndInputProps) return;
     onUpload(event, files);
     if (inputRef.current) {
       inputRef.current.value = '';
@@ -37,7 +39,8 @@ const UploadButton: FC<Props> = ({ onUpload, accept, label='Загрузить �
         // id="upload-site-latlon-top"
         type={'file'}  
         inputProps={{
-          multiple: false,
+          // ...dndInputProps,
+          multiple: true,
           accept: accept.join(', '),
           id: 'file-input',
           ref: inputRef
