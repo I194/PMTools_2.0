@@ -32,7 +32,8 @@ const ClassicResult = ({ result }: {result: ReversalTestClassicResult}) => {
           sx={{
             textDecoration: 'none',
             textTransform: 'none',
-            borderColor: `${primaryColor(theme.palette.mode)}!important`,
+            border: `1px dashed ${primaryColor(theme.palette.mode)}!important`,
+            borderRadius: '8px!important',
           }}
           onClick={onCopy}
         >
