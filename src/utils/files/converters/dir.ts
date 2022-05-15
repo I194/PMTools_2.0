@@ -48,7 +48,7 @@ export const toCSV_DIR = async (file: File, parsedData?: IDirData) => {
 
   const data = parsedData ? parsedData : await getDirectionalData(file, 'dir') as IDirData;
   
-  const columNames = 'id,Code,StepRange,N,Dgeo,Igeo,Dstrat,Istrat,MAD,K,Comment\n';
+  const columNames = 'id,Code,StepRange,N,Dgeo,Igeo,Dstrat,Istrat,K,MAD,Comment\n';
 
   const lines = data.interpretations.map((interpretation: any) => {
     const line = Object.keys(dataModel_interpretation).reduce((line, param) => {
@@ -67,7 +67,7 @@ export const toXLSX_DIR = async (file: File, parsedData?: IDirData) => {
 
   const data = parsedData ? parsedData : await getDirectionalData(file, 'dir') as IDirData;
 
-  const columnNames = 'id,Code,StepRange,N,Dgeo,Igeo,Dstrat,Istrat,MAD,K,Comment'.split(',');
+  const columnNames = 'id,Code,StepRange,N,Dgeo,Igeo,Dstrat,Istrat,K,MAD,Comment'.split(',');
 
   const lines = data.interpretations.map((interpretation: any) => {
     return Object.keys(dataModel_interpretation).map((param) => {
