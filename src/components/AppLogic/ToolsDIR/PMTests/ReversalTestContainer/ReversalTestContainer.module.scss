@@ -63,3 +63,17 @@
     }
   }
 }
+
+.copyResult {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  padding: 4px;
+  box-sizing: border-box;
+
+  border: 1px dashed #000;
+  border-radius: 8px;
+  cursor: pointer;
+}

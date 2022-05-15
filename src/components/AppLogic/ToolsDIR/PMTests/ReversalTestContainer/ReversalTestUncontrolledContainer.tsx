@@ -70,7 +70,7 @@ const ReversalTestUncontrolledContainer = ({ dataToAnalyze }: Props) => {
               <>
                 <Divider />
                 <Typography textAlign='center' color={textColor(theme.palette.mode)}>
-                  Bootstrap-вариант теста обращения [Tauxe L., 2010]
+                  Bootstrap-вариант теста обращения [Tauxe, 2010]
                 </Typography>
                 <Typography textAlign='center' color={textColor(theme.palette.mode)}>
                   Если области внутри границ 95%-го доверия (пунктирные линии) пересекаются во всех трёх компонентах, данные "проходят" тест обращения.

@@ -30,21 +30,21 @@ const reversalTestGraph = (
   const secondMaximum = data.second[parseInt((0.975 * data.second.length).toString(), 10)];
 
   const firstCDFDotsData: DotsData = firstCDF.map((cdf, index) => {
-    const x = cdf.x * graphWidth;
+    const x = (cdf.x + 1) * (graphWidth / 2);
     const y = (1 - cdf.y) * graphHeight;
     const xyData: [number, number] = [x, y];
     return {id: index, xyData};
   });
 
   const secondCDFDotsData: DotsData = secondCDF.map((cdf, index) => {
-    const x = cdf.x * graphWidth;
+    const x = (cdf.x + 1) * (graphWidth / 2);
     const y = (1 - cdf.y) * graphHeight;
     const xyData: [number, number] = [x, y];
     return {id: index, xyData};
   });
   
   const [firstLowerDotsData, firstUpperDotsData, secondLowerDotsData, secondUpperDotsData]: DotsData[] = [firstMinimum, firstMaximum, secondMinimum, secondMaximum].map((value, index) => {
-    const x = value * graphWidth;
+    const x = (value + 1) * (graphWidth / 2);
     return [
       {id: 0, xyData: [x, 0]},
       {id: 1, xyData: [x, graphHeight]},
