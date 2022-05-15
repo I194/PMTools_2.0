@@ -19,9 +19,11 @@ const parseDIR = (data: string, name: string) => {
     const Igeo = Number(line.slice(33, 39).trim());
     const Dstrat = Number(line.slice(39, 45).trim());
     const Istrat = Number(line.slice(45, 51).trim());
-    const mad = Number(line.slice(51, 57).trim());
-    const k = Number(line.slice(57, 63).trim());
-    const comment = line.slice(63, line.length).trim();
+    const k = Number(line.slice(51, 58).trim());
+    const mad = Number(line.slice(58, 64).trim());
+    const comment = line.slice(64, line.length).trim();
+
+    console.log('what', line)
 
     // there is no standard for demagnetization symbol... and idk why
     // normally it's T20-T570, but sometimes it's NRM-T570, so... split by '-'
@@ -45,8 +47,8 @@ const parseDIR = (data: string, name: string) => {
       Igeo,
       Dstrat,
       Istrat,
-      mad,
       k,
+      mad,
       comment,
       demagType,
     };

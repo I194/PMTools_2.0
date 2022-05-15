@@ -92,7 +92,7 @@ export const dataModel_interpretation: any = {
   Igeo: 6,
   Dstrat: 6,
   Istrat: 6,
-  mad: 6,
-  k: 5,
+  k: 7,
+  mad: 5,
   comment: 0
 }

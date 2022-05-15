@@ -86,7 +86,7 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
     { field: 'Istrat', headerName: 'Istrat', type: 'number', width: 70,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
-    { field: 'k', headerName: 'k', type: 'number', width: 40, },
+    { field: 'k', headerName: 'k', type: 'number', width: 80, },
     { field: 'confidenceRadius', headerName: 'MAD', type: 'string', width: 70,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
