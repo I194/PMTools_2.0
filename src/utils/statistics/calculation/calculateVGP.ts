@@ -10,8 +10,8 @@ const calculateVGP = (
 
   const direction = new Direction(declination, inclination, 1);
   const p = 0.5 * Math.PI - Math.atan(Math.tan(inclination) / 2);
-  const poleLatitude = Math.asin(Math.sin(siteLatitude) * Math.cos(p) + Math.cos(siteLatitude) * Math.sin(p) * Math.cos(declination));
-  const beta = Math.asin((Math.sin(p) * Math.sin(declination) / Math.cos(poleLatitude)));
+  const poleLatitude = Math.asin(Math.sin(siteLatitude) * Math.cos(p) + Math.cos(siteLatitude) * Math.sin(p) * Math.cos(declination)) * Direction.RADIANS;
+  const beta = Math.asin((Math.sin(p) * Math.sin(declination) / Math.cos(poleLatitude))) * Direction.RADIANS;
 
   let poleLongitude = siteLongitude + beta;
   if ((Math.cos(p) - Math.sin(poleLatitude) * Math.sin(siteLatitude)) < 0) {
@@ -23,8 +23,8 @@ const calculateVGP = (
   }
 
   const paleoLatitude = direction.paleoLatitude;
-  const dp = 2 * a95 / (1  + 3 * Math.pow(Math.cos(inclination), 2));
-  const dm = a95 * Math.sin(p) / Math.cos(inclination);
+  const dp = 2 * a95 / (1  + 3 * Math.pow(Math.cos(paleoLatitude), 2));
+  const dm = a95 * Math.cos(paleoLatitude) / Math.cos(inclination);
 
   const res: {
     poleLatitude: number,

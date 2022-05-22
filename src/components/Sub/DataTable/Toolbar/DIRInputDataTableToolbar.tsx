@@ -18,6 +18,7 @@ const DIRInputDataTableToolbar = () => {
   if (!dirStatData) return null;
   const data = dirStatData[currentDataDIRid || 0];
   // if (data && data.interpretations) {
+  //   console.log(data)
   //   // data.interpretations = data.interpretations.filter(interp => !hiddenDirectionsIDs.includes(interp.id));
   // }
 
