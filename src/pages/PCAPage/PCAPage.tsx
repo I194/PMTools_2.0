@@ -28,7 +28,7 @@ const PCAPage: FC = ({}) => {
 
   const files = useAppSelector(state => state.filesReducer.treatmentFiles);
   const { treatmentData, currentDataPMDid } = useAppSelector(state => state.parsedDataReducer);
-  const { statisticsMode, selectedStepsIDs, hiddenStepsIDs, currentFileInterpretations } = useAppSelector(state => state.pcaPageReducer);
+  const { statisticsMode, selectedStepsIDs, hiddenStepsIDs, currentFileInterpretations, allInterpretations } = useAppSelector(state => state.pcaPageReducer);
 
   const [dataToShow, setDataToShow] = useState<IPmdData | null>(null);
   const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
@@ -49,7 +49,7 @@ const PCAPage: FC = ({}) => {
     if (statisticsMode && selectedStepsIDs && selectedStepsIDs.length >= 2 && dataToShow) {
       const statistics = calculateStatisticsPMD(dataToShow, statisticsMode, selectedStepsIDs);
       // решил оставить id на совесть пользователя - теперь это просто название файла
-      statistics.interpretation.label = `${currentFileInterpretations.length}_${statistics.interpretation.label}`;
+      statistics.interpretation.label = `${allInterpretations.length}${statistics.interpretation.label}/${currentFileInterpretations.length}`;
       dispatch(addInterpretation(statistics));
       dispatch(setStatisticsMode(null));
     } else dispatch(updateCurrentInterpretation());

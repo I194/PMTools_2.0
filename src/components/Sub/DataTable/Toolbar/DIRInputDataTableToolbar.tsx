@@ -13,9 +13,13 @@ import ExportPMD from './Buttons/ExportButton/ExportPMD';
 const DIRInputDataTableToolbar = () => {
 
   const { dirStatData, currentDataDIRid } = useAppSelector(state => state.parsedDataReducer);
+  const { hiddenDirectionsIDs } = useAppSelector(state => state.dirPageReducer);
 
   if (!dirStatData) return null;
   const data = dirStatData[currentDataDIRid || 0];
+  // if (data && data.interpretations) {
+  //   // data.interpretations = data.interpretations.filter(interp => !hiddenDirectionsIDs.includes(interp.id));
+  // }
 
   return (
     <GridToolbarContainer>

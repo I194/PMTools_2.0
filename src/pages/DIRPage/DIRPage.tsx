@@ -30,7 +30,8 @@ const DIRPage: FC = ({}) => {
     statisticsMode, 
     selectedDirectionsIDs, 
     hiddenDirectionsIDs, 
-    currentFileInterpretations 
+    currentFileInterpretations,
+    allInterpretations
   } = useAppSelector(state => state.dirPageReducer);
 
   const [dataToShow, setDataToShow] = useState<IDirData | null>(null);
@@ -51,7 +52,7 @@ const DIRPage: FC = ({}) => {
     if (statisticsMode && !selectedDirectionsIDs) dispatch(showSelectionInput(true));
     if (statisticsMode && selectedDirectionsIDs && selectedDirectionsIDs.length >= 2 && dataToShow) {
       const statistics = calculateStatisticsDIR(dataToShow, statisticsMode, selectedDirectionsIDs);
-      statistics.interpretation.label = `${currentFileInterpretations.length}_${statistics.interpretation.label}`;
+      statistics.interpretation.label = `${allInterpretations.length}${statistics.interpretation.label}/${currentFileInterpretations.length}`;
       dispatch(addInterpretation(statistics));
       dispatch(setStatisticsMode(null));
     } else dispatch(updateCurrentInterpretation());
