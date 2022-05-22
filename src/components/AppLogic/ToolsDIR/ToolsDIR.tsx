@@ -204,7 +204,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
         <Button onClick={() => setShowVGP(true)}>Построить VGP</Button>
       </ButtonGroupWithLabel>
       <ButtonGroupWithLabel label='Проверка гипотез'>
-        <Button onClick={() => setShowPMTests(true)}>Палеомагнтные тесты</Button>
+        <Button onClick={() => setShowPMTests(true)}>Палеомагнитные тесты</Button>
       </ButtonGroupWithLabel>
       <ModalWrapper
         open={allFilesStatOpen}
