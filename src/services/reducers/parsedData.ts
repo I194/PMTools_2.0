@@ -50,7 +50,7 @@ const parsedDataSlice = createSlice({
       state.errorInfo = null;
     });
     builder.addCase(filesToData.fulfilled, (state, action) => {
-      if (action.payload.format === 'pmd') {
+      if (action.payload.format === 'pmd' || action.payload.format === 'squid') {
         // core hade is measured, we use the plunge (90 - hade)
         state.treatmentData = (action.payload.data as IPmdData[]).map((pmdData) => {
           return {

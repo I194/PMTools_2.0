@@ -49,7 +49,7 @@ const PCAPage: FC = ({}) => {
     if (statisticsMode && selectedStepsIDs && selectedStepsIDs.length >= 2 && dataToShow) {
       const statistics = calculateStatisticsPMD(dataToShow, statisticsMode, selectedStepsIDs);
       // решил оставить id на совесть пользователя - теперь это просто название файла
-      // statistics.interpretation.label += `_${currentFileInterpretations.length}`;
+      statistics.interpretation.label = `${currentFileInterpretations.length}_${statistics.interpretation.label}`;
       dispatch(addInterpretation(statistics));
       dispatch(setStatisticsMode(null));
     } else dispatch(updateCurrentInterpretation());
