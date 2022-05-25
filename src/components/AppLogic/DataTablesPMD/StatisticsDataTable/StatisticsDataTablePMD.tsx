@@ -8,6 +8,7 @@ import { DataGridDIRRow, StatisitcsInterpretation } from "../../../../utils/Glob
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
 import { deleteInterpretation, updateCurrentFileInterpretations, updateCurrentInterpretation } from "../../../../services/reducers/pcaPage";
+import PMDStatisticsDataTableToolbar from "../../../Sub/DataTable/Toolbar/PMDStatisticsDataTableToolbar";
 
 interface IStatisticsDataTablePMD {
   data: Array<StatisitcsInterpretation> | null;
@@ -135,6 +136,9 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
         getRowClassName={
           (params) => params.row.id === currentInterpretation?.label ? currentClass : ''
         }
+        components={{
+          Toolbar: PMDStatisticsDataTableToolbar,
+        }}
       />
     </StatisticsDataTablePMDSkeleton>
   );
