@@ -15,6 +15,7 @@ export const getDirectionalData = (file: File, as: string) => {
         const pmFile = new PMFile(file.name, file.type, file.size, file.webkitRelativePath, rawData);
         switch (ext) {
           case 'pmd': return pmFile.parsePMD();
+          case 'squid': return pmFile.parseSQUID();
           case 'dir': return pmFile.parseDIR();
           case 'pmm': return pmFile.parsePMM();
           case 'csv': {

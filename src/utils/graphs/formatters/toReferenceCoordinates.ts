@@ -11,6 +11,7 @@ const toReferenceCoordinates = (
   // rotates the coordinates to the reference coordinates
 
   if (reference == "specimen") return coordinates;
+  console.log('what', reference, metadata, coordinates);
 
   // Do the geographic correction
   coordinates = coordinates.rotateTo(metadata.a, metadata.b);

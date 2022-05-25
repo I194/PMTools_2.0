@@ -7,6 +7,7 @@ import parseCSV_PMD from "../parsers/parserCSV_PMD";
 import parseXLSX_PMD from "../parsers/parserXLSX_PMD";
 import parseCSV_SitesLatLon from "../parsers/parserCSV_SitesLatLon";
 import parseXLSX_SitesLatLon from "../parsers/parserXLSX_SitesLatLon";
+import parseSQUID from "../parsers/parserSQUID";
 
 export default class PMFile {
   name: string;
@@ -30,6 +31,7 @@ export default class PMFile {
   }
 
   parsePMD = () => parsePMD(this.data as string, this.name);
+  parseSQUID = () => parseSQUID(this.data as string, this.name);
   parseCSV_PMD = () => parseCSV_PMD(this.data as string, this.name);
   parseXLSX_PMD = () => parseXLSX_PMD(this.data as ArrayBuffer, this.name);
   parsePMM = () => parsePMM(this.data as string, this.name);

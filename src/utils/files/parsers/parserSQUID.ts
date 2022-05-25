@@ -1,3 +1,7 @@
+import Direction from "../../graphs/classes/Direction";
+import fromReferenceCoordinates from "../../graphs/formatters/fromReferenceCoordinates";
+import toReferenceCoordinates from "../../graphs/formatters/toReferenceCoordinates";
+
 const parseSQUID = (data: string, name: string) => {
   
   // eslint-disable-next-line no-control-regex
@@ -14,26 +18,43 @@ const parseSQUID = (data: string, name: string) => {
     d: +headLine[4],
     v: +headLine[5] * 1E-6,
   };
+  // поправка параметров 'a' и 'b':
+  metadata.a = metadata.a < 90 ? metadata.a + 270 : metadata.a - 90;
 
   const steps = lines.slice(1).map((line, index) => {
 
-    // PAL | Xc (Am2) | Yc (Am2) | Zc (Am2) | MAG (A/m) | Dg | Ig | Ds | Is| a95
-    // PAL === Step (mT or temp degrees)
-    // it's old format and we can't just split by " " 'cause it can cause issues
-    const step = line.slice(0, 4).trim();
-    const x = +line.slice(4, 14).trim();
-    const y = +line.slice(14, 24).trim();
-    const z = +line.slice(24, 34).trim();
-    const mag = +line.slice(34, 44).trim();
-    const Dgeo = +line.slice(44, 50).trim();
-    const Igeo = +line.slice(50, 56).trim();
-    const Dstrat = +line.slice(56, 62).trim();
-    const Istrat = +line.slice(62, 68).trim();
-    const a95 = +line.slice(68, 74).trim();
-    const comment = line.slice(74, line.length).trim();
+    // Описывать здесь формат .squid файла я не вижу смысла, формат относительно редкий и никто
+    // не использует его как что-то, данные в себе хранящее - все данные из него в .pmd переводят
+    const stepSymbol = line.slice(0, 1);
+    const stepValue = Number(line.slice(2, 6).trim());
+    let step = '';
+    if (stepSymbol === 'N') {
+      step = 'NRM';
+    } else if (stepSymbol === 'A') {
+      // step = `M${stepValue / 10}` // почему-то так было в коде конвертера у РВ, но по факту это неправильно
+      step = `M${stepValue}`;
+    } else {
+      step = stepSymbol + stepValue;
+    };
+    // это все доступные данные, которые мы можем использовать для дальнейших построений, больше .squid ничего полезного не даёт
+    const mag = +line.slice(31, 39) * 1E3;
+    const Dcore = +line.slice(46, 52);
+    const Icore = +line.slice(52, 58);
+    // все остальные данные - производные
+    const coreDirection = new Direction(Dcore, Icore, mag * metadata.v);
+    const coreCoordinates = coreDirection.toCartesian();
+    const correctedMetadata = {...metadata, b: 90 - metadata.b};
+    const geoCoordinates = toReferenceCoordinates('geographic', correctedMetadata, coreCoordinates);
+    const stratCoordinates = toReferenceCoordinates('stratigraphic', correctedMetadata, coreCoordinates);
+    // это уже то, что пойдёт в отображение
+    const [ x, y, z ] = coreCoordinates.toArray().map(coord => +coord.toExponential(2));
+    const [ Dgeo, Igeo ] = geoCoordinates.toDirection().toArray();
+    const [ Dstrat, Istrat ] = stratCoordinates.toDirection().toArray();
+    const a95 = 0; // со squid-магнитометра не приходит параметр a95, что, конечно, очень неправильно, но что поделаешь?
+    const comment = ''; // нет комментариев в squid-файле
 
     // there is no standard for demagnetization symbol... and idk why
-    const demagSmbl = line.slice(0, 1);
+    const demagSmbl = step[0];
     const thermalTypes = ['T', 't'];
     const alternatingTypes = ['M', 'm'];
 
@@ -63,7 +84,7 @@ const parseSQUID = (data: string, name: string) => {
   return {
     metadata,
     steps,
-    format: "PMD",
+    format: "SQUID",
     created: new Date().toISOString(),
   };
 
