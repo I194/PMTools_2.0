@@ -8,15 +8,14 @@ import { Reference } from "../../graphs/types";
 
 const calculatePCA_dir = (
   selectedDirections: IDirData['interpretations'],
-  normalized: boolean,
 ) => {
   
   // Function calculatePCA
   // Does a PCA calculation on the selected directions
 
   const res: RawStatisticsDIR['mean'] = {
-    geographic: pcaByReference(selectedDirections, normalized, 'geographic'),
-    stratigraphic: pcaByReference(selectedDirections, normalized, 'stratigraphic'),
+    geographic: pcaByReference(selectedDirections, 'geographic'),
+    stratigraphic: pcaByReference(selectedDirections, 'stratigraphic'),
   };
 
   return res;
@@ -24,7 +23,6 @@ const calculatePCA_dir = (
 
 const pcaByReference = (
   selectedDirections: IDirData['interpretations'],
-  normalized: boolean,
   reference: Reference,
 ) => {
   const refLabel = reference === 'geographic' ? 'geo' : 'strat';
@@ -34,7 +32,7 @@ const pcaByReference = (
   const vectors: Array<[number, number, number]> = selectedDirections.map(direction => {
     const cartesianDir = new Direction(direction[`D${refLabel}`], direction[`I${refLabel}`], 1).toCartesian();
     const { x, y, z } = cartesianDir;
-    const factor = normalized ? Math.sqrt((x * x) + (y * y) + (z * z)) : 1;
+    const factor = 1; // эти вектора всегда единичные, этот множитель чисто для лучшей читабельности кода
     return [x / factor, y / factor, z / factor];
   });
 

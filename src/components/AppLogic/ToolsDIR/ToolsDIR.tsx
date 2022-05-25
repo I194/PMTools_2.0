@@ -192,9 +192,8 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
       </ButtonGroupWithLabel>
       <ButtonGroupWithLabel label='Статистический метод'>
         <StatModeButton mode='fisher' hotkey={fisherHotkey.key}/>
-        <StatModeButton mode='mcFadden' hotkey={mcFaddenHotkey.key}/>
+        <StatModeButton mode='mcFad' hotkey={mcFaddenHotkey.key}/>
         <StatModeButton mode='gc' hotkey={gcHotkey.key}/>
-        <StatModeButton mode='gcn' hotkey={gcnHotkey.key}/>
       </ButtonGroupWithLabel>
       <ButtonGroupWithLabel label='Смотреть статистику'>
         <Button onClick={() => setAllFilesStatOpen(true)}>По всем файлам</Button>

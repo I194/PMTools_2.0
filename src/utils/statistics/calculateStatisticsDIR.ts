@@ -23,10 +23,9 @@ const calculateStatisticsDIR = (
     stratigraphic: {direction: new Direction(0, 0, 0), MAD: 0}
   };
 
-  if (mode === 'gc') meanByMode = calculatePCA_dir(selectedDirections, false);
-  if (mode === 'gcn') meanByMode = calculatePCA_dir(selectedDirections, true);
+  if (mode === 'gc') meanByMode = calculatePCA_dir(selectedDirections);
   if (mode === 'fisher') meanByMode = calculateFisherMean(selectedDirections);
-  if (mode === 'mcFadden') meanByMode = calculateMcFaddenMean(selectedDirections);
+  if (mode === 'mcFad') meanByMode = calculateMcFaddenMean(selectedDirections);
 
   const rawStatistics: RawStatisticsDIR = {
     code: mode, 

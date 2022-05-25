@@ -58,7 +58,7 @@ const dataToStereoDIR = (
         xyDataSplitted: confidenceCircle, 
         color: graphSelectedDotColor('mean')
       },
-      greatCircle: (statistics.code === 'gc' || statistics.code === 'gcn') 
+      greatCircle: (statistics.code === 'gc') 
         ? {
             xyData: greatCircle.all, 
             xyDataSplitted: greatCircle, 
