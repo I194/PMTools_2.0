@@ -16,11 +16,10 @@ const DIRInputDataTableToolbar = () => {
   const { hiddenDirectionsIDs } = useAppSelector(state => state.dirPageReducer);
 
   if (!dirStatData) return null;
-  const data = dirStatData[currentDataDIRid || 0];
-  // if (data && data.interpretations) {
-  //   console.log(data)
-  //   // data.interpretations = data.interpretations.filter(interp => !hiddenDirectionsIDs.includes(interp.id));
-  // }
+  const data = {...dirStatData[currentDataDIRid || 0]};
+  if (data && data.interpretations && hiddenDirectionsIDs.length) {
+    data.interpretations  = data.interpretations.filter(interp => !hiddenDirectionsIDs.includes(interp.id));
+  }
 
   return (
     <GridToolbarContainer>
