@@ -30,6 +30,7 @@ import VGPModalContent from '../VGP/VGPmodalContent';
 import { setDirStatFiles } from '../../../services/reducers/files';
 import FoldTestContainer from './PMTests/FoldTestContainer';
 import PMTestsModalContent from './PMTests/PMTestsModalContent';
+import ReversePolarityButtons from './ReversePolarityButtons';
 
 interface IToolsDIR {
   data: IDirData | null;
@@ -199,6 +200,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
         <Button onClick={() => setAllFilesStatOpen(true)}>По всем файлам</Button>
       </ButtonGroupWithLabel>
       <ShowHideDotsButtons data={data} />
+      <ReversePolarityButtons data={data} />
       <ButtonGroupWithLabel label='По всем сайтам'>
         <Button onClick={() => setShowVGP(true)}>Построить VGP</Button>
       </ButtonGroupWithLabel>

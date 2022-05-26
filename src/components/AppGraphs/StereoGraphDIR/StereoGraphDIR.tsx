@@ -20,15 +20,15 @@ const StereoGraphDIR: FC<IStereoGraphDIR> = ({ graphId, width, height, data }) =
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
   // 2. zoom&pan
 
-  const { reference, currentInterpretation, hiddenDirectionsIDs } = useAppSelector(state => state.dirPageReducer);
+  const { reference, currentInterpretation, hiddenDirectionsIDs, reversedDirectionsIDs } = useAppSelector(state => state.dirPageReducer);
   const { menuItems, settings } = usePMDGraphSettings();
   const selectableNodes = useGraphSelectableNodesDIR(graphId); 
 
   const selectedIDs = useGraphSelectedIDs('dir');
   const {viewHeight, viewWidth, ...areaConstants} = stereoAreaConstants(width, height);
   const dataConstants = useMemo(() => 
-    dataToStereoDIR(data, width / 2, reference, hiddenDirectionsIDs, currentInterpretation?.rawData as RawStatisticsDIR),
-  [reference, width, currentInterpretation, data, hiddenDirectionsIDs]);
+    dataToStereoDIR(data, width / 2, reference, hiddenDirectionsIDs, reversedDirectionsIDs, currentInterpretation?.rawData as RawStatisticsDIR),
+  [reference, width, currentInterpretation, data, hiddenDirectionsIDs, reversedDirectionsIDs]);
 
   return (
     <>

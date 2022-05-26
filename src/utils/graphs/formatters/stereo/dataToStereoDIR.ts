@@ -12,9 +12,24 @@ const dataToStereoDIR = (
   graphSize: number, 
   reference: Reference,
   hiddenDirectionsIDs: Array<number>,
+  reversedDirectionsIDs: Array<number>,
   statistics?: RawStatisticsDIR,
 ) => {
-  const directions = data.interpretations.filter((direction, index) => !hiddenDirectionsIDs.includes(index + 1));
+  let directions = data.interpretations.filter((direction, index) => !hiddenDirectionsIDs.includes(index + 1));
+  directions = directions.map((direction, index) => {
+    const { id, Dgeo, Igeo, Dstrat, Istrat } = direction;
+    let geoDirection = new Direction(Dgeo, Igeo, 1);
+    let stratDirection = new Direction(Dstrat, Istrat, 1);
+    if (reversedDirectionsIDs.includes(id)) {
+      geoDirection = geoDirection.reversePolarity();
+      stratDirection = stratDirection.reversePolarity();
+    };
+    const DgeoFinal = +geoDirection.declination.toFixed(1);
+    const IgeoFinal = +geoDirection.inclination.toFixed(1);
+    const DstratFinal = +stratDirection.declination.toFixed(1);
+    const IstratFinal = +stratDirection.inclination.toFixed(1);
+    return {...direction, Dgeo: DgeoFinal, Igeo: IgeoFinal, Dstrat: DstratFinal, Istrat: IstratFinal};
+  });
 
   // annotations for dots ('id' field added right in the Data.tsx as dot index)
   const labels = directions.map((direction) => direction.label);

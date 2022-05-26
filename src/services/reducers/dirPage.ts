@@ -9,6 +9,7 @@ interface IInitialState {
   reference: Reference;
   selectedDirectionsIDs: Array<number> | null;
   hiddenDirectionsIDs: Array<number>;
+  reversedDirectionsIDs: Array<number>;
   statisticsMode: StatisticsModeDIR;
   currentInterpretation: StatisitcsInterpretation | null;
   currentFileInterpretations: Array<StatisitcsInterpretation>;
@@ -24,6 +25,7 @@ const initialState: IInitialState = {
   reference: 'geographic',
   selectedDirectionsIDs: null,
   hiddenDirectionsIDs: [],
+  reversedDirectionsIDs: [],
   statisticsMode: null,
   currentInterpretation: null,
   currentFileInterpretations: [],
@@ -53,8 +55,17 @@ const dirPage = createSlice({
       state.hiddenDirectionsIDs = action.payload;
     },
     addHiddenDirectionsIDs (state, action: {payload: Array<number>}) {
+      // Set делает значения уникальными
       const updatedHiddenDirectionsIDs = [...new Set([...state.hiddenDirectionsIDs, ...action.payload])];
       state.hiddenDirectionsIDs = updatedHiddenDirectionsIDs;
+    },
+    setReversedDirectionsIDs (state, action: {payload: Array<number>}) {
+      state.reversedDirectionsIDs = action.payload;
+    },
+    addReversedDirectionsIDs (state, action: {payload: Array<number>}) {
+      // Set делает значения уникальными
+      const updatedReversedDirectionsIDs = [...new Set([...state.reversedDirectionsIDs, ...action.payload])];
+      state.reversedDirectionsIDs = updatedReversedDirectionsIDs;
     },
     showSelectionInput (state, action) {
       state.showSelectionInput = action.payload;
@@ -123,6 +134,8 @@ export const {
   setSelectedDirectionsIDs,
   sethiddenDirectionsIDs,
   addHiddenDirectionsIDs,
+  setReversedDirectionsIDs,
+  addReversedDirectionsIDs,
   setStatisticsMode,
   showSelectionInput,
   addInterpretation,

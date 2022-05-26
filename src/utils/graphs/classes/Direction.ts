@@ -61,6 +61,14 @@ class Direction {
     };
     return new Direction(dec, inc, this.length);
   };
+
+  reversePolarity = () => {
+    let dec = this.declination;
+    let inc = this.inclination;
+    inc = -inc;
+    dec = (dec + 180) % 360;
+    return new Direction(dec, inc, this.length);
+  }
 }
 
 export default Direction;

@@ -18,6 +18,7 @@ import useApiRef from "../useApiRef";
 import { setVGPData } from "../../../../services/reducers/dirPage";
 import { setSiteData } from "../../../../services/reducers/parsedData";
 import { textColor } from "../../../../utils/ThemeConstants";
+import Direction from "../../../../utils/graphs/classes/Direction";
 
 type SiteRow = {
   id: number;
@@ -40,7 +41,7 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data, sitesData }) => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
 
-  const { hiddenDirectionsIDs, reference } = useAppSelector(state => state.dirPageReducer);
+  const { hiddenDirectionsIDs, reversedDirectionsIDs, reference } = useAppSelector(state => state.dirPageReducer);
   // const { siteData } = useAppSelector(state => state.parsedDataReducer);
   // const [siteVGPData, setSiteVGPData] = useState<ISitesData['data']>([]);
   // const [editRowsModel, setEditRowsModel] = useState<GridEditRowsModel>({});
@@ -132,8 +133,21 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data, sitesData }) => {
         plateId = sitesData[index].plateId;
       };
       const interpretation = data.interpretations.find(interpretation => interpretation.id === id)!;
-      const dec = reference === 'geographic' ? interpretation.Dgeo : interpretation.Dstrat;
-      const inc = reference === 'geographic' ? interpretation.Igeo : interpretation.Istrat;
+      // учёт перевернутых направлений
+      const { Dgeo, Igeo, Dstrat, Istrat } = interpretation;
+      let geoDirection = new Direction(Dgeo, Igeo, 1);
+      let stratDirection = new Direction(Dstrat, Istrat, 1);
+      if (reversedDirectionsIDs.includes(id)) {
+        geoDirection = geoDirection.reversePolarity();
+        stratDirection = stratDirection.reversePolarity();
+      };
+      const DgeoFinal = +geoDirection.declination.toFixed(1);
+      const IgeoFinal = +geoDirection.inclination.toFixed(1);
+      const DstratFinal = +stratDirection.declination.toFixed(1);
+      const IstratFinal = +stratDirection.inclination.toFixed(1);
+      // итоговые данные для расчёта vgp
+      const dec = reference === 'geographic' ? DgeoFinal : DstratFinal;
+      const inc = reference === 'geographic' ? IgeoFinal : IstratFinal;
       const a95 = interpretation.mad;
       const vgp = calculateVGP(dec, inc, a95, lat, lon);
       return {

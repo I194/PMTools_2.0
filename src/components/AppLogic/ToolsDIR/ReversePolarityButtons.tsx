@@ -6,8 +6,8 @@ import ButtonGroupWithLabel from "../../Sub/Buttons/ButtonGroupWithLabel/ButtonG
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { 
-  addHiddenDirectionsIDs, 
-  sethiddenDirectionsIDs, 
+  setReversedDirectionsIDs,
+  addReversedDirectionsIDs,
   setSelectedDirectionsIDs, 
   setStatisticsMode 
 } from "../../../services/reducers/dirPage";
@@ -16,52 +16,56 @@ import ModalWrapper from "../../Sub/Modal/ModalWrapper";
 import InputApply from "../../Sub/InputApply/InputApply";
 import parseDotsIndexesInput from "../../../utils/parsers/parseDotsIndexesInput";
 import { enteredIndexesToIDsDIR } from "../../../utils/parsers/enteredIndexesToIDs";
+import SwapVertRoundedIcon from '@mui/icons-material/SwapVertRounded';
+import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 
 type Props = {
   data: IDirData;
 }
 
-const ShowHideDotsButtons = ({ data }: Props) => {
+const ReversePolarityButtons = ({ data }: Props) => {
 
   const dispatch = useAppDispatch();
   
   const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
-  const { selectedDirectionsIDs, hiddenDirectionsIDs } = useAppSelector(state => state.dirPageReducer); 
+  const { selectedDirectionsIDs, reversedDirectionsIDs, hiddenDirectionsIDs } = useAppSelector(state => state.dirPageReducer); 
 
-  const [hideDirs, setHideDirs] = useState<boolean>(false);
+  const [reverseDirs, setReverseDirs] = useState<boolean>(false);
   const [showIndexesInput, setShowIndexesInput] = useState<boolean>(false);
 
-  const onShowClick = () => {
-    dispatch(sethiddenDirectionsIDs([]));
+  const onUnreverseClick = () => {
+    dispatch(setReversedDirectionsIDs([]));
   };
 
-  const onHideClick = () => {
-    setHideDirs(true);
+  const onReverseClick = () => {
+    setReverseDirs(true);
   };
 
-  const [showHotkey, setShowHotkey] = useState<{key: string, code: string}>({key: 'S', code: 'KeyS'});
-  const [hideHotkey, setHideHotkey] = useState<{key: string, code: string}>({key: 'H', code: 'KeyH'});
+  // const [showHotkey, setShowHotkey] = useState<{key: string, code: string}>({key: 'S', code: 'KeyS'});
+  // const [hideHotkey, setHideHotkey] = useState<{key: string, code: string}>({key: 'H', code: 'KeyH'});
+  const [reverseHotkey, setReverseHotkey] = useState<{key: string, code: string}>({key: 'R', code: 'KeyR'});
+  const [unreverseHotkey, setUnreverseHotkey] = useState<{key: string, code: string}>({key: 'T', code: 'KeyT'});
 
   useEffect(() => {
-    const visibilityHotkeys = hotkeys.find(block => block.title === 'Видимость точек')?.hotkeys;
+    const visibilityHotkeys = hotkeys.find(block => block.title === 'Обращение полярности')?.hotkeys;
     if (visibilityHotkeys) {
-      setShowHotkey(visibilityHotkeys.find(hotkey => hotkey.label === 'Показать точки')!.hotkey);
-      setHideHotkey(visibilityHotkeys.find(hotkey => hotkey.label === 'Скрыть точки')!.hotkey);
+      setUnreverseHotkey(visibilityHotkeys.find(hotkey => hotkey.label === 'Прямая полярность')!.hotkey);
+      setReverseHotkey(visibilityHotkeys.find(hotkey => hotkey.label === 'Обратная полярность')!.hotkey);
     };
   }, [hotkeys]);
 
   useEffect(() => {
-    if ((!selectedDirectionsIDs || !selectedDirectionsIDs.length) && hideDirs) {
+    if ((!selectedDirectionsIDs || !selectedDirectionsIDs.length) && reverseDirs) {
       setShowIndexesInput(true);
     }
-    if (hideDirs && selectedDirectionsIDs && selectedDirectionsIDs.length) {
+    if (reverseDirs && selectedDirectionsIDs && selectedDirectionsIDs.length) {
       console.log(selectedDirectionsIDs)
-      dispatch(addHiddenDirectionsIDs(selectedDirectionsIDs));
-      setHideDirs(false);
+      dispatch(addReversedDirectionsIDs(selectedDirectionsIDs));
+      setReverseDirs(false);
       dispatch(setSelectedDirectionsIDs(null));
       dispatch(setStatisticsMode(null));
     };
-  }, [hideDirs, selectedDirectionsIDs]);
+  }, [reverseDirs, selectedDirectionsIDs]);
 
   useEffect(() => {
     console.log('what', hotkeysActive)
@@ -75,18 +79,18 @@ const ShowHideDotsButtons = ({ data }: Props) => {
   const handleHotkeys = (event: KeyboardEvent) => {
     const keyCode = event.code;
 
-    if (keyCode === showHotkey.code) {
+    if (keyCode === reverseHotkey.code) {
       event.preventDefault();
-      onShowClick();
+      onReverseClick();
     };
-    if (keyCode === hideHotkey.code) {
+    if (keyCode === unreverseHotkey.code) {
       event.preventDefault();
-      onHideClick();
+      onUnreverseClick();
     };
   };
 
-  const handleEnteredDotsIndexesApply = (steps: string) => {
-    const parsedIndexes = parseDotsIndexesInput(steps || `1-${data?.interpretations.length}`);
+  const handleEnteredDotsIndexesApply = (indexes: string) => {
+    const parsedIndexes = parseDotsIndexesInput(indexes || `1-${data?.interpretations.length}`);
     const IDs = enteredIndexesToIDsDIR(parsedIndexes, hiddenDirectionsIDs, data!);
     dispatch(setSelectedDirectionsIDs(IDs));
     setShowIndexesInput(false);
@@ -94,29 +98,29 @@ const ShowHideDotsButtons = ({ data }: Props) => {
 
   return (
     <>
-      <ButtonGroupWithLabel label='Видимость'>
+      <ButtonGroupWithLabel label='Обращение'>
         <Tooltip
-          title={<Typography variant='body1'>{hideHotkey.key}</Typography>}
+          title={<Typography variant='body1'>{reverseHotkey.key}</Typography>}
           enterDelay={1000}
           arrow
         >
           <Button
             color={'primary'}
-            onClick={onHideClick}
+            onClick={onReverseClick}
           >
-            <VisibilityOffIcon />
+            <SwapVertRoundedIcon />
           </Button>
         </Tooltip>
         <Tooltip
-          title={<Typography variant='body1'>{showHotkey.key}</Typography>}
+          title={<Typography variant='body1'>{unreverseHotkey.key}</Typography>}
           enterDelay={1000}
           arrow
         >
           <Button
-            color={hiddenDirectionsIDs.length ? 'warning' : 'primary'}
-            onClick={onShowClick}
+            color={reversedDirectionsIDs.length ? 'warning' : 'primary'}
+            onClick={onUnreverseClick}
           >
-            <VisibilityIcon /> 
+            <SettingsBackupRestoreIcon /> 
           </Button>
         </Tooltip>
       </ButtonGroupWithLabel>
@@ -127,11 +131,11 @@ const ShowHideDotsButtons = ({ data }: Props) => {
           setOpen={setShowIndexesInput}
           size={{width: '26vw', height: '14vh'}}
           position={{left: '50%', top: '20%'}}
-          onClose={() => {setHideDirs(false)}}
+          onClose={() => {setReverseDirs(false)}}
           isDraggable={true}
         >
           <InputApply 
-            label={`Введите номера точек (hide dirs)`}
+            label={`Введите номера точек (reverse dirs)`}
             helperText="Валидные примеры: 1-9 || 2,4,8,9 || 2-4;8,9 || 2-4;8,9;12-14"
             onApply={handleEnteredDotsIndexesApply}
             placeholder={`1-${data.interpretations.length}`}
@@ -142,4 +146,4 @@ const ShowHideDotsButtons = ({ data }: Props) => {
   );
 };
 
-export default ShowHideDotsButtons;
+export default ReversePolarityButtons;
