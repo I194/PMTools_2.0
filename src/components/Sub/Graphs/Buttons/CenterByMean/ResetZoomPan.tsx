@@ -9,7 +9,7 @@ interface ICenterByMean {
 
 const CenterByMean: FC<ICenterByMean> = ({ onClick, isUseful }) => {
   return (
-    <div className={styles.projectionSelect}>
+    <div className={styles.centerByMean}>
       <Button
         color={isUseful ? 'warning' : 'primary'}
         onClick={onClick}

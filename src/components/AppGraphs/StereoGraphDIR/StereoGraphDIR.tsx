@@ -12,15 +12,24 @@ import dataToStereoDIR from "../../../utils/graphs/formatters/stereo/dataToStere
 
 export interface IStereoGraphDIR extends IGraph {
   data: IDirData;
+  centeredByMean: boolean;
+  setCenteredByMean: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const StereoGraphDIR: FC<IStereoGraphDIR> = ({ graphId, width, height, data }) => {
+const StereoGraphDIR: FC<IStereoGraphDIR> = ({ 
+  graphId, 
+  width, 
+  height, 
+  data,
+  centeredByMean,
+  setCenteredByMean,
+}) => {
 
   // ToDo: 
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
   // 2. zoom&pan
 
-  const [centeredByMean, setCenteredByMean] = useState<boolean>(false);
+  // const [centeredByMean, setCenteredByMean] = useState<boolean>(false);
 
   const { reference, currentInterpretation, hiddenDirectionsIDs, reversedDirectionsIDs } = useAppSelector(state => state.dirPageReducer);
   const { menuItems, settings } = usePMDGraphSettings();

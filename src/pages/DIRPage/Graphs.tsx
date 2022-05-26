@@ -17,6 +17,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
   const graphToExportRef = useRef<HTMLDivElement>(null);
 
   const [graphSize, setGraphSize] = useState<number>(300);
+  const [centeredByMean, setCenteredByMean] = useState<boolean>(false);
 
   useEffect(() => {
     const graphWidth = graphRef.current?.offsetWidth;
@@ -42,6 +43,8 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
           width={graphSize}
           height={graphSize}
           data={dataToShow}
+          centeredByMean={centeredByMean}
+          setCenteredByMean={setCenteredByMean}
         />,
         ref: graphRef
       }}
@@ -51,6 +54,8 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
           width={500}
           height={500}
           data={dataToShow}
+          centeredByMean={centeredByMean}
+          setCenteredByMean={setCenteredByMean}
         />,
         ref: graphToExportRef
       }}
