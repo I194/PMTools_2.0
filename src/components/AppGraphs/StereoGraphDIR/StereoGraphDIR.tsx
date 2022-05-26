@@ -41,6 +41,7 @@ const StereoGraphDIR: FC<IStereoGraphDIR> = ({ graphId, width, height, data }) =
         menuItems={menuItems}
         extraID={data.name}
         graphName={`${data.name}_stereo_dir`}
+        // viewBox={`0 0 ${viewWidth} ${viewHeight}`}
       >
         <g>
           <AxesAndData 

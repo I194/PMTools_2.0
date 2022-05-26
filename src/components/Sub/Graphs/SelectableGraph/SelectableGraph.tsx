@@ -12,11 +12,16 @@ import ResetZoomPan from "../Buttons/ResetZoomPan/ResetZoomPan";
 import ToggleMean from "../Buttons/ToggleMean/ToggleMean";
 import { useLocation } from "react-router-dom";
 
+import {ReactSVGPanZoom, TOOL_NONE, fitSelection, zoomOnViewerCenter, fitToViewer, UncontrolledReactSVGPanZoom} from 'react-svg-pan-zoom';
+
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+
 interface ISelectableGraph {
   graphId: string;
   graphName?: string;
   width: number;
   height: number;
+  viewBox?: string;
   selectableNodes: ChildNode[];
   nodesDuplicated: boolean;
   menuItems?: Array<TMenuItem>;
@@ -34,6 +39,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
   graphName,
   width,
   height,
+  viewBox,
   selectableNodes,
   menuItems,
   extraID,
@@ -46,6 +52,14 @@ const SelectableGraph: FC<ISelectableGraph> = ({
 
   const dispatch = useAppDispatch();
   const location = useLocation();
+
+  const Viewer = useRef<any>(null);
+
+  useEffect(() => {
+    if (Viewer.current) {
+      Viewer.current.fitToViewer();
+    }
+  }, []);
 
   const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
   const currentPage = location.pathname.split('/').pop() || location.pathname;
@@ -75,6 +89,21 @@ const SelectableGraph: FC<ISelectableGraph> = ({
     );
   }, [selectableNodes]);
 
+  const [dragContainerID, setDragContainerID] = useState<string>('#'+ID);
+  const handleIsPanning = (event: KeyboardEvent) => {
+    if (event.altKey) setDragContainerID('');
+    else setDragContainerID('#'+ID);
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleIsPanning);
+    window.addEventListener('keyup', handleIsPanning);
+    return () => {
+      window.removeEventListener('keydown', handleIsPanning);
+      window.removeEventListener('keyup', handleIsPanning);
+    };
+  }, [])
+
   useEffect(() => {
     if (hotkeysActive) window.addEventListener("keydown", handleHotkeys);
     else window.removeEventListener("keydown", handleHotkeys);
@@ -82,6 +111,8 @@ const SelectableGraph: FC<ISelectableGraph> = ({
       window.removeEventListener("keydown", handleHotkeys);
     };
   }, [hotkeysActive, hotkeys, currentPan]);
+
+  console.log('drag', dragContainerID)
   
   return (
     <>
@@ -98,20 +129,30 @@ const SelectableGraph: FC<ISelectableGraph> = ({
         }
         {/* <ExportButton graphId={ID} name={graphName} /> */}
         <ExportButton graphId={`export_${ID}`} name={graphName} />
-        <svg
-          xmlns="http://www.w3.org/2000/svg" 
-          version="1.1" 
-          width={width} 
-          height={height} 
-          id={ID} 
-          onClick={handleDoubleClick}
-          onWheel={onWheel}
+        <TransformWrapper
+          panning={{
+            activationKeys: ['Alt'],
+          }}
+          disabled={graphId === 'zijd'}
         >
-          {children}
-        </svg>
+          <TransformComponent>
+            <svg
+              xmlns="http://www.w3.org/2000/svg" 
+              version="1.1" 
+              width={width} 
+              height={height} 
+              id={ID} 
+              onClick={handleDoubleClick}
+              onWheel={onWheel}
+              viewBox={viewBox}
+            >
+              {children}
+            </svg>
+          </TransformComponent>
+        </TransformWrapper>
       </ContextMenu>
       <Selecto
-        dragContainer={'#'+ID}
+        dragContainer={dragContainerID}
         boundContainer={document.getElementById(ID)}
         selectableTargets={selectableTargets}
         hitRate={100}
@@ -119,6 +160,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
         selectFromInside={true}
         toggleContinueSelect={["shift"]}
         ratio={0}
+        dragCondition={() => dragContainerID !== ''}
         onSelectEnd={e => {
           const indexes = new Set(e.selected.map(el => el.id.split('-').pop()));
           const IDs = [...indexes].filter(index => index) as Array<string>;
