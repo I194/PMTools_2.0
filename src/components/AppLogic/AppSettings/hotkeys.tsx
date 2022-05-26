@@ -79,6 +79,28 @@ export const defaultHotkeys: HotkeysType = [
   },
   {
     id: 3,
+    title: 'Обращение полярности направлений',
+    hotkeys: [
+      {
+        id: 1,
+        label: 'Обратная полярность',
+        hotkey: {
+          key: 'R',
+          code: 'KeyR',
+        }
+      },
+      {
+        id: 2,
+        label: 'Прямая полярность',
+        hotkey: {
+          key: 'T',
+          code: 'KeyT',
+        }
+      }
+    ]
+  },
+  {
+    id: 4,
     title: 'Выделение точек',
     hotkeys: [
       {
@@ -92,7 +114,7 @@ export const defaultHotkeys: HotkeysType = [
     ]
   },
   {
-    id: 4,
+    id: 5,
     title: 'Управление диграммой Зийдервельда',
     hotkeys: [
       {
