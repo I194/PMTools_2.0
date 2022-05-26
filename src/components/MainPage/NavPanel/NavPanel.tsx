@@ -20,7 +20,6 @@ const NavPanel = () => {
 
   const isSmallScreen = useMediaQuery({ query: '(max-width: 1464px)' });
   const { colorMode } = useAppSelector(state => state.appSettingsReducer);
-  const systemTheme = useSystemTheme();
   const theme = useTheme();
 
   const onColorModeClick = () => {
@@ -30,10 +29,6 @@ const NavPanel = () => {
   const onLanguageClick = () => {
     console.log('language click');
   };
-
-  useEffect(() => {
-    dispatch(setColorMode(systemTheme));
-  }, [systemTheme]);
 
   return (
     <div className={styles.container}>

@@ -16,16 +16,12 @@ const AppNavigation: FC = ({}) => {
   const isSmallScreen = useMediaQuery({ query: '(max-width: 1464px)' });
 
   const dispatch = useAppDispatch();
+  // Окончательная установка темы идёт в app.tsx и опирается она на colorMode
   const { colorMode } = useAppSelector(state => state.appSettingsReducer);
-  const systemTheme = useSystemTheme();
-
+  
   const onColorModeClick = () => {
     dispatch(setColorMode(colorMode === 'dark' ? 'light' : 'dark'));
   };
-
-  useEffect(() => {
-    dispatch(setColorMode(systemTheme));
-  }, [systemTheme]);
 
   const theme = useTheme();
 

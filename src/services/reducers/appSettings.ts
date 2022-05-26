@@ -3,12 +3,14 @@ import { HotkeysType } from "../../utils/GlobalTypes";
 
 interface IInitialState {
   colorMode: 'dark' | 'light';
+  rememberColorMode: boolean;
   hotkeysActive: boolean;
   hotkeys: HotkeysType;
 }
 
 const initialState: IInitialState = {
   colorMode: 'dark',
+  rememberColorMode: false,
   hotkeysActive: true,
   hotkeys: [],
 }
@@ -19,6 +21,11 @@ const appSettings = createSlice({
   reducers: {
     setColorMode (state, action) {
       state.colorMode = action.payload;
+      localStorage.setItem('colorMode', action.payload);
+      console.log('color', action.payload, localStorage);
+    },
+    setRememberColorMode (state, action) {
+      state.rememberColorMode = action.payload;
     },
     acitvateHotkeys (state) {
       state.hotkeysActive = true;
@@ -29,7 +36,6 @@ const appSettings = createSlice({
     setHotkeys (state, action: { payload: HotkeysType }) {
       state.hotkeys = action.payload;
       localStorage.setItem('hotkeys', JSON.stringify(action.payload));
-      console.log('hotkeys set', action.payload);
     },
   },
   extraReducers: (builder) => {
@@ -38,6 +44,7 @@ const appSettings = createSlice({
 
 export const { 
   setColorMode,
+  setRememberColorMode,
   acitvateHotkeys,
   deactivateHotkeys,
   setHotkeys,

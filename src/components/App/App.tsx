@@ -1,14 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from './App.module.scss';
 import { Route, Routes } from 'react-router-dom';
-import { useAppSelector } from '../../services/store/hooks';
+import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { MainPageLayout, AppLayout } from '../Layouts';
 import { MainPage, DIRPage, PCAPage, NotFoundPage } from '../../pages';
+import { useSystemTheme } from '../../utils/GlobalHooks';
+import { setColorMode } from '../../services/reducers/appSettings';
 
 function App() {
+
+  const dispatch = useAppDispatch();
   
-  const { colorMode } = useAppSelector(state => state.appSettingsReducer);
+  const { colorMode, rememberColorMode } = useAppSelector(state => state.appSettingsReducer);
+  const systemTheme = useSystemTheme();
+
+  // useEffect(() => {
+  //   if (!rememberColorMode) dispatch(setColorMode(systemTheme));
+  // }, [systemTheme, rememberColorMode]);
+  
+  useEffect(() => {
+    console.log('color', localStorage)
+    const previousColorMode = localStorage.getItem('colorMode') || 'light';
+    dispatch(setColorMode(previousColorMode));
+  }, []);
 
   const theme = createTheme({
     palette: {
