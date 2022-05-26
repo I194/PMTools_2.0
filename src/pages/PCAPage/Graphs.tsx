@@ -14,8 +14,11 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
   const [wv, wh] = useWindowSize();
 
   const graphLargeRef = useRef<HTMLDivElement>(null);
+  const graphLargeToExportRef = useRef<HTMLDivElement>(null);
   const graphSmallTopRef = useRef<HTMLDivElement>(null);
+  const graphSmallTopToExportRef = useRef<HTMLDivElement>(null);
   const graphSmallBotRef = useRef<HTMLDivElement>(null);
+  const graphSmallBotToExportRef = useRef<HTMLDivElement>(null);
 
   const [largeGraphSize, setLargeGraphSize] = useState<number>(300);
   const [smallGraphSize, setSmallGraphSize] = useState<number>(300);
@@ -38,8 +41,11 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
   if (!dataToShow) return (
     <GraphsSkeleton 
       graphLarge={{node: null, ref: graphLargeRef}} 
+      graphLargeToExport={{node: null, ref: graphLargeToExportRef}}
       graphSmallTop={{node: null, ref: graphSmallTopRef}}
+      graphSmallTopToExport={{node: null, ref: graphSmallTopToExportRef}}
       graphSmallBot={{node: null, ref: graphSmallBotRef}}
+      graphSmallBotToExport={{node: null, ref: graphSmallBotToExportRef}}
     />
   );
 
@@ -54,6 +60,15 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
         />,
         ref: graphLargeRef
       }}
+      graphLargeToExport={{
+        node: <ZijdGraph 
+          graphId={`export_zijd`}
+          width={500}
+          height={500} 
+          data={dataToShow}
+        />,
+        ref: graphLargeToExportRef
+      }}
       graphSmallTop={{
         node: <StereoGraph 
           graphId={`stereo`} 
@@ -63,6 +78,15 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
         />,
         ref: graphSmallTopRef
       }}
+      graphSmallTopToExport={{
+        node: <StereoGraph 
+          graphId={`export_stereo`}
+          width={500}
+          height={500} 
+          data={dataToShow}
+        />,
+        ref: graphSmallTopToExportRef
+      }}
       graphSmallBot={{
         node: <MagGraph 
           graphId={`mag`}
@@ -71,6 +95,15 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
           data={dataToShow}
         />,
         ref: graphSmallBotRef
+      }}
+      graphSmallBotToExport={{
+        node: <MagGraph
+          graphId={`export_mag`}
+          width={500}
+          height={500}
+          data={dataToShow}
+        />,
+        ref: graphSmallBotToExportRef
       }}
     />
   )

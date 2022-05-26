@@ -9,12 +9,22 @@ import {
 import { PMDGraph } from '../../utils/GlobalTypes';
 
 interface IGraphsSkeleton {
-  graphLarge: {node: ReactNode, ref: React.RefObject<HTMLDivElement>} | null ;
+  graphLarge: {node: ReactNode, ref: React.RefObject<HTMLDivElement>} | null;
+  graphLargeToExport: {node: ReactNode, ref: React.RefObject<HTMLDivElement>} | null;
   graphSmallTop: {node: ReactNode, ref: React.RefObject<HTMLDivElement>} | null;
+  graphSmallTopToExport: {node: ReactNode, ref: React.RefObject<HTMLDivElement>} | null;
   graphSmallBot: {node: ReactNode, ref: React.RefObject<HTMLDivElement>} | null;
+  graphSmallBotToExport: {node: ReactNode, ref: React.RefObject<HTMLDivElement>} | null;
 };
 
-const GraphsSkeleton: FC<IGraphsSkeleton> = ({ graphLarge, graphSmallTop, graphSmallBot }) => {
+const GraphsSkeleton: FC<IGraphsSkeleton> = ({ 
+  graphLarge, 
+  graphLargeToExport,
+  graphSmallTop, 
+  graphSmallTopToExport,
+  graphSmallBot,
+  graphSmallBotToExport,
+}) => {
   
   const theme = useTheme();
 
@@ -23,25 +33,10 @@ const GraphsSkeleton: FC<IGraphsSkeleton> = ({ graphLarge, graphSmallTop, graphS
       className={styles.graphs}
       style={{backgroundColor: bgColorMain(theme.palette.mode)}}
     >
-      <div 
-        className={styles.graphLarge} 
-        ref={graphLarge?.ref}
-        style={{
-          backgroundColor: bgColorBlocks(theme.palette.mode),
-          WebkitBoxShadow: boxShadowStyle(theme.palette.mode),
-          MozBoxShadow: boxShadowStyle(theme.palette.mode),
-          boxShadow: boxShadowStyle(theme.palette.mode),
-        }}
-      >
-        { graphLarge?.node }
-      </div>
-      <div 
-        className={styles.column}
-        style={{backgroundColor: bgColorMain(theme.palette.mode)}}
-      >
+      <>
         <div 
-          className={styles.graphSmall} 
-          ref={graphSmallTop?.ref}
+          className={styles.graphLarge} 
+          ref={graphLarge?.ref}
           style={{
             backgroundColor: bgColorBlocks(theme.palette.mode),
             WebkitBoxShadow: boxShadowStyle(theme.palette.mode),
@@ -49,20 +44,59 @@ const GraphsSkeleton: FC<IGraphsSkeleton> = ({ graphLarge, graphSmallTop, graphS
             boxShadow: boxShadowStyle(theme.palette.mode),
           }}
         >
-          { graphSmallTop?.node }
+          { graphLarge?.node }
         </div>
         <div 
-          className={styles.graphSmall} 
-          ref={graphSmallBot?.ref}
-          style={{
-            backgroundColor: bgColorBlocks(theme.palette.mode),
-            WebkitBoxShadow: boxShadowStyle(theme.palette.mode),
-            MozBoxShadow: boxShadowStyle(theme.palette.mode),
-            boxShadow: boxShadowStyle(theme.palette.mode),
-          }}
-        > 
-          { graphSmallBot?.node }
+          ref={graphLargeToExport?.ref}
+          style={{display: 'none'}}
+        >
+          { graphLargeToExport?.node }
         </div>
+      </>
+      <div 
+        className={styles.column}
+        style={{backgroundColor: bgColorMain(theme.palette.mode)}}
+      >
+        <>
+          <div 
+            className={styles.graphSmall} 
+            ref={graphSmallTop?.ref}
+            style={{
+              backgroundColor: bgColorBlocks(theme.palette.mode),
+              WebkitBoxShadow: boxShadowStyle(theme.palette.mode),
+              MozBoxShadow: boxShadowStyle(theme.palette.mode),
+              boxShadow: boxShadowStyle(theme.palette.mode),
+            }}
+          >
+            { graphSmallTop?.node }
+          </div>
+          <div 
+            ref={graphSmallTopToExport?.ref}
+            style={{display: 'none'}}
+          >
+            { graphSmallTopToExport?.node }
+          </div>
+        </>
+        <>
+          <div 
+            className={styles.graphSmall} 
+            ref={graphSmallBot?.ref}
+            style={{
+              backgroundColor: bgColorBlocks(theme.palette.mode),
+              WebkitBoxShadow: boxShadowStyle(theme.palette.mode),
+              MozBoxShadow: boxShadowStyle(theme.palette.mode),
+              boxShadow: boxShadowStyle(theme.palette.mode),
+            }}
+          > 
+            { graphSmallBot?.node }
+          </div>
+          <div 
+            ref={graphSmallBotToExport?.ref}
+            style={{display: 'none'}}
+          >
+            { graphSmallBotToExport?.node }
+          </div>
+        </>
       </div>
     </div>
   )

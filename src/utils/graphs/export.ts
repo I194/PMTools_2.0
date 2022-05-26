@@ -46,5 +46,10 @@ var exportSVG = function(svg: any, name?: string) {
 };
 
 export const handleExportGraph = (id: string, name?: string) => {
-	exportSVG(document.getElementById(id), name);
+  let svgElement = document.getElementById(id);
+  if (!svgElement) {
+    const defaultId = id.split('export_')[1];
+    svgElement = document.getElementById(defaultId);
+  }
+	exportSVG(svgElement, name);
 };

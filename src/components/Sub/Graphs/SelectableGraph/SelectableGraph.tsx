@@ -82,7 +82,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
       window.removeEventListener("keydown", handleHotkeys);
     };
   }, [hotkeysActive, hotkeys, currentPan]);
-
+  
   return (
     <>
       <ContextMenu items={menuItems}>
@@ -96,7 +96,8 @@ const SelectableGraph: FC<ISelectableGraph> = ({
             />
           </>
         }
-        <ExportButton graphId={ID} name={graphName} />
+        {/* <ExportButton graphId={ID} name={graphName} /> */}
+        <ExportButton graphId={`export_${ID}`} name={graphName} />
         <svg
           xmlns="http://www.w3.org/2000/svg" 
           version="1.1" 

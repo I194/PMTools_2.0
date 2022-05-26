@@ -24,6 +24,7 @@ const Graphs: FC = () => {
   const [wv, wh] = useWindowSize();
 
   const vgpGraphRef = useRef<HTMLDivElement>(null);
+  const vgpGraphToExportRef = useRef<HTMLDivElement>(null);
 
   const [graphSize, setGraphSize] = useState<number>(300);
 
@@ -39,6 +40,7 @@ const Graphs: FC = () => {
   if (!dataToShow) return (
     <GraphsSkeleton 
       graph={{node: null, ref: vgpGraphRef}} 
+      graphToExport={{node: null, ref: vgpGraphToExportRef}}
     />
   );
 
@@ -52,6 +54,15 @@ const Graphs: FC = () => {
           data={dataToShow}
         />,
         ref: vgpGraphRef
+      }}
+      graphToExport={{
+        node: <StereoGraphVGP
+          graphId={`export_stereoVGP`}
+          width={500}
+          height={500}
+          data={dataToShow}
+        />,
+        ref: vgpGraphToExportRef
       }}
     />
   )

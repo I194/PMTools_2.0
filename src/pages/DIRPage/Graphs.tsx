@@ -14,6 +14,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
   const [wv, wh] = useWindowSize();
 
   const graphRef = useRef<HTMLDivElement>(null);
+  const graphToExportRef = useRef<HTMLDivElement>(null);
 
   const [graphSize, setGraphSize] = useState<number>(300);
 
@@ -29,6 +30,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
   if (!dataToShow) return (
     <GraphsSkeleton 
       graph={{node: null, ref: graphRef}} 
+      graphToExport={{node: null, ref: graphToExportRef}}
     />
   );
 
@@ -42,6 +44,15 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
           data={dataToShow}
         />,
         ref: graphRef
+      }}
+      graphToExport={{
+        node: <StereoGraphDIR
+          graphId={`export_stereoDir`}
+          width={500}
+          height={500}
+          data={dataToShow}
+        />,
+        ref: graphToExportRef
       }}
     />
   )

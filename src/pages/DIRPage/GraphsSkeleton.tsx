@@ -9,9 +9,13 @@ import {
 
 interface IGraphsSkeleton {
   graph: {node: ReactNode, ref: React.RefObject<HTMLDivElement>} | null ;
+  graphToExport: {node: ReactNode, ref: React.RefObject<HTMLDivElement>} | null ;
 };
 
-const GraphsSkeleton: FC<IGraphsSkeleton> = ({ graph }) => {
+const GraphsSkeleton: FC<IGraphsSkeleton> = ({ 
+  graph,  
+  graphToExport,
+}) => {
   
   const theme = useTheme();
 
@@ -31,6 +35,12 @@ const GraphsSkeleton: FC<IGraphsSkeleton> = ({ graph }) => {
         }}
       >
         { graph?.node }
+      </div>
+      <div
+        ref={graphToExport?.ref}
+        style={{display: 'none'}}
+      >
+        { graphToExport?.node }
       </div>
     </div>
   )
