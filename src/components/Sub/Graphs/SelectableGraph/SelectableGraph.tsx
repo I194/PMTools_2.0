@@ -11,9 +11,6 @@ import ProjectionSelect from "../Buttons/ProjectionSelect/ProjectionSelect";
 import ResetZoomPan from "../Buttons/ResetZoomPan/ResetZoomPan";
 import ToggleMean from "../Buttons/ToggleMean/ToggleMean";
 import { useLocation } from "react-router-dom";
-
-import {ReactSVGPanZoom, TOOL_NONE, fitSelection, zoomOnViewerCenter, fitToViewer, UncontrolledReactSVGPanZoom} from 'react-svg-pan-zoom';
-
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 interface ISelectableGraph {

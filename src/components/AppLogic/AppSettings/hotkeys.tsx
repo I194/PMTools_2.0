@@ -114,18 +114,42 @@ export const defaultHotkeys: HotkeysType = [
     ]
   },
   {
-    id: 5,
-    title: 'Управление диграммой Зийдервельда',
+    id: 4,
+    title: 'Масштабирование графиков',
     hotkeys: [
       {
         id: 1,
-        label: 'Управление масштабом',
+        label: 'Изменение масштаба',
         disabled: true,
         hotkey: {
           key: 'MouseWheel',
           code: 'MouseWheel',
         }
       },
+      {
+        id: 2,
+        label: 'Перемещение области видимости',
+        disabled: true,
+        hotkey: {
+          key: 'Alt + MouseClick',
+          code: 'Alt + MouseClick',
+        }
+      },
+    ]
+  },
+  {
+    id: 6,
+    title: 'Управление диграммой Зийдервельда',
+    hotkeys: [
+      // {
+      //   id: 1,
+      //   label: 'Управление масштабом',
+      //   disabled: true,
+      //   hotkey: {
+      //     key: 'MouseWheel',
+      //     code: 'MouseWheel',
+      //   }
+      // },
       {
         id: 2,
         label: 'Переместиться вправо',
