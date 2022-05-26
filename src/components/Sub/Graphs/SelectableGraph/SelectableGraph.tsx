@@ -12,6 +12,7 @@ import ResetZoomPan from "../Buttons/ResetZoomPan/ResetZoomPan";
 import ToggleMean from "../Buttons/ToggleMean/ToggleMean";
 import { useLocation } from "react-router-dom";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import CenterByMean from "../Buttons/CenterByMean/ResetZoomPan";
 
 interface ISelectableGraph {
   graphId: string;
@@ -28,6 +29,8 @@ interface ISelectableGraph {
   currentPan?: Pan;
   currentZoom?: number;
   onResetZoomPan?: () => void;
+  onCenterByMean?: () => void;
+  centeredByMean?: boolean;
 }
 
 const SelectableGraph: FC<ISelectableGraph> = ({
@@ -45,6 +48,8 @@ const SelectableGraph: FC<ISelectableGraph> = ({
   currentPan,
   currentZoom,
   onResetZoomPan,
+  onCenterByMean,
+  centeredByMean,
 }) => {
 
   const dispatch = useAppDispatch();
@@ -121,6 +126,15 @@ const SelectableGraph: FC<ISelectableGraph> = ({
             <ResetZoomPan 
               onClick={onResetZoomPan!} 
               isUseful={currentZoom! > 1 || currentPan?.left !== 0 || currentPan.top !== 0} 
+            />
+          </>
+        }
+        {
+          graphId === 'stereoDir' &&
+          <>
+            <CenterByMean
+              onClick={onCenterByMean!}
+              isUseful={centeredByMean}
             />
           </>
         }

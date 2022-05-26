@@ -138,7 +138,7 @@ class Coordinates {
 
   rotateTo = (lambda: number, phi: number) => {
     // method Coordinates.rotateTo
-    // Rotates a direction to lambda, phi (azimuth, plunge in geological language)
+    // Rotates a direction to lambda, phi (azimuth, plunge or declination and inclination in geological language)
     // expects than lambda and phi given in degrees 
 
     const azimuth = lambda / Coordinates.RADIANS;

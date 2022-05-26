@@ -6,6 +6,7 @@ import { dirToCartesian2D } from "../../dirToCartesian";
 import { graphSelectedDotColor } from "../../../ThemeConstants";
 import createStereoPlaneData from "./createPlaneData/createStereoPlaneData";
 import Direction from "../../classes/Direction";
+import { strangeRotation } from "../../../statistics/matrix";
  
 const dataToStereoDIR = (
   data: IDirData, 
@@ -13,6 +14,7 @@ const dataToStereoDIR = (
   reference: Reference,
   hiddenDirectionsIDs: Array<number>,
   reversedDirectionsIDs: Array<number>,
+  centeredByMean?: boolean,
   statistics?: RawStatisticsDIR,
 ) => {
   let directions = data.interpretations.filter((direction, index) => !hiddenDirectionsIDs.includes(index + 1));
@@ -34,28 +36,21 @@ const dataToStereoDIR = (
   // annotations for dots ('id' field added right in the Data.tsx as dot index)
   const labels = directions.map((direction) => direction.label);
 
-  // 1) get inReference directional data
-  const directionalData: Array<[number, number]> = directions.map((direction) => {
-    const { Dgeo, Igeo, Dstrat, Istrat } = direction;
-    const inReferenceCoords: [number, number]  = reference === 'stratigraphic' ? [Dstrat, Istrat] : [Dgeo, Igeo];
-    return inReferenceCoords;
-  });
-
-  const dotsData: DotsData = directionalData.map((di, index) => {
-    const coords = dirToCartesian2D(di[0] - 90, di[1], graphSize);
-    return {id: directions[index].id, xyData: [coords.x, coords.y]};
-  });
-
   // mean direction calculation
   let meanDirection: MeanDirection = null;
   if (statistics) {
     const mean = statistics.mean[reference as 'geographic' | 'stratigraphic']; 
     const { direction, MAD } = mean;
+    const centeredDirection = new Direction(0, 90, 1);
+    // let centeredDirectionCoords = new Direction(0, 90, 1).toCartesian();
+    // const firstRotation = centeredDirectionCoords.rotateTo(0, 90);
+    // const secondRotation = firstRotation//.rotateTo(0, direction.inclination - 90);
+    // const centeredDirection = secondRotation.toDirection();
 
-    const [declination, inclination] = direction.toArray(); // mean dec and inc
+    const [declination, inclination] = centeredByMean ? centeredDirection.toArray() : direction.toArray(); 
     const meanXYData = dirToCartesian2D(declination - 90, inclination, graphSize);
-    const confidenceCircle = createStereoPlaneData(direction, graphSize, MAD);
-    const greatCircle = createStereoPlaneData(direction, graphSize);
+    const confidenceCircle = createStereoPlaneData(centeredByMean ? centeredDirection : direction, graphSize, MAD);
+    const greatCircle = createStereoPlaneData(centeredByMean ? centeredDirection : direction, graphSize);
 
     const tooltip: TooltipDot = {
       title: 'Mean dot',
@@ -83,6 +78,30 @@ const dataToStereoDIR = (
       tooltip,
     };
   };
+
+  
+  // 1) get inReference directional data
+  const directionalData: Array<[number, number]> = directions.map((direction) => {
+    const { Dgeo, Igeo, Dstrat, Istrat } = direction;
+    const inReferenceCoords: [number, number]  = reference === 'stratigraphic' ? [Dstrat, Istrat] : [Dgeo, Igeo];
+    let finalCoords: [number, number] = inReferenceCoords;
+    if (centeredByMean && meanDirection) {
+      const directionVector = new Direction(finalCoords[0], finalCoords[1], 1)//.toCartesian();
+      const firstRotationDirection = new Direction(meanDirection.dirData[0], 0, 1);
+      const secondRotationDirection = new Direction(0, meanDirection.dirData[1] - 90, 1);
+      // const firstRotation = directionVector.rotateTo(meanDirection.dirData[0] - 90, 0);
+      // const secondRotation = firstRotation.rotateTo(0, meanDirection.dirData[1]);
+      const firstRotation = strangeRotation(directionVector, firstRotationDirection);
+      const secondRotation = strangeRotation(firstRotation, secondRotationDirection);
+      finalCoords = secondRotation.toArray();
+    }
+    return finalCoords;
+  });
+
+  const dotsData: DotsData = directionalData.map((di, index) => {
+    let coords = dirToCartesian2D(di[0] - 90, di[1], graphSize);
+    return {id: directions[index].id, xyData: [coords.x, coords.y]};
+  });
 
   // tooltip data for each dot on graph
   const tooltipData: Array<TooltipDot> = directions.map((direction, index) => {

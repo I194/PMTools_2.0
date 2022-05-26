@@ -1,4 +1,5 @@
 import Coordinates from "../graphs/classes/Coordinates";
+import Direction from "../graphs/classes/Direction";
 
 export type Matrix3x3 = [
   [number, number, number],
@@ -102,4 +103,16 @@ export const matrixMultiply = (matrixFirst: number[][], matrixSecond: number[][]
     };
   };
   return result;
+};
+
+export const strangeRotation = (directionStart: Direction, directionEnd: Direction) => {
+  const dataXYZ = [directionStart.toCartesian().toArray()];
+  const rot_y = rotate3x3AroundY(directionEnd.inclination); // матрица поворота вокруг оси Y
+  const rot_z = rotate3x3AroundZ(directionEnd.declination); // матрица поворота вокруг оси Z
+  const rot_yz = matrixMultiply(rot_z, rot_y); // поворот вокруг Y и затем вокруг Z
+  const rotatedDataXYZ = matrixMultiply(dataXYZ, rot_yz); // поворот в нужное положение на сфере
+  const finalDataXYZ = new Coordinates(rotatedDataXYZ[0][0], rotatedDataXYZ[0][1], rotatedDataXYZ[0][2]);
+  const finalDirection = finalDataXYZ.toDirection();
+
+  return finalDirection;
 };

@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from "react";
+import React, { FC, useMemo, useState } from "react";
 import styles from "./ZijdGraph.module.scss";
 import { useAppSelector } from "../../../services/store/hooks";
 import { useGraphSelectableNodesDIR, useGraphSelectedIDs, usePMDGraphSettings } from "../../../utils/GlobalHooks";
@@ -20,6 +20,8 @@ const StereoGraphDIR: FC<IStereoGraphDIR> = ({ graphId, width, height, data }) =
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
   // 2. zoom&pan
 
+  const [centeredByMean, setCenteredByMean] = useState<boolean>(false);
+
   const { reference, currentInterpretation, hiddenDirectionsIDs, reversedDirectionsIDs } = useAppSelector(state => state.dirPageReducer);
   const { menuItems, settings } = usePMDGraphSettings();
   const selectableNodes = useGraphSelectableNodesDIR(graphId); 
@@ -27,8 +29,8 @@ const StereoGraphDIR: FC<IStereoGraphDIR> = ({ graphId, width, height, data }) =
   const selectedIDs = useGraphSelectedIDs('dir');
   const {viewHeight, viewWidth, ...areaConstants} = stereoAreaConstants(width, height);
   const dataConstants = useMemo(() => 
-    dataToStereoDIR(data, width / 2, reference, hiddenDirectionsIDs, reversedDirectionsIDs, currentInterpretation?.rawData as RawStatisticsDIR),
-  [reference, width, currentInterpretation, data, hiddenDirectionsIDs, reversedDirectionsIDs]);
+    dataToStereoDIR(data, width / 2, reference, hiddenDirectionsIDs, reversedDirectionsIDs, centeredByMean, currentInterpretation?.rawData as RawStatisticsDIR),
+  [reference, width, currentInterpretation, data, hiddenDirectionsIDs, reversedDirectionsIDs, centeredByMean]);
 
   return (
     <>
@@ -41,7 +43,8 @@ const StereoGraphDIR: FC<IStereoGraphDIR> = ({ graphId, width, height, data }) =
         menuItems={menuItems}
         extraID={data.name}
         graphName={`${data.name}_stereo_dir`}
-        // viewBox={`0 0 ${viewWidth} ${viewHeight}`}
+        onCenterByMean={() => setCenteredByMean(!centeredByMean)}
+        centeredByMean={centeredByMean}
       >
         <g>
           <AxesAndData 
