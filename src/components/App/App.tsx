@@ -21,7 +21,7 @@ function App() {
   
   useEffect(() => {
     console.log('color', localStorage)
-    const previousColorMode = localStorage.getItem('colorMode') || 'light';
+    const previousColorMode = localStorage.getItem('colorMode') || systemTheme;
     dispatch(setColorMode(previousColorMode));
   }, []);
 
