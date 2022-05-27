@@ -19,4 +19,16 @@
     flex-direction: row;
     // align-items: flex-end;
   }
+
+  @media (max-width: 1464px) { 
+    justify-content: space-between;
+    padding-right: 42px;
+
+    & .settings {
+      top: 0px;
+      right: 0px;
+      width: fit-content;
+      flex-direction: column;
+    }
+  }
 }

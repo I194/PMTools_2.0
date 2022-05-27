@@ -11,6 +11,11 @@
   margin: 48px 0 0 0;
 
   box-sizing: border-box;
+  
+
+  @media (max-width: 920px) { 
+    padding: 48px 8px;
+  }
 }
 
 .rightBlock {

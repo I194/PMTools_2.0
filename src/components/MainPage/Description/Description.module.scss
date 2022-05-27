@@ -7,6 +7,14 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: 1464px) { 
+    padding: 92px 36px 52px 36px;
+  }
+
+  @media (max-width: 920px) { 
+    padding: 92px 8px 52px 8px;
+  }
 }
 
 .tabs {
@@ -34,6 +42,10 @@
   border-radius: 12px;
 
   background-color: #fff;
+
+  @media (max-width: 920px) { 
+    top: -80px;
+  }
 }
 
 .indicator {
@@ -49,6 +61,10 @@
   padding: 0 168px;
   bottom: -32px;
   box-sizing: border-box;
+
+  @media (max-width: 920px) { 
+    padding: 0 36px;
+  }
 
   &:hover {
     & .indicatorItem {

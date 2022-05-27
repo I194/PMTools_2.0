@@ -15,6 +15,7 @@ import {
   bgColorMain,
   bgColorBlocks,
 } from '../../../utils/ThemeConstants';
+import { useMediaQuery } from "react-responsive";
  
 const Sphere = (props: JSX.IntrinsicElements['mesh'] & {themeMode: 'dark' | 'light'}) => {
 
@@ -60,10 +61,10 @@ const Sphere = (props: JSX.IntrinsicElements['mesh'] & {themeMode: 'dark' | 'lig
 
   return (
     <mesh
-      {...props}
       ref={ref}
       scale={clicked ? 2 : 1.42}
       rotation={[0, Math.PI * 1.25, 0]}
+      {...props}
       // onPointerOver={(event) => hover(true)}
       // onPointerOut={(event) => hover(false)}
     >
@@ -83,13 +84,16 @@ const Sphere = (props: JSX.IntrinsicElements['mesh'] & {themeMode: 'dark' | 'lig
 
 
 const DynamicLogo = () => {
+
+  
+  const isSmallScreen = useMediaQuery({ query: '(max-width: 920px)' });
   
   const theme = useTheme();
   return (
     <Canvas>
       <ambientLight />
       <pointLight position={[10, 10, 10]} />
-      <Sphere position={[0, 0, 0]} themeMode={theme.palette.mode}/>
+      <Sphere position={[0, 0, 0]} themeMode={theme.palette.mode} scale={isSmallScreen ? 1.21 : 1.42}/>
     </Canvas>
   );
 };
