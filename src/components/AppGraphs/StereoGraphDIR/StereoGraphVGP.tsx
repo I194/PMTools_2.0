@@ -20,7 +20,7 @@ const StereoGraphVGP: FC<IStereoGraphVGP> = ({ graphId, width, height, data }) =
   // ToDo: 
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
   // 2. zoom&pan
-
+  console.log('what', data)
   const { reference, currentInterpretation, hiddenDirectionsIDs, currentFile } = useAppSelector(state => state.dirPageReducer);
   const { menuItems, settings } = usePMDGraphSettings();
   const selectableNodes = useGraphSelectableNodesDIR(graphId); 

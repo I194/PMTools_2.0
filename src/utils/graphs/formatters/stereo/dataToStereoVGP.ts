@@ -34,18 +34,22 @@ const dataToStereoVGP = (
   // 1) get inReference directional data
   const directionalData: Array<[number, number]> = directions.map((direction) => {
     const { poleLatitude, poleLongitude } = direction;
-    const inReferenceCoords: [number, number]  = [poleLatitude, poleLongitude];
+    const inReferenceCoords: [number, number]  = [poleLongitude, poleLatitude];
     return inReferenceCoords;
   });
 
   const dotsData: DotsData = directionalData.map((di, index) => {
-    const coords = dirToCartesian2D(di[0] - 90, di[1], graphSize);
-    return {id: directions[index].id, xyData: [coords.x, coords.y]};
+    // const coords = dirToCartesian2D(di[0] - 90, di[1], 82.5);
+    const coords = new Direction(di[0], di[1], 1).toCartesian2DForGraph(graphSize);
+    return {id: directions[index].id, xyData: coords};
   });
+
+  console.log('what', dotsData, directions);
+  console.log('what', graphSize)
 
   const mean = fisherMean(
     directions.map(
-      (direction) => new Direction(direction.poleLatitude, direction.poleLongitude, 1)
+      (direction) => new Direction(direction.poleLongitude, direction.poleLatitude, 1)
     )
   );
   const { direction, MAD } = mean;
