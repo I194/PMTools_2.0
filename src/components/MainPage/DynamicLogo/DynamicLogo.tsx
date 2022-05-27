@@ -93,7 +93,7 @@ const DynamicLogo = () => {
     <Canvas>
       <ambientLight />
       <pointLight position={[10, 10, 10]} />
-      <Sphere position={[0, 0, 0]} themeMode={theme.palette.mode} scale={isSmallScreen ? 1.21 : 1.42}/>
+      <Sphere position={[0, 0, 0]} themeMode={theme.palette.mode} scale={isSmallScreen ? 1.32 : 1.42}/>
     </Canvas>
   );
 };
