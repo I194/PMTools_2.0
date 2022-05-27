@@ -122,6 +122,7 @@ const Dot: FC<IDot> = ({
               stroke={confidenceCircle.color}
               strokeLinejoin="round"
               strokeLinecap="round"
+              fillOpacity="0" // it is what makes shape transparent
             />,
             <path 
               d={createStraightPath(confidenceCircle.xyDataSplitted.pos)}
@@ -130,6 +131,7 @@ const Dot: FC<IDot> = ({
               strokeDasharray="4"
               strokeLinejoin="round"
               strokeLinecap="round"
+              fillOpacity="0"
             />,
           ],
           greatCircle && 
@@ -140,6 +142,7 @@ const Dot: FC<IDot> = ({
               stroke={greatCircle.color}
               strokeLinejoin="round"
               strokeLinecap="round"
+              fillOpacity="0"
             />,
             <path 
               d={createStraightPath(greatCircle.xyDataSplitted.pos)}
@@ -148,6 +151,7 @@ const Dot: FC<IDot> = ({
               strokeDasharray="4"
               strokeLinejoin="round"
               strokeLinecap="round"
+              fillOpacity="0"
             />
           ]
         ]
