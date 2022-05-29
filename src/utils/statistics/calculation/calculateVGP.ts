@@ -21,18 +21,24 @@ const calculateVGP = (
   // const poleLatitude = Math.asin(Math.sin(siteLatitude) * Math.cos(p) + Math.cos(siteLatitude) * Math.sin(p) * Math.cos(declination)) * Direction.RADIANS;
   // const beta = Math.asin((Math.sin(p) * Math.sin(declination) / Math.cos(poleLatitude))) * Direction.RADIANS;
   // const poleLatitudeRad = Math.asin(Math.sin(siteLatitudeRad) * Math.sin(paleoLatitudeRad) + Math.cos(siteLatitudeRad) * Math.cos(paleoLatitudeRad) * Math.cos(declinationRad));
-  const poleLatitudeRad = Math.asin(Math.sin(siteLatitudeRad) * Math.cos(paleoLatitudeRad) + Math.cos(siteLatitudeRad) * Math.sin(paleoLatitudeRad) * Math.cos(declinationRad));
+  const poleLatitudeRad = Math.asin(Math.sin(siteLatitudeRad) * Math.sin(paleoLatitudeRad) + Math.cos(siteLatitudeRad) * Math.cos(paleoLatitudeRad) * Math.cos(declinationRad));
   const poleLatitude = poleLatitudeRad * Direction.RADIANS;
-  const psiRad = Math.asin(Math.cos(paleoLatitudeRad) * Math.sin(declinationRad) / Math.cos(poleLatitudeRad));
-  const psi = psiRad * Direction.RADIANS;
-  let poleLongitude = psi + siteLongitude;
-  if ((Math.sin(paleoLatitudeRad) < Math.sin(siteLatitudeRad) * Math.sin(poleLatitudeRad))) {
-    poleLongitude = 180 - psi + siteLongitude;
-  }
-  // Bind the plate longitude between [0, 360]
-  if (poleLongitude < 0) {
-    poleLongitude += 360;
-  }
+  const shipunovConstant = Math.acos(
+    (Math.sin(paleoLatitudeRad) - Math.sin(poleLatitudeRad) * Math.sin(siteLatitudeRad)) /
+    (Math.cos(siteLatitudeRad) * Math.cos(poleLatitudeRad))
+  ) * Direction.RADIANS;
+  // const psiRad = Math.acos(Math.sin(paleoLatitudeRad) * Math.sin(declinationRad) / Math.cos(poleLatitudeRad));
+  // const psi = psiRad * Direction.RADIANS;
+  // let poleLongitude = psi + siteLongitude;
+  // if ((Math.sin(paleoLatitudeRad) < Math.sin(siteLatitudeRad) * Math.sin(poleLatitudeRad))) {
+  //   poleLongitude = 180 - psi + siteLongitude;
+  // }
+  // // Bind the plate longitude between [0, 360]
+  // if (poleLongitude < 0) {
+  //   poleLongitude += 360;
+  // }
+  let poleLongitude = shipunovConstant + siteLongitude;
+  if (Math.sin(declinationRad) < 0) poleLongitude -= 2 * shipunovConstant;
 
   const dp = 2 * a95 / (1  + 3 * Math.pow(Math.sin(inclinationRad), 2));
   const dm = a95 * Math.cos(paleoLatitudeRad) / Math.cos(inclinationRad);

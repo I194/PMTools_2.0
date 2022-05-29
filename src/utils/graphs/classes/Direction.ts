@@ -18,7 +18,7 @@ class Direction {
   get paleoLatitude() {
     return (
       Math.atan(
-        Math.tan(this.inclination / Direction.RADIANS) / 2
+        0.5 * Math.tan(this.inclination / Direction.RADIANS)
       ) * Direction.RADIANS
     );
   };
