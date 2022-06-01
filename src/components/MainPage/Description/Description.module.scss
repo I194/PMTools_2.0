@@ -85,3 +85,31 @@
     box-shadow: 0px 0px 5px 1px #119dff;
   }
 }
+
+.controlLeft {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) translateX(-150%);
+  left: 0;
+  z-index: 1;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0px 0px 5px 1px #119dff;
+  @media (max-width: 920px) { 
+    display: none;
+  }
+}
+
+.controlRight {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) translateX(150%);
+  right: 0;
+  z-index: 1;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0px 0px 5px 1px #119dff;
+  @media (max-width: 920px) { 
+    display: none;
+  }
+}
