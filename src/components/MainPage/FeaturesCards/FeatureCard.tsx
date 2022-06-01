@@ -7,12 +7,14 @@ import { textColor, bgColorBlocks } from '../../../utils/ThemeConstants';
 export type Content = {
   text: {title: string, description: string};
   image: string,
+  compressedImage: string,
   align: 'left' | 'right',
 };
 
-const FeatureCard = ({ text, image, align }: Content) => {
+const FeatureCard = ({ text, image, compressedImage, align }: Content) => {
   
   const theme = useTheme();
+  const [normalImageLoaded, setNormalImageLoaded] = useState<boolean>(false);
 
   return (
     <div 
@@ -41,7 +43,23 @@ const FeatureCard = ({ text, image, align }: Content) => {
           // backgroundColor: bgColorBlocks(theme.palette.mode),
         }}
       >
-        <img src={image} alt={text.title} width='100%'/>
+        <img 
+          src={image} 
+          alt={text.title} 
+          onLoad={() => setNormalImageLoaded(true)}
+          style={{
+            display: normalImageLoaded ? 'block' : 'none',
+          }}
+          width='100%'
+        />
+        <img 
+          src={compressedImage} 
+          alt={text.title} 
+          style={{
+            display: normalImageLoaded ? 'none' : 'block',
+          }}
+          width='100%'
+        />
       </div>
     </div>
   );
