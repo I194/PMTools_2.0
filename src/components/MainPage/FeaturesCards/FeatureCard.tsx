@@ -46,14 +46,14 @@ const FeatureCard = ({ text, image, compressedImage, align }: Content) => {
         <img 
           src={image} 
           alt={text.title} 
-          onLoad={() => setNormalImageLoaded(true)}
+          // onLoad={() => setNormalImageLoaded(true)}
           style={{
-            display: normalImageLoaded ? 'block' : 'none',
+            // display: normalImageLoaded ? 'block' : 'none',
           }}
-          // loading='lazy'
+          loading='lazy'
           width='100%'
         />
-        <img 
+        {/* <img 
           src={compressedImage} 
           alt={text.title} 
           style={{
@@ -61,7 +61,7 @@ const FeatureCard = ({ text, image, compressedImage, align }: Content) => {
           }}
           loading='lazy'
           width='100%'
-        />
+        /> */}
       </div>
     </div>
   );
