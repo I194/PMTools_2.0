@@ -50,7 +50,7 @@ const FeatureCard = ({ text, image, compressedImage, align }: Content) => {
           style={{
             display: normalImageLoaded ? 'block' : 'none',
           }}
-          loading='lazy'
+          // loading='lazy'
           width='100%'
         />
         <img 
