@@ -12,14 +12,12 @@ const MainPage: FC = ({}) => {
   
   return (
     <>
-      <NavPanel />
       <div className={styles.logo}>
         <DynamicLogo />
       </div>
       <About />
       <Description />
       <FeatureCards />
-      <Footer />
     </>
   )
 }

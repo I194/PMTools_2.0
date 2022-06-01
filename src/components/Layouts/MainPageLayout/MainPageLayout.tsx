@@ -8,6 +8,7 @@ import {
   boxShadowStyle,
   textColor
 } from '../../../utils/ThemeConstants';
+import { Footer, NavPanel } from "../../MainPage";
 
 const MainPageLayout: FC<RouteProps> = () => {
 
@@ -20,7 +21,9 @@ const MainPageLayout: FC<RouteProps> = () => {
         backgroundColor: bgColorMain(theme.palette.mode),
       }}
     >
+      <NavPanel />
       <Outlet />
+      <Footer />
     </div>
   );
 };
