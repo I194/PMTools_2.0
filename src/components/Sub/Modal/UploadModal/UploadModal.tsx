@@ -47,7 +47,7 @@ const UploadModal = ({page}: Props) => {
   };
 
   const availableFormats = {
-    pca: ['.pmd', '.squid', '.csv', '.xlsx'],
+    pca: ['.pmd', '.squid', '.rs3', '.csv', '.xlsx'],
     dir: ['.dir', '.pmm', '.csv', '.xlsx'], 
   };
 

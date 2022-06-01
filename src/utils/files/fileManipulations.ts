@@ -16,6 +16,7 @@ export const getDirectionalData = (file: File, as: string) => {
         switch (ext) {
           case 'pmd': return pmFile.parsePMD();
           case 'squid': return pmFile.parseSQUID();
+          case 'rs3': return pmFile.parseRS3();
           case 'dir': return pmFile.parseDIR();
           case 'pmm': return pmFile.parsePMM();
           case 'csv': {

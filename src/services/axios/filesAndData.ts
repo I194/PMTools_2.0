@@ -3,7 +3,7 @@ import { getDirectionalData, getSitesLatLonData } from "../../utils/files/fileMa
 
 type TFilesToData = {
   files: File[];
-  format: 'pmd' | 'squid' | 'dir';
+  format: 'pmd' | 'squid' | 'rs3' | 'dir' | 'pmm' | 'csv' | 'xlsx';
 };
 
 export const filesToData = createAsyncThunk(

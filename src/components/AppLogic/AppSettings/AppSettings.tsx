@@ -38,7 +38,7 @@ const AppSettings: FC<IAppSettings> = ({
   const { hotkeys } = useAppSelector(state => state.appSettingsReducer);
 
   const availableFormats = {
-    pca: ['.pmd', '.csv', '.xlsx'],
+    pca: ['.pmd', '.squid', '.rs3', '.csv', '.xlsx'],
     dir: ['.dir', '.pmm', '.csv', '.xlsx'], 
   };
 

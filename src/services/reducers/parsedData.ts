@@ -50,7 +50,8 @@ const parsedDataSlice = createSlice({
       state.errorInfo = null;
     });
     builder.addCase(filesToData.fulfilled, (state, action) => {
-      if (action.payload.format === 'pmd' || action.payload.format === 'squid') {
+      const format = action.payload.format;
+      if (format === 'pmd' || format === 'squid' || format === 'rs3') {
         // core hade is measured, we use the plunge (90 - hade)
         state.treatmentData = (action.payload.data as IPmdData[]).map((pmdData) => {
           return {
@@ -62,7 +63,7 @@ const parsedDataSlice = createSlice({
           }
         });
       };
-      if (action.payload.format === 'dir') {
+      if (format === 'dir' || format === 'pmm') {
         state.dirStatData = action.payload.data as IDirData[];
       };
       state.loading = 'succeeded';
