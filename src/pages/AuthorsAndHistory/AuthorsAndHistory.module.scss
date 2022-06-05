@@ -1,0 +1,53 @@
+.authors {
+  padding: 24px 164px;
+  margin-top: 32px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+
+  @media (max-width: 920px) { 
+    padding: 0 8px;
+  }
+}
+
+.authorBlock {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 24px;
+
+  @media (max-width: 920px) { 
+    flex-direction: column;
+  }
+}
+
+.infoBlock {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: left;
+
+  margin-left: 24px;
+
+  @media (max-width: 920px) { 
+    margin-left: 0;
+  }
+}
+
+
+.authorImage {
+  width: 20%;
+
+  @media (max-width: 920px) { 
+    width: 60%;
+    margin-bottom: 8px;
+  }
+}

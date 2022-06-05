@@ -4,7 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { MainPageLayout, AppLayout } from '../Layouts';
-import { MainPage, DIRPage, PCAPage, NotFoundPage, WhyPMToolsPage } from '../../pages';
+import { MainPage, DIRPage, PCAPage, NotFoundPage, WhyPMToolsPage, AuthorsAndHistory } from '../../pages';
 import { useSystemTheme } from '../../utils/GlobalHooks';
 import { setColorMode } from '../../services/reducers/appSettings';
 
@@ -37,6 +37,7 @@ function App() {
         <Route path='/' element={<MainPageLayout />}>
           <Route index element={<MainPage />}/>
           <Route path='/why-pmtools' element={<WhyPMToolsPage />}/>
+          <Route path='/authors-and-history' element={<AuthorsAndHistory />}/>
         </Route>
         <Route path='/app' element={<AppLayout />}>
           <Route path='pca' element={<PCAPage />}/>

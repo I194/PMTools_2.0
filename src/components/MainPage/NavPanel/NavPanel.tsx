@@ -60,8 +60,8 @@ const NavPanel = () => {
       external={true}
     />,
     <NavButton 
-      label='Авторы и источники'
-      to={'/authors'}
+      label='Авторы и история'
+      to={'/authors-and-history'}
     />
   ];
 
@@ -91,8 +91,8 @@ const NavPanel = () => {
             external={true}
           />
           <NavButton 
-            label='Авторы и источники'
-            to={'/authors'}
+            label='Авторы и история'
+            to={'/authors-and-history'}
           />
         </>
       }
