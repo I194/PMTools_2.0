@@ -153,32 +153,36 @@ export const defaultHotkeys: HotkeysType = [
       {
         id: 2,
         label: 'Переместиться вправо',
+        disabled: true,
         hotkey: {
-          key: 'ArrowRight',
+          key: 'Alt + ArrowRight',
           code: 'ArrowRight',
         }
       },
       {
         id: 3,
         label: 'Переместиться влево',
+        disabled: true,
         hotkey: {
-          key: 'ArrowLeft',
+          key: 'Alt + ArrowLeft',
           code: 'ArrowLeft',
         }
       },
       {
         id: 4,
         label: 'Переместиться вверх',
+        disabled: true,
         hotkey: {
-          key: 'ArrowUp',
+          key: 'Alt + ArrowUp',
           code: 'ArrowUp',
         }
       },
       {
         id: 5,
         label: 'Переместиться вниз',
+        disabled: true,
         hotkey: {
-          key: 'ArrowDown',
+          key: 'Alt + ArrowDown',
           code: 'ArrowDown',
         }
       },

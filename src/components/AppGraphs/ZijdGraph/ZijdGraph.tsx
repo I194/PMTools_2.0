@@ -56,6 +56,7 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data }) => {
 
   const handleHotkeysPan = (event: KeyboardEvent) => {
     const keyCode = event.code;
+    const altKey = event.altKey;
     const zijdHotkeys = hotkeys.find(block => block.title === 'Управление диграммой Зийдервельда')?.hotkeys;
     if (!zijdHotkeys) return;
 
@@ -64,19 +65,19 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data }) => {
     const upHotkey = zijdHotkeys.find(hotkey => hotkey.label === 'Переместиться вверх')?.hotkey.code;
     const downHotkey = zijdHotkeys.find(hotkey => hotkey.label === 'Переместиться вниз')?.hotkey.code;
     
-    if (keyCode === leftHotkey) {
+    if (altKey && keyCode === leftHotkey) {
       event.preventDefault();
       setPan({...pan, left: pan.left - 10});
     };
-    if (keyCode === rightHotkey) {
+    if (altKey && keyCode === rightHotkey) {
       event.preventDefault();
       setPan({...pan, left: pan.left + 10});
     };
-    if (keyCode === upHotkey) {
+    if (altKey && keyCode === upHotkey) {
       event.preventDefault();
       setPan({...pan, top: pan.top - 10});
     };
-    if (keyCode === downHotkey) {
+    if (altKey && keyCode === downHotkey) {
       event.preventDefault();
       setPan({...pan, top: pan.top + 10});
     };
