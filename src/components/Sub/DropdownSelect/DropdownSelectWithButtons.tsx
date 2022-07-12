@@ -8,6 +8,7 @@ import DropdownSelect, { IDropdownSelect } from './DropdownSelect';
 
 interface IDropdownSelectWithButtons extends IDropdownSelect {
   useArrowListeners?: boolean;
+  onDeleteAll?: () => void;
 };
 
 const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({ 
@@ -20,6 +21,7 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
   useArrowListeners,
   showDelete,
   onDelete,
+  onDeleteAll,
 }) => {
 
   const [selectedOption, setSelectedOption] = useState(defaultValue || '');
@@ -77,7 +79,7 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
       onDelete(option);
     }
   };
-
+  
   return (
     <div className={styles.DropdownSelectWithButtons}>
       <IconButton
@@ -135,6 +137,18 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
       >
         <KeyboardArrowRightIcon />
       </IconButton>
+      {
+        !!onDeleteAll &&
+        <IconButton
+          sx={{
+            p: 0,
+            mt: '16px'
+          }}
+          onClick={onDeleteAll}
+        >
+          <DeleteForeverIcon />
+        </IconButton>
+      }
     </div>
   )
 };

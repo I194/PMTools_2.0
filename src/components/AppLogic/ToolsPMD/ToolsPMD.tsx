@@ -5,7 +5,7 @@ import { ButtonGroupWithLabel } from '../../Sub/Buttons';
 import { Button } from '@mui/material';
 import { Reference } from '../../../utils/graphs/types';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
-import { deleteInterepretationByParentFile, setHiddenStepsIDs, setReference, setSelectedStepsIDs, setStatisticsMode, updateCurrentFileInterpretations, updateCurrentInterpretation } from '../../../services/reducers/pcaPage';
+import { deleteAllInterpretations, deleteInterepretationByParentFile, setHiddenStepsIDs, setReference, setSelectedStepsIDs, setStatisticsMode, updateCurrentFileInterpretations, updateCurrentInterpretation } from '../../../services/reducers/pcaPage';
 import { IPmdData } from '../../../utils/GlobalTypes';
 import ModalWrapper from '../../Sub/Modal/ModalWrapper';
 import InputApply from '../../Sub/InputApply/InputApply';
@@ -150,6 +150,11 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
     };
   };
 
+  const handleAllFilesDelete = () => {
+    dispatch(setTreatmentFiles([]));
+    dispatch(deleteAllInterpretations());
+  };
+
   return (
     <ToolsPMDSkeleton>
       <DropdownSelectWithButtons 
@@ -158,9 +163,10 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
         defaultValue={currentFileName}
         onOptionSelect={handleFileSelect}
         minWidth={'120px'}
-        useArrowListeners={true}
-        showDelete={true}
+        useArrowListeners
+        showDelete
         onDelete={handleFileDelete}
+        onDeleteAll={handleAllFilesDelete}
       />
       <ButtonGroupWithLabel label='Система координат'>
         {

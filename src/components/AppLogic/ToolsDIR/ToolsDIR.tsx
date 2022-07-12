@@ -23,6 +23,7 @@ import {
   updateCurrentFileInterpretations, 
   deleteInterepretationByParentFile,
   sethiddenDirectionsIDs,
+  deleteAllInterpretations,
 } from '../../../services/reducers/dirPage';
 import { Reference } from '../../../utils/graphs/types';
 import OutputDataTableDIR from '../DataTablesDIR/OutputDataTable/OutputDataTableDIR';
@@ -166,6 +167,11 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
     };
   };
 
+  const handleAllFilesDelete = () => {
+    dispatch(setDirStatFiles([]));
+    dispatch(deleteAllInterpretations());
+  };
+
   return (
     <ToolsPMDSkeleton>
       <DropdownSelectWithButtons 
@@ -174,9 +180,10 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
         defaultValue={allDirData[0].name}
         onOptionSelect={handleFileSelect}
         minWidth={'120px'}
-        useArrowListeners={true}
+        useArrowListeners
         showDelete
         onDelete={handleFileDelete}
+        onDeleteAll={handleAllFilesDelete}
       />
       <ButtonGroupWithLabel label='Система координат'>
         {
