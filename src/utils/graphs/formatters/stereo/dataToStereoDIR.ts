@@ -7,6 +7,7 @@ import { graphSelectedDotColor } from "../../../ThemeConstants";
 import createStereoPlaneData from "./createPlaneData/createStereoPlaneData";
 import Direction from "../../classes/Direction";
 import { strangeRotation } from "../../../statistics/matrix";
+import calculateCutoff from "../../../statistics/calculation/calculateCutoff";
  
 const dataToStereoDIR = (
   data: IDirData, 
@@ -16,6 +17,7 @@ const dataToStereoDIR = (
   reversedDirectionsIDs: Array<number>,
   centeredByMean?: boolean,
   statistics?: RawStatisticsDIR,
+  cutoffType?: '45' | 'vandamme',
 ) => {
   let directions = data.interpretations.filter((direction, index) => !hiddenDirectionsIDs.includes(index + 1));
   directions = directions.map((direction, index) => {
@@ -113,6 +115,16 @@ const dataToStereoDIR = (
       a95: +direction.mad.toFixed(1),
     };
   });
+
+  let cutoff = null;
+  if (cutoffType) {
+    const toCutoffDirs = directions.map((direction) => {
+      const { Dgeo, Igeo, Dstrat, Istrat } = direction;
+      const inReferenceDirs: [number, number]  = reference === 'stratigraphic' ? [Dstrat, Istrat] : [Dgeo, Igeo];
+      return new Direction(inReferenceDirs[0], inReferenceDirs[1], 1);
+    });
+    cutoff = calculateCutoff(toCutoffDirs, cutoffType).cutoffValue;
+  }
   
   return {
     directionalData, 
@@ -120,6 +132,7 @@ const dataToStereoDIR = (
     tooltipData,
     labels,
     meanDirection,
+    cutoff,
   };
 }
 

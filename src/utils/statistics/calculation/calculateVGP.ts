@@ -3,11 +3,12 @@ import Direction from '../../graphs/classes/Direction';
 const calculateVGP = (
   declination: number, 
   inclination: number, 
-  a95: number, 
   siteLatitude: number, 
-  siteLongitude: number
+  siteLongitude: number,
+  a95?: number, 
 ) => {
-
+  // calculates pole from a given direction and dp/dm paramaters if a95 provided
+  // the as poleFrom method in paleomagnetism.org Site class
   const direction = new Direction(declination, inclination, 1);
   const paleoLatitude = direction.paleoLatitude;
   const [declinationRad, inclinationRad, siteLatitudeRad, siteLongitudeRad, paleoLatitudeRad] = [
@@ -40,15 +41,18 @@ const calculateVGP = (
   let poleLongitude = shipunovConstant + siteLongitude;
   if (Math.sin(declinationRad) < 0) poleLongitude -= 2 * shipunovConstant;
 
-  const dp = 2 * a95 / (1  + 3 * Math.pow(Math.sin(inclinationRad), 2));
-  const dm = a95 * Math.cos(paleoLatitudeRad) / Math.cos(inclinationRad);
+  let [dp, dm]: (number | undefined)[] = [undefined, undefined];
+  if (a95) {
+    dp = 2 * a95 / (1  + 3 * Math.pow(Math.sin(inclinationRad), 2));
+    dm = a95 * Math.cos(paleoLatitudeRad) / Math.cos(inclinationRad);
+  }
 
   const res: {
     poleLatitude: number,
     poleLongitude: number,
     paleoLatitude: number,
-    dp: number,
-    dm: number,
+    dp?: number,
+    dm?: number,
   } = {
     poleLatitude,
     poleLongitude,

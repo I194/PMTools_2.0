@@ -150,6 +150,8 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data, sitesData }) => {
       const inc = reference === 'geographic' ? IgeoFinal : IstratFinal;
       const a95 = interpretation.mad;
       const vgp = calculateVGP(dec, inc, a95, lat, lon);
+      const dp: number = vgp?.dp || 0;
+      const dm: number = vgp?.dm || 0;
       return {
         id,
         label,
@@ -160,7 +162,9 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data, sitesData }) => {
         lon,
         age,
         plateId,
-        ...vgp
+        ...vgp,
+        dp,
+        dm
       }
     });
     dispatch(setVGPData(vgpData));

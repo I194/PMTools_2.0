@@ -38,8 +38,15 @@ const StereoGraphDIR: FC<IStereoGraphDIR> = ({
   const selectedIDs = useGraphSelectedIDs('dir');
   const {viewHeight, viewWidth, ...areaConstants} = stereoAreaConstants(width, height);
   const dataConstants = useMemo(() => 
-    dataToStereoDIR(data, width / 2, reference, hiddenDirectionsIDs, reversedDirectionsIDs, centeredByMean, currentInterpretation?.rawData as RawStatisticsDIR),
+    dataToStereoDIR(
+      data, width / 2, reference, 
+      hiddenDirectionsIDs, reversedDirectionsIDs, 
+      centeredByMean, currentInterpretation?.rawData as RawStatisticsDIR,
+      '45'
+    ),
   [reference, width, currentInterpretation, data, hiddenDirectionsIDs, reversedDirectionsIDs, centeredByMean]);
+
+  console.log('cutoff', dataConstants.cutoff);
 
   return (
     <>
