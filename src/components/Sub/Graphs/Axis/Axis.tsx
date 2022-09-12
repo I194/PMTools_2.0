@@ -112,7 +112,7 @@ const Axis: FC<IAxis> = ({
         x={ namePosition ? namePosition.x : axisPos[type].text.x } 
         y={ namePosition ? namePosition.y : axisPos[type].text.y }
         textAnchor='middle' // Horizontal alignment
-        alignmentBaseline="middle" // Vertical alignment
+        alignmentBaseline="middle" // Vertical alignment, doesn't work in CorelDraw and Inkscape
         fontSize={'16px'}
       >
         {name}
@@ -124,7 +124,7 @@ const Axis: FC<IAxis> = ({
               x={ mirrorNamePosition ? mirrorNamePosition.x : axisPos[type].text.xMirror } 
               y={ mirrorNamePosition ? mirrorNamePosition.y : axisPos[type].text.yMirror }
               textAnchor='middle' // Horizontal alignment
-              alignmentBaseline="middle" // Vertical alignment
+              alignmentBaseline="middle" // Vertical alignment, doesn't work in CorelDraw and Inkscape
               fontSize={'16px'}
             >
               {mirrorName}

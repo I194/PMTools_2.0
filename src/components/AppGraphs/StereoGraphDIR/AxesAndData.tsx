@@ -84,6 +84,7 @@ const AxesAndData: FC<IAxesAndData> = ({
           type='y'
           name='N'
           mirrorName='S'
+          mirrorNamePosition={{x: zeroX, y: height + 15}}
           zero={zeroX}
           length={height}
           unit={unit}
@@ -98,7 +99,6 @@ const AxesAndData: FC<IAxesAndData> = ({
           Добавить слушатель можно только к конкретному элементу по типу <circle />
           Потому лучше отрисовывать отдельно каждый <circle /> через map() массива координат
           Однако hover всё равно работать не будет и потому лучше использовать onMouseOver
-          Как раз при этом достигается условие zero-css (я его только что сам придумал, а может и раньше было оно)
       */}
       <g 
         id={`${graphId}-data`}
