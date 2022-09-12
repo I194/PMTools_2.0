@@ -8,8 +8,8 @@ import { UploadButton } from "../../Buttons";
 import styles from "./UploadModal.module.scss";
 import { useTheme } from "@mui/material/styles";
 
-import examplePCA from './examples/examplePCA.pmd';
-import exampleDIR from './examples/exampleDIR.pmm';
+import examplePCA from '../../../../assets/examples/examplePCA.pmd'
+import exampleDIR from '../../../../assets/examples/exampleDIR.pmm'
 
 type Props = {
   page: 'pca' | 'dir';

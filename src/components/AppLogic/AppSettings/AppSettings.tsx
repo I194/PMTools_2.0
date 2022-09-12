@@ -19,6 +19,8 @@ import SettingsModal from "../../Sub/Modal/SettingsModal/SettingsModal";
 import { deactivateHotkeys, setHotkeys } from "../../../services/reducers/appSettings";
 import loadHotkeys, { defaultHotkeys } from "./hotkeys";
 
+import pmtoolsHowToUse from '../../../assets/PMTools_how_to_use.pdf';
+
 interface IAppSettings {
   onFileUpload: (event: any, files?: Array<File>) => void;
   dndInputProps: any;
@@ -51,6 +53,7 @@ const AppSettings: FC<IAppSettings> = ({
 
   const onHelpClick = () => {
     setShowHelp(true);
+    window.open(pmtoolsHowToUse, '_blank')
   };
 
   useEffect(() => {
@@ -88,7 +91,7 @@ const AppSettings: FC<IAppSettings> = ({
           component="span"
           onClick={onHelpClick}
         >
-          { isSmallScreen ? '' : 'Помощь'}
+          { isSmallScreen ? '' : 'Описание'}
         </Button>
         <label 
           htmlFor="upload-file" 
