@@ -51,7 +51,7 @@ const dirPage = createSlice({
     setSelectedDirectionsIDs (state, action) {
       state.selectedDirectionsIDs = action.payload;
     },
-    sethiddenDirectionsIDs (state, action: {payload: Array<number>}) {
+    setHiddenDirectionsIDs (state, action: {payload: Array<number>}) {
       state.hiddenDirectionsIDs = action.payload;
     },
     addHiddenDirectionsIDs (state, action: {payload: Array<number>}) {
@@ -132,7 +132,7 @@ export const {
   setVGPData,
   setReference,
   setSelectedDirectionsIDs,
-  sethiddenDirectionsIDs,
+  setHiddenDirectionsIDs,
   addHiddenDirectionsIDs,
   setReversedDirectionsIDs,
   addReversedDirectionsIDs,

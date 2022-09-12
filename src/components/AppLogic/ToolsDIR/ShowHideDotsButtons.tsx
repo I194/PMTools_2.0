@@ -7,7 +7,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { 
   addHiddenDirectionsIDs, 
-  sethiddenDirectionsIDs, 
+  setHiddenDirectionsIDs, 
   setSelectedDirectionsIDs, 
   setStatisticsMode 
 } from "../../../services/reducers/dirPage";
@@ -32,7 +32,7 @@ const ShowHideDotsButtons = ({ data }: Props) => {
   const [showIndexesInput, setShowIndexesInput] = useState<boolean>(false);
 
   const onShowClick = () => {
-    dispatch(sethiddenDirectionsIDs([]));
+    dispatch(setHiddenDirectionsIDs([]));
   };
 
   const onHideClick = () => {

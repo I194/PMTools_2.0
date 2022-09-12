@@ -22,7 +22,7 @@ import {
   updateCurrentInterpretation, 
   updateCurrentFileInterpretations, 
   deleteInterepretationByParentFile,
-  sethiddenDirectionsIDs,
+  setHiddenDirectionsIDs,
   deleteAllInterpretations,
 } from '../../../services/reducers/dirPage';
 import { Reference } from '../../../utils/graphs/types';
@@ -146,7 +146,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
         dispatch(updateCurrentFileInterpretations(filename));
         dispatch(updateCurrentInterpretation());
         dispatch(setSelectedDirectionsIDs(null));
-        dispatch(sethiddenDirectionsIDs([]));
+        dispatch(setHiddenDirectionsIDs([]));
         dispatch(setStatisticsMode(null));
       } else dispatch(setCurrentDIRid(0));
     }
@@ -164,12 +164,20 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
       const updatedFiles = dirStatFiles.filter(file => file.name !== option);
       dispatch(setDirStatFiles(updatedFiles));
       dispatch(deleteInterepretationByParentFile(option));
+      dispatch(updateCurrentInterpretation());
+      dispatch(setSelectedDirectionsIDs(null));
+      dispatch(setHiddenDirectionsIDs([]));
+      dispatch(setStatisticsMode(null));
     };
   };
 
   const handleAllFilesDelete = () => {
     dispatch(setDirStatFiles([]));
     dispatch(deleteAllInterpretations());
+    dispatch(updateCurrentInterpretation());
+    dispatch(setSelectedDirectionsIDs(null));
+    dispatch(setHiddenDirectionsIDs([]));
+    dispatch(setStatisticsMode(null));
   };
 
   return (

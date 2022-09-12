@@ -147,12 +147,20 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
       const updatedFiles = treatmentFiles.filter(file => file.name !== option);
       dispatch(setTreatmentFiles(updatedFiles));
       dispatch(deleteInterepretationByParentFile(option));
+      dispatch(updateCurrentInterpretation());
+      dispatch(setSelectedStepsIDs(null));
+      dispatch(setHiddenStepsIDs([]));
+      dispatch(setStatisticsMode(null));
     };
   };
 
   const handleAllFilesDelete = () => {
     dispatch(setTreatmentFiles([]));
     dispatch(deleteAllInterpretations());
+    dispatch(updateCurrentInterpretation());
+    dispatch(setSelectedStepsIDs(null));
+    dispatch(setHiddenStepsIDs([]));
+    dispatch(setStatisticsMode(null));
   };
 
   return (

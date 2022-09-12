@@ -4,7 +4,7 @@ import { DataGridDIRRow, IDirData } from "../../../../utils/GlobalTypes";
 import { DataGrid, GridActionsCellItem, GridColumnHeaderParams, GridColumns, GridSelectionModel, GridValueFormatterParams } from '@mui/x-data-grid';
 import DataTablePMDSkeleton from './DataTableDIRSkeleton';
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
-import { setSelectedDirectionsIDs, sethiddenDirectionsIDs, setReversedDirectionsIDs } from "../../../../services/reducers/dirPage";
+import { setSelectedDirectionsIDs, setHiddenDirectionsIDs, setReversedDirectionsIDs } from "../../../../services/reducers/dirPage";
 import { GetDataTableBaseStyle } from "../styleConstants";
 import PMDInputDataTableToolbar from "../../../Sub/DataTable/Toolbar/PMDInputDataTableToolbar";
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -46,11 +46,11 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
     const newhiddenDirectionsIDs = hiddenDirectionsIDs.includes(id) 
       ? hiddenDirectionsIDs.filter(hiddenId => hiddenId !== id) 
       : [...hiddenDirectionsIDs, id];
-    dispatch(sethiddenDirectionsIDs(newhiddenDirectionsIDs))
+    dispatch(setHiddenDirectionsIDs(newhiddenDirectionsIDs))
   };
 
   const toggleAllRowsVisibility = (event: any) => {
-    dispatch(sethiddenDirectionsIDs([]));
+    dispatch(setHiddenDirectionsIDs([]));
   };
 
   const toggleRowPolarity = (id: number) => (event: any) => {
