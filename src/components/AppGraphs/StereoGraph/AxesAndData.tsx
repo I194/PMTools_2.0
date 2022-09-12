@@ -84,6 +84,7 @@ const AxesAndData: FC<IAxesAndData> = ({
           type='y'
           name='N'
           mirrorName='S'
+          mirrorNamePosition={{x: zeroX, y: height + 15}}
           zero={zeroX}
           length={height}
           unit={unit}
