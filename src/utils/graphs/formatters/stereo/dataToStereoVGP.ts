@@ -39,9 +39,20 @@ const dataToStereoVGP = (
   });
 
   const dotsData: DotsData = directionalData.map((di, index) => {
-    // const coords = dirToCartesian2D(di[0] - 90, di[1], 82.5);
     const coords = new Direction(di[0], di[1], 1).toCartesian2DForGraph(graphSize);
-    return {id: directions[index].id, xyData: coords};
+    const direction = new Direction(di[0], di[1], 1);
+    const a95 = directions[index] ? directions[index].a95 : 0;
+    const confidenceCircle = createStereoPlaneData(direction, graphSize, a95);
+    return {
+      id: directions[index].id, 
+      xyData: coords,
+      dirData: di,
+      confidenceCircle: {
+        xyData: confidenceCircle.all, 
+        xyDataSplitted: confidenceCircle, 
+        color: '#000'
+      },
+    };
   });
 
   console.log('what', dotsData, directions);
@@ -62,7 +73,7 @@ const dataToStereoVGP = (
     title: 'Mean VGP',
     dec: +declination.toFixed(1),
     inc: +inclination.toFixed(1),
-    mad: +MAD.toFixed(1),
+    a95: +MAD.toFixed(1),
     meanType: 'fisher',
   };
 
@@ -84,8 +95,10 @@ const dataToStereoVGP = (
       label: direction.label,
       dec: +directionalData[index][0].toFixed(1),
       inc: +directionalData[index][1].toFixed(1),
+      a95: directions[index].a95
     };
   });
+
   return {
     directionalData, 
     dotsData,

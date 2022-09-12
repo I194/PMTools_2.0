@@ -23,6 +23,7 @@ const splitCircle = (
   // От точки с Inc: 0 и до неё же
   for (let i = zeroIncIndex; i < ellipse.length + zeroIncIndex; i++) {
     const point = ellipse[i % ellipse.length];
+    if (!point) continue;
 
     let pointSign = Math.sign(point.inclination);
 

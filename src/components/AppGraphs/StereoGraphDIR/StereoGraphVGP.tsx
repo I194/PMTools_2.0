@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useMemo } from "react";
 import styles from "./ZijdGraph.module.scss";
 import { useAppSelector } from "../../../services/store/hooks";
-import { useGraphSelectableNodesDIR, useGraphSelectedIDs, usePMDGraphSettings } from "../../../utils/GlobalHooks";
+import { useGraphSelectableNodesDIR, useGraphSelectedIDs, useDIRGraphSettings } from "../../../utils/GlobalHooks";
 import { IDirData, IGraph, RawStatisticsDIR, VGPData } from "../../../utils/GlobalTypes";
 import { SelectableGraph, GraphSymbols } from "../../Sub/Graphs";
 import { stereoAreaConstants } from "./StereoConstants";
@@ -20,9 +20,8 @@ const StereoGraphVGP: FC<IStereoGraphVGP> = ({ graphId, width, height, data }) =
   // ToDo: 
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
   // 2. zoom&pan
-  console.log('what', data)
   const { reference, currentInterpretation, hiddenDirectionsIDs, currentFile } = useAppSelector(state => state.dirPageReducer);
-  const { menuItems, settings } = usePMDGraphSettings();
+  const { menuItems, settings } = useDIRGraphSettings();
   const selectableNodes = useGraphSelectableNodesDIR(graphId); 
   const selectedIDs = useGraphSelectedIDs('dir');
   const {viewHeight, viewWidth, ...areaConstants} = stereoAreaConstants(width, height);
