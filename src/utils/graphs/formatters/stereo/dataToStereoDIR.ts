@@ -20,6 +20,7 @@ const dataToStereoDIR = (
   cutoffType?: '45' | 'vandamme',
 ) => {
   let directions = data.interpretations.filter((direction, index) => !hiddenDirectionsIDs.includes(index + 1));
+
   directions = directions.map((direction, index) => {
     const { id, Dgeo, Igeo, Dstrat, Istrat } = direction;
     let geoDirection = new Direction(Dgeo, Igeo, 1);
@@ -102,7 +103,19 @@ const dataToStereoDIR = (
 
   const dotsData: DotsData = directionalData.map((di, index) => {
     let coords = dirToCartesian2D(di[0] - 90, di[1], graphSize);
-    return {id: directions[index].id, xyData: [coords.x, coords.y]};
+    const direction = new Direction(di[0], di[1], 1);
+    const a95 = directions[index] ? directions[index].mad : 0;
+    const confidenceCircle = createStereoPlaneData(direction, graphSize, a95);
+    return {
+      id: directions[index].id, 
+      xyData: [coords.x, coords.y],
+      dirData: di,
+      confidenceCircle: {
+        xyData: confidenceCircle.all, 
+        xyDataSplitted: confidenceCircle, 
+        color: '#000'
+      },
+    };
   });
 
   // tooltip data for each dot on graph

@@ -59,6 +59,7 @@ export type DotSettings = {
   tooltips: boolean;
   id?: boolean;
   label?: boolean;
+  confidenceCircle?: boolean;
 };
 
 export type GraphAreaSettings = {
@@ -75,4 +76,12 @@ export type Pan = {
   top: number;
 };
 
-export type DotsData = Array<{id: number, xyData: [number, number]}>;
+export type DirectionDot = {
+  id: number;
+  dirData?: [number, number];
+  xyData: [number, number];
+  confidenceCircle?: PlaneData;
+  tooltip?: TooltipDot;
+}
+
+export type DotsData = DirectionDot[];//Array<{id: number, xyData: [number, number]}>;

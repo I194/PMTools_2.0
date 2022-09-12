@@ -79,7 +79,7 @@ const Data: FC<IData> = ({
           id={`${graphId}-${type}-dots`}
         >
           {
-            data.map(({id, xyData}, index) => (
+            data.map(({id, xyData, confidenceCircle}, index) => (
               <Dot 
                 x={xyData[0]} 
                 y={xyData[1]} 
@@ -110,6 +110,7 @@ const Data: FC<IData> = ({
                     ? 2 
                     : 1
                 }
+                confidenceCircle={confidenceCircle}
                 settings={settings}
               />
             )

@@ -62,13 +62,15 @@ export const useDIRGraphSettings = () => {
   const [annotations, setAnnotations] = useState<boolean>(true);
   const [directionID, setDirectionID] = useState<boolean>(true);
   const [directionLabel, setDirectionLabel] = useState<boolean>(true);
+  const [confidenceCircle, setConfidenceCircle] = useState<boolean>(false);
 
   const menuItems: Array<TMenuItem> = [
     {label: 'Tooltips', onClick: () => setTooltips(!tooltips), state: tooltips},
     {label: 'Ticks', onClick: () => setTicks(!ticks), state: ticks, divider: true},
     {label: 'Annotations', onClick: () => setAnnotations(!annotations), state: annotations},
     {label: 'Show ID', onClick: () => setDirectionID(!directionID), state: directionID},
-    {label: 'Show label', onClick: () => setDirectionLabel(!directionLabel), state: directionLabel},
+    {label: 'Show label', onClick: () => setDirectionLabel(!directionLabel), state: directionLabel, divider: true},
+    {label: 'Show confidence circles', onClick: () => setConfidenceCircle(!confidenceCircle), state: confidenceCircle},
   ];
 
   const settings: GraphSettings = {
@@ -78,6 +80,7 @@ export const useDIRGraphSettings = () => {
       tooltips,
       id: directionID,
       label: directionLabel,
+      confidenceCircle
     },
   };
 

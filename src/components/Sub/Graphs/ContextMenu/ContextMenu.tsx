@@ -4,6 +4,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { TMenuItem } from '../../../../utils/graphs/types';
 import CheckOutlinedIcon from '@mui/icons-material/CheckOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import { Divider } from '@mui/material';
 
 interface IContextMenu {
   items?: Array<TMenuItem>;
@@ -55,18 +56,24 @@ const ContextMenu: FC<IContextMenu> = ({ items, children }) => {
         {
           items.map((item) => {
             return (
-              <MenuItem 
-                onClick={() => handleClick(item)}
-                sx={{padding: '4px 8px'}}
-                key={item.label}
-              >
+              <>
+                <MenuItem 
+                  onClick={() => handleClick(item)}
+                  sx={{padding: '4px 8px'}}
+                  key={item.label}
+                >
+                  {
+                    item.state 
+                      ? <CheckOutlinedIcon sx={{mr: '8px'}}/>
+                      : <CloseOutlinedIcon sx={{mr: '8px'}}/>
+                  }
+                  {item.label}
+                </MenuItem>
                 {
-                  item.state 
-                    ? <CheckOutlinedIcon sx={{mr: '8px'}}/>
-                    : <CloseOutlinedIcon sx={{mr: '8px'}}/>
+                  item.divider &&
+                  <Divider />
                 }
-                {item.label}
-              </MenuItem>
+              </>
             );
           })
         }

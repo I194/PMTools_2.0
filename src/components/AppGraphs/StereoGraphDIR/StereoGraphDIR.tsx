@@ -1,7 +1,7 @@
 import React, { FC, useMemo, useState } from "react";
 import styles from "./ZijdGraph.module.scss";
 import { useAppSelector } from "../../../services/store/hooks";
-import { useGraphSelectableNodesDIR, useGraphSelectedIDs, usePMDGraphSettings } from "../../../utils/GlobalHooks";
+import { useGraphSelectableNodesDIR, useGraphSelectedIDs, useDIRGraphSettings } from "../../../utils/GlobalHooks";
 import { IDirData, IGraph, RawStatisticsDIR, VGPData } from "../../../utils/GlobalTypes";
 import { SelectableGraph, GraphSymbols } from "../../Sub/Graphs";
 import { stereoAreaConstants } from "./StereoConstants";
@@ -32,7 +32,7 @@ const StereoGraphDIR: FC<IStereoGraphDIR> = ({
   // const [centeredByMean, setCenteredByMean] = useState<boolean>(false);
 
   const { reference, currentInterpretation, hiddenDirectionsIDs, reversedDirectionsIDs } = useAppSelector(state => state.dirPageReducer);
-  const { menuItems, settings } = usePMDGraphSettings();
+  const { menuItems, settings } = useDIRGraphSettings();
   const selectableNodes = useGraphSelectableNodesDIR(graphId); 
 
   const selectedIDs = useGraphSelectedIDs('dir');

@@ -86,13 +86,13 @@ const Dot: FC<IDot> = ({
             y={y - 8}
             fontSize={'0.8vw'}
           >
-           {
-             [
-               settings.id && annotation.id,
-               settings.id && settings.label && ': ',
-               settings.label && annotation.label
-             ]
-           }
+            {
+              [
+                settings.id && annotation.id,
+                settings.id && settings.label && ': ',
+                settings.label && annotation.label
+              ]
+            }
           </text>,
 
           selected && 
@@ -114,7 +114,7 @@ const Dot: FC<IDot> = ({
             <line x1={x} x2={x} y1={y - 8} y2={y + 8} stroke={graphSelectedDotColor(type)}/>
           </g>,
 
-          confidenceCircle &&
+          confidenceCircle && settings.confidenceCircle &&
           [
             <path 
               d={createStraightPath(confidenceCircle.xyDataSplitted.neg)}

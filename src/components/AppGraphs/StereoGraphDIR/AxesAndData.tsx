@@ -136,7 +136,7 @@ const AxesAndData: FC<IAxesAndData> = ({
             strokeColor={meanDirection.confidenceCircle?.color || 'black'}
             confidenceCircle={meanDirection.confidenceCircle}
             greatCircle={meanDirection.greatCircle}
-            settings={settings.dots}
+            settings={{...settings.dots, confidenceCircle: true}}
           />
         }
       </g>
