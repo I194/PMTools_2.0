@@ -11,6 +11,7 @@
     "@react-three/drei": "^8.20.2",
     "@react-three/fiber": "^7.0.26",
     "@reduxjs/toolkit": "^1.7.1",
+    "@rive-app/react-canvas": "^3.0.24",
     "@svgr/webpack": "^6.2.1",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
