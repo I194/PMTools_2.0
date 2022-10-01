@@ -4,6 +4,8 @@ import { useWindowSize } from '../../utils/GlobalHooks';
 import { ZijdGraph, StereoGraph, MagGraph} from '../../components/AppGraphs';
 import { IPmdData } from '../../utils/GlobalTypes';
 import GraphsSkeleton from './GraphsSkeleton';
+import { useAppSelector } from '../../services/store/hooks';
+import { useMediaQuery } from 'react-responsive';
 
 interface IGraphs {
   dataToShow: IPmdData | null;
@@ -12,6 +14,8 @@ interface IGraphs {
 const Graphs: FC<IGraphs> = ({ dataToShow }) => {
 
   const [wv, wh] = useWindowSize();
+  const widthLessThan1400 = useMediaQuery({ query: '(max-width: 1400px)' });
+  const largeGraphToShow = useAppSelector(state => state.pcaPageReducer.largeGraph);
 
   const graphLargeRef = useRef<HTMLDivElement>(null);
   const graphLargeToExportRef = useRef<HTMLDivElement>(null);
@@ -49,15 +53,80 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
     />
   );
 
+  if (widthLessThan1400) return (
+    <GraphsSkeleton 
+      graphLarge={{
+        node: (
+          largeGraphToShow === 0 
+            ? 
+              <ZijdGraph 
+                graphId={`zijd`}
+                width={largeGraphSize}
+                height={largeGraphSize} 
+                data={dataToShow}
+              />
+            :
+              largeGraphToShow === 1
+              ?
+                <StereoGraph 
+                  graphId={`stereo`} 
+                  width={largeGraphSize}
+                  height={largeGraphSize}
+                  data={dataToShow}
+                />
+              :
+                <MagGraph 
+                  graphId={`mag`}
+                  width={largeGraphSize}
+                  height={largeGraphSize}
+                  data={dataToShow}
+                />
+        ),
+        ref: graphLargeRef
+      }}
+      graphLargeToExport={{
+        node: (
+          largeGraphToShow === 0 
+            ?
+              <ZijdGraph 
+                graphId={`export_zijd`}
+                width={500}
+                height={500} 
+                data={dataToShow}
+              />
+            :
+              largeGraphToShow === 1
+              ?
+                <StereoGraph 
+                  graphId={`export_stereo`}
+                  width={500}
+                  height={500} 
+                  data={dataToShow}
+                />
+              :
+                <MagGraph
+                  graphId={`export_mag`}
+                  width={500}
+                  height={500}
+                  data={dataToShow}
+                />
+        ),
+        ref: graphLargeToExportRef
+      }}
+    />
+  )
+
   return (
     <GraphsSkeleton 
       graphLarge={{
-        node: <ZijdGraph 
-          graphId={`zijd`}
-          width={largeGraphSize}
-          height={largeGraphSize} 
-          data={dataToShow}
-        />,
+        node: (
+          <ZijdGraph 
+            graphId={`zijd`}
+            width={largeGraphSize}
+            height={largeGraphSize} 
+            data={dataToShow}
+          />
+        ),
         ref: graphLargeRef
       }}
       graphLargeToExport={{
@@ -70,12 +139,14 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
         ref: graphLargeToExportRef
       }}
       graphSmallTop={{
-        node: <StereoGraph 
-          graphId={`stereo`} 
-          width={smallGraphSize}
-          height={smallGraphSize}
-          data={dataToShow}
-        />,
+        node: (
+          <StereoGraph 
+            graphId={`stereo`} 
+            width={smallGraphSize}
+            height={smallGraphSize}
+            data={dataToShow}
+          />
+        ),
         ref: graphSmallTopRef
       }}
       graphSmallTopToExport={{
@@ -88,21 +159,25 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
         ref: graphSmallTopToExportRef
       }}
       graphSmallBot={{
-        node: <MagGraph 
-          graphId={`mag`}
-          width={smallGraphSize}
-          height={smallGraphSize}
-          data={dataToShow}
-        />,
+        node: (
+          <MagGraph 
+            graphId={`mag`}
+            width={smallGraphSize}
+            height={smallGraphSize}
+            data={dataToShow}
+          />
+        ),
         ref: graphSmallBotRef
       }}
       graphSmallBotToExport={{
-        node: <MagGraph
-          graphId={`export_mag`}
-          width={500}
-          height={500}
-          data={dataToShow}
-        />,
+        node: (
+          <MagGraph
+            graphId={`export_mag`}
+            width={500}
+            height={500}
+            data={dataToShow}
+          />
+        ),
         ref: graphSmallBotToExportRef
       }}
     />

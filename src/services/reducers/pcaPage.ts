@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { IPmdData, IDirData } from "../../utils/GlobalTypes";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { IPmdData, IDirData, GraphPMD } from "../../utils/GlobalTypes";
 import { RawStatisticsPCA, StatisitcsInterpretation } from "../../utils/GlobalTypes";
 import { Projection, Reference, StatisticsModePCA } from "../../utils/graphs/types";
 
@@ -15,6 +15,7 @@ interface IInitialState {
   allInterpretations: Array<StatisitcsInterpretation>;
   outputFilename: string;
   showStepsInput: boolean;
+  largeGraph: GraphPMD;
 }
 
 const initialState: IInitialState = {
@@ -29,6 +30,7 @@ const initialState: IInitialState = {
   allInterpretations: [],
   outputFilename: '',
   showStepsInput: false,
+  largeGraph: 0,  
 }
 
 const pcaPage = createSlice({
@@ -105,6 +107,9 @@ const pcaPage = createSlice({
     setOutputFilename (state, action) {
       state.outputFilename = action.payload;
     },
+    setLargeGraph (state, action: PayloadAction<GraphPMD>) {
+      state.largeGraph = action.payload;
+    }
   },
   extraReducers: (builder) => {
   }
@@ -127,6 +132,7 @@ export const {
   updateCurrentInterpretation,
   deleteInterepretationByParentFile,
   setOutputFilename,
+  setLargeGraph,
 } = pcaPage.actions;
 
 const pcaPageReducer = pcaPage.reducer;

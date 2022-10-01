@@ -2,15 +2,12 @@ import React, { FC, useEffect } from 'react';
 import styles from './ModalWrapper.module.scss';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
-import { Backdrop, Box, IconButton } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { IconButton } from '@mui/material';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import Draggable from 'react-draggable';
 import { useTheme } from '@mui/material/styles';
 import {
   bgColorMain,
-  bgColorBlocks,
-  boxShadowStyle
 } from '../../../utils/ThemeConstants';
 import { useAppDispatch } from '../../../services/store/hooks';
 import { acitvateHotkeys, deactivateHotkeys } from '../../../services/reducers/appSettings';
@@ -80,6 +77,7 @@ const ModalWrapper: FC<IModal> = ({
             position: 'absolute',
             right: '8px',
             top: '8px',
+            zIndex: 100,
           }}
           onClick={handleClose}
         >

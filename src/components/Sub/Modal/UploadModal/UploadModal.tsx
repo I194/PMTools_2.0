@@ -10,6 +10,7 @@ import { useTheme } from "@mui/material/styles";
 
 import examplePCA from '../../../../assets/examples/examplePCA.pmd'
 import exampleDIR from '../../../../assets/examples/exampleDIR.pmm'
+import { useMediaQuery } from "react-responsive";
 
 type Props = {
   page: 'pca' | 'dir';
@@ -19,6 +20,7 @@ const UploadModal = ({page}: Props) => {
 
   const theme = useTheme();
   const dispatch = useAppDispatch();
+  const widthLessThan720 = useMediaQuery({ maxWidth: 719 });
 
   const handleFileUpload = (event: any, files?: Array<File>) => {;
     const acceptedFiles = files ? files : Array.from(event.currentTarget.files);
@@ -64,25 +66,27 @@ const UploadModal = ({page}: Props) => {
           variant='contained'
           color='primary'
           sx={{
-            textTransform: 'none',
-            ml: '24px',
+            textTransform: 'none'
           }}
           onClick={useExample}
         >
           Или воспользуйтесь примером
         </Button>
       </div>
-      <div 
-        className={styles.dropContainer}
-        style={{
-          borderColor: theme.palette.mode === 'light' ? '#474c50' : '#fff',
-          boxShadow: isDragActive ? `0px 0px 12px 1px ${textColor(theme.palette.mode)}` : 'none',
-        }}
-      >
-        <Typography variant="h4" color={textColor(theme.palette.mode)}>
-          Или перетащите файлы поверх приложения
-        </Typography>
-      </div>
+      {
+        !widthLessThan720 && 
+        <div 
+          className={styles.dropContainer}
+          style={{
+            borderColor: theme.palette.mode === 'light' ? '#474c50' : '#fff',
+            boxShadow: isDragActive ? `0px 0px 12px 1px ${textColor(theme.palette.mode)}` : 'none',
+          }}
+        >
+          <Typography variant="h4" color={textColor(theme.palette.mode)} textAlign='center'>
+            Или перетащите файлы поверх приложения
+          </Typography>
+        </div>
+      }
     </div>
   )
 };

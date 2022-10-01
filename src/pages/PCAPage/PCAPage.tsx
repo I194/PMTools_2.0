@@ -19,12 +19,15 @@ import {
 } from '../../utils/ThemeConstants';
 import ModalWrapper from '../../components/Sub/Modal/ModalWrapper';
 import UploadModal from '../../components/Sub/Modal/UploadModal/UploadModal';
+import { useMediaQuery } from 'react-responsive';
 
 const PCAPage: FC = ({}) => {
 
-  const dispatch = useAppDispatch();
-  
   const theme = useTheme();
+  const dispatch = useAppDispatch();
+  const widthLessThan720 = useMediaQuery({ maxWidth: 719 });
+  const heightLessThan560 = useMediaQuery({ maxHeight: 559 });
+  const unsupportedResolution = widthLessThan720 || heightLessThan560;
 
   const files = useAppSelector(state => state.filesReducer.treatmentFiles);
   const { treatmentData, currentDataPMDid } = useAppSelector(state => state.parsedDataReducer);
@@ -58,7 +61,9 @@ const PCAPage: FC = ({}) => {
   useEffect(() => {
     if (!dataToShow) setShowUploadModal(true);
     else setShowUploadModal(false);
-  }, [dataToShow])
+  }, [dataToShow]);
+
+  if (unsupportedResolution) return <>Размер окна должен быть не меньше чем 720x560</>
 
   return (
     <>
@@ -79,7 +84,7 @@ const PCAPage: FC = ({}) => {
       <ModalWrapper
         open={showUploadModal}
         setOpen={setShowUploadModal}
-        size={{width: '60vw', height: '60vh'}}
+        size={{width: '60vw', height: widthLessThan720 ? 'fit-content' : '60vh'}}
         showBottomClose
       >
         <UploadModal page='pca' />

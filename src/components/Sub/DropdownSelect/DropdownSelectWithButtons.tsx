@@ -5,6 +5,7 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { FormControl, IconButton, InputLabel, ListItem, ListItemText, MenuItem, Select, SelectChangeEvent,  } from '@mui/material';
 import DropdownSelect, { IDropdownSelect } from './DropdownSelect';
+import { DefaultIconButton } from '../Buttons';
 
 interface IDropdownSelectWithButtons extends IDropdownSelect {
   useArrowListeners?: boolean;
@@ -82,7 +83,7 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
   
   return (
     <div className={styles.DropdownSelectWithButtons}>
-      <IconButton
+      <DefaultIconButton
         sx={{
           p: 0,
           mt: '16px'
@@ -90,7 +91,7 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
         onClick={handleLeftClick}
       >
         <KeyboardArrowLeftIcon />
-      </IconButton>
+      </DefaultIconButton>
       <FormControl variant="standard" sx={{ minWidth: minWidth || '200px', m: m || '0' }}>
         <InputLabel>{ label }</InputLabel>
         <Select
@@ -128,7 +129,7 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
           }
         </Select>
       </FormControl>
-      <IconButton
+      <DefaultIconButton
         sx={{
           p: 0,
           mt: '16px'
@@ -136,10 +137,10 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
         onClick={handleRightClick}
       >
         <KeyboardArrowRightIcon />
-      </IconButton>
+      </DefaultIconButton>
       {
         !!onDeleteAll &&
-        <IconButton
+        <DefaultIconButton
           sx={{
             p: 0,
             mt: '16px'
@@ -147,7 +148,7 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
           onClick={onDeleteAll}
         >
           <DeleteForeverIcon />
-        </IconButton>
+        </DefaultIconButton>
       }
     </div>
   )

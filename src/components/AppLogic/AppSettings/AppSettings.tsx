@@ -1,25 +1,22 @@
-import React, { FC, useCallback, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import styles from './AppSettings.module.scss';
-import { MenuList, MenuItem, Button, Input } from '@mui/material';
+import { IconButton, Button, Input } from '@mui/material';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
 import { useAppDispatch, useAppSelector } from "../../../services/store/hooks";
-import { setDirStatFiles, setInputFiles, setTreatmentFiles } from "../../../services/reducers/files";
-import { useLocation } from "react-router-dom";
 import { useTheme } from '@mui/material/styles';
 import {
   textColor
 } from '../../../utils/ThemeConstants';
-
-import {useDropzone} from 'react-dropzone'
 import { useMediaQuery } from "react-responsive";
 import ModalWrapper from "../../Sub/Modal/ModalWrapper";
 import SettingsModal from "../../Sub/Modal/SettingsModal/SettingsModal";
-import { deactivateHotkeys, setHotkeys } from "../../../services/reducers/appSettings";
-import loadHotkeys, { defaultHotkeys } from "./hotkeys";
+import { setHotkeys } from "../../../services/reducers/appSettings";
+import loadHotkeys from "./hotkeys";
 
 import pmtoolsHowToUse from '../../../assets/PMTools_how_to_use.pdf';
+import { DefaultButton, DefaultResponsiveButton } from "../../Sub/Buttons";
 
 interface IAppSettings {
   onFileUpload: (event: any, files?: Array<File>) => void;
@@ -35,7 +32,7 @@ const AppSettings: FC<IAppSettings> = ({
 
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const isSmallScreen = useMediaQuery({ query: '(max-width: 1464px)' });
+  const widthLessThan1400 = useMediaQuery({ query: '(max-width: 1400px)' });
 
   const { hotkeys } = useAppSelector(state => state.appSettingsReducer);
 
@@ -63,36 +60,16 @@ const AppSettings: FC<IAppSettings> = ({
   return (
     <>
       <div className={styles.buttons}>
-        <Button
-          variant="contained" 
-          startIcon={<SettingsOutlinedIcon />}
-          sx={{
-            textTransform: 'none', 
-            marginRight: '16px',
-            '.MuiButton-startIcon': isSmallScreen ? {
-              margin: 0,
-            } : {},
-          }}
-          component="span"
+        <DefaultResponsiveButton
+          icon={<SettingsOutlinedIcon />}
+          text={'Настройки'}
           onClick={onSettingsClick}
-        >
-          { isSmallScreen ? '' : 'Настройки'}
-        </Button>
-        <Button
-          variant="contained" 
-          startIcon={<HelpOutlineOutlinedIcon />}
-          sx={{
-            textTransform: 'none', 
-            marginRight: '16px',
-            '.MuiButton-startIcon': isSmallScreen ? {
-              margin: 0,
-            } : {},
-          }}
-          component="span"
+        />
+        <DefaultResponsiveButton
+          icon={<HelpOutlineOutlinedIcon />}
+          text={'Описание'}
           onClick={onHelpClick}
-        >
-          { isSmallScreen ? '' : 'Описание'}
-        </Button>
+        />
         <label 
           htmlFor="upload-file" 
           style={{
@@ -111,22 +88,16 @@ const AppSettings: FC<IAppSettings> = ({
               }}
               disableUnderline={true}
               sx={{display: 'none'}}
-              // onChange={onFileUpload}
             />
           }
-          <Button 
-            variant="outlined" 
-            startIcon={<UploadFileOutlinedIcon />}
+          <DefaultResponsiveButton
+            icon={<UploadFileOutlinedIcon />}
+            text={'Загрузить файл'}
+            variant='outlined'
             disabled={currentPage !== 'pca' && currentPage !== 'dir'}
-            sx={{
-              textTransform: 'none', 
-              width: '100%',
-              color: textColor(theme.palette.mode),
-            }}
             component="span"
-          >
-            Загрузить файл
-          </Button>
+            id="upload-file-button"
+          />
         </label>
       </div>
       <ModalWrapper

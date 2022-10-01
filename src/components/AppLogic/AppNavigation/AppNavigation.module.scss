@@ -9,13 +9,10 @@
   align-items: center;
 
   padding: 4px 8px;
+  gap: 8px;
 
   & a {
     text-decoration: none;
-  }
-
-  &:nth-child(n) {
-    margin-right: 8px;
   }
 
 }

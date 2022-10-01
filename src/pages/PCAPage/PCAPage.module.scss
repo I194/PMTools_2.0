@@ -1,11 +1,17 @@
 .controlPanel {
   position: relative;
   max-height: 10%;
-  width: 100%;
+  max-width: 100%;
 
   display: flex;
   flex-direction: row;
   background-color: #000;
+  gap: 32px;
+  box-sizing: border-box;
+
+  @media screen and (max-width: 1400px) {
+    gap: 16px;
+  }
 }
 
 .data {
@@ -18,14 +24,17 @@
   display: flex;
   flex-direction: row;
   background-color: #000;
+  gap: 32px;
 
   .tables {
     position: relative;
     width: 37.5%;
+    min-width: 37.5%;
 
     display: flex;
     flex-direction: column;
     background-color: #000;
+    gap: 16px;
 
     .tableSmall {
       position: relative;
@@ -35,7 +44,6 @@
       background-color: #212121;
     }
 
-    padding: 8px 16px;
     box-sizing: border-box;
   }
 
@@ -46,14 +54,16 @@
     display: flex;
     flex-direction: row;
     background-color: #000;
+    gap: 16px;
 
     .column {
       position: relative;
-      width: calc(100% / 3);
+      width: 36%;
       height: 100%;
       
       display: flex;
       flex-direction: column;
+      gap: 16px;
 
       :last-child {
         margin-bottom: 0px;
@@ -74,12 +84,11 @@
       align-items: center;
       
       background-color: #212121;
-      margin: 8px;
     }
 
     .graphLarge {
       position: relative;
-      width: calc(2 * (100% / 3));
+      width: 64%;
       height: 100%;
 
       display: flex;
@@ -88,10 +97,33 @@
       align-items: center;
 
       background-color: #212121;
-      margin: 0px 8px; 
     }
 
-    padding: 8px;
     box-sizing: border-box;
+  }
+
+  @media screen and (max-width: 1400px) {
+    gap: 16px;
+
+    .tables {
+      width: 58%;
+      gap: 8px;
+    }
+
+    .graphs {
+      width: 42%;
+
+      .graphLarge {
+        width: 100%;
+      }
+
+      .column {
+        display: none;
+      }
+
+      .graphSmall {
+        display: none;
+      }
+    }
   }
 }

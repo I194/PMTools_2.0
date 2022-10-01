@@ -225,3 +225,10 @@ export type HotkeysType = Array<{
     };
   }>;
 }>;
+
+export enum GraphPMD {
+  zijd,
+  stereo,
+  remagnetization
+};
+

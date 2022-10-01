@@ -2,14 +2,16 @@ import React, { FC } from "react";
 import styles from './AppNavigation.module.scss';
 import { Button } from '@mui/material';
 import { NavLink } from 'react-router-dom';
+import { DefaultResponsiveButton } from "../../Sub/Buttons";
 
 interface INavButton {
   label: string;
+  icon: React.ReactNode;
   to: string;
   external?: boolean;
 }
 
-const NavButton: FC<INavButton> = ({ label, to, external }) => {
+const NavButton: FC<INavButton> = ({ label, icon, to, external }) => {
 
   const onClickExternal = () => {
     window.location.href = to;
@@ -17,17 +19,11 @@ const NavButton: FC<INavButton> = ({ label, to, external }) => {
   
   if (external) {
     return (
-      <Button
-        variant="contained" 
-        sx={{
-          textTransform: 'none',
-          marginRight: '16px',
-        }}
-        component="span"
+      <DefaultResponsiveButton
+        text={label}
+        icon={icon}
         onClick={onClickExternal}
-      >
-        { label }
-      </Button>
+      />
     )
   };
 
@@ -36,19 +32,11 @@ const NavButton: FC<INavButton> = ({ label, to, external }) => {
       {
         ({ isActive }) => {
           return (
-            <Button
-            variant="contained" 
-            color={ isActive ? 'secondary' : 'primary' }
-            sx={{
-              textTransform: 'none',
-              marginRight: '16px',
-              // textDecoration: isActive ? 'underline' : 'none',
-              fontWeight: isActive ? 700 : 500,
-            }}
-            component="span"
-            >
-              { label }
-            </Button>
+            <DefaultResponsiveButton
+              text={label}
+              icon={icon}
+              color={ isActive ? 'secondary' : 'primary' }
+            />
           );
         }
       }

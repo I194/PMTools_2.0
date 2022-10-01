@@ -11,10 +11,10 @@ import { PMDGraph } from '../../utils/GlobalTypes';
 interface IGraphsSkeleton {
   graphLarge: {node: ReactNode, ref: React.RefObject<HTMLDivElement>} | null;
   graphLargeToExport: {node: ReactNode, ref: React.RefObject<HTMLDivElement>} | null;
-  graphSmallTop: {node: ReactNode, ref: React.RefObject<HTMLDivElement>} | null;
-  graphSmallTopToExport: {node: ReactNode, ref: React.RefObject<HTMLDivElement>} | null;
-  graphSmallBot: {node: ReactNode, ref: React.RefObject<HTMLDivElement>} | null;
-  graphSmallBotToExport: {node: ReactNode, ref: React.RefObject<HTMLDivElement>} | null;
+  graphSmallTop?: {node: ReactNode, ref: React.RefObject<HTMLDivElement>} | null;
+  graphSmallTopToExport?: {node: ReactNode, ref: React.RefObject<HTMLDivElement>} | null;
+  graphSmallBot?: {node: ReactNode, ref: React.RefObject<HTMLDivElement>} | null;
+  graphSmallBotToExport?: {node: ReactNode, ref: React.RefObject<HTMLDivElement>} | null;
 };
 
 const GraphsSkeleton: FC<IGraphsSkeleton> = ({ 

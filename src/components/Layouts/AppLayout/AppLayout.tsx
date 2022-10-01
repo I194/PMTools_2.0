@@ -12,12 +12,15 @@ import {
   boxShadowStyle,
   textColor
 } from '../../../utils/ThemeConstants';
+import GraphSelector from "../../AppLogic/GraphsSelector/GraphsSelector";
+import { useMediaQuery } from "react-responsive";
 
 const AppLayout: FC<RouteProps> = () => {
 
   const dispatch = useAppDispatch();
-  const location = useLocation();
   const theme = useTheme();
+  const widthLessThan1400 = useMediaQuery({ query: '(max-width: 1400px)' });
+  const location = useLocation();
   const currentPage = location.pathname.split('/').pop() || location.pathname;
 
   const handleFileUpload = (event: any, files?: Array<File>) => {;
@@ -89,6 +92,25 @@ const AppLayout: FC<RouteProps> = () => {
                 <AppNavigation />
               </div>
             </div>
+            {
+              widthLessThan1400 &&
+              <div 
+                className={styles.settings}
+                style={{backgroundColor: bgColorMain(theme.palette.mode)}}
+              >
+                <div 
+                  className={styles.appSettings} 
+                  style={{
+                    backgroundColor: bgColorBlocks(theme.palette.mode),
+                    WebkitBoxShadow: boxShadowStyle(theme.palette.mode),
+                    MozBoxShadow: boxShadowStyle(theme.palette.mode),
+                    boxShadow: boxShadowStyle(theme.palette.mode),
+                  }}
+                >
+                  <GraphSelector />
+                </div>
+              </div>
+            }
           </div>
           <Outlet />
         </div>

@@ -11,7 +11,7 @@ const Unit: FC<IUnit> = ({ label, viewHeight, viewWidth }) => {
   return (
     <text 
       id='graph-unit' 
-      x={`75%`} 
+      x={`70%`} 
       y={viewHeight - 4} 
       className={styles.unitText}
       fontSize={ '18px' }

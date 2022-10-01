@@ -9,6 +9,7 @@ import { setTreatmentData } from "../../../../services/reducers/parsedData";
 import EditIcon from '@mui/icons-material/Edit';
 import MetaDataChange from "../../../Sub/DataTable/MetaDataChange/MetaDataChange";
 import ModalWrapper from "../../../Sub/Modal/ModalWrapper";
+import { useMediaQuery } from "react-responsive";
 
 interface IMetaDataTablePMD {
   data: IPmdData['metadata'] | null | undefined;
@@ -16,6 +17,7 @@ interface IMetaDataTablePMD {
 
 const MetaDataTablePMD: FC<IMetaDataTablePMD> = ({ data}) => {
 
+  const widthLessThan1400 = useMediaQuery({ query: '(max-width: 1400px)' });
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
 
   const columns: GridColumns = [
@@ -75,7 +77,7 @@ const MetaDataTablePMD: FC<IMetaDataTablePMD> = ({ data}) => {
           columns={columns} 
           hideFooter={rows.length < 100}
           autoHeight={true}
-          getRowHeight={() => 24}
+          getRowHeight={() => 30}
           density={'compact'}
           disableSelectionOnClick={true}
           sx={{
@@ -96,7 +98,9 @@ const MetaDataTablePMD: FC<IMetaDataTablePMD> = ({ data}) => {
         <ModalWrapper
           open={showEditModal}
           setOpen={setShowEditModal}
-          size={{height: '36vh'}}
+          size={{
+            height: widthLessThan1400 ? '54vh' : '36vh'
+          }}
         >
           <MetaDataChange oldMetadata={data} onApply={() => setShowEditModal(false)}/>
         </ModalWrapper>

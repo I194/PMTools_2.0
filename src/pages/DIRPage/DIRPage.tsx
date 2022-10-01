@@ -17,12 +17,15 @@ import { useTheme } from '@mui/material/styles';
 import { bgColorMain } from '../../utils/ThemeConstants';
 import ModalWrapper from '../../components/Sub/Modal/ModalWrapper';
 import UploadModal from '../../components/Sub/Modal/UploadModal/UploadModal';
+import { useMediaQuery } from 'react-responsive';
 
 const DIRPage: FC = ({}) => {
 
-  const dispatch = useAppDispatch();
-  
   const theme = useTheme();
+  const dispatch = useAppDispatch();
+  const widthLessThan720 = useMediaQuery({ maxWidth: 719 });
+  const heightLessThan560 = useMediaQuery({ maxHeight: 559 });
+  const unsupportedResolution = widthLessThan720 || heightLessThan560;
 
   const files = useAppSelector(state => state.filesReducer.dirStatFiles);
   const { dirStatData, currentDataDIRid } = useAppSelector(state => state.parsedDataReducer);
@@ -64,6 +67,8 @@ const DIRPage: FC = ({}) => {
     else setShowUploadModal(false);
   }, [dataToShow]);
 
+  if (unsupportedResolution) return <>Размер окна должен быть не меньше чем 720x560</>
+
   return (
     <>
       <div 
@@ -82,7 +87,7 @@ const DIRPage: FC = ({}) => {
       <ModalWrapper
         open={showUploadModal}
         setOpen={setShowUploadModal}
-        size={{width: '60vw', height: '60vh'}}
+        size={{width: '60vw', height: widthLessThan720 ? 'fit-content' : '60vh'}}
         showBottomClose
       >
         <UploadModal page='dir' />
