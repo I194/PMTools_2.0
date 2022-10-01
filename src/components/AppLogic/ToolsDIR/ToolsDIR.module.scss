@@ -1,8 +1,9 @@
 .instruments {
   width: 100%;
   background-color: #000;
+  overflow-x: auto;
+  overflow-y: hidden;
 
-  padding: 8px 16px;
   box-sizing: border-box;
 
   .dataSettings {
@@ -23,6 +24,7 @@
 
     background-color: #212121;
     padding: 2px 0px;
+    box-sizing: border-box;
   };
 
 };

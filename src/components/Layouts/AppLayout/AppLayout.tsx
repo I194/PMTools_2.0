@@ -93,7 +93,7 @@ const AppLayout: FC<RouteProps> = () => {
               </div>
             </div>
             {
-              widthLessThan1400 &&
+              widthLessThan1400 && currentPage === 'pca' &&
               <div 
                 className={styles.settings}
                 style={{backgroundColor: bgColorMain(theme.palette.mode)}}

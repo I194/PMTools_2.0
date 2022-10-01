@@ -32,6 +32,7 @@ import { setDirStatFiles } from '../../../services/reducers/files';
 import FoldTestContainer from './PMTests/FoldTestContainer';
 import PMTestsModalContent from './PMTests/PMTestsModalContent';
 import ReversePolarityButtons from './ReversePolarityButtons';
+import { useMediaQuery } from 'react-responsive';
 
 interface IToolsDIR {
   data: IDirData | null;
@@ -40,6 +41,7 @@ interface IToolsDIR {
 const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
 
   const dispatch = useAppDispatch();
+  const widthLessThan1400 = useMediaQuery({ query: '(max-width: 1400px)' });
   
   const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
   const { dirStatFiles } = useAppSelector(state => state.filesReducer);
@@ -232,7 +234,10 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
       <ModalWrapper
         open={showVGP}
         setOpen={setShowVGP}
-        size={{width: '80vw', height: '64vh'}}
+        size={{
+          width: widthLessThan1400 ? '94vw' : '80vw', 
+          height: widthLessThan1400 ? '72vh' : '64vh'
+        }}
         position={{left: '50%', top: '50%'}}
         isDraggable={true}
       >
@@ -241,7 +246,10 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
       <ModalWrapper
         open={showPMTests}
         setOpen={setShowPMTests}
-        size={{width: '80vw', height: '64vh'}}
+        size={{
+          width: widthLessThan1400 ? '94vw' : '80vw', 
+          height: widthLessThan1400 ? '72vh' : '64vh'
+        }}
         position={{left: '50%', top: '50%'}}
         isDraggable={true}
       >

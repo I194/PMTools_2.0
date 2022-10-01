@@ -14,7 +14,12 @@ const ToolsPMDSkeleton: FC = ({ children }) => {
   return (
     <div 
       className={styles.instruments}
-      style={{backgroundColor: bgColorMain(theme.palette.mode)}}
+      style={{
+        backgroundColor: bgColorMain(theme.palette.mode),
+        WebkitBoxShadow: boxShadowStyle(theme.palette.mode),
+        MozBoxShadow: boxShadowStyle(theme.palette.mode),
+        boxShadow: boxShadowStyle(theme.palette.mode),
+      }}
     >
       <div 
         className={styles.dataSettings}

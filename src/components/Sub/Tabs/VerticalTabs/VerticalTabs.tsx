@@ -74,7 +74,8 @@ const VerticalTabs = ({ content }: TabsProps) => {
         sx={{ 
           borderRight: 1, 
           borderColor: 'divider',
-          minWidth: 'fit-content', 
+          // minWidth: 'fit-content', 
+          maxWidth: '20vw',
         }}
       >
         {
