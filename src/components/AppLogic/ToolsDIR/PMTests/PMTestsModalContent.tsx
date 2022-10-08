@@ -15,6 +15,7 @@ import ReversalTestContainer from "./ReversalTestContainer/ReversalTestUncontrol
 import ReversalTestUncontrolledContainer from "./ReversalTestContainer/ReversalTestUncontrolledContainer";
 import ReversalTestControlledContainer from "./ReversalTestContainer/ReversalTestControlledContainer";
 import ConglomeratesTestContainer from "./ConglomeratesTestContainer";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   data: IDirData;
@@ -23,11 +24,12 @@ type Props = {
 const PMTestsModalContent: FC<Props> = ({ data }) => {
 
   const theme = useTheme();
+  const { t, i18n } = useTranslation('translation');
   const dispatch = useAppDispatch();
 
   const content = [
     {
-      label: 'Тест складки (Bootstrap-версия)',
+      label: t("pmtests.foldTest.title"),
       content: (
         <div className={styles.dataContainer}>
           <div className={styles.data}>
@@ -37,7 +39,7 @@ const PMTestsModalContent: FC<Props> = ({ data }) => {
       )
     },
     {
-      label: 'Тесты обращения (автоматические)',
+      label: t("pmtests.reverseAutoTest.title"),
       content: (
         <div className={styles.dataContainer}>
           <div className={styles.data}>
@@ -47,7 +49,7 @@ const PMTestsModalContent: FC<Props> = ({ data }) => {
       )
     },
     {
-      label: 'Тест обращения (ручной ввод)',
+      label: t("pmtests.reverseTest.title"),
       content: (
         <div className={styles.dataContainer}>
           <div className={styles.data}>
@@ -57,7 +59,7 @@ const PMTestsModalContent: FC<Props> = ({ data }) => {
       )
     },
     {
-      label: 'Тест конгломератов',
+      label: t("pmtests.conglomerateTest.title"),
       content: (
         <div className={styles.dataContainer}>
           <div className={styles.data}>

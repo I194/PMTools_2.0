@@ -16,6 +16,7 @@ import ModalWrapper from "../../Sub/Modal/ModalWrapper";
 import InputApply from "../../Sub/InputApply/InputApply";
 import parseDotsIndexesInput from "../../../utils/parsers/parseDotsIndexesInput";
 import { enteredIndexesToIDsDIR } from "../../../utils/parsers/enteredIndexesToIDs";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   data: IDirData;
@@ -24,6 +25,7 @@ type Props = {
 const ShowHideDotsButtons = ({ data }: Props) => {
 
   const dispatch = useAppDispatch();
+  const { t, i18n } = useTranslation('translation');
   
   const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
   const { selectedDirectionsIDs, hiddenDirectionsIDs } = useAppSelector(state => state.dirPageReducer); 
@@ -94,7 +96,7 @@ const ShowHideDotsButtons = ({ data }: Props) => {
 
   return (
     <>
-      <ButtonGroupWithLabel label='Видимость'>
+      <ButtonGroupWithLabel label={t('dirPage.tools.visibility.title')}>
         <Tooltip
           title={<Typography variant='body1'>{hideHotkey.key}</Typography>}
           enterDelay={1000}
@@ -131,8 +133,8 @@ const ShowHideDotsButtons = ({ data }: Props) => {
           isDraggable={true}
         >
           <InputApply 
-            label={`Введите номера точек (hide dirs)`}
-            helperText="Валидные примеры: 1-9 || 2,4,8,9 || 2-4;8,9 || 2-4;8,9;12-14"
+            label={`${t('inputDirs.label')} (hide dirs)`}
+            helperText={`${t('inputDirs.helper')} 1-9 || 2,4,8,9 || 2-4;8,9 || 2-4;8,9;12-14`}
             onApply={handleEnteredDotsIndexesApply}
             placeholder={`1-${data.interpretations.length}`}
           />

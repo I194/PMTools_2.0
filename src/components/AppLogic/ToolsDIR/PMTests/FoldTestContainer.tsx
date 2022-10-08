@@ -14,8 +14,11 @@ import {
 } from '../../../../utils/ThemeConstants';
 
 import getCDF from '../../../../utils/graphs/formatters/getCDF';
+import { useTranslation } from 'react-i18next';
 
 const Controls = ({ isRunning, setIsRunning }: { isRunning: boolean, setIsRunning: (isRunning: boolean) => void }) => {
+  const { t, i18n } = useTranslation('translation');
+  
   return (
     <div className={styles.controls}>
       <Button 
@@ -29,9 +32,9 @@ const Controls = ({ isRunning, setIsRunning }: { isRunning: boolean, setIsRunnin
         }}
       >
         {
-          isRunning ? 
-          'Тест запущен, производится моделирование...' : 
-          'Запустить тест складки'
+          isRunning 
+            ? t("pmtests.controls.running")
+            : t("pmtests.controls.run")
         }
       </Button>
     </div>
@@ -45,6 +48,7 @@ type Props = {
 const FoldTestContainer = ({ dataToAnalyze }: Props) => {
 
   const theme = useTheme();
+  const { t, i18n } = useTranslation('translation');
   const [dataToShow, setDataToShow] = useState<FoldTestResult>({untilts: [], savedBootstraps: []});
   const [isRunning, setIsRunning] = useState(false);
 
@@ -88,7 +92,7 @@ const FoldTestContainer = ({ dataToAnalyze }: Props) => {
       <div className={styles.result}>
         <div className={styles.resultRow}>
           <Typography variant='body1' color={textColor(theme.palette.mode)}>
-            Наиболее плотная сгруппированность векторов (кучность, 95% доверительный интервал) наблюдается на: 
+            {t("pmtests.foldTest.first")}
           </Typography>
           <Typography variant='body1' color={successColor(theme.palette.mode)} ml='8px' fontWeight={600}>
             {`${unfoldingMinimun} — ${unfoldingMaximum}`}
@@ -96,7 +100,7 @@ const FoldTestContainer = ({ dataToAnalyze }: Props) => {
         </div>
         <div className={styles.resultRow}>
           <Typography variant='body1' color={textColor(theme.palette.mode)}>
-            При этом диапазон всех бутстреп-генераций следующий:
+            {t("pmtests.foldTest.second")}
           </Typography>
           <Typography variant='body1' color={primaryColor(theme.palette.mode)} ml='8px' fontWeight={600}>
             {`${Math.min(...dataToShow.untilts)} — ${Math.max(...dataToShow.untilts)}`}

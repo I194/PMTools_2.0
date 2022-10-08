@@ -8,9 +8,11 @@ import {
   successColor,
 } from '../../../../../utils/ThemeConstants';
 import { ReversalTestClassicResult } from "../../../../../utils/GlobalTypes";
+import { useTranslation } from "react-i18next";
 
 const ClassicResult = ({ result }: {result: ReversalTestClassicResult}) => {
   const theme = useTheme();
+  const { t, i18n } = useTranslation('translation');
 
   const onCopy = () => {
     const text = `γ/γcr=${result.gamma.toFixed(2)}/${result.gammaCritical.toFixed(2)}`;
@@ -20,10 +22,10 @@ const ClassicResult = ({ result }: {result: ReversalTestClassicResult}) => {
   return (
     <>
       <Typography variant='body1' color={textColor(theme.palette.mode)}>
-        Классический тест обращения [McFadden and McElhinny, 1990]
+        {t("pmtests.reverseTestResult.title")}
       </Typography>
       <Tooltip
-        title='Нажмите, чтобы скопировать'
+        title={t("pmtests.reverseTestResult.tooltip")}
         arrow
         placement="right"
       >

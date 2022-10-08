@@ -19,6 +19,7 @@ import { setVGPData } from "../../../../services/reducers/dirPage";
 import { setSiteData } from "../../../../services/reducers/parsedData";
 import { textColor } from "../../../../utils/ThemeConstants";
 import Direction from "../../../../utils/graphs/classes/Direction";
+import { useTranslation } from "react-i18next";
 
 type SiteRow = {
   id: number;
@@ -40,6 +41,7 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data, sitesData }) => {
   
   const dispatch = useAppDispatch();
   const theme = useTheme();
+  const { t, i18n } = useTranslation('translation');
 
   const { hiddenDirectionsIDs, reversedDirectionsIDs, reference } = useAppSelector(state => state.dirPageReducer);
   // const { siteData } = useAppSelector(state => state.parsedDataReducer);
@@ -214,7 +216,7 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data, sitesData }) => {
             color: textColor(theme.palette.mode),
           }}
         >  
-          Очистить данные
+          {t("vgp.dataManipulation.clear")}
         </Button>
         <Button
           variant="contained"
@@ -224,7 +226,7 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data, sitesData }) => {
             marginTop: '16px',
           }}
         >  
-          Рассчитать VGP
+          {t("vgp.dataManipulation.calculate")}
         </Button>
       </div>
     </div>

@@ -9,9 +9,11 @@ import { myImage, RVImage } from './assets';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LanguageTwoToneIcon from '@mui/icons-material/LanguageTwoTone';
+import { useTranslation } from 'react-i18next';
 
 const Authors = () => {
   const theme = useTheme();
+  const { t, i18n } = useTranslation('translation');
   const isSmallScreen = useMediaQuery({ query: '(max-width: 920px)' });
 
   const onClickExternal = (to: string) => {
@@ -21,7 +23,7 @@ const Authors = () => {
   return (
     <div className={styles.authors}>
       <Typography variant='h4' color={textColor(theme.palette.mode)} textAlign='center' fontSize={isSmallScreen ? '30px' : '34px'} mb='16px'>
-        Создатели PMTools
+        {t('authorsAndHistoryPage.headline')}
       </Typography>
       <div className={styles.authorBlock}>
         <img 
@@ -31,11 +33,11 @@ const Authors = () => {
           className={styles.authorImage}
         />
         <div className={styles.infoBlock}>
-          <Typography variant='h6' color={textColor(theme.palette.mode)} fontWeight={isSmallScreen ? '400' : '500'}>
-            <strong>Иван Ефремов</strong> — разработчик PMTools. 
+          <Typography variant='h6' color={textColor(theme.palette.mode)} fontWeight={isSmallScreen ? '400' : '500'} >
+            {t('authorsAndHistoryPage.ie.whois')} 
           </Typography>
           <Typography variant='caption' color={textColor(theme.palette.mode)} fontWeight={isSmallScreen ? '400' : '500'}>
-            Детальная информация по ссылкам ниже.
+            {t('authorsAndHistoryPage.ie.about')} 
           </Typography>
           <Button
             variant="text" 
@@ -82,10 +84,10 @@ const Authors = () => {
         />
         <div className={styles.infoBlock}>
           <Typography variant='h6' color={textColor(theme.palette.mode)} fontWeight={isSmallScreen ? '400' : '500'}>
-            <strong>Роман Веселовский</strong> — инициатор проекта и научный консультант на всём пути разработки.  
+            {t('authorsAndHistoryPage.rv.whois')}   
           </Typography>
           <Typography variant='caption' color={textColor(theme.palette.mode)} fontWeight={isSmallScreen ? '400' : '500'}>
-            Профессор РАН, доктор геолого-минералогических наук, главный научный сотрудник Института Физики Земли РАН. 
+            {t('authorsAndHistoryPage.rv.about')}  
           </Typography>
           <Button
             variant="text" 

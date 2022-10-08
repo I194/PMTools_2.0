@@ -8,15 +8,17 @@ import { useTheme } from "@mui/material/styles";
 import { textColor } from "../../../../utils/ThemeConstants";
 import { VerticalTabs } from "../../Tabs";
 import { HotkeysSection } from "./Sections";
+import { useTranslation } from "react-i18next";
 
 const SettingsModal = () => {
 
   const theme = useTheme();
+  const { t, i18n } = useTranslation('translation');
   const dispatch = useAppDispatch();
 
   const content = [
     {
-      label: 'Горячие клавиши',
+      label: t('settings.hotkeys.title'),
       content: <HotkeysSection />
     },
     // {

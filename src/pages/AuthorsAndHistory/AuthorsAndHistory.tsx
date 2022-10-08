@@ -5,9 +5,11 @@ import { useMediaQuery } from 'react-responsive';
 import Authors from './Authors';
 import History from './History';
 import { PrettyButton } from '../../components/Sub/Buttons';
+import { useTranslation } from 'react-i18next';
 
 const AuthorsAndHistory: FC = ({}) => {
   const theme = useTheme();
+  const { t, i18n } = useTranslation('translation');
   const isSmallScreen = useMediaQuery({ query: '(max-width: 920px)' });
   const [showHistory, setShowHistory] = useState(false);
 
@@ -22,9 +24,9 @@ const AuthorsAndHistory: FC = ({}) => {
         }}
       >
         {
-          !showHistory ? 
-          'Хочу посмотреть историю создания' :
-          'Не хочу смотреть историю создания'
+          !showHistory 
+            ? t('authorsAndHistoryPage.historybutton.show')
+            : t('authorsAndHistoryPage.historybutton.hide')
         }
       </PrettyButton>
       <History show={showHistory} />

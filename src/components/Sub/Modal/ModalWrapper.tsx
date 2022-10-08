@@ -11,6 +11,7 @@ import {
 } from '../../../utils/ThemeConstants';
 import { useAppDispatch } from '../../../services/store/hooks';
 import { acitvateHotkeys, deactivateHotkeys } from '../../../services/reducers/appSettings';
+import { useTranslation } from 'react-i18next';
 
 interface IModal {
   open: boolean;
@@ -35,6 +36,7 @@ const ModalWrapper: FC<IModal> = ({
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
+  const { t, i18n } = useTranslation('translation');
 
   const handleClose = () => {
     setOpen(false);
@@ -86,7 +88,9 @@ const ModalWrapper: FC<IModal> = ({
         { children }
         {
           showBottomClose && 
-          <Button variant='outlined' onClick={handleClose} sx={{mt: 2}}>Закрыть</Button>
+          <Button variant='outlined' onClick={handleClose} sx={{mt: 2}}>
+            {t('importModal.close')}
+          </Button>
         }
       </div>
     </Modal>

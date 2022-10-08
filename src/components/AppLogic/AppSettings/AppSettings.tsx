@@ -13,10 +13,12 @@ import { useMediaQuery } from "react-responsive";
 import ModalWrapper from "../../Sub/Modal/ModalWrapper";
 import SettingsModal from "../../Sub/Modal/SettingsModal/SettingsModal";
 import { setHotkeys } from "../../../services/reducers/appSettings";
-import loadHotkeys from "./hotkeys";
 
 import pmtoolsHowToUse from '../../../assets/PMTools_how_to_use.pdf';
 import { DefaultButton, DefaultResponsiveButton } from "../../Sub/Buttons";
+import { useTranslation } from "react-i18next";
+import { HotkeysType } from "../../../utils/GlobalTypes";
+import { useDefaultHotkeys } from "../../../utils/GlobalHooks";
 
 interface IAppSettings {
   onFileUpload: (event: any, files?: Array<File>) => void;
@@ -31,9 +33,11 @@ const AppSettings: FC<IAppSettings> = ({
 }) => {
 
   const theme = useTheme();
+  const { t, i18n } = useTranslation('translation');
   const dispatch = useAppDispatch();
   const widthLessThan1400 = useMediaQuery({ query: '(max-width: 1400px)' });
 
+  const defaultHotkeys = useDefaultHotkeys();
   const { hotkeys } = useAppSelector(state => state.appSettingsReducer);
 
   const availableFormats = {
@@ -53,6 +57,18 @@ const AppSettings: FC<IAppSettings> = ({
     window.open(pmtoolsHowToUse, '_blank')
   };
 
+  const loadHotkeys = () => {
+    const hotkeysStored: HotkeysType = JSON.parse(localStorage.getItem('hotkeys')!);
+  
+    if (!hotkeysStored || !hotkeysStored.length) {
+      // Дублирование функционала, актуальная операция в редьюсере
+      // localStorage.setItem('hotkeys', JSON.stringify(defaultHotkeys));
+      return defaultHotkeys;
+    }
+  
+    return hotkeysStored;
+  };
+
   useEffect(() => {
     if (!hotkeys.length) dispatch(setHotkeys(loadHotkeys()));
   }, []);
@@ -62,12 +78,12 @@ const AppSettings: FC<IAppSettings> = ({
       <div className={styles.buttons}>
         <DefaultResponsiveButton
           icon={<SettingsOutlinedIcon />}
-          text={'Настройки'}
+          text={t('appLayout.settings.settings')}
           onClick={onSettingsClick}
         />
         <DefaultResponsiveButton
           icon={<HelpOutlineOutlinedIcon />}
-          text={'Описание'}
+          text={t('appLayout.settings.help')}
           onClick={onHelpClick}
         />
         <label 
@@ -92,7 +108,7 @@ const AppSettings: FC<IAppSettings> = ({
           }
           <DefaultResponsiveButton
             icon={<UploadFileOutlinedIcon />}
-            text={'Загрузить файл'}
+            text={t('appLayout.settings.import')}
             variant='outlined'
             disabled={currentPage !== 'pca' && currentPage !== 'dir'}
             component="span"

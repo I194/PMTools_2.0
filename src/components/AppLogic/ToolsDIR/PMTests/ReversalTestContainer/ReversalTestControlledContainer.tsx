@@ -18,10 +18,12 @@ import TestControls from '../TestControls';
 import { useForm, Controller } from 'react-hook-form';
 import Direction from '../../../../../utils/graphs/classes/Direction';
 import ClassicResult from './ClassicResult';
+import { useTranslation } from 'react-i18next';
 
 const ReversalTestControlledContainer = () => {
 
   const theme = useTheme();
+  const { t, i18n } = useTranslation('translation');
   const [dataToShow, setDataToShow] = useState<ReversalTestResultAll>();
   const [isRunning, setIsRunning] = useState(false);
 
@@ -57,7 +59,7 @@ const ReversalTestControlledContainer = () => {
             pr: '12px',
           }}
         > 
-          Рассчитать
+          {t("pmtests.reverseTest.first")}
         </Button>
         <div className={styles.controlled}>
           <div className={styles.inputs}>
@@ -71,7 +73,7 @@ const ReversalTestControlledContainer = () => {
                     {...field}
                     label="Declination 1"
                     variant="standard"
-                    helperText={errors.declination_1 && 'Поле обязательно'}
+                    helperText={errors.declination_1 && t("pmtests.reverseTest.required")}
                     FormHelperTextProps={{
                       error: errors.declination_1,
                     }}
@@ -87,7 +89,7 @@ const ReversalTestControlledContainer = () => {
                     {...field}
                     label="Inclination 1"
                     variant="standard"
-                    helperText={errors.inclination_1 && 'Поле обязательно'}
+                    helperText={errors.inclination_1 && t("pmtests.reverseTest.required")}
                     FormHelperTextProps={{
                       error: errors.inclination_1,
                     }}
@@ -103,7 +105,7 @@ const ReversalTestControlledContainer = () => {
                     {...field}
                     label="N 1"
                     variant="standard"
-                    helperText={errors.N_1 && 'Поле обязательно'}
+                    helperText={errors.N_1 && t("pmtests.reverseTest.required")}
                     FormHelperTextProps={{
                       error: errors.N_1,
                     }}
@@ -119,7 +121,7 @@ const ReversalTestControlledContainer = () => {
                     {...field}
                     label="k 1"
                     variant="standard"
-                    helperText={errors.K_1 && 'Поле обязательно'}
+                    helperText={errors.K_1 && t("pmtests.reverseTest.required")}
                     FormHelperTextProps={{
                       error: errors.K_1,
                     }}
@@ -137,7 +139,7 @@ const ReversalTestControlledContainer = () => {
                     {...field}
                     label="Declination 2"
                     variant="standard"
-                    helperText={errors.declination_2 && 'Поле обязательно'}
+                    helperText={errors.declination_2 && t("pmtests.reverseTest.required")}
                     FormHelperTextProps={{
                       error: errors.declination_2,
                     }}
@@ -153,7 +155,7 @@ const ReversalTestControlledContainer = () => {
                     {...field}
                     label="Inclination 2"
                     variant="standard"
-                    helperText={errors.inclination_2 && 'Поле обязательно'}
+                    helperText={errors.inclination_2 && t("pmtests.reverseTest.required")}
                     FormHelperTextProps={{
                       error: errors.inclination_2,
                     }}
@@ -169,9 +171,9 @@ const ReversalTestControlledContainer = () => {
                     {...field}
                     label="N 2"
                     variant="standard"
-                    helperText={errors.n_2 && 'Поле обязательно'}
+                    helperText={errors.N_2 && t("pmtests.reverseTest.required")}
                     FormHelperTextProps={{
-                      error: errors.n_2,
+                      error: errors.N_2,
                     }}
                   />
                 )}
@@ -185,7 +187,7 @@ const ReversalTestControlledContainer = () => {
                     {...field}
                     label="k 2"
                     variant="standard"
-                    helperText={errors.K_2 && 'Поле обязательно'}
+                    helperText={errors.K_2 && t("pmtests.reverseTest.required")}
                     FormHelperTextProps={{
                       error: errors.K_2,
                     }}

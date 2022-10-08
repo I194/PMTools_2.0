@@ -11,6 +11,7 @@ import { useTheme } from "@mui/material/styles";
 import examplePCA from '../../../../assets/examples/examplePCA.pmd'
 import exampleDIR from '../../../../assets/examples/exampleDIR.pmm'
 import { useMediaQuery } from "react-responsive";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   page: 'pca' | 'dir';
@@ -19,6 +20,7 @@ type Props = {
 const UploadModal = ({page}: Props) => {
 
   const theme = useTheme();
+  const { t, i18n } = useTranslation('translation');
   const dispatch = useAppDispatch();
   const widthLessThan720 = useMediaQuery({ maxWidth: 719 });
 
@@ -60,7 +62,7 @@ const UploadModal = ({page}: Props) => {
         <UploadButton 
           accept={availableFormats[page]}
           onUpload={handleFileUpload}
-          label={`Загрузите файлы (${availableFormats[page].join(', ')})`}
+          label={`${t('importModal.import')} (${availableFormats[page].join(', ')})`}
         />
         <Button 
           variant='contained'
@@ -70,7 +72,7 @@ const UploadModal = ({page}: Props) => {
           }}
           onClick={useExample}
         >
-          Или воспользуйтесь примером
+          {t('importModal.useExample')}
         </Button>
       </div>
       {
@@ -83,7 +85,7 @@ const UploadModal = ({page}: Props) => {
           }}
         >
           <Typography variant="h4" color={textColor(theme.palette.mode)} textAlign='center'>
-            Или перетащите файлы поверх приложения
+            {t('importModal.useDnD')}
           </Typography>
         </div>
       }

@@ -1,5 +1,6 @@
 import { Button } from "@mui/material";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import styles from './PMTests.module.scss';
 
 type Props = {
@@ -13,10 +14,12 @@ type Props = {
 const TestControls = ({ 
   isRunning, 
   setIsRunning, 
-  startLabel = 'Запустить тест', 
-  runningLabel = 'Тест запущен, производится моделирование...',
+  startLabel, 
+  runningLabel,
   submit,
 }: Props) => {
+  const { t, i18n } = useTranslation('translation');
+
   return (
     <div className={styles.controls}>
       <Button 
@@ -30,7 +33,11 @@ const TestControls = ({
           textTransform: 'none',
         }}
       >
-        { isRunning ? runningLabel : startLabel }
+        { 
+          isRunning 
+            ? runningLabel || t("pmtests.controls.running")
+            : startLabel || t("pmtests.controls.run")
+        }
       </Button>
     </div>
   );

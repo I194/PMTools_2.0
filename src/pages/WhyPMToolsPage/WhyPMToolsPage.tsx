@@ -22,9 +22,11 @@ import {
   exportGraphs,
   exportGraphsDark,
 } from '../../components/MainPage/FeaturesCards/assets';
+import { useTranslation } from 'react-i18next';
 
 const WhyPMToolsPage: FC = ({}) => {
   const theme = useTheme();
+  const { t, i18n } = useTranslation('translation');
   const isSmallScreen = useMediaQuery({ query: '(max-width: 920px)' });
 
   const formatsImage = theme.palette.mode === 'light' ? formats : formatsDark;
@@ -39,13 +41,13 @@ const WhyPMToolsPage: FC = ({}) => {
       </div>
       <div className={styles.about}>
         <Typography variant='h4' color={textColor(theme.palette.mode)} textAlign='center' fontSize={isSmallScreen ? '30px' : '34px'}>
-          PMTools — новейшее программное обеспечение для статистической обработки и визуализации палеомагнитных данных 
+          {t('whyPMToolsPage.headline')}
         </Typography>
         <Typography variant='h5' color={textColor(theme.palette.mode)} sx={{width: '100%', m: '10px 0px'}} fontSize={isSmallScreen ? '24px' : '28px'}>
-          Импорт и экспорт данных
+          {t('whyPMToolsPage.importAndExport.title')}
         </Typography>
         <Typography variant='h6' color={textColor(theme.palette.mode)} fontWeight={isSmallScreen ? '400' : '500'}>
-          PMTools позволяет вам работать с такими форматами, как:
+          {t('whyPMToolsPage.importAndExport.lines.first')}
           <ul style={{margin: '10px 0px'}}>
             <li>.pmd</li>
             <li>.squid</li>
@@ -53,10 +55,7 @@ const WhyPMToolsPage: FC = ({}) => {
             <li>.dir</li>
             <li>.pmm</li>
           </ul>
-          а также с их структурными аналогами в форматах <strong>.csv</strong> и <strong>.xlsx</strong>.
-          Более того, все эти форматы доступны не только для импорта, но и для экспорта. То есть вы можете загрузить свой
-          .pmd или .dir файл и затем экспортировать его как .xlsx, получив таким образом все преимущества работы с данными в Microsoft Excel. 
-          Обратное также возможно!
+          {t('whyPMToolsPage.importAndExport.lines.second')}
         </Typography>
         <img 
           src={formatsImage} 
@@ -65,15 +64,13 @@ const WhyPMToolsPage: FC = ({}) => {
           width='100%'
         />
         <Typography variant='h6' color={textColor(theme.palette.mode)} fontWeight={isSmallScreen ? '400' : '500'}>
-          Более того, вы можете экспортировать данные по рассчитанным виртуальным геомагнитным полюсам (VGP) напрямую в форматах <strong>.gpml</strong> и <strong>.vgp</strong>, 
-          которые напрямую поддерживаются соответственно программами GPlates и GMAP.
+          {t('whyPMToolsPage.importAndExport.lines.third')}
         </Typography>
         <Typography variant='h5' color={textColor(theme.palette.mode)} sx={{width: '100%', m: '10px 0px'}} fontSize={isSmallScreen ? '24px' : '28px'}>
-          Работа с графикой
+          {t('whyPMToolsPage.graphics.title')}
         </Typography>
         <Typography variant='h6' color={textColor(theme.palette.mode)} fontWeight={isSmallScreen ? '400' : '500'}>
-          Все графики и диаграммы, получаемые в ходе работы с данными в PMTools, максимально подготовлены для прямого использования их в статьях и презентациях. 
-          К тому же они являются векторными и могут быть легко открыты и отредактированы в любом векторном графическом редакторе.
+          {t('whyPMToolsPage.graphics.lines.third')}
         </Typography>
         <img 
           src={exportGraphsImage}
@@ -82,15 +79,13 @@ const WhyPMToolsPage: FC = ({}) => {
           width='100%'
         />
         <Typography variant='h5' color={textColor(theme.palette.mode)} sx={{width: '100%', m: '10px 0px'}} fontSize={isSmallScreen ? '24px' : '28px'}>
-          Взаимодействие с данными
+          {t('whyPMToolsPage.dataManipulation.title')}
         </Typography>
         <Typography variant='h6' color={textColor(theme.palette.mode)} fontWeight={isSmallScreen ? '400' : '500'}>
-          Взаимодействие со всеми импортированными данными в PMTools основано на простой концепции: любое направление (точку) можно "выбрать". 
-          Вы можете выбрать направления (точки) прямо на графике, можете выбрать через таблицу, а можете и вовсе ввести их порядковые номера в специальное окно. Полная свобода выбора! 
+          {t('whyPMToolsPage.dataManipulation.lines.first')}
         </Typography>
         <Typography variant='h6' color={textColor(theme.palette.mode)} fontWeight={isSmallScreen ? '400' : '500'}>
-          При этом, взаимодествуя с данными через графики, вы можете с комфортом использовать масштабирование и перемещение области видимости.
-          А взаимодействуя с таблицами, можете фильтровать данные как вам угодно, по абсолютно любым столбцам и с обилием условий. 
+          {t('whyPMToolsPage.dataManipulation.lines.second')}
         </Typography>
         <img 
           src={selectionImage} 
@@ -99,12 +94,10 @@ const WhyPMToolsPage: FC = ({}) => {
           width='100%'
         />
         <Typography variant='h5' color={textColor(theme.palette.mode)} sx={{width: '100%', m: '10px 0px'}} fontSize={isSmallScreen ? '24px' : '28px'}>
-          Горячие клавиши
+          {t('whyPMToolsPage.hotkeys.title')}
         </Typography>
         <Typography variant='h6' color={textColor(theme.palette.mode)} fontWeight={isSmallScreen ? '400' : '500'}>
-          Управление PMTools может осуществляться не только при помощи классического взаимодействия с графическим интерфейсом, 
-          но и при помощи горячих клавиш, которые, для вашего удобства, были частично заимствованы из пакета программ Р. Энкина для OS DOS, 
-          и в то же время являются редактируемыми — подстраивайте управления под себя!
+          {t('whyPMToolsPage.hotkeys.lines.first')}
         </Typography>
         <img 
           src={hotkeysImage}

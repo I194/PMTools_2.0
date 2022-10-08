@@ -19,6 +19,7 @@ import { useForm, Controller } from 'react-hook-form';
 import Direction from '../../../../../utils/graphs/classes/Direction';
 import ClassicResult from './ClassicResult';
 import ReversalTestGraph from '../../../../AppGraphs/ReversalTestGraph/ReversalTestGraph';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   dataToAnalyze: IDirData | null;
@@ -27,6 +28,7 @@ type Props = {
 const ReversalTestUncontrolledContainer = ({ dataToAnalyze }: Props) => {
 
   const theme = useTheme();
+  const { t, i18n } = useTranslation('translation');
   const [dataToShow, setDataToShow] = useState<ReversalTestResultAll>();
   const [isRunning, setIsRunning] = useState(false);
 
@@ -70,11 +72,10 @@ const ReversalTestUncontrolledContainer = ({ dataToAnalyze }: Props) => {
               <>
                 <Divider />
                 <Typography textAlign='center' color={textColor(theme.palette.mode)}>
-                  Bootstrap-вариант теста обращения [Tauxe, 2010]
+                  {t("pmtests.reverseAutoTest.first")}
                 </Typography>
                 <Typography textAlign='center' color={textColor(theme.palette.mode)}>
-                  Если области внутри границ 95%-го доверия (пунктирные линии) пересекаются во всех трёх компонентах, данные "проходят" тест обращения.
-                  В противном случае (нет пересечений) тест не пройден. 
+                  {t("pmtests.reverseAutoTest.second")}
                 </Typography>
               </>
             )

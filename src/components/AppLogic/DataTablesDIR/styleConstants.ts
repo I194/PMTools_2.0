@@ -10,6 +10,7 @@ export const GetDataTableBaseStyle = () => {
   const theme = useTheme();
 
   return ({
+    border: 'none',
     borderRadius: '0px',
     borderColor: borderColor(theme.palette.mode),
     '.MuiDataGrid-columnSeparator': {

@@ -14,11 +14,13 @@ import {
 } from '../../../utils/ThemeConstants';
 import GraphSelector from "../../AppLogic/GraphsSelector/GraphsSelector";
 import { useMediaQuery } from "react-responsive";
+import { useTranslation } from "react-i18next";
 
 const AppLayout: FC<RouteProps> = () => {
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
+  const { t, i18n } = useTranslation('translation');
   const widthLessThan1400 = useMediaQuery({ query: '(max-width: 1400px)' });
   const location = useLocation();
   const currentPage = location.pathname.split('/').pop() || location.pathname;
@@ -42,7 +44,7 @@ const AppLayout: FC<RouteProps> = () => {
         {
           isDragActive && 
           <div className={styles.dropFiles} style={{color: textColor(theme.palette.mode)}}>
-            Отпустите файлы для загрузки
+            {t('appLayout.dropFiles')}
           </div>
         }
         <div 

@@ -164,7 +164,7 @@ const OutputDataTablePMD: FC = () => {
       <div className={styles.toolbar}>
         <TextField
           id="allInterpretationsPCA_filename"
-          label="Имя файла"
+          label="File name"
           value={filename}
           onChange={handleFilenameChange}
           variant="standard"

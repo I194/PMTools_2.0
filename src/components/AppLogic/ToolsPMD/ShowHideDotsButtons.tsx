@@ -11,6 +11,7 @@ import InputApply from '../../Sub/InputApply/InputApply';
 import parseDotsIndexesInput from "../../../utils/parsers/parseDotsIndexesInput";
 import { enteredIndexesToIDsPMD } from "../../../utils/parsers/enteredIndexesToIDs";
 import { IPmdData } from "../../../utils/GlobalTypes";
+import { useTranslation } from "react-i18next";
 
 type Props = {
   data: IPmdData;
@@ -19,6 +20,7 @@ type Props = {
 const ShowHideDotsButtons = ({ data }: Props) => {
 
   const dispatch = useAppDispatch();
+  const { t, i18n } = useTranslation('translation');
 
   const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
   const { hiddenStepsIDs, selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
@@ -87,7 +89,7 @@ const ShowHideDotsButtons = ({ data }: Props) => {
 
   return (
     <>
-      <ButtonGroupWithLabel label='Шаги'>
+      <ButtonGroupWithLabel label={t('pcaPage.tools.visibility.title')}>
         <Tooltip
           title={<Typography variant='body1'>{hideHotkey.key}</Typography>}
           enterDelay={1000}
@@ -124,8 +126,8 @@ const ShowHideDotsButtons = ({ data }: Props) => {
           isDraggable={true}
         >
           <InputApply 
-            label={`Введите номера шагов (hide steps)`}
-            helperText="Валидные примеры: 1-9 || 2,4,8,9 || 2-4;8,9 || 2-4;8,9;12-14"
+            label={`${t('inputDirs.label')} (hide steps)`}
+            helperText={`${t('inputDirs.helper')} 1-9 || 2,4,8,9 || 2-4;8,9 || 2-4;8,9;12-14`}
             onApply={handleEnteredStepsApply}
             placeholder={`1-${data.steps.length}`}
           />

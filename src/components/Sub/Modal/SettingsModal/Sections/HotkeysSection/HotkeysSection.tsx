@@ -7,14 +7,17 @@ import { textColor, bgColorBlocks } from "../../../../../../utils/ThemeConstants
 
 import { useForm } from "react-hook-form";
 import { HotkeysType } from "../../../../../../utils/GlobalTypes";
-import { defaultHotkeys } from "../../../../../AppLogic/AppSettings/hotkeys";
 import { useAppDispatch, useAppSelector } from "../../../../../../services/store/hooks";
 import { setHotkeys } from "../../../../../../services/reducers/appSettings";
+import { useTranslation } from "react-i18next";
+import { useDefaultHotkeys } from "../../../../../../utils/GlobalHooks";
 
 const HotkeysSection = () => {
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
+  const defaultHotkeys = useDefaultHotkeys();
+  const { t, i18n } = useTranslation('translation');
   
   // const hotkeys: HotkeysType = JSON.parse(localStorage.getItem('hotkeys')!); // Они всегда будут в локальном хранилище, см. loadHotkeys()
   const { register, setValue, getValues, setError, formState: { errors }, clearErrors, watch  } = useForm();
@@ -22,9 +25,11 @@ const HotkeysSection = () => {
 
   useEffect(() => {
     hotkeys.map(block => {
+      // const defaultBlock = defaultHotkeys?.find(defaultBlock => defaultBlock.id === block.id);
       block.hotkeys.map(hotkey => {
         register(hotkey.label);
         setValue(hotkey.label, hotkey.hotkey);
+        // defaultBlock?.hotkeys.find(defaultHotkey => defaultHotkey.id === hotkey.id)?.label || hotkey.label
       });
     })
   }, [hotkeys]);
@@ -38,7 +43,7 @@ const HotkeysSection = () => {
       .map(key => getValues()[key].code)
       .filter((code, index) => index !== currentKeyIndex);
 
-    if (allCurrentCodes.includes(code)) setError(label, { message: 'Клавиша уже используется' })
+    if (allCurrentCodes.includes(code)) setError(label, { message: t("settings.hotkeys.buttonAlreadyUsed") })
     else clearErrors(label);
 
     setValue(label, { key: key.length === 1 ? key.toUpperCase() : key, code });
@@ -51,7 +56,7 @@ const HotkeysSection = () => {
         const codeOccurences = allCurrentCodes.filter(currentCode => currentCode === code).length;
         const label = Object.keys(allValues)[index];
         if (codeOccurences > 1) {
-          setError(label, { message: 'Клавиша уже используется' });
+          setError(label, { message: t('settings.hotkeys.buttonAlreadyUsed') });
         } else {
           clearErrors(label);
         }
@@ -69,7 +74,7 @@ const HotkeysSection = () => {
       return { ...block, hotkeys: newHotkeysBlock };
     });
     dispatch(setHotkeys(newHotkeys));
-    alert('Настройки сохранены');
+    alert(t('settings.onSaveMessage'));
   };
 
   const toDefault = () => {
@@ -79,7 +84,7 @@ const HotkeysSection = () => {
         setValue(hotkey.label, hotkey.hotkey);
       });
     });
-    alert('Установлены настройки по умолчанию');
+    alert(t('settings.onDefaulSettings'));
   };
 
   return (
@@ -88,7 +93,7 @@ const HotkeysSection = () => {
         hotkeys.map((block, index) => (
           <div key={index} className={styles.block}>
             <Typography variant="h6" color={textColor(theme.palette.mode)} mt={index === 0 ? '0' : '16px'}>
-              {block.title}
+              {t(`settings.hotkeys.titles.${block.title}`)}
             </Typography>
             <Divider />
             {
@@ -101,7 +106,7 @@ const HotkeysSection = () => {
                   }}
                 >
                   <Typography variant="body1" color={textColor(theme.palette.mode)}>
-                    {hotkey.label}
+                    {t(`settings.hotkeys.titles.${hotkey.label}`)}
                   </Typography>
                   <div className={styles.hotkeyBlock}>
                     <Typography variant="body1" color='error' mr='16px'>
@@ -152,7 +157,7 @@ const HotkeysSection = () => {
           onClick={handleSave}
           disabled={Object.keys(errors).length > 0}
         >
-          Сохранить
+          {t('settings.saveButton')}
         </Button>
         <Button
           variant="outlined"
@@ -162,7 +167,7 @@ const HotkeysSection = () => {
             ml: '16px',
           }}
         >
-          Вернуть по умолчанию
+          {t('settings.toDefaultButton')}
         </Button>
       </div>
     </div>

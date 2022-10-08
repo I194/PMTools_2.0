@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import styles from './App.module.scss';
 import { Route, Routes } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
@@ -32,20 +32,22 @@ function App() {
   });
 
   return (
-    <ThemeProvider theme={theme}>
-      <Routes>
-        <Route path='/' element={<MainPageLayout />}>
-          <Route index element={<MainPage />}/>
-          <Route path='/why-pmtools' element={<WhyPMToolsPage />}/>
-          <Route path='/authors-and-history' element={<AuthorsAndHistory />}/>
-        </Route>
-        <Route path='/app' element={<AppLayout />}>
-          <Route path='pca' element={<PCAPage />}/>
-          <Route path='dir' element={<DIRPage />}/>
-        </Route>
-        <Route path='*' element={<NotFoundPage />}/>
-      </Routes>
-    </ThemeProvider>
+    <Suspense fallback="loading">
+      <ThemeProvider theme={theme}>
+        <Routes>
+          <Route path='/' element={<MainPageLayout />}>
+            <Route index element={<MainPage />}/>
+            <Route path='/why-pmtools' element={<WhyPMToolsPage />}/>
+            <Route path='/authors-and-history' element={<AuthorsAndHistory />}/>
+          </Route>
+          <Route path='/app' element={<AppLayout />}>
+            <Route path='pca' element={<PCAPage />}/>
+            <Route path='dir' element={<DIRPage />}/>
+          </Route>
+          <Route path='*' element={<NotFoundPage />}/>
+        </Routes>
+      </ThemeProvider>
+    </Suspense>
   );
 }
 

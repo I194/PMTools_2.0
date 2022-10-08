@@ -6,6 +6,7 @@ import { IPmdData } from '../../../../utils/GlobalTypes';
 import { useAppDispatch, useAppSelector } from '../../../../services/store/hooks';
 import equal from "deep-equal"
 import { setTreatmentData } from '../../../../services/reducers/parsedData';
+import { useTranslation } from 'react-i18next';
 
 interface IMetaDataChange {
   oldMetadata: IPmdData['metadata'];
@@ -15,6 +16,7 @@ interface IMetaDataChange {
 const MetaDataChange: FC<IMetaDataChange> = ({ oldMetadata, onApply }) => {
 
   const dispatch = useAppDispatch();
+  const { t, i18n } = useTranslation('translation');
   const { treatmentData } = useAppSelector(state => state.parsedDataReducer);
   const [newMetadata, setNewMetadata] = useState<IPmdData['metadata']>(oldMetadata);
 
@@ -103,7 +105,7 @@ const MetaDataChange: FC<IMetaDataChange> = ({ oldMetadata, onApply }) => {
         onClick={handleApply}
         sx={{mt: '16px'}}
       >
-        Применить
+        {t('pcaPage.metadataModal.apply')}
       </Button>
     </div>
   )

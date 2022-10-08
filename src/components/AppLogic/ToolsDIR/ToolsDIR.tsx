@@ -33,6 +33,7 @@ import FoldTestContainer from './PMTests/FoldTestContainer';
 import PMTestsModalContent from './PMTests/PMTestsModalContent';
 import ReversePolarityButtons from './ReversePolarityButtons';
 import { useMediaQuery } from 'react-responsive';
+import { useTranslation } from 'react-i18next';
 
 interface IToolsDIR {
   data: IDirData | null;
@@ -41,6 +42,7 @@ interface IToolsDIR {
 const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
 
   const dispatch = useAppDispatch();
+  const { t, i18n } = useTranslation('translation');
   const widthLessThan1400 = useMediaQuery({ query: '(max-width: 1400px)' });
   
   const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
@@ -185,7 +187,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
   return (
     <ToolsPMDSkeleton>
       <DropdownSelectWithButtons 
-        label={'Текущий файл'}
+        label={t('dirPage.tools.currentFile.title')}
         options={allDirData.map(dir => dir.name)}
         defaultValue={allDirData[0].name}
         onOptionSelect={handleFileSelect}
@@ -195,7 +197,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
         onDelete={handleFileDelete}
         onDeleteAll={handleAllFilesDelete}
       />
-      <ButtonGroupWithLabel label='Система координат'>
+      <ButtonGroupWithLabel label={t('dirPage.tools.coordinateSystem.title')}>
         {
           availableReferences.map(availRef => (
             <Button 
@@ -208,21 +210,27 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
           ))
         }
       </ButtonGroupWithLabel>
-      <ButtonGroupWithLabel label='Статистический метод'>
+      <ButtonGroupWithLabel label={t('dirPage.tools.statMethod.title')}>
         <StatModeButton mode='fisher' hotkey={fisherHotkey.key}/>
         <StatModeButton mode='mcFad' hotkey={mcFaddenHotkey.key}/>
         <StatModeButton mode='gc' hotkey={gcHotkey.key}/>
       </ButtonGroupWithLabel>
-      <ButtonGroupWithLabel label='Смотреть статистику'>
-        <Button onClick={() => setAllFilesStatOpen(true)}>По всем файлам</Button>
+      <ButtonGroupWithLabel label={t('dirPage.tools.seeStats.title')}>
+        <Button onClick={() => setAllFilesStatOpen(true)}>
+          {t('dirPage.tools.seeStats.label')}
+        </Button>
       </ButtonGroupWithLabel>
       <ShowHideDotsButtons data={data} />
       <ReversePolarityButtons data={data} />
-      <ButtonGroupWithLabel label='По всем сайтам'>
-        <Button onClick={() => setShowVGP(true)}>Построить VGP</Button>
+      <ButtonGroupWithLabel label={t('dirPage.tools.vgp.title')}>
+        <Button onClick={() => setShowVGP(true)}>
+          {t('dirPage.tools.vgp.label')}
+        </Button>
       </ButtonGroupWithLabel>
-      <ButtonGroupWithLabel label='Проверка гипотез'>
-        <Button onClick={() => setShowPMTests(true)}>Палеомагнитные тесты</Button>
+      <ButtonGroupWithLabel label={t('dirPage.tools.tests.title')}>
+        <Button onClick={() => setShowPMTests(true)}>
+          {t('dirPage.tools.tests.label')}
+        </Button>
       </ButtonGroupWithLabel>
       <ModalWrapper
         open={allFilesStatOpen}
@@ -266,8 +274,8 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
           isDraggable={true}
         >
           <InputApply 
-            label={`Введите номера точек (${statisticsMode})`}
-            helperText="Валидные примеры: 1-9 || 2,4,8,9 || 2-4;8,9 || 2-4;8,9;12-14"
+            label={`${t('inputDirs.label')} (${statisticsMode})`}
+            helperText={`${t('inputDirs.helper')} 1-9 || 2,4,8,9 || 2-4;8,9 || 2-4;8,9;12-14`}
             onApply={handleEnteredDotsIndexesApply}
             placeholder={`1-${data.interpretations.length}`}
           />

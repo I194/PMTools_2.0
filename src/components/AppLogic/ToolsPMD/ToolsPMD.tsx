@@ -19,6 +19,7 @@ import ShowHideDotsButtons from './ShowHideDotsButtons';
 import { referenceToLabel } from '../../../utils/parsers/labelToReference';
 import { enteredIndexesToIDsPMD } from '../../../utils/parsers/enteredIndexesToIDs';
 import { setTreatmentFiles } from '../../../services/reducers/files';
+import { useTranslation } from 'react-i18next';
 
 interface IToolsPMD {
   data: IPmdData | null;
@@ -27,6 +28,7 @@ interface IToolsPMD {
 const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
 
   const dispatch = useAppDispatch();
+  const { t, i18n } = useTranslation('translation');
 
   const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
   const { treatmentFiles } = useAppSelector(state => state.filesReducer);
@@ -166,7 +168,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   return (
     <ToolsPMDSkeleton>
       <DropdownSelectWithButtons 
-        label={'Текущий файл'}
+        label={t('pcaPage.tools.currentFile.title')}
         options={allDataPMD.map(pmd => pmd.metadata.name)}
         defaultValue={currentFileName}
         onOptionSelect={handleFileSelect}
@@ -176,7 +178,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
         onDelete={handleFileDelete}
         onDeleteAll={handleAllFilesDelete}
       />
-      <ButtonGroupWithLabel label='Система координат'>
+      <ButtonGroupWithLabel label={t('pcaPage.tools.coordinateSystem.title')}>
         {
           availableReferences.map(availRef => (
             <Button 
@@ -188,14 +190,16 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
           ))
         }
       </ButtonGroupWithLabel>
-      <ButtonGroupWithLabel label='Статистический метод'>
+      <ButtonGroupWithLabel label={t('pcaPage.tools.statMethod.title')}>
         <StatModeButton mode='pca' hotkey={pcaHotkey.key}/>
         <StatModeButton mode='pca0' hotkey={pca0Hotkey.key}/>
         <StatModeButton mode='gc' hotkey={gcHotkey.key}/>
         <StatModeButton mode='gcn' hotkey={gcnHotkey.key}/>
       </ButtonGroupWithLabel>
-      <ButtonGroupWithLabel label='Смотреть статистику'>
-        <Button onClick={() => setAllFilesStatOpen(true)}>По всем файлам</Button>
+      <ButtonGroupWithLabel label={t('pcaPage.tools.seeStats.title')}>
+        <Button onClick={() => setAllFilesStatOpen(true)}>
+          {t('pcaPage.tools.seeStats.label')}
+        </Button>
       </ButtonGroupWithLabel>
       {/* <ShowHideDotsButtons setShowStepsInput={setShowStepsInput} showStepsInput={showStepsInput}/> */}
       <ShowHideDotsButtons data={data} />
@@ -217,8 +221,8 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
           isDraggable={true}
         >
           <InputApply 
-            label={`Введите номера шагов (${statisticsMode || 'hide steps'})`}
-            helperText="Валидные примеры: 1-9 || 2,4,8,9 || 2-4;8,9 || 2-4;8,9;12-14"
+            label={`${t('inputDirs.label')} (${statisticsMode || 'hide steps'})`}
+            helperText={`${t('inputDirs.helper')} 1-9 || 2,4,8,9 || 2-4;8,9 || 2-4;8,9;12-14`}
             onApply={handleEnteredStepsApply}
             placeholder={`1-${data.steps.length}`}
           />

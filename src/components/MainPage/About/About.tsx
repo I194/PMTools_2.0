@@ -6,25 +6,26 @@ import { useTheme } from '@mui/material/styles';
 import { textColor } from '../../../utils/ThemeConstants';
 import { NavLink } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
+import { useTranslation } from 'react-i18next';
 
 const About = () => {
 
   
   const isSmallScreen = useMediaQuery({ query: '(max-width: 920px)' });
   const theme = useTheme();
+  const { t, i18n } = useTranslation('translation');
 
   return (
     <div className={styles.container}>
       <Typography variant='h3' color={textColor(theme.palette.mode)} textAlign='center' mb='16px' fontSize={isSmallScreen ? '42px' : '48px'}>
-        Работайте с результатами палеомагнитных исследований. 
+        {t('mainPage.about.firstLine')}
       </Typography>
       <Typography variant='h4' color={textColor(theme.palette.mode)} textAlign='center' mb='16px' fontSize={isSmallScreen ? '30px' : '34px'}>
-        В любое время, в любом месте, с любого устройства.
+        {t('mainPage.about.secondLine')}
       </Typography>
       <Typography variant='h4' color={textColor(theme.palette.mode)} textAlign='center' fontSize={isSmallScreen ? '30px' : '34px'}>
-        И не беспокойтесь о защите данных.
+        {t('mainPage.about.thirdLine')}
       </Typography>
-
       <NavLink to={'/app/pca'} style={{textDecoration: 'none'}}>
         <Button
           variant="contained"
@@ -38,7 +39,7 @@ const About = () => {
             mt: '42px',
           }}
         >
-          Приступить к работе
+          {t('mainPage.about.startWork')}
         </Button>
       </NavLink>
     </div>
