@@ -31,8 +31,6 @@ const OutputDataTablePMD: FC = () => {
   const [filename, setFilename] = useState<string>('PCA Interpretations');
   const debouncedFilename = useDebounce(filename, 500);
 
-  console.log(data)
-
   const handleEditRowsModelChange = useCallback((model: GridEditRowsModel) => {
     setEditRowsModel(model);
   }, []);
@@ -47,7 +45,6 @@ const OutputDataTablePMD: FC = () => {
     const deletedRowParentFile = data.filter(
       interpretation => interpretation.label === label
     )[0].parentFile;
-    console.log(deletedRowParentFile, currentFileName, treatmentData, currentDataPMDid);
 
     if (deletedRowParentFile === currentFileName) {
       dispatch(updateCurrentFileInterpretations(deletedRowParentFile));
@@ -132,7 +129,12 @@ const OutputDataTablePMD: FC = () => {
           comment: newComment
         };
       });
-      if (!equal(updatedData, data)) dispatch(setAllInterpretations(updatedData));
+      if (!equal(updatedData, data)) {
+        dispatch(setAllInterpretations(updatedData));
+        const currentFileName = treatmentData![currentDataPMDid || 0]?.metadata.name;
+        dispatch(updateCurrentFileInterpretations(currentFileName));
+        dispatch(updateCurrentInterpretation());
+      }
     };
   }, [data, editRowsModel]);
 

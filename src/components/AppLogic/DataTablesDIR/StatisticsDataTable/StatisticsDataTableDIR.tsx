@@ -1,14 +1,16 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState, useCallback } from "react";
 import styles from './StatisticsDataTableDIR.module.scss';
 import { useTheme } from '@mui/material/styles';
-import { DataGrid, GridActionsCellItem, GridColumns, GridColumnHeaderParams, GridValueFormatterParams } from '@mui/x-data-grid';
+import { DataGrid, GridActionsCellItem, GridColumns, GridColumnHeaderParams, GridValueFormatterParams, GridEditRowsModel, GridCellParams, MuiEvent } from '@mui/x-data-grid';
 import StatisticsDataTablePMDSkeleton from './StatisticsDataTableDIRSkeleton';
 import { GetDataTableBaseStyle } from "../styleConstants";
 import { DataGridDIRFromDIRRow, StatisitcsInterpretationFromDIR } from "../../../../utils/GlobalTypes";
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
-import { deleteInterpretation, updateCurrentFileInterpretations, updateCurrentInterpretation } from "../../../../services/reducers/dirPage";
+import { deleteInterpretation, setAllInterpretations, updateCurrentFileInterpretations, updateCurrentInterpretation } from "../../../../services/reducers/dirPage";
 import DIRStatisticsDataTableToolbar from "../../../Sub/DataTable/Toolbar/DIRStatisticsDataTableToolbar";
+import equal from "deep-equal"
+import { acitvateHotkeys, deactivateHotkeys } from "../../../../services/reducers/appSettings";
 
 interface IStatisticsDataTableDIR {
   data: Array<StatisitcsInterpretationFromDIR> | null;
@@ -20,11 +22,35 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ data }) => {
   const theme = useTheme();
 
   const { currentInterpretation } = useAppSelector(state => state.dirPageReducer);
+  const [editRowsModel, setEditRowsModel] = useState<GridEditRowsModel>({});
   const [currentClass, setCurrentClass] = useState(styles.current_dark);
+
+  const handleEditRowsModelChange = useCallback((model: GridEditRowsModel) => {
+    setEditRowsModel(model);
+  }, []);
 
   useEffect(() => {
     setCurrentClass(theme.palette.mode === 'dark' ? styles.current_dark : styles.current_light);
   }, [theme]);
+
+  useEffect(() => {
+    if (data && Object.keys(editRowsModel).length !== 0) {
+      const updatedData = data.map((interpretation, index) => {
+        const rowId = Object.keys(editRowsModel)[0];
+        const newComment = editRowsModel[rowId]?.comment?.value as string;
+        if (rowId !== interpretation.label) return interpretation;
+        return {
+          ...interpretation,
+          comment: newComment
+        };
+      });
+      if (!equal(updatedData, data)) {
+        dispatch(setAllInterpretations(updatedData));
+        dispatch(updateCurrentFileInterpretations(data[0].parentFile));
+        dispatch(updateCurrentInterpretation());
+      }
+    };
+  }, [data, editRowsModel]);
 
   const handleRowDelete = (id: string) => (event: any) => {
     event.stopPropagation();
@@ -47,34 +73,35 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ data }) => {
   };
 
   const columns: GridColumns = [
-    { field: 'id', headerName: 'Label', type: 'string', flex: 1 },
-    { field: 'code', headerName: 'Code', type: 'string', flex: 1 },
+    { field: 'id', headerName: 'Label', type: 'string', width: 70 },
+    { field: 'code', headerName: 'Code', type: 'string', width: 60 },
     { field: 'stepRange', headerName: 'StepRange', type: 'string', width: 90 },
     { field: 'stepCount', headerName: 'N', type: 'number', minWidth: 30, width: 30 },
-    { field: 'Dgeo', headerName: 'Dgeo', type: 'number', flex: 1,
+    { field: 'Dgeo', headerName: 'Dgeo', type: 'number', width: 70,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
-    { field: 'Igeo', headerName: 'Igeo', type: 'number', flex: 1,
+    { field: 'Igeo', headerName: 'Igeo', type: 'number', width: 60,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
-    { field: 'accuracyGeo', headerName: 'Kgeo', type: 'string', flex: 1,
+    { field: 'accuracyGeo', headerName: 'Kgeo', type: 'string', width: 60,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
-    { field: 'confidenceRadiusGeo', headerName: 'MADgeo', type: 'string', flex: 1,
+    { field: 'confidenceRadiusGeo', headerName: 'MADgeo', type: 'string', width: 80,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
-    { field: 'Dstrat', headerName: 'Dstrat', type: 'number', flex: 1,
+    { field: 'Dstrat', headerName: 'Dstrat', type: 'number', width: 70,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
-    { field: 'Istrat', headerName: 'Istrat', type: 'number', flex: 1,
+    { field: 'Istrat', headerName: 'Istrat', type: 'number', width: 60,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
-    { field: 'accuracyStrat', headerName: 'Kstrat', type: 'string', flex: 1,
+    { field: 'accuracyStrat', headerName: 'Kstrat', type: 'string', width: 60,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
-    { field: 'confidenceRadiusStrat', headerName: 'MADstrat', type: 'string', flex: 1,
+    { field: 'confidenceRadiusStrat', headerName: 'MADstrat', type: 'string', width: 80,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
+    { field: 'comment', headerName: 'Comment', type: 'string', flex: 1, editable: true, cellClassName: styles[`editableCell_${theme.palette.mode}`] },
     {
       field: 'actions',
       type: 'actions',
@@ -110,8 +137,8 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ data }) => {
 
   if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
 
-  const rows: Array<Omit<DataGridDIRFromDIRRow, 'comment' | 'id' | 'label'>> = data.map((statistics, index) => {
-    const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadiusGeo, Kgeo, confidenceRadiusStrat, Kstrat } = statistics;
+  const rows: Array<Omit<DataGridDIRFromDIRRow, | 'id' | 'label'>> = data.map((statistics, index) => {
+    const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadiusGeo, Kgeo, confidenceRadiusStrat, Kstrat, comment } = statistics;
     return {
       id: label,
       code, 
@@ -125,6 +152,7 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ data }) => {
       accuracyGeo: +(Kgeo || 0).toFixed(1),
       confidenceRadiusStrat: +confidenceRadiusStrat.toFixed(1),
       accuracyStrat: +(Kstrat || 0).toFixed(1),
+      comment
     };
   });
 
@@ -133,6 +161,14 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ data }) => {
       <DataGrid 
         rows={rows} 
         columns={columns} 
+        editRowsModel={editRowsModel}
+        onEditRowsModelChange={handleEditRowsModelChange}
+        onCellEditStart={(params: GridCellParams, event: MuiEvent) => {
+          dispatch(deactivateHotkeys());
+        }}
+        onCellEditStop={(params: GridCellParams, event: MuiEvent) => {
+          dispatch(acitvateHotkeys());
+        }}
         sx={{
           ...GetDataTableBaseStyle(),
           '& .MuiDataGrid-cell': {
