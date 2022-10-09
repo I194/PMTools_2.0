@@ -1,8 +1,8 @@
-import { IDirData, IPmdData, StatisitcsInterpretation } from "../../GlobalTypes";
+import { IPmdData, StatisitcsInterpretationFromPCA } from "../../GlobalTypes";
 import equal from "deep-equal"
 
 const getInterpretationIDs = (
-  interpretation: StatisitcsInterpretation | null, 
+  interpretation: StatisitcsInterpretationFromPCA | null, 
   allData: IPmdData, 
 ) => {
   const inInterpretationIDs: Array<number> = [];

@@ -11,21 +11,23 @@ const parseCSV_DIR = (data: string, name: string) => {
     
     const params = line.replace(/\s+/g, ' ').split(',');
 
-    // id | Code | StepRange | N | Dgeo | Igeo | Dstrat | Istrat | MAD | K | Comment 
+    // id | Code | StepRange | N | Dgeo | Igeo | Kgeo | MADgeo | Dstrat | Istrat | Kstrat | MADstrat | Comment 
     const label = params[0];
     const code = params[1];
     const stepRange = params[2];
     const stepCount = Number(params[3]);
     const Dgeo = +(+params[4]).toFixed(1);
     const Igeo = +(+params[5]).toFixed(1);
-    const Dstrat = +(+params[6]).toFixed(1);
-    const Istrat = +(+params[7]).toFixed(1);
-    const mad = +(+params[8]).toFixed(1);
-    const k = +(+params[9]);
+    const Kgeo = +(+params[6]).toFixed(1);
+    const MADgeo = +(+params[7]).toFixed(1);
+    const Dstrat = +(+params[8]).toFixed(1);
+    const Istrat = +(+params[9]).toFixed(1);
+    const Kstrat = +(+params[10]).toFixed(1);
+    const MADstrat = +(+params[11]).toFixed(1);
 
     let comment = '';
     // comment may be with commas
-    for (let i = 10; i < params.length; i++) comment += params[i];
+    for (let i = 12; i < params.length; i++) comment += params[i];
     comment = comment.trim();
 
     // there is no standard for demagnetization symbol... and idk why
@@ -49,8 +51,10 @@ const parseCSV_DIR = (data: string, name: string) => {
       Igeo,
       Dstrat,
       Istrat,
-      mad,
-      k,
+      MADgeo,
+      MADstrat,
+      Kgeo,
+      Kstrat,
       comment
     };
 

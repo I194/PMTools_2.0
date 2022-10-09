@@ -1,16 +1,17 @@
 import * as XLSX from 'xlsx';
-import { dataModel_interpretation } from '../fileConstants';
+import { dataModel_interpretation_from_pca, dataModel_interpretation_from_dir } from '../fileConstants';
 import { download, getDirectionalData, s2ab } from '../fileManipulations';
 import { IDirData } from '../../GlobalTypes';
 import { getFileName, putParamToString } from '../subFunctions';
 
 export const toDIR = async (file: File, parsedData?: IDirData) => {
-  
+  // only from PCA page you can import in DIR format
+  // because DIR format for DIR page statistics is built completely different and unsopprted by PMTools currently
   const data = parsedData ? parsedData : await getDirectionalData(file, 'dir') as IDirData;
   console.log(data);
   const lines = data.interpretations.map((interpretation: any) => {
-    const line = Object.keys(dataModel_interpretation).reduce((line, param) => {
-      return line + putParamToString(interpretation[param], dataModel_interpretation[param])
+    const line = Object.keys(dataModel_interpretation_from_pca).reduce((line, param) => {
+      return line + putParamToString(interpretation[param], dataModel_interpretation_from_pca[param])
     }, '');
     return line;
   }).join('\r\n');
@@ -29,10 +30,10 @@ export const toPMM = async (file: File, parsedData?: IDirData) => {
   const columnNames = 'ID,CODE,STEPRANGE,N,Dg,Ig,kg,a95g,Ds,Is,ks,a95s,comment\n';
 
   const lines = data.interpretations.map((interpretation: any) => {
-    const line = Object.keys(dataModel_interpretation).reduce((line, param, i) => {
-      if (i === 6) return line + `${interpretation.k},${interpretation.mad},${interpretation[param]},`;
-      if (i === 8) return line + `${interpretation.k},${interpretation.mad},${interpretation.comment}`;
-      if (i > 8) return line;
+    const line = Object.keys(dataModel_interpretation_from_dir).reduce((line, param, i) => {
+      // if (i === 6) return line + `${interpretation.k},${interpretation.mad},${interpretation[param]},`;
+      // if (i === 8) return line + `${interpretation.k},${interpretation.mad},${interpretation.comment}`;
+      if (i > 13) return line;
       return line + `${interpretation[param]},`;
     }, '');
     return line;
@@ -48,10 +49,10 @@ export const toCSV_DIR = async (file: File, parsedData?: IDirData) => {
 
   const data = parsedData ? parsedData : await getDirectionalData(file, 'dir') as IDirData;
   
-  const columNames = 'id,Code,StepRange,N,Dgeo,Igeo,Dstrat,Istrat,K,MAD,Comment\n';
+  const columNames = 'id,Code,StepRange,N,Dgeo,Igeo,Kgeo,MADgeo,Dstrat,Istrat,Kstrat,MADstrat,Comment\n';
 
   const lines = data.interpretations.map((interpretation: any) => {
-    const line = Object.keys(dataModel_interpretation).reduce((line, param) => {
+    const line = Object.keys(dataModel_interpretation_from_dir).reduce((line, param) => {
       return line + `${interpretation[param]},`
     }, '')
     return line.slice(0, -1);
@@ -67,10 +68,10 @@ export const toXLSX_DIR = async (file: File, parsedData?: IDirData) => {
 
   const data = parsedData ? parsedData : await getDirectionalData(file, 'dir') as IDirData;
 
-  const columnNames = 'id,Code,StepRange,N,Dgeo,Igeo,Dstrat,Istrat,K,MAD,Comment'.split(',');
+  const columnNames = 'id,Code,StepRange,N,Dgeo,Igeo,Kgeo,MADgeo,Dstrat,Istrat,Kstrat,MADstrat,Comment'.split(',');
 
   const lines = data.interpretations.map((interpretation: any) => {
-    return Object.keys(dataModel_interpretation).map((param) => {
+    return Object.keys(dataModel_interpretation_from_dir).map((param) => {
       return interpretation[param];
     });
   });

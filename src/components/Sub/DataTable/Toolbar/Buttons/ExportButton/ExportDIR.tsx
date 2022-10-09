@@ -14,7 +14,7 @@ const ExportDIR = (props: ButtonProps & {data: IDirData}) => {
   const { data } = props;
   return (
     <GridToolbarExportContainer {...props}>
-      <DIRExportMenuItem as={'dir'} data={data}/>
+      {/* <DIRExportMenuItem as={'dir'} data={data}/> */}
       <DIRExportMenuItem as={'pmm'} data={data}/>
       <DIRExportMenuItem as={'csv'} data={data} />
       <DIRExportMenuItem as={'xlsx'} data={data} />

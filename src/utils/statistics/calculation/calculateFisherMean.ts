@@ -6,11 +6,11 @@ const calculateFisherMean = (
   selectedDirections: IDirData['interpretations']
 ) => {
   const DirectionsGeo = selectedDirections.map(direction => new Direction(direction.Dgeo, direction.Igeo, 1));
-  const DirectionsStart = selectedDirections.map(direction => new Direction(direction.Dstrat, direction.Istrat, 1))
+  const DirectionsStrat = selectedDirections.map(direction => new Direction(direction.Dstrat, direction.Istrat, 1))
 
   const res: RawStatisticsDIR['mean'] = {
     geographic: fisherMean(DirectionsGeo),
-    stratigraphic: fisherMean(DirectionsStart),
+    stratigraphic: fisherMean(DirectionsStrat),
   };
   
   return res;

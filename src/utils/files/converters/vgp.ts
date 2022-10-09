@@ -1,5 +1,5 @@
 import * as XLSX from 'xlsx';
-import { dataModel_interpretation } from '../fileConstants';
+import { dataModel_interpretation_from_dir } from '../fileConstants';
 import { download, getDirectionalData, s2ab } from '../fileManipulations';
 import { IDirData, IVGPData } from '../../GlobalTypes';
 import { getFileName } from '../subFunctions';

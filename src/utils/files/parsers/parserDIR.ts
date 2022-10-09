@@ -9,7 +9,7 @@ const parseDIR = (data: string, name: string) => {
 
   const interpretations: IDirData['interpretations'] = lines.map((line, index) => {
 
-    // ID | CODE | STEPRANGE | N | Dg | Ig | kg | Ds | Is | MAD | Comment 
+    // ID | CODE | STEPRANGE | N | Dg | Ig | Ds | Is | k | MAD | Comment 
     // it's old format and we can't just split by " " 'cause it can cause issues
     const label = line.slice(0, 7).trim();
     const code = line.slice(7, 14).trim();
@@ -22,8 +22,6 @@ const parseDIR = (data: string, name: string) => {
     const k = Number(line.slice(51, 58).trim());
     const mad = Number(line.slice(58, 64).trim());
     const comment = line.slice(64, line.length).trim();
-
-    console.log('what', line)
 
     // there is no standard for demagnetization symbol... and idk why
     // normally it's T20-T570, but sometimes it's NRM-T570, so... split by '-'
@@ -47,8 +45,10 @@ const parseDIR = (data: string, name: string) => {
       Igeo,
       Dstrat,
       Istrat,
-      k,
-      mad,
+      MADgeo: mad,
+      MADstrat: mad,
+      Kgeo: k,
+      Kstrat: k,
       comment,
       demagType,
     };

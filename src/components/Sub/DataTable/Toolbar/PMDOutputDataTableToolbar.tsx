@@ -28,8 +28,10 @@ const PMDOutputDataTableToolbar = () => {
         Igeo: interpretation.Igeo,
         Dstrat: interpretation.Dstrat,
         Istrat: interpretation.Istrat,
-        mad: interpretation.confidenceRadius,
-        k: interpretation.k || 0,
+        MADgeo: interpretation.confidenceRadius,
+        Kgeo: interpretation.accuracy || 0,
+        MADstrat: interpretation.confidenceRadius,
+        Kstrat: interpretation.accuracy || 0,
         comment: interpretation.comment,
         demagType: interpretation.demagType
       };

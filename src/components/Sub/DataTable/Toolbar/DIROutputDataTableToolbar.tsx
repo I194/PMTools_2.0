@@ -28,8 +28,10 @@ const DIROutputDataTableToolbar = () => {
         Igeo: interpretation.Igeo,
         Dstrat: interpretation.Dstrat,
         Istrat: interpretation.Istrat,
-        mad: interpretation.confidenceRadius,
-        k: interpretation.k || 0,
+        MADgeo: interpretation.confidenceRadiusGeo,
+        Kgeo: interpretation.Kgeo || 0,
+        MADstrat: interpretation.confidenceRadiusGeo,
+        Kstrat: interpretation.Kgeo || 0,
         comment: interpretation.comment,
         demagType: interpretation.demagType
       };

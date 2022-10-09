@@ -6,7 +6,7 @@ import equal from "deep-equal"
 import { GetDataTableBaseStyle } from "../styleConstants";
 import StatisticsDataTablePMDSkeleton from './OutputDataTableDIRSkeleton';
 import PMDOutputDataTableToolbar from '../../../Sub/DataTable/Toolbar/PMDOutputDataTableToolbar';
-import { DataGridDIRRow } from "../../../../utils/GlobalTypes";
+import { DataGridDIRFromDIRRow } from "../../../../utils/GlobalTypes";
 import { deleteAllInterpretations, deleteInterpretation, setAllInterpretations, setOutputFilename, updateCurrentFileInterpretations, updateCurrentInterpretation } from "../../../../services/reducers/dirPage";
 import TextField from '@mui/material/TextField';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
@@ -69,16 +69,22 @@ const OutputDataTableDIR: FC = () => {
     { field: 'Igeo', headerName: 'Igeo', type: 'number', width: 70,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
+    { field: 'accuracyGeo', headerName: 'Kgeo', type: 'string', width: 70,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
+    { field: 'confidenceRadiusGeo', headerName: 'MADgeo', type: 'string', width: 80,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
     { field: 'Dstrat', headerName: 'Dstrat', type: 'number', width: 70,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
     { field: 'Istrat', headerName: 'Istrat', type: 'number', width: 70,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
-    { field: 'confidenceRadius', headerName: 'MAD', type: 'string', width: 70,
+    { field: 'accuracyStrat', headerName: 'Kstrat', type: 'string', width: 70,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
-    { field: 'accuracy', headerName: 'k', type: 'string', width: 70,
+    { field: 'confidenceRadiusStrat', headerName: 'MADstrat', type: 'string', width: 80,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
     { field: 'comment', headerName: 'Comment', type: 'string', flex: 1, editable: true, cellClassName: styles[`editableCell_${theme.palette.mode}`] },
@@ -139,8 +145,8 @@ const OutputDataTableDIR: FC = () => {
 
   if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
 
-  const rows: Array<Omit<DataGridDIRRow, 'id' | 'label'>> = data.map((statistics, index) => {
-    const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadius, k, comment } = statistics;
+  const rows: Array<Omit<DataGridDIRFromDIRRow, 'id' | 'label'>> = data.map((statistics, index) => {
+    const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadiusGeo, Kgeo, confidenceRadiusStrat, Kstrat, comment } = statistics;
     return {
       id: label,
       code, 
@@ -150,8 +156,10 @@ const OutputDataTableDIR: FC = () => {
       Igeo: +Igeo.toFixed(1),
       Dstrat: +Dstrat.toFixed(1),
       Istrat: +Istrat.toFixed(1),
-      confidenceRadius: +confidenceRadius.toFixed(1),
-      accuracy: +(k || 0).toFixed(1),
+      confidenceRadiusGeo: +confidenceRadiusGeo.toFixed(1),
+      accuracyGeo: +(Kgeo || 0).toFixed(1),
+      confidenceRadiusStrat: +confidenceRadiusStrat.toFixed(1),
+      accuracyStrat: +(Kstrat || 0).toFixed(1),
       comment
     };
   });

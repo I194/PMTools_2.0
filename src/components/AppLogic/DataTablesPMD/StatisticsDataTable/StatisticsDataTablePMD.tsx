@@ -4,14 +4,14 @@ import { useTheme } from '@mui/material/styles';
 import { DataGrid, GridActionsCellItem, GridColumns, GridColumnHeaderParams, GridValueFormatterParams } from '@mui/x-data-grid';
 import StatisticsDataTablePMDSkeleton from './StatisticsDataTablePMDSkeleton';
 import { GetDataTableBaseStyle } from "../styleConstants";
-import { DataGridDIRRow, StatisitcsInterpretation } from "../../../../utils/GlobalTypes";
+import { DataGridDIRFromPCARow, StatisitcsInterpretationFromPCA } from "../../../../utils/GlobalTypes";
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
 import { deleteInterpretation, updateCurrentFileInterpretations, updateCurrentInterpretation } from "../../../../services/reducers/pcaPage";
 import PMDStatisticsDataTableToolbar from "../../../Sub/DataTable/Toolbar/PMDStatisticsDataTableToolbar";
 
 interface IStatisticsDataTablePMD {
-  data: Array<StatisitcsInterpretation> | null;
+  data: Array<StatisitcsInterpretationFromPCA> | null;
 };
 
 const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
@@ -101,7 +101,7 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
 
   if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
 
-  const rows: Array<Omit<DataGridDIRRow, 'comment' | 'id' | 'label'>> = data.map((statistics, index) => {
+  const rows: Array<Omit<DataGridDIRFromPCARow, 'comment' | 'id' | 'label'>> = data.map((statistics, index) => {
     const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadius } = statistics;
     return {
       id: label,

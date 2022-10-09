@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import styles from './DIRPage.module.scss';
 import { useAppSelector } from '../../services/store/hooks';
-import { IDirData, StatisitcsInterpretation } from "../../utils/GlobalTypes";
+import { IDirData, StatisitcsInterpretationFromDIR } from "../../utils/GlobalTypes";
 import { DataTableDIR, StatisticsDataTableDIR } from '../../components/AppLogic';
 import { useTheme } from '@mui/material/styles';
 import {
@@ -17,7 +17,7 @@ const Tables: FC<ITables> = ({ dataToShow }) => {
   const theme = useTheme();
   
   const { currentInterpretation, currentFileInterpretations } = useAppSelector(state => state.dirPageReducer);
-  const [interpretations, setInterpretations] = useState<StatisitcsInterpretation[] | null>(null);
+  const [interpretations, setInterpretations] = useState<StatisitcsInterpretationFromDIR[] | null>(null);
 
   useEffect(() => {
     if (currentFileInterpretations && currentFileInterpretations.length) setInterpretations(currentFileInterpretations);

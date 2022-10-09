@@ -39,9 +39,15 @@ export type TooltipDot = {
   inc?: number;
   mag?: string;
   meanType?: StatisticsModePCA | StatisticsModeDIR;
-  mad?: number;
+  MAD?: number;
+  MADg?: number;
+  MADs?: number;
   a95?: number;
+  a95g?: number;
+  a95s?: number;
   k?: number;
+  kg?: number;
+  ks?: number;
   comment?: string;
 };
 

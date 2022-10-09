@@ -4,14 +4,14 @@ import { useTheme } from '@mui/material/styles';
 import { DataGrid, GridActionsCellItem, GridColumns, GridColumnHeaderParams, GridValueFormatterParams } from '@mui/x-data-grid';
 import StatisticsDataTablePMDSkeleton from './StatisticsDataTableDIRSkeleton';
 import { GetDataTableBaseStyle } from "../styleConstants";
-import { DataGridDIRRow, StatisitcsInterpretation } from "../../../../utils/GlobalTypes";
+import { DataGridDIRFromDIRRow, StatisitcsInterpretationFromDIR } from "../../../../utils/GlobalTypes";
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
 import { deleteInterpretation, updateCurrentFileInterpretations, updateCurrentInterpretation } from "../../../../services/reducers/dirPage";
 import DIRStatisticsDataTableToolbar from "../../../Sub/DataTable/Toolbar/DIRStatisticsDataTableToolbar";
 
 interface IStatisticsDataTableDIR {
-  data: Array<StatisitcsInterpretation> | null;
+  data: Array<StatisitcsInterpretationFromDIR> | null;
 };
 
 const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ data }) => {
@@ -57,16 +57,22 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ data }) => {
     { field: 'Igeo', headerName: 'Igeo', type: 'number', flex: 1,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
+    { field: 'accuracyGeo', headerName: 'Kgeo', type: 'string', flex: 1,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
+    { field: 'confidenceRadiusGeo', headerName: 'MADgeo', type: 'string', flex: 1,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
     { field: 'Dstrat', headerName: 'Dstrat', type: 'number', flex: 1,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
     { field: 'Istrat', headerName: 'Istrat', type: 'number', flex: 1,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
-    { field: 'confidenceRadius', headerName: 'MAD', type: 'string', flex: 1,
+    { field: 'accuracyStrat', headerName: 'Kstrat', type: 'string', flex: 1,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
-    { field: 'accuracy', headerName: 'k', type: 'string', flex: 1,
+    { field: 'confidenceRadiusStrat', headerName: 'MADstrat', type: 'string', flex: 1,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
     {
@@ -104,8 +110,8 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ data }) => {
 
   if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
 
-  const rows: Array<Omit<DataGridDIRRow, 'comment' | 'id' | 'label'>> = data.map((statistics, index) => {
-    const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadius, k } = statistics;
+  const rows: Array<Omit<DataGridDIRFromDIRRow, 'comment' | 'id' | 'label'>> = data.map((statistics, index) => {
+    const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadiusGeo, Kgeo, confidenceRadiusStrat, Kstrat } = statistics;
     return {
       id: label,
       code, 
@@ -115,8 +121,10 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ data }) => {
       Igeo: +Igeo.toFixed(1),
       Dstrat: +Dstrat.toFixed(1),
       Istrat: +Istrat.toFixed(1),
-      confidenceRadius: +confidenceRadius.toFixed(1),
-      accuracy: +(k || 0).toFixed(1),
+      confidenceRadiusGeo: +confidenceRadiusGeo.toFixed(1),
+      accuracyGeo: +(Kgeo || 0).toFixed(1),
+      confidenceRadiusStrat: +confidenceRadiusStrat.toFixed(1),
+      accuracyStrat: +(Kstrat || 0).toFixed(1),
     };
   });
 

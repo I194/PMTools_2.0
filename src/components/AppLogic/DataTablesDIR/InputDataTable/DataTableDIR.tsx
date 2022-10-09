@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import styles from './DataTableDIR.module.scss';
-import { DataGridDIRRow, IDirData } from "../../../../utils/GlobalTypes";
+import { DataGridDIRFromDIRRow, IDirData } from "../../../../utils/GlobalTypes";
 import { DataGrid, GridActionsCellItem, GridColumnHeaderParams, GridColumns, GridSelectionModel, GridValueFormatterParams } from '@mui/x-data-grid';
 import DataTablePMDSkeleton from './DataTableDIRSkeleton';
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
@@ -34,7 +34,7 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
 
   // selectionModel is array of ID's of rows
   const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
-  const [selectedRows, setSelectedRows] = useState<Array<DataGridDIRRow>>([]);
+  const [selectedRows, setSelectedRows] = useState<Array<DataGridDIRFromDIRRow>>([]);
 
   useEffect(() => {
     if (selectedDirectionsIDs) setSelectionModel(selectedDirectionsIDs);
@@ -130,14 +130,22 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
     { field: 'Igeo', headerName: 'Igeo', type: 'number', width: 70,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
+    { field: 'accuracyGeo', headerName: 'Kgeo', type: 'string', width: 70,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
+    { field: 'confidenceRadiusGeo', headerName: 'MADgeo', type: 'string', width: 80,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
     { field: 'Dstrat', headerName: 'Dstrat', type: 'number', width: 70,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
     { field: 'Istrat', headerName: 'Istrat', type: 'number', width: 70,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
-    { field: 'k', headerName: 'k', type: 'number', width: 80, },
-    { field: 'confidenceRadius', headerName: 'MAD', type: 'string', width: 70,
+    { field: 'accuracyStrat', headerName: 'Kstrat', type: 'string', width: 70,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
+    { field: 'confidenceRadiusStrat', headerName: 'MADstrat', type: 'string', width: 80,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
     { field: 'comment', headerName: 'Comment', type: 'string', width: 200 },
@@ -153,8 +161,8 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
   
   if (!data) return <DataTableDIRSkeleton />;
   let visibleIndex = 1;
-  const rows: Array<DataGridDIRRow> = data.interpretations.map((interpretation, index) => {
-    const { id, label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, k, mad, comment } = interpretation;
+  const rows: Array<DataGridDIRFromDIRRow> = data.interpretations.map((interpretation, index) => {
+    const { id, label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, MADgeo, Kgeo, MADstrat, Kstrat, comment } = interpretation;
     let geoDirection = new Direction(Dgeo, Igeo, 1);
     let stratDirection = new Direction(Dstrat, Istrat, 1);
     if (reversedDirectionsIDs.includes(id)) {
@@ -176,8 +184,10 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
       Igeo: IgeoFinal,
       Dstrat: DstratFinal,
       Istrat: IstratFinal,
-      k: +k.toFixed(1),
-      confidenceRadius: +mad.toFixed(1),
+      confidenceRadiusGeo: +MADgeo.toFixed(1),
+      accuracyGeo: +(Kgeo || 0).toFixed(1),
+      confidenceRadiusStrat: +MADstrat.toFixed(1),
+      accuracyStrat: +(Kstrat || 0).toFixed(1),
       comment
     };
   });

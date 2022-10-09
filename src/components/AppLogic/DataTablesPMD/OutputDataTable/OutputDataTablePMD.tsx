@@ -6,7 +6,7 @@ import equal from "deep-equal"
 import { GetDataTableBaseStyle } from "../styleConstants";
 import StatisticsDataTablePMDSkeleton from './OutputDataTablePMDSkeleton';
 import PMDOutputDataTableToolbar from '../../../Sub/DataTable/Toolbar/PMDOutputDataTableToolbar';
-import { DataGridDIRRow } from "../../../../utils/GlobalTypes";
+import { DataGridDIRFromPCARow } from "../../../../utils/GlobalTypes";
 import { deleteAllInterpretations, deleteInterpretation, setAllInterpretations, setOutputFilename, updateCurrentFileInterpretations, updateCurrentInterpretation } from "../../../../services/reducers/pcaPage";
 import TextField from '@mui/material/TextField';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
@@ -138,7 +138,7 @@ const OutputDataTablePMD: FC = () => {
 
   if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
 
-  const rows: Array<Omit<DataGridDIRRow, 'id' | 'label'>> = data.map((statistics, index) => {
+  const rows: Array<Omit<DataGridDIRFromPCARow, 'id' | 'label'>> = data.map((statistics, index) => {
     const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadius, comment } = statistics;
     console.log(label)
     return {

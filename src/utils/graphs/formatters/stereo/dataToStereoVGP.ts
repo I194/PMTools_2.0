@@ -55,9 +55,6 @@ const dataToStereoVGP = (
     };
   });
 
-  console.log('what', dotsData, directions);
-  console.log('what', graphSize)
-
   const mean = fisherMean(
     directions.map(
       (direction) => new Direction(direction.poleLongitude, direction.poleLatitude, 1)

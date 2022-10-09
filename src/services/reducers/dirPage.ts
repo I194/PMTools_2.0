@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IDirData, VGPData } from "../../utils/GlobalTypes";
-import { StatisitcsInterpretation } from "../../utils/GlobalTypes";
+import { StatisitcsInterpretationFromDIR } from "../../utils/GlobalTypes";
 import { Reference, StatisticsModeDIR } from "../../utils/graphs/types";
 
 interface IInitialState {
@@ -11,9 +11,9 @@ interface IInitialState {
   hiddenDirectionsIDs: Array<number>;
   reversedDirectionsIDs: Array<number>;
   statisticsMode: StatisticsModeDIR;
-  currentInterpretation: StatisitcsInterpretation | null;
-  currentFileInterpretations: Array<StatisitcsInterpretation>;
-  allInterpretations: Array<StatisitcsInterpretation>;
+  currentInterpretation: StatisitcsInterpretationFromDIR | null;
+  currentFileInterpretations: Array<StatisitcsInterpretationFromDIR>;
+  allInterpretations: Array<StatisitcsInterpretationFromDIR>;
   outputFilename: string;
   showSelectionInput: boolean;
   showVGPMean: boolean;

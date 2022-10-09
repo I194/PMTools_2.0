@@ -1,3 +1,5 @@
+import { IDirData } from "../../GlobalTypes";
+
 const parsePMM = (data: string, name: string) => {
   // eslint-disable-next-line no-control-regex
   const eol = new RegExp("\r?\n");
@@ -8,25 +10,23 @@ const parsePMM = (data: string, name: string) => {
   // name = header[0] || name;
 
   // Skip 1 and 2 lines 'cause they're in the header 
-  const interpretations = lines.slice(2).map((line, index) => {
+  const interpretations: IDirData['interpretations'] = lines.slice(2).map((line, index) => {
     
     const params = line.replace(/\s+/g, '').split(',');
 
     // ID | CODE | STEPRANGE | N | Dg | Ig | kg | a95g | Ds | Is | ks | a95s | comment 
-    // 'kg' and 'ks' - idiotic garbage and, moreover, there is no 'a95' - there is only MAD (Maximum Angular Deviation)
     const label = params[0];
     const code = params[1];
     const stepRange = params[2];
     const stepCount = Number(params[3]);
     const Dgeo = Number(params[4]);
     const Igeo = Number(params[5]);
-    const madGeo = Number(params[7]);
+    const Kgeo = Number(params[6]);
+    const MADgeo = Number(params[7]);
     const Dstrat = Number(params[8]);
     const Istrat = Number(params[9]);
-    // const madStrat = Number(params[11]);
-    // but we don't need madStrat and madGeo at the same time - they must be equal, otherwise some of them is incorrect, so...
-    const mad = madGeo;
-    const k = 0;
+    const Kstrat = Number(params[10]);
+    const MADstrat = Number(params[11]);
 
     // comment may be with spaces
     let comment = '';
@@ -54,8 +54,10 @@ const parsePMM = (data: string, name: string) => {
       Igeo,
       Dstrat,
       Istrat,
-      mad,
-      k,
+      MADgeo,
+      MADstrat,
+      Kgeo,
+      Kstrat,
       comment
     };
 

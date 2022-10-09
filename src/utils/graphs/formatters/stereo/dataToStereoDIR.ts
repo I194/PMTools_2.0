@@ -59,7 +59,7 @@ const dataToStereoDIR = (
       title: 'Mean dot',
       dec: +declination.toFixed(1),
       inc: +inclination.toFixed(1),
-      mad: +MAD.toFixed(1),
+      MAD: +MAD.toFixed(1),
       meanType: statistics.code,
     };
 
@@ -104,7 +104,12 @@ const dataToStereoDIR = (
   const dotsData: DotsData = directionalData.map((di, index) => {
     let coords = dirToCartesian2D(di[0] - 90, di[1], graphSize);
     const direction = new Direction(di[0], di[1], 1);
-    const a95 = directions[index] ? directions[index].mad : 0;
+    let a95 = 0;
+    if (directions[index]) {
+      a95 = reference === 'stratigraphic' 
+        ? directions[index].MADgeo 
+        : directions[index].MADstrat
+    }
     const confidenceCircle = createStereoPlaneData(direction, graphSize, a95);
     return {
       id: directions[index].id, 
@@ -125,7 +130,8 @@ const dataToStereoDIR = (
       label: direction.label,
       dec: +directionalData[index][0].toFixed(1),
       inc: +directionalData[index][1].toFixed(1),
-      a95: +direction.mad.toFixed(1),
+      MADg: +direction.MADgeo.toFixed(1),
+      MADs: +direction.MADstrat.toFixed(1),
     };
   });
 

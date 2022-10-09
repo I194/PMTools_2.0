@@ -71,8 +71,10 @@ export interface IDirData extends IObjectKeys {
     Igeo: number;
     Dstrat: number;
     Istrat: number;
-    mad: number;
-    k: number;
+    MADgeo: number;
+    Kgeo: number;
+    MADstrat: number;
+    Kstrat: number;
     comment: string;
     demagType: 'thermal' | 'alternating field' | undefined;
   }[];
@@ -104,23 +106,42 @@ export interface IVGPData extends IObjectKeys {
   created: string;
 };
 
-export type StatisitcsInterpretation = {
+export type StatisitcsInterpretationFromPCA = {
   parentFile: string;
   label: string;
-  code: StatisticsModePCA | StatisticsModeDIR;
-  steps?: Array<PMDStep>;
-  directions?: IDirData['interpretations'];
+  code: StatisticsModePCA;
+  steps: Array<PMDStep>;
   stepRange: string;
   stepCount: number;
   Dgeo: number;
   Igeo: number;
   Dstrat: number;
   Istrat: number;
-  confidenceRadius: number; // MAD for PCA and a95 for DIR
-  k?: number; // not exist for MAD as a confidene value
+  confidenceRadius: number; // MAD for PCA
+  accuracy?: number; // the same as K (kappa), but in most cases of PCA calculation accuracy is not defined
   comment: string;
   demagType: 'thermal' | 'alternating field' | undefined;
-  rawData: RawStatisticsPCA | RawStatisticsDIR;
+  rawData: RawStatisticsPCA;
+};
+
+export type StatisitcsInterpretationFromDIR = {
+  parentFile: string;
+  label: string;
+  code: StatisticsModeDIR;
+  directions: IDirData['interpretations'];
+  stepRange: string;
+  stepCount: number;
+  Dgeo: number;
+  Igeo: number;
+  Dstrat: number;
+  Istrat: number;
+  confidenceRadiusGeo: number; // MAD for PCA and a95 for Fisher
+  Kgeo?: number; // not exist for MAD as a confidene value
+  confidenceRadiusStrat: number; // MAD for PCA and a95 for Fisher
+  Kstrat?: number; // not exist for MAD as a confidene value
+  comment: string;
+  demagType: 'thermal' | 'alternating field' | undefined;
+  rawData: RawStatisticsDIR;
 };
 
 export type RawStatisticsPCA = {
@@ -208,7 +229,8 @@ export type DataGridPMDRow = {
   comment: string;
 };
 
-export type DataGridDIRRow = Omit<StatisitcsInterpretation, 'demagType' | 'parentFile' | 'rawData' | 'steps'> & {readonly id: number};
+export type DataGridDIRFromPCARow = Omit<StatisitcsInterpretationFromPCA, 'demagType' | 'parentFile' | 'rawData' | 'steps'> & {readonly id: number};
+export type DataGridDIRFromDIRRow = Omit<StatisitcsInterpretationFromDIR, 'demagType' | 'parentFile' | 'rawData' | 'directions'> & {readonly id: number};
 
 export type ThemeMode = 'dark' | 'light';
 

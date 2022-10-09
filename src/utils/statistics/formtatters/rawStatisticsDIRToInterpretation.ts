@@ -1,5 +1,5 @@
 import { IDirData, RawStatisticsDIR } from "../../GlobalTypes";
-import { StatisitcsInterpretation } from "../../GlobalTypes";
+import { StatisitcsInterpretationFromDIR } from "../../GlobalTypes";
 import { StatisticsModeDIR } from "../../graphs/types";
 
 const rawStatisticsDIRToInterpretation = (
@@ -19,12 +19,14 @@ const rawStatisticsDIRToInterpretation = (
   const [Dgeo, Igeo] = statistics.mean.geographic.direction.toArray();
   const [Dstrat, Istrat] = statistics.mean.stratigraphic.direction.toArray();
 
-  const confidenceRadius = statistics.mean.geographic.MAD;
-  const accuracy = statistics.mean.geographic.k;
+  const confidenceRadiusGeo = statistics.mean.geographic.MAD;
+  const accuracyGeo = statistics.mean.geographic.k;
+  const confidenceRadiusStrat = statistics.mean.stratigraphic.MAD;
+  const accuracyStrat = statistics.mean.stratigraphic.k;
   const comment = '';
   const demagType = selectedDirections[0].demagType;
 
-  const interpretation: StatisitcsInterpretation = {
+  const interpretation: StatisitcsInterpretationFromDIR = {
     parentFile: filename,
     label,
     code,
@@ -35,8 +37,10 @@ const rawStatisticsDIRToInterpretation = (
     Igeo: +Igeo.toFixed(1),
     Dstrat: +Dstrat.toFixed(1),
     Istrat: +Istrat.toFixed(1),
-    confidenceRadius: +confidenceRadius.toFixed(1),
-    k: +(accuracy || 0).toFixed(1),
+    confidenceRadiusGeo: +confidenceRadiusGeo.toFixed(1),
+    Kgeo: +(accuracyGeo || 0).toFixed(1),
+    confidenceRadiusStrat: +confidenceRadiusStrat.toFixed(1),
+    Kstrat: +(accuracyStrat || 0).toFixed(1),
     comment,
     demagType,
     rawData: statistics

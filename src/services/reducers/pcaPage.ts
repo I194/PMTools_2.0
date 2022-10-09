@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IPmdData, IDirData, GraphPMD } from "../../utils/GlobalTypes";
-import { RawStatisticsPCA, StatisitcsInterpretation } from "../../utils/GlobalTypes";
+import { RawStatisticsPCA, StatisitcsInterpretationFromPCA } from "../../utils/GlobalTypes";
 import { Projection, Reference, StatisticsModePCA } from "../../utils/graphs/types";
 
 interface IInitialState {
@@ -10,9 +10,9 @@ interface IInitialState {
   selectedStepsIDs: Array<number> | null;
   hiddenStepsIDs: Array<number>;
   statisticsMode: StatisticsModePCA;
-  currentInterpretation: StatisitcsInterpretation | null;
-  currentFileInterpretations: Array<StatisitcsInterpretation>;
-  allInterpretations: Array<StatisitcsInterpretation>;
+  currentInterpretation: StatisitcsInterpretationFromPCA | null;
+  currentFileInterpretations: Array<StatisitcsInterpretationFromPCA>;
+  allInterpretations: Array<StatisitcsInterpretationFromPCA>;
   outputFilename: string;
   showStepsInput: boolean;
   largeGraph: GraphPMD;

@@ -1,5 +1,5 @@
 import { IPmdData } from "../../GlobalTypes";
-import { RawStatisticsPCA, StatisitcsInterpretation } from "../../GlobalTypes";
+import { RawStatisticsPCA, StatisitcsInterpretationFromPCA } from "../../GlobalTypes";
 import toReferenceCoordinates from "../../graphs/formatters/toReferenceCoordinates";
 import { StatisticsModePCA } from "../../graphs/types";
 
@@ -29,7 +29,7 @@ const rawStatisticsPMDToInterpretation = (
   const comment = '';
   const demagType = selectedSteps[0].demagType;
 
-  const interpretation: StatisitcsInterpretation = {
+  const interpretation: StatisitcsInterpretationFromPCA = {
     parentFile: metadata.name,
     label,
     code,

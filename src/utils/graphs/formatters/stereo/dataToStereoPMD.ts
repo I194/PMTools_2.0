@@ -52,7 +52,7 @@ const dataToStereoPMD = (
       title: 'Mean dot',
       dec: +declination.toFixed(1),
       inc: +inclination.toFixed(1),
-      mad: +statistics.MAD.toFixed(1),
+      MAD: +statistics.MAD.toFixed(1),
       meanType: statistics.code,
     };
 

@@ -1,6 +1,6 @@
-import { IDirData } from "../GlobalTypes"
+import { IDirData, IPmdData } from "../GlobalTypes"
 
-export const examplePMD = {
+export const examplePMD: IPmdData = {
   metadata: {
     name: 'string',
     a: 0,
@@ -10,6 +10,7 @@ export const examplePMD = {
     v: 0,
   },
   steps: [{
+    id: 0,
     step: 'string',
     x: 0,
     y: 0,
@@ -27,7 +28,7 @@ export const examplePMD = {
   created: 'string',
 }
 
-export const exampleDir = {
+export const exampleDir: IDirData = {
   name: 'string',
   interpretations: [{
     id: 0,
@@ -39,8 +40,10 @@ export const exampleDir = {
     Igeo: 0,
     Dstrat: 0,
     Istrat: 0,
-    mad: 0,
-    k: 0,
+    MADgeo: 0,
+    Kgeo: 0,
+    MADstrat: 0,
+    Kstrat: 0,
     comment: 'string',
     demagType: undefined,
   }],
@@ -83,7 +86,7 @@ export const dataModel_metaPMD: any = {
 }
 
 // count of symbols for each property (column) in line (row)
-export const dataModel_interpretation: any = {
+export const dataModel_interpretation_from_pca: any = {
   label: 7,
   code: 8,
   stepRange: 9,
@@ -92,7 +95,23 @@ export const dataModel_interpretation: any = {
   Igeo: 6,
   Dstrat: 6,
   Istrat: 6,
-  k: 7,
-  mad: 5,
+  Kgeo: 7, // must match Kgeo from IDirData["interpretations"]
+  MADgeo: 5, // must match MADgeo from IDirData["interpretations"]
+  comment: 0
+}
+
+export const dataModel_interpretation_from_dir: any = {
+  label: 7,
+  code: 8,
+  stepRange: 9,
+  stepCount: 3,
+  Dgeo: 6,
+  Igeo: 6,
+  Kgeo: 7,
+  MADgeo: 5,
+  Dstrat: 6,
+  Istrat: 6,
+  Kstrat: 7,
+  MADstrat: 5,
   comment: 0
 }
