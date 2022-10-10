@@ -43,7 +43,7 @@ const calculateVGP = (
 
   let [dp, dm]: (number | undefined)[] = [undefined, undefined];
   if (a95) {
-    dp = 2 * a95 / (1  + 3 * Math.pow(Math.sin(inclinationRad), 2));
+    dp = 2 * a95 / (1  + 3 * Math.pow(Math.cos(inclinationRad), 2));
     dm = a95 * Math.cos(paleoLatitudeRad) / Math.cos(inclinationRad);
   }
 
