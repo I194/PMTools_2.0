@@ -89,7 +89,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
 
   useEffect(() => {
     if (currentDataPMDid !== null) {
-      const filename = allDataPMD[currentDataPMDid].metadata.name;
+      const filename = allDataPMD[currentDataPMDid]?.metadata.name;
       if (filename) {
         setCurrentFileName(filename);
         dispatch(updateCurrentFileInterpretations(filename));
