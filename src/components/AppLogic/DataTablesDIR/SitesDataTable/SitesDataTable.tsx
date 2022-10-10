@@ -151,7 +151,7 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data, sitesData }) => {
       const dec = reference === 'geographic' ? DgeoFinal : DstratFinal;
       const inc = reference === 'geographic' ? IgeoFinal : IstratFinal;
       const a95 = reference === 'geographic' ? interpretation.MADgeo : interpretation.MADstrat;
-      const vgp = calculateVGP(dec, inc, a95, lat, lon);
+      const vgp = calculateVGP(dec, inc, lat, lon, a95);
       const dp: number = vgp?.dp || 0;
       const dm: number = vgp?.dm || 0;
       return {
