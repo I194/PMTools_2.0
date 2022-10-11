@@ -4,11 +4,9 @@ import {
   GridToolbarDensitySelector,
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
-
-import { Typography } from "@mui/material";
-import ExportDIR from "./Buttons/ExportButton/ExportDIR";
 import { useAppSelector } from "../../../../services/store/hooks";
 import { IDirData } from "../../../../utils/GlobalTypes";
+import ExportDIRFromPCA from "./Buttons/ExportButton/ExportDIRFromPca";
 
 const PMDStatisticsDataTableToolbar = () => {
 
@@ -45,7 +43,7 @@ const PMDStatisticsDataTableToolbar = () => {
       <GridToolbarFilterButton />
       <GridToolbarColumnsButton />
       <GridToolbarDensitySelector />
-      <ExportDIR data={data}/>
+      <ExportDIRFromPCA data={data}/>
     </GridToolbarContainer>
   );
 };

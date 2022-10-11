@@ -4,11 +4,9 @@ import {
   GridToolbarDensitySelector,
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
-import { FC, useEffect } from "react";
 import { useAppSelector } from "../../../../services/store/hooks";
 import { IDirData } from "../../../../utils/GlobalTypes"; 
-import ExportDIR from "./Buttons/ExportButton/ExportDIR";
-import ExportPMD from './Buttons/ExportButton/ExportPMD';
+import ExportDIRFromDIR from "./Buttons/ExportButton/ExportDIRFromDIR";
 
 const DIRStatisticsDataTableToolbar = () => {
 
@@ -45,7 +43,7 @@ const DIRStatisticsDataTableToolbar = () => {
       <GridToolbarFilterButton />
       <GridToolbarColumnsButton />
       <GridToolbarDensitySelector />
-      <ExportDIR data={data}/>
+      <ExportDIRFromDIR data={data}/>
     </GridToolbarContainer>
   );
 };

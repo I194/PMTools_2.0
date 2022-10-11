@@ -4,10 +4,8 @@ import {
   GridToolbarDensitySelector,
   GridToolbarFilterButton,
 } from "@mui/x-data-grid";
-import { FC } from "react";
 import { useAppSelector } from "../../../../services/store/hooks";
-import { IDirData, IPmdData } from "../../../../utils/GlobalTypes";
-import ExportDIR from "./Buttons/ExportButton/ExportDIR";
+import { IPmdData } from "../../../../utils/GlobalTypes";
 import ExportPMD from './Buttons/ExportButton/ExportPMD';
 
 const PMDInputDataTableToolbar = () => {

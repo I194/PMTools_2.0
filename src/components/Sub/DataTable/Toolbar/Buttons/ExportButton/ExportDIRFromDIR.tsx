@@ -10,7 +10,7 @@ import PMDExportMenuItem from './MenuItems/PMDExportMenuItem';
 import { IDirData } from '../../../../../../utils/GlobalTypes'; 
 import DIRExportMenuItem from './MenuItems/DIRExportMenuItem';
 
-const ExportDIR = (props: ButtonProps & {data: IDirData}) => {
+const ExportDIRFromDIR = (props: ButtonProps & {data: IDirData}) => {
   const { data } = props;
   return (
     <GridToolbarExportContainer {...props}>
@@ -22,4 +22,4 @@ const ExportDIR = (props: ButtonProps & {data: IDirData}) => {
   );
 };
 
-export default ExportDIR;
+export default ExportDIRFromDIR;
