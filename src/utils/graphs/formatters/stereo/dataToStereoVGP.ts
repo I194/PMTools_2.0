@@ -26,7 +26,8 @@ const dataToStereoVGP = (
   graphSize: number, 
   hiddenDirectionsIDs: Array<number>,
 ) => {
-  const directions = data.filter((direction, index) => !hiddenDirectionsIDs.includes(index + 1));
+  // filtering already done before vgpData creation in SitesDataTable component in calculateVGPs function
+  const directions = data;//.filter((direction, index) => !hiddenDirectionsIDs.includes(index + 1));
 
   // annotations for dots ('id' field added right in the Data.tsx as dot index)
   const labels = directions.map((direction) => direction.label);
