@@ -26,7 +26,7 @@ const VGPmodalContent: FC<Props> = ({ data }) => {
   const { t, i18n } = useTranslation('translation');
   const dispatch = useAppDispatch();
 
-  const { siteData } = useAppSelector(state => state.parsedDataReducer);
+  // const { siteData } = useAppSelector(state => state.parsedDataReducer);
 
   const handleUpload = async (event: any, files?: Array<File>) => {
     const acceptedFile = files ? files[0] : event.currentTarget.files[0];
@@ -58,7 +58,7 @@ const VGPmodalContent: FC<Props> = ({ data }) => {
       </div>
       <div className={styles.data}>
         <div className={styles.input}>
-          <SitesDataTable data={data} sitesData={siteData?.data} />
+          <SitesDataTable data={data} />
         </div>
         <div className={styles.vgpTable}>
           <VGPDataTable />

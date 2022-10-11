@@ -33,51 +33,23 @@ type SiteRow = {
 
 interface IDataTableDIR {
   data: IDirData | null;
-  sitesData?: ISitesData['data'];
+  // sitesData?: ISitesData['data'];
 };
 
 
-const SitesDataTable: FC<IDataTableDIR> = ({ data, sitesData }) => {
+const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
   
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const { t, i18n } = useTranslation('translation');
 
   const { hiddenDirectionsIDs, reversedDirectionsIDs, reference } = useAppSelector(state => state.dirPageReducer);
-  // const { siteData } = useAppSelector(state => state.parsedDataReducer);
-  // const [siteVGPData, setSiteVGPData] = useState<ISitesData['data']>([]);
-  // const [editRowsModel, setEditRowsModel] = useState<GridEditRowsModel>({});
-
-  // useEffect(() => {
-  //   console.log(siteData, siteVGPData)
-  //   if (siteData && !siteVGPData.length) setSiteVGPData(siteData.data);
-  // }, [siteData])
-
-  // useEffect(() => {
-  //   if (siteData && Object.keys(editRowsModel).length !== 0) {
-  //     const updatedData = siteData.data.map((site, index) => {
-  //       const rowId = Object.keys(editRowsModel)[0];
-  //       const newComment = editRowsModel[rowId]?.comment?.value as string;
-  //       if (rowId !== site.label) return interpretation;
-  //       return {
-  //         ...interpretation,
-  //         comment: newComment
-  //       };
-  //     });
-  //     if (!equal(updatedData, siteData)) dispatch(setAllInterpretations(updatedData));
-  //   };
-  // }, [siteData, editRowsModel]);
-
-  // const handleEditRowsModelChange = useCallback((model: GridEditRowsModel) => {
-  //   setEditRowsModel(model);
-  // }, []);
-
-  // console.log('what', sitesData)
+  const sitesData = useAppSelector(state => state.parsedDataReducer.siteData);
 
   const columns: GridColumns = [
-    { field: 'id', headerName: 'ID', type: 'string', width: 30 },
-    { field: 'index', headerName: '№', type: 'string', width: 30 },
-    { field: 'label', headerName: 'Label', type: 'string', width: 80 },
+    { field: 'id', headerName: 'ID', type: 'string', minWidth: 20, width: 22 },
+    { field: 'index', headerName: '№', type: 'string', minWidth: 20, width: 22 },
+    { field: 'label', headerName: 'Label', type: 'string', width: 50 },
     { field: 'lat', headerName: 'Lat', type: 'number', flex: 1, editable: true, 
       cellClassName: styles[`editableCell_${theme.palette.mode}`],
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
@@ -86,11 +58,11 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data, sitesData }) => {
       cellClassName: styles[`editableCell_${theme.palette.mode}`],
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
-    { field: 'age', headerName: 'age', type: 'number', flex: 1, editable: true, 
+    { field: 'age', headerName: 'age', type: 'number', width: 70, editable: true, 
       cellClassName: styles[`editableCell_${theme.palette.mode}`],
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
-    { field: 'plateId', headerName: 'plate ID', type: 'number', flex: 1, editable: true, 
+    { field: 'plateId', headerName: 'plate ID', type: 'number', width: 70, editable: true, 
       cellClassName: styles[`editableCell_${theme.palette.mode}`],
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(0)
     },
@@ -169,7 +141,9 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data, sitesData }) => {
         dm
       }
     });
+    const newSitesData: ISitesData['data'] = [...rows];
     dispatch(setVGPData(vgpData));
+    dispatch(setSiteData(newSitesData));
   };
 
   const deleteData = () => {
@@ -183,8 +157,6 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data, sitesData }) => {
         <DataGrid 
           rows={rows} 
           columns={enhancedColumns} 
-          // editRowsModel={editRowsModel}
-          // onEditRowsModelChange={handleEditRowsModelChange}
           sx={{
             ...GetDataTableBaseStyle(),
             '& .MuiDataGrid-cell': {
