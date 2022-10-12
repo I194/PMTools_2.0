@@ -9,14 +9,18 @@ import { SelectableGraph, GraphSymbols, Unit} from "../../Sub/Graphs";
 import { zijdAreaConstants } from "./ZijdConstants";
 import AxesAndData from "./AxesAndData";
 import getInterpretationIDs from "../../../utils/graphs/formatters/getInterpretationIDs";
-import { Pan } from "../../../utils/graphs/types";
+import { GraphSettings, Pan, TMenuItem } from "../../../utils/graphs/types";
 import CoordinateSystem from "../../Sub/Graphs/CoordinateSystem/CoordinateSystem";
 
 export interface IZijdGraph extends IGraph {
   data: IPmdData;
+  menuSettings: {
+    menuItems: TMenuItem[];
+    settings: GraphSettings;
+  }
 };
 
-const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data }) => {
+const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data, menuSettings }) => {
 
   // ToDo: 
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
@@ -27,7 +31,8 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data }) => {
 
   const { hotkeys } = useAppSelector(state => state.appSettingsReducer);
   const { reference, projection, currentInterpretation, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
-  const { menuItems, settings } = usePMDGraphSettings();
+  // const { menuItems, settings } = usePMDGraphSettings();
+  const { menuItems, settings } = menuSettings;
   const selectableNodes = useGraphSelectableNodesPCA(graphId, true);
   const selectedIDs = useGraphSelectedIDs();
 

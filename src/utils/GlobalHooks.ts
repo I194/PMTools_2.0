@@ -58,7 +58,7 @@ export const usePMDGraphSettings = () => {
 };
 
 export const useDIRGraphSettings = () => {
-  // производит всю работу с хранением и отображением настроек графиков на странице PCA (PMD Graphs)
+  // производит всю работу с хранением и отображением настроек графиков на странице DIR (DIR Graphs)
   const [tooltips, setTooltips] = useState<boolean>(true);
   const [ticks, setTicks] = useState<boolean>(true);
   const [annotations, setAnnotations] = useState<boolean>(true);

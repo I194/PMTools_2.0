@@ -9,19 +9,25 @@ import { magAreaConstants } from "./MagConstants";
 import AxesAndData from "./AxesAndData";
 import getInterpretationIDs from "../../../utils/graphs/formatters/getInterpretationIDs";
 import { useAppSelector } from "../../../services/store/hooks";
+import { GraphSettings, TMenuItem } from "../../../utils/graphs/types";
 
 export interface IMagGraph extends IGraph {
   data: IPmdData;
+  menuSettings: {
+    menuItems: TMenuItem[];
+    settings: GraphSettings;
+  }
 }
 
-const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data }) => {
+const MagGraph: FC<IMagGraph> = ({ graphId, width, height, data, menuSettings }) => {
 
   // ToDo: 
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
   // 2. zoom&pan
 
   const { currentInterpretation, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
-  const { menuItems, settings } = usePMDGraphSettings();
+  // const { menuItems, settings } = usePMDGraphSettings();
+  const { menuItems, settings } = menuSettings;
   const selectableNodes = useGraphSelectableNodesPCA(graphId, false);
   const selectedIDs = useGraphSelectedIDs();
 

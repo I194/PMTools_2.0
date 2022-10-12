@@ -9,11 +9,16 @@ import AxesAndData from "./AxesAndData";
 import getInterpretationIDs from "../../../utils/graphs/formatters/getInterpretationIDs";
 import CoordinateSystem from "../../Sub/Graphs/CoordinateSystem/CoordinateSystem";
 import dataToStereoDIR from "../../../utils/graphs/formatters/stereo/dataToStereoDIR";
+import { GraphSettings, TMenuItem } from "../../../utils/graphs/types";
 
 export interface IStereoGraphDIR extends IGraph {
   data: IDirData;
   centeredByMean: boolean;
   setCenteredByMean: React.Dispatch<React.SetStateAction<boolean>>;
+  menuSettings: {
+    menuItems: TMenuItem[];
+    settings: GraphSettings;
+  }
 };
 
 const StereoGraphDIR: FC<IStereoGraphDIR> = ({ 
@@ -23,6 +28,7 @@ const StereoGraphDIR: FC<IStereoGraphDIR> = ({
   data,
   centeredByMean,
   setCenteredByMean,
+  menuSettings,
 }) => {
 
   // ToDo: 
@@ -32,7 +38,8 @@ const StereoGraphDIR: FC<IStereoGraphDIR> = ({
   // const [centeredByMean, setCenteredByMean] = useState<boolean>(false);
 
   const { reference, currentInterpretation, hiddenDirectionsIDs, reversedDirectionsIDs } = useAppSelector(state => state.dirPageReducer);
-  const { menuItems, settings } = useDIRGraphSettings();
+  // const { menuItems, settings } = useDIRGraphSettings();
+  const { menuItems, settings } = menuSettings;
   const selectableNodes = useGraphSelectableNodesDIR(graphId); 
 
   const selectedIDs = useGraphSelectedIDs('dir');
@@ -45,8 +52,6 @@ const StereoGraphDIR: FC<IStereoGraphDIR> = ({
       '45'
     ),
   [reference, width, currentInterpretation, data, hiddenDirectionsIDs, reversedDirectionsIDs, centeredByMean]);
-
-  console.log('cutoff', dataConstants.cutoff);
 
   return (
     <>

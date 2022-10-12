@@ -10,19 +10,25 @@ import { stereoAreaConstants } from "./StereoConstants";
 import AxesAndData from "./AxesAndData";
 import getInterpretationIDs from "../../../utils/graphs/formatters/getInterpretationIDs";
 import CoordinateSystem from "../../Sub/Graphs/CoordinateSystem/CoordinateSystem";
+import { GraphSettings, TMenuItem } from "../../../utils/graphs/types";
 
 export interface IStereoGraph extends IGraph {
   data: IPmdData;
+  menuSettings: {
+    menuItems: TMenuItem[];
+    settings: GraphSettings;
+  }
 }
 
-const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data }) => {
+const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data, menuSettings }) => {
 
   // ToDo: 
   // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
   // 2. zoom&pan
 
   const { reference, currentInterpretation, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
-  const { menuItems, settings } = usePMDGraphSettings();
+  // const { menuItems, settings } = usePMDGraphSettings();
+  const { menuItems, settings } = menuSettings;
   const selectableNodes = useGraphSelectableNodesPCA(graphId, false); 
   const selectedIDs = useGraphSelectedIDs();
 

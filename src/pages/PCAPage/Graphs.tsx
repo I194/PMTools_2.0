@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import styles from './PCAPage.module.scss';
-import { useWindowSize } from '../../utils/GlobalHooks';
+import { usePMDGraphSettings, useWindowSize } from '../../utils/GlobalHooks';
 import { ZijdGraph, StereoGraph, MagGraph} from '../../components/AppGraphs';
 import { IPmdData } from '../../utils/GlobalTypes';
 import GraphsSkeleton from './GraphsSkeleton';
@@ -16,6 +16,9 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
   const [wv, wh] = useWindowSize();
   const widthLessThan1400 = useMediaQuery({ query: '(max-width: 1400px)' });
   const largeGraphToShow = useAppSelector(state => state.pcaPageReducer.largeGraph);
+  const zjdMenuSettings = usePMDGraphSettings();
+  const strMenuSettings = usePMDGraphSettings();
+  const dmgMenuSettings = usePMDGraphSettings();
 
   const graphLargeRef = useRef<HTMLDivElement>(null);
   const graphLargeToExportRef = useRef<HTMLDivElement>(null);
@@ -64,6 +67,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
                 width={largeGraphSize}
                 height={largeGraphSize} 
                 data={dataToShow}
+                menuSettings={{menuItems: zjdMenuSettings.menuItems, settings: zjdMenuSettings.settings}}
               />
             :
               largeGraphToShow === 1
@@ -73,6 +77,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
                   width={largeGraphSize}
                   height={largeGraphSize}
                   data={dataToShow}
+                  menuSettings={{menuItems: strMenuSettings.menuItems, settings: strMenuSettings.settings}}
                 />
               :
                 <MagGraph 
@@ -80,6 +85,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
                   width={largeGraphSize}
                   height={largeGraphSize}
                   data={dataToShow}
+                  menuSettings={{menuItems: dmgMenuSettings.menuItems, settings: dmgMenuSettings.settings}}
                 />
         ),
         ref: graphLargeRef
@@ -93,6 +99,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
                 width={500}
                 height={500} 
                 data={dataToShow}
+                menuSettings={{menuItems: zjdMenuSettings.menuItems, settings: zjdMenuSettings.settings}}
               />
             :
               largeGraphToShow === 1
@@ -102,6 +109,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
                   width={500}
                   height={500} 
                   data={dataToShow}
+                  menuSettings={{menuItems: strMenuSettings.menuItems, settings: strMenuSettings.settings}}
                 />
               :
                 <MagGraph
@@ -109,6 +117,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
                   width={500}
                   height={500}
                   data={dataToShow}
+                  menuSettings={{menuItems: dmgMenuSettings.menuItems, settings: dmgMenuSettings.settings}}
                 />
         ),
         ref: graphLargeToExportRef
@@ -125,6 +134,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
             width={largeGraphSize}
             height={largeGraphSize} 
             data={dataToShow}
+            menuSettings={{menuItems: zjdMenuSettings.menuItems, settings: zjdMenuSettings.settings}}
           />
         ),
         ref: graphLargeRef
@@ -135,6 +145,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
           width={500}
           height={500} 
           data={dataToShow}
+          menuSettings={{menuItems: zjdMenuSettings.menuItems, settings: zjdMenuSettings.settings}}
         />,
         ref: graphLargeToExportRef
       }}
@@ -145,6 +156,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
             width={smallGraphSize}
             height={smallGraphSize}
             data={dataToShow}
+            menuSettings={{menuItems: strMenuSettings.menuItems, settings: strMenuSettings.settings}}
           />
         ),
         ref: graphSmallTopRef
@@ -155,6 +167,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
           width={500}
           height={500} 
           data={dataToShow}
+          menuSettings={{menuItems: strMenuSettings.menuItems, settings: strMenuSettings.settings}}
         />,
         ref: graphSmallTopToExportRef
       }}
@@ -165,6 +178,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
             width={smallGraphSize}
             height={smallGraphSize}
             data={dataToShow}
+            menuSettings={{menuItems: dmgMenuSettings.menuItems, settings: dmgMenuSettings.settings}}
           />
         ),
         ref: graphSmallBotRef
@@ -176,6 +190,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
             width={500}
             height={500}
             data={dataToShow}
+            menuSettings={{menuItems: dmgMenuSettings.menuItems, settings: dmgMenuSettings.settings}}
           />
         ),
         ref: graphSmallBotToExportRef

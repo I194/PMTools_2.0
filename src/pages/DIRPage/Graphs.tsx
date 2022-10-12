@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import styles from './DIRPage.module.scss';
-import { useWindowSize } from '../../utils/GlobalHooks';
+import { useDIRGraphSettings, useWindowSize } from '../../utils/GlobalHooks';
 import { IDirData } from '../../utils/GlobalTypes';
 import GraphsSkeleton from './GraphsSkeleton';
 import { StereoGraphDIR }from '../../components/AppGraphs';
@@ -15,6 +15,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
 
   const graphRef = useRef<HTMLDivElement>(null);
   const graphToExportRef = useRef<HTMLDivElement>(null);
+  const { menuItems, settings } = useDIRGraphSettings();
 
   const [graphSize, setGraphSize] = useState<number>(300);
   const [centeredByMean, setCenteredByMean] = useState<boolean>(false);
@@ -45,6 +46,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
           data={dataToShow}
           centeredByMean={centeredByMean}
           setCenteredByMean={setCenteredByMean}
+          menuSettings={{menuItems, settings}}
         />,
         ref: graphRef
       }}
@@ -56,6 +58,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
           data={dataToShow}
           centeredByMean={centeredByMean}
           setCenteredByMean={setCenteredByMean}
+          menuSettings={{menuItems, settings}}
         />,
         ref: graphToExportRef
       }}
