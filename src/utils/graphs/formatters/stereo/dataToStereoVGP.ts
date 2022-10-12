@@ -61,7 +61,7 @@ const dataToStereoVGP = (
       (direction) => new Direction(direction.poleLongitude, direction.poleLatitude, 1)
     )
   );
-  const { direction, MAD } = mean;
+  const { direction, MAD, k } = mean;
 
   const [declination, inclination] = direction.toArray(); // mean dec and inc
   const meanXYData = dirToCartesian2D(declination - 90, inclination, graphSize);
@@ -72,6 +72,7 @@ const dataToStereoVGP = (
     dec: +declination.toFixed(1),
     inc: +inclination.toFixed(1),
     a95: +MAD.toFixed(1),
+    k: +k!.toFixed(1),
     meanType: 'fisher',
   };
 

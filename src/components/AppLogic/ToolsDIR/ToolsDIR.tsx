@@ -244,7 +244,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
         setOpen={setShowVGP}
         size={{
           width: widthLessThan1400 ? '94vw' : '80vw', 
-          height: widthLessThan1400 ? '72vh' : '64vh'
+          height: widthLessThan1400 ? '80vh' : '72vh'
         }}
         position={{left: '50%', top: '50%'}}
         isDraggable={true}

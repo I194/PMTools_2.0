@@ -1,4 +1,4 @@
-import { IDirData, RawStatisticsDIR } from "../../GlobalTypes";
+import { IDirData, MeanDir, RawStatisticsDIR } from "../../GlobalTypes";
 import Coordinates from "../../graphs/classes/Coordinates";
 import Direction from "../../graphs/classes/Direction";
 
@@ -18,7 +18,7 @@ const calculateFisherMean = (
 
 export const fisherMean = (
   directions: Array<Direction>,
-) => {
+): MeanDir => {
 
   /*
   Calculates the Fisher mean and associated parameter from a di_block

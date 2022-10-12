@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IDirData, VGPData } from "../../utils/GlobalTypes";
+import { IDirData, MeanDir, VGPData } from "../../utils/GlobalTypes";
 import { StatisitcsInterpretationFromDIR } from "../../utils/GlobalTypes";
 import { Reference, StatisticsModeDIR } from "../../utils/graphs/types";
 
 interface IInitialState {
   currentFile: IDirData | null;
   vgpData: VGPData | null;
+  vgpMean: MeanDir | null;
   reference: Reference;
   selectedDirectionsIDs: Array<number> | null;
   hiddenDirectionsIDs: Array<number>;
@@ -22,6 +23,7 @@ interface IInitialState {
 const initialState: IInitialState = {
   currentFile: null,
   vgpData: null,
+  vgpMean: null,
   reference: 'geographic',
   selectedDirectionsIDs: null,
   hiddenDirectionsIDs: [],
@@ -44,6 +46,9 @@ const dirPage = createSlice({
     },
     setVGPData (state, action) {
       state.vgpData = action.payload;
+    },
+    setVGPMean (state, action) {
+      state.vgpMean = action.payload;
     },
     setReference (state, action) {
       state.reference = action.payload;
@@ -130,6 +135,7 @@ const dirPage = createSlice({
 export const { 
   setCurrentFile,
   setVGPData,
+  setVGPMean,
   setReference,
   setSelectedDirectionsIDs,
   setHiddenDirectionsIDs,

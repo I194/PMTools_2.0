@@ -15,6 +15,7 @@ import {
   successColor,
 } from '../../../utils/ThemeConstants';
 import { useTranslation } from "react-i18next";
+import VGPMean from "./VGPMean";
 
 type Props = {
   data: IDirData;
@@ -35,26 +36,31 @@ const VGPmodalContent: FC<Props> = ({ data }) => {
 
   return (
     <div className={styles.modalContent}>
-      <div className={styles.import}>
-        <Typography color={textColor(theme.palette.mode)}>
-          {t("vgp.upload.first")}
-        </Typography>
-        <div className={styles.upload}>
-          <UploadButton 
-            accept={['.csv', '.xlsx']}
-            onUpload={handleUpload}
-            label={`${t("vgp.upload.button")} (.csv, .xlsx)`}
-          />
+      <div className={styles.topCenter}>
+        <div className={styles.import}>
+          <Typography color={textColor(theme.palette.mode)}>
+            {t("vgp.upload.first")}
+          </Typography>
+          <div className={styles.upload}>
+            <UploadButton 
+              accept={['.csv', '.xlsx']}
+              onUpload={handleUpload}
+              label={`${t("vgp.upload.button")} (.csv, .xlsx)`}
+            />
+          </div>
+          <Typography color={textColor(theme.palette.mode)}>
+            {t("vgp.upload.second")} <code style={{color: primaryColor(theme.palette.mode)}}>lat</code> & <code style={{color: primaryColor(theme.palette. mode)}}>lon</code>.
+          </Typography>
         </div>
-        <Typography color={textColor(theme.palette.mode)}>
-          {t("vgp.upload.second")} <code style={{color: primaryColor(theme.palette.mode)}}>lat</code> & <code style={{color: primaryColor(theme.palette. mode)}}>lon</code>.
-        </Typography>
-      </div>
-      <div className={styles.import}>
-        <Typography color={textColor(theme.palette.mode)}>
-          {t("vgp.upload.third")} <code style={{color: primaryColor(theme.palette.mode)}}>age</code> & <code style={{color: primaryColor(theme.palette.mode)} }>plate_id</code>
-          {t("vgp.upload.fourth")} <code style={{color: successColor(theme.palette.mode)}}>GPlates</code>
-        </Typography>
+        <div className={styles.import}>
+          <Typography color={textColor(theme.palette.mode)}>
+            {t("vgp.upload.third")} <code style={{color: primaryColor(theme.palette.mode)}}>age</code> & <code style={{color: primaryColor(theme.palette.mode)} }>plate_id</code>
+            {t("vgp.upload.fourth")} <code style={{color: successColor(theme.palette.mode)}}>GPlates</code>
+          </Typography>
+        </div>
+        <div className={styles.vgpRes}>
+          <VGPMean />
+        </div>
       </div>
       <div className={styles.data}>
         <div className={styles.input}>

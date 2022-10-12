@@ -5,6 +5,9 @@ import { VGPData } from '../../../utils/GlobalTypes';
 import GraphsSkeleton from './GraphsSkeleton';
 import { StereoGraphVGP } from '../../AppGraphs';
 import { useAppDispatch, useAppSelector } from "../../../services/store/hooks";
+import { fisherMean } from '../../../utils/statistics/calculation/calculateFisherMean';
+import Direction from '../../../utils/graphs/classes/Direction';
+import { setVGPMean } from '../../../services/reducers/dirPage';
 
 // interface IGraphs {
 //   dataToShow: VGPData | null;
@@ -12,14 +15,28 @@ import { useAppDispatch, useAppSelector } from "../../../services/store/hooks";
 
 const Graphs: FC = () => {
 
-  
-  const { vgpData } = useAppSelector(state => state.dirPageReducer);
+  const dispatch = useAppDispatch();
+  const { vgpData, reference } = useAppSelector(state => state.dirPageReducer);
 
   const [dataToShow, setDataToShow] = useState<VGPData | null>(null);
 
   useEffect(() => {
-    if (vgpData) setDataToShow(vgpData);
+    if (vgpData) {
+      setDataToShow(vgpData);
+    }
   }, [vgpData]);
+
+  useEffect(() => {
+    if (vgpData) {
+      const directions = vgpData;
+      const mean = fisherMean(
+        directions.map(
+          (direction) => new Direction(direction.poleLongitude, direction.poleLatitude, 1)
+        )
+      );
+      dispatch(setVGPMean(mean));
+    }
+  }, [vgpData, reference]);
 
   const [wv, wh] = useWindowSize();
 

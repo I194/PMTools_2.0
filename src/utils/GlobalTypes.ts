@@ -157,23 +157,18 @@ export type RawStatisticsPCA = {
 export type RawStatisticsDIR = {
   code: StatisticsModeDIR;
   mean: {
-    geographic: {
-      direction: Direction;
-      MAD: number;
-      k?: number;
-      R?: number;
-      N?: number;
-      csd?: number;
-    },
-    stratigraphic: {
-      direction: Direction;
-      MAD: number;
-      k?: number;
-      R?: number;
-      N?: number;
-      csd?: number;
-    };
+    geographic: MeanDir;
+    stratigraphic: MeanDir;
   };
+};
+
+export type MeanDir = {
+  direction: Direction;
+  MAD: number;
+  k?: number;
+  R?: number;
+  N?: number;
+  csd?: number;
 };
 
 export type FoldTestResult = {

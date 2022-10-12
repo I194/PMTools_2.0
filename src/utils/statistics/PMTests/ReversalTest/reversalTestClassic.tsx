@@ -17,10 +17,10 @@ const reversalTestClassic = (dataToAnalyze: IDirData) => {
   const fisherNormal = fisherMean(normalDirections);
   const fisherReversed = fisherMean(reversedDirections);
 
-  const N1 = fisherNormal.N;
-  const R1 = fisherNormal.R;
-  const N2 = fisherReversed.N;
-  const R2 = fisherReversed.R;
+  const N1 = fisherNormal.N!;
+  const R1 = fisherNormal.R!;
+  const N2 = fisherReversed.N!;
+  const R2 = fisherReversed.R!;
 
   const probability = 0.05;
 

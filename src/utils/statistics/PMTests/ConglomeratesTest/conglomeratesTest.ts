@@ -12,7 +12,9 @@ const conglomeratesTest = (dataToAnalyze: IDirData) => {
 
   const directions = dataToAnalyze.interpretations.map(dir => new Direction(dir.Dgeo, dir.Igeo, 1));
 
-  const { R, N } = fisherMean(directions);
+  const mean = fisherMean(directions);
+  const R = mean.R!;
+  const N = mean.N!;
 
   // Test
 
