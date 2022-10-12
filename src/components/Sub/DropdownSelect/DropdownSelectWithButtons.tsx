@@ -18,6 +18,8 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
   onOptionSelect, 
   defaultValue, 
   minWidth,
+  width,
+  maxWidth,
   m,
   useArrowListeners,
   showDelete,
@@ -92,7 +94,15 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
       >
         <KeyboardArrowLeftIcon />
       </DefaultIconButton>
-      <FormControl variant="standard" sx={{ minWidth: minWidth || '200px', m: m || '0' }}>
+      <FormControl 
+        variant="standard" 
+        sx={{ 
+          minWidth: minWidth || '200px', 
+          width,
+          maxWidth,
+          m: m || '0', 
+        }}
+      >
         <InputLabel>{ label }</InputLabel>
         <Select
           value={selectedOption}
@@ -104,6 +114,10 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
             margin: 0,
             '& .MuiListItem-root': {
               display: 'none',
+            },
+            '& .MuiListItemText-root': {
+              textOverflow: "ellipsis",
+              overflow: 'hidden',
             }
           }}
         >

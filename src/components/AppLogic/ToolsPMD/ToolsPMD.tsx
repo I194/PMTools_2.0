@@ -172,7 +172,8 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
         options={allDataPMD.map(pmd => pmd.metadata.name)}
         defaultValue={currentFileName}
         onOptionSelect={handleFileSelect}
-        minWidth={'120px'}
+        minWidth={'210px'}
+        maxWidth={'210px'}
         useArrowListeners
         showDelete
         onDelete={handleFileDelete}

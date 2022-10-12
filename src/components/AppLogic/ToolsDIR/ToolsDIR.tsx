@@ -191,7 +191,8 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
         options={allDirData.map(dir => dir.name)}
         defaultValue={allDirData[0].name}
         onOptionSelect={handleFileSelect}
-        minWidth={'120px'}
+        minWidth={'210px'}
+        maxWidth={'210px'}
         useArrowListeners
         showDelete
         onDelete={handleFileDelete}

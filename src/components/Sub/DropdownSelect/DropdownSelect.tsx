@@ -12,6 +12,8 @@ export interface IDropdownSelect {
   onOptionSelect: (option: string) => void;
   defaultValue?: string;
   minWidth?: string;
+  width?: string;
+  maxWidth?: string;
   m?: string;
   showDelete?: boolean;
   onDelete?: (option: string) => void;
@@ -23,6 +25,8 @@ const DropdownSelect: FC<IDropdownSelect> = ({
   onOptionSelect, 
   defaultValue, 
   minWidth,
+  width,
+  maxWidth,
   m,
   showDelete,
   onDelete,
@@ -42,7 +46,15 @@ const DropdownSelect: FC<IDropdownSelect> = ({
   };
 
   return (
-    <FormControl variant="standard" sx={{ minWidth: minWidth || '200px', m: m || '0 0 0 16px' }}>
+    <FormControl 
+      variant="standard" 
+      sx={{ 
+        minWidth: minWidth || '200px', 
+        width,
+        maxWidth,
+        m: m || '0 0 0 16px'
+      }}
+    >
       <InputLabel>{ label }</InputLabel>
       <Select
         value={selectedOption}
