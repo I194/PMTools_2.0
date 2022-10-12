@@ -40,7 +40,7 @@ export const usePMDGraphSettings = () => {
     {label: 'Tooltips', onClick: () => setTooltips(!tooltips), state: tooltips},
     {label: 'Ticks', onClick: () => setTicks(!ticks), state: ticks, divider: true},
     {label: 'Annotations', onClick: () => setAnnotations(!annotations), state: annotations},
-    {label: 'Show ID', onClick: () => setStepID(!stepID), state: stepID},
+    {label: 'Show №', onClick: () => setStepID(!stepID), state: stepID},
     {label: 'Show label', onClick: () => setStepLabel(!stepLabel), state: stepLabel},
   ];
 
@@ -70,7 +70,7 @@ export const useDIRGraphSettings = () => {
     {label: 'Tooltips', onClick: () => setTooltips(!tooltips), state: tooltips},
     {label: 'Ticks', onClick: () => setTicks(!ticks), state: ticks, divider: true},
     {label: 'Annotations', onClick: () => setAnnotations(!annotations), state: annotations},
-    {label: 'Show ID', onClick: () => setDirectionID(!directionID), state: directionID},
+    {label: 'Show №', onClick: () => setDirectionID(!directionID), state: directionID},
     {label: 'Show label', onClick: () => setDirectionLabel(!directionLabel), state: directionLabel, divider: true},
     {label: 'Show confidence circles', onClick: () => setConfidenceCircle(!confidenceCircle), state: confidenceCircle},
   ];
