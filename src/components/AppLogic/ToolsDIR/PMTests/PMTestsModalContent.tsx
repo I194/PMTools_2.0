@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState, useEffect } from "react";
 import styles from './PMTests.module.scss';
 import { IDirData } from "../../../../utils/GlobalTypes";
 import FoldTestContainer from "./FoldTestContainer";
@@ -23,9 +23,19 @@ type Props = {
 
 const PMTestsModalContent: FC<Props> = ({ data }) => {
 
+  const dispatch = useAppDispatch();
   const theme = useTheme();
   const { t, i18n } = useTranslation('translation');
-  const dispatch = useAppDispatch();
+  const { hiddenDirectionsIDs } = useAppSelector(state => state.dirPageReducer);
+  const [visibleData, setVisibleData] = useState<IDirData>(data);
+
+  useEffect(() => {
+    if (data) {
+      const newVisibleInterpretations = data.interpretations.filter((direction, index) => !hiddenDirectionsIDs.includes(index + 1));
+      const newVisibleData = {...data, interpretations: newVisibleInterpretations};
+      setVisibleData(newVisibleData);
+    }
+  }, [data, hiddenDirectionsIDs]);
 
   const content = [
     {
@@ -33,7 +43,7 @@ const PMTestsModalContent: FC<Props> = ({ data }) => {
       content: (
         <div className={styles.dataContainer}>
           <div className={styles.data}>
-            <FoldTestContainer dataToAnalyze={data}/>
+            <FoldTestContainer dataToAnalyze={visibleData}/>
           </div>
         </div>
       )
@@ -43,7 +53,7 @@ const PMTestsModalContent: FC<Props> = ({ data }) => {
       content: (
         <div className={styles.dataContainer}>
           <div className={styles.data}>
-            <ReversalTestUncontrolledContainer dataToAnalyze={data}/>
+            <ReversalTestUncontrolledContainer dataToAnalyze={visibleData}/>
           </div>
         </div>
       )
@@ -63,7 +73,7 @@ const PMTestsModalContent: FC<Props> = ({ data }) => {
       content: (
         <div className={styles.dataContainer}>
           <div className={styles.data}>
-            <ConglomeratesTestContainer dataToAnalyze={data}/>
+            <ConglomeratesTestContainer dataToAnalyze={visibleData}/>
           </div>
         </div>
       )
