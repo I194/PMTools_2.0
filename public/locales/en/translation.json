@@ -2,7 +2,7 @@
   "mainLayout": {
     "navPanel": {
       "whyPMTools": "Why PMTools?",
-      "PCA": "Magnetic cleanings (PCA)",
+      "PCA": "Magnetic treatment (PCA)",
       "DIR": "Directional statistics (DIR)",
       "projectRepo": "Project repository",
       "authorsAndHistory": "Authors and history"
@@ -29,15 +29,15 @@
     "featuresCards": {
       "pca": {
         "title": "Perform component analysis",
-        "description": "The Magnetic Cleaning Page (PCA) provides classic tools for identifying magnetization components. Work directly with the specimen collection and export the selected directions in any convenient format."
+        "description": "The Magnetic Treatment Page (PCA) provides classic tools for identifying magnetization components. Work directly with the specimen collection and export the selected directions in any convenient format."
       },
       "dir": {
         "title": "Study the distribution of directions",
-        "description": "The Direction Statistics page (DIR) makes it possible to find average directions using various methods. And on the same page you can conduct paleomagnetic statistical tests to test your hypotheses."
+        "description": "The Direction Statistics page (DIR) makes it possible to find mean directions using various methods. And on the same page you can conduct paleomagnetic statistical tests to test your hypotheses."
       },
       "vgp": {
         "title": "Find Virtual Geomagnetic Poles",
-        "description": "To calculate the poles, it is enough to open the corresponding module on the DIR page and simply enter or import the coordinates of the sites (you can even from an XLSX file). And the resulting VGP can be immediately exported in a format suitable for the GPLates program."
+        "description": "To calculate the poles, it is enough to open the corresponding module on the DIR page and simply enter or import the coordinates of the sites (you can even from an XLSX file). And the resulting VGP can be immediately exported in a format suitable for the GPLates and GMap programs."
       },
       "selection": {
         "title": "Interacting with data has never been so easy",
@@ -105,7 +105,7 @@
       "headline": "The history of the PMTools development",
       "shortdesc": "PMTools was created a little over 2 years, and during this two times it was rewritten from scratch.",
       "lines": {
-        "first": "It was May 2019. And there was an extremely simple idea - to write a small program that would build streograms based on the results of magnetic cleanings. This was necessary, because all the available programs that did this, among other things, exported stereograms that were not particularly convenient for subsequent use, which had to be manually completed for a long time in a graphics editor. For implementation, it was decided to use Python, Matplotlib, Pandas and PyQt5. Here's what the results of a week's work on it looked like:",
+        "first": "It was May 2019. And there was an extremely simple idea - to write a small program that would build streograms based on the results of magnetic treatment. This was necessary, because all the available programs that did this, among other things, exported stereograms that were not particularly convenient for subsequent use, which had to be manually completed for a long time in a graphics editor. For implementation, it was decided to use Python, Matplotlib, Pandas and PyQt5. Here's what the results of a week's work on it looked like:",
         "second": "Having created this, it became clear that PyQT5 is not suitable for the task at hand, like Matplotlip. Therefore, the search for new ways to accomplish the task began. Variants in Python and C++ were considered. All C++ solutions were overly complex, and it was clear that implementation in this language would take too much time and effort. That's why Python was chosen. After a couple of weeks of searching and analyzing suitable solutions for this, among the libraries and frameworks, the choice fell on Plotly. At that time, this company had in its arsenal the charting library of the same name and the emerging framework for building web applications in Python - Dash. Thus, armed with Plotly and Dash, this was created over the summer of 2019:",
         "third": "And over the following months, at a slow pace, minor improvements and minor changes were made:",
         "fourth": "The created program was called PMTools and it was already something more than just a streogram builder. It was already a web application for component analysis, and also provided the ability to calculate the Fisher mean and build a stereogram setup, and a small paleomagnetic calculator was also created. However, it quickly became clear that this was not the final product, but rather an alpha version.",
@@ -123,7 +123,7 @@
       "import": "Import file"
     },
     "navPanel": {
-      "PCA": "Magnetic cleanings",
+      "PCA": "Magnetic treatment",
       "DIR": "Directional statistics",
       "projectRepo": "Project repository",
       "mainPage": "Main page"
@@ -282,17 +282,17 @@
       "second": "And the range of all bootstrap generations is as follows:"
     },
     "reverseAutoTest": {
-      "title": "Reverse Tests (Automatic)",
-      "first": "Bootstrap reverse test [Tauxe, 2010]",
+      "title": "Reversal Tests (Automatic)",
+      "first": "Bootstrap reversal test [Tauxe, 2010]",
       "second": "If the areas within the 95% confidence boundaries (dashed lines) intersect in all three components, the data \"passed\" the reversal test. Otherwise (no intersections), the test failed."
     },
     "reverseTest": {
-      "title": "Reverse Test (manual input)",
+      "title": "Reversal Test (manual input)",
       "first": "Calculate",
       "required": "Required"
     },
     "reverseTestResult": {
-      "title": "Classical reverse test [McFadden and McElhinny, 1990]",
+      "title": "Classical reversal test [McFadden and McElhinny, 1990]",
       "tooltip": "Press to copy"
     },
     "conglomerateTest": {
