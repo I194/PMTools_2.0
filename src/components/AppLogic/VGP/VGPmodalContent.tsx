@@ -16,6 +16,7 @@ import {
 } from '../../../utils/ThemeConstants';
 import { useTranslation } from "react-i18next";
 import VGPMean from "./VGPMean";
+import { useMediaQuery } from "react-responsive";
 
 type Props = {
   data: IDirData;
@@ -26,6 +27,7 @@ const VGPmodalContent: FC<Props> = ({ data }) => {
   const theme = useTheme();
   const { t, i18n } = useTranslation('translation');
   const dispatch = useAppDispatch();
+  const widthLessThan1400 = useMediaQuery({ query: '(max-width: 1400px)' });
 
   // const { siteData } = useAppSelector(state => state.parsedDataReducer);
 
@@ -45,7 +47,11 @@ const VGPmodalContent: FC<Props> = ({ data }) => {
             <UploadButton 
               accept={['.csv', '.xlsx']}
               onUpload={handleUpload}
-              label={`${t("vgp.upload.button")} (.csv, .xlsx)`}
+              label={
+                widthLessThan1400 
+                  ? '.csv, .xlsx'
+                  : `${t("vgp.upload.button")} (.csv, .xlsx)`
+              }
             />
           </div>
           <Typography color={textColor(theme.palette.mode)}>

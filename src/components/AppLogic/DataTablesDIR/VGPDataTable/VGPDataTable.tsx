@@ -23,7 +23,9 @@ type VGPRow = {
   id: number;
   index: number | string;
   poleLatitude: number,
-  poleLongitude: number,
+  poleLongitude?: number,
+  poleLongitudeW?: number,
+  poleLongitudeE?: number,
   paleoLatitude: number,
   dp: number,
   dm: number,
@@ -46,34 +48,40 @@ const VGPDataTable: FC = () => {
   }, []);
 
   const columns: GridColumns = [
-    { field: 'id', headerName: 'ID', type: 'string', width: 30 },
-    { field: 'index', headerName: '№', type: 'string', width: 30 },
-    { field: 'poleLatitude', headerName: 'pole lat', type: 'number', width: 80,
+    { field: 'id', headerName: 'ID', type: 'string', minWidth: 20, width: 22 },
+    { field: 'index', headerName: '№', type: 'string', minWidth: 20, width: 22 },
+    { field: 'poleLatitude', headerName: 'pole lat', type: 'number', width: 60,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
-    { field: 'poleLongitude', headerName: 'pole lon', type: 'number', width: 80,
+    { field: 'poleLongitude', headerName: 'pole lon', type: 'number', width: 70,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
-    { field: 'paleoLatitude', headerName: 'paleo lat', type: 'number', width: 80,
+    // { field: 'poleLongitudeW', headerName: 'pole lon W', type: 'number', width: 72,
+    //   valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    // },
+    // { field: 'poleLongitudeE', headerName: 'pole lon E', type: 'number', width: 72,
+    //   valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    // },
+    { field: 'paleoLatitude', headerName: 'paleo lat', type: 'number', width: 70,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
-    { field: 'dp', headerName: 'dp', type: 'number', width: 60,
+    { field: 'dp', headerName: 'dp', type: 'number', minWidth: 20, width: 50,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
-    { field: 'dm', headerName: 'dm', type: 'number', width: 60,
+    { field: 'dm', headerName: 'dm', type: 'number', minWidth: 20, width: 50,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
-    { field: 'sLat', headerName: 'site Lat', type: 'number', width: 80,
+    { field: 'sLat', headerName: 'site Lat', type: 'number', width: 60,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
-    { field: 'sLon', headerName: 'site Lon', type: 'number', width: 80,
+    { field: 'sLon', headerName: 'site Lon', type: 'number', width: 60,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
     { field: 'age', headerName: 'age', type: 'number', width: 60,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
     { field: 'plateId', headerName: 'plate ID', type: 'number', width: 60,
-      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(0)
     },
   ];
 
@@ -94,6 +102,8 @@ const VGPDataTable: FC = () => {
       index: hiddenDirectionsIDs.includes(id) ? '-' : visibleIndex++,
       poleLatitude,
       poleLongitude,
+      // poleLongitudeW: poleLongitude,
+      // poleLongitudeE: Math.abs(poleLongitude - 360),
       paleoLatitude,
       dp,
       dm,

@@ -50,7 +50,7 @@ const Graphs: FC = () => {
     const graphHeight = vgpGraphRef.current?.offsetHeight;
     if (graphWidth && graphHeight) {
       const minBoxSize = Math.min(graphWidth, graphHeight);
-      setGraphSize(minBoxSize - 112);
+      setGraphSize(minBoxSize - 72);
     };
   }, [vgpGraphRef, wv, wh]);
 

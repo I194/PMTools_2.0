@@ -98,14 +98,16 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
     if (!rows.length) return;
     const visibleRows = rows.filter(row => !hiddenDirectionsIDs.includes(row.id));
     const vgpData: VGPData = visibleRows.map((row, index) => {
+      // let [id, label] = [0, ''];
+      // let [lat, lon, age, plateId] = [0, 0, 0, 0];
       let { id, label, lat, lon, age, plateId } = row;
       // на случай, если были загружены данные из файла и не обновился apiRef
-      if ((lat === 0 || lon === 0 || age === 0 || plateId === 0) && sitesData && sitesData[index]) {
-        lat = sitesData[index].lat;
-        lon = sitesData[index].lon;
-        age = sitesData[index].age;
-        plateId = sitesData[index].plateId;
-      };
+      // if ((lat === 0 || lon === 0 || age === 0 || plateId === 0) && sitesData && sitesData[index]) {
+      //   lat = sitesData[index].lat;
+      //   lon = sitesData[index].lon;
+      //   age = sitesData[index].age;
+      //   plateId = sitesData[index].plateId;
+      // };
       const interpretation = data.interpretations.find(interpretation => interpretation.id === id)!;
       // учёт перевернутых направлений
       const { Dgeo, Igeo, Dstrat, Istrat } = interpretation;
@@ -142,6 +144,7 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
       }
     });
     const newSitesData: ISitesData['data'] = [...rows];
+    console.log('new vgp and site data', vgpData, newSitesData);
     dispatch(setVGPData(vgpData));
     dispatch(setSiteData(newSitesData));
   };

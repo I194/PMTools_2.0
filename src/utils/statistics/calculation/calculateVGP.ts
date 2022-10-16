@@ -34,12 +34,12 @@ const calculateVGP = (
   // if ((Math.sin(paleoLatitudeRad) < Math.sin(siteLatitudeRad) * Math.sin(poleLatitudeRad))) {
   //   poleLongitude = 180 - psi + siteLongitude;
   // }
-  // // Bind the plate longitude between [0, 360]
+  let poleLongitude = shipunovConstant + siteLongitude;
+  if (Math.sin(declinationRad) < 0) poleLongitude -= 2 * shipunovConstant;
+  // Bind the plate longitude between [0, 360]
   // if (poleLongitude < 0) {
   //   poleLongitude += 360;
   // }
-  let poleLongitude = shipunovConstant + siteLongitude;
-  if (Math.sin(declinationRad) < 0) poleLongitude -= 2 * shipunovConstant;
 
   let [dp, dm]: (number | undefined)[] = [undefined, undefined];
   if (a95) {

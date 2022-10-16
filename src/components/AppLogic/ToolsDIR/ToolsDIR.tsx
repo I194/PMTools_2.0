@@ -244,11 +244,11 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
         open={showVGP}
         setOpen={setShowVGP}
         size={{
-          width: widthLessThan1400 ? '94vw' : '80vw', 
-          height: widthLessThan1400 ? '80vh' : '72vh'
+          width: widthLessThan1400 ? '94vw' : '88vw', 
+          height: widthLessThan1400 ? '88vh' : '80vh'
         }}
         position={{left: '50%', top: '50%'}}
-        isDraggable={true}
+        isDraggable={false}
       >
         <VGPModalContent data={data}/>
       </ModalWrapper>
@@ -256,11 +256,11 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
         open={showPMTests}
         setOpen={setShowPMTests}
         size={{
-          width: widthLessThan1400 ? '94vw' : '80vw', 
-          height: widthLessThan1400 ? '72vh' : '64vh'
+          width: widthLessThan1400 ? '94vw' : '88vw', 
+          height: widthLessThan1400 ? '88vh' : '80vh'
         }}
         position={{left: '50%', top: '50%'}}
-        isDraggable={true}
+        isDraggable={false}
       >
         <PMTestsModalContent data={data}/>
       </ModalWrapper>
