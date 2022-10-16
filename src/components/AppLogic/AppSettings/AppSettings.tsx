@@ -42,7 +42,7 @@ const AppSettings: FC<IAppSettings> = ({
 
   const availableFormats = {
     pca: ['.pmd', '.squid', '.rs3', '.csv', '.xlsx'],
-    dir: ['.dir', '.pmm', '.csv', '.xlsx'], 
+    dir: ['.dir', '.mdir', '.pmm', '.csv', '.xlsx'], 
   };
 
   const [showSettings, setShowSettings] = useState(false);

@@ -9,6 +9,7 @@ import parseCSV_SitesLatLon from "../parsers/parserCSV_SitesLatLon";
 import parseXLSX_SitesLatLon from "../parsers/parserXLSX_SitesLatLon";
 import parseSQUID from "../parsers/parserSQUID";
 import parserRS3 from "../parsers/parserRS3";
+import parseMDIR from "../parsers/parserMDIR";
 
 export default class PMFile {
   name: string;
@@ -38,6 +39,7 @@ export default class PMFile {
   parseXLSX_PMD = () => parseXLSX_PMD(this.data as ArrayBuffer, this.name);
   parsePMM = () => parsePMM(this.data as string, this.name);
   parseDIR = () => parseDIR(this.data as string, this.name);
+  parseMDIR = () => parseMDIR(this.data as string, this.name);
   parseCSV_DIR = () => parseCSV_DIR(this.data as string, this.name);
   parseXLSX_DIR = () => parseXLSX_DIR(this.data as ArrayBuffer, this.name);
   parseCSV_SitesLatLon = () => parseCSV_SitesLatLon(this.data as string, this.name);
