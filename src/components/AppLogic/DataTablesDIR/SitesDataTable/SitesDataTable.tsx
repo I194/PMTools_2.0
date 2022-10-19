@@ -47,9 +47,9 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
   const sitesData = useAppSelector(state => state.parsedDataReducer.siteData);
 
   const columns: GridColumns = [
-    { field: 'id', headerName: 'ID', type: 'string', minWidth: 20, width: 22 },
-    { field: 'index', headerName: '№', type: 'string', minWidth: 20, width: 22 },
-    { field: 'label', headerName: 'Label', type: 'string', width: 50 },
+    { field: 'id', headerName: 'ID', type: 'string', minWidth: 20, width: 30 },
+    { field: 'index', headerName: '№', type: 'string', minWidth: 20, width: 30 },
+    { field: 'label', headerName: 'Label', type: 'string', width: 70 },
     { field: 'lat', headerName: 'Lat', type: 'number', flex: 1, editable: true, 
       cellClassName: styles[`editableCell_${theme.palette.mode}`],
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)

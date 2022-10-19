@@ -58,10 +58,11 @@ const VGPMean = () => {
             </Typography>
             <Typography variant='body1' color={textColor(theme.palette.mode)}>
               plon: {
-                vgpMean.direction.declination > 180
-                  ? -(360 - vgpMean.direction.declination).toFixed(2)
-                  : vgpMean.direction.declination.toFixed(2)
-              } {/* dec, from 0 to 360 deg, but we need to bind it between -180 to 180 deg */}
+                // vgpMean.direction.declination > 180
+                //   ? -(360 - vgpMean.direction.declination).toFixed(2)
+                //   : vgpMean.direction.declination.toFixed(2)
+                  vgpMean.direction.declination.toFixed(2)
+              } {/* dec, from 0 to 360 deg, but we need to bind it between -180 to 180 deg. UPD: no needed anymore */}
             </Typography>
           </div>
           <span 
