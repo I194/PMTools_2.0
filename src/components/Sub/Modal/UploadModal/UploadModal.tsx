@@ -52,7 +52,7 @@ const UploadModal = ({page}: Props) => {
 
   const availableFormats = {
     pca: ['.pmd', '.squid', '.rs3', '.csv', '.xlsx'],
-    dir: ['.dir', '.mdir', '.pmm', '.csv', '.xlsx'], 
+    dir: ['.dir', '.pmm', '.csv', '.xlsx'], 
   };
 
   // накладывается на глобальный импорт через dnd в appLayout...

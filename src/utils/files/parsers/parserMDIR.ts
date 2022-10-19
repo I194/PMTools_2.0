@@ -1,6 +1,9 @@
 import { IDirData } from "../../GlobalTypes";
 
 const parseMDIR = (data: string, name: string) => {
+  // !!! DEPRECATED
+  // .mdir data format combined with .dir data format
+  // !!! DEPRECATED
   
   // eslint-disable-next-line no-control-regex
   const eol = new RegExp("\r?\n");
