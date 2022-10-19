@@ -119,7 +119,23 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
         components={{
           Toolbar: PMDInputDataTableToolbar, 
         }}
-        sx={GetDataTableBaseStyle()}
+        sx={{
+          ...GetDataTableBaseStyle(),
+          // '& .MuiDataGrid-columnHeaders': {
+          //   minHeight: '24px!important',
+          //   maxHeight: '24px!important',
+          //   lineHeight: '24px!important',
+          // },
+          // '& .MuiDataGrid-virtualScroller': {
+          //   marginTop: '24px!important',
+          // },
+          '& .MuiDataGrid-cell': {
+            padding: '0px 0px',
+          },
+          '& .MuiDataGrid-columnHeader': {
+            padding: '0px 0px',
+          }
+        }}
         density={'compact'}
         hideFooter={rows.length < 100}
         getRowClassName={

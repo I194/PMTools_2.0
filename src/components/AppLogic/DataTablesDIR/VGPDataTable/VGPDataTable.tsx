@@ -48,8 +48,8 @@ const VGPDataTable: FC = () => {
   }, []);
 
   const columns: GridColumns = [
-    { field: 'id', headerName: 'ID', type: 'string', minWidth: 20, width: 22 },
-    { field: 'index', headerName: '№', type: 'string', minWidth: 20, width: 22 },
+    { field: 'id', headerName: 'ID', type: 'string', minWidth: 20, width: 30 },
+    { field: 'index', headerName: '№', type: 'string', minWidth: 20, width: 30 },
     { field: 'poleLatitude', headerName: 'pole lat', type: 'number', width: 60,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },

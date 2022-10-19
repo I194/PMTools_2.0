@@ -236,7 +236,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
       <ModalWrapper
         open={allFilesStatOpen}
         setOpen={setAllFilesStatOpen}
-        size={{width: '60vw', height: '60vh'}}
+        size={{width: '80vw', height: '60vh'}}
       >
         <OutputDataTableDIR />
       </ModalWrapper>

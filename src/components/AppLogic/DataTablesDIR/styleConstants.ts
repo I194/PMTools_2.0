@@ -20,7 +20,8 @@ export const GetDataTableBaseStyle = () => {
       borderColor: borderColor(theme.palette.mode)
     },
     '.MuiDataGrid-cell': {
-      borderColor: borderColor(theme.palette.mode)
+      borderColor: borderColor(theme.palette.mode),
+      padding: '0px 0px',
     },
     "& .MuiDataGrid-cell:focus-within, & .MuiDataGrid-cell:focus": {
       outline: "none"
@@ -28,5 +29,8 @@ export const GetDataTableBaseStyle = () => {
     '.MuiDataGrid-row:hover': {
       cursor: 'pointer',
     },
+    '.MuiDataGrid-columnHeader': {
+      padding: '0px 0px',
+    }
   });
 };

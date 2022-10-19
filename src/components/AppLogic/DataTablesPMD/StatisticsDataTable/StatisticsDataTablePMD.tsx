@@ -76,26 +76,6 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
   };
 
   const columns: GridColumns = [
-    { field: 'id', headerName: 'Label', type: 'string', width: 70  },
-    { field: 'code', headerName: 'Code', type: 'string', width: 50 },
-    { field: 'stepRange', headerName: 'StepRange', type: 'string', width: 90 },
-    { field: 'stepCount', headerName: 'N', type: 'number', minWidth: 24, width: 24 },
-    { field: 'Dgeo', headerName: 'Dgeo', type: 'number', width: 60,
-      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
-    },
-    { field: 'Igeo', headerName: 'Igeo', type: 'number', width: 50,
-      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
-    },
-    { field: 'Dstrat', headerName: 'Dstrat', type: 'number', width: 60,
-      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
-    },
-    { field: 'Istrat', headerName: 'Istrat', type: 'number', width: 50,
-      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
-    },
-    { field: 'confidenceRadius', headerName: 'MAD', type: 'string', width: 50,
-      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
-    },
-    { field: 'comment', headerName: 'Comment', type: 'string', flex: 1, editable: true, cellClassName: styles[`editableCell_${theme.palette.mode}`] },
     {
       field: 'actions',
       type: 'actions',
@@ -119,7 +99,27 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
           />,
         ];
       },
-    }
+    },
+    { field: 'id', headerName: 'Label', type: 'string', width: 70  },
+    { field: 'code', headerName: 'Code', type: 'string', width: 50 },
+    { field: 'stepRange', headerName: 'StepRange', type: 'string', width: 90 },
+    { field: 'stepCount', headerName: 'N', type: 'number', minWidth: 24, width: 24 },
+    { field: 'Dgeo', headerName: 'Dgeo', type: 'number', width: 60,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
+    { field: 'Igeo', headerName: 'Igeo', type: 'number', width: 50,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
+    { field: 'Dstrat', headerName: 'Dstrat', type: 'number', width: 60,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
+    { field: 'Istrat', headerName: 'Istrat', type: 'number', width: 50,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
+    { field: 'confidenceRadius', headerName: 'MAD', type: 'string', width: 50,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
+    { field: 'comment', headerName: 'Comment', type: 'string', minWidth: 210, flex: 1, editable: true, cellClassName: styles[`editableCell_${theme.palette.mode}`] },
   ];
 
   columns.forEach((col) => {
@@ -167,7 +167,8 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
           },
           '& .MuiDataGrid-columnHeader': {
             padding: '0px 0px',
-          }
+          },
+          p: '0 4px 0 0'
         }}
         hideFooter={rows.length < 100}
         density={'compact'}

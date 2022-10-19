@@ -73,6 +73,30 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ data }) => {
   };
 
   const columns: GridColumns = [
+    {
+      field: 'actions',
+      type: 'actions',
+      minWidth: 40,
+      width: 40,
+      renderHeader: (params: GridColumnHeaderParams) => (
+        <GridActionsCellItem
+          icon={<DeleteIcon />}
+          label="Delete all interpretations"
+          onClick={handleDeleteAllRows}
+          color="inherit"
+        />
+      ),
+      getActions: ({ id }) => {
+        return [
+          <GridActionsCellItem
+            icon={<DeleteIcon />}
+            label="Delete interpretation"
+            onClick={handleRowDelete(id as string)}
+            color="inherit"
+          />,
+        ];
+      },
+    },
     { field: 'id', headerName: 'Label', type: 'string', width: 70 },
     { field: 'code', headerName: 'Code', type: 'string', width: 60 },
     { field: 'stepRange', headerName: 'StepRange', type: 'string', width: 90 },
@@ -101,31 +125,7 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ data }) => {
     { field: 'confidenceRadiusStrat', headerName: 'MADstrat', type: 'string', width: 80,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
-    { field: 'comment', headerName: 'Comment', type: 'string', flex: 1, editable: true, cellClassName: styles[`editableCell_${theme.palette.mode}`] },
-    {
-      field: 'actions',
-      type: 'actions',
-      minWidth: 40,
-      width: 40,
-      renderHeader: (params: GridColumnHeaderParams) => (
-        <GridActionsCellItem
-          icon={<DeleteIcon />}
-          label="Delete all interpretations"
-          onClick={handleDeleteAllRows}
-          color="inherit"
-        />
-      ),
-      getActions: ({ id }) => {
-        return [
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete interpretation"
-            onClick={handleRowDelete(id as string)}
-            color="inherit"
-          />,
-        ];
-      },
-    }
+    { field: 'comment', headerName: 'Comment', type: 'string', minWidth: 210, flex: 1, editable: true, cellClassName: styles[`editableCell_${theme.palette.mode}`] },
   ];
 
   columns.forEach((col) => {
@@ -176,7 +176,8 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ data }) => {
           },
           '& .MuiDataGrid-columnHeader': {
             padding: '0px 0px',
-          }
+          },
+          p: '0 4px 0 0'
         }}
         hideFooter={rows.length < 100}
         density={'compact'}

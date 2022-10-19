@@ -58,26 +58,6 @@ const OutputDataTablePMD: FC = () => {
   };
 
   const columns: GridColumns = [
-    { field: 'id', headerName: 'Label', type: 'string', width: 120 },
-    { field: 'code', headerName: 'Code', type: 'string', width: 70 },
-    { field: 'stepRange', headerName: 'StepRange', type: 'string', width: 120 },
-    { field: 'stepCount', headerName: 'N', type: 'number', width: 40 },
-    { field: 'Dgeo', headerName: 'Dgeo', type: 'number', width: 70,
-      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
-    },
-    { field: 'Igeo', headerName: 'Igeo', type: 'number', width: 70,
-      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
-    },
-    { field: 'Dstrat', headerName: 'Dstrat', type: 'number', width: 70,
-      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
-    },
-    { field: 'Istrat', headerName: 'Istrat', type: 'number', width: 70,
-      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
-    },
-    { field: 'confidenceRadius', headerName: 'MAD', type: 'string', width: 70,
-      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
-    },
-    { field: 'comment', headerName: 'Comment', type: 'string', flex: 1, editable: true, cellClassName: styles[`editableCell_${theme.palette.mode}`] },
     {
       field: 'actions',
       type: 'actions',
@@ -100,7 +80,27 @@ const OutputDataTablePMD: FC = () => {
           />,
         ];
       },
-    }
+    },
+    { field: 'id', headerName: 'Label', type: 'string', width: 120 },
+    { field: 'code', headerName: 'Code', type: 'string', width: 70 },
+    { field: 'stepRange', headerName: 'StepRange', type: 'string', width: 120 },
+    { field: 'stepCount', headerName: 'N', type: 'number', width: 40 },
+    { field: 'Dgeo', headerName: 'Dgeo', type: 'number', width: 70,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
+    { field: 'Igeo', headerName: 'Igeo', type: 'number', width: 70,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
+    { field: 'Dstrat', headerName: 'Dstrat', type: 'number', width: 70,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
+    { field: 'Istrat', headerName: 'Istrat', type: 'number', width: 70,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
+    { field: 'confidenceRadius', headerName: 'MAD', type: 'string', width: 70,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    },
+    { field: 'comment', headerName: 'Comment', type: 'string', minWidth: 320, flex: 1, editable: true, cellClassName: styles[`editableCell_${theme.palette.mode}`] },
   ];
 
   columns.forEach((col) => {

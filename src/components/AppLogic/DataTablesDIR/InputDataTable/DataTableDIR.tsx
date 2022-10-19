@@ -118,8 +118,8 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
         ];
       },
     },
-    { field: 'id', headerName: 'ID', type: 'string', minWidth: 20, width: 30 },
-    { field: 'index', headerName: '№', type: 'string', minWidth: 20, width: 30 },
+    { field: 'id', headerName: 'ID', type: 'number', width: 40 },
+    { field: 'index', headerName: '№', type: 'number', width: 40 },
     { field: 'label', headerName: 'Label', type: 'string', width: 90 },
     { field: 'code', headerName: 'Code', type: 'string', width: 80 },
     { field: 'stepRange', headerName: 'StepRange', type: 'string', width: 120 },
@@ -210,7 +210,15 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
         components={{
           Toolbar: DIRInputDataTableToolbar, 
         }}
-        sx={GetDataTableBaseStyle()}
+        sx={{
+          ...GetDataTableBaseStyle(),
+          '& .MuiDataGrid-cell': {
+            padding: '0px 0px',
+          },
+          '& .MuiDataGrid-columnHeader': {
+            padding: '0px 0px',
+          }
+        }}
         density={'compact'}
         hideFooter={rows.length < 100}
         getRowClassName={

@@ -207,7 +207,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
       <ModalWrapper
         open={allFilesStatOpen}
         setOpen={setAllFilesStatOpen}
-        size={{width: '60vw', height: '60vh'}}
+        size={{width: '80vw', height: '60vh'}}
       >
         <OutputDataTablePMD />
       </ModalWrapper>

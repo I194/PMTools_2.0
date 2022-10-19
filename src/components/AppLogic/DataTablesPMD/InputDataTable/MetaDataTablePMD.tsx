@@ -89,6 +89,12 @@ const MetaDataTablePMD: FC<IMetaDataTablePMD> = ({ data}) => {
             },
             '& .MuiDataGrid-virtualScroller': {
               marginTop: '24px!important',
+            },
+            '& .MuiDataGrid-cell': {
+              padding: '0px 0px',
+            },
+            '& .MuiDataGrid-columnHeader': {
+              padding: '0px 0px',
             }
           }}
         />

@@ -60,6 +60,29 @@ const OutputDataTableDIR: FC = () => {
   };
 
   const columns: GridColumns = [
+    {
+      field: 'actions',
+      type: 'actions',
+      width: 40,
+      renderHeader: (params: GridColumnHeaderParams) => (
+        <GridActionsCellItem
+          icon={<DeleteIcon />}
+          label="Delete all interpretations"
+          onClick={handleDeleteAllRows}
+          color="inherit"
+        />
+      ),
+      getActions: ({ id }) => {
+        return [
+          <GridActionsCellItem
+            icon={<DeleteIcon />}
+            label="Delete interpretation"
+            onClick={handleRowDelete(id as string)}
+            color="inherit"
+          />,
+        ];
+      },
+    },
     { field: 'id', headerName: 'Label', type: 'string', width: 120 },
     { field: 'code', headerName: 'Code', type: 'string', width: 70 },
     { field: 'stepRange', headerName: 'StepRange', type: 'string', width: 120 },
@@ -88,30 +111,7 @@ const OutputDataTableDIR: FC = () => {
     { field: 'confidenceRadiusStrat', headerName: 'MADstrat', type: 'string', width: 80,
       valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
     },
-    { field: 'comment', headerName: 'Comment', type: 'string', flex: 1, editable: true, cellClassName: styles[`editableCell_${theme.palette.mode}`] },
-    {
-      field: 'actions',
-      type: 'actions',
-      width: 40,
-      renderHeader: (params: GridColumnHeaderParams) => (
-        <GridActionsCellItem
-          icon={<DeleteIcon />}
-          label="Delete all interpretations"
-          onClick={handleDeleteAllRows}
-          color="inherit"
-        />
-      ),
-      getActions: ({ id }) => {
-        return [
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete interpretation"
-            onClick={handleRowDelete(id as string)}
-            color="inherit"
-          />,
-        ];
-      },
-    }
+    { field: 'comment', headerName: 'Comment', type: 'string', minWidth: 320, flex: 1, editable: true, cellClassName: styles[`editableCell_${theme.palette.mode}`] },
   ];
 
   columns.forEach((col) => {
@@ -191,7 +191,15 @@ const OutputDataTableDIR: FC = () => {
           columns={columns} 
           editRowsModel={editRowsModel}
           onEditRowsModelChange={handleEditRowsModelChange}
-          sx={GetDataTableBaseStyle()}
+          sx={{
+            ...GetDataTableBaseStyle(),
+            '& .MuiDataGrid-cell': {
+              padding: '0px 0px',
+            },
+            '& .MuiDataGrid-columnHeader': {
+              padding: '0px 0px',
+            }
+          }}
           hideFooter={rows.length < 100}
           density={'compact'}
           components={{
