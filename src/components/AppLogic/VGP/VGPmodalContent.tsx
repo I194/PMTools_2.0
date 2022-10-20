@@ -31,7 +31,7 @@ const VGPmodalContent: FC<Props> = ({ data }) => {
 
   // const { siteData } = useAppSelector(state => state.parsedDataReducer);
 
-  const handleUpload = async (event: any, files?: Array<File>) => {
+  const handleUpload = (event: any, files?: Array<File>) => {
     const acceptedFile = files ? files[0] : event.currentTarget.files[0];
     dispatch(sitesFileToLatLon(acceptedFile));
   };
@@ -52,6 +52,7 @@ const VGPmodalContent: FC<Props> = ({ data }) => {
                   ? '.csv, .xlsx'
                   : `${t("vgp.upload.button")} (.csv, .xlsx)`
               }
+              extraId="vgp"
             />
           </div>
           <Typography color={textColor(theme.palette.mode)}>

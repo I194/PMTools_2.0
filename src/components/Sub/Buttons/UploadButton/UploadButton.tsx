@@ -12,9 +12,10 @@ type Props = {
   accept: Array<string>;
   dndInputProps?: any;
   label?: string;
+  extraId?: string;
 }
 
-const UploadButton: FC<Props> = ({ onUpload, accept, dndInputProps, label='Загрузить файл' }) => {
+const UploadButton: FC<Props> = ({ onUpload, accept, dndInputProps, label='Загрузить файл', extraId='1' }) => {
 
   const theme = useTheme();
 
@@ -30,7 +31,7 @@ const UploadButton: FC<Props> = ({ onUpload, accept, dndInputProps, label='За�
 
   return (
     <label 
-      htmlFor="file-input" 
+      htmlFor={`file-input-${extraId}`} 
       style={{
         flex: 'auto'
       }}
@@ -42,7 +43,7 @@ const UploadButton: FC<Props> = ({ onUpload, accept, dndInputProps, label='За�
           // ...dndInputProps,
           multiple: true,
           accept: accept.join(', '),
-          id: 'file-input',
+          id: `file-input-${extraId}`,
           ref: inputRef
         }}
         disableUnderline={true}

@@ -46,7 +46,6 @@ export const getDirectionalData = (file: File, as: string) => {
 }
 
 export const getSitesLatLonData = (file: File) => {
-  
   const ext = (/[.]/.exec(file.name)) ? /[^.]+$/.exec(file.name)?.toString().toLowerCase() : undefined;
 
   return new Promise<ISitesData>((resolve, reject) => {

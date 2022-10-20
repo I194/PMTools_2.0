@@ -44,7 +44,7 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
   const { t, i18n } = useTranslation('translation');
 
   const { hiddenDirectionsIDs, reversedDirectionsIDs, reference } = useAppSelector(state => state.dirPageReducer);
-  const sitesData = useAppSelector(state => state.parsedDataReducer.siteData);
+  const sitesData = useAppSelector(state => state.parsedDataReducer.siteData)?.data;
 
   const columns: GridColumns = [
     { field: 'id', headerName: 'ID', type: 'string', minWidth: 20, width: 30 },
@@ -78,7 +78,7 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
   const { apiRef, enhancedColumns } = useApiRef(columns);
 
   if (!data) return <SitesDataTableSkeleton />;
-
+  
   let visibleIndex = 1;
   const rows: Array<SiteRow> = data.interpretations.map((interpretation, index) => {
     const { id, label } = interpretation;
