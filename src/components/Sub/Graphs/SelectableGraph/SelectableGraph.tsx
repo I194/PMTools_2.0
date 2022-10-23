@@ -114,7 +114,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
       window.removeEventListener('keydown', handleIsPanning);
       window.removeEventListener('keyup', handleIsPanning);
     };
-  }, [])
+  }, [handleIsPanning])
 
   useEffect(() => {
     if (hotkeysActive) window.addEventListener("keydown", handleHotkeys);
