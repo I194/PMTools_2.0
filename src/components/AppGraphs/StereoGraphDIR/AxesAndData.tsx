@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { Cutoff } from "../../../utils/GlobalTypes";
 import { DotsData, GraphSettings, MeanDirection, TooltipDot } from "../../../utils/graphs/types";
 import { graphSelectedDotColor } from "../../../utils/ThemeConstants";
 import { Axis, Data, Dot } from "../../Sub/Graphs";
@@ -23,6 +24,7 @@ interface IAxesAndData {
   };
   selectedIDs: Array<number>;
   inInterpretationIDs: Array<number>;
+  cutoff?: Cutoff;
   settings: GraphSettings;
 };
 
@@ -32,6 +34,7 @@ const AxesAndData: FC<IAxesAndData> = ({
   dataConstants,
   selectedIDs,
   inInterpretationIDs,
+  cutoff,
   settings,
 }) => {
 
@@ -137,6 +140,18 @@ const AxesAndData: FC<IAxesAndData> = ({
             confidenceCircle={meanDirection.confidenceCircle}
             greatCircle={meanDirection.greatCircle}
             settings={{...settings.dots, confidenceCircle: true}}
+          />
+        }
+        {
+          cutoff?.enabled && cutoff?.borderCircle?.show &&
+          <circle 
+            id='stereo-circle-cutoff'
+            cx={0} 
+            cy={0} 
+            r={(cutoff.borderCircle.angle / 90) * (width/2)}
+            fill="none"
+            stroke="#119dff"
+            strokeWidth={1.42}
           />
         }
       </g>

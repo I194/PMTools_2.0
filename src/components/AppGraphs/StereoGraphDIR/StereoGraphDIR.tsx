@@ -2,7 +2,7 @@ import React, { FC, useMemo, useState } from "react";
 import styles from "./ZijdGraph.module.scss";
 import { useAppSelector } from "../../../services/store/hooks";
 import { useGraphSelectableNodesDIR, useGraphSelectedIDs, useDIRGraphSettings } from "../../../utils/GlobalHooks";
-import { IDirData, IGraph, RawStatisticsDIR, VGPData } from "../../../utils/GlobalTypes";
+import { Cutoff, IDirData, IGraph, RawStatisticsDIR, VGPData } from "../../../utils/GlobalTypes";
 import { SelectableGraph, GraphSymbols } from "../../Sub/Graphs";
 import { stereoAreaConstants } from "./StereoConstants";
 import AxesAndData from "./AxesAndData";
@@ -15,6 +15,7 @@ export interface IStereoGraphDIR extends IGraph {
   data: IDirData;
   centeredByMean: boolean;
   setCenteredByMean: React.Dispatch<React.SetStateAction<boolean>>;
+  cutoff: Cutoff;
   menuSettings: {
     menuItems: TMenuItem[];
     settings: GraphSettings;
@@ -28,18 +29,12 @@ const StereoGraphDIR: FC<IStereoGraphDIR> = ({
   data,
   centeredByMean,
   setCenteredByMean,
+  cutoff,
   menuSettings,
 }) => {
 
-  // ToDo: 
-  // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
-  // 2. zoom&pan
-
-  // const [centeredByMean, setCenteredByMean] = useState<boolean>(false);
-
-  const { reference, currentInterpretation, hiddenDirectionsIDs, reversedDirectionsIDs } = useAppSelector(state => state.dirPageReducer);
-  // const { menuItems, settings } = useDIRGraphSettings();
   const { menuItems, settings } = menuSettings;
+  const { reference, currentInterpretation, hiddenDirectionsIDs, reversedDirectionsIDs } = useAppSelector(state => state.dirPageReducer);
   const selectableNodes = useGraphSelectableNodesDIR(graphId); 
 
   const selectedIDs = useGraphSelectedIDs('dir');
@@ -51,7 +46,12 @@ const StereoGraphDIR: FC<IStereoGraphDIR> = ({
       centeredByMean, currentInterpretation?.rawData as RawStatisticsDIR,
       '45'
     ),
-  [reference, width, currentInterpretation, data, hiddenDirectionsIDs, reversedDirectionsIDs, centeredByMean]);
+    [
+      reference, width, currentInterpretation, 
+      data, hiddenDirectionsIDs, 
+      reversedDirectionsIDs, centeredByMean
+    ]
+  );
 
   return (
     <>
@@ -66,6 +66,14 @@ const StereoGraphDIR: FC<IStereoGraphDIR> = ({
         graphName={`${data.name}_stereo_dir`}
         onCenterByMean={() => setCenteredByMean(!centeredByMean)}
         centeredByMean={centeredByMean}
+        cutoff={{
+          toggle: () => cutoff.setEnableCutoff(!cutoff.enabled),
+          isEnabled: cutoff.enabled,
+          toggleBorderVisibility: () => cutoff.borderCircle?.setShow(!cutoff.borderCircle?.show),
+          isBorderVisible: cutoff.borderCircle?.show || false,
+          toggleOuterDotsVisibility: () => cutoff.outerDots?.setShow(!cutoff.outerDots?.show),
+          isDotsHidden: !cutoff.outerDots?.show || false
+        }}
       >
         <g>
           <AxesAndData 
@@ -76,6 +84,7 @@ const StereoGraphDIR: FC<IStereoGraphDIR> = ({
             dataConstants={dataConstants}
             inInterpretationIDs={[]}
             selectedIDs={selectedIDs}
+            cutoff={cutoff}
             settings={settings}
           />
           <CoordinateSystem reference={reference} top={-15}/>  

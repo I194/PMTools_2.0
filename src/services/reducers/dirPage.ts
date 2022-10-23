@@ -64,6 +64,11 @@ const dirPage = createSlice({
       const updatedHiddenDirectionsIDs = [...new Set([...state.hiddenDirectionsIDs, ...action.payload])];
       state.hiddenDirectionsIDs = updatedHiddenDirectionsIDs;
     },
+    removeHiddenDirectionsIDs (state, action: {payload: Array<number>}) {
+      // Set делает значения уникальными
+      const visibleDirectionsIDs = [...new Set([...state.hiddenDirectionsIDs, ...action.payload])];
+      state.hiddenDirectionsIDs = state.hiddenDirectionsIDs.filter(id => !visibleDirectionsIDs.includes(id));
+    },
     setReversedDirectionsIDs (state, action: {payload: Array<number>}) {
       state.reversedDirectionsIDs = action.payload;
     },
@@ -140,6 +145,7 @@ export const {
   setSelectedDirectionsIDs,
   setHiddenDirectionsIDs,
   addHiddenDirectionsIDs,
+  removeHiddenDirectionsIDs,
   setReversedDirectionsIDs,
   addReversedDirectionsIDs,
   setStatisticsMode,

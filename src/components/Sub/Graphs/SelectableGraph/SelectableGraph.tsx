@@ -12,7 +12,8 @@ import ResetZoomPan from "../Buttons/ResetZoomPan/ResetZoomPan";
 import ToggleMean from "../Buttons/ToggleMean/ToggleMean";
 import { useLocation } from "react-router-dom";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import CenterByMean from "../Buttons/CenterByMean/ResetZoomPan";
+import CenterByMean from "../Buttons/CenterByMean/CenterByMean";
+import Cutoff from "../Buttons/Cutoff/Cutoff";
 
 interface ISelectableGraph {
   graphId: string;
@@ -31,6 +32,14 @@ interface ISelectableGraph {
   onResetZoomPan?: () => void;
   onCenterByMean?: () => void;
   centeredByMean?: boolean;
+  cutoff?: {
+    toggle: () => void;
+    isEnabled: boolean;
+    toggleBorderVisibility: () => void;
+    isBorderVisible: boolean;
+    toggleOuterDotsVisibility: () => void;
+    isDotsHidden: boolean;
+  }
 }
 
 const SelectableGraph: FC<ISelectableGraph> = ({
@@ -50,6 +59,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
   onResetZoomPan,
   onCenterByMean,
   centeredByMean,
+  cutoff,
 }) => {
 
   const dispatch = useAppDispatch();
@@ -113,8 +123,6 @@ const SelectableGraph: FC<ISelectableGraph> = ({
       window.removeEventListener("keydown", handleHotkeys);
     };
   }, [hotkeysActive, hotkeys, currentPan]);
-
-  console.log('drag', dragContainerID)
   
   return (
     <>
@@ -131,12 +139,23 @@ const SelectableGraph: FC<ISelectableGraph> = ({
         }
         {
           graphId === 'stereoDir' &&
-          <>
+          <div className={styles.chartExtraSettings}>
             <CenterByMean
               onClick={onCenterByMean!}
               isUseful={centeredByMean}
             />
-          </>
+            {
+              cutoff &&
+              <Cutoff
+                onToggle={cutoff.toggle}
+                isUseful={cutoff.isEnabled}
+                onToggleBorderVisibility={cutoff.toggleBorderVisibility}
+                isUsefulBorder={cutoff.isBorderVisible}
+                onToggleOuterDotsVisibility={cutoff.toggleOuterDotsVisibility}
+                isUsefulDots={cutoff.isDotsHidden}
+              />
+            }
+          </div>
         }
         {/* <ExportButton graphId={ID} name={graphName} /> */}
         <ExportButton graphId={`export_${ID}`} name={graphName} />

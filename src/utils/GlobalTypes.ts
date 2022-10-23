@@ -249,3 +249,17 @@ export enum GraphPMD {
   remagnetization
 };
 
+export interface Cutoff {
+  enabled: boolean;
+  setEnableCutoff: React.Dispatch<React.SetStateAction<boolean>>;
+  borderCircle?: {
+    show: boolean;
+    setShow: React.Dispatch<React.SetStateAction<boolean>>;
+    angle: number; // degrees
+  }
+  outerDots?: {
+    show: boolean;
+    setShow: React.Dispatch<React.SetStateAction<boolean>>;
+  }
+}
+

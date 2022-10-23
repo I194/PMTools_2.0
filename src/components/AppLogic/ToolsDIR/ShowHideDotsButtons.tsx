@@ -57,7 +57,6 @@ const ShowHideDotsButtons = ({ data }: Props) => {
       setShowIndexesInput(true);
     }
     if (hideDirs && selectedDirectionsIDs && selectedDirectionsIDs.length) {
-      console.log(selectedDirectionsIDs)
       dispatch(addHiddenDirectionsIDs(selectedDirectionsIDs));
       setHideDirs(false);
       dispatch(setSelectedDirectionsIDs(null));
@@ -66,7 +65,6 @@ const ShowHideDotsButtons = ({ data }: Props) => {
   }, [hideDirs, selectedDirectionsIDs]);
 
   useEffect(() => {
-    console.log('what', hotkeysActive)
     if (hotkeysActive) window.addEventListener("keydown", handleHotkeys);
     else window.removeEventListener("keydown", handleHotkeys);
     return () => {
