@@ -14,11 +14,11 @@ import ModalWrapper from "../../Sub/Modal/ModalWrapper";
 import SettingsModal from "../../Sub/Modal/SettingsModal/SettingsModal";
 import { setHotkeys } from "../../../services/reducers/appSettings";
 
-import pmtoolsHowToUse from '../../../assets/PMTools_how_to_use.pdf';
 import { DefaultButton, DefaultResponsiveButton } from "../../Sub/Buttons";
 import { useTranslation } from "react-i18next";
 import { HotkeysType } from "../../../utils/GlobalTypes";
 import { useDefaultHotkeys } from "../../../utils/GlobalHooks";
+import HelpModal from "../../Sub/Modal/HelpModal/HelpModal";
 
 interface IAppSettings {
   onFileUpload: (event: any, files?: Array<File>) => void;
@@ -54,7 +54,6 @@ const AppSettings: FC<IAppSettings> = ({
 
   const onHelpClick = () => {
     setShowHelp(true);
-    window.open(pmtoolsHowToUse, '_blank')
   };
 
   const loadHotkeys = () => {
@@ -122,6 +121,13 @@ const AppSettings: FC<IAppSettings> = ({
         size={{width: '60vw', height: '60vh'}}
       >
         <SettingsModal />
+      </ModalWrapper>
+      <ModalWrapper
+        open={showHelp}
+        setOpen={setShowHelp}
+        size={{width: '21vw', height: '12vh'}}
+      >
+        <HelpModal />
       </ModalWrapper>
     </>
   )
