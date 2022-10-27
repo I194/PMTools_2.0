@@ -44,12 +44,14 @@ const StereoGraphDIR: FC<IStereoGraphDIR> = ({
       data, width / 2, reference, 
       hiddenDirectionsIDs, reversedDirectionsIDs, 
       centeredByMean, currentInterpretation?.rawData as RawStatisticsDIR,
-      '45'
+      cutoff.enabled
     ),
     [
-      reference, width, currentInterpretation, 
-      data, hiddenDirectionsIDs, 
-      reversedDirectionsIDs, centeredByMean
+      reference, width, 
+      currentInterpretation, data, 
+      hiddenDirectionsIDs, 
+      reversedDirectionsIDs, 
+      centeredByMean, cutoff
     ]
   );
 

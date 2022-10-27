@@ -23,6 +23,7 @@ class Direction {
     );
   };
 
+  /** Creates and returns array of dec and inc: [declination, inclination] from this Direction. */
   toArray = () => {
     const dirArr: [number, number] = [this.declination, this.inclination];
     return dirArr;

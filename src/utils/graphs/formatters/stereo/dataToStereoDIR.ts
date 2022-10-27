@@ -17,7 +17,7 @@ const dataToStereoDIR = (
   reversedDirectionsIDs: Array<number>,
   centeredByMean?: boolean,
   statistics?: RawStatisticsDIR,
-  cutoffType?: '45' | 'vandamme',
+  cutoff?: boolean,
 ) => {
   let directions = data.interpretations.filter((direction, index) => !hiddenDirectionsIDs.includes(index + 1));
 
@@ -53,6 +53,7 @@ const dataToStereoDIR = (
     const [declination, inclination] = centeredByMean ? centeredDirection.toArray() : direction.toArray(); 
     const meanXYData = dirToCartesian2D(declination - 90, inclination, graphSize);
     const confidenceCircle = createStereoPlaneData(centeredByMean ? centeredDirection : direction, graphSize, MAD);
+    const confidenceCircle45 = createStereoPlaneData(centeredByMean ? centeredDirection : direction, graphSize, 45);
     const greatCircle = createStereoPlaneData(centeredByMean ? centeredDirection : direction, graphSize);
 
     const tooltip: TooltipDot = {
@@ -70,6 +71,11 @@ const dataToStereoDIR = (
         xyData: confidenceCircle.all, 
         xyDataSplitted: confidenceCircle, 
         color: graphSelectedDotColor('mean')
+      },
+      cutoffCircle: {
+        xyData: confidenceCircle45.all, 
+        xyDataSplitted: confidenceCircle45, 
+        color: '#119dff'
       },
       greatCircle: (statistics.code === 'gc') 
         ? {
@@ -89,11 +95,9 @@ const dataToStereoDIR = (
     const inReferenceCoords: [number, number]  = reference === 'stratigraphic' ? [Dstrat, Istrat] : [Dgeo, Igeo];
     let finalCoords: [number, number] = inReferenceCoords;
     if (centeredByMean && meanDirection) {
-      const directionVector = new Direction(finalCoords[0], finalCoords[1], 1)//.toCartesian();
+      const directionVector = new Direction(finalCoords[0], finalCoords[1], 1);
       const firstRotationDirection = new Direction(meanDirection.dirData[0], 0, 1);
       const secondRotationDirection = new Direction(0, meanDirection.dirData[1] - 90, 1);
-      // const firstRotation = directionVector.rotateTo(meanDirection.dirData[0] - 90, 0);
-      // const secondRotation = firstRotation.rotateTo(0, meanDirection.dirData[1]);
       const firstRotation = strangeRotation(directionVector, firstRotationDirection);
       const secondRotation = strangeRotation(firstRotation, secondRotationDirection);
       finalCoords = secondRotation.toArray();
@@ -134,16 +138,6 @@ const dataToStereoDIR = (
       MADs: +direction.MADstrat.toFixed(1),
     };
   });
-
-  let cutoff = null;
-  if (cutoffType) {
-    const toCutoffDirs = directions.map((direction) => {
-      const { Dgeo, Igeo, Dstrat, Istrat } = direction;
-      const inReferenceDirs: [number, number]  = reference === 'stratigraphic' ? [Dstrat, Istrat] : [Dgeo, Igeo];
-      return new Direction(inReferenceDirs[0], inReferenceDirs[1], 1);
-    });
-    cutoff = calculateCutoff(toCutoffDirs, cutoffType).cutoffValue;
-  }
   
   return {
     directionalData, 
@@ -151,7 +145,6 @@ const dataToStereoDIR = (
     tooltipData,
     labels,
     meanDirection,
-    cutoff,
   };
 }
 

@@ -21,6 +21,7 @@ export type MeanDirection = {
   dirData: [number, number];
   xyData: [number, number];
   confidenceCircle?: PlaneData;
+  cutoffCircle?: PlaneData;
   greatCircle?: PlaneData;
   tooltip: TooltipDot;
 } | null;

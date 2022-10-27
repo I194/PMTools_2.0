@@ -138,20 +138,9 @@ const AxesAndData: FC<IAxesAndData> = ({
             fillColor={meanDirection.dirData[1] > 0 ? graphSelectedDotColor('mean') : 'white'}
             strokeColor={meanDirection.confidenceCircle?.color || 'black'}
             confidenceCircle={meanDirection.confidenceCircle}
+            cutoffCircle={(cutoff?.enabled && cutoff?.borderCircle?.show) ? meanDirection.cutoffCircle : undefined}
             greatCircle={meanDirection.greatCircle}
             settings={{...settings.dots, confidenceCircle: true}}
-          />
-        }
-        {
-          cutoff?.enabled && cutoff?.borderCircle?.show &&
-          <circle 
-            id='stereo-circle-cutoff'
-            cx={0} 
-            cy={0} 
-            r={(cutoff.borderCircle.angle / 90) * (width/2)}
-            fill="none"
-            stroke="#119dff"
-            strokeWidth={1.42}
           />
         }
       </g>

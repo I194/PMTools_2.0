@@ -6,6 +6,8 @@ import GraphsSkeleton from './GraphsSkeleton';
 import { StereoGraphDIR }from '../../components/AppGraphs';
 import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
 import { addHiddenDirectionsIDs, removeHiddenDirectionsIDs } from '../../services/reducers/dirPage';
+import Direction from '../../utils/graphs/classes/Direction';
+import { strangeRotation } from '../../utils/statistics/matrix';
 
 interface IGraphs {
   dataToShow: IDirData | null;
@@ -19,7 +21,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
   const graphRef = useRef<HTMLDivElement>(null);
   const graphToExportRef = useRef<HTMLDivElement>(null);
   const { menuItems, settings } = useDIRGraphSettings();
-  const { reference } = useAppSelector(state => state.dirPageReducer);
+  const { reference, currentInterpretation  } = useAppSelector(state => state.dirPageReducer);
 
   const [graphSize, setGraphSize] = useState<number>(300);
   const [centeredByMean, setCenteredByMean] = useState<boolean>(false);
@@ -38,9 +40,17 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
   }, [graphRef, wv, wh]);
 
   useEffect(() => {
-    if (dataToShow && enableCutoff && !showCutoffOuterDots) {
+    if (dataToShow && enableCutoff && !showCutoffOuterDots && currentInterpretation?.rawData) {
+      // сначала берём среднее направление, относительно него будем строить cutoff
+      const { direction: meanDirection }  = currentInterpretation.rawData.mean[reference as 'geographic' | 'stratigraphic']; 
+      // затем берём все имеющиеся векторы и фильтруем их по их удалённости от среднего направления
       const newDirsToHideIDs = dataToShow.interpretations.filter(
-        dir => dir[reference === "stratigraphic" ? 'Istrat' : 'Igeo'] <= cutoffAngle
+        direction => {
+          const { Dgeo, Igeo, Dstrat, Istrat } = direction;
+          const inReferenceCoords: [number, number]  = reference === 'stratigraphic' ? [Dstrat, Istrat] : [Dgeo, Igeo];
+          const directionVector = new Direction(inReferenceCoords[0], inReferenceCoords[1], 1);
+          return (meanDirection.angle(directionVector) > cutoffAngle);
+        }
       ).map(dir => dir.id);
       dispatch(addHiddenDirectionsIDs(newDirsToHideIDs));
     } else if ((dataToShow && !enableCutoff) || (dataToShow && showCutoffOuterDots)) {
@@ -49,7 +59,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
       ).map(dir => dir.id);
       dispatch(removeHiddenDirectionsIDs(newDirsToShowIDs));
     }
-  }, [enableCutoff, showCutoffOuterDots, dataToShow]);
+  }, [enableCutoff, showCutoffOuterDots, dataToShow, currentInterpretation]);
 
   if (!dataToShow) return (
     <GraphsSkeleton 

@@ -21,6 +21,7 @@ interface IDot {
   strokeColor: string;
   strokeWidth?: number;
   confidenceCircle?: PlaneData;
+  cutoffCircle?: PlaneData;
   greatCircle?: PlaneData;
   settings: DotSettings;
 }
@@ -39,6 +40,7 @@ const Dot: FC<IDot> = ({
   strokeColor,
   strokeWidth = 1,
   confidenceCircle,
+  cutoffCircle,
   greatCircle,
   settings,
 }) => {
@@ -128,6 +130,28 @@ const Dot: FC<IDot> = ({
               d={createStraightPath(confidenceCircle.xyDataSplitted.pos)}
               fill='transparent'
               stroke={confidenceCircle.color}
+              strokeDasharray="4"
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              fillOpacity="0"
+            />,
+          ],
+          cutoffCircle && 
+          [
+            <path 
+              d={createStraightPath(cutoffCircle.xyDataSplitted.neg)}
+              fill='transparent'
+              stroke={cutoffCircle.color}
+              strokeWidth={1.42}
+              strokeLinejoin="round"
+              strokeLinecap="round"
+              fillOpacity="0" // it is what makes shape transparent
+            />,
+            <path 
+              d={createStraightPath(cutoffCircle.xyDataSplitted.pos)}
+              fill='transparent'
+              stroke={cutoffCircle.color}
+              strokeWidth={1.42}
               strokeDasharray="4"
               strokeLinejoin="round"
               strokeLinecap="round"
