@@ -14,6 +14,7 @@ import { useLocation } from "react-router-dom";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import CenterByMean from "../Buttons/CenterByMean/CenterByMean";
 import Cutoff from "../Buttons/Cutoff/Cutoff";
+import DefaultButton from "../Buttons/DefaultButton/DefaultButton";
 
 interface ISelectableGraph {
   graphId: string;
@@ -64,17 +65,12 @@ const SelectableGraph: FC<ISelectableGraph> = ({
 
   const dispatch = useAppDispatch();
   const location = useLocation();
+  const currentPage = location.pathname.split('/').pop() || location.pathname;
 
   const Viewer = useRef<any>(null);
 
-  useEffect(() => {
-    if (Viewer.current) {
-      Viewer.current.fitToViewer();
-    }
-  }, []);
-
   const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
-  const currentPage = location.pathname.split('/').pop() || location.pathname;
+  const [disableCustomZoomPan, setDisableCustomZoomPan] = useState<boolean>(false);
 
   const handleDoubleClick = (event: any) => {
     event.preventDefault();
@@ -89,6 +85,18 @@ const SelectableGraph: FC<ISelectableGraph> = ({
   const [ID, setID] = useState<string>(`${graphId}-graph`);
   const [selectableTargets, setSelectableTargets] = useState<(string | HTMLElement)[]>([]);
 
+  const [dragContainerID, setDragContainerID] = useState<string>('#'+ID);
+  const handleIsPanning = (event: KeyboardEvent) => {
+    if (event.altKey) setDragContainerID('');
+    else setDragContainerID('#'+ID);
+  };
+  
+  useEffect(() => {
+    if (Viewer.current) {
+      Viewer.current.fitToViewer();
+    }
+  }, []);
+
   useEffect(() => {
     if (extraID) {
       setID(`${graphId}-graph-${extraID}`);
@@ -100,12 +108,6 @@ const SelectableGraph: FC<ISelectableGraph> = ({
       selectableNodes.map(node => document.getElementById((node.lastChild as any).id) || '') 
     );
   }, [selectableNodes]);
-
-  const [dragContainerID, setDragContainerID] = useState<string>('#'+ID);
-  const handleIsPanning = (event: KeyboardEvent) => {
-    if (event.altKey) setDragContainerID('');
-    else setDragContainerID('#'+ID);
-  };
 
   useEffect(() => {
     window.addEventListener('keydown', handleIsPanning);
@@ -135,6 +137,14 @@ const SelectableGraph: FC<ISelectableGraph> = ({
               onClick={onResetZoomPan!} 
               isUseful={currentZoom! > 1 || currentPan?.left !== 0 || currentPan.top !== 0} 
             />
+            <DefaultButton 
+              onClick={() => setDisableCustomZoomPan(prev => !prev)}
+              isUseful={!disableCustomZoomPan}
+              label={'Boundless zoom'}
+              extraStyle={{
+                left: '338px'
+              }}
+            />
           </>
         }
         {
@@ -163,7 +173,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
           panning={{
             activationKeys: ['Alt'],
           }}
-          disabled={graphId === 'zijd'}
+          disabled={!disableCustomZoomPan && (graphId === 'zijd')}
         >
           <TransformComponent>
             <svg
@@ -173,7 +183,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
               height={height} 
               id={ID} 
               onClick={handleDoubleClick}
-              onWheel={onWheel}
+              onWheel={disableCustomZoomPan ? undefined : onWheel}
               viewBox={viewBox}
             >
               {children}
