@@ -4,7 +4,8 @@ import { useTheme } from '@mui/material/styles';
 import {
   bgColorMain,
   bgColorBlocks,
-  boxShadowStyle
+  boxShadowStyle,
+  bgColorCharts
 } from '../../utils/ThemeConstants';
 
 interface IGraphsSkeleton {
@@ -28,7 +29,7 @@ const GraphsSkeleton: FC<IGraphsSkeleton> = ({
         className={styles.graphLarge} 
         ref={graph?.ref}
         style={{
-          backgroundColor: bgColorBlocks(theme.palette.mode),
+          backgroundColor: bgColorCharts(theme.palette.mode),
           WebkitBoxShadow: boxShadowStyle(theme.palette.mode),
           MozBoxShadow: boxShadowStyle(theme.palette.mode),
           boxShadow: boxShadowStyle(theme.palette.mode),

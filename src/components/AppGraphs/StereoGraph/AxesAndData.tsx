@@ -120,7 +120,7 @@ const AxesAndData: FC<IAxesAndData> = ({
           inInterpretationIDs={inInterpretationIDs}
           dotFillColor='black'
           differentColors={true}
-          colorsType="stereo"
+          colorsType="light"
           settings={settings.dots}
         />
         {

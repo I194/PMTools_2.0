@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { useTheme } from '@mui/material/styles';
 import { Cutoff } from "../../../utils/GlobalTypes";
 import { DotsData, GraphSettings, MeanDirection, TooltipDot } from "../../../utils/graphs/types";
 import { graphSelectedDotColor } from "../../../utils/ThemeConstants";
@@ -37,6 +38,8 @@ const AxesAndData: FC<IAxesAndData> = ({
   cutoff,
   settings,
 }) => {
+
+  const theme = useTheme();
 
   const {
     graphAreaMargin,
@@ -123,7 +126,7 @@ const AxesAndData: FC<IAxesAndData> = ({
           inInterpretationIDs={inInterpretationIDs}
           dotFillColor='black'
           differentColors={true}
-          colorsType="stereo"
+          colorsType={theme.palette.mode}
           settings={settings.dots}
         />
         {

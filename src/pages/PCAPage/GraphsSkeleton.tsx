@@ -4,7 +4,8 @@ import { useTheme } from '@mui/material/styles';
 import {
   bgColorMain,
   bgColorBlocks,
-  boxShadowStyle
+  boxShadowStyle,
+  bgColorCharts
 } from '../../utils/ThemeConstants';
 import { PMDGraph } from '../../utils/GlobalTypes';
 
@@ -38,7 +39,7 @@ const GraphsSkeleton: FC<IGraphsSkeleton> = ({
           className={styles.graphLarge} 
           ref={graphLarge?.ref}
           style={{
-            backgroundColor: bgColorBlocks(theme.palette.mode),
+            backgroundColor: bgColorCharts(theme.palette.mode),
             WebkitBoxShadow: boxShadowStyle(theme.palette.mode),
             MozBoxShadow: boxShadowStyle(theme.palette.mode),
             boxShadow: boxShadowStyle(theme.palette.mode),
@@ -62,7 +63,7 @@ const GraphsSkeleton: FC<IGraphsSkeleton> = ({
             className={styles.graphSmall} 
             ref={graphSmallTop?.ref}
             style={{
-              backgroundColor: bgColorBlocks(theme.palette.mode),
+              backgroundColor: bgColorCharts(theme.palette.mode),
               WebkitBoxShadow: boxShadowStyle(theme.palette.mode),
               MozBoxShadow: boxShadowStyle(theme.palette.mode),
               boxShadow: boxShadowStyle(theme.palette.mode),
@@ -82,7 +83,7 @@ const GraphsSkeleton: FC<IGraphsSkeleton> = ({
             className={styles.graphSmall} 
             ref={graphSmallBot?.ref}
             style={{
-              backgroundColor: bgColorBlocks(theme.palette.mode),
+              backgroundColor: bgColorCharts(theme.palette.mode),
               WebkitBoxShadow: boxShadowStyle(theme.palette.mode),
               MozBoxShadow: boxShadowStyle(theme.palette.mode),
               boxShadow: boxShadowStyle(theme.palette.mode),

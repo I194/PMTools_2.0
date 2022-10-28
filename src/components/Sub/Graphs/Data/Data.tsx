@@ -25,7 +25,7 @@ interface IData {
     fill?: string;
     strokeDasharray?: string;
   };
-  colorsType?: 'stereo' | 'colouredStereo';
+  colorsType?: 'light' | 'dark';
   settings: DotSettings;
 }
 
@@ -49,15 +49,11 @@ const Data: FC<IData> = ({
  }) => {
   
   const colorByType = (
-    type: 'stereo' | 'colouredStereo',
-    xy: [number, number],
-    dec: number,
-    inc: number,
-    index: number
+    type: 'light' | 'dark',
+    inc: number
   ) => {
-    if (type === 'stereo') return inc >= 0 ? 'black' : 'white';
-    if (type === 'colouredStereo') return inc >= 0 ? 'red' : 'blue';
-    return 'black';
+    if (type === 'dark') return inc >= 0 ? 'black' : 'white';
+    return inc >= 0 ? 'black' : 'white';
   };
 
   return (
@@ -93,16 +89,14 @@ const Data: FC<IData> = ({
                   differentColors && colorsType
                     ? colorByType(
                         colorsType, 
-                        xyData, 
-                        directionalData ? directionalData[index][0] : 1, 
                         directionalData ? directionalData[index][1] : 1,
-                        index
                       )
                     : dotFillColor
                 }
                 strokeColor={
                   inInterpretationIDs.includes(id) 
                     ? dotHighlightedColor || 'orange' 
+                    // : colorsType === 'dark' ? '#119dff' : "black"
                     : "black"
                 }
                 strokeWidth={
