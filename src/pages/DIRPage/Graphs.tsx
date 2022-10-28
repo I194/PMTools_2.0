@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import styles from './DIRPage.module.scss';
 import { useDIRGraphSettings, useWindowSize } from '../../utils/GlobalHooks';
 import { IDirData } from '../../utils/GlobalTypes';
@@ -39,27 +39,29 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
     };
   }, [graphRef, wv, wh]);
 
+  const cutoffOuterDotsIDs: number[] = useMemo(() => {
+    if (!currentInterpretation?.rawData || !dataToShow) return [];
+    // сначала берём среднее направление, относительно него будем строить cutoff
+    const { direction: meanDirection }  = currentInterpretation.rawData.mean[reference as 'geographic' | 'stratigraphic']; 
+    // затем берём все имеющиеся векторы и фильтруем их по их удалённости от среднего направления
+    const newDirsToHideIDs = dataToShow.interpretations.filter(
+      direction => {
+        const { Dgeo, Igeo, Dstrat, Istrat } = direction;
+        const inReferenceCoords: [number, number]  = reference === 'stratigraphic' ? [Dstrat, Istrat] : [Dgeo, Igeo];
+        const directionVector = new Direction(inReferenceCoords[0], inReferenceCoords[1], 1);
+        return (meanDirection.angle(directionVector) > cutoffAngle);
+      }
+    ).map(dir => dir.id);
+    return newDirsToHideIDs;
+  }, [currentInterpretation, dataToShow])
+
   useEffect(() => {
-    if (dataToShow && enableCutoff && !showCutoffOuterDots && currentInterpretation?.rawData) {
-      // сначала берём среднее направление, относительно него будем строить cutoff
-      const { direction: meanDirection }  = currentInterpretation.rawData.mean[reference as 'geographic' | 'stratigraphic']; 
-      // затем берём все имеющиеся векторы и фильтруем их по их удалённости от среднего направления
-      const newDirsToHideIDs = dataToShow.interpretations.filter(
-        direction => {
-          const { Dgeo, Igeo, Dstrat, Istrat } = direction;
-          const inReferenceCoords: [number, number]  = reference === 'stratigraphic' ? [Dstrat, Istrat] : [Dgeo, Igeo];
-          const directionVector = new Direction(inReferenceCoords[0], inReferenceCoords[1], 1);
-          return (meanDirection.angle(directionVector) > cutoffAngle);
-        }
-      ).map(dir => dir.id);
-      dispatch(addHiddenDirectionsIDs(newDirsToHideIDs));
+    if (dataToShow && enableCutoff && !showCutoffOuterDots) {
+      dispatch(addHiddenDirectionsIDs(cutoffOuterDotsIDs));
     } else if ((dataToShow && !enableCutoff) || (dataToShow && showCutoffOuterDots)) {
-      const newDirsToShowIDs = dataToShow.interpretations.filter(
-        dir => dir[reference === "stratigraphic" ? 'Istrat' : 'Igeo'] <= cutoffAngle
-      ).map(dir => dir.id);
-      dispatch(removeHiddenDirectionsIDs(newDirsToShowIDs));
+      dispatch(removeHiddenDirectionsIDs(cutoffOuterDotsIDs));
     }
-  }, [enableCutoff, showCutoffOuterDots, dataToShow, currentInterpretation]);
+  }, [enableCutoff, showCutoffOuterDots, dataToShow]);
 
   if (!dataToShow) return (
     <GraphsSkeleton 
