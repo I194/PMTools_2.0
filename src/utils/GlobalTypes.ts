@@ -4,7 +4,7 @@ import Direction from "./graphs/classes/Direction";
 import { StatisticsModeDIR, StatisticsModePCA } from "./graphs/types";
 
 export interface IGraph {
-  graphId: string;
+  graphId: GraphType;
   width: number;
   height: number;
 };
@@ -263,3 +263,7 @@ export interface Cutoff {
   }
 }
 
+export type GraphType = BasicGraphType | BasicGraphExportType | PMTestsGraphType;
+export type BasicGraphType = 'zijd' | 'stereo' | 'mag' | 'stereoDir' | 'stereoVGP';
+export type BasicGraphExportType = 'export_zijd' | 'export_stereo' | 'export_mag' | 'export_stereoDir' | 'export_stereoVGP';
+export type PMTestsGraphType = 'foldTest' | 'reversalTest';

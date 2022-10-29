@@ -301,6 +301,76 @@
       "second": "Test result:",
       "res": "en"
     }
+  },
+  "graphsInfo": {
+    "generalAdvice": {
+      "title": "General advice",
+      "line1": "If the PMTools controls take up too much space, zoom out on the page using the keyboard shortcut: "
+    },
+    "zijd": {
+      "zoomPan": {
+        "title": "Zoom&Pan",
+        "line1": "2 scaling options available: boundless and normal",
+        "line2": "Boundless zoom",
+        "line3": "Use mouse wheel to zoom",
+        "line4": "Use keys to position",
+        "line5": "Use button to reset",
+        "line6": "Only in this mode the Unit can be changed",
+        "line7": "Normal zoom",
+        "line8": "Use mouse wheel to zoom",
+        "line9": "Press left mouse button to pan "
+      },
+      "selecting": {
+        "title": "Dots selection",
+        "line1": "There are 4 options for selecting dots:",
+        "line2": "Hold the left mouse button and select an area on the chart",
+        "line3": "Left mouse button click on the desired point on the chart",
+        "line4": "Left mouse button click on the desired point (row) in the table",
+        "line5": "Enter dots numbers in the input field*",
+        "line6": "Hint: to combine the first two selection methods or to select the range of points in the table, hold down the key ",
+        "line7": "* Input field appears when using the static method or when hiding points when no points have been selected yet"
+      },
+      "interactiveLegend": {
+        "title": "Interactive legend",
+        "line1": "When you hover over the legend, the corresponding function on the chart changes style, and when you click on the legend element, you can adjust the visibility of the function*",
+        "line2": "* Does not affect the exported graph"
+      }
+    },
+    "stereoAndMagAndStereoDir": {
+      "zoomPan": {
+        "title": "Zoom&Pan",
+        "line1": "Only normal zoom option available",
+        "line2": "Normal zoom",
+        "line3": "Use mouse wheel to zoom",
+        "line4": "For paning, use the left mouse button while holding down the key "
+      },
+      "selecting": {
+        "title": "Dots selection",
+        "line1": "There are 4 options for selecting dots:",
+        "line2": "Hold the left mouse button and select an area on the chart",
+        "line3": "Left mouse button click on the desired point on the chart",
+        "line4": "Left mouse button click on the desired point (row) in the table",
+        "line5": "Enter dots numbers in the input field*",
+        "line6": "Hint: to combine the first two selection methods or to select the range of points in the table, hold down the key ",
+        "line7": "* Input field appears when using the static method or when hiding points when no points have been selected yet"
+      }
+    },
+    "stereoVGP": {
+      "zoomPan": {
+        "title": "Zoom&Pan",
+        "line1": "Only normal zoom option available",
+        "line2": "Normal zoom",
+        "line3": "Use mouse wheel to zoom",
+        "line4": "For paning, use the left mouse button while holding down the key "
+      },
+      "selecting": {
+        "title": "Dots selection",
+        "line1": "There are 2 options for selecting (selecting) points (directions):",
+        "line2": "Hold the left mouse button and select an area on the chart",
+        "line3": "Left mouse button click on the desired point on the chart",
+        "line6": "Hint: to combine the selection methods, hold down the key "
+      }
+    }
   }
 }
 

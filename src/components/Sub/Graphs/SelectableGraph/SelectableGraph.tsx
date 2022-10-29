@@ -15,9 +15,11 @@ import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import CenterByMean from "../Buttons/CenterByMean/CenterByMean";
 import Cutoff from "../Buttons/Cutoff/Cutoff";
 import DefaultButton from "../Buttons/DefaultButton/DefaultButton";
+import { GraphType } from "../../../../utils/GlobalTypes";
+import InfoButton from "../Buttons/InfoButton/InfoButton";
 
 interface ISelectableGraph {
-  graphId: string;
+  graphId: GraphType;
   graphName?: string;
   width: number;
   height: number;
@@ -125,6 +127,8 @@ const SelectableGraph: FC<ISelectableGraph> = ({
       window.removeEventListener("keydown", handleHotkeys);
     };
   }, [hotkeysActive, hotkeys, currentPan]);
+
+  console.log('drag', dragContainerID, document.getElementById(ID))
   
   return (
     <>
@@ -169,6 +173,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
         }
         {/* <ExportButton graphId={ID} name={graphName} /> */}
         <ExportButton graphId={`export_${ID}`} name={graphName} />
+        <InfoButton graphType={graphId} />
         <TransformWrapper
           panning={{
             activationKeys: ['Alt'],
@@ -192,8 +197,9 @@ const SelectableGraph: FC<ISelectableGraph> = ({
         </TransformWrapper>
       </ContextMenu>
       <Selecto
-        dragContainer={dragContainerID}
+        rootContainer={document.getElementById(dragContainerID)}
         boundContainer={document.getElementById(ID)}
+        dragContainer={dragContainerID}
         selectableTargets={selectableTargets}
         hitRate={100}
         selectByClick={true}
