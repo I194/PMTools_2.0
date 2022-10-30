@@ -6,15 +6,12 @@ import { getFileName, putParamToString } from '../subFunctions';
 
 /**
  * Converts parsed directional data (data from files with .dir, .pmm extensions and their .csv and .xlsx analogues) to .dir file
- * @param {File} file - The file with data to be converted
- * @param {IDirData} [parsedData] - The parsed directional data, preferable to pass this parameter and it will be used instead of file parameter
+ * @param {IDirData} [parsedData] - The parsed directional data
  * @returns {Promise<void>} Instead of return, it calls download() function, so file exported directly to user machine:
  * @example download(res, `${filename}.dir`, 'text/plain;charset=utf-8');
  */
-export const toDIR = async (file: File, parsedData?: IDirData): Promise<void> => {
-  // only from PCA page you can import in DIR format
-  // because DIR format for DIR page statistics is built completely different and unsopprted by PMTools currently
-  const data = parsedData ? parsedData : await getDirectionalData(file, 'dir') as IDirData;
+export const toDIR = async (parsedData: IDirData): Promise<void> => {
+  const data = parsedData;
 
   const lines = data.interpretations.map((interpretation: any) => {
     const line = Object.keys(dataModel_interpretation_from_pca).reduce((line, param) => {
@@ -31,13 +28,12 @@ export const toDIR = async (file: File, parsedData?: IDirData): Promise<void> =>
 
 /**
  * Converts parsed directional data (data from files with .dir, .pmm extensions and their .csv and .xlsx analogues) to .pmm file
- * @param {File} file - The file with data to be converted
- * @param {IDirData} [parsedData] - The parsed directional data, preferable to pass this parameter and it will be used instead of file parameter
+ * @param {IDirData} [parsedData] - The parsed directional data
  * @returns {Promise<void>} Instead of return, it calls download() function, so file exported directly to user machine:
  * @example download(res, `${filename}.pmm`, 'text/plain;charset=utf-8');
  */
-export const toPMM = async (file: File, parsedData?: IDirData): Promise<void> => {
-  const data = parsedData ? parsedData : await getDirectionalData(file, 'dir') as IDirData;
+export const toPMM = async (parsedData: IDirData): Promise<void> => {
+  const data = parsedData;
 
   const metaLines = `"file_comment"\n${data.name},"author","2021-11-27"\n`;
   const columnNames = 'ID,CODE,STEPRANGE,N,Dg,Ig,kg,a95g,Ds,Is,ks,a95s,comment\n';
@@ -58,13 +54,12 @@ export const toPMM = async (file: File, parsedData?: IDirData): Promise<void> =>
 
 /**
  * Converts parsed directional data (data from files with .dir, .pmm extensions and their .csv and .xlsx analogues) to .csv file
- * @param {File} file - The file with data to be converted
- * @param {IDirData} [parsedData] - The parsed directional data, preferable to pass this parameter and it will be used instead of file parameter
+ * @param {IDirData} [parsedData] - The parsed directional data
  * @returns {Promise<void>} Instead of return, it calls download() function, so file exported directly to user machine:
  * @example download(res, `${filename}.csv`, 'text/csv;charset=utf-8');
  */
-export const toCSV_DIR = async (file: File, parsedData?: IDirData): Promise<void> => {
-  const data = parsedData ? parsedData : await getDirectionalData(file, 'dir') as IDirData;
+export const toCSV_DIR = async (parsedData: IDirData): Promise<void> => {
+  const data = parsedData;
   
   const columNames = 'id,Code,StepRange,N,Dgeo,Igeo,Kgeo,MADgeo,Dstrat,Istrat,Kstrat,MADstrat,Comment\n';
 
@@ -83,13 +78,12 @@ export const toCSV_DIR = async (file: File, parsedData?: IDirData): Promise<void
 
 /**
  * Converts parsed directional data (data from files with .dir, .pmm extensions and their .csv and .xlsx analogues) to .xlsx file
- * @param {File} file - The file with data to be converted
- * @param {IDirData} [parsedData] - The parsed directional data, preferable to pass this parameter and it will be used instead of file parameter
+ * @param {IDirData} [parsedData] - The parsed directional data
  * @returns {Promise<void>} Instead of return, it calls download() function, so file exported directly to user machine:
  * @example download(res, `${filename}.xlsx`, "application/octet-stream");
  */
-export const toXLSX_DIR = async (file: File, parsedData?: IDirData): Promise<void> => {
-  const data = parsedData ? parsedData : await getDirectionalData(file, 'dir') as IDirData;
+export const toXLSX_DIR = async (parsedData: IDirData): Promise<void> => {
+  const data = parsedData;
 
   const columnNames = 'id,Code,StepRange,N,Dgeo,Igeo,Kgeo,MADgeo,Dstrat,Istrat,Kstrat,MADstrat,Comment'.split(',');
 

@@ -122,7 +122,7 @@ export const toCSV_VGP = async (parsedData: IVGPData): Promise<void> => {
  * @returns {Promise<void>} Instead of return, it calls download() function, so file exported directly to user machine:
  * @example download(res, `${filename}.xlsx`, "application/octet-stream");
  */
-export const toXLSX_VGP = async (file: File, parsedData: IVGPData): Promise<void> => {
+export const toXLSX_VGP = async (parsedData: IVGPData): Promise<void> => {
   const data = parsedData;
 
   const rawColumnNames = ['label', 'dec', 'inc', 'a95', 'lat', 'lon', 'poleLatitude', 'poleLongitude', 'paleoLatitude', 'dp', 'dm', 'age', 'plateId'];

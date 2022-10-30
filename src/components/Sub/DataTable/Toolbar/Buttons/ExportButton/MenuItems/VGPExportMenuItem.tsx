@@ -14,34 +14,33 @@ interface DIRExport {
 const DIRExportMenuItem: FC<DIRExport> = ({as, data}, props: GridExportMenuItemProps<{}>) => {
 
   const { hideMenu } = props;
-  const blankFile = new File([], '');
 
   const exportAs = {
     vgp: {
       export: () => {
         if (!data.created) data.created = new Date().toLocaleString();
-        toVGP(blankFile, data)
+        toVGP(data)
       }, 
       label: 'Export as VGP'
     },
     gpml: {
       export: () => {
         if (!data.created) data.created = new Date().toLocaleString();
-        toGPML(blankFile, data)
+        toGPML(data)
       }, 
       label: 'Export as GPML'
     },
     csv: {
       export: () => {
         if (!data.created) data.created = new Date().toLocaleString();
-        toCSV_VGP(blankFile, data)
+        toCSV_VGP(data)
       }, 
       label: 'Export as CSV'
     },
     xlsx: {
       export: () => {
         if (!data.created) data.created = new Date().toLocaleString();
-        toXLSX_VGP(blankFile, data)
+        toXLSX_VGP(data)
       }, 
       label: 'Export as XLSX'
     }

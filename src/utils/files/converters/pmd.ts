@@ -6,13 +6,12 @@ import { toExponential_PMD, putParamToString, getFileName } from '../subFunction
 
 /**
  * Converts parsed magnetic treatment data (data from files with .pmd, .rs3, .squid extensions and their .csv and .xlsx analogues) to .pmd file
- * @param {File} file - The file with data to be converted
- * @param {IPmdData} [parsedData] - The parsed magnetic treatment data, preferable to pass this parameter and it will be used instead of file parameter
+ * @param {IPmdData} [parsedData] - The parsed magnetic treatment data
  * @returns {Promise<void>} Instead of return, it calls download() function, so file exported directly to user machine:
  * @example download(res, `${filename}.pmd`, 'text/plain;charset=utf-8');
  */
-export const toPMD = async (file: File, parsedData?: IPmdData): Promise<void> => {
-  const data = parsedData ? parsedData : await getDirectionalData(file, 'pmd') as IPmdData;
+export const toPMD = async (parsedData: IPmdData): Promise<void> => {
+  const data = parsedData;
 
   const extraMeta: any = {
     ...data.metadata,
@@ -57,13 +56,12 @@ export const toPMD = async (file: File, parsedData?: IPmdData): Promise<void> =>
 
 /**
  * Converts parsed magnetic treatment data (data from files with .pmd, .rs3, .squid extensions and their .csv and .xlsx analogues) to .csv file
- * @param {File} file - The file with data to be converted
- * @param {IPmdData} [parsedData] - The parsed magnetic treatment data, preferable to pass this parameter and it will be used instead of file parameter
+ * @param {IPmdData} [parsedData] - The parsed magnetic treatment data
  * @returns {Promise<void>} Instead of return, it calls download() function, so file exported directly to user machine:
  * @example download(res, `${filename}.csv`, 'text/csv;charset=utf-8');
  */
-export const toCSV_PMD = async (file: File, parsedData?: IPmdData): Promise<void> => {
-  const data = parsedData ? parsedData : await getDirectionalData(file, 'pmd') as IPmdData;
+export const toCSV_PMD = async (parsedData: IPmdData): Promise<void> => {
+  const data = parsedData;
 
   const metaNames = 'a,b,s,d,v(m3)\n';
   const metaLine = [
@@ -91,13 +89,12 @@ export const toCSV_PMD = async (file: File, parsedData?: IPmdData): Promise<void
 
 /**
  * Converts parsed magnetic treatment data (data from files with .pmd, .rs3, .squid extensions and their .csv and .xlsx analogues) to .xlsx file
- * @param {File} file - The file with data to be converted
- * @param {IPmdData} [parsedData] - The parsed magnetic treatment data, preferable to pass this parameter and it will be used instead of file parameter
+ * @param {IPmdData} [parsedData] - The parsed magnetic treatment data
  * @returns {Promise<void>} Instead of return, it calls download() function, so file exported directly to user machine:
  * @example download(res, `${filename}.xlsx`, "application/octet-stream");
  */
-export const toXLSX_PMD = async (file: File, parsedData?: IPmdData): Promise<void> => {
-  const data = parsedData ? parsedData : await getDirectionalData(file, 'pmd') as IPmdData;
+export const toXLSX_PMD = async (parsedData: IPmdData): Promise<void> => {
+  const data = parsedData;
 
   const metaNames = 'a,b,s,d,v (m3)'.split(',');
   const metaLine = [

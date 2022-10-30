@@ -14,34 +14,33 @@ interface DIRExport {
 const DIRExportMenuItem: FC<DIRExport> = ({as, data}, props: GridExportMenuItemProps<{}>) => {
 
   const { hideMenu } = props;
-  const blankFile = new File([], '');
 
   const exportAs = {
     dir: {
       export: () => {
         if (!data.created) data.created = new Date().toLocaleString();
-        toDIR(blankFile, data)
+        toDIR(data)
       }, 
       label: 'Export as DIR'
     },
     pmm: {
       export: () => {
         if (!data.created) data.created = new Date().toLocaleString();
-        toPMM(blankFile, data)
+        toPMM(data)
       }, 
       label: 'Export as PMM'
     },
     csv: {
       export: () => {
         if (!data.created) data.created = new Date().toLocaleString();
-        toCSV_DIR(blankFile, data)
+        toCSV_DIR(data)
       }, 
       label: 'Export as CSV'
     },
     xlsx: {
       export: () => {
         if (!data.created) data.created = new Date().toLocaleString();
-        toXLSX_DIR(blankFile, data)
+        toXLSX_DIR(data)
       }, 
       label: 'Export as XLSX'
     }

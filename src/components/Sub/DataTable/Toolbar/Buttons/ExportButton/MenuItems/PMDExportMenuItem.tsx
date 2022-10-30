@@ -14,12 +14,11 @@ interface PMDExport {
 const PMDExportMenuItem: FC<PMDExport> = ({as, data}, props: GridExportMenuItemProps<{}>) => {
 
   const { hideMenu } = props;
-  const blankFile = new File([], '');
 
   const exportAs = {
-    pmd: {export: () => toPMD(blankFile, data), label: 'Export as PMD'},
-    csv: {export: () => toCSV_PMD(blankFile, data), label: 'Export as CSV'},
-    xlsx: {export: () => toXLSX_PMD(blankFile, data), label: 'Export as XLSX'}
+    pmd: {export: () => toPMD(data), label: 'Export as PMD'},
+    csv: {export: () => toCSV_PMD(data), label: 'Export as CSV'},
+    xlsx: {export: () => toXLSX_PMD(data), label: 'Export as XLSX'}
   };
 
   return (
