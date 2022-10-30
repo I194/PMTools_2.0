@@ -1,10 +1,15 @@
 import * as XLSX from 'xlsx';
-import { dataModel_interpretation_from_dir } from '../fileConstants';
-import { download, getDirectionalData, s2ab } from '../fileManipulations';
-import { IDirData, IVGPData } from '../../GlobalTypes';
+import { download, s2ab } from '../fileManipulations';
+import { IVGPData } from '../../GlobalTypes';
 import { getFileName } from '../subFunctions';
 
-export const toGPML = async (file: File, parsedData: IVGPData) => {
+/**
+ * Converts parsed VGP data (combination of directional data and geographical data) to .gpml file
+ * @param {IVGPData} parsedData - The parsed VGP data
+ * @returns {Promise<void>} Instead of return, it calls download() function, so file exported directly to user machine:
+ * @example download(res, `${filename}.gpml`, 'text/csv;charset=utf-8');
+ */
+export const toGPML = async (parsedData: IVGPData): Promise<void> => {
   const data = parsedData;
   
   const rawColumnNames = ['label', 'poleLatitude', 'poleLongitude', 'plateId', 'age', 'a95'];
@@ -61,7 +66,13 @@ export const toGPML = async (file: File, parsedData: IVGPData) => {
   download(res, `${filename}.gpml`, 'text/csv;charset=utf-8');
 };
 
-export const toVGP = async (file: File, parsedData: IVGPData) => {
+/**
+ * Converts parsed VGP data (combination of directional data and geographical data) to .vgp file
+ * @param {IVGPData} parsedData - The parsed VGP data
+ * @returns {Promise<void>} Instead of return, it calls download() function, so file exported directly to user machine:
+ * @example download(res, `${filename}.vgp`, 'text/csv;charset=utf-8');
+ */
+export const toVGP = async (parsedData: IVGPData): Promise<void> => {
   const data = parsedData;
   
   const rawColumnNames = ['label', 'dec', 'inc', 'a95', 'lat', 'lon', 'poleLatitude', 'poleLongitude', 'dp', 'dm', 'age'];
@@ -80,7 +91,13 @@ export const toVGP = async (file: File, parsedData: IVGPData) => {
   download(res, `${filename}.vgp`, 'text/csv;charset=utf-8');
 };
 
-export const toCSV_VGP = async (file: File, parsedData: IVGPData) => {
+/**
+ * Converts parsed VGP data (combination of directional data and geographical data) to .csv file
+ * @param {IVGPData} parsedData - The parsed VGP data, preferable to pass this parameter and it will be used instead of file parameter
+ * @returns {Promise<void>} Instead of return, it calls download() function, so file exported directly to user machine:
+ * @example download(res, `${filename}.csv`, 'text/csv;charset=utf-8');
+ */
+export const toCSV_VGP = async (parsedData: IVGPData): Promise<void> => {
   const data = parsedData;
   
   const rawColumnNames = ['label', 'dec', 'inc', 'a95', 'lat', 'lon', 'poleLatitude', 'poleLongitude', 'paleoLatitude', 'dp', 'dm', 'age', 'plateId'];
@@ -99,8 +116,13 @@ export const toCSV_VGP = async (file: File, parsedData: IVGPData) => {
   download(res, `${filename}.csv`, 'text/csv;charset=utf-8');
 };
 
-export const toXLSX_VGP = async (file: File, parsedData: IVGPData) => {
-
+/**
+ * Converts parsed VGP data (combination of directional data and geographical data) to .xlsx file
+ * @param {IVGPData} parsedData - The parsed VGP data
+ * @returns {Promise<void>} Instead of return, it calls download() function, so file exported directly to user machine:
+ * @example download(res, `${filename}.xlsx`, "application/octet-stream");
+ */
+export const toXLSX_VGP = async (file: File, parsedData: IVGPData): Promise<void> => {
   const data = parsedData;
 
   const rawColumnNames = ['label', 'dec', 'inc', 'a95', 'lat', 'lon', 'poleLatitude', 'poleLongitude', 'paleoLatitude', 'dp', 'dm', 'age', 'plateId'];
@@ -122,5 +144,6 @@ export const toXLSX_VGP = async (file: File, parsedData: IVGPData) => {
   const res = s2ab(wbinary);
   const filename = getFileName(data.name);
 
-  download(res, `${filename}.xlsx`, "application/octet-stream")
+  download(res, `${filename}.xlsx`, "application/octet-stream");
 };
+
