@@ -1,6 +1,12 @@
 import { IDirData } from "../../GlobalTypes";
 
-const parseDIR = (data: string, name: string) => {
+/**
+ * Process parsing of data from imported .dir file
+ * @param {string} [data] - The string data from imported file
+ * @param {string} [name] - The name of imported file
+ * @returns {IDirData} IDirData
+ */
+const parseDIR = (data: string, name: string): IDirData => {
   
   // eslint-disable-next-line no-control-regex
   const eol = new RegExp("\r?\n");
@@ -100,3 +106,4 @@ const parseDIR = (data: string, name: string) => {
 }
 
 export default parseDIR;
+

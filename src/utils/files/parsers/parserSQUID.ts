@@ -1,8 +1,14 @@
+import { IPmdData } from "../../GlobalTypes";
 import Direction from "../../graphs/classes/Direction";
-import fromReferenceCoordinates from "../../graphs/formatters/fromReferenceCoordinates";
 import toReferenceCoordinates from "../../graphs/formatters/toReferenceCoordinates";
 
-const parseSQUID = (data: string, name: string) => {
+/**
+ * Process parsing of data from imported .squid file
+ * @param {string} [data] - The string data from imported file
+ * @param {string} [name] - The name of imported file
+ * @returns {IPmdData} IPmdData
+ */
+const parseSQUID = (data: string, name: string): IPmdData => {
   
   // eslint-disable-next-line no-control-regex
   const eol = new RegExp("\r?\n");
@@ -91,3 +97,4 @@ const parseSQUID = (data: string, name: string) => {
 }
 
 export default parseSQUID;
+

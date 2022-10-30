@@ -1,4 +1,12 @@
-const parsePMD = (data: string, name: string) => {
+import { IPmdData } from "../../GlobalTypes";
+
+/**
+ * Process parsing of data from imported .pmd file
+ * @param {string} [data] - The string data from imported file
+ * @param {string} [name] - The name of imported file
+ * @returns {IPmdData} IPmdData
+ */
+const parsePMD = (data: string, name: string): IPmdData => {
   
   // eslint-disable-next-line no-control-regex
   const eol = new RegExp("\r?\n");
@@ -70,3 +78,4 @@ const parsePMD = (data: string, name: string) => {
 }
 
 export default parsePMD;
+

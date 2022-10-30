@@ -1,6 +1,13 @@
 import { IDirData } from "../../GlobalTypes";
 
-const parseMDIR = (data: string, name: string) => {
+/**
+ * Process parsing of data from imported .csv dir-like file
+ * @deprecated since v.2.1.0, all logics moved to parseDIR function
+ * @param {string} [data] - The string data from imported file
+ * @param {string} [name] - The name of imported file
+ * @returns {IDirData} IDirData
+ */
+const parseMDIR = (data: string, name: string): IDirData => {
   // !!! DEPRECATED
   // .mdir data format combined with .dir data format
   // !!! DEPRECATED

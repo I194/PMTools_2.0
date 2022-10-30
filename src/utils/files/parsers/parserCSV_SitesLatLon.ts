@@ -1,4 +1,12 @@
-const parseCSV_SitesLatLon = (data: string, name: string) => {
+import { ISitesData } from "../../GlobalTypes";
+
+/**
+ * Process parsing of data from imported .csv file containing geographical data for VGPs calculation
+ * @param {string} [data] - The string data from imported file
+ * @param {string} [name] - The name of imported file
+ * @returns {ISitesData} ISitesData
+ */
+const parseCSV_SitesLatLon = (data: string, name: string): ISitesData => {
   
   // eslint-disable-next-line no-control-regex
   const eol = new RegExp("\r?\n");
@@ -38,3 +46,4 @@ const parseCSV_SitesLatLon = (data: string, name: string) => {
 }
 
 export default parseCSV_SitesLatLon;
+

@@ -1,6 +1,12 @@
 import { IDirData } from "../../GlobalTypes";
 
-const parseCSV_DIR = (data: string, name: string) => {
+/**
+ * Process parsing of data from imported .csv dir-like file
+ * @param {string} [data] - The string data from imported file
+ * @param {string} [name] - The name of imported file
+ * @returns {IDirData} IDirData
+ */
+const parseCSV_DIR = (data: string, name: string): IDirData => {
   
   // eslint-disable-next-line no-control-regex
   const eol = new RegExp("\r?\n");
@@ -70,3 +76,4 @@ const parseCSV_DIR = (data: string, name: string) => {
 }
 
 export default parseCSV_DIR;
+
