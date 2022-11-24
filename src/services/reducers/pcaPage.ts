@@ -1,7 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IPmdData, IDirData, GraphPMD } from "../../utils/GlobalTypes";
-import { RawStatisticsPCA, StatisitcsInterpretationFromPCA } from "../../utils/GlobalTypes";
-import { Projection, Reference, StatisticsModePCA } from "../../utils/graphs/types";
+import {
+  RawStatisticsPCA,
+  StatisitcsInterpretationFromPCA,
+} from "../../utils/GlobalTypes";
+import {
+  Projection,
+  Reference,
+  StatisticsModePCA,
+} from "../../utils/graphs/types";
 
 interface IInitialState {
   currentFile: IPmdData | null;
@@ -20,102 +27,104 @@ interface IInitialState {
 
 const initialState: IInitialState = {
   currentFile: null,
-  reference: 'geographic',
-  projection: {y: 'W, UP', x: 'N, N'},
+  reference: "geographic",
+  projection: { y: "W, UP", x: "N, N" },
   selectedStepsIDs: null,
   hiddenStepsIDs: [],
   statisticsMode: null,
   currentInterpretation: null,
   currentFileInterpretations: [],
   allInterpretations: [],
-  outputFilename: '',
+  outputFilename: "",
   showStepsInput: false,
-  largeGraph: 0,  
-}
+  largeGraph: 0,
+};
 
 const pcaPage = createSlice({
-  name: 'pcaPage',
+  name: "pcaPage",
   initialState,
   reducers: {
-    setCurrentFile (state, action) {
+    setCurrentFile(state, action) {
       state.currentFile = action.payload;
     },
-    setReference (state, action) {
+    setReference(state, action) {
       state.reference = action.payload;
     },
-    setProjection (state, action) {
+    setProjection(state, action) {
       state.projection = action.payload;
     },
-    setSelectedStepsIDs (state, action) {
+    setSelectedStepsIDs(state, action) {
       state.selectedStepsIDs = action.payload;
     },
-    setHiddenStepsIDs (state, action: {payload: Array<number>}) {
+    setHiddenStepsIDs(state, action: { payload: Array<number> }) {
       state.hiddenStepsIDs = action.payload;
     },
-    addHiddenStepsIDs (state, action: {payload: Array<number>}) {
-      const updatedHiddenStepsIDs = [...new Set([...state.hiddenStepsIDs, ...action.payload])];
+    addHiddenStepsIDs(state, action: { payload: Array<number> }) {
+      const updatedHiddenStepsIDs = [
+        ...new Set([...state.hiddenStepsIDs, ...action.payload]),
+      ];
       state.hiddenStepsIDs = updatedHiddenStepsIDs;
     },
-    setStatisticsMode (state, action) {
+    setStatisticsMode(state, action) {
       state.statisticsMode = action.payload;
     },
-    showStepsInput (state, action) {
+    showStepsInput(state, action) {
       state.showStepsInput = action.payload;
     },
-    addInterpretation (state, action) {
+    addInterpretation(state, action) {
       state.currentInterpretation = action.payload?.interpretation;
       state.currentFileInterpretations.push(action.payload?.interpretation);
       state.allInterpretations.push(action.payload?.interpretation);
     },
-    deleteInterpretation (state, action) {
-      const interpretationLabel = action.payload;
+    deleteInterpretation(state, action) {
+      const interpretationUUID = action.payload;
       const updatedInterpretations = state.allInterpretations.filter(
-        interpretation => interpretation.label !== interpretationLabel
+        (interpretation) => interpretation.uuid !== interpretationUUID
       );
       state.allInterpretations = updatedInterpretations;
     },
-    deleteInterepretationByParentFile (state, action) {
+    deleteInterepretationByParentFile(state, action) {
       const parentFile = action.payload;
       const updatedInterpretations = state.allInterpretations.filter(
-        interpretation => interpretation.parentFile !== parentFile
+        (interpretation) => interpretation.parentFile !== parentFile
       );
       state.allInterpretations = updatedInterpretations;
     },
-    setAllInterpretations (state, action) {
+    setAllInterpretations(state, action) {
       state.allInterpretations = action.payload;
     },
-    deleteAllInterpretations (state) {
+    deleteAllInterpretations(state) {
       state.allInterpretations = [];
       state.currentFileInterpretations = [];
       state.currentInterpretation = null;
     },
-    updateCurrentFileInterpretations (state, action) {
+    updateCurrentFileInterpretations(state, action) {
       const filename = action.payload;
       state.currentFileInterpretations = state.allInterpretations.filter(
-        interpretation => interpretation.parentFile === filename
+        (interpretation) => interpretation.parentFile === filename
       );
     },
-    updateCurrentInterpretation (state) {
+    updateCurrentInterpretation(state) {
       if (!state.currentFileInterpretations.length) {
         state.currentInterpretation = null;
         return;
-      };
-      state.currentInterpretation = state.currentFileInterpretations[
-        state.currentFileInterpretations.length - 1
-      ];
+      }
+      state.currentInterpretation =
+        state.currentFileInterpretations[
+          state.currentFileInterpretations.length - 1
+        ];
     },
-    setOutputFilename (state, action) {
+    setOutputFilename(state, action) {
       state.outputFilename = action.payload;
     },
-    setLargeGraph (state, action: PayloadAction<GraphPMD>) {
+    setLargeGraph(state, action: PayloadAction<GraphPMD>) {
       state.largeGraph = action.payload;
-    }
+    },
   },
-  extraReducers: (builder) => {
-  }
+  extraReducers: (builder) => {},
 });
 
-export const { 
+export const {
   setCurrentFile,
   setReference,
   setProjection,

@@ -35,15 +35,15 @@ const OutputDataTablePMD: FC = () => {
     setEditRowsModel(model);
   }, []);
   
-  const handleRowDelete = (label: string) => (event: any) => {
+  const handleRowDelete = (uuid: string) => (event: any) => {
     event.stopPropagation();
-    dispatch(deleteInterpretation(label));
+    dispatch(deleteInterpretation(uuid));
         
     // это всё надо упростить и перенести в мидлвару
     // и ещё заполнять поле currentFile при обновлении currentDataDIR/PMDid (тоже в мидлваре)
     const currentFileName = treatmentData![currentDataPMDid || 0]?.metadata.name;
     const deletedRowParentFile = data.filter(
-      interpretation => interpretation.label === label
+      interpretation => interpretation.uuid === uuid
     )[0].parentFile;
 
     if (deletedRowParentFile === currentFileName) {
@@ -81,7 +81,8 @@ const OutputDataTablePMD: FC = () => {
         ];
       },
     },
-    { field: 'id', headerName: 'Label', type: 'string', width: 120 },
+    { field: 'id', headerName: 'ID', type: 'string', width: 50, hide: true},
+    { field: 'label', headerName: 'Label', type: 'string', width: 120  },
     { field: 'code', headerName: 'Code', type: 'string', width: 70 },
     { field: 'stepRange', headerName: 'StepRange', type: 'string', width: 120 },
     { field: 'stepCount', headerName: 'N', type: 'number', width: 40 },
@@ -140,11 +141,12 @@ const OutputDataTablePMD: FC = () => {
 
   if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
 
-  const rows: Array<Omit<DataGridDIRFromPCARow, 'id' | 'label'>> = data.map((statistics, index) => {
-    const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadius, comment } = statistics;
+  const rows: Array<Omit<DataGridDIRFromPCARow, 'id' | 'label' | 'uuid'>> = data.map((statistics, index) => {
+    const { uuid, label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadius, comment } = statistics;
     console.log(label)
     return {
-      id: label,
+      id: uuid, 
+      label,
       code, 
       stepRange,
       stepCount,

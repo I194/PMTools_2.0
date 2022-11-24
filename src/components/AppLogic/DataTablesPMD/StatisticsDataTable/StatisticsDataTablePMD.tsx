@@ -100,7 +100,8 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
         ];
       },
     },
-    { field: 'id', headerName: 'Label', type: 'string', width: 70  },
+    { field: 'id', headerName: 'ID', type: 'string', width: 50, hide: true},
+    { field: 'label', headerName: 'Label', type: 'string', width: 70  },
     { field: 'code', headerName: 'Code', type: 'string', width: 50 },
     { field: 'stepRange', headerName: 'StepRange', type: 'string', width: 90 },
     { field: 'stepCount', headerName: 'N', type: 'number', minWidth: 24, width: 24 },
@@ -131,10 +132,11 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
 
   if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
 
-  const rows: Array<Omit<DataGridDIRFromPCARow, 'comment' | 'id' | 'label'>> = data.map((statistics, index) => {
-    const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadius, comment } = statistics;
+  const rows: Array<Omit<DataGridDIRFromPCARow, 'comment' | 'id' | 'label' | 'uuid'>> = data.map((statistics, index) => {
+    const { uuid, label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadius, comment } = statistics;
     return {
-      id: label,
+      id: uuid,
+      label,
       code, 
       stepRange,
       stepCount,

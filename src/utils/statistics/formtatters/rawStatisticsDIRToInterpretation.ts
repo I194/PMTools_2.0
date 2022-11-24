@@ -1,19 +1,21 @@
 import { IDirData, RawStatisticsDIR } from "../../GlobalTypes";
 import { StatisitcsInterpretationFromDIR } from "../../GlobalTypes";
 import { StatisticsModeDIR } from "../../graphs/types";
+import { v4 as uuidv4 } from "uuid";
 
 const rawStatisticsDIRToInterpretation = (
-  statistics: RawStatisticsDIR, 
-  selectedDirections: IDirData['interpretations'],
-  filename: IDirData['name'],
-  code: StatisticsModeDIR,
+  statistics: RawStatisticsDIR,
+  selectedDirections: IDirData["interpretations"],
+  filename: IDirData["name"],
+  code: StatisticsModeDIR
 ) => {
   // ограничение по длине в 7 символов из-за специфики .dir файлов
   // здесь оставляется 4 первые символа имени файла, далее добавится id
   // получится по итогу такое: aBcD_1 или aBcD_12
-  const label: string = filename.slice(0, 4);  
+  const filenameWithoutExtension = filename.replace(/\.[^/.]+$/, "");
+  const label: string = filenameWithoutExtension.slice(0, 6);
 
-  const stepRange: string = 'avg'
+  const stepRange: string = "avg";
   const stepCount: number = selectedDirections.length;
 
   const [Dgeo, Igeo] = statistics.mean.geographic.direction.toArray();
@@ -23,10 +25,11 @@ const rawStatisticsDIRToInterpretation = (
   const accuracyGeo = statistics.mean.geographic.k;
   const confidenceRadiusStrat = statistics.mean.stratigraphic.MAD;
   const accuracyStrat = statistics.mean.stratigraphic.k;
-  const comment = '';
+  const comment = "";
   const demagType = selectedDirections[0].demagType;
 
   const interpretation: StatisitcsInterpretationFromDIR = {
+    uuid: uuidv4(),
     parentFile: filename,
     label,
     code,
@@ -43,7 +46,7 @@ const rawStatisticsDIRToInterpretation = (
     Kstrat: +(accuracyStrat || 0).toFixed(1),
     comment,
     demagType,
-    rawData: statistics
+    rawData: statistics,
   };
 
   return interpretation;
