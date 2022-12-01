@@ -79,5 +79,8 @@
     "@types/uuid": "^8.3.4",
     "file-loader": "^6.2.0",
     "sass": "^1.51.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
   }
 }
