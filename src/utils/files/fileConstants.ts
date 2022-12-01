@@ -99,8 +99,8 @@ export const dataModel_interpretation_from_pca: any = {
   Igeo: 6,
   Dstrat: 6,
   Istrat: 6,
-  MADgeo: 7, // must match MADgeo from IDirData["interpretations"]
-  Kgeo: 6, // must match Kgeo from IDirData["interpretations"]
+  MADgeo: 7, // must match MADgeo from IDirData["interpretations"] Было Kgeo 7
+  Kgeo: 6, // must match Kgeo from IDirData["interpretations"] Было MADgeo 5
   comment: 0,
 };
 
