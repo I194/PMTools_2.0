@@ -112,7 +112,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
     };
     if (keyCode === mcFaddenHotkey.code) {
       event.preventDefault();
-      dispatch(setStatisticsMode('mcFadden'))
+      dispatch(setStatisticsMode('mcFad'))
     };
     if (keyCode === gcHotkey.code) {
       event.preventDefault();
