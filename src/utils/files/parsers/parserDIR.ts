@@ -28,10 +28,10 @@ const parseDIR = (data: string, name: string): IDirData => {
     let Igeo = Number(line.slice(33, 39).trim());
     let Dstrat = Number(line.slice(39, 45).trim());
     let Istrat = Number(line.slice(45, 51).trim());
-    let Kgeo = Number(line.slice(51, 58).trim());
-    let MADgeo = Number(line.slice(58, 64).trim());
-    let Kstrat = Number(line.slice(51, 58).trim());
-    let MADstrat = Number(line.slice(58, 64).trim());
+    let MADgeo = Number(line.slice(51, 58).trim());
+    let Kgeo = Number(line.slice(58, 64).trim());
+    let MADstrat = Number(line.slice(51, 58).trim());
+    let Kstrat = Number(line.slice(58, 64).trim());
 
     let skipNextLine = false;
 
