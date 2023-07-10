@@ -1,0 +1,19 @@
+body{
+    padding: 50px;
+}
+.box{
+    display: grid;
+    grid-template-columns: repeat();
+    justify-items: center;
+}
+
+.svg{
+    width: 400px;
+    height: 300px;
+    border: 1px solid #000;
+    margin-bottom: 50px;
+}
+svg:hover {
+   border: 2px solid #000;
+
+}
