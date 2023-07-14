@@ -2,6 +2,31 @@
 //-----------------------------------------------------------------------
 // projections func
 //-----------------------------------------------------------------------
+
+
+export function fisherStat(dirs: number[][]) {
+
+    var x_sum = 0;
+    var y_sum = 0;
+    var z_sum = 0;
+
+    for (var i = 0; i < dirs.length; i++)
+    {
+        x_sum += dirs[i][0];
+        y_sum += dirs[i][1];
+        z_sum += dirs[i][2];
+    }
+    var r = [x_sum, y_sum, z_sum];
+
+    var r_len = vector_length(r);
+    var n = dirs.length;
+    var k = (n - 1) / (n - r_len);
+    var alpha95 = 140 / Math.sqrt(k * n);
+
+    var result : [number[], number] = [NormalizeV(r), alpha95];
+    return result;
+}
+
 export function cordsToKey(coord: number[]) {
     var key = Math.random;
     return key;
@@ -178,7 +203,7 @@ export function get_perp(v1: number[],v2: number[])
 // circle plot func
 //-----------------------------------------------------------------------
 
-export function PlotCircle(direction: number[], phi: number)
+export function PlotCircle(direction: number[], phi: number, circle_points_numb: number)
 {
     direction = NormalizeV(direction);
 
@@ -218,7 +243,7 @@ export function PlotCircle(direction: number[], phi: number)
 
     points4.push( [my_point[0], my_point[1], my_point[2]] );
 
-    var circle_points_numb = 2 * 720;
+
 
     for ( let i = 0; i < circle_points_numb; i ++ ) {
         my_point = RotateAroundV(my_point, direction, 360 / circle_points_numb);
@@ -290,52 +315,21 @@ export function my_reload(){
 //     }
 }
 
-export function convertToLambert(v: number[], center_zone: number[]) {
-  // Декартовы координаты точки
-  var dx = v[0];
-  var dy = v[1];
-  var dz = v[2];
+export function convertToLambert(v: number[], fish_dir: number[]) {
+    var north = [-fish_dir[0], -fish_dir[1], -fish_dir[2]];
+    var r2_proj = vectV2([v[0] - north[0], v[1] - north[1], v[2] - north[2]]);
 
-  // Радиус сферы
-  var r = Math.sqrt(dx * dx + dy * dy + dz * dz);
+//     r2_proj = RotateAroundV(r2_proj, get_perp([0, 0, 1], fish_dir), -angle_between_v([0, 0, 1], fish_dir) * 180 / Math.PI)
 
-  // Расчет широты и долготы точки в радианах
-  var lat = Math.acos(dz / r);
-  var lon = Math.atan2(dy, dx);
-
-  // Параметры проекции Ламберта
-  var phi0 = Math.PI / 2; // широта центрального меридиана
-  var lam0 = 0; // долгота центрального меридиана
-  var phi0 = DekVgeo(center_zone[0], center_zone[1], center_zone[2])[0] * Math.PI / 180; // широта центрального меридиана
-  var lam0 = DekVgeo(center_zone[0], center_zone[1], center_zone[2])[1] * Math.PI / 180; // долгота центрального меридиана
-
-  // Параметры зоны проекции Ламберта
-  var k = 1; // масштабный коэффициент
-  var n = 0.5; // коэффициент сжатия
-  var theta = Math.asin(n); // угол между осью x и осью, на которой масштабное изменение задано
-
-  // Расчет координат в проекции Ламберта
-  var phi = lat;
-  var lam = lon - lam0;
-  var xLambert = k * r * Math.sin(phi) * Math.sin(lam);
-  var yLambert = k * r * (Math.sin(theta) * Math.cos(phi) - Math.cos(theta) * Math.sin(phi) * Math.cos(lam));
-
-  // Возвращаем результат в виде объекта
-  return {
-    x: xLambert,
-    y: yLambert
-  };
+    return r2_proj;
 }
 
-export function lambert_conic(points: number[][], center_zone: number[]){
+export function lambertMass(points: number[][], fish_dir: number[]){
 
     var result = [];
-    var lambert;
-
     for (var i = 0; i < points.length; i++)
     {
-        lambert = convertToLambert(points[i], center_zone);
-        result.push([lambert.x, lambert.y]);
+        result.push(convertToLambert(points[i], fish_dir));
     }
 
 
@@ -421,8 +415,7 @@ export function zone_square(points_number: number, all_points: number, ) { retur
 
 export function poly_contour(points: number[][], center: number[], s: number)
 {
-    console.log('s');
-    console.log(s);
+
     for (var i = 0; i < points.length; i++)
     {
         points[i] = [points[i][0] - center[0], points[i][1] - center[1]];

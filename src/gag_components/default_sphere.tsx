@@ -15,10 +15,43 @@ import {
     } from "./gag_functions";
 
 
-export function default_sphere(center_zone: number[], dir_list: number[][], angle_list: number[], grid_points: number[][], points_numb: number) {
+export function Default_sphere(props:{center_zone: number[], dir_list: number[][], angle_list: number[], grid_points: number[][]}) {
+
+
+    //-----------------------------------------------------------------
+    //
+    //-----------------------------------------------------------------
+
+
+
+    var dir_list = props.dir_list;
+    var center_zone = props.center_zone;
+    var angle_list = props.angle_list;
+    var def_grid_points = props.grid_points;
+
+
+//     grid_points = centering(grid_points, center_zone);
+
+    var grid = [];
+
+    for ( let i = 0; i < def_grid_points.length; i ++ ) {
+        grid.push(
+            e('circle',
+                {
+                    r: 0.0095,
+//                     r: 0.00035,
+                    cx: String(def_grid_points[i][0]),
+                    cy: String(def_grid_points[i][1]),
+                    fill: 'green',
+                }, ''
+            )
+        );
+    }
+
     //-----------------------------------------------------------------
     // add coords of circles around paleo dirs for right svg
     //-----------------------------------------------------------------
+
 
     var right_circles = [];
 
@@ -28,7 +61,7 @@ export function default_sphere(center_zone: number[], dir_list: number[][], angl
                                 e('polyline',
                                     {
 
-                                        points: make_coords(PlotCircle(dir_list[i], angle_list[i])),
+                                        points: make_coords(PlotCircle(dir_list[i], angle_list[i], 90)),
                                         stroke: "black",
                                         fill: 'none',
                                         strokeWidth:"0.005px",
@@ -51,16 +84,16 @@ export function default_sphere(center_zone: number[], dir_list: number[][], angl
     var mer_numb = 8;
     for ( var i = 0; i < mer_numb; i ++ ) {
         point = RotateAroundV(point, [0, 1, 0], 30 - 10 * mer_numb / 9);
-        var meridian = PlotCircle(point, 90);
+        var meridian = PlotCircle(point, 90, 90);
         coords1.push(make_coords(meridian));
     }
 
     var par_numb = 8;
     for ( var i = 0; i < par_numb; i ++ ) {
-        var paralel = PlotCircle([0, 1, 0], i * (30 - 10 * mer_numb / 9));
+        var paralel = PlotCircle([0, 1, 0], i * (30 - 10 * mer_numb / 9), 90);
         coords1.push(make_coords(paralel));
     }
-    paralel = PlotCircle([0, 0, 1], 90);
+    paralel = PlotCircle([0, 0, 1], 90, 90);
     coords1.push(make_coords(paralel));
 
 
@@ -100,11 +133,18 @@ export function default_sphere(center_zone: number[], dir_list: number[][], angl
 
 
 
-    return (
-        <div>default_sphere</div>
-    )
-//                     e('div', {key: 13, float: "left"}, [
+  return (
+    <div key={13}>
+      <h5 className="my_text">right svg</h5>
+      <svg className="svg" key={4} viewBox="-1 -1 2 2">
+        {right_degree_grid}{right_circles}{right_center_zone}
+      </svg>
+    </div>
+  );
+
+//     return e('div', {key: 13, float: "left"}, [
 //                         e('h5', {key: 1}, "right svg"),
 //                         e('svg', {className: "svg", key: 4, viewBox: "-1 -1 2 2"}, [right_degree_grid, right_circles, right_center_zone])
-//                            ])
+//                            ]
+//             );
 }
