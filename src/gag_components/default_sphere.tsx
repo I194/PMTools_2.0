@@ -30,23 +30,6 @@ export function Default_sphere(props:{center_zone: number[], dir_list: number[][
     var def_grid_points = props.grid_points;
 
 
-//     grid_points = centering(grid_points, center_zone);
-
-    var grid = [];
-
-    for ( let i = 0; i < def_grid_points.length; i ++ ) {
-        grid.push(
-            e('circle',
-                {
-                    r: 0.0095,
-//                     r: 0.00035,
-                    cx: String(def_grid_points[i][0]),
-                    cy: String(def_grid_points[i][1]),
-                    fill: 'green',
-                }, ''
-            )
-        );
-    }
 
     //-----------------------------------------------------------------
     // add coords of circles around paleo dirs for right svg
