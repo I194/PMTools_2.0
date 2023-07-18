@@ -1,11 +1,7 @@
 import React, {createElement as e, useState, Component} from 'react';
 import "./style.css";
-
-import {Zoomed_graph} from "./gag_components/zoomed_graph";
 import {Zoomed_lambert_graph} from "./gag_components/zoomed_lambert_graph";
 import {Rotate_sphere} from "./gag_components/rotate_sphere";
-import {Default_sphere} from "./gag_components/default_sphere";
-import {My_interface} from  "./gag_components/my_input";
 import {
     GeoVdek,
     getRandomfloat,
@@ -28,17 +24,46 @@ function App() {
     //-----------------------------------------------------------
     // input data generating
     //-----------------------------------------------------------
+// <select value={selectedD} onChange={handleDChange}>
 
 
-    var cmadlist = [7.69, 3.9, 3.18, 2.88,
-                    2.71, 2.63, 2.57, 2.54,
-                    2.51, 2.48, 2.46, 2.44,
-                    2.43, 2.43];
-    var camadlist = [6.0, 5.0, 4.63, 4.43,
-                    4.31, 4.24, 4.18, 4.14,
-                    4.12, 4.11, 4.08, 4.08,
-                    4.06, 4.05];
+    const [selectedD, setSelectedD] = useState<number>(10);
+    const handleDChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const number = parseInt(event.target.value);
+        setSelectedD(number);
+    };
+    var d = selectedD;
 
+    const [selectedP, setSelectedP] = useState<number>(1);
+    const handlePChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const number = parseInt(event.target.value);
+        setSelectedP(number);
+    };
+    var p = selectedP;
+
+    const [selectedAPC, setSelectedAPC] = useState<number>(0);
+    const handleAPCChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const number = parseInt(event.target.value);
+        setSelectedAPC(number);
+    };
+    var apc = selectedAPC;
+
+
+
+
+
+    if (d == 10) {
+        var camadlist = [6.0, 5.0, 4.63, 4.43,
+                4.31, 4.24, 4.18, 4.14,
+                4.12, 4.11, 4.08, 4.08,
+                4.06, 4.05];
+    }
+    else {
+        var camadlist = [6.0, 5.0, 4.63, 4.43,
+                4.31, 4.24, 4.18, 4.14,
+                4.12, 4.11, 4.08, 4.08,
+                4.06, 4.05];
+    }
 
 
     var max_lon = 95;
@@ -85,7 +110,7 @@ function App() {
 
         // this lists will use later
         dir_list.push(NormalizeV(paleo_data_list[i]));
-        angle_list.push(cmadlist[getRandomInt(2, camadlist.length)]);
+        angle_list.push(camadlist[getRandomInt(2, camadlist.length)]);
     }
 
 
@@ -94,7 +119,7 @@ function App() {
     //-----------------------------------------------------------------------
 
     const [sred_dir, alpha95]: [ number[], number] = fisherStat(dir_list);
-//     sred_dir[0] += 0.1;
+
     //-----------------------------------------------------------------------
     // making grid dots
     //-----------------------------------------------------------------------
@@ -144,8 +169,6 @@ function App() {
         print_point = 0;
     }
 
-
-
     //---------------------------------------------------------------------------------------
     // center zone calc
     //---------------------------------------------------------------------------------------
@@ -168,15 +191,6 @@ function App() {
         sred_dir: sred_dir
     };
 
-    var zoom_props = {
-        center_zone: center_zone,
-        dir_list: dir_list,
-        angle_list: angle_list,
-        grid_points: grid_points,
-        points_numb: points_numb,
-        sred_dir: sred_dir,
-        alpha95: alpha95
-    };
     var lambert_props = {
         center_zone: center_zone,
         dir_list: dir_list,
@@ -186,11 +200,6 @@ function App() {
         sred_dir: sred_dir,
         alpha95: alpha95
     };
-
-
-
-//     const my_output = ({ firstName, lastName }: { firstName: string, lastName: string }) => <div>Hey you! {firstName} {lastName}!</div>;
-//     const [count, setCount] = useState(0);
 
     return (
     <div>
@@ -210,27 +219,8 @@ function App() {
                 dir_list={dir_list}
                 angle_list={angle_list}/>
         </div>
-        <div className="container">
-            <Zoomed_graph center_zone={center_zone}
-                dir_list={dir_list}
-                angle_list={angle_list}
-                grid_points={grid_points}
-                points_numb={points_numb}
-                sred_dir={sred_dir}
-                alpha95={alpha95}
-            />
 
-            <Default_sphere
-                center_zone={center_zone}
-                dir_list={dir_list}
-                grid_points={grid_points}
-                angle_list={angle_list}
-                sred_dir={sred_dir}
-                />
-        </div>
         <div className="container">
-            <My_interface />
-
 
             <select value={selectedNumber} onChange={handleNumberChange}>
                 <option value={50000}>50 000</option>
@@ -245,15 +235,24 @@ function App() {
                 <option value={3500000}>3 500 000</option>
             </select>
 
+            <select value={selectedD} onChange={handleDChange}>
+                <option value={10}>d = 10</option>
+                <option value={5}>d = 5</option>
+            </select>
+
+            <select value={selectedP} onChange={handlePChange}>
+                <option value={1}>0.99</option>
+                <option value={2}>0.995</option>
+                <option value={3}>0.997</option>
+            </select>
+
+            <select value={selectedAPC} onChange={handleAPCChange}>
+                <option value={1}>aPC</option>
+                <option value={0}>PC</option>
+            </select>
+
             <br/>
             <button onClick={generateRandomNumbers}>Generate Random Numbers</button>
-            <ul>
-                {randomNumbers.map((num, index) => (
-                <li key={index}>{num}</li>
-                ))}
-            </ul>
-
-
         </div>
 
     </div>
