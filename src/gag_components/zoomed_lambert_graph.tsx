@@ -55,45 +55,6 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
                             }, ''
                         );
 
-    //---------------------------------------------------------------------------------------
-    // making spheral grid for lambert svg
-    //---------------------------------------------------------------------------------------
-
-
-    var lgp1 = [];
-    for (var i = 0; i < lambert_grid_points.length; i++)
-    {
-
-        lgp1.push(
-
-                RotateAroundV(
-                    lambert_grid_points[i],
-                    get_perp([0, 0, 1], lamb_sred_dir),
-                    -angle_between_v([0, 0, 1], lamb_sred_dir) * 180 / Math.PI)
-            );
-    }
-//     var lambert_grid_points = centering(lambert_grid_points1, lamb_sred_dir);//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//     lambert_grid_points = lambertMass(lambert_grid_points, lamb_sred_dir);
-
-    var grid_lambert = [];
-
-    for ( let i = 0; i < lambert_grid_points.length; i ++ ) {
-        grid_lambert.push(
-            e('circle',
-                {
-//                     r: 0.0005,
-                    r: 0.0023,
-                    //==========================================================================================================
-//                     cx: String(convertToLambert(lgp1[i], lamb_sred_dir)[0]),
-//                     cy: String(convertToLambert(lgp1[i], lamb_sred_dir)[1]),
-
-                    cx: String(lgp1[i][0]),
-                    cy: String(lgp1[i][1]),
-                    fill: '#199456',
-                }, ''
-            )
-        );
-    }
     //-----------------------------------------------------------------
     // add coords of circles around paleo dirs for lambert svg
     //-----------------------------------------------------------------
@@ -105,30 +66,14 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     for ( var i = 0; i < dir_list.length; i ++ ) {
 
         //==========================================================================================================
-//         var dir_circle = centering(PlotCircle(dir_list[i], angle_list[i], plot_point_numb), lamb_sred_dir);
         var dir_circle = lambertMass(PlotCircle(dir_list[i], angle_list[i], plot_point_numb), lamb_sred_dir);
-
-//         lambert_circles.push(
-//                                 e('polyline',
-//                                     {
-//
-//                                         points: make_coords(dir_circle),
-//                                         stroke: "black",
-//                                         fill: 'none',
-//                                         strokeWidth:"0.001px",
-//                                         strokeDasharray: "0.001px, 0.004px",
-//
-//                                     }, ''
-//                                 )
-//                             );
 
         for ( var j = 0; j < dir_circle.length; j ++ )
         {
         lambert_circles.push(
                                 e('circle',
                                     {
-//                                         r: 0.0005,
-                                        r: 0.0036,
+                                        r: 0.0005,
                                         cx: String(dir_circle[j][0]),
                                         cy: String(dir_circle[j][1]),
                                         fill: "black",
@@ -139,58 +84,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
         }
 
     }
-    //-----------------------------------------------------------------
-    // add coords of circles around paleo dirs to check JUST
-    //-----------------------------------------------------------------
 
-    var just_circles = [];
-
-    for ( var i = 0; i < dir_list.length; i ++ ) {
-
-        dir_circle = centering(PlotCircle(dir_list[i], angle_list[i], plot_point_numb), lamb_sred_dir);
-        just_circles.push(
-                                e('polyline',
-                                    {
-                                        points: make_coords(dir_circle),
-                                        stroke: "#8bc0cc",
-                                        fill: 'none',
-                                        strokeWidth:"0.0115px",
-//                                         strokeWidth:"0.0025px",
-                                    }, ''
-                                )
-                            );
-    }
-
-    //-----------------------------------------------------------------
-    // second variant of zone polygon plot
-    //-----------------------------------------------------------------
-
-//     var color_poly = [];
-//     var input: [number, number][] = [];
-//
-//     for ( let i = 0; i < lambert_grid_points.length; i ++ )
-//     {
-//         input.push([lambert_grid_points[i][0], lambert_grid_points[i][1]]);
-//     }
-//
-//     var cpoly = convexHull(input);
-//     var poly_points = [];
-//
-//     for ( let i = 0; i < cpoly.length; i ++ )
-//     {
-//         poly_points.push([cpoly[i][0], cpoly[i][1], 1]);
-//     }
-//
-//
-//     for ( var i = 0; i < poly_points.length; i ++ )
-//         color_poly.push(
-//             e('polygon',
-//                 {
-//                     points: make_coords(poly_points),
-//                     fill: '#AAE1BF',
-//                 }, ''
-//             )
-//         );
     //-----------------------------------------------------------------
     // polygon of zone
     //-----------------------------------------------------------------
@@ -202,7 +96,6 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     for ( var i = 0; i < dir_list.length; i ++ )
     {
         //==========================================================================================================
-//         var b = centering(PlotCircle(dir_list[i], angle_list[i], calc_circ_points), lamb_sred_dir);
         var b = lambertMass(PlotCircle(dir_list[i], angle_list[i], calc_circ_points), lamb_sred_dir);
 
         for (var j = 0; j < b.length; j++){
@@ -222,15 +115,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     {
         poly_points3d.push([poly_points2d[i][0], poly_points2d[i][1], 1 ]);
     }
-//     var color_poly = [];
-//     color_poly.push(
-//         e('polygon',
-//             {
-//                 points: make_coords(poly_points3d),
-//                 fill: '#77D685',
-//             }, ''
-//         )
-//     );
+
 
   const [isVisible, setIsVisible] = useState(true);
 
@@ -246,9 +131,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
 
     var fisher_dir = e('circle',
                             {
-
-                                r: 0.01,
-//                                 r: 0.0025,
+                                r: 0.0025,
                                 cx: String(0),
                                 cy: String(0),
                                 fill: 'red',
@@ -270,26 +153,18 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
                                     points: make_coords(PlotCircle([0, 0, 1], alpha95, 90)),
                                     stroke: "red",
                                     fill: 'none',
-                                    strokeWidth: "0.006px",
-                                    strokeDasharray: "0.04px, 0.008px",
-//                                     strokeWidth: "0.001px",
-//                                     strokeDasharray: "0.01px, 0.003px",
+                                    strokeWidth: "0.001px",
+                                    strokeDasharray: "0.01px, 0.003px",
                                 }, ''
                             )
                         );
 
-//   <svg className="svg" key={4} viewBox="-1 -1 2 2">
-// <svg className="svg" key={4} viewBox="-0.1 -0.1 0.2 0.2">
   return (
     <div key={13}>
       <h5 className="my_text">lambert svg</h5>
 
-      <svg className="svg" key={4} viewBox="-0.4 -0.4 0.8 0.8">
+      <svg className="svg" key={4} viewBox="-0.1 -0.1 0.2 0.2">
         {isVisible && <polygon points={polygonPoints} fill="#AAE1BF" />}
-
-        {just_circles}
-
-        {grid_lambert}
         {lambert_circles}
         {fisher_dir}
         {fish_circle}

@@ -40,17 +40,14 @@ function App() {
                     4.06, 4.05];
 
 
+
     var max_lon = 95;
-    var min_lon = 80;
-    var max_lat = 19;
+    var min_lon = 91;
+    var max_lat = 5;
     var min_lat = 1;
-//     var max_lon = 95;
-//     var min_lon = 91;
-//     var max_lat = 5;
-//     var min_lat = 1;
 
 
-    var dir_number = 3;
+    var dir_number = 4;
 
     const [randomNumbers, setRandomNumbers] = useState<number[]>([]);
 
@@ -81,8 +78,6 @@ function App() {
     var angle_list = [];
     var random_dir = NormalizeV( [ getRandomfloat(0, 1), getRandomfloat(0, 1), getRandomfloat(0, 1) ] );
     var random_angle = getRandomfloat(0, 180);
-//     var random_dir = NormalizeV( [12.25332872287876, 0.62710598184995592, 0.7081437582222506] );
-//     var random_angle = -38.37150716636394;
 
     for ( var i = 0; i < dir_number; i ++ ) {
 
@@ -90,8 +85,7 @@ function App() {
 
         // this lists will use later
         dir_list.push(NormalizeV(paleo_data_list[i]));
-        angle_list.push(getRandomInt(15, 20));
-//         angle_list.push(cmadlist[getRandomInt(2, camadlist.length)]);
+        angle_list.push(cmadlist[getRandomInt(2, camadlist.length)]);
     }
 
 
