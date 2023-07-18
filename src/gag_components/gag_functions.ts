@@ -4,6 +4,7 @@
 //-----------------------------------------------------------------------
 
 
+
 export function fisherStat(dirs: number[][]) {
 
     var x_sum = 0;
@@ -258,11 +259,11 @@ export function PlotCircle(direction: number[], phi: number, circle_points_numb:
 //-----------------------------------------------------------------------
 
 
-export function centering(points: number[][], dir: number[]){
+export function centering(in_points: number[][], dir: number[]){
 
     var res = [];
     // var vertical_v = RotateAroundV([0, 1, 0], get_perp([0, 0, 1], dir), -angle_between_v([0, 0, 1], dir) * 180 / Math.PI);
-
+    var points = in_points;
     for ( var i = 0; i < points.length; i ++ ) {
 
 
@@ -315,13 +316,41 @@ export function my_reload(){
 //     }
 }
 
+export function lineSphereIntersect(v: number[]) {
+
+    var a1 = v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
+    var b1 = 2 * v[2]
+    var c1 = 1 - 4;
+
+    var d = b1 * b1 - 4 * a1 * c1;
+    var t1 = (-b1 - Math.sqrt(d)) / (2 * a1);
+    var t2 = (-b1 + Math.sqrt(d)) / (2 * a1);
+
+    var x1 = v[0] * t1;
+    var y1 = v[1] * t1;
+    var z1 = v[2] * t1;
+
+    var x2 = v[0] * t2;
+    var y2 = v[1] * t2;
+    var z2 = v[2] * t2;
+
+
+    if (z1 > 0){
+        return [x1, y1, z1];
+    }
+    else {
+        return [x2, y2, z2];
+    }
+}
 export function convertToLambert(v: number[], fish_dir: number[]) {
-    var north = [-fish_dir[0], -fish_dir[1], -fish_dir[2]];
-    var r2_proj = vectV2([v[0] - north[0], v[1] - north[1], v[2] - north[2]]);
 
-//     r2_proj = RotateAroundV(r2_proj, get_perp([0, 0, 1], fish_dir), -angle_between_v([0, 0, 1], fish_dir) * 180 / Math.PI)
 
-    return r2_proj;
+    var my_perp = get_perp([0, 0, 1], fish_dir);
+    var r2_proj = RotateAroundV(v, my_perp, -angle_between_v([0, 0, 1], fish_dir) * 180 / Math.PI);
+//     var r2_proj = v;
+
+
+    return lineSphereIntersect(r2_proj);
 }
 
 export function lambertMass(points: number[][], fish_dir: number[]){

@@ -41,12 +41,16 @@ function App() {
 
 
     var max_lon = 95;
-    var min_lon = 91;
-    var max_lat = 5;
+    var min_lon = 80;
+    var max_lat = 19;
     var min_lat = 1;
+//     var max_lon = 95;
+//     var min_lon = 91;
+//     var max_lat = 5;
+//     var min_lat = 1;
 
 
-    var dir_number = 4;
+    var dir_number = 3;
 
     const [randomNumbers, setRandomNumbers] = useState<number[]>([]);
 
@@ -86,7 +90,8 @@ function App() {
 
         // this lists will use later
         dir_list.push(NormalizeV(paleo_data_list[i]));
-        angle_list.push(cmadlist[getRandomInt(2, camadlist.length)]);
+        angle_list.push(getRandomInt(15, 20));
+//         angle_list.push(cmadlist[getRandomInt(2, camadlist.length)]);
     }
 
 
@@ -95,7 +100,7 @@ function App() {
     //-----------------------------------------------------------------------
 
     const [sred_dir, alpha95]: [ number[], number] = fisherStat(dir_list);
-
+//     sred_dir[0] += 0.1;
     //-----------------------------------------------------------------------
     // making grid dots
     //-----------------------------------------------------------------------
@@ -165,7 +170,8 @@ function App() {
         center_zone: center_zone,
         dir_list: dir_list,
         grid_points: grid_points,
-        angle_list: angle_list
+        angle_list: angle_list,
+        sred_dir: sred_dir
     };
 
     var zoom_props = {
@@ -225,6 +231,7 @@ function App() {
                 dir_list={dir_list}
                 grid_points={grid_points}
                 angle_list={angle_list}
+                sred_dir={sred_dir}
                 />
         </div>
         <div className="container">

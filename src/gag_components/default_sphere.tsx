@@ -11,11 +11,18 @@ import {
     get_perp,
     centering,
     poly_contour,
+    lambertMass,
     zone_square
     } from "./gag_functions";
 
 
-export function Default_sphere(props:{center_zone: number[], dir_list: number[][], angle_list: number[], grid_points: number[][]}) {
+export function Default_sphere(props:{
+                                            center_zone: number[],
+                                            dir_list: number[][],
+                                            angle_list: number[],
+                                            grid_points: number[][],
+                                            sred_dir: number[],
+                                        }) {
 
 
     //-----------------------------------------------------------------
@@ -28,7 +35,7 @@ export function Default_sphere(props:{center_zone: number[], dir_list: number[][
     var center_zone = props.center_zone;
     var angle_list = props.angle_list;
     var def_grid_points = props.grid_points;
-
+    var def_sred_dir = props.sred_dir;
 
 
     //-----------------------------------------------------------------
@@ -106,7 +113,7 @@ export function Default_sphere(props:{center_zone: number[], dir_list: number[][
     var right_center_zone = e('circle',
                         {
 
-                            r: 0.028,
+                            r: 0.01,
                             cx: String(center_zone[0]),
                             cy: String(center_zone[1]),
                             fill: 'red',
@@ -120,7 +127,10 @@ export function Default_sphere(props:{center_zone: number[], dir_list: number[][
     <div key={13}>
       <h5 className="my_text">right svg</h5>
       <svg className="svg" key={4} viewBox="-1 -1 2 2">
-        {right_degree_grid}{right_circles}{right_center_zone}
+        {right_degree_grid}
+        {right_circles}
+        {right_center_zone}
+
       </svg>
     </div>
   );

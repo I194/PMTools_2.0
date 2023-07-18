@@ -82,7 +82,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
             e('circle',
                 {
 //                     r: 0.0005,
-                    r: 0.0005,
+                    r: 0.0023,
                     //==========================================================================================================
 //                     cx: String(convertToLambert(lgp1[i], lamb_sred_dir)[0]),
 //                     cy: String(convertToLambert(lgp1[i], lamb_sred_dir)[1]),
@@ -127,7 +127,8 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
         lambert_circles.push(
                                 e('circle',
                                     {
-                                        r: 0.0005,
+//                                         r: 0.0005,
+                                        r: 0.0036,
                                         cx: String(dir_circle[j][0]),
                                         cy: String(dir_circle[j][1]),
                                         fill: "black",
@@ -153,7 +154,8 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
                                         points: make_coords(dir_circle),
                                         stroke: "#8bc0cc",
                                         fill: 'none',
-                                        strokeWidth:"0.0025px",
+                                        strokeWidth:"0.0115px",
+//                                         strokeWidth:"0.0025px",
                                     }, ''
                                 )
                             );
@@ -213,7 +215,6 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
         input.push([circ_p[i][0], circ_p[i][1]]);
     }
 
-
     var poly_points2d = poly_contour(input, [rot_center_zone[0], rot_center_zone[1]], zone_square(lambert_grid_points.length, points_numb));
     var poly_points3d = [];
 
@@ -231,7 +232,6 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
 //         )
 //     );
 
-
   const [isVisible, setIsVisible] = useState(true);
 
   const handleCheckboxChange = () => {
@@ -240,8 +240,6 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
 
   const polygonPoints = make_coords(poly_points3d);
 
-
-
     //-----------------------------------------------------------------
     // making fisher stat
     //-----------------------------------------------------------------
@@ -249,7 +247,8 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     var fisher_dir = e('circle',
                             {
 
-                                r: 0.0025,
+                                r: 0.01,
+//                                 r: 0.0025,
                                 cx: String(0),
                                 cy: String(0),
                                 fill: 'red',
@@ -265,28 +264,27 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
 
     var fish_circle = [];
 
-
     fish_circle.push(
                             e('polyline',
                                 {
-
                                     points: make_coords(PlotCircle([0, 0, 1], alpha95, 90)),
                                     stroke: "red",
                                     fill: 'none',
-                                    strokeWidth: "0.001px",
-                                    strokeDasharray: "0.01px, 0.003px",
+                                    strokeWidth: "0.006px",
+                                    strokeDasharray: "0.04px, 0.008px",
+//                                     strokeWidth: "0.001px",
+//                                     strokeDasharray: "0.01px, 0.003px",
                                 }, ''
                             )
                         );
 
-
-
-
+//   <svg className="svg" key={4} viewBox="-1 -1 2 2">
+// <svg className="svg" key={4} viewBox="-0.1 -0.1 0.2 0.2">
   return (
     <div key={13}>
       <h5 className="my_text">lambert svg</h5>
-      <svg className="svg" key={4} viewBox="-1 -1 2 2">
 
+      <svg className="svg" key={4} viewBox="-0.4 -0.4 0.8 0.8">
         {isVisible && <polygon points={polygonPoints} fill="#AAE1BF" />}
 
         {just_circles}
