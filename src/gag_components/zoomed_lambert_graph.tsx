@@ -47,7 +47,8 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     var lambert_center_zone = e('circle',
                             {
 
-                                r: 0.0019,
+                                r: 0.003,
+//                                 r: 0.0019,
                                 cx: String(rot_center_zone[0]),
                                 cy: String(rot_center_zone[1]),
                                 fill: '#4054E7',
@@ -73,7 +74,8 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
         lambert_circles.push(
                                 e('circle',
                                     {
-                                        r: 0.0005,
+                                        r: 0.0015,
+//                                         r: 0.0005,
                                         cx: String(dir_circle[j][0]),
                                         cy: String(dir_circle[j][1]),
                                         fill: "black",
@@ -131,7 +133,8 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
 
     var fisher_dir = e('circle',
                             {
-                                r: 0.0025,
+                                r: 0.0035,
+//                                 r: 0.0025,
                                 cx: String(0),
                                 cy: String(0),
                                 fill: 'red',
@@ -153,7 +156,8 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
                                     points: make_coords(PlotCircle([0, 0, 1], alpha95, 90)),
                                     stroke: "red",
                                     fill: 'none',
-                                    strokeWidth: "0.001px",
+                                    strokeWidth: "0.0016px",
+//                                     strokeWidth: "0.001px",
                                     strokeDasharray: "0.01px, 0.003px",
                                 }, ''
                             )
@@ -163,7 +167,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     <div key={13}>
       <h5 className="my_text">lambert svg</h5>
 
-      <svg className="svg" key={4} viewBox="-0.1 -0.1 0.2 0.2">
+      <svg className="svg" key={4} viewBox="-0.2 -0.2 0.4 0.4">
         {isVisible && <polygon points={polygonPoints} fill="#AAE1BF" />}
         {lambert_circles}
         {fisher_dir}

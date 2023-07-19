@@ -27,6 +27,8 @@ function App() {
 // <select value={selectedD} onChange={handleDChange}>
 
 
+
+
     const [selectedD, setSelectedD] = useState<number>(10);
     const handleDChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const number = parseInt(event.target.value);
@@ -34,7 +36,7 @@ function App() {
     };
     var d = selectedD;
 
-    const [selectedP, setSelectedP] = useState<number>(1);
+    const [selectedP, setSelectedP] = useState<number>(990);
     const handlePChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const number = parseInt(event.target.value);
         setSelectedP(number);
@@ -51,18 +53,79 @@ function App() {
 
 
 
+    var quantiles = [9.9, 8.1, 7.1, 6.4, 5.9, 5.5, 5.2, 4.9, 4.6, 4.4, 4.3, 4.1, 4.0, 3.8];
 
     if (d == 10) {
-        var camadlist = [6.0, 5.0, 4.63, 4.43,
-                4.31, 4.24, 4.18, 4.14,
-                4.12, 4.11, 4.08, 4.08,
-                4.06, 4.05];
+        if (apc == 0){
+            if (p == 950){
+                quantiles = [9.9, 8.1, 7.1, 6.4, 5.9, 5.5, 5.2, 4.9, 4.6, 4.4, 4.3, 4.1, 4.0, 3.8];
+            }
+            if (p == 975){
+                quantiles = [11.0, 9.1, 7.9, 7.1, 6.6, 6.1, 5.8, 5.4, 5.2, 5.0, 4.8, 4.6, 4.4, 4.3];
+            }
+            if (p == 990){
+                quantiles = [12.3, 10.1, 8.9, 8.0, 7.4, 6.8, 6.4, 6.1, 5.8, 5.5, 5.3, 5.1, 4.9, 4.8];
+            }
+            if (p == 995){
+                quantiles = [8.6, 7.9, 7.4, 6.9, 6.5,6.2, 5.9];
+            }
+            if (p == 997){
+                quantiles = [9.0, 8.3, 7.7, 7.2, 6.8, 6.5, 6.2];
+            }
+        }
+        if (apc == 1){
+            if (p == 950){
+                quantiles = [8.4, 7.3, 6.6, 6.0, 5.6, 5.3, 5.0, 4.8, 4.5, 4.3, 4.2, 4.0, 3.9, 3.8];
+            }
+            if (p == 975){
+                quantiles = [9.3, 8.1, 7.3, 6.7, 6.3, 5.9, 5.6, 5.3, 5.0, 4.8, 4.6, 4.5, 4.3, 4.2];
+            }
+            if (p == 990){
+                quantiles = [10.4, 9.1, 8.2, 7.5, 7.0, 6.6, 6.2, 5.9, 5.6, 5.4, 5.2, 5.0, 4.8, 4.7];
+            }
+            if (p == 995){
+                quantiles = [8.1, 7.5, 7.0, 6.6, 6.3, 6.0, 5.8];
+            }
+            if (p == 997){
+                quantiles = [8.4, 7.9, 7.4, 7.0, 6.6, 6.3, 6.1];
+            }
+        }
     }
     else {
-        var camadlist = [6.0, 5.0, 4.63, 4.43,
-                4.31, 4.24, 4.18, 4.14,
-                4.12, 4.11, 4.08, 4.08,
-                4.06, 4.05];
+        if (apc == 0){
+            if (p == 950){
+                quantiles = [20.1, 16.4, 14.3, 12.9, 11.8, 11.0, 10.4, 9.8, 9.3, 8.9, 8.6, 8.2, 7.9, 7.7];
+            }
+            if (p == 975){
+                quantiles = [22.1, 18.2, 15.9, 14.3, 13.1, 12.3, 11.5, 10.9, 10.4, 9.9, 9.5, 9.2, 8.8, 8.6];
+            }
+            if (p == 990){
+                quantiles = [24.7, 20.4, 17.8, 16.0, 14.7, 13.7, 12.9, 12.2, 11.6, 11.1, 10.6, 10.2, 9.9, 9.6];
+            }
+            if (p == 995){
+                quantiles = [17.3, 15.8, 14.8, 13.8, 13.1, 12.5, 11.9];
+            }
+            if (p == 997){
+                quantiles = [18.1, 16.6, 15.5, 14.5, 13.7, 13.1, 12.5];
+            }
+        }
+        if (apc == 1){
+            if (p == 950){
+                quantiles = [16.9, 14.7, 13.2, 12.1, 11.2, 10.5, 10.0, 9.5, 9.1, 8.7, 8.4, 8.1, 7.8, 7.5];
+            }
+            if (p == 975){
+                quantiles = [18.6, 16.3, 14.7, 13.5, 12.5, 11.7, 11.1, 10.5, 10.1, 9.7, 9.3, 9.0, 8.7, 8.4];
+            }
+            if (p == 990){
+                quantiles = [20.8, 18.2, 16.4, 15.0, 14.0, 13.1, 12.4, 11.8, 11.2, 10.8, 10.4, 10.0, 9.7, 9.4];
+            }
+            if (p == 995){
+                quantiles = [16.2, 15.0, 14.1, 13.3, 12.7, 12.1, 11.6];
+            }
+            if (p == 997){
+                quantiles = [17.0, 15.7, 14.8, 14.0, 13.3, 12.7, 12.2];
+            }
+        }
     }
 
 
@@ -110,7 +173,8 @@ function App() {
 
         // this lists will use later
         dir_list.push(NormalizeV(paleo_data_list[i]));
-        angle_list.push(camadlist[getRandomInt(2, camadlist.length)]);
+        angle_list.push(quantiles[4]);
+//         angle_list.push(quantiles[getRandomInt(3, quantiles.length)]);
     }
 
 
@@ -119,7 +183,8 @@ function App() {
     //-----------------------------------------------------------------------
 
     const [sred_dir, alpha95]: [ number[], number] = fisherStat(dir_list);
-
+    console.log('alpha95');
+    console.log(alpha95);
     //-----------------------------------------------------------------------
     // making grid dots
     //-----------------------------------------------------------------------
@@ -241,9 +306,11 @@ function App() {
             </select>
 
             <select value={selectedP} onChange={handlePChange}>
-                <option value={1}>0.99</option>
-                <option value={2}>0.995</option>
-                <option value={3}>0.997</option>
+                <option value={950}>0.950</option>
+                <option value={975}>0.975</option>
+                <option value={990}>0.99</option>
+                <option value={995}>0.995</option>
+                <option value={997}>0.997</option>
             </select>
 
             <select value={selectedAPC} onChange={handleAPCChange}>
