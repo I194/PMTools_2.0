@@ -307,15 +307,6 @@ export function make_coords(points: number[][]){
 }
 
 
-
-export function my_reload(){
-
-//     if (confirm('Вы действительно хотите обновить страницу?'))
-//     {
-//         window.location.reload();
-//     }
-}
-
 export function lineSphereIntersect(v: number[]) {
 
     var a1 = v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
@@ -342,13 +333,12 @@ export function lineSphereIntersect(v: number[]) {
         return [x2, y2, z2];
     }
 }
-export function convertToLambert(v: number[], fish_dir: number[]) {
 
+
+export function convertToLambert(v: number[], fish_dir: number[]) {
 
     var my_perp = get_perp([0, 0, 1], fish_dir);
     var r2_proj = RotateAroundV(v, my_perp, -angle_between_v([0, 0, 1], fish_dir) * 180 / Math.PI);
-//     var r2_proj = v;
-
 
     return lineSphereIntersect(r2_proj);
 }
@@ -360,7 +350,6 @@ export function lambertMass(points: number[][], fish_dir: number[]){
     {
         result.push(convertToLambert(points[i], fish_dir));
     }
-
 
     return result;
 }
@@ -415,8 +404,6 @@ export function points_dist_2d(v1: number[], v2: number[]) { return Math.sqrt( (
 
 export function v_len_2d(v: number[]) { return Math.sqrt( v[0] * v[0] + v[1] * v[1] ); }
 
-
-
 export function v_angle_2d(v1: number[], v2: number[])
 {
     var angle;
@@ -440,9 +427,9 @@ export function rot_V_2d(v: number[], alpha: number)
 
 
 
-export function zone_square(points_number: number, all_points: number, ) { return 4 * Math.PI * 1 * points_number / all_points;};
+export function zone_square(points_number: number, all_points: number, ) { return points_number / all_points;};
 
-export function poly_contour(points: number[][], center: number[], s: number)
+export function poly_contour(points: number[][], center: number[])
 {
 
     for (var i = 0; i < points.length; i++)
@@ -485,52 +472,4 @@ export function poly_contour(points: number[][], center: number[], s: number)
 
 
     return result;
-    if (s > 0.00008) { return result; }
-    else { return [[0,0], [0,0]]}
-//     if (s > 0.00015) {return result;}
-//     else
-//     {
-//         var sred = 0;
-//
-//         for (var i = 0; i < result.length; i++)
-//         {
-//             sred += v_len_2d(result[i]);
-//         }
-//
-//         sred = sred / result.length;
-//
-//         var result1 = [result[0]];
-//
-//         for (var i = 0; i < result.length; i++)
-//         {
-//             if (v_len_2d(result[i]) < sred) {
-//                 result1.push(result[i]);
-//             }
-//         }
-//
-//         return result1;
-//     }
 }
-
-// function IncDecF = NED2IDF(NEDVector)
-// %NED2IDF  Transform NED-data to IDF-data (in grad and microteslas).
-// %Usage: IncDecF = NED2IDF(NEDVector)
-//
-//        TO_GRAD=180.0/pi;
-//        IncDecF=0.0*NEDVector;
-//
-//        IncDecF(3)=norm(NEDVector);
-//        if IncDecF(3) <= 0.0
-//             return;
-//        end
-//
-//        IncDecF(1)=asin(NEDVector(3)/IncDecF(3));
-//        IncDecF(2) = acos(NEDVector(1)/(IncDecF(3)*cos(IncDecF(1))))*TO_GRAD;
-//        if NEDVector(2) < 0.0
-//            IncDecF(2) = -IncDecF(2);
-//        end
-//        IncDecF(1) = IncDecF(1)*TO_GRAD;
-//
-//        return
-
-

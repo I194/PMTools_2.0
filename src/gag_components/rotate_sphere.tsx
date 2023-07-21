@@ -60,7 +60,6 @@ export function Rotate_sphere(props:{center_zone: number[], dir_list: number[][]
                                     }, ''
                                 )
                             );
-
     }
 
 
@@ -94,7 +93,6 @@ export function Rotate_sphere(props:{center_zone: number[], dir_list: number[][]
         center_degree_grid.push(
             e('polyline',
                 {
-
                     points: coords[i],
                     stroke: "black",
                     fill: 'none',
@@ -105,12 +103,10 @@ export function Rotate_sphere(props:{center_zone: number[], dir_list: number[][]
 
     }
 
-
-
   return (
-    <div key={13}>
-      <h5 className="my_text">center svg</h5>
-      <svg className="svg" key={4} viewBox="-1 -1 2 2">
+    <div key={1653463}>
+      <h5 className="my_text">Sphere</h5>
+      <svg className="svg" key={654365434} viewBox="-1 -1 2 2">
         {center_degree_grid}{center_circles}{center_center_zone}
       </svg>
     </div>

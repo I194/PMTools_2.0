@@ -13,7 +13,8 @@ import {
     zone_square,
     convexHull,
     convertToLambert,
-    lambertMass
+    lambertMass,
+    points_dist_2d
     } from "./gag_functions";
 
 
@@ -24,7 +25,10 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
                                                             grid_points: number[][],
                                                             points_numb: number
                                                             sred_dir: number[],
-                                                            alpha95: number
+                                                            alpha95: number,
+                                                            isvis: boolean,
+                                                            isvisgrid: boolean,
+                                                            polygonPoints: string
                                                         }) {
 
     var center_zone = lambert_zoom_props.center_zone;
@@ -34,24 +38,64 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     var points_numb = lambert_zoom_props.points_numb;
     var lamb_sred_dir = lambert_zoom_props.sred_dir;
     var alpha95 = lambert_zoom_props.alpha95;
+    var lambert_isvis = lambert_zoom_props.isvis;
+    var grid_isvis = lambert_zoom_props.isvisgrid;
+    var lambert_polygonPoints = lambert_zoom_props.polygonPoints;
 
+    var plot_point_numb = 70;
+    var circles_r = 0.0025;
+    var grid_r = 0.0015;
+    var grid_color = '#16732f';
+    var center_zone_r = 0.003;
+    var center_zone_color = '#4054E7';
+    var my_view_box = "-0.2 -0.2 0.4 0.4";
+    var poly_color = "#AAE1BF";
+
+
+    //-----------------------------------------------------------------
+    // making grid on left svg
+    //-----------------------------------------------------------------
+//     zoom_grid_points = centering(zoom_grid_points, zoom_sred_dir);
+    var zgp1 = [];
+        for (var i = 0; i < lambert_grid_points.length; i++)
+        {
+            zgp1.push(
+                RotateAroundV(
+                    lambert_grid_points[i],
+                    get_perp([0, 0, 1], lamb_sred_dir),
+                    -angle_between_v([0, 0, 1], lamb_sred_dir) * 180 / Math.PI)
+                );
+        }
+
+
+    var grid = [];
+
+    for ( let i = 0; i < zgp1.length; i ++ ) {
+        grid.push(
+            e('circle',
+                {
+                    r: grid_r,
+                    cx: String(zgp1[i][0]),
+                    cy: String(zgp1[i][1]),
+                    fill: grid_color,
+                }, ''
+            )
+        );
+    }
 
     //-----------------------------------------------------------------
     // making center zone for drawing on lambert svg
     //-----------------------------------------------------------------
 
-    //==========================================================================================================
-//     var rot_center_zone = RotateAroundV(center_zone, get_perp([0, 0, 1], lamb_sred_dir), -angle_between_v([0, 0, 1], lamb_sred_dir) * 180 / Math.PI);
     var rot_center_zone = convertToLambert(center_zone, lamb_sred_dir);
 
     var lambert_center_zone = e('circle',
                             {
 
-                                r: 0.003,
-//                                 r: 0.0019,
+                                r: center_zone_r,
                                 cx: String(rot_center_zone[0]),
                                 cy: String(rot_center_zone[1]),
-                                fill: '#4054E7',
+                                fill: center_zone_color,
 
                             }, ''
                         );
@@ -60,13 +104,12 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     // add coords of circles around paleo dirs for lambert svg
     //-----------------------------------------------------------------
 
-    var plot_point_numb = 90;
+
 
     var lambert_circles = [];
 
     for ( var i = 0; i < dir_list.length; i ++ ) {
 
-        //==========================================================================================================
         var dir_circle = lambertMass(PlotCircle(dir_list[i], angle_list[i], plot_point_numb), lamb_sred_dir);
 
         for ( var j = 0; j < dir_circle.length; j ++ )
@@ -74,8 +117,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
         lambert_circles.push(
                                 e('circle',
                                     {
-                                        r: 0.0015,
-//                                         r: 0.0005,
+                                        r: circles_r,
                                         cx: String(dir_circle[j][0]),
                                         cy: String(dir_circle[j][1]),
                                         fill: "black",
@@ -87,45 +129,6 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
 
     }
 
-    //-----------------------------------------------------------------
-    // polygon of zone
-    //-----------------------------------------------------------------
-
-    var calc_circ_points = 720 * 8;
-    var input: [number, number][] = [];
-    var circ_p = [];
-
-    for ( var i = 0; i < dir_list.length; i ++ )
-    {
-        //==========================================================================================================
-        var b = lambertMass(PlotCircle(dir_list[i], angle_list[i], calc_circ_points), lamb_sred_dir);
-
-        for (var j = 0; j < b.length; j++){
-            circ_p.push(b[j]);
-        }
-    }
-
-    for ( let i = 0; i < circ_p.length; i ++ )
-    {
-        input.push([circ_p[i][0], circ_p[i][1]]);
-    }
-
-    var poly_points2d = poly_contour(input, [rot_center_zone[0], rot_center_zone[1]], zone_square(lambert_grid_points.length, points_numb));
-    var poly_points3d = [];
-
-    for ( let i = 0; i < poly_points2d.length; i ++ )
-    {
-        poly_points3d.push([poly_points2d[i][0], poly_points2d[i][1], 1 ]);
-    }
-
-
-  const [isVisible, setIsVisible] = useState(true);
-
-  const handleCheckboxChange = () => {
-    setIsVisible(!isVisible);
-  };
-
-  const polygonPoints = make_coords(poly_points3d);
 
     //-----------------------------------------------------------------
     // making fisher stat
@@ -134,7 +137,6 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     var fisher_dir = e('circle',
                             {
                                 r: 0.0035,
-//                                 r: 0.0025,
                                 cx: String(0),
                                 cy: String(0),
                                 fill: 'red',
@@ -164,19 +166,27 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
                         );
 
   return (
-    <div key={13}>
-      <h5 className="my_text">lambert svg</h5>
+    <div key={1227544233}>
+      <h5 className="my_text">Lambert svg</h5>
 
-      <svg className="svg" key={4} viewBox="-0.2 -0.2 0.4 0.4">
-        {isVisible && <polygon points={polygonPoints} fill="#AAE1BF" />}
+      <svg className="svg" key={6534324} viewBox={my_view_box}>
+
+        {lambert_isvis && <polygon points={lambert_polygonPoints} fill={poly_color} />}
+        {grid_isvis && grid}
         {lambert_circles}
         {fisher_dir}
         {fish_circle}
         {lambert_center_zone}
+
       </svg>
-      <input type="checkbox" checked={isVisible} onChange={handleCheckboxChange} />
+
     </div>
   );
-
+//   const [isvisgrid, setisvisgrid] = useState(true);
+//   const gridCheckboxChange = () => {
+//     setisvisgrid(!isvisgrid);
+//   };
+// isvisgrid} onChange={gridCheckboxChange
+// grid_isvis
 
 }

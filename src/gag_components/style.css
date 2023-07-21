@@ -1,0 +1,208 @@
+body{
+    padding: 50px;
+    font-size: 16px;
+    font-family: 'Open Sans', sans-serif;
+    color: #202020;
+}
+.box{
+    display: grid;
+    grid-template-columns: repeat();
+    justify-items: center;
+}
+
+.svg{
+    width: 500px;
+    height: 350px;
+    border: 3px solid #999999;
+    margin: 10px;
+    border-radius: 8px;
+}
+svg:hover {
+   border: 5px solid #6897bb;
+   margin: 8px;
+   border-radius: 32px;
+}
+
+.interface{
+    width: 490px;
+    height: 760px;
+    border: 3px solid #999999;
+    margin: 10px;
+    padding: 5px;
+    border-radius: 8px;
+
+}
+
+.interface:hover {
+   border: 5px solid #6897bb;
+   margin: 8px;
+   border-radius: 32px;
+}
+
+.container {
+  float: left;
+}
+.my_text {
+  text-align: center;
+  font-size: 1.5rem;
+  margin: 2px;
+}
+svg #AreaSVG ,
+svg #RiverSVG {
+display: none;
+}
+#areaCbx:checked ~ svg #AreaSVG { display: block; }
+#riverCbx:checked ~ svg #RiverSVG { display: block; }
+
+
+
+.button {
+   font-size: 16px;
+   font-family: 'Open Sans', sans-serif;
+    transition-duration: 0.4s;
+    border: none;
+    color: #202020;
+    background: #e2e2e2;
+    padding: 10px;
+    text-align: center;
+
+    border-radius: 10px;
+    margin: 5px;
+
+}
+
+.button:hover {
+    background-color: #71cd94;
+    color: white;
+    border-radius: 3px;
+
+}
+
+select {
+   font-size: 16px;
+   font-family: 'Open Sans', sans-serif;
+   -webkit-appearance:none;
+   -moz-appearance:none;
+   -ms-appearance:none;
+   appearance:none;
+   outline:0;
+   box-shadow:none;
+   border:0!important;
+   background: #e2e2e2;
+   background-image: none;
+   flex: 1;
+   padding: 5px 12px;
+   color: #202020;
+   cursor:pointer;
+
+   border-radius: 3px;
+   margin: 5px
+}
+
+
+
+
+.my_input {
+  display: block;
+  position: relative;
+  padding-left: 27px;
+  margin: 5px;
+  font-size: 16px;
+  font-family: 'Open Sans', sans-serif;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.my_input input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #eee;
+    border-radius: 5px;
+}
+
+/* On mouse-over, add a grey background color */
+.my_input:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.my_input input:checked ~ .checkmark {
+  background-color: #71cd94;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.my_input input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.my_input .checkmark:after {
+  left: 7px;
+  top: 2px;
+  width: 3px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+
+
+
+caption{
+    font-size: 16px;
+    font-family: 'Open Sans', sans-serif;
+    padding: 25px;
+    font-weight: bold;
+}
+
+
+table, tr, th {
+    font-size: 13px;
+    font-family: 'Open Sans', sans-serif;
+    border: 3px solid grey;
+    border-collapse:collapse;
+    margin: 15px;
+
+
+    padding: 15px;
+}
+
+th:hover{
+    background: rgba(153, 204, 255, 0.5);
+}
+
+tr:hover{
+    background: rgb(245, 245, 245);
+}
+
+
+
+
+
+
