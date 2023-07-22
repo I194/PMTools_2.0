@@ -19,7 +19,8 @@ import {
     fisherStat,
     lambertMass,
     points_dist_2d,
-    getRandomInt
+    getRandomInt,
+    get_quantiles
     } from "./gag_functions";
 
 
@@ -30,10 +31,10 @@ export function Khokhlov_Gvozdik() {
     // input data generating
     //-----------------------------------------------------------
 
-
     const [selectedD, setSelectedD] = useState<number>(10);
     const handleDChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const number = parseInt(event.target.value);
+
         setSelectedD(number);
     };
     var d = selectedD;
@@ -52,133 +53,88 @@ export function Khokhlov_Gvozdik() {
     };
     var apc = selectedAPC;
 
+  const [isvis, setIsVisible] = useState(true);
+  const handleCheckboxChange = () => {
+    setIsVisible(!isvis);
+  };
 
+  const [isvisgrid, setisvisgrid] = useState(false);
+  const gridCheckboxChange = () => {
+    setisvisgrid(!isvisgrid);
+  };
 
+  const [selectedNumber, setSelectedNumber] = useState<number>(100000);
 
-    var quantiles = [9.9, 8.1, 7.1, 6.4, 5.9, 5.5, 5.2, 4.9, 4.6, 4.4, 4.3, 4.1, 4.0, 3.8];
-
-    if (d == 10) {
-        if (apc == 0){
-            if (p == 950){
-                quantiles = [9.9, 8.1, 7.1, 6.4, 5.9, 5.5, 5.2, 4.9, 4.6, 4.4, 4.3, 4.1, 4.0, 3.8];
-            }
-            if (p == 975){
-                quantiles = [11.0, 9.1, 7.9, 7.1, 6.6, 6.1, 5.8, 5.4, 5.2, 5.0, 4.8, 4.6, 4.4, 4.3];
-            }
-            if (p == 990){
-                quantiles = [12.3, 10.1, 8.9, 8.0, 7.4, 6.8, 6.4, 6.1, 5.8, 5.5, 5.3, 5.1, 4.9, 4.8];
-            }
-            if (p == 995){
-                quantiles = [8.6, 7.9, 7.4, 6.9, 6.5,6.2, 5.9];
-            }
-            if (p == 997){
-                quantiles = [9.0, 8.3, 7.7, 7.2, 6.8, 6.5, 6.2];
-            }
-        }
-        if (apc == 1){
-            if (p == 950){
-                quantiles = [8.4, 7.3, 6.6, 6.0, 5.6, 5.3, 5.0, 4.8, 4.5, 4.3, 4.2, 4.0, 3.9, 3.8];
-            }
-            if (p == 975){
-                quantiles = [9.3, 8.1, 7.3, 6.7, 6.3, 5.9, 5.6, 5.3, 5.0, 4.8, 4.6, 4.5, 4.3, 4.2];
-            }
-            if (p == 990){
-                quantiles = [10.4, 9.1, 8.2, 7.5, 7.0, 6.6, 6.2, 5.9, 5.6, 5.4, 5.2, 5.0, 4.8, 4.7];
-            }
-            if (p == 995){
-                quantiles = [8.1, 7.5, 7.0, 6.6, 6.3, 6.0, 5.8];
-            }
-            if (p == 997){
-                quantiles = [8.4, 7.9, 7.4, 7.0, 6.6, 6.3, 6.1];
-            }
-        }
-    }
-    else {
-        if (apc == 0){
-            if (p == 950){
-                quantiles = [20.1, 16.4, 14.3, 12.9, 11.8, 11.0, 10.4, 9.8, 9.3, 8.9, 8.6, 8.2, 7.9, 7.7];
-            }
-            if (p == 975){
-                quantiles = [22.1, 18.2, 15.9, 14.3, 13.1, 12.3, 11.5, 10.9, 10.4, 9.9, 9.5, 9.2, 8.8, 8.6];
-            }
-            if (p == 990){
-                quantiles = [24.7, 20.4, 17.8, 16.0, 14.7, 13.7, 12.9, 12.2, 11.6, 11.1, 10.6, 10.2, 9.9, 9.6];
-            }
-            if (p == 995){
-                quantiles = [17.3, 15.8, 14.8, 13.8, 13.1, 12.5, 11.9];
-            }
-            if (p == 997){
-                quantiles = [18.1, 16.6, 15.5, 14.5, 13.7, 13.1, 12.5];
-            }
-        }
-        if (apc == 1){
-            if (p == 950){
-                quantiles = [16.9, 14.7, 13.2, 12.1, 11.2, 10.5, 10.0, 9.5, 9.1, 8.7, 8.4, 8.1, 7.8, 7.5];
-            }
-            if (p == 975){
-                quantiles = [18.6, 16.3, 14.7, 13.5, 12.5, 11.7, 11.1, 10.5, 10.1, 9.7, 9.3, 9.0, 8.7, 8.4];
-            }
-            if (p == 990){
-                quantiles = [20.8, 18.2, 16.4, 15.0, 14.0, 13.1, 12.4, 11.8, 11.2, 10.8, 10.4, 10.0, 9.7, 9.4];
-            }
-            if (p == 995){
-                quantiles = [16.2, 15.0, 14.1, 13.3, 12.7, 12.1, 11.6];
-            }
-            if (p == 997){
-                quantiles = [17.0, 15.7, 14.8, 14.0, 13.3, 12.7, 12.2];
-            }
-        }
-    }
+    const handleNumberChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const number = parseInt(event.target.value);
+        setSelectedNumber(number);
+    };
+    const outsideVariable = selectedNumber;
+    var points_numb = outsideVariable;
 
 
     var max_lon = 0;
     var min_lon = 10;
     var max_lat = 0;
     var min_lat = 10;
-    var step = 0;
-    var step_list: number[] = [];
 
-    var dir_number = getRandomInt(4, 8);
 
-    const [randomNumbers, setRandomNumbers] = useState<number[]>([]);
+    var quantiles = get_quantiles(d, apc, p);
+
+
+    const [angle_list, setAngleList] = useState<number[]>([]);
+    const [step_list, setStepList] = useState<number[]>([]);
+    const [dir_list, setDirList] = useState<[number, number, number][]>([]);
+    const [test, setTest] = useState<number>();
 
     const generateRandomNumbers = () => {
         var random_list = [];
+        var dir_number = getRandomInt(4, 5);
 
         for (var i = 0; i < dir_number; i++)
         {
             random_list.push(getRandomfloat(min_lat, max_lat));
             random_list.push(getRandomfloat(min_lon, max_lon));
         }
-        setRandomNumbers(random_list);
+
+        var dir_list: [number, number, number][] = [];
+        var angle_list = [];
+        var paleo_data: number[];
+        var step = 0;
+
+        var random_dir = NormalizeV( [ getRandomfloat(0, 1), getRandomfloat(0, 1), getRandomfloat(0, 1) ] );
+        var random_angle = getRandomfloat(0, 180);
+
+        for ( var i = 0; i < dir_number; i ++ ) {
+
+            paleo_data = GeoVdek(1, random_list[i * 2], random_list[i * 2 + 1])
+            paleo_data = NormalizeV(RotateAroundV(paleo_data, random_dir, random_angle));
+            step = getRandomInt(3, quantiles.length);
+
+            angle_list.push(quantiles[step]);
+            step_list.push(step);
+
+            dir_list.push([paleo_data[0], paleo_data[1], paleo_data[2]]);
+        }
+        setAngleList(angle_list);
+        setStepList(step_list);
+        setDirList(dir_list);
+
+
+        setTest(quantiles[step]);
+
     };
 
-    const savedNumbers = randomNumbers;
 
 
-    var paleo_data_list: number[][] = [];
-    for (var i = 0; i < dir_number; i++)
-    {
-        paleo_data_list.push(GeoVdek(1, savedNumbers[i * 2], savedNumbers[i * 2 + 1]));
-    }
-
-    var dir_list = [];
-    var angle_list = [];
-    var random_dir = NormalizeV( [ getRandomfloat(0, 1), getRandomfloat(0, 1), getRandomfloat(0, 1) ] );
-    var random_angle = getRandomfloat(0, 180);
-
-    for ( var i = 0; i < dir_number; i ++ ) {
-
-        paleo_data_list[i] = RotateAroundV(paleo_data_list[i], random_dir, random_angle);
-
-        // this lists will use later
-        dir_list.push(NormalizeV(paleo_data_list[i]));
 
 
-        step = getRandomInt(3, quantiles.length);
-        angle_list.push(quantiles[step]);
-        step_list.push(step);
-    }
+// напиши код на react typescript, который по нажатию на кнопку генерирует и выводит на страницу:
+// одно случайное целое число с названием dir_number,
+// массив с числами от 1 до dir_number с названием angle_list,
+// массив с числами фибоначи от 1 до dir_number с названием step_list,
+// массив  типа [number, number, number][] с случайными целыми числами и длиной dir_number с названием dir_list
+//
 
 
     //-----------------------------------------------------------------------
@@ -191,7 +147,8 @@ export function Khokhlov_Gvozdik() {
     };
     // Генерация данных для таблицы
     const generateTableData = (): TableRow[] => {
-        const randomRows = dir_number; // Случайное количество строк от 4 до 8
+        const randomRows = 4; // Случайное количество строк от 4 до 8
+//         const randomRows = dir_number;
         const tableData: TableRow[] = [];
 
         for (let i = 1; i <= randomRows; i++) {
@@ -236,14 +193,6 @@ export function Khokhlov_Gvozdik() {
     var phi = 0.013;
 
 
-    const [selectedNumber, setSelectedNumber] = useState<number>(100000);
-
-    const handleNumberChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const number = parseInt(event.target.value);
-        setSelectedNumber(number);
-    };
-    const outsideVariable = selectedNumber;
-    var points_numb = outsideVariable;
 
     for (var i = 0; i < points_numb; i++)
     {
@@ -328,15 +277,7 @@ export function Khokhlov_Gvozdik() {
     //---------------------------------------------------------------------------------------
 
 
-  const [isvis, setIsVisible] = useState(true);
-  const handleCheckboxChange = () => {
-    setIsVisible(!isvis);
-  };
 
-  const [isvisgrid, setisvisgrid] = useState(false);
-  const gridCheckboxChange = () => {
-    setisvisgrid(!isvisgrid);
-  };
 
     var my_props = {
         center_zone: center_zone,
@@ -438,13 +379,15 @@ export function Khokhlov_Gvozdik() {
                 <b>Maxium radius of the zone: </b>{max_rad.toFixed(3)}
                 <br/>
                 <b>&#945;95: </b>{alpha95.toFixed(3)}
+                <br/>
+                <b>{quantiles}</b>
+                <br/>
+                <b>{test}</b>
+            </div>
 
-
-
-
+            <h5 className="my_text">Data view</h5>
+            <div className="my_scroll scrollable-table">
                 <table>
-
-                    <caption>Data view</caption>
 
                     <tr>
                         <th>Number</th>
@@ -460,13 +403,12 @@ export function Khokhlov_Gvozdik() {
                     </tr>
                     ))}
 
-
                 </table>
-
-
-
-
             </div>
+
+
+
+
         </div>
     </div>
     );

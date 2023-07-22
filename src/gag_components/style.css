@@ -25,13 +25,14 @@ svg:hover {
 
 .interface{
     width: 490px;
-    height: 760px;
+    height: 342px;
     border: 3px solid #999999;
     margin: 10px;
     padding: 5px;
     border-radius: 8px;
 
 }
+
 
 .interface:hover {
    border: 5px solid #6897bb;
@@ -75,8 +76,19 @@ display: none;
     background-color: #71cd94;
     color: white;
     border-radius: 3px;
+    box-shadow: 2px 2px #999999;
 
 }
+
+.button:active {
+  background-color: #e2e2e2;
+    color: #202020;
+
+}
+
+
+
+
 
 select {
    font-size: 16px;
@@ -182,14 +194,23 @@ caption{
 }
 
 
+.my_scroll {
+    overflow: auto;
+   margin: 20px 10px;
+
+   border-radius: 8px;
+       width: 504px;
+    height: 348px;
+    border: 2px solid #999999;
+    border-radius: 1px;
+}
+
+
 table, tr, th {
     font-size: 13px;
     font-family: 'Open Sans', sans-serif;
-    border: 3px solid grey;
+    border: 2px solid #999999;
     border-collapse:collapse;
-    margin: 15px;
-
-
     padding: 15px;
 }
 
@@ -201,6 +222,29 @@ tr:hover{
     background: rgb(245, 245, 245);
 }
 
+/* Цвет полосы прокрутки */
+::-webkit-scrollbar {
+
+
+  width: 8px; /* ширина полосы прокрутки */
+}
+
+/* Фон полосы прокрутки */
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+/* Цвет области под указателем */
+::-webkit-scrollbar-thumb {
+  background-color: #999999;
+
+}
+
+/* Цвет области под указателем при наведении */
+::-webkit-scrollbar-thumb:hover {
+  background-color: grey;
+
+}
 
 
 
