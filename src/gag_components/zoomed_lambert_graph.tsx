@@ -105,6 +105,12 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     //-----------------------------------------------------------------
 
 
+    var max_y = 1000000;
+    var min_y = 1000000;
+    var max_x = 1000000;
+    var min_x = 1000000;
+
+
 
     var lambert_circles = [];
 
@@ -114,20 +120,57 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
 
         for ( var j = 0; j < dir_circle.length; j ++ )
         {
-        lambert_circles.push(
-                                e('circle',
-                                    {
-                                        r: circles_r,
-                                        cx: String(dir_circle[j][0]),
-                                        cy: String(dir_circle[j][1]),
-                                        fill: "black",
-                                    }, ''
-                                )
-                            );
+            lambert_circles.push(
+                                    e('circle',
+                                        {
+                                            r: circles_r,
+                                            cx: String(dir_circle[j][0]),
+                                            cy: String(dir_circle[j][1]),
+                                            fill: "black",
+                                        }, ''
+                                    )
+                                );
+
+            if (max_x != 1000000 && min_x != 1000000 && max_y != 1000000 && min_y != 1000000)
+            {
+                if (dir_circle[j][0] > max_x)
+                {
+                    max_x = dir_circle[j][0];
+                }
+
+                if (dir_circle[j][0] < min_x)
+                {
+                    min_x = dir_circle[j][0];
+                }
+
+                if (dir_circle[j][1] > max_y)
+                {
+                    max_y = dir_circle[j][1];
+                }
+
+                if (dir_circle[j][1] < min_y)
+                {
+                    min_y = dir_circle[j][1];
+                }
+            }
+            else {
+                min_x = dir_circle[j][0];
+                max_x = dir_circle[j][0];
+                min_y = dir_circle[j][1];
+                max_y = dir_circle[j][1];
+
+            }
+
 
         }
 
+
+
+
     }
+
+    var my_view_box = String(min_x) + " " + String(min_y) + " " + String(max_x - min_x) + " " + String(max_y - min_y);
+//     "-0.2 -0.2 0.4 0.4";
 
 
     //-----------------------------------------------------------------
@@ -182,11 +225,5 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
 
     </div>
   );
-//   const [isvisgrid, setisvisgrid] = useState(true);
-//   const gridCheckboxChange = () => {
-//     setisvisgrid(!isvisgrid);
-//   };
-// isvisgrid} onChange={gridCheckboxChange
-// grid_isvis
 
 }
