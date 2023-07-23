@@ -340,12 +340,13 @@ export function Khokhlov_Gvozdik() {
                     <option value={3000000}>3 000 000</option>
                     <option value={3500000}>3 500 000</option>
                 </select>
-                <br/>
+
 
                 <select value={selectedD} onChange={handleDChange}>
                     <option value={10}>d = 10</option>
                     <option value={5}>d = 5</option>
                 </select>
+
                 <br/>
 
                 <select value={selectedP} onChange={handlePChange}>
@@ -355,7 +356,7 @@ export function Khokhlov_Gvozdik() {
                     <option value={995}>0.995</option>
                     <option value={997}>0.997</option>
                 </select>
-                <br/>
+
 
                 <select value={selectedAPC} onChange={handleAPCChange}>
                     <option value={1}>aPC</option>

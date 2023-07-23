@@ -42,7 +42,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     var grid_isvis = lambert_zoom_props.isvisgrid;
     var lambert_polygonPoints = lambert_zoom_props.polygonPoints;
 
-    var plot_point_numb = 70;
+    var plot_point_numb = 170;
     var circles_r = 0.0025;
     var grid_r = 0.0015;
     var grid_color = '#16732f';
@@ -52,36 +52,6 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     var poly_color = "#AAE1BF";
 
 
-    //-----------------------------------------------------------------
-    // making grid on left svg
-    //-----------------------------------------------------------------
-//     zoom_grid_points = centering(zoom_grid_points, zoom_sred_dir);
-    var zgp1 = [];
-        for (var i = 0; i < lambert_grid_points.length; i++)
-        {
-            zgp1.push(
-                RotateAroundV(
-                    lambert_grid_points[i],
-                    get_perp([0, 0, 1], lamb_sred_dir),
-                    -angle_between_v([0, 0, 1], lamb_sred_dir) * 180 / Math.PI)
-                );
-        }
-
-
-    var grid = [];
-
-    for ( let i = 0; i < zgp1.length; i ++ ) {
-        grid.push(
-            e('circle',
-                {
-                    r: grid_r,
-                    cx: String(zgp1[i][0]),
-                    cy: String(zgp1[i][1]),
-                    fill: grid_color,
-                }, ''
-            )
-        );
-    }
 
     //-----------------------------------------------------------------
     // making center zone for drawing on lambert svg
@@ -120,17 +90,6 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
 
         for ( var j = 0; j < dir_circle.length; j ++ )
         {
-            lambert_circles.push(
-                                    e('circle',
-                                        {
-                                            r: circles_r,
-                                            cx: String(dir_circle[j][0]),
-                                            cy: String(dir_circle[j][1]),
-                                            fill: "black",
-                                        }, ''
-                                    )
-                                );
-
             if (max_x != 1000000 && min_x != 1000000 && max_y != 1000000 && min_y != 1000000)
             {
                 if (dir_circle[j][0] > max_x)
@@ -160,18 +119,65 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
                 max_y = dir_circle[j][1];
 
             }
-
-
         }
+    }
 
+    var circles_r = (max_y - min_y) / 400;
+    grid_r = (max_y - min_y) / 400;
 
+    for ( var i = 0; i < dir_list.length; i ++ ) {
 
+        var dir_circle = lambertMass(PlotCircle(dir_list[i], angle_list[i], plot_point_numb), lamb_sred_dir);
 
+        for ( var j = 0; j < dir_circle.length; j ++ )
+        {
+            lambert_circles.push(
+                                    e('circle',
+                                        {
+                                            r: circles_r,
+                                            cx: String(dir_circle[j][0]),
+                                            cy: String(dir_circle[j][1]),
+                                            fill: "black",
+                                        }, ''
+                                    )
+                                );
+        }
     }
 
     var my_view_box = String(min_x) + " " + String(min_y) + " " + String(max_x - min_x) + " " + String(max_y - min_y);
-//     "-0.2 -0.2 0.4 0.4";
 
+    //     "-0.2 -0.2 0.4 0.4";
+
+    //-----------------------------------------------------------------
+    // making grid on left svg
+    //-----------------------------------------------------------------
+
+    var zgp1 = [];
+        for (var i = 0; i < lambert_grid_points.length; i++)
+        {
+            zgp1.push(
+                RotateAroundV(
+                    lambert_grid_points[i],
+                    get_perp([0, 0, 1], lamb_sred_dir),
+                    -angle_between_v([0, 0, 1], lamb_sred_dir) * 180 / Math.PI)
+                );
+        }
+
+
+    var grid = [];
+
+    for ( let i = 0; i < zgp1.length; i ++ ) {
+        grid.push(
+            e('circle',
+                {
+                    r: grid_r,
+                    cx: String(zgp1[i][0]),
+                    cy: String(zgp1[i][1]),
+                    fill: grid_color,
+                }, ''
+            )
+        );
+    }
 
     //-----------------------------------------------------------------
     // making fisher stat

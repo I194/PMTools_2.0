@@ -72,14 +72,14 @@ export function Rotate_sphere(props:{center_zone: number[], dir_list: number[][]
     var point = [0, 0, 1];
 
 
-    var mer_numb = 8;
+    var mer_numb = 9;
     for ( var i = 0; i < mer_numb; i ++ ) {
         point = RotateAroundV(point, [0, 1, 0], 30 - 10 * mer_numb / 9);
         var meridian = centering(PlotCircle(point, 90, 90), center_zone);
         coords.push(make_coords(meridian));
     }
 
-    var par_numb = 8;
+    var par_numb = 9;
     for ( var i = 0; i < par_numb; i ++ ) {
         var paralel = centering(PlotCircle([0, 1, 0], i * (30 - 10 * mer_numb / 9), 90), center_zone);
         coords.push(make_coords(paralel));

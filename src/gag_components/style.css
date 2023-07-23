@@ -59,9 +59,10 @@ svg:hover {
     background: #71cd94;
     padding: 10px;
     text-align: center;
-    box-shadow: 0px 0px 6px 0px #999999;
-    border-radius: 12px;
+    box-shadow: 0px 0px 3px 0px #999999;
+    border-radius: 8px;
     margin: 6px;
+    width: 235px;
 
 }
 
@@ -81,6 +82,7 @@ svg:hover {
 
 
 select {
+    width: 235px;
    font-size: 16px;
    font-family: 'Open Sans', sans-serif;
    -webkit-appearance:none;
@@ -135,29 +137,38 @@ select {
   height: 20px;
   width: 20px;
   background-color: #eee;
-    border-radius: 5px;
+  border-radius: 5px;
 }
 
 /* On mouse-over, add a grey background color */
 .my_input:hover input ~ .checkmark {
   background-color: #ccc;
+
 }
 
 /* When the checkbox is checked, add a blue background */
 .my_input input:checked ~ .checkmark {
   background-color: #71cd94;
 }
+.my_input input:checked:hover ~ .checkmark {
+  background-color: #38ba69;
+  border-radius: 2px;
+  transition-duration: 0.35s;
+}
+
 
 /* Create the checkmark/indicator (hidden when not checked) */
 .checkmark:after {
   content: "";
   position: absolute;
   display: none;
+
 }
 
 /* Show the checkmark when checked */
 .my_input input:checked ~ .checkmark:after {
   display: block;
+
 }
 
 /* Style the checkmark/indicator */
@@ -171,7 +182,9 @@ select {
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
   transform: rotate(45deg);
+
 }
+
 
 
 
