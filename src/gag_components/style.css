@@ -15,12 +15,12 @@ body{
     height: 350px;
     border: 3px solid #999999;
     margin: 10px;
-    border-radius: 8px;
+    border-radius: 6px;
 }
 svg:hover {
    border: 5px solid #6897bb;
    margin: 8px;
-   border-radius: 32px;
+   border-radius: 6px;
 }
 
 .interface{
@@ -37,7 +37,7 @@ svg:hover {
 .interface:hover {
    border: 5px solid #6897bb;
    margin: 8px;
-   border-radius: 32px;
+   border-radius: 6px;
 }
 
 .container {
@@ -48,46 +48,36 @@ svg:hover {
   font-size: 1.5rem;
   margin: 2px;
 }
-svg #AreaSVG ,
-svg #RiverSVG {
-display: none;
-}
-#areaCbx:checked ~ svg #AreaSVG { display: block; }
-#riverCbx:checked ~ svg #RiverSVG { display: block; }
-
 
 
 .button {
    font-size: 16px;
    font-family: 'Open Sans', sans-serif;
-    transition-duration: 0.4s;
+    transition-duration: 0.15s;
     border: none;
-    color: #202020;
-    background: #e2e2e2;
+    color: white;
+    background: #71cd94;
     padding: 10px;
     text-align: center;
-
-    border-radius: 10px;
-    margin: 5px;
+    box-shadow: 0px 0px 6px 0px #999999;
+    border-radius: 12px;
+    margin: 6px;
 
 }
 
 .button:hover {
-    background-color: #71cd94;
+    background-color: #38ba69;
     color: white;
     border-radius: 3px;
-    box-shadow: 2px 2px #999999;
+
 
 }
 
 .button:active {
-  background-color: #e2e2e2;
-    color: #202020;
+    background-color: #e2e2e2;
 
+    box-shadow: 0px 0px 0px 0px #999999;
 }
-
-
-
 
 
 select {
@@ -196,30 +186,49 @@ caption{
 
 .my_scroll {
     overflow: auto;
-   margin: 20px 10px;
+    margin: 20px 10px;
+    width: 504px;
+    height: 350px;
+    border: 3px solid #999999;
+    border-radius: 6px;
+}
 
-   border-radius: 8px;
-       width: 504px;
-    height: 348px;
-    border: 2px solid #999999;
-    border-radius: 1px;
+.my_scroll:hover {
+   border: 5px solid #6897bb;
+   margin: 18px 8px;
+   border-radius: 6px;
+
 }
 
 
 table, tr, th {
     font-size: 13px;
     font-family: 'Open Sans', sans-serif;
-    border: 2px solid #999999;
     border-collapse:collapse;
-    padding: 15px;
+    white-space: pre;
+}
+td {
+   border-bottom: 3px solid #999999;
+   border-right: 3px solid #999999;
+   padding: 11px 0px 11px 0px;
+   text-align: center;
+   width: 80px;
+
+}
+.coords {
+   width: 264px;
 }
 
 th:hover{
     background: rgba(153, 204, 255, 0.5);
+
 }
 
 tr:hover{
     background: rgb(245, 245, 245);
+}
+.table_head:hover{
+    background: rgba(153, 204, 255, 0.5);
 }
 
 /* Цвет полосы прокрутки */

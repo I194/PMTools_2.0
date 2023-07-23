@@ -31,39 +31,22 @@ export function Khokhlov_Gvozdik() {
     // input data generating
     //-----------------------------------------------------------
 
-    const [selectedD, setSelectedD] = useState<number>(10);
-    const handleDChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const number = parseInt(event.target.value);
+    var max_lon = 0;
+    var min_lon = 10;
+    var max_lat = 0;
+    var min_lat = 10;
 
-        setSelectedD(number);
+    const [isvis, setIsVisible] = useState(true);
+    const handleCheckboxChange = () => {
+        setIsVisible(!isvis);
     };
-    var d = selectedD;
 
-    const [selectedP, setSelectedP] = useState<number>(990);
-    const handlePChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const number = parseInt(event.target.value);
-        setSelectedP(number);
+    const [isvisgrid, setisvisgrid] = useState(false);
+    const gridCheckboxChange = () => {
+        setisvisgrid(!isvisgrid);
     };
-    var p = selectedP;
 
-    const [selectedAPC, setSelectedAPC] = useState<number>(0);
-    const handleAPCChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const number = parseInt(event.target.value);
-        setSelectedAPC(number);
-    };
-    var apc = selectedAPC;
-
-  const [isvis, setIsVisible] = useState(true);
-  const handleCheckboxChange = () => {
-    setIsVisible(!isvis);
-  };
-
-  const [isvisgrid, setisvisgrid] = useState(false);
-  const gridCheckboxChange = () => {
-    setisvisgrid(!isvisgrid);
-  };
-
-  const [selectedNumber, setSelectedNumber] = useState<number>(100000);
+    const [selectedNumber, setSelectedNumber] = useState<number>(100000);
 
     const handleNumberChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const number = parseInt(event.target.value);
@@ -73,23 +56,57 @@ export function Khokhlov_Gvozdik() {
     var points_numb = outsideVariable;
 
 
-    var max_lon = 0;
-    var min_lon = 10;
-    var max_lat = 0;
-    var min_lat = 10;
 
+    const [dir_number, setDirNumb] = useState<number>(0);
+    const [angle_list, setAngleList] = useState<number[]>([]);
+    const [step_list, setStepList] = useState<number[]>([]);
+
+    const [selectedD, setSelectedD] = useState<number>(10);
+    const handleDChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const number = parseInt(event.target.value);
+        setSelectedD(number);
+
+        var new_ang_list = [];
+        for ( var i = 0; i < dir_number; i ++ ) {
+            new_ang_list.push(quantiles[step_list[i]]);
+        }
+        setAngleList(new_ang_list);
+    };
+    var d = selectedD;
+
+    const [selectedP, setSelectedP] = useState<number>(990);
+    const handlePChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const number = parseInt(event.target.value);
+        setSelectedP(number);
+
+        var new_ang_list = [];
+        for ( var i = 0; i < dir_number; i ++ ) {
+            new_ang_list.push(quantiles[step_list[i]]);
+        }
+        setAngleList(new_ang_list);
+    };
+    var p = selectedP;
+
+    const [selectedAPC, setSelectedAPC] = useState<number>(0);
+    const handleAPCChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const number = parseInt(event.target.value);
+        setSelectedAPC(number);
+
+        var new_ang_list = [];
+        for ( var i = 0; i < dir_number; i ++ ) {
+            new_ang_list.push(quantiles[step_list[i]]);
+        }
+        setAngleList(new_ang_list);
+    };
+    var apc = selectedAPC;
 
     var quantiles = get_quantiles(d, apc, p);
 
-
-    const [angle_list, setAngleList] = useState<number[]>([]);
-    const [step_list, setStepList] = useState<number[]>([]);
     const [dir_list, setDirList] = useState<[number, number, number][]>([]);
-    const [test, setTest] = useState<number>();
 
     const generateRandomNumbers = () => {
         var random_list = [];
-        var dir_number = getRandomInt(4, 5);
+        var dir_number = getRandomInt(3, 9 + 1);
 
         for (var i = 0; i < dir_number; i++)
         {
@@ -99,6 +116,7 @@ export function Khokhlov_Gvozdik() {
 
         var dir_list: [number, number, number][] = [];
         var angle_list = [];
+        var step_list = [];
         var paleo_data: number[];
         var step = 0;
 
@@ -109,24 +127,18 @@ export function Khokhlov_Gvozdik() {
 
             paleo_data = GeoVdek(1, random_list[i * 2], random_list[i * 2 + 1])
             paleo_data = NormalizeV(RotateAroundV(paleo_data, random_dir, random_angle));
-            step = getRandomInt(3, quantiles.length);
+            step = getRandomInt(6, quantiles.length);
 
             angle_list.push(quantiles[step]);
-            step_list.push(step);
+            step_list.push(step + 3);
 
             dir_list.push([paleo_data[0], paleo_data[1], paleo_data[2]]);
         }
-        setAngleList(angle_list);
-        setStepList(step_list);
         setDirList(dir_list);
-
-
-        setTest(quantiles[step]);
-
+        setStepList(step_list);
+        setDirNumb(dir_number);
+        setAngleList(angle_list);
     };
-
-
-
 
 
 // напиши код на react typescript, который по нажатию на кнопку генерирует и выводит на страницу:
@@ -140,37 +152,28 @@ export function Khokhlov_Gvozdik() {
     //-----------------------------------------------------------------------
     //
     //-----------------------------------------------------------------------
-    type TableRow = {
-        id: number;
-        randomInt: number;
-        randomFloats: number[];
-    };
-    // Генерация данных для таблицы
-    const generateTableData = (): TableRow[] => {
-        const randomRows = 4; // Случайное количество строк от 4 до 8
-//         const randomRows = dir_number;
-        const tableData: TableRow[] = [];
 
-        for (let i = 1; i <= randomRows; i++) {
+   var table_data = [];
 
-            // Случайное целое число от 3 до 8
-            const randomInt = step_list[i];
-
-            // Три случайных дробных числа от 0 до 1
-            const randomFloats = Array.from({ length: 3 }, () => getRandomfloat(0, 1));
-            tableData.push({
-                id: i,
-                randomInt,
-                randomFloats,
-            });
-        }
-        return tableData;
+   for (var i = 0; i < dir_number; i++) {
+        table_data.push(
+            {
+                id: i + 1,
+                step_numb: step_list[i],
+                angles: angle_list[i],
+                dir_coords: String(dir_list[i][0]) + "\n" + String(dir_list[i][1]) + "\n" + String(dir_list[i][2]) + "\n"
+            }
+        );
     }
 
-    const tableData = generateTableData();
-
-
-
+   let res = table_data.map(function(item) {
+      return <tr key={item.id}>
+         <td>{item.id}</td>
+         <td>{item.step_numb}</td>
+         <td>{item.angles}</td>
+         <td className="coords">{item.dir_coords}</td>
+      </tr>;
+   });
 
     //-----------------------------------------------------------------------
     // fisher stat
@@ -377,33 +380,31 @@ export function Khokhlov_Gvozdik() {
                 {" " + String((zone_square(grid_points.length, points_numb) * 100).toFixed(3))}%.
                 <br/>
                 <b>Maxium radius of the zone: </b>{max_rad.toFixed(3)}
+
                 <br/>
                 <b>&#945;95: </b>{alpha95.toFixed(3)}
-                <br/>
-                <b>{quantiles}</b>
-                <br/>
-                <b>{test}</b>
+
             </div>
 
             <h5 className="my_text">Data view</h5>
             <div className="my_scroll scrollable-table">
+
                 <table>
-
-                    <tr>
-                        <th>Number</th>
-                        <th>Steps</th>
-                        <th>Coordinates</th>
-                    </tr>
-
-                    {tableData.map(({ id, randomInt, randomFloats }) => (
-                    <tr key={id}>
-                        <td>{id}</td>
-                        <td>{randomInt}</td>
-                        <td>{randomFloats.join(', ')}</td>
-                    </tr>
-                    ))}
-
+                    <thead>
+                        <tr>
+                            <td className="table_head">id</td>
+                            <td className="table_head">Step</td>
+                            <td className="table_head">Angle</td>
+                            <td className="table_head">Dir</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {res}
+                    </tbody>
                 </table>
+
+
+
             </div>
 
 
