@@ -36,74 +36,85 @@ export function Khokhlov_Gvozdik() {
     var max_lat = 0;
     var min_lat = 10;
 
-    const [isvis, setIsVisible] = useState(true);
-    const handleCheckboxChange = () => {
-        setIsVisible(!isvis);
-    };
+    // Ваня. проблема в участке кода с 40 по 150 строку. есть кнопка, три тега select(их 4, но первый обособлен и работает нормально) и строчка, которая выводится на экран.
+    // теги select задают значения радиусов кругов, при их переключении должны меняться радиусы кругов, записанные в переменную quantiles,
+    // первые значения quantiles выводятся на экран в виде строчки quantiles=___12.3___... эта строка должна меняться каждый
+    // раз, когда один из этих трех selectов переключаются, но этого не происходит при первом переключении любого select.
+    // при повторном переключении тега select, quantiles меняются на те значения, которые должны были высветиться при предыдущем переключении тега.
+    // Ваня. эти хуки работают корректно. 
+        // Ваня. массив с количеством шагов размагничивания, случайное количество
+        const [step_list, setStepList] = useState<number[]>([]);
+        // Ваня. массив с направлениями == координаты центров кругов, случайные направления, расположенные примерно рядом
+        const [dir_list, setDirList] = useState<[number, number, number][]>([]);
+        // Ваня. количество генерируемых образцов, случайное число
+        const [dir_number, setDirNumb] = useState<number>(0);
 
-    const [isvisgrid, setisvisgrid] = useState(false);
-    const gridCheckboxChange = () => {
-        setisvisgrid(!isvisgrid);
-    };
+    // Ваня. c этими хуками возникают проблемы.
+        // Ваня. эти три значения задаются выбором в тегах select, и на их основе задается массив quantiles
+            const [apc, setSelectedAPC] = useState<number>(0);
+            const [selectedP, setSelectedP] = useState<number>(990);
+            const [selectedD, setSelectedD] = useState<number>(10);
+        
+        // Ваня. это массивы с радиусами кругов. quantiles - таблицные значения, получаемые из функции первые 5 значений выводятся на экран 
+        const [quantiles, setQuantiles] = useState<number[]>([12.3, 10.1, 8.9, 8.0, 7.4, 6.8, 6.4, 6.1, 5.8, 5.5, 5.3, 5.1, 4.9, 4.8]);
+        // angle_list - массив с углами для каждого образца, рассчитывается из quantiles и step_list.
+	const [angle_list, setAngleList] = useState<number[]>([]);
 
-    const [selectedNumber, setSelectedNumber] = useState<number>(100000);
-
-    const handleNumberChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const number = parseInt(event.target.value);
-        setSelectedNumber(number);
-    };
-    const outsideVariable = selectedNumber;
-    var points_numb = outsideVariable;
-
-
-
-    const [dir_number, setDirNumb] = useState<number>(0);
-    const [angle_list, setAngleList] = useState<number[]>([]);
-    const [step_list, setStepList] = useState<number[]>([]);
-
-    const [selectedD, setSelectedD] = useState<number>(10);
+    // Ваня. это select который выбирает параметр d = 10 или 5, для расчета quantiles и angle_list. 
+    //  он должен при изменении менять quantiles и angle_list, и на экране менять строчку quantiles=___12.3___...
     const handleDChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const number = parseInt(event.target.value);
         setSelectedD(number);
 
+        var quantiles = get_quantiles(selectedD, apc, selectedP);
+        setQuantiles(quantiles);
+
         var new_ang_list = [];
         for ( var i = 0; i < dir_number; i ++ ) {
             new_ang_list.push(quantiles[step_list[i]]);
         }
         setAngleList(new_ang_list);
     };
-    var d = selectedD;
 
-    const [selectedP, setSelectedP] = useState<number>(990);
+
+    // Ваня. это select который выбирает параметр на 0.99/0.975/0.997..., для расчета quantiles и angle_list. 
+    //  он должен при изменении менять quantiles и angle_list, и на экране менять строчку quantiles=___12.3___...
     const handlePChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const number = parseInt(event.target.value);
         setSelectedP(number);
 
+        var quantiles = get_quantiles(selectedD, apc, selectedP);
+        setQuantiles(quantiles);
+
         var new_ang_list = [];
         for ( var i = 0; i < dir_number; i ++ ) {
             new_ang_list.push(quantiles[step_list[i]]);
         }
         setAngleList(new_ang_list);
     };
-    var p = selectedP;
 
-    const [selectedAPC, setSelectedAPC] = useState<number>(0);
+
+    // Ваня. это select который выбирает параметр на aPC/PC, для расчета quantiles и angle_list. 
+    //  он должен при изменении менять quantiles и angle_list, и на экране менять строчку quantiles=___12.3___...
     const handleAPCChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const number = parseInt(event.target.value);
         setSelectedAPC(number);
 
+        var quantiles = get_quantiles(selectedD, apc, selectedP);
+        setQuantiles(quantiles);
+
         var new_ang_list = [];
         for ( var i = 0; i < dir_number; i ++ ) {
             new_ang_list.push(quantiles[step_list[i]]);
         }
         setAngleList(new_ang_list);
     };
-    var apc = selectedAPC;
 
-    var quantiles = get_quantiles(d, apc, p);
 
-    const [dir_list, setDirList] = useState<[number, number, number][]>([]);
-
+    // Ваня. это кнопка, которая генерирует направления(dir_list), число образцов(dir_number), 
+    // количество шагов размагничивания в образцах(step_list) и рассчитывает из quantiles - angle_list
+    // она не меняет quantiles!! она просто генерирует данные, и раздает образцам 
+    // радиусы их кругов на основе quantiles.
     const generateRandomNumbers = () => {
         var random_list = [];
         var dir_number = getRandomInt(3, 9 + 1);
@@ -134,19 +145,36 @@ export function Khokhlov_Gvozdik() {
 
             dir_list.push([paleo_data[0], paleo_data[1], paleo_data[2]]);
         }
+        
         setDirList(dir_list);
         setStepList(step_list);
         setDirNumb(dir_number);
         setAngleList(angle_list);
     };
 
+    //-----------------------------------------------------------------------
+    // Ваня. Дальше все работает корректно
+    //-----------------------------------------------------------------------
 
-// напиши код на react typescript, который по нажатию на кнопку генерирует и выводит на страницу:
-// одно случайное целое число с названием dir_number,
-// массив с числами от 1 до dir_number с названием angle_list,
-// массив с числами фибоначи от 1 до dir_number с названием step_list,
-// массив  типа [number, number, number][] с случайными целыми числами и длиной dir_number с названием dir_list
-//
+    const [isvis, setIsVisible] = useState(true);
+    const handleCheckboxChange = () => {
+        setIsVisible(!isvis);
+    };
+
+    const [isvisgrid, setisvisgrid] = useState(false);
+    const gridCheckboxChange = () => {
+        setisvisgrid(!isvisgrid);
+    };
+
+    const [selectedNumber, setSelectedNumber] = useState<number>(100000);
+
+    const handleNumberChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const number = parseInt(event.target.value);
+        setSelectedNumber(number);
+    };
+    const outsideVariable = selectedNumber;
+    var points_numb = outsideVariable;
+
 
 
     //-----------------------------------------------------------------------
@@ -358,7 +386,7 @@ export function Khokhlov_Gvozdik() {
                 </select>
 
 
-                <select value={selectedAPC} onChange={handleAPCChange}>
+                <select value={apc} onChange={handleAPCChange}>
                     <option value={1}>aPC</option>
                     <option value={0}>PC</option>
                 </select>
@@ -384,6 +412,14 @@ export function Khokhlov_Gvozdik() {
 
                 <br/>
                 <b>&#945;95: </b>{alpha95.toFixed(3)}
+
+                <br/>
+                <b>quantiles = </b>
+                {"____"}{quantiles[0]}
+                {"____"}{quantiles[1]}
+                {"____"}{quantiles[2]}
+                {"____"}{quantiles[3]}
+                {"____"}{quantiles[4]}{"_______"}
 
             </div>
 
