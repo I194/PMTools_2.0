@@ -7,7 +7,7 @@
 
 export function get_quantiles(d: number, apc: number, p: number) {
 
-    var quantiles = [9.9, 8.1, 7.1, 6.4, 5.9, 5.5, 5.2, 4.9, 4.6, 4.4, 4.3, 4.1, 4.0, 3.8];
+    var quantiles = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
     if (d == 10) {
         if (apc == 0){

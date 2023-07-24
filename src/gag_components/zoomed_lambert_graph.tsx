@@ -52,7 +52,18 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     var poly_color = "#AAE1BF";
 
 
+    if (angle_list[0] == 0){
+      return (
+        <div key={1227544233}>
+          <h5 className="my_text">Lambert svg</h5>
 
+          <svg className="svg interface" key={6534324} viewBox={my_view_box}>
+
+          </svg>
+
+        </div>
+      );
+    }
     //-----------------------------------------------------------------
     // making center zone for drawing on lambert svg
     //-----------------------------------------------------------------
@@ -143,8 +154,10 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
                                 );
         }
     }
+    if (max_x < -1 * min_x) {var max_x = -min_x}
+    if (max_y < -1 * min_y) {var max_y = -min_y}
 
-    var my_view_box = String(min_x) + " " + String(min_y) + " " + String(max_x - min_x) + " " + String(max_y - min_y);
+    var my_view_box = String(-max_x) + " " + String(-max_y - 0.03) + " " + String(max_x * 2) + " " + String(max_y * 2 + 0.06);
 
     //     "-0.2 -0.2 0.4 0.4";
 
@@ -218,7 +231,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     <div key={1227544233}>
       <h5 className="my_text">Lambert svg</h5>
 
-      <svg className="svg" key={6534324} viewBox={my_view_box}>
+      <svg className="svg interface" key={6534324} viewBox={my_view_box}>
 
         {lambert_isvis && <polygon points={lambert_polygonPoints} fill={poly_color} />}
         {grid_isvis && grid}

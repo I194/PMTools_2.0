@@ -11,42 +11,56 @@ body{
 }
 
 .svg{
+}
+
+
+.interface{
     width: 500px;
     height: 350px;
     border: 3px solid #999999;
-    margin: 10px;
     border-radius: 6px;
+    margin: 0px 20px 0px 0px;
+    padding: 10px;
 }
-svg:hover {
-   border: 5px solid #6897bb;
-   margin: 8px;
-   border-radius: 6px;
-}
+.interface:hover{
 
-.interface{
-    width: 490px;
-    height: 342px;
-    border: 3px solid #999999;
-    margin: 10px;
-    padding: 5px;
-    border-radius: 8px;
-
+    width: 500px;
+    height: 350px;
+    border: 6px solid #369e9e;
+    border-radius: 12px;
+    margin: -3px 15px -4px -3px;
 }
 
 
-.interface:hover {
-   border: 5px solid #6897bb;
-   margin: 8px;
-   border-radius: 6px;
+
+.data {
+  text-align: center;
+  font-size: 1rem;
+  margin: 2px 2px 5px 2px;
 }
+.my_scroll {
+    overflow: auto;
+    margin-top: 0px;
+    padding: 0;
+    width: 520px;
+    height: 370px;
+}
+.my_scroll:hover {
+  width: 520px;
+  height: 370px;
+  border: 6px solid #999999;
+
+}
+
+
 
 .container {
   float: left;
 }
 .my_text {
   text-align: center;
-  font-size: 1.5rem;
-  margin: 2px;
+  font-size: 1rem;
+  margin: -2.6px 0px 5px 0px;
 }
 
 
@@ -189,31 +203,6 @@ select {
 
 
 
-caption{
-    font-size: 16px;
-    font-family: 'Open Sans', sans-serif;
-    padding: 25px;
-    font-weight: bold;
-}
-
-
-.my_scroll {
-    overflow: auto;
-    margin: 20px 10px;
-    width: 504px;
-    height: 350px;
-    border: 3px solid #999999;
-    border-radius: 6px;
-}
-
-.my_scroll:hover {
-   border: 5px solid #6897bb;
-   margin: 18px 8px;
-   border-radius: 6px;
-
-}
-
-
 table, tr, th {
     font-size: 13px;
     font-family: 'Open Sans', sans-serif;
@@ -246,9 +235,7 @@ tr:hover{
 
 /* Цвет полосы прокрутки */
 ::-webkit-scrollbar {
-
-
-  width: 8px; /* ширина полосы прокрутки */
+  width: 5.5px; /* ширина полосы прокрутки */
 }
 
 /* Фон полосы прокрутки */
@@ -264,11 +251,6 @@ tr:hover{
 
 /* Цвет области под указателем при наведении */
 ::-webkit-scrollbar-thumb:hover {
-  background-color: grey;
+  background-color: #999999;
 
 }
-
-
-
-
-

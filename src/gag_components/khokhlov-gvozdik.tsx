@@ -1,4 +1,4 @@
-import React, {createElement as e, useState} from 'react';
+import React, {createElement as e, useEffect, useState} from 'react';
 import {Zoomed_lambert_graph} from "./zoomed_lambert_graph";
 import {Rotate_sphere} from "./rotate_sphere";
 import "./style.css";
@@ -41,83 +41,74 @@ export function Khokhlov_Gvozdik() {
     // первые значения quantiles выводятся на экран в виде строчки quantiles=___12.3___... эта строка должна меняться каждый
     // раз, когда один из этих трех selectов переключаются, но этого не происходит при первом переключении любого select.
     // при повторном переключении тега select, quantiles меняются на те значения, которые должны были высветиться при предыдущем переключении тега.
-    // Ваня. эти хуки работают корректно. 
-        // Ваня. массив с количеством шагов размагничивания, случайное количество
-        const [step_list, setStepList] = useState<number[]>([]);
-        // Ваня. массив с направлениями == координаты центров кругов, случайные направления, расположенные примерно рядом
-        const [dir_list, setDirList] = useState<[number, number, number][]>([]);
-        // Ваня. количество генерируемых образцов, случайное число
-        const [dir_number, setDirNumb] = useState<number>(0);
+    // Ваня. эти хуки работают корректно.
+    // Ваня. массив с количеством шагов размагничивания, случайное количество
+    const [step_list, setStepList] = useState<number[]>([]);
+    // Ваня. массив с направлениями == координаты центров кругов, случайные направления, расположенные примерно рядом
+    const [dir_list, setDirList] = useState<[number, number, number][]>([]);
+    // Ваня. количество генерируемых образцов, случайное число
+    const [dir_number, setDirNumb] = useState<number>(0);
 
     // Ваня. c этими хуками возникают проблемы.
-        // Ваня. эти три значения задаются выбором в тегах select, и на их основе задается массив quantiles
-            const [apc, setSelectedAPC] = useState<number>(0);
-            const [selectedP, setSelectedP] = useState<number>(990);
-            const [selectedD, setSelectedD] = useState<number>(10);
-        
-        // Ваня. это массивы с радиусами кругов. quantiles - таблицные значения, получаемые из функции первые 5 значений выводятся на экран 
-        const [quantiles, setQuantiles] = useState<number[]>([12.3, 10.1, 8.9, 8.0, 7.4, 6.8, 6.4, 6.1, 5.8, 5.5, 5.3, 5.1, 4.9, 4.8]);
-        // angle_list - массив с углами для каждого образца, рассчитывается из quantiles и step_list.
+    // Ваня. эти три значения задаются выбором в тегах select, и на их основе задается массив quantiles
+    const [apc, setSelectedAPC] = useState<number>(0);
+    const [selectedP, setSelectedP] = useState<number>(990);
+    const [selectedD, setSelectedD] = useState<number>(10);
+
+    // Ваня. это массивы с радиусами кругов. quantiles - таблицные значения, получаемые из функции первые 5 значений выводятся на экран
+    const [quantiles, setQuantiles] = useState<number[]>([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    // angle_list - массив с углами для каждого образца, рассчитывается из quantiles и step_list.
 	const [angle_list, setAngleList] = useState<number[]>([]);
 
-    // Ваня. это select который выбирает параметр d = 10 или 5, для расчета quantiles и angle_list. 
+    // сеттеры в React работают асинхронно, вот тут детали работы указаны https://react.dev/reference/react/useState#setstate-caveats
+    // из-за этого поведения, когда ты пытался вызвать setQuantiles и setAngleList внутри handleDChange и других хэндлеров, у тебя еще не
+    // успевало обновиться состояние setSelectedD (аналогичное с двумя другими сеттерами) и потому ты наблюдал такое поведение
+    // useEffect как раз придуман для реагирования на асинхронные изменения в коде*
+    // *все что я тут написал может быть совсем иначе написано в документации и где либо в сети, это просто моё виденье всего этого процесса
+    useEffect(() => {
+        var quantiles = get_quantiles(selectedD, apc, selectedP);
+        setQuantiles(quantiles);
+
+        var new_ang_list = [];
+        for ( var i = 0; i < dir_number; i ++ ) {
+            new_ang_list.push(quantiles[step_list[i] - 3]);
+        }
+        setAngleList(new_ang_list);
+
+
+    }, [selectedD, apc, selectedP, dir_number, step_list, angle_list]);
+
+    // Ваня. это select который выбирает параметр d = 10 или 5, для расчета quantiles и angle_list.
     //  он должен при изменении менять quantiles и angle_list, и на экране менять строчку quantiles=___12.3___...
     const handleDChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const number = parseInt(event.target.value);
         setSelectedD(number);
-
-        var quantiles = get_quantiles(selectedD, apc, selectedP);
-        setQuantiles(quantiles);
-
-        var new_ang_list = [];
-        for ( var i = 0; i < dir_number; i ++ ) {
-            new_ang_list.push(quantiles[step_list[i]]);
-        }
-        setAngleList(new_ang_list);
     };
 
 
-    // Ваня. это select который выбирает параметр на 0.99/0.975/0.997..., для расчета quantiles и angle_list. 
+    // Ваня. это select который выбирает параметр на 0.99/0.975/0.997..., для расчета quantiles и angle_list.
     //  он должен при изменении менять quantiles и angle_list, и на экране менять строчку quantiles=___12.3___...
     const handlePChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const number = parseInt(event.target.value);
         setSelectedP(number);
-
-        var quantiles = get_quantiles(selectedD, apc, selectedP);
-        setQuantiles(quantiles);
-
-        var new_ang_list = [];
-        for ( var i = 0; i < dir_number; i ++ ) {
-            new_ang_list.push(quantiles[step_list[i]]);
-        }
-        setAngleList(new_ang_list);
     };
 
 
-    // Ваня. это select который выбирает параметр на aPC/PC, для расчета quantiles и angle_list. 
+    // Ваня. это select который выбирает параметр на aPC/PC, для расчета quantiles и angle_list.
     //  он должен при изменении менять quantiles и angle_list, и на экране менять строчку quantiles=___12.3___...
     const handleAPCChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const number = parseInt(event.target.value);
         setSelectedAPC(number);
-
-        var quantiles = get_quantiles(selectedD, apc, selectedP);
-        setQuantiles(quantiles);
-
-        var new_ang_list = [];
-        for ( var i = 0; i < dir_number; i ++ ) {
-            new_ang_list.push(quantiles[step_list[i]]);
-        }
-        setAngleList(new_ang_list);
     };
 
 
-    // Ваня. это кнопка, которая генерирует направления(dir_list), число образцов(dir_number), 
+    // Ваня. это кнопка, которая генерирует направления(dir_list), число образцов(dir_number),
     // количество шагов размагничивания в образцах(step_list) и рассчитывает из quantiles - angle_list
-    // она не меняет quantiles!! она просто генерирует данные, и раздает образцам 
+    // она не меняет quantiles!! она просто генерирует данные, и раздает образцам
     // радиусы их кругов на основе quantiles.
     const generateRandomNumbers = () => {
         var random_list = [];
-        var dir_number = getRandomInt(3, 9 + 1);
+        var dir_number = getRandomInt(5, 9 + 1);
 
         for (var i = 0; i < dir_number; i++)
         {
@@ -126,7 +117,7 @@ export function Khokhlov_Gvozdik() {
         }
 
         var dir_list: [number, number, number][] = [];
-        var angle_list = [];
+
         var step_list = [];
         var paleo_data: number[];
         var step = 0;
@@ -140,16 +131,16 @@ export function Khokhlov_Gvozdik() {
             paleo_data = NormalizeV(RotateAroundV(paleo_data, random_dir, random_angle));
             step = getRandomInt(6, quantiles.length);
 
-            angle_list.push(quantiles[step]);
-            step_list.push(step + 3);
+
+            step_list.push(step);
 
             dir_list.push([paleo_data[0], paleo_data[1], paleo_data[2]]);
         }
-        
+
         setDirList(dir_list);
         setStepList(step_list);
         setDirNumb(dir_number);
-        setAngleList(angle_list);
+        setAngleList([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     };
 
     //-----------------------------------------------------------------------
@@ -381,8 +372,6 @@ export function Khokhlov_Gvozdik() {
                     <option value={950}>0.950</option>
                     <option value={975}>0.975</option>
                     <option value={990}>0.99</option>
-                    <option value={995}>0.995</option>
-                    <option value={997}>0.997</option>
                 </select>
 
 
@@ -414,34 +403,29 @@ export function Khokhlov_Gvozdik() {
                 <b>&#945;95: </b>{alpha95.toFixed(3)}
 
                 <br/>
-                <b>quantiles = </b>
-                {"____"}{quantiles[0]}
-                {"____"}{quantiles[1]}
-                {"____"}{quantiles[2]}
-                {"____"}{quantiles[3]}
-                {"____"}{quantiles[4]}{"_______"}
 
             </div>
+            <div className="container">
+              <h5 className="data">Data view</h5>
+              <div className="interface my_scroll scrollable-table ">
 
-            <h5 className="my_text">Data view</h5>
-            <div className="my_scroll scrollable-table">
-
-                <table>
-                    <thead>
-                        <tr>
-                            <td className="table_head">id</td>
-                            <td className="table_head">Step</td>
-                            <td className="table_head">Angle</td>
-                            <td className="table_head">Dir</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {res}
-                    </tbody>
-                </table>
+                  <table>
+                      <thead>
+                          <tr>
+                              <td className="table_head">id</td>
+                              <td className="table_head">Step</td>
+                              <td className="table_head">Angle</td>
+                              <td className="table_head">Dir</td>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          {res}
+                      </tbody>
+                  </table>
 
 
 
+              </div>
             </div>
 
 
@@ -451,5 +435,3 @@ export function Khokhlov_Gvozdik() {
     </div>
     );
 }
-
-

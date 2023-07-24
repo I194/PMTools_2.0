@@ -106,7 +106,7 @@ export function Rotate_sphere(props:{center_zone: number[], dir_list: number[][]
   return (
     <div key={1653463}>
       <h5 className="my_text">Sphere</h5>
-      <svg className="svg" key={654365434} viewBox="-1 -1 2 2">
+      <svg className="svg interface" key={654365434} viewBox="-1 -1.05 2 2.1">
         {center_degree_grid}{center_circles}{center_center_zone}
       </svg>
     </div>
