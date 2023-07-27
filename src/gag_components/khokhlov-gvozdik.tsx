@@ -74,9 +74,9 @@ export function Khokhlov_Gvozdik() {
             new_ang_list.push(quantiles[step_list[i] - 3]);
         }
         setAngleList(new_ang_list);
+        console.log('angles changed')
 
-
-    }, [selectedD, apc, selectedP, dir_number, step_list, angle_list]);
+    }, [selectedD, apc, selectedP, dir_number, step_list]);
 
     // Ваня. это select который выбирает параметр d = 10 или 5, для расчета quantiles и angle_list.
     //  он должен при изменении менять quantiles и angle_list, и на экране менять строчку quantiles=___12.3___...

@@ -67,12 +67,12 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     //-----------------------------------------------------------------
     // making center zone for drawing on lambert svg
     //-----------------------------------------------------------------
-
+    var my_key = 0;
     var rot_center_zone = convertToLambert(center_zone, lamb_sred_dir);
 
     var lambert_center_zone = e('circle',
                             {
-
+                                key: my_key,
                                 r: center_zone_r,
                                 cx: String(rot_center_zone[0]),
                                 cy: String(rot_center_zone[1]),
@@ -145,6 +145,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
             lambert_circles.push(
                                     e('circle',
                                         {
+                                            key: my_key,
                                             r: circles_r,
                                             cx: String(dir_circle[j][0]),
                                             cy: String(dir_circle[j][1]),
@@ -152,6 +153,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
                                         }, ''
                                     )
                                 );
+            my_key += 1;
         }
     }
     if (max_x < -1 * min_x) {var max_x = -min_x}
@@ -183,6 +185,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
         grid.push(
             e('circle',
                 {
+                    key: my_key,
                     r: grid_r,
                     cx: String(zgp1[i][0]),
                     cy: String(zgp1[i][1]),
@@ -190,14 +193,16 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
                 }, ''
             )
         );
+        my_key += 1;
     }
-
+    my_key += 1;
     //-----------------------------------------------------------------
     // making fisher stat
     //-----------------------------------------------------------------
 
     var fisher_dir = e('circle',
                             {
+                                key: my_key,
                                 r: 0.0035,
                                 cx: String(0),
                                 cy: String(0),
@@ -207,7 +212,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
                         );
 
 
-
+    my_key += 1;
     //---------------------------------------------------------------------------------------
     // making alpha95 circle
     //---------------------------------------------------------------------------------------
@@ -217,6 +222,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     fish_circle.push(
                             e('polyline',
                                 {
+                                    key: my_key,
                                     points: make_coords(PlotCircle([0, 0, 1], alpha95, 90)),
                                     stroke: "red",
                                     fill: 'none',

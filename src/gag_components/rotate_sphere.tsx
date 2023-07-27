@@ -29,7 +29,7 @@ export function Rotate_sphere(props:{center_zone: number[], dir_list: number[][]
 
     var center_center_zone = e('circle',
                             {
-
+                                key: 0,
                                 r: 0.018,
                                 cx: String(rot_center_zone[0]),
                                 cy: String(rot_center_zone[1]),
@@ -43,14 +43,14 @@ export function Rotate_sphere(props:{center_zone: number[], dir_list: number[][]
     //-----------------------------------------------------------------
 
     var center_circles = [];
-
+    var my_key = 1;
     for ( var i = 0; i < dir_list.length; i ++ ) {
 
         var dir_circle = centering(PlotCircle(dir_list[i], angle_list[i], 90), center_zone);
         center_circles.push(
                                 e('polyline',
                                     {
-
+                                        key: my_key,
                                         points: make_coords(dir_circle),
                                         stroke: "black",
                                         fill: 'none',
@@ -60,6 +60,7 @@ export function Rotate_sphere(props:{center_zone: number[], dir_list: number[][]
                                     }, ''
                                 )
                             );
+        my_key += 1;
     }
 
 
@@ -93,6 +94,7 @@ export function Rotate_sphere(props:{center_zone: number[], dir_list: number[][]
         center_degree_grid.push(
             e('polyline',
                 {
+                    key: my_key,
                     points: coords[i],
                     stroke: "black",
                     fill: 'none',
@@ -100,7 +102,7 @@ export function Rotate_sphere(props:{center_zone: number[], dir_list: number[][]
                 }, ''
             )
         );
-
+        my_key += 1;
     }
 
   return (
