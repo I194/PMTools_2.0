@@ -7,18 +7,19 @@ import { MainPageLayout, AppLayout } from '../Layouts';
 import { MainPage, DIRPage, PCAPage, NotFoundPage, WhyPMToolsPage, AuthorsAndHistory } from '../../pages';
 import { useSystemTheme } from '../../utils/GlobalHooks';
 import { setColorMode } from '../../services/reducers/appSettings';
-
+// import "./gag_components/style.css";
+import {Khokhlov_Gvozdik} from "../../gag_components/khokhlov-gvozdik";
 function App() {
 
   const dispatch = useAppDispatch();
-  
+
   const { colorMode, rememberColorMode } = useAppSelector(state => state.appSettingsReducer);
   const systemTheme = useSystemTheme();
 
   // useEffect(() => {
   //   if (!rememberColorMode) dispatch(setColorMode(systemTheme));
   // }, [systemTheme, rememberColorMode]);
-  
+
   useEffect(() => {
     console.log('color', localStorage)
     const previousColorMode = localStorage.getItem('colorMode') || systemTheme;
@@ -47,7 +48,9 @@ function App() {
           <Route path='*' element={<NotFoundPage />}/>
         </Routes>
       </ThemeProvider>
+      <Khokhlov_Gvozdik/>
     </Suspense>
+
   );
 }
 
