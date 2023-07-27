@@ -168,31 +168,6 @@ export function Khokhlov_Gvozdik() {
 
 
 
-    //-----------------------------------------------------------------------
-    //
-    //-----------------------------------------------------------------------
-
-   var table_data = [];
-
-   for (var i = 0; i < dir_number; i++) {
-        table_data.push(
-            {
-                id: i + 1,
-                step_numb: step_list[i],
-                angles: angle_list[i],
-                dir_coords: String(dir_list[i][0]) + "\n" + String(dir_list[i][1]) + "\n" + String(dir_list[i][2]) + "\n"
-            }
-        );
-    }
-
-   let res = table_data.map(function(item) {
-      return <tr key={item.id}>
-         <td>{item.id}</td>
-         <td>{item.step_numb}</td>
-         <td>{item.angles}</td>
-         <td className="coords">{item.dir_coords}</td>
-      </tr>;
-   });
 
     //-----------------------------------------------------------------------
     // fisher stat
@@ -347,7 +322,7 @@ export function Khokhlov_Gvozdik() {
         <div className="container">
             <h5 className="my_text">Interface</h5>
             <div className="interface">
-                <select value={selectedNumber} onChange={handleNumberChange}>
+                <select className="my_select" value={selectedNumber} onChange={handleNumberChange}>
                     <option value={50000}>50 000</option>
                     <option value={100000}>100 000</option>
                     <option value={250000}>250 000</option>
@@ -361,21 +336,21 @@ export function Khokhlov_Gvozdik() {
                 </select>
 
 
-                <select value={selectedD} onChange={handleDChange}>
+                <select className="my_select" value={selectedD} onChange={handleDChange}>
                     <option value={10}>d = 10</option>
                     <option value={5}>d = 5</option>
                 </select>
 
                 <br/>
 
-                <select value={selectedP} onChange={handlePChange}>
+                <select className="my_select" value={selectedP} onChange={handlePChange}>
                     <option value={950}>0.950</option>
                     <option value={975}>0.975</option>
                     <option value={990}>0.99</option>
                 </select>
 
 
-                <select value={apc} onChange={handleAPCChange}>
+                <select className="my_select" value={apc} onChange={handleAPCChange}>
                     <option value={1}>aPC</option>
                     <option value={0}>PC</option>
                 </select>
@@ -384,52 +359,30 @@ export function Khokhlov_Gvozdik() {
                 <button className="button" onClick={generateRandomNumbers}>Generate Random Numbers</button>
                 <br/>
 
-                <label className="my_input">Zone painting
+                <label className="my_input"><div className="info">Zone painting</div>
                     <input type="checkbox" checked={isvis} onChange={handleCheckboxChange}/>
                     <span className="checkmark"></span>
                 </label>
 
-                <label className="my_input">Grid painting
+                <label className="my_input"><div className="info">Grid painting</div>
                     <input type="checkbox" checked={isvisgrid} onChange={gridCheckboxChange}/>
                     <span className="checkmark"></span>
                 </label>
 
-                <b>The percentage of the zone from the sphere:</b>
-                {" " + String((zone_square(grid_points.length, points_numb) * 100).toFixed(3))}%.
-                <br/>
-                <b>Maxium radius of the zone: </b>{max_rad.toFixed(3)}
+                <div className="info">
+                    <b>The percentage of the zone from the sphere:</b>
+                    {" " + String((zone_square(grid_points.length, points_numb) * 100).toFixed(3))}%.
+                    <br/>
 
-                <br/>
-                <b>&#945;95: </b>{alpha95.toFixed(3)}
+                    <b>Maxium radius of the zone: </b>{max_rad.toFixed(3)}
 
-                <br/>
+                    <br/>
+                    <b>&#945;95: </b>{alpha95.toFixed(3)}
+                    <br/>
+                </div>
+
 
             </div>
-            <div className="container">
-              <h5 className="data">Data view</h5>
-              <div className="interface my_scroll scrollable-table ">
-
-                  <table>
-                      <thead>
-                          <tr>
-                              <td className="table_head">id</td>
-                              <td className="table_head">Step</td>
-                              <td className="table_head">Angle</td>
-                              <td className="table_head">Dir</td>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          {res}
-                      </tbody>
-                  </table>
-
-
-
-              </div>
-            </div>
-
-
-
 
         </div>
     </div>

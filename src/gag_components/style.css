@@ -1,31 +1,16 @@
-body{
-    padding: 50px;
-    font-size: 16px;
-    font-family: 'Open Sans', sans-serif;
-    color: #202020;
-}
-.box{
-    display: grid;
-    grid-template-columns: repeat();
-    justify-items: center;
-}
 
-.svg{
-}
+
 
 
 .interface{
-    width: 500px;
-    height: 350px;
+    width: 350px;
+    height: 220px;
     border: 3px solid #999999;
     border-radius: 6px;
     margin: 0px 20px 0px 0px;
     padding: 10px;
 }
 .interface:hover{
-
-    width: 500px;
-    height: 350px;
     border: 6px solid #369e9e;
     border-radius: 12px;
     margin: -3px 15px -4px -3px;
@@ -59,13 +44,18 @@ body{
 }
 .my_text {
   text-align: center;
-  font-size: 1rem;
+  font-size: 12px;
   margin: -2.6px 0px 5px 0px;
+}
+
+.info {
+  font-size: 8px;
+
 }
 
 
 .button {
-   font-size: 16px;
+   font-size: 8px;
    font-family: 'Open Sans', sans-serif;
     transition-duration: 0.15s;
     border: none;
@@ -77,6 +67,7 @@ body{
     border-radius: 8px;
     margin: 6px;
     width: 235px;
+    height: 20px;
 
 }
 
@@ -95,9 +86,10 @@ body{
 }
 
 
-select {
+.my_select {
     width: 235px;
-   font-size: 16px;
+    height: 20px;
+   font-size: 8px;
    font-family: 'Open Sans', sans-serif;
    -webkit-appearance:none;
    -moz-appearance:none;
@@ -199,58 +191,6 @@ select {
 
 }
 
-
-
-
-
-table, tr, th {
-    font-size: 13px;
-    font-family: 'Open Sans', sans-serif;
-    border-collapse:collapse;
-    white-space: pre;
-}
-td {
-   border-bottom: 3px solid #999999;
-   border-right: 3px solid #999999;
-   padding: 11px 0px 11px 0px;
-   text-align: center;
-   width: 80px;
-
-}
 .coords {
    width: 264px;
-}
-
-th:hover{
-    background: rgba(153, 204, 255, 0.5);
-
-}
-
-tr:hover{
-    background: rgb(245, 245, 245);
-}
-.table_head:hover{
-    background: rgba(153, 204, 255, 0.5);
-}
-
-/* Цвет полосы прокрутки */
-::-webkit-scrollbar {
-  width: 5.5px; /* ширина полосы прокрутки */
-}
-
-/* Фон полосы прокрутки */
-::-webkit-scrollbar-track {
-  background-color: #f1f1f1;
-}
-
-/* Цвет области под указателем */
-::-webkit-scrollbar-thumb {
-  background-color: #999999;
-
-}
-
-/* Цвет области под указателем при наведении */
-::-webkit-scrollbar-thumb:hover {
-  background-color: #999999;
-
 }
