@@ -44,11 +44,11 @@ function App() {
           <Route path='/app' element={<AppLayout />}>
             <Route path='pca' element={<PCAPage />}/>
             <Route path='dir' element={<DIRPage />}/>
-            <Route path='dir' element={<Khokhlov_Gvozdik />}/>
-        
+            <Route path='Khokhlov_Gvozdik' element={<Khokhlov_Gvozdik />}/>
           </Route>
           <Route path='*' element={<NotFoundPage />}/>
         </Routes>
+
       </ThemeProvider>
       
     </Suspense>

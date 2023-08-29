@@ -60,7 +60,7 @@ const AppNavigation: FC = ({}) => {
       <NavButton 
         label={t('')}
         icon={'Khokhlov-Gvozdik'}
-        to={'/app/khokhlov_gvozdik'}
+        to={'Khokhlov_Gvozdik'}
       />
 
       <NavButton 
