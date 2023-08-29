@@ -36,35 +36,24 @@ export function Khokhlov_Gvozdik() {
     var max_lat = 0;
     var min_lat = 10;
 
-    // Ваня. проблема в участке кода с 40 по 150 строку. есть кнопка, три тега select(их 4, но первый обособлен и работает нормально) и строчка, которая выводится на экран.
-    // теги select задают значения радиусов кругов, при их переключении должны меняться радиусы кругов, записанные в переменную quantiles,
-    // первые значения quantiles выводятся на экран в виде строчки quantiles=___12.3___... эта строка должна меняться каждый
-    // раз, когда один из этих трех selectов переключаются, но этого не происходит при первом переключении любого select.
-    // при повторном переключении тега select, quantiles меняются на те значения, которые должны были высветиться при предыдущем переключении тега.
-    // Ваня. эти хуки работают корректно.
-    // Ваня. массив с количеством шагов размагничивания, случайное количество
+   
     const [step_list, setStepList] = useState<number[]>([]);
-    // Ваня. массив с направлениями == координаты центров кругов, случайные направления, расположенные примерно рядом
+
     const [dir_list, setDirList] = useState<[number, number, number][]>([]);
-    // Ваня. количество генерируемых образцов, случайное число
+
     const [dir_number, setDirNumb] = useState<number>(0);
 
-    // Ваня. c этими хуками возникают проблемы.
-    // Ваня. эти три значения задаются выбором в тегах select, и на их основе задается массив quantiles
+
     const [apc, setSelectedAPC] = useState<number>(0);
     const [selectedP, setSelectedP] = useState<number>(990);
     const [selectedD, setSelectedD] = useState<number>(10);
 
-    // Ваня. это массивы с радиусами кругов. quantiles - таблицные значения, получаемые из функции первые 5 значений выводятся на экран
+
     const [quantiles, setQuantiles] = useState<number[]>([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-    // angle_list - массив с углами для каждого образца, рассчитывается из quantiles и step_list.
+
 	const [angle_list, setAngleList] = useState<number[]>([]);
 
-    // сеттеры в React работают асинхронно, вот тут детали работы указаны https://react.dev/reference/react/useState#setstate-caveats
-    // из-за этого поведения, когда ты пытался вызвать setQuantiles и setAngleList внутри handleDChange и других хэндлеров, у тебя еще не
-    // успевало обновиться состояние setSelectedD (аналогичное с двумя другими сеттерами) и потому ты наблюдал такое поведение
-    // useEffect как раз придуман для реагирования на асинхронные изменения в коде*
-    // *все что я тут написал может быть совсем иначе написано в документации и где либо в сети, это просто моё виденье всего этого процесса
+
     useEffect(() => {
         var quantiles = get_quantiles(selectedD, apc, selectedP);
         setQuantiles(quantiles);
@@ -78,34 +67,27 @@ export function Khokhlov_Gvozdik() {
 
     }, [selectedD, apc, selectedP, dir_number, step_list]);
 
-    // Ваня. это select который выбирает параметр d = 10 или 5, для расчета quantiles и angle_list.
-    //  он должен при изменении менять quantiles и angle_list, и на экране менять строчку quantiles=___12.3___...
+
     const handleDChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const number = parseInt(event.target.value);
         setSelectedD(number);
     };
 
 
-    // Ваня. это select который выбирает параметр на 0.99/0.975/0.997..., для расчета quantiles и angle_list.
-    //  он должен при изменении менять quantiles и angle_list, и на экране менять строчку quantiles=___12.3___...
+
     const handlePChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const number = parseInt(event.target.value);
         setSelectedP(number);
     };
 
 
-    // Ваня. это select который выбирает параметр на aPC/PC, для расчета quantiles и angle_list.
-    //  он должен при изменении менять quantiles и angle_list, и на экране менять строчку quantiles=___12.3___...
+
     const handleAPCChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const number = parseInt(event.target.value);
         setSelectedAPC(number);
     };
 
 
-    // Ваня. это кнопка, которая генерирует направления(dir_list), число образцов(dir_number),
-    // количество шагов размагничивания в образцах(step_list) и рассчитывает из quantiles - angle_list
-    // она не меняет quantiles!! она просто генерирует данные, и раздает образцам
-    // радиусы их кругов на основе quantiles.
     const generateRandomNumbers = () => {
         var random_list = [];
         var dir_number = getRandomInt(5, 9 + 1);
@@ -143,9 +125,7 @@ export function Khokhlov_Gvozdik() {
         setAngleList([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     };
 
-    //-----------------------------------------------------------------------
-    // Ваня. Дальше все работает корректно
-    //-----------------------------------------------------------------------
+
 
     const [isvis, setIsVisible] = useState(true);
     const handleCheckboxChange = () => {

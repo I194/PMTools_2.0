@@ -12,6 +12,7 @@ import OtherHousesIcon from '@mui/icons-material/OtherHouses';
 import { DefaultIconButton } from "../../Sub/Buttons";
 import { useTranslation } from "react-i18next";
 import { Menu, MenuItem } from "@mui/material";
+import {Khokhlov_Gvozdik} from "../../../gag_components/khokhlov-gvozdik";
 
 const AppNavigation: FC = ({}) => {
 
@@ -56,6 +57,12 @@ const AppNavigation: FC = ({}) => {
         icon={'DIR'}
         to={'/app/dir'}
       />
+      <NavButton 
+        label={t('')}
+        icon={'Khokhlov-Gvozdik'}
+        to={'/app/khokhlov_gvozdik'}
+      />
+
       <NavButton 
         label={t('appLayout.navPanel.projectRepo')}
         icon={<GitHubIcon />}
