@@ -23,14 +23,16 @@ import {
     get_quantiles
     } from "./gag_functions";
 
-
+// import styles from '../pages/DIRPage/DIRPage.module.scss';
+// import { bgColorMain } from '../utils/ThemeConstants';
+// import { useTheme } from '@mui/material/styles';
 
 export function Khokhlov_Gvozdik() {
 
     //-----------------------------------------------------------
     // input data generating
     //-----------------------------------------------------------
-
+    // const theme = useTheme();
     var max_lon = 0;
     var min_lon = 10;
     var max_lat = 0;
@@ -278,8 +280,9 @@ export function Khokhlov_Gvozdik() {
     };
 
     return (
+    // <div className={styles.data} style={{backgroundColor: bgColorMain(theme.palette.mode)}}> 
     <div>
-        <div className="container">
+        <div className="graph_container">
             <Zoomed_lambert_graph
                 center_zone={center_zone}
                 dir_list={dir_list}
@@ -292,12 +295,15 @@ export function Khokhlov_Gvozdik() {
                 isvisgrid={isvisgrid}
                 polygonPoints={polygonPoints}
             />
+        </div>
 
+        <div className="sphere_container">       
             <Rotate_sphere
                 center_zone={center_zone}
                 dir_list={dir_list}
                 angle_list={angle_list}/>
         </div>
+
 
         <div className="container">
             <h5 className="my_text">Interface</h5>

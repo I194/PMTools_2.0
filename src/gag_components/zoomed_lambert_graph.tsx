@@ -237,7 +237,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     <div key={1227544233}>
       <h5 className="my_text">Lambert svg</h5>
 
-      <svg className="svg interface" key={6534324} viewBox={my_view_box}>
+      <svg className="svg graph_interface" key={6534324} viewBox={my_view_box}>
 
         {lambert_isvis && <polygon points={lambert_polygonPoints} fill={poly_color} />}
         {grid_isvis && grid}

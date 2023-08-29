@@ -1,20 +1,87 @@
 
 
 
+.sphere_interface{
+  width: 250px;
+  height: 250px;
+  border: 3px solid #999999;
+  border-radius: 6px;
 
-.interface{
-    width: 350px;
-    height: 220px;
+  padding: 10px;
+  margin: auto;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+.sphere_interface:hover{
+  border: 3px solid #4690db;
+  border-radius: 12px;
+
+}
+
+.sphere_container {
+float: right;
+background-color: white;
+width:300px;
+height:320px;
+margin: 10px;
+box-shadow: rgba(34, 60, 80, 0.21) 0px 0px 10px 1px;
+}
+
+
+
+
+.graph_interface{
+    width: 400px;
+    height: 400px;
     border: 3px solid #999999;
     border-radius: 6px;
-    margin: 0px 20px 0px 0px;
+
     padding: 10px;
+    margin: auto;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+.graph_interface:hover{
+    border: 3px solid #4690db;
+    border-radius: 12px;
+
+}
+
+.graph_container {
+  float: right;
+  background-color: white;
+  width:450px;
+  height:470px;
+  margin: 10px;
+  box-shadow: rgba(34, 60, 80, 0.21) 0px 0px 10px 1px;
+}
+
+
+.interface{
+  width: 450px;
+  height: 400px;
+  border: 3px solid #999999;
+  border-radius: 6px;
+  padding: 10px;
+  margin: auto;
+
+  margin-bottom: 10px;
 }
 .interface:hover{
-    border: 6px solid #369e9e;
-    border-radius: 12px;
-    margin: -3px 15px -4px -3px;
+  border: 3px solid #4690db;
+  border-radius: 12px;
+
 }
+
+.container {
+  float: right;
+  background-color: white;
+  width:500px;
+  height:470px;
+  margin: 10px;
+  box-shadow: rgba(34, 60, 80, 0.21) 0px 0px 10px 1px;
+}
+
 
 
 
@@ -39,40 +106,37 @@
 
 
 
-.container {
-  float: left;
-}
 .my_text {
   text-align: center;
-  font-size: 12px;
+  font-size: 20px;
   margin: -2.6px 0px 5px 0px;
 }
 
 .info {
-  font-size: 8px;
+  font-size: 14px;
 
 }
 
 
 .button {
-   font-size: 8px;
+   font-size: 14px;
    font-family: 'Open Sans', sans-serif;
     transition-duration: 0.15s;
     border: none;
     color: white;
-    background: #71cd94;
-    padding: 3px;
+    background: #4690db;
+    padding: 6px;
     text-align: center;
     box-shadow: 0px 0px 3px 0px #999999;
     border-radius: 8px;
-    margin: 3px;
+    margin: 5px;
     width: 235px;
-    height: 20px;
+    height: 40px;
 
 }
 
 .button:hover {
-    background-color: #38ba69;
+    background-color: #1975d2;
     color: white;
     border-radius: 3px;
 
@@ -88,8 +152,8 @@
 
 .my_select {
     width: 235px;
-    height: 20px;
-   font-size: 8px;
+    height: 40px;
+   font-size: 14px;
    font-family: 'Open Sans', sans-serif;
    -webkit-appearance:none;
    -moz-appearance:none;
@@ -116,8 +180,8 @@
   display: block;
   position: relative;
   padding-left: 27px;
-  margin: 5px;
-  font-size: 16px;
+  margin: 15px;
+  
   font-family: 'Open Sans', sans-serif;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -154,10 +218,10 @@
 
 /* When the checkbox is checked, add a blue background */
 .my_input input:checked ~ .checkmark {
-  background-color: #71cd94;
+  background-color: #4690db;
 }
 .my_input input:checked:hover ~ .checkmark {
-  background-color: #38ba69;
+  background-color: #1975d2;
   border-radius: 2px;
   transition-duration: 0.35s;
 }
