@@ -27,8 +27,17 @@ import {
 // import { bgColorMain } from '../utils/ThemeConstants';
 // import { useTheme } from '@mui/material/styles';
 
-export function Khokhlov_Gvozdik() {
+import ModalWrapper from '../components/Sub/Modal/ModalWrapper';
+import UploadModal from '../components/Sub/Modal/UploadModal/UploadModal';
+import { useMediaQuery } from 'react-responsive';
+// import Tables from './Tables';
+// import { IDirData } from '../utils/GlobalTypes';
+// import { useAppSelector } from '../services/store/hooks';
 
+export function Khokhlov_Gvozdik() {
+    // const [dataToShow, setDataToShow] = useState<IDirData | null>(null);
+    const [showUploadModal, setShowUploadModal] = useState<boolean>(true);
+    const widthLessThan720 = useMediaQuery({ maxWidth: 719 });
     //-----------------------------------------------------------
     // input data generating
     //-----------------------------------------------------------
@@ -282,6 +291,8 @@ export function Khokhlov_Gvozdik() {
     return (
     // <div className={styles.data} style={{backgroundColor: bgColorMain(theme.palette.mode)}}> 
     <div>
+        {/* <Tables dataToShow={dataToShow}/> */}
+
         <div className="graph_container">
             <Zoomed_lambert_graph
                 center_zone={center_zone}
@@ -371,6 +382,15 @@ export function Khokhlov_Gvozdik() {
             </div>
 
         </div>
+
+        <ModalWrapper
+        open={showUploadModal}
+        setOpen={setShowUploadModal}
+        size={{width: '60vw', height: widthLessThan720 ? 'fit-content' : '60vh'}}
+        showBottomClose
+      >
+        <UploadModal page='dir' />
+      </ModalWrapper>
     </div>
     );
 }
