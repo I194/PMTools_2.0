@@ -290,10 +290,10 @@ export function Khokhlov_Gvozdik() {
 
     return (
     // <div className={styles.data} style={{backgroundColor: bgColorMain(theme.palette.mode)}}> 
-    <div>
+    <div className="main_container">
         {/* <Tables dataToShow={dataToShow}/> */}
 
-        <div className="graph_container">
+        <div className="graph_container common-container">
             <Zoomed_lambert_graph
                 center_zone={center_zone}
                 dir_list={dir_list}
@@ -306,57 +306,8 @@ export function Khokhlov_Gvozdik() {
                 isvisgrid={isvisgrid}
                 polygonPoints={polygonPoints}
             />
-        </div>
-
-        <div className="sphere_container">       
-            <Rotate_sphere
-                center_zone={center_zone}
-                dir_list={dir_list}
-                angle_list={angle_list}/>
-        </div>
-
-
-        <div className="container">
-            <h5 className="my_text">Interface</h5>
-            <div className="interface">
-                <select className="my_select" value={selectedNumber} onChange={handleNumberChange}>
-                    <option value={50000}>50 000</option>
-                    <option value={100000}>100 000</option>
-                    <option value={250000}>250 000</option>
-                    <option value={500000}>500 000</option>
-                    <option value={1000000}>1 000 000</option>
-                    <option value={1500000}>1 500 000</option>
-                    <option value={2000000}>2 000 000</option>
-                    <option value={2500000}>2 500 000</option>
-                    <option value={3000000}>3 000 000</option>
-                    <option value={3500000}>3 500 000</option>
-                </select>
-
-
-                <select className="my_select" value={selectedD} onChange={handleDChange}>
-                    <option value={10}>d = 10</option>
-                    <option value={5}>d = 5</option>
-                </select>
-
-                <br/>
-
-                <select className="my_select" value={selectedP} onChange={handlePChange}>
-                    <option value={950}>0.950</option>
-                    <option value={975}>0.975</option>
-                    <option value={990}>0.99</option>
-                </select>
-
-
-                <select className="my_select" value={apc} onChange={handleAPCChange}>
-                    <option value={1}>aPC</option>
-                    <option value={0}>PC</option>
-                </select>
-
-                <br/>
-                <button className="button" onClick={generateRandomNumbers}>Generate Random Numbers</button>
-                <br/>
-
-                <label className="my_input"><div className="info">Zone painting</div>
+            
+            <label className="my_input"><div className="info">Zone painting</div>
                     <input type="checkbox" checked={isvis} onChange={handleCheckboxChange}/>
                     <span className="checkmark"></span>
                 </label>
@@ -364,19 +315,80 @@ export function Khokhlov_Gvozdik() {
                 <label className="my_input"><div className="info">Grid painting</div>
                     <input type="checkbox" checked={isvisgrid} onChange={gridCheckboxChange}/>
                     <span className="checkmark"></span>
-                </label>
+            </label>
+        </div>
 
-                <div className="info">
+        <div className="table_container common-container">
+            table
+        </div>
+
+        <div className="table2_container common-container">
+            table2
+        </div>
+
+        <div className="sphere_container common-container">       
+                    <Rotate_sphere
+                        center_zone={center_zone}
+                        dir_list={dir_list}
+                        angle_list={angle_list}/>
+        </div>
+
+
+        <div className="container common-container">
+            <h5 className="my_text">Interface</h5>
+            <div className="interface">
+                
+
+                    <select className="select1-item item my_select" value={selectedNumber} onChange={handleNumberChange}>
+                        <option value={50000}>50 000</option>
+                        <option value={100000}>100 000</option>
+                        <option value={250000}>250 000</option>
+                        <option value={500000}>500 000</option>
+                        <option value={1000000}>1 000 000</option>
+                        <option value={1500000}>1 500 000</option>
+                        <option value={2000000}>2 000 000</option>
+                        <option value={2500000}>2 500 000</option>
+                        <option value={3000000}>3 000 000</option>
+                        <option value={3500000}>3 500 000</option>
+                    </select>
+     
+
+                    <select className="select2-item item my_select" value={selectedD} onChange={handleDChange}>
+                        <option value={10}>d = 10</option>
+                        <option value={5}>d = 5</option>
+                    </select>
+
+
+                    <select className="select3-item item my_select" value={selectedP} onChange={handlePChange}>
+                        <option value={950}>0.950</option>
+                        <option value={975}>0.975</option>
+                        <option value={990}>0.99</option>
+                    </select>
+
+
+
+                    <select className="select4-item item my_select" value={apc} onChange={handleAPCChange}>
+                        <option value={1}>aPC</option>
+                        <option value={0}>PC</option>
+                    </select>
+
+
+                <div className="button-item item">
+                    <button className="button" onClick={generateRandomNumbers}>Generate Random Numbers</button>
+                </div>
+
+
+                <div className="info-item info item">
                     <b>The percentage of the zone from the sphere:</b>
                     {" " + String((zone_square(grid_points.length, points_numb) * 100).toFixed(3))}%.
                     <br/>
-
                     <b>Maxium radius of the zone: </b>{max_rad.toFixed(3)}
-
                     <br/>
                     <b>&#945;95: </b>{alpha95.toFixed(3)}
                     <br/>
                 </div>
+
+
 
 
             </div>
