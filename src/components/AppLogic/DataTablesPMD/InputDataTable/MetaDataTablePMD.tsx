@@ -7,8 +7,8 @@ import { GetDataTableBaseStyle } from "../styleConstants";
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
 import { setTreatmentData } from "../../../../services/reducers/parsedData";
 import EditIcon from '@mui/icons-material/Edit';
-import MetaDataChange from "../../../Sub/DataTable/MetaDataChange/MetaDataChange";
-import ModalWrapper from "../../../Sub/Modal/ModalWrapper";
+import MetaDataChange from "../../../Common/DataTable/MetaDataChange/MetaDataChange";
+import ModalWrapper from "../../../Common/Modal/ModalWrapper";
 import { useMediaQuery } from "react-responsive";
 
 interface IMetaDataTablePMD {

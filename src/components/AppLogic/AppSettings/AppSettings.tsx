@@ -10,15 +10,15 @@ import {
   textColor
 } from '../../../utils/ThemeConstants';
 import { useMediaQuery } from "react-responsive";
-import ModalWrapper from "../../Sub/Modal/ModalWrapper";
-import SettingsModal from "../../Sub/Modal/SettingsModal/SettingsModal";
+import ModalWrapper from "../../Common/Modal/ModalWrapper";
+import SettingsModal from "../../Common/Modal/SettingsModal/SettingsModal";
 import { setHotkeys } from "../../../services/reducers/appSettings";
 
-import { DefaultButton, DefaultResponsiveButton } from "../../Sub/Buttons";
+import { DefaultButton, DefaultResponsiveButton } from "../../Common/Buttons";
 import { useTranslation } from "react-i18next";
 import { HotkeysType } from "../../../utils/GlobalTypes";
 import { useDefaultHotkeys } from "../../../utils/GlobalHooks";
-import HelpModal from "../../Sub/Modal/HelpModal/HelpModal";
+import HelpModal from "../../Common/Modal/HelpModal/HelpModal";
 
 interface IAppSettings {
   onFileUpload: (event: any, files?: Array<File>) => void;
@@ -125,7 +125,7 @@ const AppSettings: FC<IAppSettings> = ({
       <ModalWrapper
         open={showHelp}
         setOpen={setShowHelp}
-        size={{width: '21vw', height: '12vh'}}
+        // size={{width: '21vw', height: '12vh'}}
       >
         <HelpModal />
       </ModalWrapper>

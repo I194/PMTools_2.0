@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "../../../services/store/hooks";
 import { useTheme } from '@mui/material/styles';
 import { useMediaQuery } from "react-responsive";
 
-import { DefaultResponsiveButton } from "../../Sub/Buttons";
+import { DefaultResponsiveButton } from "../../Common/Buttons";
 import { GraphPMD } from "../../../utils/GlobalTypes";
 import { setLargeGraph } from "../../../services/reducers/pcaPage";
 

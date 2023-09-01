@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import styles from './AppNavigation.module.scss';
 import { Button } from '@mui/material';
 import { NavLink } from 'react-router-dom';
-import { DefaultResponsiveButton } from "../../Sub/Buttons";
+import { DefaultResponsiveButton } from "../../Common/Buttons";
 
 interface INavButton {
   label: string;

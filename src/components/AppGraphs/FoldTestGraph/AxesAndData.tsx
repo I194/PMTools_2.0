@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { DotsData, GraphSettings, TooltipDot } from "../../../utils/graphs/types";
-import { Axis, Data } from "../../Sub/Graphs";
+import { Axis, Data } from "../../Common/Graphs";
 
 interface IAxesAndData {
   graphId: string;

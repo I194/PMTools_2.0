@@ -10,7 +10,7 @@ import {
   primaryColor,
   successColor,
 } from '../../../../utils/ThemeConstants';
-import { VerticalTabs } from "../../../Sub/Tabs";
+import { VerticalTabs } from "../../../Common/Tabs";
 import ReversalTestContainer from "./ReversalTestContainer/ReversalTestUncontrolledContainer";
 import ReversalTestUncontrolledContainer from "./ReversalTestContainer/ReversalTestUncontrolledContainer";
 import ReversalTestControlledContainer from "./ReversalTestContainer/ReversalTestControlledContainer";
