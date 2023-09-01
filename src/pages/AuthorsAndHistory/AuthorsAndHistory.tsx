@@ -4,7 +4,7 @@ import { useTheme } from '@mui/material/styles';
 import { useMediaQuery } from 'react-responsive';
 import Authors from './Authors';
 import History from './History';
-import { PrettyButton } from '../../components/Sub/Buttons';
+import { PrettyButton } from '../../components/Common/Buttons';
 import { useTranslation } from 'react-i18next';
 
 const AuthorsAndHistory: FC = ({}) => {

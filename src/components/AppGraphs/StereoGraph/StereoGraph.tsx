@@ -5,11 +5,11 @@ import { useGraphSelectableNodesPCA, useGraphSelectedIDs, usePMDGraphSettings } 
 import { IGraph, RawStatisticsPCA } from "../../../utils/GlobalTypes";
 import { IPmdData } from "../../../utils/GlobalTypes";
 import dataToStereoPMD from "../../../utils/graphs/formatters/stereo/dataToStereoPMD";
-import { SelectableGraph, GraphSymbols } from "../../Sub/Graphs";
+import { SelectableGraph, GraphSymbols } from "../../Common/Graphs";
 import { stereoAreaConstants } from "./StereoConstants";
 import AxesAndData from "./AxesAndData";
 import getInterpretationIDs from "../../../utils/graphs/formatters/getInterpretationIDs";
-import CoordinateSystem from "../../Sub/Graphs/CoordinateSystem/CoordinateSystem";
+import CoordinateSystem from "../../Common/Graphs/CoordinateSystem/CoordinateSystem";
 import { GraphSettings, TMenuItem } from "../../../utils/graphs/types";
 
 export interface IStereoGraph extends IGraph {
@@ -21,13 +21,7 @@ export interface IStereoGraph extends IGraph {
 }
 
 const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data, menuSettings }) => {
-
-  // ToDo: 
-  // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
-  // 2. zoom&pan
-
-  const { reference, currentInterpretation, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
-  // const { menuItems, settings } = usePMDGraphSettings();
+  const { reference, currentInterpretation, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer);
   const { menuItems, settings } = menuSettings;
   const selectableNodes = useGraphSelectableNodesPCA(graphId, false); 
   const selectedIDs = useGraphSelectedIDs();

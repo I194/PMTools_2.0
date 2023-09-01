@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { useAppSelector } from "../../../services/store/hooks";
 import projectionByReference from "../../../utils/graphs/formatters/zijd/projectionByReference";
 import { DotsData, GraphSettings, PCALines, TooltipDot } from "../../../utils/graphs/types";
-import { Axis, Data } from "../../Sub/Graphs";
+import { Axis, Data } from "../../Common/Graphs";
 import { useTheme } from '@mui/material/styles';
 import { warningColor } from "../../../utils/ThemeConstants";
 

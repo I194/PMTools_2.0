@@ -11,7 +11,7 @@ import { DataGridDIRFromPCARow, StatisitcsInterpretationFromPCA } from "../../..
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
 import { deleteInterpretation, setAllInterpretations, updateCurrentFileInterpretations, updateCurrentInterpretation } from "../../../../services/reducers/pcaPage";
-import PMDStatisticsDataTableToolbar from "../../../Sub/DataTable/Toolbar/PMDStatisticsDataTableToolbar";
+import PMDStatisticsDataTableToolbar from "../../../Common/DataTable/Toolbar/PMDStatisticsDataTableToolbar";
 import equal from "deep-equal";
 import { acitvateHotkeys, deactivateHotkeys } from "../../../../services/reducers/appSettings";
 

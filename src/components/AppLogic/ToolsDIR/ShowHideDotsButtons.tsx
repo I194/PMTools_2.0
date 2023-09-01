@@ -2,7 +2,7 @@ import React, { FC, useCallback, useEffect, useState } from "react";
 import styles from './ToolsDIR.module.scss';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
 import { Button, Tooltip, Typography } from "@mui/material";
-import ButtonGroupWithLabel from "../../Sub/Buttons/ButtonGroupWithLabel/ButtonGroupWithLabel";
+import ButtonGroupWithLabel from "../../Common/Buttons/ButtonGroupWithLabel/ButtonGroupWithLabel";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { 
@@ -12,8 +12,8 @@ import {
   setStatisticsMode 
 } from "../../../services/reducers/dirPage";
 import { IDirData } from '../../../utils/GlobalTypes';
-import ModalWrapper from "../../Sub/Modal/ModalWrapper";
-import InputApply from "../../Sub/InputApply/InputApply";
+import ModalWrapper from "../../Common/Modal/ModalWrapper";
+import InputApply from "../../Common/InputApply/InputApply";
 import parseDotsIndexesInput from "../../../utils/parsers/parseDotsIndexesInput";
 import { enteredIndexesToIDsDIR } from "../../../utils/parsers/enteredIndexesToIDs";
 import { useTranslation } from "react-i18next";

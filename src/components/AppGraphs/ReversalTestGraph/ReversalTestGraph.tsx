@@ -4,7 +4,7 @@ import { useGraphSelectableNodesPCA, useGraphSelectedIDs, usePMDGraphSettings } 
 import { CommonMeanTestBootstrapResult, FoldTestResult, IGraph } from "../../../utils/GlobalTypes";
 import { IPmdData } from "../../../utils/GlobalTypes";
 import dataToMag from "../../../utils/graphs/formatters/mag/dataToMag";
-import { SelectableGraph } from "../../Sub/Graphs";
+import { SelectableGraph } from "../../Common/Graphs";
 import { reversalTestConstants } from "./ReversalTestConstants";
 import AxesAndData from "./AxesAndData";
 import getInterpretationIDs from "../../../utils/graphs/formatters/getInterpretationIDs";
@@ -17,11 +17,6 @@ export interface IReversalTestGraph extends IGraph {
 }
 
 const ReversalTestGraph: FC<IReversalTestGraph> = ({ graphId, width, height, data }) => {
-
-  // ToDo: 
-  // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
-  // 2. zoom&pan
-
   const { menuItems, settings } = usePMDGraphSettings();
 
   const dataConstants = useMemo(() => dataToReversalTest(data, width, height), [data, width, height]);

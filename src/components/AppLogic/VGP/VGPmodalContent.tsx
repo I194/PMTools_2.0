@@ -5,7 +5,7 @@ import SitesDataTable from '../DataTablesDIR/SitesDataTable/SitesDataTable';
 import VGPDataTable from "../DataTablesDIR/VGPDataTable/VGPDataTable";
 import Graphs from "./Graphs";
 import { Typography, Button, Input } from "@mui/material";
-import { UploadButton } from '../../Sub/Buttons';
+import { UploadButton } from '../../Common/Buttons';
 import { useAppDispatch, useAppSelector } from "../../../services/store/hooks";
 import { sitesFileToLatLon } from "../../../services/axios/filesAndData";
 import { useTheme } from '@mui/material/styles';

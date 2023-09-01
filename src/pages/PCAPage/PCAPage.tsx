@@ -17,8 +17,8 @@ import { useTheme } from '@mui/material/styles';
 import {
   bgColorMain,
 } from '../../utils/ThemeConstants';
-import ModalWrapper from '../../components/Sub/Modal/ModalWrapper';
-import UploadModal from '../../components/Sub/Modal/UploadModal/UploadModal';
+import ModalWrapper from '../../components/Common/Modal/ModalWrapper';
+import UploadModal from '../../components/Common/Modal/UploadModal/UploadModal';
 import { useMediaQuery } from 'react-responsive';
 
 const PCAPage: FC = ({}) => {

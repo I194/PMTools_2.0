@@ -67,7 +67,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
                 width={largeGraphSize}
                 height={largeGraphSize} 
                 data={dataToShow}
-                menuSettings={{menuItems: zjdMenuSettings.menuItems, settings: zjdMenuSettings.settings}}
+                rightClickMenu={{items: zjdMenuSettings.menuItems, settings: zjdMenuSettings.settings}}
               />
             :
               largeGraphToShow === 1
@@ -99,7 +99,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
                 width={500}
                 height={500} 
                 data={dataToShow}
-                menuSettings={{menuItems: zjdMenuSettings.menuItems, settings: zjdMenuSettings.settings}}
+                rightClickMenu={{items: zjdMenuSettings.menuItems, settings: zjdMenuSettings.settings}}
               />
             :
               largeGraphToShow === 1
@@ -134,7 +134,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
             width={largeGraphSize}
             height={largeGraphSize} 
             data={dataToShow}
-            menuSettings={{menuItems: zjdMenuSettings.menuItems, settings: zjdMenuSettings.settings}}
+            rightClickMenu={{items: zjdMenuSettings.menuItems, settings: zjdMenuSettings.settings}}
           />
         ),
         ref: graphLargeRef
@@ -145,7 +145,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
           width={500}
           height={500} 
           data={dataToShow}
-          menuSettings={{menuItems: zjdMenuSettings.menuItems, settings: zjdMenuSettings.settings}}
+          rightClickMenu={{items: zjdMenuSettings.menuItems, settings: zjdMenuSettings.settings}}
         />,
         ref: graphLargeToExportRef
       }}

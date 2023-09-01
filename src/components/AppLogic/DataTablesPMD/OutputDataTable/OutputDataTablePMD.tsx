@@ -5,7 +5,7 @@ import { useDebounce } from "../../../../utils/GlobalHooks";
 import equal from "deep-equal"
 import { GetDataTableBaseStyle } from "../styleConstants";
 import StatisticsDataTablePMDSkeleton from './OutputDataTablePMDSkeleton';
-import PMDOutputDataTableToolbar from '../../../Sub/DataTable/Toolbar/PMDOutputDataTableToolbar';
+import PMDOutputDataTableToolbar from '../../../Common/DataTable/Toolbar/PMDOutputDataTableToolbar';
 import { DataGridDIRFromPCARow } from "../../../../utils/GlobalTypes";
 import { deleteAllInterpretations, deleteInterpretation, setAllInterpretations, setOutputFilename, updateCurrentFileInterpretations, updateCurrentInterpretation } from "../../../../services/reducers/pcaPage";
 import TextField from '@mui/material/TextField';

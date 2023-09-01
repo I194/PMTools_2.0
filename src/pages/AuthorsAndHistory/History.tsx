@@ -8,7 +8,7 @@ import { Button, Typography } from '@mui/material';
 import pmtoolsLogo from './pmtools_logo.png';
 import { useMediaQuery } from 'react-responsive';
 import { firstStepsImage, pmtoolsAlphaV1Image, pmtoolsAlphaV2Image, pmtoolsBetaImage, uralImage1, uralImage2, uralImage3, uralImage4 } from './assets';
-import Carousel from '../../components/Sub/Carousel/Carousel';
+import Carousel from '../../components/Common/Carousel/Carousel';
 import { useTranslation } from 'react-i18next';
 
 const History = ({ show }: {show?: boolean}) => {
