@@ -235,7 +235,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
 
   return (
     <div key={1227544233}>
-      <h5 className="my_text">Lambert svg</h5>
+      {/* <h5 className="my_text">Lambert svg</h5> */}
 
       <svg className="svg graph_interface" key={6534324} viewBox={my_view_box}>
 

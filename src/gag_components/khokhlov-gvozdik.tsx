@@ -307,15 +307,7 @@ export function Khokhlov_Gvozdik() {
                 polygonPoints={polygonPoints}
             />
             
-            <label className="my_input"><div className="info">Zone painting</div>
-                    <input type="checkbox" checked={isvis} onChange={handleCheckboxChange}/>
-                    <span className="checkmark"></span>
-                </label>
 
-                <label className="my_input"><div className="info">Grid painting</div>
-                    <input type="checkbox" checked={isvisgrid} onChange={gridCheckboxChange}/>
-                    <span className="checkmark"></span>
-            </label>
         </div>
 
         <div className="table_container common-container">
@@ -326,16 +318,16 @@ export function Khokhlov_Gvozdik() {
             table2
         </div>
 
-        <div className="sphere_container common-container">       
+        {/* <div className="sphere_container common-container">       
                     <Rotate_sphere
                         center_zone={center_zone}
                         dir_list={dir_list}
                         angle_list={angle_list}/>
-        </div>
+        </div> */}
 
 
         <div className="container common-container">
-            <h5 className="my_text">Interface</h5>
+            {/* <h5 className="my_text">Interface</h5> */}
             <div className="interface">
                 
 
@@ -379,13 +371,22 @@ export function Khokhlov_Gvozdik() {
 
 
                 <div className="info-item info item">
-                    <b>The percentage of the zone from the sphere:</b>
+                    {/* <b>The percentage of the zone from the sphere:</b>
                     {" " + String((zone_square(grid_points.length, points_numb) * 100).toFixed(3))}%.
                     <br/>
                     <b>Maxium radius of the zone: </b>{max_rad.toFixed(3)}
                     <br/>
                     <b>&#945;95: </b>{alpha95.toFixed(3)}
-                    <br/>
+                    <br/> */}
+                    <label className="my_input"><div className="info">Zone painting</div>
+                        <input type="checkbox" checked={isvis} onChange={handleCheckboxChange}/>
+                        <span className="checkmark"></span>
+                    </label>
+
+                    <label className="my_input"><div className="info">Grid painting</div>
+                        <input type="checkbox" checked={isvisgrid} onChange={gridCheckboxChange}/>
+                        <span className="checkmark"></span>
+                    </label>
                 </div>
 
 

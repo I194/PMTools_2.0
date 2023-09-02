@@ -5,9 +5,9 @@
 .main_container{
   display: grid;
   grid-template-columns: 8fr 6fr 3fr;
-  grid-template-rows: 5fr 3fr;
-  grid-gap: 20px;
-  height: 100%;
+  grid-template-rows: 7fr 3fr;
+  grid-gap: 10px;
+  height: 100vh;
   overflow:auto;
   /* grid-template-rows: minmax(0, 500px); */
   /* justify-content: center;
@@ -15,9 +15,10 @@
 }
 
 .common-container {
-  
+
   background-color: white;
-  box-shadow: rgba(34, 60, 80, 0.21) 0px 0px 10px 1px;
+  box-shadow: rgba(34, 60, 80, 0.1) 0px 0px 10px 1px;
+
   overflow: auto;
   position: relative;
   padding: 10px;
@@ -54,10 +55,133 @@
 
 .container {
   grid-column-start: 2;
-  grid-column-end: 2;
+  grid-column-end: 4;
   grid-row-start: 2;
   grid-row-end: 2;
 }
+
+@media screen and (max-width: 720px){
+  .main_container{
+    
+    overflow: scroll;
+    display: block;
+    display: none;
+    /* grid-template-columns: 2fr 3fr; */
+    /* grid-template-rows: 6fr 2fr 6fr 2fr; */
+    /* grid-gap: 5px; */
+    /* height: 150vh;
+    overflow: scroll; */
+
+
+  }
+  
+  .common-container {
+    background-color: white;
+    box-shadow: rgba(34, 60, 80, 0.21) 0px 0px 10px 1px;
+    overflow: auto;
+    position: relative;
+    padding: 10px;
+    margin: 5px;
+  
+  }
+  
+  .table_container{
+   height: 300px;
+  }
+  
+  .graph_container {
+    height: 300px;
+  }
+  
+  .sphere_container {
+
+  }
+  
+  .table2_container{
+    height: 150px;
+  }
+  
+  .container {
+    height: 150px;
+  }
+
+  .interface{
+    padding: 5px;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 5fr 5fr 5fr;
+    grid-template-rows: 1fr 1fr 2fr;
+    grid-gap: 10px;
+  }
+
+  .graph_interface{
+    /* display: block; */
+    height: 12vh;
+    padding: 5px;
+  }
+}
+
+@media screen and (max-height: 580px){
+  .main_container{
+    
+    overflow: scroll;
+    display: block;
+    display: none;
+    /* grid-template-columns: 2fr 3fr; */
+    /* grid-template-rows: 6fr 2fr 6fr 2fr; */
+    /* grid-gap: 5px; */
+    /* height: 150vh;
+    overflow: scroll; */
+
+
+  }
+  
+  .common-container {
+    background-color: white;
+    box-shadow: rgba(34, 60, 80, 0.21) 0px 0px 10px 1px;
+    overflow: auto;
+    position: relative;
+    padding: 10px;
+    margin: 5px;
+  
+  }
+  
+  .table_container{
+   height: 300px;
+  }
+  
+  .graph_container {
+    height: 300px;
+  }
+  
+  .sphere_container {
+
+  }
+  
+  .table2_container{
+    height: 150px;
+  }
+  
+  .container {
+    height: 150px;
+  }
+
+  .interface{
+    padding: 5px;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 5fr 5fr 5fr;
+    grid-template-rows: 1fr 1fr 2fr;
+    grid-gap: 10px;
+  }
+
+  .graph_interface{
+    /* display: block; */
+    height: 200px;
+    padding: 5px;
+  }
+}
+
 
 /* --------------------------------------------------------------*/
 /* intefrace grid*/
@@ -77,13 +201,11 @@
 }
 
 .graph_interface{
-  height: 40vh;
-  width: 90%;
+  height: 57vh;
+  width: 100%;
   border: 3px solid #999999;
   border-radius: 6px;
-  padding: 10px;
-
-
+  padding: auto;
 }
 
 .graph_interface:hover{
@@ -99,13 +221,12 @@
 .interface{
   border: 3px solid #999999;
   border-radius: 6px;
-  padding: 10px;
-  height: 25vh;
+  padding: 2.5vh;
+  height: 17.5vh;
   display: grid;
-  grid-template-columns: 5fr 5fr 5fr;
+  grid-template-columns: 5fr 5fr 3fr;
   grid-template-rows: 1fr 1fr 2fr;
-  grid-gap: 20px;
-
+  grid-gap: 10px;
 }
 
 .interface:hover{
@@ -116,7 +237,7 @@
 
 
 .item{
-  background-color: #73bee9;
+  /* background-color: #73bee9; */
   border-radius: 5px;
 }
 
@@ -188,7 +309,6 @@
   text-align: center;
   
   border-radius: 8px;
-  width: 30vh;
   height: 5.5vh;
   transition: transform 0.6s ease-in-out;
 }
