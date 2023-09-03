@@ -1,3 +1,46 @@
+:root {
+  --my-white: white;
+  --menu-blue: #4690db;
+  --my-grey: #999999;
+  --checkbox-hover: #1975d2;
+  --my-black: #202020;
+  --checkmark-hover: #ccc;
+  --my-checkmark: #eee;
+  --my-select: #eee;
+  --my-shadow: rgba(0, 0, 0, 0.35);
+  --my-shadow2: rgba(0, 0, 0, 0.55);
+  --button-blue: #4690db;
+  --button-blue2: #90caf9;
+  --button-blue3: #62b8ff;
+  
+  --color-scheme: light;
+}
+
+.dark {
+  --my-white: #424242;
+  --menu-blue: #90caf9;
+  --my-grey: #999999;
+  --checkbox-hover: #4892cf;
+  --my-black: #202020;
+  --checkmark-hover: #4892cf;
+  --my-checkmark: #90caf9;
+  --my-select: #90caf9;
+  --my-shadow: rgba(144, 202, 249, 0.21);
+  --my-shadow2: rgba(144, 202, 249, 0.55);
+
+  --button-blue: #2c94fc;
+  --button-blue2: #2375c6;
+  --button-blue3: #62b8ff;
+  --color-scheme: dark;
+}
+
+
+.low-screen{
+  color: #2c94fc;
+
+  visibility: hidden;
+  display: none;
+}
 
 /* --------------------------------------------------------------*/
 /* main grid*/
@@ -9,19 +52,26 @@
   grid-gap: 10px;
   height: 100vh;
   overflow:auto;
+  
   /* grid-template-rows: minmax(0, 500px); */
   /* justify-content: center;
   justify-items: center; */
 }
 
 .common-container {
-
-  background-color: white;
-  box-shadow: rgba(34, 60, 80, 0.1) 0px 0px 10px 1px;
-
+  background-color: var(--my-white);
+  
+  box-shadow: var(--my-shadow) 0px 0px 10px 1px;
   overflow: auto;
   position: relative;
   padding: 10px;
+  transition: 0.4s ease-in-out;
+}
+
+.common-container:hover {
+
+  box-shadow: none;
+  transition: 0.4s ease-in-out;
 
 }
 
@@ -65,7 +115,7 @@
     
     overflow: scroll;
     display: block;
-    display: none;
+
     /* grid-template-columns: 2fr 3fr; */
     /* grid-template-rows: 6fr 2fr 6fr 2fr; */
     /* grid-gap: 5px; */
@@ -74,15 +124,18 @@
 
 
   }
-  
+  .low-screen{
+    visibility: visible;
+    display: block;
+  }
   .common-container {
-    background-color: white;
-    box-shadow: rgba(34, 60, 80, 0.21) 0px 0px 10px 1px;
+    background-color: var(--my-white);
+    box-shadow: var(--my-shadow) 0px 0px 10px 1px;
     overflow: auto;
     position: relative;
     padding: 10px;
     margin: 5px;
-  
+    display: none;
   }
   
   .table_container{
@@ -135,14 +188,18 @@
 
 
   }
-  
+  .low-screen{
+    visibility: visible;
+    display: block;
+  }
   .common-container {
-    background-color: white;
-    box-shadow: rgba(34, 60, 80, 0.21) 0px 0px 10px 1px;
+    background-color: var(--my-white);
+    box-shadow: var(--my-shadow) 0px 0px 10px 1px;
     overflow: auto;
     position: relative;
     padding: 10px;
     margin: 5px;
+    display: none;
   
   }
   
@@ -188,7 +245,7 @@
 /* --------------------------------------------------------------*/
 
 .sphere_interface{
-  border: 3px solid #999999;
+  border: 3px solid var(--my-grey);
   border-radius: 6px;
   padding: 10px;
   height: 235px;
@@ -196,21 +253,23 @@
 
 }
 .sphere_interface:hover{
-  border: 3px solid #4690db;
+  border: 3px solid var(--menu-blue);
   border-radius: 12px;
+  transition: 0.4s ease-in-out;
 }
 
 .graph_interface{
   height: 57vh;
   width: 100%;
-  border: 3px solid #999999;
+  border: 3px solid var(--my-grey);
   border-radius: 6px;
   padding: auto;
 }
 
 .graph_interface:hover{
-  border: 3px solid #4690db;
+  border: 3px solid var(--menu-blue);
   border-radius: 12px;
+  transition: 0.4s ease-in-out;
 
 }
 
@@ -219,7 +278,7 @@
 /* --------------------------------------------------------------*/
 
 .interface{
-  border: 3px solid #999999;
+  border: 3px solid var(--my-grey);
   border-radius: 6px;
   padding: 2.5vh;
   height: 17.5vh;
@@ -230,14 +289,14 @@
 }
 
 .interface:hover{
-  border: 3px solid #4690db;
+  border: 3px solid var(--menu-blue);
   border-radius: 12px;
+  transition: 0.4s ease-in-out;
 }
 
 
 
 .item{
-  /* background-color: #73bee9; */
   border-radius: 5px;
 }
 
@@ -303,8 +362,8 @@
   font-family: 'Open Sans', sans-serif;
   transition-duration: 0.15s;
   border: none;
-  color: white;
-  background: #4690db;
+  color: var(--my-white);
+  background: var(--button-blue);
   padding: 6px;
   text-align: center;
   
@@ -314,15 +373,15 @@
 }
 
 .button:hover {
-  background-color: #1975d2;
-  color: white;
+  background-color: var(--button-blue3);
+  color: var(--my-white);
   border-radius: 3px;
-  box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.45);
+  box-shadow: 0px 2px 7px var(--my-shadow2);
   transition: transform 0.6s ease-in-out;
 }
 
 .button:active {
-  background-color: #e2e2e2;
+  background-color: var(--my-select);
   box-shadow: none;
   transition: transform 0.6s ease-in-out;
 }
@@ -338,11 +397,11 @@
   outline:0;
   box-shadow:none;
   border:0!important;
-  background: #e2e2e2;
+  background: var(--my-select);
   background-image: none;
   flex: 1;
   padding: 5px 12px;
-  color: #202020;
+  color: var(--my-black);
   cursor:pointer;
   border-radius: 3px;
   transition: transform 0.6s ease-in-out;
@@ -350,7 +409,7 @@
 
 .my_select:hover {
   transition: transform 0.6s ease-in-out;
-  box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.35);
+  box-shadow: 0px 2px 7px var(--my-shadow2);
 }
 
 
@@ -387,24 +446,27 @@
   left: 0;
   height: 20px;
   width: 20px;
-  background-color: #eee;
+  background-color: var(--my-checkmark);
   border-radius: 5px;
 }
 
-/* On mouse-over, add a grey background color */
+/* On mouse-over, add a g rey background color */
 .my_input:hover input ~ .checkmark {
-  background-color: #ccc;
+  background-color: var(--checkmark-hover);
 }
+
 
 /* When the checkbox is checked, add a blue background */
 .my_input input:checked ~ .checkmark {
-  background-color: #4690db;
+  background-color: var(--checkbox-hover);
 }
 .my_input input:checked:hover ~ .checkmark {
-  background-color: #1975d2;
+  background-color: var(--button-blue2);
   border-radius: 2px;
-  transition-duration: 0.35s;
 }
+
+
+
 
 /* Create the checkmark/indicator (hidden when not checked) */
 .checkmark:after {
@@ -424,7 +486,7 @@
   top: 2px;
   width: 3px;
   height: 10px;
-  border: solid white;
+  border: solid var(--my-white);
   border-width: 0 3px 3px 0;
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);

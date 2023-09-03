@@ -23,21 +23,48 @@ import {
     get_quantiles
     } from "./gag_functions";
 
-// import styles from '../pages/DIRPage/DIRPage.module.scss';
-// import { bgColorMain } from '../utils/ThemeConstants';
-// import { useTheme } from '@mui/material/styles';
 
+
+import { useAppDispatch, useAppSelector } from '../services/store/hooks';
+import { 
+    addInterpretation, 
+    setStatisticsMode, 
+    showSelectionInput, 
+    updateCurrentInterpretation 
+} from '../services/reducers/dirPage';
+import { filesToData } from '../services/axios/filesAndData';
+import { IDirData } from '../utils/GlobalTypes';
+import calculateStatisticsDIR from '../utils/statistics/calculateStatisticsDIR';
+// import Tables from './kh-table';
+import { ToolsDIR } from '../components/AppLogic';
+import { useTheme } from '@mui/material/styles';
+import { bgColorMain } from '../utils/ThemeConstants';
 import ModalWrapper from '../components/Sub/Modal/ModalWrapper';
 import UploadModal from '../components/Sub/Modal/UploadModal/UploadModal';
 import { useMediaQuery } from 'react-responsive';
-// import Tables from './Tables';
-// import { IDirData } from '../utils/GlobalTypes';
-// import { useAppSelector } from '../services/store/hooks';
 
 export function Khokhlov_Gvozdik() {
     // const [dataToShow, setDataToShow] = useState<IDirData | null>(null);
-    const [showUploadModal, setShowUploadModal] = useState<boolean>(true);
+
     const widthLessThan720 = useMediaQuery({ maxWidth: 719 });
+
+
+    const dispatch = useAppDispatch();
+
+    const files = useAppSelector(state => state.filesReducer.dirStatFiles);
+    const { dirStatData, currentDataDIRid } = useAppSelector(state => state.parsedDataReducer);
+    const { 
+      statisticsMode, 
+      selectedDirectionsIDs, 
+      hiddenDirectionsIDs, 
+      reversedDirectionsIDs,
+      currentFileInterpretations,
+      allInterpretations
+    } = useAppSelector(state => state.dirPageReducer);
+  
+
+    const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
+  
     //-----------------------------------------------------------
     // input data generating
     //-----------------------------------------------------------
@@ -143,11 +170,18 @@ export function Khokhlov_Gvozdik() {
         setIsVisible(!isvis);
     };
 
+    const [isdark, setdark] = useState(true);
+    const DarkTeamChange = () => {
+        setdark(!isdark);
+        const root = document.documentElement;
+        root.classList.toggle('dark', !isdark);
+    };
+
     const [isvisgrid, setisvisgrid] = useState(false);
     const gridCheckboxChange = () => {
         setisvisgrid(!isvisgrid);
     };
-
+    
     const [selectedNumber, setSelectedNumber] = useState<number>(100000);
 
     const handleNumberChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -264,9 +298,13 @@ export function Khokhlov_Gvozdik() {
     // Interface
     //---------------------------------------------------------------------------------------
 
+    var poly_color = "#AAE1BF";
+    var grid_color = '#16732f';
 
+    var poly_color = "#5badff";
+    var grid_color = '#1975d2';
 
-
+    
     var my_props = {
         center_zone: center_zone,
         dir_list: dir_list,
@@ -285,13 +323,16 @@ export function Khokhlov_Gvozdik() {
         alpha95: alpha95,
         isvis: isvis,
         isvisgrid: isvisgrid,
-        polygonPoints: polygonPoints
+        polygonPoints: polygonPoints,
+        grid_color: grid_color,
+        poly_color: poly_color
     };
 
     return (
-    // <div className={styles.data} style={{backgroundColor: bgColorMain(theme.palette.mode)}}> 
+
     <div className="main_container">
-        {/* <Tables dataToShow={dataToShow}/> */}
+
+<h3 className="low-screen">Размер окна должен быть не меньше чем 720x560</h3>
 
         <div className="graph_container common-container">
             <Zoomed_lambert_graph
@@ -305,13 +346,15 @@ export function Khokhlov_Gvozdik() {
                 isvis={isvis}
                 isvisgrid={isvisgrid}
                 polygonPoints={polygonPoints}
+                grid_color={grid_color}
+                poly_color={poly_color}
             />
             
 
         </div>
 
         <div className="table_container common-container">
-            table
+
         </div>
 
         <div className="table2_container common-container">
@@ -387,6 +430,11 @@ export function Khokhlov_Gvozdik() {
                         <input type="checkbox" checked={isvisgrid} onChange={gridCheckboxChange}/>
                         <span className="checkmark"></span>
                     </label>
+
+                    <label className="my_input"><div className="info">dark team</div>
+                        <input type="checkbox" checked={isdark} onChange={DarkTeamChange}/>
+                        <span className="checkmark"></span>
+                    </label>
                 </div>
 
 
@@ -404,6 +452,8 @@ export function Khokhlov_Gvozdik() {
       >
         <UploadModal page='dir' />
       </ModalWrapper>
+
     </div>
+    
     );
 }

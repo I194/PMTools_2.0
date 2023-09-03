@@ -28,7 +28,9 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
                                                             alpha95: number,
                                                             isvis: boolean,
                                                             isvisgrid: boolean,
-                                                            polygonPoints: string
+                                                            polygonPoints: string,
+                                                            grid_color: string,
+                                                            poly_color: string
                                                         }) {
 
     var center_zone = lambert_zoom_props.center_zone;
@@ -42,14 +44,18 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     var grid_isvis = lambert_zoom_props.isvisgrid;
     var lambert_polygonPoints = lambert_zoom_props.polygonPoints;
 
+
+
+    var poly_color = lambert_zoom_props.poly_color;
+    var grid_color = lambert_zoom_props.grid_color;
+
+    var center_zone_color = '#4054E7';
     var plot_point_numb = 170;
     var circles_r = 0.0025;
     var grid_r = 0.0015;
-    var grid_color = '#16732f';
     var center_zone_r = 0.003;
-    var center_zone_color = '#4054E7';
     var my_view_box = "-0.2 -0.2 0.4 0.4";
-    var poly_color = "#AAE1BF";
+
 
 
     if (angle_list[0] == 0){
