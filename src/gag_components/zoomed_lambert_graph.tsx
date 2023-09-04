@@ -162,12 +162,6 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
             my_key += 1;
         }
     }
-    if (max_x < -1 * min_x) {var max_x = -min_x}
-    if (max_y < -1 * min_y) {var max_y = -min_y}
-
-    var my_view_box = String(-max_x) + " " + String(-max_y - 0.03) + " " + String(max_x * 2) + " " + String(max_y * 2 + 0.06);
-
-    //     "-0.2 -0.2 0.4 0.4";
 
     //-----------------------------------------------------------------
     // making grid on left svg
@@ -239,11 +233,75 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
                             )
                         );
 
+    my_key += 1;
+    //---------------------------------------------------------------------------------------
+    // 
+    //---------------------------------------------------------------------------------------
+
+    var rumbs = e('circle',
+            {
+                key: my_key,
+                r: max_y * 1.3,
+                cx: String(0),
+                cy: String(0),
+                fill: "none",
+                stroke: "grey", 
+                strokeWidth: "0.0016px",
+                strokeDasharray: "0.06px, 0.012px"
+
+            }, ''
+        );
+
+    my_key += 1;
+
+    if (max_x < -1 * min_x) {var max_x = -min_x}
+    if (max_y < -1 * min_y) {var max_y = -min_y}
+
+
+    //     "-0.2 -0.2 0.4 0.4";
+
+
+    var my_view_box:string;
+    var rumb_font_size:number;
+    var my_max:number;
+
+    if (max_x > max_y){
+        rumb_font_size = max_x / 10;
+        my_max = max_x;
+
+        my_view_box = String(-max_x - 2 * rumb_font_size) + " ";
+        my_view_box += String(-max_x - 2 * rumb_font_size) + " ";
+        my_view_box += String(max_x * 2 + 4 * rumb_font_size) + " ";
+        my_view_box += String(max_x * 2 + 4 * rumb_font_size);
+
+    }
+    else{
+        rumb_font_size = max_y / 10;
+        my_max = max_y;
+        
+        my_view_box = String(-max_y - 2 * rumb_font_size) + " ";
+        my_view_box += String(-max_y - 2 * rumb_font_size) + " ";
+        my_view_box += String(max_y * 2 + 4 * rumb_font_size) + " "; 
+        my_view_box += String(max_y * 2 + 4 * rumb_font_size);
+
+
+    
+    }
+    //---------------------------------------------------------------------------------------
+    // 
+    //---------------------------------------------------------------------------------------
+
+
+    
+
   return (
     <div key={1227544233}>
       {/* <h5 className="my_text">Lambert svg</h5> */}
 
       <svg className="svg graph_interface" key={6534324} viewBox={my_view_box}>
+
+        {/* {rumbs} */}
+
 
         {lambert_isvis && <polygon points={lambert_polygonPoints} fill={poly_color} />}
         {grid_isvis && grid}
@@ -251,6 +309,19 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
         {fisher_dir}
         {fish_circle}
         {lambert_center_zone}
+
+        <text x={my_max + rumb_font_size} y={0} textAnchor="middle" fontSize={String(rumb_font_size)} fill="black">
+            {"E"}
+        </text>
+        <text x={-my_max - rumb_font_size} y={0} textAnchor="middle" fontSize={String(rumb_font_size)} fill="black">
+            {"W"}
+        </text>
+        <text x={0} y={my_max + rumb_font_size} textAnchor="middle" fontSize={String(rumb_font_size)} fill="black">
+            {"S"}
+        </text>
+        <text x={0} y={-my_max - rumb_font_size} textAnchor="middle" fontSize={String(rumb_font_size)} fill="black">
+            {"N"}
+        </text>
 
       </svg>
 

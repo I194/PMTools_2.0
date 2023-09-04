@@ -1,17 +1,19 @@
 :root {
   --my-white: white;
   --menu-blue: #4690db;
-  --my-grey: #999999;
+  --my-grey: #c5c5c5;
   --checkbox-hover: #1975d2;
   --my-black: #202020;
   --checkmark-hover: #ccc;
-  --my-checkmark: #eee;
-  --my-select: #eee;
-  --my-shadow: rgba(0, 0, 0, 0.35);
-  --my-shadow2: rgba(0, 0, 0, 0.55);
+  --my-checkmark: #e0e0e0;
+  --my-select: #e4e4e4;
+  --my-shadow: rgba(0, 0, 0, 0.15);
+  --my-shadow2: rgba(0, 0, 0, 0.15);
   --button-blue: #4690db;
   --button-blue2: #90caf9;
   --button-blue3: #62b8ff;
+  --my-tooltip: #202020;
+  --my-tooltip-back: #c5c5c5;
   
   --color-scheme: light;
 }
@@ -25,13 +27,15 @@
   --checkmark-hover: #4892cf;
   --my-checkmark: #90caf9;
   --my-select: #90caf9;
-  --my-shadow: rgba(144, 202, 249, 0.21);
+  --my-shadow: rgba(144, 202, 249, 0.31);
   --my-shadow2: rgba(144, 202, 249, 0.55);
 
-  --button-blue: #2c94fc;
+  --button-blue: #0280fd;
   --button-blue2: #2375c6;
-  --button-blue3: #62b8ff;
+  --button-blue3: #229cff;
+  --my-tooltip: #90caf9;
   --color-scheme: dark;
+  --my-tooltip-back: #424242;
 }
 
 
@@ -47,9 +51,9 @@
 /* --------------------------------------------------------------*/
 .main_container{
   display: grid;
-  grid-template-columns: 8fr 6fr 3fr;
+  grid-template-columns: 10fr 6fr 3fr;
   grid-template-rows: 7fr 3fr;
-  grid-gap: 10px;
+  grid-gap: 20px;
   height: 100vh;
   overflow:auto;
   
@@ -179,7 +183,7 @@
     
     overflow: scroll;
     display: block;
-    display: none;
+
     /* grid-template-columns: 2fr 3fr; */
     /* grid-template-rows: 6fr 2fr 6fr 2fr; */
     /* grid-gap: 5px; */
@@ -200,7 +204,6 @@
     padding: 10px;
     margin: 5px;
     display: none;
-  
   }
   
   .table_container{
@@ -227,7 +230,7 @@
     padding: 5px;
     height: 100vh;
     display: grid;
-    grid-template-columns: 5fr 5fr 5fr;
+    grid-template-columns: 5fr 5fr 3fr ;
     grid-template-rows: 1fr 1fr 2fr;
     grid-gap: 10px;
   }
@@ -259,11 +262,15 @@
 }
 
 .graph_interface{
-  height: 57vh;
+  height: 52vh;
   width: 100%;
   border: 3px solid var(--my-grey);
   border-radius: 6px;
   padding: auto;
+
+  position: relative; 
+  
+  
 }
 
 .graph_interface:hover{
@@ -280,11 +287,11 @@
 .interface{
   border: 3px solid var(--my-grey);
   border-radius: 6px;
-  padding: 2.5vh;
+  padding: 1vh;
   height: 17.5vh;
   display: grid;
-  grid-template-columns: 5fr 5fr 3fr;
-  grid-template-rows: 1fr 1fr 2fr;
+  grid-template-columns: 6fr 6fr 4fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
   grid-gap: 10px;
 }
 
@@ -331,18 +338,36 @@
   grid-column-start: 1;
   grid-column-end: 3;
   grid-row-start: 3;
-  grid-row-end: 3;
+  grid-row-end: 5;
   justify-self: center;
   align-self: center;
 }
 
-.info-item {
+.info-item1 {
   grid-column-start: 3;
   grid-column-end: 3;
   grid-row-start: 1;
-  grid-row-end: 4;
+  grid-row-end: 1;
+  align-self: center;
+  
 }
+.info-item2 {
 
+  grid-column-start: 3;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 2;
+  align-self: center;
+
+
+}
+.info-item3 {
+  grid-column-start: 3;
+  grid-column-end: 3;
+  grid-row-start: 3;
+  grid-row-end: 3;
+  align-self: center;
+}
 
 
 .my_text {
@@ -354,7 +379,12 @@
 }
 
 .info {
-  font-size: 14px;
+  /* background-color: #1975d2; */
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  /* flex-direction: column; */
+
 }
 
 .button {
@@ -362,8 +392,8 @@
   font-family: 'Open Sans', sans-serif;
   transition-duration: 0.15s;
   border: none;
-  color: var(--my-white);
-  background: var(--button-blue);
+  color: white;
+  background: var(--button-blue3);
   padding: 6px;
   text-align: center;
   
@@ -372,10 +402,17 @@
   transition: transform 0.6s ease-in-out;
 }
 
+@media screen and (max-width: 900px){
+  .button {
+    font-size: 13px;
+
+  }
+}
+
 .button:hover {
-  background-color: var(--button-blue3);
+  background-color: var(--button-blue);
   color: var(--my-white);
-  border-radius: 3px;
+  border-radius: 6px;
   box-shadow: 0px 2px 7px var(--my-shadow2);
   transition: transform 0.6s ease-in-out;
 }
@@ -411,8 +448,25 @@
   transition: transform 0.6s ease-in-out;
   box-shadow: 0px 2px 7px var(--my-shadow2);
 }
+.my_select option {
 
+  border-radius: 5px;
+  outline: none;
+}
 
+.my_select option:checked {
+  background-color: var(--checkmark-hover);
+  color: var(--my-white);
+}
+
+.select-option:hover {
+  background-color: var(--checkmark-hover);
+  color: var(--my-white);
+}
+.my_select.decorated option:hover {
+  background-color: var(--checkmark-hover);
+  color: var(--my-white);
+}
 /* --------------------------------------------------------------*/
 /* CHECKBOX */
 /* --------------------------------------------------------------*/
@@ -421,13 +475,16 @@
   display: block;
   position: relative;
   padding-left: 27px;
-  margin-bottom: 10px;
-  margin-top: 10px;
+  /* margin-bottom: 30px; */
+  /* margin-top: 0px; */
   font-family: 'Open Sans', sans-serif;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  display: flex;
+  align-items: center;
+  /* height: 100%; */
 }
 
 /* Hide the browser's default checkbox */
@@ -442,12 +499,15 @@
 /* Create a custom checkbox */
 .checkmark {
   position: absolute;
-  top: 0;
-  left: 0;
+
+  left: 0px;
   height: 20px;
   width: 20px;
   background-color: var(--my-checkmark);
   border-radius: 5px;
+
+  
+  
 }
 
 /* On mouse-over, add a g rey background color */
@@ -493,4 +553,36 @@
   transform: rotate(45deg);
 }
 
+.graph-tooltip{
+  color: var(--menu-blue);
+  display: block;
+  float: right;
+}
+
+
+.interface-tooltip{
+  color: var(--menu-blue);
+  display: block;
+  width: 100%;
+  float: right;
+}
+
+
+
+
+.my-tooltip{
+
+}
+
+.tooltip-span{
+  color: var(--my-tooltip);
+}
+
+.MuiTooltip-tooltip {
+  background-color: var(--my-tooltip-back) !important;
+}
+
+.my-tooltip-arrow:before {
+  border-bottom-color: green;
+}
 

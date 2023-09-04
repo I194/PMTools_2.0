@@ -1,6 +1,8 @@
 import React, {createElement as e, useEffect, useState} from 'react';
 import {Zoomed_lambert_graph} from "./zoomed_lambert_graph";
 import {Rotate_sphere} from "./rotate_sphere";
+import {TooltipContent} from "./my-tooltip";
+
 import "./style.css";
 import {
     GeoVdek,
@@ -22,7 +24,9 @@ import {
     getRandomInt,
     get_quantiles
     } from "./gag_functions";
-
+import HelpCenterOutlinedIcon from '@mui/icons-material/HelpCenterOutlined';
+import Tooltip from '@mui/material/Tooltip';   
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 
 
 import { useAppDispatch, useAppSelector } from '../services/store/hooks';
@@ -42,6 +46,10 @@ import { bgColorMain } from '../utils/ThemeConstants';
 import ModalWrapper from '../components/Sub/Modal/ModalWrapper';
 import UploadModal from '../components/Sub/Modal/UploadModal/UploadModal';
 import { useMediaQuery } from 'react-responsive';
+
+
+
+
 
 export function Khokhlov_Gvozdik() {
     // const [dataToShow, setDataToShow] = useState<IDirData | null>(null);
@@ -68,6 +76,12 @@ export function Khokhlov_Gvozdik() {
     //-----------------------------------------------------------
     // input data generating
     //-----------------------------------------------------------
+
+    const [size, setSize] = React.useState('small');
+
+
+
+
     // const theme = useTheme();
     var max_lon = 0;
     var min_lon = 10;
@@ -328,13 +342,51 @@ export function Khokhlov_Gvozdik() {
         poly_color: poly_color
     };
 
+
+    // Функция для загрузки SVG
+    const handleDownloadSVG = () => {
+        const svgElement = document.querySelector('.svg.graph_interface');
+        if (!svgElement) {
+            console.error('SVG element not found');
+            return;
+        }
+
+        const svgData = new XMLSerializer().serializeToString(svgElement);
+
+        const downloadLink = document.createElement('a');
+        const blob = new Blob([svgData], { type: 'image/svg+xml' });
+        const url = URL.createObjectURL(blob);
+
+        downloadLink.href = url;
+        downloadLink.download = 'graph.svg';
+
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        URL.revokeObjectURL(url);
+    };
+
+
     return (
 
     <div className="main_container">
 
-<h3 className="low-screen">Размер окна должен быть не меньше чем 720x560</h3>
+    <h3 className="low-screen">Размер окна должен быть не меньше чем 720x560</h3>
 
         <div className="graph_container common-container">
+         
+            <Tooltip className="my-tooltip" title={<TooltipContent type={'graph'} />} arrow>               
+                        <HelpCenterOutlinedIcon className='graph-tooltip'/>
+            </Tooltip>
+            
+            <a onClick={handleDownloadSVG}>
+                <Tooltip className="my-tooltip" title={<TooltipContent type={'download svg'} />} arrow>
+                    
+                    <FileDownloadOutlinedIcon  className='graph-tooltip'/>
+                    
+                </Tooltip>
+            </a>
+            
             <Zoomed_lambert_graph
                 center_zone={center_zone}
                 dir_list={dir_list}
@@ -349,12 +401,14 @@ export function Khokhlov_Gvozdik() {
                 grid_color={grid_color}
                 poly_color={poly_color}
             />
-            
+
+
+ 
 
         </div>
 
         <div className="table_container common-container">
-
+            
         </div>
 
         <div className="table2_container common-container">
@@ -369,22 +423,40 @@ export function Khokhlov_Gvozdik() {
         </div> */}
 
 
+
+
+
         <div className="container common-container">
             {/* <h5 className="my_text">Interface</h5> */}
+            
+            <div className='interface-tooltip'>
+                <Tooltip 
+                    style={{}}
+                    title={<TooltipContent type={'checkbox'} 
+                    
+                    />} arrow>
+
+                    <HelpCenterOutlinedIcon  className='interface-tooltip'/>
+
+                </Tooltip>
+            </div>
+
+
             <div className="interface">
-                
+                    
+
 
                     <select className="select1-item item my_select" value={selectedNumber} onChange={handleNumberChange}>
-                        <option value={50000}>50 000</option>
-                        <option value={100000}>100 000</option>
-                        <option value={250000}>250 000</option>
-                        <option value={500000}>500 000</option>
-                        <option value={1000000}>1 000 000</option>
-                        <option value={1500000}>1 500 000</option>
-                        <option value={2000000}>2 000 000</option>
-                        <option value={2500000}>2 500 000</option>
-                        <option value={3000000}>3 000 000</option>
-                        <option value={3500000}>3 500 000</option>
+                        <option value={50000}>grid = 50 000</option>
+                        <option value={100000}>grid = 100 000</option>
+                        <option value={250000}>grid = 250 000</option>
+                        <option value={500000}>grid = 500 000</option>
+                        <option value={1000000}>grid = 1 000 000</option>
+                        <option value={1500000}>grid = 1 500 000</option>
+                        <option value={2000000}>grid = 2 000 000</option>
+                        <option value={2500000}>grid = 2 500 000</option>
+                        <option value={3000000}>grid = 3 000 000</option>
+                        <option value={3500000}>grid = 3 500 000</option>
                     </select>
      
 
@@ -395,25 +467,22 @@ export function Khokhlov_Gvozdik() {
 
 
                     <select className="select3-item item my_select" value={selectedP} onChange={handlePChange}>
-                        <option value={950}>0.950</option>
-                        <option value={975}>0.975</option>
-                        <option value={990}>0.99</option>
+                        <option value={950}>quantile = 0.950</option>
+                        <option value={975}>quantile = 0.975</option>
+                        <option value={990}>quantile = 0.99</option>
                     </select>
 
 
 
                     <select className="select4-item item my_select" value={apc} onChange={handleAPCChange}>
-                        <option value={1}>aPC</option>
-                        <option value={0}>PC</option>
+                        <option className="select-option" value={1}>aPC</option>
+                        <option className="select-option" value={0}>PC</option>
                     </select>
 
 
                 <div className="button-item item">
                     <button className="button" onClick={generateRandomNumbers}>Generate Random Numbers</button>
                 </div>
-
-
-                <div className="info-item info item">
                     {/* <b>The percentage of the zone from the sphere:</b>
                     {" " + String((zone_square(grid_points.length, points_numb) * 100).toFixed(3))}%.
                     <br/>
@@ -421,22 +490,27 @@ export function Khokhlov_Gvozdik() {
                     <br/>
                     <b>&#945;95: </b>{alpha95.toFixed(3)}
                     <br/> */}
-                    <label className="my_input"><div className="info">Zone painting</div>
+            
+                <div className="info-item1">
+                    <label className="my_input"><div className="info">Show zone</div>
                         <input type="checkbox" checked={isvis} onChange={handleCheckboxChange}/>
                         <span className="checkmark"></span>
                     </label>
+                </div>
 
-                    <label className="my_input"><div className="info">Grid painting</div>
+                <div className="info-item2">
+                    <label className="my_input"><div className="info">Show grid</div>
                         <input type="checkbox" checked={isvisgrid} onChange={gridCheckboxChange}/>
                         <span className="checkmark"></span>
                     </label>
+                </div>
 
+                <div className="info-item3">
                     <label className="my_input"><div className="info">dark team</div>
                         <input type="checkbox" checked={isdark} onChange={DarkTeamChange}/>
                         <span className="checkmark"></span>
                     </label>
                 </div>
-
 
 
 
