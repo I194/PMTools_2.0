@@ -5,6 +5,16 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    border-radius: 12px;
+    padding: 6px;
+    background-color: #fff;
+  }
 }
 
 .articles {
