@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Sphere with Grid</title>
+    <style>
+      body {
+        background-color: #000000;
+        margin: 0;
+        overflow: hidden;
+      }
+    </style>
+</head>
+<body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/controls/OrbitControls.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.122.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.122.0/examples/js/controls/OrbitControls.min.js"></script>
+<script>
+
+      //-----------------------------------------------------------------------
+	  // projections func
+      //-----------------------------------------------------------------------
+      function GeoVdek(r, phi, lmbd)
+      {
+            phi = phi * Math.PI / 180;
+            lmbd = lmbd * Math.PI / 180;
+
+            var X = r * Math.cos(phi) * Math.cos(lmbd);
+            var Y = r * Math.cos(phi) * Math.sin(lmbd);
+            var Z = r * Math.sin(phi);
+
+            var C = RotateAroundV([X, Y, Z], [1,0,0], 90);
+            return C;
+      }
+
+      function DekVgeo(x, y, z)
+      {
+            var R = 1;
+            var phi = Math.asin(z / R) * 180 / Math.PI;
+            var lmbd = Math.atan(y / x) * 180 / Math.PI;
+            return [phi, lmbd];
+      }
+
+      function vector_length(v) { return Math.sqrt( v[0] * v[0] + v[1] * v[1] + v[2] * v[2] ); }
+
+      function angle_between_v(v1, v2)
+      {
+            var angle;
+            angle = Math.acos( (v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]) / ( vector_length(v1) * vector_length(v2) ) );
+            if (angle > 180) { angle -= 180; }
+            return angle;
+      }
+
+
+
+      //-----------------------------------------------------------------------
+      // matrix mod functions
+      //-----------------------------------------------------------------------
+
+      function MultiplyMatrix(A,B)
+      {
+          var C = [0, 0, 0];
+
+          C[0] = A[0][0] * B[0] + A[0][1] * B[1] + A[0][2] * B[2];
+          C[1] = A[1][0] * B[0] + A[1][1] * B[1] + A[1][2] * B[2];
+          C[2] = A[2][0] * B[0] + A[2][1] * B[1] + A[2][2] * B[2];
+
+          return C;
+      }
+
+      function RotateAroundV(B, V, phi)
+      {
+          phi = phi * Math.PI / 180;
+
+          var x = V[0];
+          var y = V[1];
+          var z = V[2];
+
+          let A = [
+            [Math.cos(phi) + (1 - Math.cos(phi)) * x * x, (1 - Math.cos(phi)) * x * y - z * Math.sin(phi), (1 - Math.cos(phi)) * x * z + y * Math.sin(phi)],
+            [(1 - Math.cos(phi)) * y * x + z * Math.sin(phi), Math.cos(phi) + (1 - Math.cos(phi)) * y * y, (1 - Math.cos(phi)) * y * z - x * Math.sin(phi)],
+            [(1 - Math.cos(phi)) * z * x - y * Math.sin(phi), (1 - Math.cos(phi)) * z * y + x * Math.sin(phi), Math.cos(phi) + (1 - Math.cos(phi)) * z * z]
+          ];
+
+          var C = MultiplyMatrix(A, B)
+
+          return C;
+      }
+
+      function NormalizeV(V)
+      {
+          var x = V[0];
+          var y = V[1];
+          var z = V[2];
+
+         var L = Math.sqrt(x * x + y * y + z * z);
+
+          var C = [x / L, y / L, z / L];
+
+          return C;
+      }
+
+      //-----------------------------------------------------------------------
+	  // circle plot func
+      //-----------------------------------------------------------------------
+
+      function PlotCircle(direction, phi, scene, my_color, dashed)
+      {
+          if (dashed == 0) {
+              direction = NormalizeV(direction);
+
+              if ((direction[0] == -1 || direction[0] == 1) && direction[1] == 0 && direction[2] == 0){
+                var xp = 0;
+                var yp = 1;
+                var zp = 1;
+                var perp = NormalizeV([xp, yp, zp]);
+                }
+              else if (direction[0] == 0 && (direction[1] == -1 || direction[1] == 1) && direction[2] == 0){
+                var xp = 1;
+                var yp = 0;
+                var zp = 1;
+                var perp = NormalizeV([xp, yp, zp]);
+                }
+              else if (direction[0] == 0 && direction[1] == 0 && (direction[2] == 1 || direction[2] == -1)){
+                var xp = 1;
+                var yp = 1;
+                var zp = 0;
+                var perp = NormalizeV([xp, yp, zp]);
+                }
+              else {
+                var xp = Math.random() * (0.001 - 0.0001) + 0.0001;
+                var yp = Math.random() * (0.001 - 0.0001) + 0.0001;
+                var zp = (-1) * (direction[0] * xp + direction[1] * yp) / direction[2];
+                var perp = NormalizeV([xp, yp, zp]);
+                }
+
+              var my_point = direction;
+              my_point = RotateAroundV(my_point, perp, phi);
+
+              var points4 = [];
+
+              points4.push( new THREE.Vector3( my_point[0], my_point[1], my_point[2] ) );
+
+              for ( let i = 0; i < 720; i ++ ) {
+                my_point = RotateAroundV(my_point, direction, 0.5);
+                points4.push( new THREE.Vector3( my_point[0], my_point[1], my_point[2] ) );
+              }
+
+              var geometry4 = new THREE.BufferGeometry().setFromPoints( points4 );
+              var material4 = new THREE.LineBasicMaterial({ color: my_color, linewidth: 2});
+
+
+              //0xFF5454
+              var line4 = new THREE.Line( geometry4, material4 );
+              scene.add( line4 );
+          }
+          else {
+
+              direction = NormalizeV(direction);
+
+              if ((direction[0] == -1 || direction[0] == 1) && direction[1] == 0 && direction[2] == 0){
+                var xp = 0;
+                var yp = 1;
+                var zp = 1;
+                var perp = NormalizeV([xp, yp, zp]);
+                }
+              else if (direction[0] == 0 && (direction[1] == -1 || direction[1] == 1) && direction[2] == 0){
+                var xp = 1;
+                var yp = 0;
+                var zp = 1;
+                var perp = NormalizeV([xp, yp, zp]);
+                }
+              else if (direction[0] == 0 && direction[1] == 0 && (direction[2] == 1 || direction[2] == -1)){
+                var xp = 1;
+                var yp = 1;
+                var zp = 0;
+                var perp = NormalizeV([xp, yp, zp]);
+                }
+              else {
+                var xp = Math.random() * (0.001 - 0.0001) + 0.0001;
+                var yp = Math.random() * (0.001 - 0.0001) + 0.0001;
+                var zp = (-1) * (direction[0] * xp + direction[1] * yp) / direction[2];
+                var perp = NormalizeV([xp, yp, zp]);
+                }
+
+              var my_point = direction;
+              my_point = RotateAroundV(my_point, perp, phi);
+
+              var points4 = [];
+
+              points4.push( new THREE.Vector3( my_point[0], my_point[1], my_point[2] ) );
+
+              //-------------------------------------------------------------------
+              //-------------------------------------------------------------------
+
+              for ( let j = 0; j < 72; j ++ ) {
+                  if ( j % 2 == 0){
+                      for ( let i = 0; i < 20; i ++ ) {
+                        my_point = RotateAroundV(my_point, direction, 0.5);
+                        points4.push( new THREE.Vector3( my_point[0], my_point[1], my_point[2] ) );
+
+                      }
+
+                      var geometry4 = new THREE.BufferGeometry().setFromPoints( points4 );
+                      var material4 = new THREE.LineBasicMaterial({ color: my_color, linewidth: 2});
+
+                      //0xFF5454
+                      var line4 = new THREE.Line( geometry4, material4 );
+                      scene.add( line4 );
+                  }
+                  else {
+                     for ( let i = 0; i < 20; i ++ ) {
+                        my_point = RotateAroundV(my_point, direction, 0.5);
+
+                     }
+                  }
+                  points4 = [];
+              }
+              //-------------------------------------------------------------------
+              //-------------------------------------------------------------------
+
+
+          }
+      }
+
+      //-----------------------------------------------------------------------
+	  // begin
+      //-----------------------------------------------------------------------
+      //-----------------------------------------------------------------------
+	  // Set up the scene
+      //-----------------------------------------------------------------------
+
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x0000);
+
+      // Set up the camera
+      const camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.9,
+        1000
+      );
+
+      camera.position.z = 2;
+
+      // Set up the renderer
+      var renderer = new THREE.WebGLRenderer( { antialias: true } );
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+
+      //Create a PointLight and turn on shadows for the light
+      const light = new THREE.PointLight( 0xffffff, 1, 100 );
+      scene.add( light );
+
+
+      //-----------------------------------------------------------------------
+	  // make sphere
+      //-----------------------------------------------------------------------
+
+
+      //var sphereGeometry = new THREE.SphereGeometry(0.999, 90, 90);
+      //var sphereMaterial = new THREE.MeshBasicMaterial({color: 0x00849C, wireframe: true});
+      //var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+      //scene.add(sphere);
+
+      //var sphereGeometry = new THREE.SphereGeometry(0.9999, 18, 18);
+      //var sphereMaterial = new THREE.MeshBasicMaterial({color: 0x5EB3C2, wireframe: false});
+      //var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+      //scene.add(sphere);
+
+      var geometry = new THREE.SphereGeometry( 0.997, 90, 90 );
+      var material = new THREE.MeshDepthMaterial({color: 0x3B8C9A});
+      var material = new THREE.MeshLambertMaterial({color: 0x0000});
+      var sphere = new THREE.Mesh( geometry, material );
+      scene.add( sphere );
+
+      //-----------------------------------------------------------
+      // draw random circles
+      //-----------------------------------------------------------
+
+      var max = 1;
+      var min = -1;
+      var dir = [0, 0, 0];
+      var my_angle;
+
+      var dir_list = [];
+      var angle_list = [];
+
+
+
+        var k1 = 0;
+        var k2 = 0;
+        var k3 = 1;
+
+      for ( var i = 0; i < 7; i ++ ) {
+          k1 += 0.03;
+
+          dir = [k1, k2, k3];
+          dir_list.push(dir);
+
+          my_angle = Math.random() * (15 - 7) + 7;
+          PlotCircle(dir, my_angle, scene, 0xFF5454, 1);
+          angle_list.push(my_angle * Math.PI/ 180);
+        }
+
+      //-----------------------------------------------------------
+      // draw sphere grid
+      //-----------------------------------------------------------
+
+      var point = [0, 0, 1];
+      PlotCircle(point, 90, scene, 0x00849C, 0);
+
+      for ( var i = 0; i < 19; i ++ ) {
+          point = RotateAroundV(point, [0, 1, 0], 10);
+          PlotCircle(point, 90, scene, 0x00849C, 0);
+        }
+
+      for ( var i = 0; i < 19; i ++ ) {
+          PlotCircle([0, 1, 0], i * 10, scene, 0x00849C, 0);
+        }
+
+      //-----------------------------------------------------------------------
+	  // plot dots grid
+      //-----------------------------------------------------------------------
+
+        var x;
+        var y;
+        var phi = 0.013;
+        var points_numb = 400000;
+        var m;
+        var print_point = 0;
+        var list_dots = [];
+        var center_zone = [0, 0, 0];
+      const map1 = new THREE.TextureLoader().load( 'spirit.png' );
+      var dotMaterial = new THREE.PointsMaterial( { size: 2, sizeAttenuation: false } );
+
+//---------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------
+
+        var dotGeometry = new THREE.Geometry();
+
+        for (var i = 0; i < points_numb; i++)
+        {
+            x = (i * phi - Math.round(i * phi)) * 360;
+            y = (i / points_numb - Math.round(i / points_numb)) * 360;
+
+            m = GeoVdek(1, x, y);
+
+              for (var j = 0; j < dir_list.length; j++ )
+                  {
+                  if (angle_between_v(dir_list[j], m) < angle_list[j])
+                  {
+                        print_point = 1;
+                  }
+                  else { print_point = 0; break; }
+                  }
+
+            if (print_point == 1)
+            {
+            list_dots.push(m);
+            dotGeometry.vertices.push(new THREE.Vector3(m[0], m[1], m[2]));
+            }
+            print_point = 0;
+        }
+
+
+      var dot = new THREE.Points( dotGeometry, dotMaterial );
+      scene.add( dot );
+
+
+
+      for (var i = 0; i < list_dots.length; i++)
+      {
+        center_zone[0] += list_dots[i][0];
+        center_zone[1] += list_dots[i][1];
+        center_zone[2] += list_dots[i][2];
+      }
+      center_zone = NormalizeV(center_zone);
+
+      var dotGeometry1 = new THREE.Geometry();
+      dotGeometry1.vertices.push(new THREE.Vector3(center_zone[0], center_zone[1], center_zone[2]));
+
+
+      var dotMaterial1 = new THREE.PointsMaterial( { size: 10, sizeAttenuation: false } );
+      var dot1 = new THREE.Points( dotGeometry1, dotMaterial1 );
+      scene.add( dot1 );
+
+      //-----------------------------------------------------------------------
+	  // fisher
+      //-----------------------------------------------------------------------
+        var r_sum = [0, 0, 0];
+        for (var i = 0; i < dir_list.length; i++){
+            r_sum[0] += dir_list[i][0];
+            r_sum[1] += dir_list[i][1];
+            r_sum[2] += dir_list[i][2];
+        }
+        var Rdlin = vector_length(r_sum);
+        var r_sum = NormalizeV(r_sum);
+
+        var N = dir_list.length;
+        var K = (N - 1) / (N - Rdlin);
+        var alpha95 = 140 / Math.pow(K * N, 0.5);
+        alpha95 = alpha95 * Math.Pi / 180;
+        alpha95 = K;
+
+        //PlotCircle(r_sum, alpha95, scene, 0xD71CA4, 1);
+        PlotCircle(r_sum, N, scene, 0xD8B8CF, 1);
+        //PlotCircle(r_sum, K, scene, 0xCDDC85, 1);
+        PlotCircle(r_sum, Rdlin, scene, 0x879C1C, 1);
+
+      //-----------------------------------------------------------------------
+	  // render anim
+      //-----------------------------------------------------------------------
+
+      // Set up the controls
+      var controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+      // Animate the scene
+      var animate = function () {
+        requestAnimationFrame(animate);
+        light.position.copy( camera.position );
+        controls.update();
+
+        renderer.render(scene, camera);
+      };
+
+      animate();
+
+</script>
+<!--<h1>Итог - <div id="min"></div> </h1>-->
+</body>
+</html>

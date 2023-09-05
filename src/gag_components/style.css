@@ -93,12 +93,7 @@
   grid-row-end: 1;
 }
 
-.sphere_container {
-  grid-column-start: 3;
-  grid-column-end: 3;
-  grid-row-start: 2;
-  grid-row-end: 2;
-}
+
 
 .table2_container{
   grid-column-start: 1;
@@ -151,7 +146,7 @@
   }
   
   .sphere_container {
-
+    /* height: 200vh; */
   }
   
   .table2_container{
@@ -248,10 +243,10 @@
 /* --------------------------------------------------------------*/
 
 .sphere_interface{
-  border: 3px solid var(--my-grey);
+  border: 3px solid var(--menu-blue);
   border-radius: 6px;
   padding: 10px;
-  height: 235px;
+  height: 500px;
   width: 90%;
 
 }

@@ -1,13 +1,16 @@
 import React, {createElement as e, useEffect, useState} from 'react';
 import "./style.css";
+import {Rotate_sphere} from "./rotate_sphere";
 
 
-
-
-  export function TooltipContent(tooltip_props:{type:string}) {
+  export function TooltipContent(tooltip_props:{type:string, sred_dir: number[], center_zone: number[], dir_list: number[][], angle_list: number[]}) {
 
     var type = tooltip_props.type;
 
+    let center_zone = tooltip_props.center_zone;
+    let dir_list = tooltip_props.dir_list;
+    let angle_list = tooltip_props.angle_list;
+    let sred_dir = tooltip_props.sred_dir
 
     let content = '';
     if (type === 'graph') {
@@ -21,6 +24,7 @@ import "./style.css";
                 образцов и представляет собой доверительный интервал. Чем 
                 больше шагов размагничивания было пройдено образцом, тем 
                 меньше круг.
+                
                 <hr className='tooltip-span'></hr>
                 Пересечение кругов образует  синеватую зону, в которой лежит 
                 истинное палеомагнитное направление, закраску этой зоны можно 
@@ -29,6 +33,11 @@ import "./style.css";
                 на панели параметров, также сам grid можно отобразить, нажав
                 на галочку show grid. При достаточной точности, центр
                 будет находиться ровно в гипоцентре зоны.
+                <Rotate_sphere
+                        sred_dir={sred_dir}
+                        center_zone={center_zone}
+                        dir_list={dir_list}
+                        angle_list={angle_list}/>
             </span>
         );
     } 

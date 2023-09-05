@@ -290,7 +290,43 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     //---------------------------------------------------------------------------------------
     // 
     //---------------------------------------------------------------------------------------
+    
+    var coords = [];
 
+    var point = [1, 0, 0];
+
+    
+    var mer_numb = 18;
+    for ( var i = 0; i < mer_numb; i ++ ) {
+        point = RotateAroundV(point, [0, 1, 0], 30 - 10 * mer_numb / 9);
+        var meridian = centering(PlotCircle(point, 90, 90), lamb_sred_dir);
+        coords.push(make_coords(meridian));
+    }
+
+    var par_numb = 18;
+    for ( var i = 0; i < par_numb; i ++ ) {
+        var paralel = centering(PlotCircle([0, 1, 0], i * (30 - 10 * mer_numb / 9), 90), lamb_sred_dir);
+        coords.push(make_coords(paralel));
+    }
+
+    paralel = PlotCircle([0, 0, 1], 90, 90);
+    coords.push(make_coords(paralel));
+
+    var center_degree_grid = [];
+    for ( let i = 0; i < coords.length; i ++ ) {
+        center_degree_grid.push(
+            e('polyline',
+                {
+                    key: my_key,
+                    points: coords[i],
+                    stroke: "grey",
+                    fill: 'none',
+                    strokeWidth:"0.0005px"
+                }, ''
+            )
+        );
+        my_key += 1;
+    }
 
     
 
@@ -302,7 +338,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
 
         {/* {rumbs} */}
 
-
+        {center_degree_grid}
         {lambert_isvis && <polygon points={lambert_polygonPoints} fill={poly_color} />}
         {grid_isvis && grid}
         {lambert_circles}

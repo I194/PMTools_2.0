@@ -14,18 +14,20 @@ import {
     } from "./gag_functions";
 
 
-export function Rotate_sphere(props:{center_zone: number[], dir_list: number[][], angle_list: number[]}) {
+export function Rotate_sphere(props:{sred_dir: number[], center_zone: number[], dir_list: number[][], angle_list: number[]}) {
 
 
     var dir_list = props.dir_list;
     var center_zone = props.center_zone;
     var angle_list = props.angle_list;
-
+    let sred_dir = props.sred_dir;
     //-----------------------------------------------------------------
     // making center zone for drawing on center svg
     //-----------------------------------------------------------------
 
-    var rot_center_zone = RotateAroundV(center_zone, get_perp([0, 0, 1], center_zone), -angle_between_v([0, 0, 1], center_zone) * 180 / Math.PI)
+    var rot_center_zone = center_zone;
+
+    var rot_center_zone = sred_dir;
 
     var center_center_zone = e('circle',
                             {
@@ -46,7 +48,7 @@ export function Rotate_sphere(props:{center_zone: number[], dir_list: number[][]
     var my_key = 1;
     for ( var i = 0; i < dir_list.length; i ++ ) {
 
-        var dir_circle = centering(PlotCircle(dir_list[i], angle_list[i], 90), center_zone);
+        var dir_circle = PlotCircle(dir_list[i], angle_list[i], 90);
         center_circles.push(
                                 e('polyline',
                                     {
@@ -70,19 +72,19 @@ export function Rotate_sphere(props:{center_zone: number[], dir_list: number[][]
 
     var coords = [];
 
-    var point = [0, 0, 1];
+    var point = [1, 0, 0];
 
 
     var mer_numb = 9;
     for ( var i = 0; i < mer_numb; i ++ ) {
         point = RotateAroundV(point, [0, 1, 0], 30 - 10 * mer_numb / 9);
-        var meridian = centering(PlotCircle(point, 90, 90), center_zone);
+        var meridian = PlotCircle(point, 90, 90);
         coords.push(make_coords(meridian));
     }
 
     var par_numb = 9;
     for ( var i = 0; i < par_numb; i ++ ) {
-        var paralel = centering(PlotCircle([0, 1, 0], i * (30 - 10 * mer_numb / 9), 90), center_zone);
+        var paralel = PlotCircle([0, 1, 0], i * (30 - 10 * mer_numb / 9), 90);
         coords.push(make_coords(paralel));
     }
 

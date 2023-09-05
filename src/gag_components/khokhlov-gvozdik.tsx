@@ -2,6 +2,7 @@ import React, {createElement as e, useEffect, useState} from 'react';
 import {Zoomed_lambert_graph} from "./zoomed_lambert_graph";
 import {Rotate_sphere} from "./rotate_sphere";
 import {TooltipContent} from "./my-tooltip";
+import {Threedsphere} from "./3dsphere";
 
 import "./style.css";
 import {
@@ -375,12 +376,24 @@ export function Khokhlov_Gvozdik() {
 
         <div className="graph_container common-container">
          
-            <Tooltip className="my-tooltip" title={<TooltipContent type={'graph'} />} arrow>               
+            <Tooltip className="my-tooltip" title={<TooltipContent 
+                type={'graph'}
+                sred_dir={sred_dir}
+                center_zone={center_zone}
+                dir_list={dir_list}
+                angle_list={angle_list}
+            />} arrow>               
                         <HelpCenterOutlinedIcon className='graph-tooltip'/>
             </Tooltip>
             
             <a onClick={handleDownloadSVG}>
-                <Tooltip className="my-tooltip" title={<TooltipContent type={'download svg'} />} arrow>
+                <Tooltip className="my-tooltip" title={<TooltipContent 
+                    type={'download svg'} 
+                    sred_dir={sred_dir}
+                    center_zone={center_zone}
+                    dir_list={dir_list}
+                    angle_list={angle_list}
+                />} arrow>
                     
                     <FileDownloadOutlinedIcon  className='graph-tooltip'/>
                     
@@ -403,24 +416,31 @@ export function Khokhlov_Gvozdik() {
             />
 
 
- 
-
+                    {center_zone[0]}
+                    <br></br>
+                    {center_zone[1]}
+                    <br></br>
+                    {center_zone[2]}
+                    <br></br>
         </div>
 
         <div className="table_container common-container">
             
+        {/* <div className="sphere_container">       
+                    <Rotate_sphere
+                        sred_dir={sred_dir}
+                        center_zone={center_zone}
+                        dir_list={dir_list}
+                        angle_list={angle_list}/>
+        </div> */}
+
+            <Threedsphere />
         </div>
 
         <div className="table2_container common-container">
             table2
         </div>
 
-        {/* <div className="sphere_container common-container">       
-                    <Rotate_sphere
-                        center_zone={center_zone}
-                        dir_list={dir_list}
-                        angle_list={angle_list}/>
-        </div> */}
 
 
 
@@ -432,8 +452,12 @@ export function Khokhlov_Gvozdik() {
             <div className='interface-tooltip'>
                 <Tooltip 
                     style={{}}
-                    title={<TooltipContent type={'checkbox'} 
-                    
+                    title={<TooltipContent 
+                        type={'checkbox'} 
+                        sred_dir={sred_dir}
+                        center_zone={center_zone}
+                        dir_list={dir_list}
+                        angle_list={angle_list}            
                     />} arrow>
 
                     <HelpCenterOutlinedIcon  className='interface-tooltip'/>

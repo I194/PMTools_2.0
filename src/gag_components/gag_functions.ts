@@ -349,14 +349,32 @@ export function centering(in_points: number[][], dir: number[]){
     var points = in_points;
     for ( var i = 0; i < points.length; i ++ ) {
 
+        //working var
+        // points[i] = RotateAroundV(points[i], get_perp([0, 0, 1], dir), -angle_between_v([0, 0, 1], dir) * 180 / Math.PI);
+        
 
-        points[i] = RotateAroundV(points[i], get_perp([0, 0, 1], dir), -angle_between_v([0, 0, 1], dir) * 180 / Math.PI);
-        // points[i] = RotateAroundZ(points[i], -angle_between_v([0, 1, 0], [vertical_v[0], vertical_v[1], 0]) * 180 / Math.PI);
+        if (dir[0] >= 0 && dir[1] >= 0 && dir[2] >= 0) {
+            points[i] = RotateAroundY(points[i], angle_between_v([0, 1, 0], [dir[0], dir[1], 0]) * 180 / Math.PI);
+            points[i] = RotateAroundX(points[i], -angle_between_v([1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+        }
+        if (dir[0] >= 0 && dir[1] >= 0 && dir[2] <= 0) {
+            points[i] = RotateAroundY(points[i], angle_between_v([0, 1, 0], [dir[0], dir[1], 0]) * 180 / Math.PI);
+            points[i] = RotateAroundX(points[i], angle_between_v([1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+        }
+        if (dir[0] >= 0 && dir[1] <= 0 && dir[2] <= 0) {
+            points[i] = RotateAroundY(points[i], -angle_between_v([0, 1, 0], [dir[0], dir[1], 0]) * 180 / Math.PI);
+            points[i] = RotateAroundX(points[i], angle_between_v([1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+        }
+        if (dir[0] >= 0 && dir[1] <= 0 && dir[2] >= 0) {
+            points[i] = RotateAroundY(points[i], -angle_between_v([0, 1, 0], [dir[0], dir[1], 0]) * 180 / Math.PI);
+            points[i] = RotateAroundX(points[i], -angle_between_v([1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+        }
+
 
 
         if (points[i][2] >= 0) {
             res.push(points[i]);
-       }
+        }
     }
 
     if (res.length < points.length){
