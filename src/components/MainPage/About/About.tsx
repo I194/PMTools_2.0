@@ -32,11 +32,12 @@ const About = () => {
           color="primary"
           sx={{
             textTransform: 'none',
-            fontSize: '18px',
+            fontSize: '24px',
             borderRadius: '4px',
             padding: '8px 24px',
             width: 'fit-content',
             mt: '42px',
+            mb: '42px'
           }}
         >
           {t('mainPage.about.startWork')}
