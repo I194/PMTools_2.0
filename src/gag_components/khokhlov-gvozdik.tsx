@@ -23,6 +23,7 @@ import {
     lambertMass,
     points_dist_2d,
     getRandomInt,
+    GeoVdekG,
     get_quantiles
     } from "./gag_functions";
 import HelpCenterOutlinedIcon from '@mui/icons-material/HelpCenterOutlined';
@@ -116,7 +117,8 @@ export function Khokhlov_Gvozdik() {
             new_ang_list.push(quantiles[step_list[i] - 3]);
         }
         setAngleList(new_ang_list);
-        console.log('angles changed')
+        console.log('angles changed');
+        console.log(new_ang_list);
 
     }, [selectedD, apc, selectedP, dir_number, step_list]);
 
@@ -161,7 +163,8 @@ export function Khokhlov_Gvozdik() {
         var random_angle = getRandomfloat(0, 180);
 
         for ( var i = 0; i < dir_number; i ++ ) {
-
+            console.log('random_list[i * 2]');
+            console.log(random_list[i * 2]);
             paleo_data = GeoVdek(1, random_list[i * 2], random_list[i * 2 + 1])
             paleo_data = NormalizeV(RotateAroundV(paleo_data, random_dir, random_angle));
             step = getRandomInt(6, quantiles.length);
@@ -230,7 +233,7 @@ export function Khokhlov_Gvozdik() {
     var phi = 0.013;
 
 
-
+    
     for (var i = 0; i < points_numb; i++)
     {
         x = (i * phi - Math.round(i * phi)) * 360;
@@ -274,41 +277,6 @@ export function Khokhlov_Gvozdik() {
     // polygon of zone and max radius calculation
     //---------------------------------------------------------------------------------------
 
-    var rot_center_zone = convertToLambert(center_zone, sred_dir);
-    var calc_circ_points = 720 * 8;
-    var input: [number, number][] = [];
-    var circ_p = [];
-
-    for ( var i = 0; i < dir_list.length; i ++ )
-    {
-        var b = lambertMass(PlotCircle(dir_list[i], angle_list[i], calc_circ_points), sred_dir);
-
-        for (var j = 0; j < b.length; j++){
-            circ_p.push(b[j]);
-        }
-    }
-
-    for ( let i = 0; i < circ_p.length; i ++ )
-    {
-        input.push([circ_p[i][0], circ_p[i][1]]);
-    }
-
-    var poly_points2d = poly_contour(input, [rot_center_zone[0], rot_center_zone[1]]);
-    var poly_points3d = [];
-
-    for ( let i = 0; i < poly_points2d.length; i ++ )
-    {
-        poly_points3d.push([poly_points2d[i][0], poly_points2d[i][1], 1 ]);
-    }
-
-    const polygonPoints = make_coords(poly_points3d);
-
-    var max_rad = -1;
-    for ( let i = 0; i < input.length; i ++ )
-    {
-        if (points_dist_2d(rot_center_zone, input[i]) > max_rad){max_rad = points_dist_2d(rot_center_zone, input[i]);}
-    }
-
     //---------------------------------------------------------------------------------------
     // Interface
     //---------------------------------------------------------------------------------------
@@ -338,7 +306,6 @@ export function Khokhlov_Gvozdik() {
         alpha95: alpha95,
         isvis: isvis,
         isvisgrid: isvisgrid,
-        polygonPoints: polygonPoints,
         grid_color: grid_color,
         poly_color: poly_color
     };
@@ -410,7 +377,6 @@ export function Khokhlov_Gvozdik() {
                 alpha95={alpha95}
                 isvis={isvis}
                 isvisgrid={isvisgrid}
-                polygonPoints={polygonPoints}
                 grid_color={grid_color}
                 poly_color={poly_color}
             />
@@ -434,7 +400,7 @@ export function Khokhlov_Gvozdik() {
                         angle_list={angle_list}/>
         </div> */}
 
-            <Threedsphere />
+
         </div>
 
         <div className="table2_container common-container">
@@ -471,6 +437,7 @@ export function Khokhlov_Gvozdik() {
 
 
                     <select className="select1-item item my_select" value={selectedNumber} onChange={handleNumberChange}>
+                        <option value={10000}>grid = 10 000</option>
                         <option value={50000}>grid = 50 000</option>
                         <option value={100000}>grid = 100 000</option>
                         <option value={250000}>grid = 250 000</option>

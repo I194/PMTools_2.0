@@ -13,17 +13,17 @@ import {
     zone_square
     } from "./gag_functions";
 
-import { createScene } from './ThreejsScene';
+// import { createScene } from './ThreejsScene';
 
 export function Threedsphere() {
-    const containerRef = useRef<HTMLDivElement>(null);
+    // const containerRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-      if (containerRef.current) {
-        createScene(containerRef.current);
-      }
-    }, [containerRef]);
+    // useEffect(() => {
+    //   if (containerRef.current) {
+    //     createScene(containerRef.current);
+    //   }
+    // }, [containerRef]);
 
-    return <div ref={containerRef} />;
+    // return <div ref={containerRef} />;
 
 }

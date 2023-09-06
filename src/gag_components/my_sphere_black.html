@@ -12,14 +12,14 @@
     </style>
 </head>
 <body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/controls/OrbitControls.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.122.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.122.0/examples/js/controls/OrbitControls.min.js"></script>
-<script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/controls/OrbitControls.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/three@0.122.0/build/three.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/three@0.122.0/examples/js/controls/OrbitControls.min.js"></script>
+      <script>
 
       //-----------------------------------------------------------------------
-	  // projections func
+      // projections func
       //-----------------------------------------------------------------------
       function GeoVdek(r, phi, lmbd)
       {
@@ -44,13 +44,7 @@
 
       function vector_length(v) { return Math.sqrt( v[0] * v[0] + v[1] * v[1] + v[2] * v[2] ); }
 
-      function angle_between_v(v1, v2)
-      {
-            var angle;
-            angle = Math.acos( (v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]) / ( vector_length(v1) * vector_length(v2) ) );
-            if (angle > 180) { angle -= 180; }
-            return angle;
-      }
+
 
 
 
@@ -255,56 +249,6 @@
       scene.add( light );
 
 
-      //-----------------------------------------------------------------------
-	  // make sphere
-      //-----------------------------------------------------------------------
-
-
-      //var sphereGeometry = new THREE.SphereGeometry(0.999, 90, 90);
-      //var sphereMaterial = new THREE.MeshBasicMaterial({color: 0x00849C, wireframe: true});
-      //var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-      //scene.add(sphere);
-
-      //var sphereGeometry = new THREE.SphereGeometry(0.9999, 18, 18);
-      //var sphereMaterial = new THREE.MeshBasicMaterial({color: 0x5EB3C2, wireframe: false});
-      //var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-      //scene.add(sphere);
-
-      var geometry = new THREE.SphereGeometry( 0.997, 90, 90 );
-      var material = new THREE.MeshDepthMaterial({color: 0x3B8C9A});
-      var material = new THREE.MeshLambertMaterial({color: 0x0000});
-      var sphere = new THREE.Mesh( geometry, material );
-      scene.add( sphere );
-
-      //-----------------------------------------------------------
-      // draw random circles
-      //-----------------------------------------------------------
-
-      var max = 1;
-      var min = -1;
-      var dir = [0, 0, 0];
-      var my_angle;
-
-      var dir_list = [];
-      var angle_list = [];
-
-
-
-        var k1 = 0;
-        var k2 = 0;
-        var k3 = 1;
-
-      for ( var i = 0; i < 7; i ++ ) {
-          k1 += 0.03;
-
-          dir = [k1, k2, k3];
-          dir_list.push(dir);
-
-          my_angle = Math.random() * (15 - 7) + 7;
-          PlotCircle(dir, my_angle, scene, 0xFF5454, 1);
-          angle_list.push(my_angle * Math.PI/ 180);
-        }
-
       //-----------------------------------------------------------
       // draw sphere grid
       //-----------------------------------------------------------
@@ -321,98 +265,263 @@
           PlotCircle([0, 1, 0], i * 10, scene, 0x00849C, 0);
         }
 
+
       //-----------------------------------------------------------------------
-	  // plot dots grid
+      // test
       //-----------------------------------------------------------------------
-
-        var x;
-        var y;
-        var phi = 0.013;
-        var points_numb = 400000;
-        var m;
-        var print_point = 0;
-        var list_dots = [];
-        var center_zone = [0, 0, 0];
-      const map1 = new THREE.TextureLoader().load( 'spirit.png' );
-      var dotMaterial = new THREE.PointsMaterial( { size: 2, sizeAttenuation: false } );
-
-//---------------------------------------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------------------------------
-
+      function dotPlot(m, my_color){
         var dotGeometry = new THREE.Geometry();
-
-        for (var i = 0; i < points_numb; i++)
-        {
-            x = (i * phi - Math.round(i * phi)) * 360;
-            y = (i / points_numb - Math.round(i / points_numb)) * 360;
-
-            m = GeoVdek(1, x, y);
-
-              for (var j = 0; j < dir_list.length; j++ )
-                  {
-                  if (angle_between_v(dir_list[j], m) < angle_list[j])
-                  {
-                        print_point = 1;
-                  }
-                  else { print_point = 0; break; }
-                  }
-
-            if (print_point == 1)
-            {
-            list_dots.push(m);
-            dotGeometry.vertices.push(new THREE.Vector3(m[0], m[1], m[2]));
-            }
-            print_point = 0;
-        }
-
-
-      var dot = new THREE.Points( dotGeometry, dotMaterial );
-      scene.add( dot );
-
-
-
-      for (var i = 0; i < list_dots.length; i++)
-      {
-        center_zone[0] += list_dots[i][0];
-        center_zone[1] += list_dots[i][1];
-        center_zone[2] += list_dots[i][2];
+        var m1 = NormalizeV(m);
+        
+        dotGeometry.vertices.push(new THREE.Vector3(m1[0], m1[1], m1[2]));
+        var dotMaterial = new THREE.PointsMaterial( { color: my_color, size: 10, sizeAttenuation: false } );
+        var dot = new THREE.Points( dotGeometry, dotMaterial );
+        scene.add( dot );
       }
-      center_zone = NormalizeV(center_zone);
-
-      var dotGeometry1 = new THREE.Geometry();
-      dotGeometry1.vertices.push(new THREE.Vector3(center_zone[0], center_zone[1], center_zone[2]));
 
 
-      var dotMaterial1 = new THREE.PointsMaterial( { size: 10, sizeAttenuation: false } );
-      var dot1 = new THREE.Points( dotGeometry1, dotMaterial1 );
-      scene.add( dot1 );
-
-      //-----------------------------------------------------------------------
-	  // fisher
-      //-----------------------------------------------------------------------
-        var r_sum = [0, 0, 0];
-        for (var i = 0; i < dir_list.length; i++){
-            r_sum[0] += dir_list[i][0];
-            r_sum[1] += dir_list[i][1];
-            r_sum[2] += dir_list[i][2];
+      function linePlot(m, my_color){
+        var points4 = [];
+        for ( let i = 0; i < m.length; i ++ ) {
+          points4.push( new THREE.Vector3( m[i][0], m[i][1], m[i][2] ) );
         }
-        var Rdlin = vector_length(r_sum);
-        var r_sum = NormalizeV(r_sum);
+        var geometry4 = new THREE.BufferGeometry().setFromPoints( points4 );
+        var material4 = new THREE.LineBasicMaterial({ color: my_color, linewidth: 2});
+        var line4 = new THREE.Line( geometry4, material4 );
+        scene.add( line4 );
+      }
 
-        var N = dir_list.length;
-        var K = (N - 1) / (N - Rdlin);
-        var alpha95 = 140 / Math.pow(K * N, 0.5);
-        alpha95 = alpha95 * Math.Pi / 180;
-        alpha95 = K;
+      
+      function get_perp(v1,v2)
+      {
+          var x1 = v1[0];
+          var y1 = v1[1];
+          var z1 = v1[2];
 
-        //PlotCircle(r_sum, alpha95, scene, 0xD71CA4, 1);
-        PlotCircle(r_sum, N, scene, 0xD8B8CF, 1);
-        //PlotCircle(r_sum, K, scene, 0xCDDC85, 1);
-        PlotCircle(r_sum, Rdlin, scene, 0x879C1C, 1);
+          var x2 = v2[0];
+          var y2 = v2[1];
+          var z2 = v2[2];
+
+          var i = y1 * z2 - z1 * y2;
+          var j = z1 * x2 - x1 * z2;
+          var k = x1 * y2 - y1 * x2;
+
+          return NormalizeV([i,j,k]);
+      }
+
+      function convertPoint(point, newAxes) {
+        const deltaX = point[0];
+        const deltaY = point[1];
+        const deltaZ = point[2];
+
+        const transformedX = newAxes[0][0] * deltaX + newAxes[1][0] * deltaY + newAxes[2][0] * deltaZ;
+        const transformedY = newAxes[0][1] * deltaX + newAxes[1][1] * deltaY + newAxes[2][1] * deltaZ;
+        const transformedZ = newAxes[0][2] * deltaX + newAxes[1][2] * deltaY + newAxes[2][2] * deltaZ;
+
+        return [transformedX, transformedY, transformedZ];
+      }
+
+      function angle_between(v1, v2)
+      {
+          var angle;
+          angle = Math.acos( (v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]) / ( vector_length(v1) * vector_length(v2) ) );
+          if (angle > 180) { angle -= 180; }
+              return angle;
+      }
+
+      function MultiplyMatrix(A, B)
+      {
+          var C = [0, 0, 0];
+
+          C[0] = A[0][0] * B[0] + A[0][1] * B[1] + A[0][2] * B[2];
+          C[1] = A[1][0] * B[0] + A[1][1] * B[1] + A[1][2] * B[2];
+          C[2] = A[2][0] * B[0] + A[2][1] * B[1] + A[2][2] * B[2];
+
+          return C;
+      }
+      function RotateAroundZ(B, phi)
+      {
+          phi = phi * Math.PI / 180;
+
+          let A = [
+                      [ Math.cos(phi), -Math.sin(phi), 0 ],
+                      [ Math.sin(phi), Math.cos(phi), 0 ],
+                      [ 0, 0, 1 ],
+                  ];
+
+          var C = MultiplyMatrix(A, B)
+
+          return C;
+      }
+
+      function RotateAroundY(B, phi)
+      {
+          phi = phi * Math.PI / 180;
+
+          let A = [
+                      [ Math.cos(phi), 0, Math.sin(phi) ],
+                      [ 0, 1, 0 ],
+                      [ -Math.sin(phi), 0, Math.cos(phi) ],
+                  ];
+
+          var C = MultiplyMatrix(A, B)
+
+          return C;
+      }
+      function RotateAroundX(B, phi)
+      {
+          phi = phi * Math.PI / 180;
+
+          let A = [
+                      [ 1, 0, 0 ],
+                      [ 0, Math.cos(phi), -Math.sin(phi) ],
+                      [ 0, Math.sin(phi), Math.cos(phi) ],
+                  ];
+
+          var C = MultiplyMatrix(A, B)
+
+          return C;
+      }
+
+
+     // find new basis
+     function test(center, sign_numb, my_var) {
+      var green = 0x0f87a;
+      var red = 0xFF5454;
+      var blue = 0xaaaa;
+      var purple = 0xa834eb;
+      var pink = 0xeb34eb;
+
+
+      if (sign_numb == 1) {
+        var my_sign = [1,1,1];
+      }
+      if (sign_numb == 2) {
+        var my_sign = [1,-1,1];
+      }
+      if (sign_numb == 3) {
+        var my_sign = [1,1,-1];
+      }
+      if (sign_numb == 4) {
+        var my_sign = [1,-1,-1];
+      }
+      if (sign_numb == 5) {
+        var my_sign = [-1,1,1];
+      }
+      if (sign_numb == 6) {
+        var my_sign = [-1,-1,1];
+      }
+      if (sign_numb == 7) {
+        var my_sign = [-1,1,-1];
+      }
+      if (sign_numb == 8) {
+        var my_sign = [-1,-1,-1];
+      }
+
+      //  basis
+      var x_axis = [1,0,0];
+      var y_axis = [0,1,0];
+      var z_axis = [0,0,1];
+      var basis = [x_axis, y_axis, z_axis];
+
+      var x_axis1 = get_perp(y_axis, center);
+      var y_axis1 = get_perp(center, x_axis1);
+      var z_axis1 = center;
+      var new_basis1 = [x_axis1, y_axis1, z_axis1];
+
+      linePlot([x_axis1, [0,0,0], y_axis1, [0,0,0], z_axis1, [0,0,0]], purple);
+
+
+      var x_axis2 = RotateAroundX( z_axis, -angle_between(center, y_axis) * 180 / Math.PI );
+      var x_axis2 = [my_sign[0] * x_axis2[0], my_sign[0] * x_axis2[1], my_sign[0] * x_axis2[2]];
+
+      var y_axis2 = RotateAroundV( x_axis, x_axis2, angle_between(x_axis1, x_axis) * 180 / Math.PI  );
+      var y_axis2 = [my_sign[1] * y_axis2[0], my_sign[1] * y_axis2[1], my_sign[1] * y_axis2[2]];
+
+      var z_axis2 = get_perp(x_axis2, y_axis2);
+      var z_axis2 = [my_sign[2] * z_axis2[0], my_sign[2] * z_axis2[1], my_sign[2] * z_axis2[2]];
+
+      var new_basis2 = [z_axis2, x_axis2, y_axis2];
+
+      if (my_var == 1){var new_basis2 = [ z_axis2, x_axis2, y_axis2];}
+      if (my_var == 2){var new_basis2 = [ z_axis2, y_axis2, x_axis2];}
+      if (my_var == 3){ var new_basis2 = [ y_axis2, x_axis2, z_axis2];}
+      if (my_var == 4){var new_basis2 = [ y_axis2, z_axis2, x_axis2];}
+      if (my_var == 5){var new_basis2 = [ x_axis2, z_axis2, y_axis2];}
+      if (my_var == 6){var new_basis2 = [ x_axis2, y_axis2, z_axis2];}
+
+      linePlot([x_axis2, [0,0,0], y_axis2, [0,0,0], z_axis2, [0,0,0]]);
+
+      dotPlot(convertPoint(center, new_basis2), pink);
+
+      dotPlot(convertPoint(dot1, new_basis2), pink);
+      dotPlot(convertPoint(dot2, new_basis2), pink);
+      dotPlot(convertPoint(dot3, new_basis2), pink);
+      dotPlot(convertPoint(dot4, new_basis2), pink);
+
+    }
+
+      var green = 0x0f87a;
+      var red = 0xFF5454;
+      var blue = 0xaaaa;
+      var purple = 0xa834eb;
+      var pink = 0xeb34eb;
+
+      //  basis
+      var x_axis = [1,0,0];
+      var y_axis = [0,1,0];
+      var z_axis = [0,0,1];
+      var basis = [x_axis, y_axis, z_axis];
+
+
+      dotPlot(x_axis, red);
+      dotPlot(y_axis, red);
+      dotPlot(z_axis, red);
+
+
+      linePlot([x_axis, [0,0,0], y_axis, [0,0,0], z_axis, [0,0,0]], red);
+
+
+      var center = NormalizeV([-1,-1,-1]);
+
+      var dot1 = RotateAroundX( center, 65);
+      var dot2 = RotateAroundY( center, 65);
+      var dot3 = RotateAroundZ( center, 65);
+      var dot4 = RotateAroundV( center, [1, 0, 1], 65);
+
+      // +++
+      if (center[0] > 0 && center[1] > 0 && center[2] > 0) { test(center, 2, 1) }
+      // +-+
+      if (center[0] > 0 && center[1] < 0 && center[2] > 0) { test(center, 2, 1) }
+      // ++-
+      if (center[0] > 0 && center[1] > 0 && center[2] < 0) { test(center, 1, 1) }
+      // +--
+      if (center[0] > 0 && center[1] < 0 && center[2] < 0) { test(center, 1, 1) }
+      // -++  [-1,1,1] 5 
+      if (center[0] < 0 && center[1] > 0 && center[2] > 0) { test(center, 3, 3)}
+      // --+ 
+      if (center[0] < 0 && center[1] < 0 && center[2] > 0) { test(center, 3, 3) }
+      // -+-
+      if (center[0] < 0 && center[1] > 0 && center[2] < 0) { test(center, 3, 3) }
+      // ---
+      if (center[0] < 0 && center[1] < 0 && center[2] < 0) { test(center, 3, 3) }
+
+
+      dotPlot(center, green);
+
+      dotPlot(dot1, blue);
+      dotPlot(dot2, blue);
+      dotPlot(dot3, blue);
+      dotPlot(dot4, blue);
+
 
       //-----------------------------------------------------------------------
-	  // render anim
+	    // render anim
       //-----------------------------------------------------------------------
+
+
+
+
 
       // Set up the controls
       var controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -429,6 +538,6 @@
       animate();
 
 </script>
-<!--<h1>Итог - <div id="min"></div> </h1>-->
+
 </body>
 </html>

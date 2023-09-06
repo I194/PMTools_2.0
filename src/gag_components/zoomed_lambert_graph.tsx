@@ -28,7 +28,6 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
                                                             alpha95: number,
                                                             isvis: boolean,
                                                             isvisgrid: boolean,
-                                                            polygonPoints: string,
                                                             grid_color: string,
                                                             poly_color: string
                                                         }) {
@@ -42,7 +41,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     var alpha95 = lambert_zoom_props.alpha95;
     var lambert_isvis = lambert_zoom_props.isvis;
     var grid_isvis = lambert_zoom_props.isvisgrid;
-    var lambert_polygonPoints = lambert_zoom_props.polygonPoints;
+
 
 
 
@@ -54,16 +53,17 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     var circles_r = 0.0025;
     var grid_r = 0.0015;
     var center_zone_r = 0.003;
-    var my_view_box = "-0.2 -0.2 0.4 0.4";
+
 
 
 
     if (angle_list[0] == 0){
+    console.log("clear");
       return (
         <div key={1227544233}>
           <h5 className="my_text">Lambert svg</h5>
 
-          <svg className="svg interface" key={6534324} viewBox={my_view_box}>
+          <svg className="svg interface" key={6534324} viewBox={"-1 -1 2 2"}>
 
           </svg>
 
@@ -74,15 +74,20 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     // making center zone for drawing on lambert svg
     //-----------------------------------------------------------------
     var my_key = 0;
-    var rot_center_zone = convertToLambert(center_zone, lamb_sred_dir);
-
+//--------------------------fix------------------------------------------
+// var rot_center_zone = convertToLambert(center_zone, lamb_sred_dir);
+    var rot_center_zone = center_zone;
     var lambert_center_zone = e('circle',
                             {
                                 key: my_key,
-                                r: center_zone_r,
+                                //------------------------- fix ---------------------------------------
+                                // r: center_zone_r,
+                                r: 0.03,
                                 cx: String(rot_center_zone[0]),
                                 cy: String(rot_center_zone[1]),
-                                fill: center_zone_color,
+                                //------------------------- fix ---------------------------------------
+                                // fill: center_zone_color,
+                                fill: "red",
 
                             }, ''
                         );
@@ -102,8 +107,9 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     var lambert_circles = [];
 
     for ( var i = 0; i < dir_list.length; i ++ ) {
-
-        var dir_circle = lambertMass(PlotCircle(dir_list[i], angle_list[i], plot_point_numb), lamb_sred_dir);
+        //-------------------fix---------mayby dont centering-----------------------
+        // var dir_circle = lambertMass(PlotCircle(dir_list[i], angle_list[i], plot_point_numb), lamb_sred_dir);
+        var dir_circle = centering(PlotCircle(dir_list[i], angle_list[i], plot_point_numb), lamb_sred_dir);
 
         for ( var j = 0; j < dir_circle.length; j ++ )
         {
@@ -143,8 +149,9 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     grid_r = (max_y - min_y) / 400;
 
     for ( var i = 0; i < dir_list.length; i ++ ) {
-
-        var dir_circle = lambertMass(PlotCircle(dir_list[i], angle_list[i], plot_point_numb), lamb_sred_dir);
+        //-----------------------------fix--------------------------
+        // var dir_circle = lambertMass(PlotCircle(dir_list[i], angle_list[i], plot_point_numb), lamb_sred_dir);
+        var dir_circle = centering(PlotCircle(dir_list[i], angle_list[i], plot_point_numb), lamb_sred_dir);
 
         for ( var j = 0; j < dir_circle.length; j ++ )
         {
@@ -152,7 +159,9 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
                                     e('circle',
                                         {
                                             key: my_key,
-                                            r: circles_r,
+                                            //------------------------- fix ---------------------------------------
+                                            // r: circles_r,
+                                            r: 0.005,
                                             cx: String(dir_circle[j][0]),
                                             cy: String(dir_circle[j][1]),
                                             fill: "black",
@@ -170,13 +179,11 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     var zgp1 = [];
         for (var i = 0; i < lambert_grid_points.length; i++)
         {
-            zgp1.push(
-                RotateAroundV(
-                    lambert_grid_points[i],
-                    get_perp([0, 0, 1], lamb_sred_dir),
-                    -angle_between_v([0, 0, 1], lamb_sred_dir) * 180 / Math.PI)
-                );
+            zgp1.push(lambert_grid_points[i]);
         }
+
+    //-------------------fix-------------------------
+    zgp1 = centering(zgp1, lamb_sred_dir);
 
 
     var grid = [];
@@ -186,7 +193,9 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
             e('circle',
                 {
                     key: my_key,
-                    r: grid_r,
+                    //------------------------- fix ---------------------------------------
+                    // r: grid_r,
+                    r: 0.007,
                     cx: String(zgp1[i][0]),
                     cy: String(zgp1[i][1]),
                     fill: grid_color,
@@ -227,7 +236,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
                                     stroke: "red",
                                     fill: 'none',
                                     strokeWidth: "0.0016px",
-//                                     strokeWidth: "0.001px",
+
                                     strokeDasharray: "0.01px, 0.003px",
                                 }, ''
                             )
@@ -235,7 +244,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
 
     my_key += 1;
     //---------------------------------------------------------------------------------------
-    // 
+    // rumbs
     //---------------------------------------------------------------------------------------
 
     var rumbs = e('circle',
@@ -258,7 +267,6 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     if (max_y < -1 * min_y) {var max_y = -min_y}
 
 
-    //     "-0.2 -0.2 0.4 0.4";
 
 
     var my_view_box:string;
@@ -288,7 +296,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     
     }
     //---------------------------------------------------------------------------------------
-    // 
+    // degree grid
     //---------------------------------------------------------------------------------------
     
     var coords = [];
@@ -321,15 +329,63 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
                     points: coords[i],
                     stroke: "grey",
                     fill: 'none',
-                    strokeWidth:"0.0005px"
+                    //------------------------- fix ---------------------------------------
+                    // strokeWidth:"0.0005px"
+                    strokeWidth:"0.01px"
                 }, ''
             )
         );
         my_key += 1;
     }
 
-    
+    //-------------------------------------------------------------------------------
+    //--------rot_center_zone twice????????!!!!!!!!--------fix---------------------
+    //   var rot_center_zone = convertToLambert(center_zone, lamb_sred_dir);
+  var rot_center_zone = center_zone;
 
+
+  var calc_circ_points = 720 * 8;
+  var input: [number, number][] = [];
+  var circ_p = [];
+
+  for ( var i = 0; i < dir_list.length; i ++ )
+  {
+      
+    //-------------------fix---------------------
+    // var b = lambertMass(PlotCircle(dir_list[i], angle_list[i], calc_circ_points), lamb_sred_dir);
+    var b = PlotCircle(dir_list[i], angle_list[i], calc_circ_points);
+
+      for (var j = 0; j < b.length; j++){
+          circ_p.push(b[j]);
+      }
+  }
+
+  for ( let i = 0; i < circ_p.length; i ++ )
+  {
+      input.push([circ_p[i][0], circ_p[i][1]]);
+  }
+
+  var poly_points2d = poly_contour(input, [rot_center_zone[0], rot_center_zone[1]]);
+  var poly_points3d = [];
+
+  for ( let i = 0; i < poly_points2d.length; i ++ )
+  {
+      poly_points3d.push([poly_points2d[i][0], poly_points2d[i][1], 1 ]);
+  }
+
+  const polygonPoints = make_coords(poly_points3d);
+
+  var max_rad = -1;
+  for ( let i = 0; i < input.length; i ++ )
+  {
+      if (points_dist_2d(rot_center_zone, input[i]) > max_rad){max_rad = points_dist_2d(rot_center_zone, input[i]);}
+  }
+
+
+
+  //------------------------------------------- fix ---------------------------------------
+  my_view_box = '-1 -1 2 2';
+  //-------------------------------fix-----------------------
   return (
     <div key={1227544233}>
       {/* <h5 className="my_text">Lambert svg</h5> */}
@@ -339,14 +395,14 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
         {/* {rumbs} */}
 
         {center_degree_grid}
-        {lambert_isvis && <polygon points={lambert_polygonPoints} fill={poly_color} />}
+        {/* {lambert_isvis && <polygon points={polygonPoints} fill={poly_color} />} */}
         {grid_isvis && grid}
         {lambert_circles}
-        {fisher_dir}
-        {fish_circle}
-        {lambert_center_zone}
+        {/* {fisher_dir} */}
+        {/* {fish_circle} */}
+        {/* {lambert_center_zone} */}
 
-        <text x={my_max + rumb_font_size} y={0} textAnchor="middle" fontSize={String(rumb_font_size)} fill="black">
+        {/* <text x={my_max + rumb_font_size} y={0} textAnchor="middle" fontSize={String(rumb_font_size)} fill="black">
             {"E"}
         </text>
         <text x={-my_max - rumb_font_size} y={0} textAnchor="middle" fontSize={String(rumb_font_size)} fill="black">
@@ -357,7 +413,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
         </text>
         <text x={0} y={-my_max - rumb_font_size} textAnchor="middle" fontSize={String(rumb_font_size)} fill="black">
             {"N"}
-        </text>
+        </text> */}
 
       </svg>
 

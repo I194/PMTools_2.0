@@ -144,6 +144,17 @@ export function GeoVdek(r: number, phi: number, lmbd: number)
     return C;
 }
 
+export function GeoVdekG(r: number, point1: number, point2: number): [number, number, number] {
+    const projectedX = point1;
+    const projectedY = point2;
+    const squaredSum = projectedX * projectedX + projectedY * projectedY;
+    const projectedZ = Math.sqrt(1 - squaredSum);
+  
+    return [projectedX, projectedY, projectedZ];
+}
+
+
+
 export function vector_length(v:number[]) { return Math.sqrt( v[0] * v[0] + v[1] * v[1] + v[2] * v[2] ); }
 
 export function points_dist(p1:number[], p2:number[]) {
