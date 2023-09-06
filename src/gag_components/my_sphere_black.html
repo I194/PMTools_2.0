@@ -484,10 +484,10 @@
 
       var center = NormalizeV([-1,-1,-1]);
 
-      var dot1 = RotateAroundX( center, 65);
-      var dot2 = RotateAroundY( center, 65);
-      var dot3 = RotateAroundZ( center, 65);
-      var dot4 = RotateAroundV( center, [1, 0, 1], 65);
+      var dot1 = RotateAroundX( center, 5);
+      var dot2 = RotateAroundY( center, 5);
+      var dot3 = RotateAroundZ( center, 5);
+      var dot4 = RotateAroundV( center, [1, 0, 1], 5);
 
       // +++
       if (center[0] > 0 && center[1] > 0 && center[2] > 0) { test(center, 2, 1) }
@@ -505,6 +505,35 @@
       if (center[0] < 0 && center[1] > 0 && center[2] < 0) { test(center, 3, 3) }
       // ---
       if (center[0] < 0 && center[1] < 0 && center[2] < 0) { test(center, 3, 3) }
+      
+      // 000
+
+      // 0--
+      // 0+-
+      // 0-+
+      // 0++
+
+      // 00-
+      // 00+
+
+      // 0-0
+      // 0+0
+
+      // -00
+      // +00
+      
+      // -0-
+      // +0-
+      // -0+
+      // +0+
+
+      // --0
+      // +-0
+      // -+0
+      // ++0
+
+
+
 
 
       dotPlot(center, green);

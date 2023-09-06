@@ -14,7 +14,9 @@ import {
     convexHull,
     convertToLambert,
     lambertMass,
-    points_dist_2d
+    points_dist_2d,
+    to_new_basis,
+    to_new_basis_mass
     } from "./gag_functions";
 
 
@@ -109,7 +111,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     for ( var i = 0; i < dir_list.length; i ++ ) {
         //-------------------fix---------mayby dont centering-----------------------
         // var dir_circle = lambertMass(PlotCircle(dir_list[i], angle_list[i], plot_point_numb), lamb_sred_dir);
-        var dir_circle = centering(PlotCircle(dir_list[i], angle_list[i], plot_point_numb), lamb_sred_dir);
+        var dir_circle = PlotCircle(dir_list[i], angle_list[i], plot_point_numb);
 
         for ( var j = 0; j < dir_circle.length; j ++ )
         {
@@ -151,7 +153,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     for ( var i = 0; i < dir_list.length; i ++ ) {
         //-----------------------------fix--------------------------
         // var dir_circle = lambertMass(PlotCircle(dir_list[i], angle_list[i], plot_point_numb), lamb_sred_dir);
-        var dir_circle = centering(PlotCircle(dir_list[i], angle_list[i], plot_point_numb), lamb_sred_dir);
+        var dir_circle = to_new_basis_mass(PlotCircle(dir_list[i], angle_list[i], plot_point_numb), lamb_sred_dir);
 
         for ( var j = 0; j < dir_circle.length; j ++ )
         {
@@ -183,7 +185,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
         }
 
     //-------------------fix-------------------------
-    zgp1 = centering(zgp1, lamb_sred_dir);
+    zgp1 = to_new_basis_mass(zgp1, lamb_sred_dir);
 
 
     var grid = [];
