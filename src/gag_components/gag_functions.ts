@@ -361,26 +361,61 @@ export function centering(in_points: number[][], dir: number[]){
     for ( var i = 0; i < points.length; i ++ ) {
 
         //working var
-        points[i] = RotateAroundV(points[i], get_perp([0, 0, 1], dir), -angle_between_v([0, 0, 1], dir) * 180 / Math.PI);
+        // points[i] = RotateAroundV(points[i], get_perp([0, 0, 1], dir), -angle_between_v([0, 0, 1], dir) * 180 / Math.PI);
         
 
-        // if (dir[0] >= 0 && dir[1] >= 0 && dir[2] >= 0) {
-        //     points[i] = RotateAroundY(points[i], angle_between_v([0, 1, 0], [dir[0], dir[1], 0]) * 180 / Math.PI);
-        //     points[i] = RotateAroundX(points[i], -angle_between_v([1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI);
-        // }
-        // if (dir[0] >= 0 && dir[1] >= 0 && dir[2] <= 0) {
-        //     points[i] = RotateAroundY(points[i], angle_between_v([0, 1, 0], [dir[0], dir[1], 0]) * 180 / Math.PI);
-        //     points[i] = RotateAroundX(points[i], angle_between_v([1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI);
-        // }
-        // if (dir[0] >= 0 && dir[1] <= 0 && dir[2] <= 0) {
-        //     points[i] = RotateAroundY(points[i], -angle_between_v([0, 1, 0], [dir[0], dir[1], 0]) * 180 / Math.PI);
-        //     points[i] = RotateAroundX(points[i], angle_between_v([1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI);
-        // }
-        // if (dir[0] >= 0 && dir[1] <= 0 && dir[2] >= 0) {
-        //     points[i] = RotateAroundY(points[i], -angle_between_v([0, 1, 0], [dir[0], dir[1], 0]) * 180 / Math.PI);
-        //     points[i] = RotateAroundX(points[i], -angle_between_v([1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI);
-        // }
+        if (dir[0] >= 0 && dir[1] >= 0 && dir[2] >= 0) {
+            var yrot = RotateAroundY(points[i], -angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+            var diryrot = RotateAroundY(dir, -angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+            yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+            points[i] = yrot;
+        }
 
+        if (dir[0] >= 0 && dir[1] >= 0 && dir[2] <= 0) {
+            var diryrot = RotateAroundY(dir, -( 90 + angle_between_v([1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI));
+            var yrot = RotateAroundY(points[i], -( 90 + angle_between_v([1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI));
+            yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+            points[i] = yrot;
+        }
+
+        if (dir[0] >= 0 && dir[1] <= 0 && dir[2] <= 0) {
+            var diryrot = RotateAroundY(dir, -(90 + angle_between_v([1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI));
+            var yrot = RotateAroundY(points[i], -(90 + angle_between_v([1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI));
+            yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+            points[i] = yrot;
+        }
+
+        if (dir[0] >= 0 && dir[1] <= 0 && dir[2] >= 0) {
+            var diryrot = RotateAroundY(dir, -angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+            var yrot = RotateAroundY(points[i], -angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+            yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+            points[i] = yrot;
+        }
+
+        if (dir[0] <= 0 && dir[1] >= 0 && dir[2] >= 0) {
+            var diryrot = RotateAroundY(dir, angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+            var yrot = RotateAroundY(points[i], angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+            yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+            points[i] = yrot;
+        }
+        if (dir[0] <= 0 && dir[1] <= 0 && dir[2] >= 0) {
+            var diryrot = RotateAroundY(dir, angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+            var yrot = RotateAroundY(points[i], angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+            yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+            points[i] = yrot;
+        }
+        if (dir[0] <= 0 && dir[1] >= 0 && dir[2] <= 0) {
+            var diryrot =RotateAroundY(dir, 90 + angle_between_v([-1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+            var yrot = RotateAroundY(points[i], 90 + angle_between_v([-1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+            yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+            points[i] = yrot;
+        }
+        if (dir[0] <= 0 && dir[1] <= 0 && dir[2] <= 0) {
+            var diryrot = RotateAroundY(dir, 90 + angle_between_v([-1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+            var yrot = RotateAroundY(points[i], 90 + angle_between_v([-1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+            yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+            points[i] = yrot;
+        }
 
 
         if (points[i][2] >= 0) {
@@ -677,18 +712,18 @@ export function test(point: number[], center: number[], sign_numb: number, my_va
 
 
 export function to_new_basis(point: number[], center: number[]){
-  // +++
+  // +++ 23 -63 -73
   if (center[0] > 0 && center[1] > 0 && center[2] > 0) { return test(point, center, 2, 3) }
-  // +-+
+  // +-+                                                       13  23 53 63        
   if (center[0] > 0 && center[1] < 0 && center[2] > 0) { return test(point, center, 2, 3) }
-  // ++-
-  if (center[0] > 0 && center[1] > 0 && center[2] < 0) { return test(point, center, 1, 1) }
-  // +--
-  if (center[0] > 0 && center[1] < 0 && center[2] < 0) { return test(point, center, 1, 1) }
-  // -++  [-1,1,1] 5 
+  // ++-                                                             23 maybe-63 check
+  if (center[0] > 0 && center[1] > 0 && center[2] < 0) { return test(point, center, 2, 3) }
+  // +--                                                                +-13 23 53 63 check
+  if (center[0] > 0 && center[1] < 0 && center[2] < 0) { return test(point, center, 2, 3) }
+  // -++                                                                   33 73 34  74            
   if (center[0] < 0 && center[1] > 0 && center[2] > 0) { return test(point, center, 3, 3)}
-  // --+ 
-  if (center[0] < 0 && center[1] < 0 && center[2] > 0) { return test(point, center, 3, 3) }
+  // --+                                                                64 33 24+-  41+- 81+- 22 62  73               
+  if (center[0] < 0 && center[1] < 0 && center[2] > 0) { return test(point, center, 6, 4) }
   // -+-
   if (center[0] < 0 && center[1] > 0 && center[2] < 0) { return test(point, center, 3, 3) }
   // ---
@@ -703,8 +738,22 @@ export function to_new_basis_mass(points: number[][], center: number[]){
     let res: number[][]=[];
     for ( let i = 0; i < points.length; i ++ ){
         var m = to_new_basis(points[i], center);
+        
+        // if (m[2] != 0) {
         new_points.push([m[0], m[1], m[2]]);
+        // }
     }
+
+
+
+        // for ( var i = 0; i < new_points.length; i ++ ) {
+        //     if (new_points[i] != points[i]){
+        //         return new_points.slice(i,new_points.length).concat(new_points.slice(0, i));
+
+        //     }
+        // }
+    
+
     return new_points;
         
     //     if (new_points[i][2] >= 0) {

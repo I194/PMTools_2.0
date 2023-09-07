@@ -77,8 +77,8 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     //-----------------------------------------------------------------
     var my_key = 0;
 //--------------------------fix------------------------------------------
-// var rot_center_zone = convertToLambert(center_zone, lamb_sred_dir);
-    var rot_center_zone = center_zone;
+var rot_center_zone = convertToLambert(center_zone, lamb_sred_dir);
+    // var rot_center_zone = centering([center_zone], lamb_sred_dir)[0];
     var lambert_center_zone = e('circle',
                             {
                                 key: my_key,
@@ -153,7 +153,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     for ( var i = 0; i < dir_list.length; i ++ ) {
         //-----------------------------fix--------------------------
         // var dir_circle = lambertMass(PlotCircle(dir_list[i], angle_list[i], plot_point_numb), lamb_sred_dir);
-        var dir_circle = to_new_basis_mass(PlotCircle(dir_list[i], angle_list[i], plot_point_numb), lamb_sred_dir);
+        var dir_circle = centering(PlotCircle(dir_list[i], angle_list[i], plot_point_numb), lamb_sred_dir);
 
         for ( var j = 0; j < dir_circle.length; j ++ )
         {
@@ -185,7 +185,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
         }
 
     //-------------------fix-------------------------
-    zgp1 = to_new_basis_mass(zgp1, lamb_sred_dir);
+    zgp1 = centering(zgp1, lamb_sred_dir);
 
 
     var grid = [];
@@ -394,17 +394,17 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
 
       <svg className="svg graph_interface" key={6534324} viewBox={my_view_box}>
 
-        {/* {rumbs} */}
+        {rumbs}
 
         {center_degree_grid}
-        {/* {lambert_isvis && <polygon points={polygonPoints} fill={poly_color} />} */}
+        {lambert_isvis && <polygon points={polygonPoints} fill={poly_color} />}
         {grid_isvis && grid}
         {lambert_circles}
-        {/* {fisher_dir} */}
-        {/* {fish_circle} */}
-        {/* {lambert_center_zone} */}
+        {fisher_dir}
+        {fish_circle}
+        {lambert_center_zone}
 
-        {/* <text x={my_max + rumb_font_size} y={0} textAnchor="middle" fontSize={String(rumb_font_size)} fill="black">
+        <text x={my_max + rumb_font_size} y={0} textAnchor="middle" fontSize={String(rumb_font_size)} fill="black">
             {"E"}
         </text>
         <text x={-my_max - rumb_font_size} y={0} textAnchor="middle" fontSize={String(rumb_font_size)} fill="black">
@@ -415,7 +415,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
         </text>
         <text x={0} y={-my_max - rumb_font_size} textAnchor="middle" fontSize={String(rumb_font_size)} fill="black">
             {"N"}
-        </text> */}
+        </text>
 
       </svg>
 

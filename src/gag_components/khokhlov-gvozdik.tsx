@@ -163,8 +163,7 @@ export function Khokhlov_Gvozdik() {
         var random_angle = getRandomfloat(0, 180);
 
         for ( var i = 0; i < dir_number; i ++ ) {
-            console.log('random_list[i * 2]');
-            console.log(random_list[i * 2]);
+
             paleo_data = GeoVdek(1, random_list[i * 2], random_list[i * 2 + 1])
             paleo_data = NormalizeV(RotateAroundV(paleo_data, random_dir, random_angle));
             step = getRandomInt(6, quantiles.length);
@@ -172,6 +171,9 @@ export function Khokhlov_Gvozdik() {
 
             step_list.push(step);
 
+            //------------------------fix------------------------
+            // dir_list.push([paleo_data[0], paleo_data[1], paleo_data[2]]);
+            // paleo_data = NormalizeV([1 + getRandomfloat(0, 0.2), -1  + getRandomfloat(0, 0.2), -1  + getRandomfloat(0, 0.2)]);
             dir_list.push([paleo_data[0], paleo_data[1], paleo_data[2]]);
         }
 
