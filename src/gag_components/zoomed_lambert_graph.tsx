@@ -14,6 +14,7 @@ import {
     convexHull,
     convertToLambert,
     lambertMass,
+    to_center,
     points_dist_2d,
     to_new_basis,
     to_new_basis_mass
@@ -31,7 +32,9 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
                                                             isvis: boolean,
                                                             isvisgrid: boolean,
                                                             grid_color: string,
-                                                            poly_color: string
+                                                            poly_color: string,
+                                                            degree_grid_isvis: boolean,
+                                                            rumbs_isvis: boolean
                                                         }) {
 
     var center_zone = lambert_zoom_props.center_zone;
@@ -43,7 +46,8 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     var alpha95 = lambert_zoom_props.alpha95;
     var lambert_isvis = lambert_zoom_props.isvis;
     var grid_isvis = lambert_zoom_props.isvisgrid;
-
+    var rumbs_isvis = lambert_zoom_props.rumbs_isvis;
+    var degree_grid_isvis = lambert_zoom_props.degree_grid_isvis;
 
 
 
@@ -76,20 +80,16 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     // making center zone for drawing on lambert svg
     //-----------------------------------------------------------------
     var my_key = 0;
-//--------------------------fix------------------------------------------
-var rot_center_zone = convertToLambert(center_zone, lamb_sred_dir);
-    // var rot_center_zone = centering([center_zone], lamb_sred_dir)[0];
+
+    var rot_center_zone = convertToLambert(to_center(center_zone, lamb_sred_dir), lamb_sred_dir);
+
     var lambert_center_zone = e('circle',
                             {
                                 key: my_key,
-                                //------------------------- fix ---------------------------------------
-                                // r: center_zone_r,
-                                r: 0.03,
+                                r: center_zone_r,
                                 cx: String(rot_center_zone[0]),
                                 cy: String(rot_center_zone[1]),
-                                //------------------------- fix ---------------------------------------
-                                // fill: center_zone_color,
-                                fill: "red",
+                                fill: center_zone_color,
 
                             }, ''
                         );
@@ -109,9 +109,8 @@ var rot_center_zone = convertToLambert(center_zone, lamb_sred_dir);
     var lambert_circles = [];
 
     for ( var i = 0; i < dir_list.length; i ++ ) {
-        //-------------------fix---------mayby dont centering-----------------------
-        // var dir_circle = lambertMass(PlotCircle(dir_list[i], angle_list[i], plot_point_numb), lamb_sred_dir);
-        var dir_circle = PlotCircle(dir_list[i], angle_list[i], plot_point_numb);
+
+        var dir_circle = PlotCircle(to_center(dir_list[i], lamb_sred_dir), angle_list[i], plot_point_numb);
 
         for ( var j = 0; j < dir_circle.length; j ++ )
         {
@@ -151,9 +150,7 @@ var rot_center_zone = convertToLambert(center_zone, lamb_sred_dir);
     grid_r = (max_y - min_y) / 400;
 
     for ( var i = 0; i < dir_list.length; i ++ ) {
-        //-----------------------------fix--------------------------
-        // var dir_circle = lambertMass(PlotCircle(dir_list[i], angle_list[i], plot_point_numb), lamb_sred_dir);
-        var dir_circle = centering(PlotCircle(dir_list[i], angle_list[i], plot_point_numb), lamb_sred_dir);
+        var dir_circle = lambertMass(centering(PlotCircle(dir_list[i], angle_list[i], plot_point_numb), lamb_sred_dir), lamb_sred_dir);
 
         for ( var j = 0; j < dir_circle.length; j ++ )
         {
@@ -161,9 +158,7 @@ var rot_center_zone = convertToLambert(center_zone, lamb_sred_dir);
                                     e('circle',
                                         {
                                             key: my_key,
-                                            //------------------------- fix ---------------------------------------
-                                            // r: circles_r,
-                                            r: 0.005,
+                                            r: circles_r,
                                             cx: String(dir_circle[j][0]),
                                             cy: String(dir_circle[j][1]),
                                             fill: "black",
@@ -184,8 +179,7 @@ var rot_center_zone = convertToLambert(center_zone, lamb_sred_dir);
             zgp1.push(lambert_grid_points[i]);
         }
 
-    //-------------------fix-------------------------
-    zgp1 = centering(zgp1, lamb_sred_dir);
+    zgp1 = lambertMass(centering(zgp1, lamb_sred_dir), lamb_sred_dir);
 
 
     var grid = [];
@@ -195,9 +189,7 @@ var rot_center_zone = convertToLambert(center_zone, lamb_sred_dir);
             e('circle',
                 {
                     key: my_key,
-                    //------------------------- fix ---------------------------------------
-                    // r: grid_r,
-                    r: 0.007,
+                    r: grid_r,
                     cx: String(zgp1[i][0]),
                     cy: String(zgp1[i][1]),
                     fill: grid_color,
@@ -249,19 +241,7 @@ var rot_center_zone = convertToLambert(center_zone, lamb_sred_dir);
     // rumbs
     //---------------------------------------------------------------------------------------
 
-    var rumbs = e('circle',
-            {
-                key: my_key,
-                r: max_y * 1.3,
-                cx: String(0),
-                cy: String(0),
-                fill: "none",
-                stroke: "grey", 
-                strokeWidth: "0.0016px",
-                strokeDasharray: "0.06px, 0.012px"
 
-            }, ''
-        );
 
     my_key += 1;
 
@@ -306,16 +286,16 @@ var rot_center_zone = convertToLambert(center_zone, lamb_sred_dir);
     var point = [1, 0, 0];
 
     
-    var mer_numb = 18;
+    var mer_numb = 180;
     for ( var i = 0; i < mer_numb; i ++ ) {
-        point = RotateAroundV(point, [0, 1, 0], 30 - 10 * mer_numb / 9);
-        var meridian = centering(PlotCircle(point, 90, 90), lamb_sred_dir);
+        point = RotateAroundV(point, [0, 1, 0], 360/ mer_numb );
+        var meridian = lambertMass(centering(PlotCircle(point, 90, 90), lamb_sred_dir), lamb_sred_dir);
         coords.push(make_coords(meridian));
     }
 
-    var par_numb = 18;
+    var par_numb = 180;
     for ( var i = 0; i < par_numb; i ++ ) {
-        var paralel = centering(PlotCircle([0, 1, 0], i * (30 - 10 * mer_numb / 9), 90), lamb_sred_dir);
+        var paralel = lambertMass(centering(PlotCircle([0, 1, 0], i * (360/ mer_numb), 90), lamb_sred_dir), lamb_sred_dir);
         coords.push(make_coords(paralel));
     }
 
@@ -331,19 +311,12 @@ var rot_center_zone = convertToLambert(center_zone, lamb_sred_dir);
                     points: coords[i],
                     stroke: "grey",
                     fill: 'none',
-                    //------------------------- fix ---------------------------------------
-                    // strokeWidth:"0.0005px"
-                    strokeWidth:"0.01px"
+                    strokeWidth:"0.0005px"
                 }, ''
             )
         );
         my_key += 1;
     }
-
-    //-------------------------------------------------------------------------------
-    //--------rot_center_zone twice????????!!!!!!!!--------fix---------------------
-    //   var rot_center_zone = convertToLambert(center_zone, lamb_sred_dir);
-  var rot_center_zone = center_zone;
 
 
   var calc_circ_points = 720 * 8;
@@ -353,9 +326,8 @@ var rot_center_zone = convertToLambert(center_zone, lamb_sred_dir);
   for ( var i = 0; i < dir_list.length; i ++ )
   {
       
-    //-------------------fix---------------------
-    // var b = lambertMass(PlotCircle(dir_list[i], angle_list[i], calc_circ_points), lamb_sred_dir);
-    var b = PlotCircle(dir_list[i], angle_list[i], calc_circ_points);
+
+    var b = PlotCircle(to_center(dir_list[i], lamb_sred_dir), angle_list[i], calc_circ_points);
 
       for (var j = 0; j < b.length; j++){
           circ_p.push(b[j]);
@@ -385,18 +357,18 @@ var rot_center_zone = convertToLambert(center_zone, lamb_sred_dir);
 
 
 
-  //------------------------------------------- fix ---------------------------------------
-  my_view_box = '-1 -1 2 2';
-  //-------------------------------fix-----------------------
+    //------------------------------------------- fix ---------------------------------------
+    //   my_view_box = '-1 -1 2 2';
+
   return (
     <div key={1227544233}>
       {/* <h5 className="my_text">Lambert svg</h5> */}
 
       <svg className="svg graph_interface" key={6534324} viewBox={my_view_box}>
 
-        {rumbs}
+        {degree_grid_isvis && center_degree_grid}
 
-        {center_degree_grid}
+
         {lambert_isvis && <polygon points={polygonPoints} fill={poly_color} />}
         {grid_isvis && grid}
         {lambert_circles}
@@ -404,18 +376,30 @@ var rot_center_zone = convertToLambert(center_zone, lamb_sred_dir);
         {fish_circle}
         {lambert_center_zone}
 
-        <text x={my_max + rumb_font_size} y={0} textAnchor="middle" fontSize={String(rumb_font_size)} fill="black">
-            {"E"}
-        </text>
-        <text x={-my_max - rumb_font_size} y={0} textAnchor="middle" fontSize={String(rumb_font_size)} fill="black">
-            {"W"}
-        </text>
-        <text x={0} y={my_max + rumb_font_size} textAnchor="middle" fontSize={String(rumb_font_size)} fill="black">
-            {"S"}
-        </text>
-        <text x={0} y={-my_max - rumb_font_size} textAnchor="middle" fontSize={String(rumb_font_size)} fill="black">
-            {"N"}
-        </text>
+        
+        {rumbs_isvis && 
+            <text x={my_max + rumb_font_size} y={0} textAnchor="middle" fontSize={String(rumb_font_size)} fill="black">
+                {"E"}
+            </text>
+        }
+
+        {rumbs_isvis && 
+            <text x={-my_max - rumb_font_size} y={0} textAnchor="middle" fontSize={String(rumb_font_size)} fill="black">
+                {"W"}
+            </text>
+        }
+
+        {rumbs_isvis && 
+            <text x={0} y={my_max + rumb_font_size} textAnchor="middle" fontSize={String(rumb_font_size)} fill="black">
+                {"S"}
+            </text>
+        }
+
+        {rumbs_isvis && 
+            <text x={0} y={-my_max - rumb_font_size} textAnchor="middle" fontSize={String(rumb_font_size)} fill="black">
+                {"N"}
+            </text>
+        }
 
       </svg>
 

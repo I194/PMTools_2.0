@@ -213,6 +213,14 @@ export function Khokhlov_Gvozdik() {
 
 
 
+    const [degree_grid_isvis, setDegree] = useState(true);
+    const degreeCheckboxChange = () => {
+        setDegree(!degree_grid_isvis);
+    };
+    const [rumbs_isvis, setRumbs] = useState(true);
+    const rumbCheckboxChange = () => {
+        setRumbs(!rumbs_isvis);
+    };
 
     //-----------------------------------------------------------------------
     // fisher stat
@@ -309,7 +317,9 @@ export function Khokhlov_Gvozdik() {
         isvis: isvis,
         isvisgrid: isvisgrid,
         grid_color: grid_color,
-        poly_color: poly_color
+        poly_color: poly_color,
+        degree_grid_isvis: degree_grid_isvis,
+        rumbs_isvis: rumbs_isvis
     };
 
 
@@ -381,6 +391,8 @@ export function Khokhlov_Gvozdik() {
                 isvisgrid={isvisgrid}
                 grid_color={grid_color}
                 poly_color={poly_color}
+                degree_grid_isvis={degree_grid_isvis}
+                rumbs_isvis={rumbs_isvis}
             />
 
 
@@ -406,7 +418,12 @@ export function Khokhlov_Gvozdik() {
         </div>
 
         <div className="table2_container common-container">
-            table2
+
+            <label className="my_input"><div className="info">dark team</div>
+                <input type="checkbox" checked={isdark} onChange={DarkTeamChange}/>
+                <span className="checkmark"></span>
+            </label>
+
         </div>
 
 
@@ -498,9 +515,18 @@ export function Khokhlov_Gvozdik() {
                     </label>
                 </div>
 
+
+
                 <div className="info-item3">
-                    <label className="my_input"><div className="info">dark team</div>
-                        <input type="checkbox" checked={isdark} onChange={DarkTeamChange}/>
+                    <label className="my_input"><div className="info">show degree grid</div>
+                        <input type="checkbox" checked={degree_grid_isvis} onChange={degreeCheckboxChange}/>
+                        <span className="checkmark"></span>
+                    </label>
+                </div>
+
+                <div className="info-item4">
+                    <label className="my_input"><div className="info">show rumbs</div>
+                        <input type="checkbox" checked={rumbs_isvis} onChange={rumbCheckboxChange}/>
                         <span className="checkmark"></span>
                     </label>
                 </div>

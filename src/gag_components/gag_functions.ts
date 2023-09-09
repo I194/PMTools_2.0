@@ -351,7 +351,64 @@ export function PlotCircle(direction: number[], phi: number, circle_points_numb:
 //-----------------------------------------------------------------------
 // begin
 //-----------------------------------------------------------------------
+export function to_center(point: number[], dir: number[]){
+    
+    
+    if (dir[0] >= 0 && dir[1] >= 0 && dir[2] >= 0) {
+        var yrot = RotateAroundY(point, -angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+        var diryrot = RotateAroundY(dir, -angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+        yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+        point = yrot;
+    }
 
+    if (dir[0] >= 0 && dir[1] >= 0 && dir[2] <= 0) {
+        var diryrot = RotateAroundY(dir, -( 90 + angle_between_v([1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI));
+        var yrot = RotateAroundY(point, -( 90 + angle_between_v([1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI));
+        yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+        point = yrot;
+    }
+
+    if (dir[0] >= 0 && dir[1] <= 0 && dir[2] <= 0) {
+        var diryrot = RotateAroundY(dir, -(90 + angle_between_v([1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI));
+        var yrot = RotateAroundY(point, -(90 + angle_between_v([1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI));
+        yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+        point = yrot;
+    }
+
+    if (dir[0] >= 0 && dir[1] <= 0 && dir[2] >= 0) {
+        var diryrot = RotateAroundY(dir, -angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+        var yrot = RotateAroundY(point, -angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+        yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+        point = yrot;
+    }
+
+    if (dir[0] <= 0 && dir[1] >= 0 && dir[2] >= 0) {
+        var diryrot = RotateAroundY(dir, angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+        var yrot = RotateAroundY(point, angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+        yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+        point = yrot;
+    }
+    if (dir[0] <= 0 && dir[1] <= 0 && dir[2] >= 0) {
+        var diryrot = RotateAroundY(dir, angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+        var yrot = RotateAroundY(point, angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+        yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+        point = yrot;
+    }
+    if (dir[0] <= 0 && dir[1] >= 0 && dir[2] <= 0) {
+        var diryrot =RotateAroundY(dir, 90 + angle_between_v([-1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+        var yrot = RotateAroundY(point, 90 + angle_between_v([-1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+        yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+        point = yrot;
+    }
+    if (dir[0] <= 0 && dir[1] <= 0 && dir[2] <= 0) {
+        var diryrot = RotateAroundY(dir, 90 + angle_between_v([-1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+        var yrot = RotateAroundY(point, 90 + angle_between_v([-1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+        yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+        point = yrot;
+    }
+
+    return point;
+}
 
 export function centering(in_points: number[][], dir: number[]){
 
@@ -362,60 +419,7 @@ export function centering(in_points: number[][], dir: number[]){
 
         //working var
         // points[i] = RotateAroundV(points[i], get_perp([0, 0, 1], dir), -angle_between_v([0, 0, 1], dir) * 180 / Math.PI);
-        
-
-        if (dir[0] >= 0 && dir[1] >= 0 && dir[2] >= 0) {
-            var yrot = RotateAroundY(points[i], -angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
-            var diryrot = RotateAroundY(dir, -angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
-            yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
-            points[i] = yrot;
-        }
-
-        if (dir[0] >= 0 && dir[1] >= 0 && dir[2] <= 0) {
-            var diryrot = RotateAroundY(dir, -( 90 + angle_between_v([1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI));
-            var yrot = RotateAroundY(points[i], -( 90 + angle_between_v([1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI));
-            yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
-            points[i] = yrot;
-        }
-
-        if (dir[0] >= 0 && dir[1] <= 0 && dir[2] <= 0) {
-            var diryrot = RotateAroundY(dir, -(90 + angle_between_v([1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI));
-            var yrot = RotateAroundY(points[i], -(90 + angle_between_v([1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI));
-            yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
-            points[i] = yrot;
-        }
-
-        if (dir[0] >= 0 && dir[1] <= 0 && dir[2] >= 0) {
-            var diryrot = RotateAroundY(dir, -angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
-            var yrot = RotateAroundY(points[i], -angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
-            yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
-            points[i] = yrot;
-        }
-
-        if (dir[0] <= 0 && dir[1] >= 0 && dir[2] >= 0) {
-            var diryrot = RotateAroundY(dir, angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
-            var yrot = RotateAroundY(points[i], angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
-            yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
-            points[i] = yrot;
-        }
-        if (dir[0] <= 0 && dir[1] <= 0 && dir[2] >= 0) {
-            var diryrot = RotateAroundY(dir, angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
-            var yrot = RotateAroundY(points[i], angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
-            yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
-            points[i] = yrot;
-        }
-        if (dir[0] <= 0 && dir[1] >= 0 && dir[2] <= 0) {
-            var diryrot =RotateAroundY(dir, 90 + angle_between_v([-1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI);
-            var yrot = RotateAroundY(points[i], 90 + angle_between_v([-1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI);
-            yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
-            points[i] = yrot;
-        }
-        if (dir[0] <= 0 && dir[1] <= 0 && dir[2] <= 0) {
-            var diryrot = RotateAroundY(dir, 90 + angle_between_v([-1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI);
-            var yrot = RotateAroundY(points[i], 90 + angle_between_v([-1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI);
-            yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
-            points[i] = yrot;
-        }
+        points[i] = to_center(points[i], dir);
 
 
         if (points[i][2] >= 0) {
@@ -485,9 +489,10 @@ export function lineSphereIntersect(v: number[]) {
 export function convertToLambert(v: number[], fish_dir: number[]) {
 
     var my_perp = get_perp([0, 0, 1], fish_dir);
-    var r2_proj = RotateAroundV(v, my_perp, -angle_between_v([0, 0, 1], fish_dir) * 180 / Math.PI);
+    // var r2_proj = RotateAroundV(v, my_perp, -angle_between_v([0, 0, 1], fish_dir) * 180 / Math.PI);
 
-    return lineSphereIntersect(r2_proj);
+    // return lineSphereIntersect(r2_proj);
+    return lineSphereIntersect(v);
 }
 
 export function lambertMass(points: number[][], fish_dir: number[]){

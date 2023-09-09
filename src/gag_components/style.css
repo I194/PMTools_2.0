@@ -252,7 +252,7 @@
 }
 .sphere_interface:hover{
   border: 3px solid var(--menu-blue);
-  border-radius: 12px;
+  /* border-radius: 12px; */
   transition: 0.4s ease-in-out;
 }
 
@@ -270,7 +270,7 @@
 
 .graph_interface:hover{
   border: 3px solid var(--menu-blue);
-  border-radius: 12px;
+  /* border-radius: 12px; */
   transition: 0.4s ease-in-out;
 
 }
@@ -292,7 +292,7 @@
 
 .interface:hover{
   border: 3px solid var(--menu-blue);
-  border-radius: 12px;
+  /* border-radius: 12px; */
   transition: 0.4s ease-in-out;
 }
 
@@ -361,6 +361,14 @@
   grid-column-end: 3;
   grid-row-start: 3;
   grid-row-end: 3;
+  align-self: center;
+}
+
+.info-item4 {
+  grid-column-start: 3;
+  grid-column-end: 3;
+  grid-row-start: 4;
+  grid-row-end: 4;
   align-self: center;
 }
 
