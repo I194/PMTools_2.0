@@ -396,12 +396,12 @@ export function Khokhlov_Gvozdik() {
             />
 
 
-                    {center_zone[0]}
+                    {/* {center_zone[0]}
                     <br></br>
                     {center_zone[1]}
                     <br></br>
                     {center_zone[2]}
-                    <br></br>
+                    <br></br> */}
         </div>
 
         <div className="table_container common-container">

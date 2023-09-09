@@ -150,7 +150,7 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     grid_r = (max_y - min_y) / 400;
 
     for ( var i = 0; i < dir_list.length; i ++ ) {
-        var dir_circle = lambertMass(centering(PlotCircle(dir_list[i], angle_list[i], plot_point_numb), lamb_sred_dir), lamb_sred_dir);
+        var dir_circle = lambertMass(PlotCircle(to_center(dir_list[i], lamb_sred_dir), angle_list[i], plot_point_numb), lamb_sred_dir);
 
         for ( var j = 0; j < dir_circle.length; j ++ )
         {
@@ -173,25 +173,20 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     // making grid on left svg
     //-----------------------------------------------------------------
 
-    var zgp1 = [];
-        for (var i = 0; i < lambert_grid_points.length; i++)
-        {
-            zgp1.push(lambert_grid_points[i]);
-        }
 
-    zgp1 = lambertMass(centering(zgp1, lamb_sred_dir), lamb_sred_dir);
+    lambert_grid_points = lambertMass(centering(lambert_grid_points, lamb_sred_dir), lamb_sred_dir);
 
 
     var grid = [];
 
-    for ( let i = 0; i < zgp1.length; i ++ ) {
+    for ( let i = 0; i < lambert_grid_points.length; i ++ ) {
         grid.push(
             e('circle',
                 {
                     key: my_key,
                     r: grid_r,
-                    cx: String(zgp1[i][0]),
-                    cy: String(zgp1[i][1]),
+                    cx: String(lambert_grid_points[i][0]),
+                    cy: String(lambert_grid_points[i][1]),
                     fill: grid_color,
                 }, ''
             )
@@ -286,16 +281,17 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
     var point = [1, 0, 0];
 
     
-    var mer_numb = 180;
+    var mer_numb = 18;
     for ( var i = 0; i < mer_numb; i ++ ) {
-        point = RotateAroundV(point, [0, 1, 0], 360/ mer_numb );
-        var meridian = lambertMass(centering(PlotCircle(point, 90, 90), lamb_sred_dir), lamb_sred_dir);
+        point = to_center(RotateAroundV(point, [0, 1, 0], 360/ mer_numb ), lamb_sred_dir);
+        var meridian = lambertMass(PlotCircle(point, 90, 90), lamb_sred_dir);
         coords.push(make_coords(meridian));
     }
 
-    var par_numb = 180;
+    var par_numb = 18;
+    let vert = to_center([0, 1, 0], lamb_sred_dir)
     for ( var i = 0; i < par_numb; i ++ ) {
-        var paralel = lambertMass(centering(PlotCircle([0, 1, 0], i * (360/ mer_numb), 90), lamb_sred_dir), lamb_sred_dir);
+        var paralel = lambertMass(PlotCircle(vert, i * (360/ mer_numb), 90), lamb_sred_dir);
         coords.push(make_coords(paralel));
     }
 
