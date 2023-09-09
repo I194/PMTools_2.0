@@ -280,23 +280,23 @@ export function Zoomed_lambert_graph(lambert_zoom_props:{
 
     var point = [1, 0, 0];
 
-    
+    // to_center(, lamb_sred_dir)
     var mer_numb = 18;
     for ( var i = 0; i < mer_numb; i ++ ) {
-        point = to_center(RotateAroundV(point, [0, 1, 0], 360/ mer_numb ), lamb_sred_dir);
-        var meridian = lambertMass(PlotCircle(point, 90, 90), lamb_sred_dir);
+        point = RotateAroundV(point, [0, 1, 0], 360/ mer_numb );
+        var meridian = lambertMass(centering(PlotCircle(point, 90, 90), lamb_sred_dir), lamb_sred_dir);
         coords.push(make_coords(meridian));
     }
 
     var par_numb = 18;
-    let vert = to_center([0, 1, 0], lamb_sred_dir)
+    // let vert = to_center(, lamb_sred_dir)
     for ( var i = 0; i < par_numb; i ++ ) {
-        var paralel = lambertMass(PlotCircle(vert, i * (360/ mer_numb), 90), lamb_sred_dir);
+        var paralel = lambertMass(centering(PlotCircle([0, 1, 0], i * (360/ mer_numb), 90), lamb_sred_dir), lamb_sred_dir);
         coords.push(make_coords(paralel));
     }
 
-    paralel = PlotCircle([0, 0, 1], 90, 90);
-    coords.push(make_coords(paralel));
+    // paralel = PlotCircle([0, 0, 1], 90, 90);
+    // coords.push(make_coords(paralel));
 
     var center_degree_grid = [];
     for ( let i = 0; i < coords.length; i ++ ) {
