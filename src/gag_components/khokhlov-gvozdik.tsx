@@ -1,5 +1,5 @@
 import React, {createElement as e, useEffect, useState} from 'react';
-import {Zoomed_lambert_graph} from "./zoomed_lambert_graph";
+import {ZoomedLambertGraph} from "./ZoomedLambertGraph";
 import {Rotate_sphere} from "./rotate_sphere";
 import {TooltipContent} from "./my-tooltip";
 import {Threedsphere} from "./3dsphere";
@@ -29,62 +29,14 @@ import {
 import HelpCenterOutlinedIcon from '@mui/icons-material/HelpCenterOutlined';
 import Tooltip from '@mui/material/Tooltip';   
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
-
-
-import { useAppDispatch, useAppSelector } from '../services/store/hooks';
-import { 
-    addInterpretation, 
-    setStatisticsMode, 
-    showSelectionInput, 
-    updateCurrentInterpretation 
-} from '../services/reducers/dirPage';
-import { filesToData } from '../services/axios/filesAndData';
-import { IDirData } from '../utils/GlobalTypes';
-import calculateStatisticsDIR from '../utils/statistics/calculateStatisticsDIR';
-// import Tables from './kh-table';
-import { ToolsDIR } from '../components/AppLogic';
-import { useTheme } from '@mui/material/styles';
-import { bgColorMain } from '../utils/ThemeConstants';
-import ModalWrapper from '../components/Sub/Modal/ModalWrapper';
-import UploadModal from '../components/Sub/Modal/UploadModal/UploadModal';
 import { useMediaQuery } from 'react-responsive';
 
-
-
-
-
 export function Khokhlov_Gvozdik() {
-    // const [dataToShow, setDataToShow] = useState<IDirData | null>(null);
-
-    const widthLessThan720 = useMediaQuery({ maxWidth: 719 });
-
-
-    const dispatch = useAppDispatch();
-
-    const files = useAppSelector(state => state.filesReducer.dirStatFiles);
-    const { dirStatData, currentDataDIRid } = useAppSelector(state => state.parsedDataReducer);
-    const { 
-      statisticsMode, 
-      selectedDirectionsIDs, 
-      hiddenDirectionsIDs, 
-      reversedDirectionsIDs,
-      currentFileInterpretations,
-      allInterpretations
-    } = useAppSelector(state => state.dirPageReducer);
-  
-
-    const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
   
     //-----------------------------------------------------------
     // input data generating
     //-----------------------------------------------------------
 
-    const [size, setSize] = React.useState('small');
-
-
-
-
-    // const theme = useTheme();
     var max_lon = 0;
     var min_lon = 10;
     var max_lat = 0;
@@ -241,8 +193,6 @@ export function Khokhlov_Gvozdik() {
     var print_point = 0;
 
     var phi = 0.013;
-
-
     
     for (var i = 0; i < points_numb; i++)
     {
@@ -322,7 +272,6 @@ export function Khokhlov_Gvozdik() {
         rumbs_isvis: rumbs_isvis
     };
 
-
     // Функция для загрузки SVG
     const handleDownloadSVG = () => {
         const svgElement = document.querySelector('.svg.graph_interface');
@@ -346,115 +295,80 @@ export function Khokhlov_Gvozdik() {
         URL.revokeObjectURL(url);
     };
 
-
     return (
-
-    <div className="main_container">
-
-    <h3 className="low-screen">Размер окна должен быть не меньше чем 720x560</h3>
-
-        <div className="graph_container common-container">
-         
-            <Tooltip className="my-tooltip" title={<TooltipContent 
-                type={'graph'}
-                sred_dir={sred_dir}
-                center_zone={center_zone}
-                dir_list={dir_list}
-                angle_list={angle_list}
-            />} arrow>               
-                        <HelpCenterOutlinedIcon className='graph-tooltip'/>
-            </Tooltip>
-            
-            <a onClick={handleDownloadSVG}>
+        <div className="main_container">
+            <h3 className="low-screen">Размер окна должен быть не меньше чем 720x560</h3>
+            <div className="graph_container common-container">
                 <Tooltip className="my-tooltip" title={<TooltipContent 
-                    type={'download svg'} 
+                    type={'graph'}
                     sred_dir={sred_dir}
                     center_zone={center_zone}
                     dir_list={dir_list}
                     angle_list={angle_list}
-                />} arrow>
-                    
-                    <FileDownloadOutlinedIcon  className='graph-tooltip'/>
-                    
+                />} arrow>               
+                    <HelpCenterOutlinedIcon className='graph-tooltip'/>
                 </Tooltip>
-            </a>
-            
-            <Zoomed_lambert_graph
-                center_zone={center_zone}
-                dir_list={dir_list}
-                angle_list={angle_list}
-                grid_points={grid_points}
-                points_numb={points_numb}
-                sred_dir={sred_dir}
-                alpha95={alpha95}
-                isvis={isvis}
-                isvisgrid={isvisgrid}
-                grid_color={grid_color}
-                poly_color={poly_color}
-                degree_grid_isvis={degree_grid_isvis}
-                rumbs_isvis={rumbs_isvis}
-            />
-
-
-                    {/* {center_zone[0]}
-                    <br></br>
-                    {center_zone[1]}
-                    <br></br>
-                    {center_zone[2]}
-                    <br></br> */}
-        </div>
-
-        <div className="table_container common-container">
-            
-        {/* <div className="sphere_container">       
-                    <Rotate_sphere
+                <a onClick={handleDownloadSVG}>
+                    <Tooltip className="my-tooltip" title={<TooltipContent 
+                        type={'download svg'} 
                         sred_dir={sred_dir}
                         center_zone={center_zone}
                         dir_list={dir_list}
-                        angle_list={angle_list}/>
-        </div> */}
-
-
-        </div>
-
-        <div className="table2_container common-container">
-
-            <label className="my_input"><div className="info">dark team</div>
-                <input type="checkbox" checked={isdark} onChange={DarkTeamChange}/>
-                <span className="checkmark"></span>
-            </label>
-
-        </div>
-
-
-
-
-
-
-        <div className="container common-container">
-            {/* <h5 className="my_text">Interface</h5> */}
-            
-            <div className='interface-tooltip'>
-                <Tooltip 
-                    style={{}}
-                    title={<TooltipContent 
-                        type={'checkbox'} 
-                        sred_dir={sred_dir}
-                        center_zone={center_zone}
-                        dir_list={dir_list}
-                        angle_list={angle_list}            
+                        angle_list={angle_list}
                     />} arrow>
-
-                    <HelpCenterOutlinedIcon  className='interface-tooltip'/>
-
-                </Tooltip>
+                        <FileDownloadOutlinedIcon  className='graph-tooltip'/>
+                    </Tooltip>
+                </a>
+                <ZoomedLambertGraph
+                    centerZone={center_zone}
+                    dirList={dir_list}
+                    angleList={angle_list}
+                    gridPoints={grid_points}
+                    pointsCount={points_numb}
+                    meanDir={sred_dir}
+                    alpha95={alpha95}
+                    gridColor={grid_color}
+                    polygonColor={poly_color}
+                    showGrid={isvisgrid}
+                    showDegreeGrid={degree_grid_isvis}
+                    showRumbs={rumbs_isvis}
+                    showPolygon={isvis}
+                />
+                {/* {center_zone[0]}
+                <br></br>
+                {center_zone[1]}
+                <br></br>
+                {center_zone[2]}
+                <br></br> */}
             </div>
-
-
-            <div className="interface">
-                    
-
-
+            <div className="table_container common-container">
+            </div>
+            <div className="table2_container common-container">
+                <label className="my_input">
+                    <div className="info">dark mode</div>
+                    <input type="checkbox" checked={isdark} onChange={DarkTeamChange}/>
+                    <span className="checkmark"></span>
+                </label>
+            </div>
+            <div className="container common-container">
+                <div className='interface-tooltip'>
+                    <Tooltip 
+                        style={{}}
+                        title={
+                            <TooltipContent 
+                                type={'checkbox'} 
+                                sred_dir={sred_dir}
+                                center_zone={center_zone}
+                                dir_list={dir_list}
+                                angle_list={angle_list}            
+                            />
+                        } 
+                        arrow
+                    >
+                        <HelpCenterOutlinedIcon className='interface-tooltip'/>
+                    </Tooltip>
+                </div>
+                <div className="interface">
                     <select className="select1-item item my_select" value={selectedNumber} onChange={handleNumberChange}>
                         <option value={10000}>grid = 10 000</option>
                         <option value={50000}>grid = 50 000</option>
@@ -468,85 +382,55 @@ export function Khokhlov_Gvozdik() {
                         <option value={3000000}>grid = 3 000 000</option>
                         <option value={3500000}>grid = 3 500 000</option>
                     </select>
-     
-
                     <select className="select2-item item my_select" value={selectedD} onChange={handleDChange}>
                         <option value={10}>d = 10</option>
                         <option value={5}>d = 5</option>
                     </select>
-
-
                     <select className="select3-item item my_select" value={selectedP} onChange={handlePChange}>
                         <option value={950}>quantile = 0.950</option>
                         <option value={975}>quantile = 0.975</option>
                         <option value={990}>quantile = 0.99</option>
                     </select>
-
-
-
                     <select className="select4-item item my_select" value={apc} onChange={handleAPCChange}>
                         <option className="select-option" value={1}>aPC</option>
                         <option className="select-option" value={0}>PC</option>
                     </select>
-
-
-                <div className="button-item item">
-                    <button className="button" onClick={generateRandomNumbers}>Generate Random Numbers</button>
+                    <div className="button-item item">
+                        <button className="button" onClick={generateRandomNumbers}>Generate Random Numbers</button>
+                    </div>
+                        {/* <b>The percentage of the zone from the sphere:</b>
+                        {" " + String((zone_square(grid_points.length, points_numb) * 100).toFixed(3))}%.
+                        <br/>
+                        <b>Maxium radius of the zone: </b>{max_rad.toFixed(3)}
+                        <br/>
+                        <b>&#945;95: </b>{alpha95.toFixed(3)}
+                        <br/> */}
+                    <div className="info-item1">
+                        <label className="my_input"><div className="info">Show zone</div>
+                            <input type="checkbox" checked={isvis} onChange={handleCheckboxChange}/>
+                            <span className="checkmark"></span>
+                        </label>
+                    </div>
+                    <div className="info-item2">
+                        <label className="my_input"><div className="info">Show grid</div>
+                            <input type="checkbox" checked={isvisgrid} onChange={gridCheckboxChange}/>
+                            <span className="checkmark"></span>
+                        </label>
+                    </div>
+                    <div className="info-item3">
+                        <label className="my_input"><div className="info">show degree grid</div>
+                            <input type="checkbox" checked={degree_grid_isvis} onChange={degreeCheckboxChange}/>
+                            <span className="checkmark"></span>
+                        </label>
+                    </div>
+                    <div className="info-item4">
+                        <label className="my_input"><div className="info">show rumbs</div>
+                            <input type="checkbox" checked={rumbs_isvis} onChange={rumbCheckboxChange}/>
+                            <span className="checkmark"></span>
+                        </label>
+                    </div>
                 </div>
-                    {/* <b>The percentage of the zone from the sphere:</b>
-                    {" " + String((zone_square(grid_points.length, points_numb) * 100).toFixed(3))}%.
-                    <br/>
-                    <b>Maxium radius of the zone: </b>{max_rad.toFixed(3)}
-                    <br/>
-                    <b>&#945;95: </b>{alpha95.toFixed(3)}
-                    <br/> */}
-            
-                <div className="info-item1">
-                    <label className="my_input"><div className="info">Show zone</div>
-                        <input type="checkbox" checked={isvis} onChange={handleCheckboxChange}/>
-                        <span className="checkmark"></span>
-                    </label>
-                </div>
-
-                <div className="info-item2">
-                    <label className="my_input"><div className="info">Show grid</div>
-                        <input type="checkbox" checked={isvisgrid} onChange={gridCheckboxChange}/>
-                        <span className="checkmark"></span>
-                    </label>
-                </div>
-
-
-
-                <div className="info-item3">
-                    <label className="my_input"><div className="info">show degree grid</div>
-                        <input type="checkbox" checked={degree_grid_isvis} onChange={degreeCheckboxChange}/>
-                        <span className="checkmark"></span>
-                    </label>
-                </div>
-
-                <div className="info-item4">
-                    <label className="my_input"><div className="info">show rumbs</div>
-                        <input type="checkbox" checked={rumbs_isvis} onChange={rumbCheckboxChange}/>
-                        <span className="checkmark"></span>
-                    </label>
-                </div>
-
-
-
             </div>
-
         </div>
-
-        <ModalWrapper
-        open={showUploadModal}
-        setOpen={setShowUploadModal}
-        size={{width: '60vw', height: widthLessThan720 ? 'fit-content' : '60vh'}}
-        showBottomClose
-      >
-        <UploadModal page='dir' />
-      </ModalWrapper>
-
-    </div>
-    
     );
 }
