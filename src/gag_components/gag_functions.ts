@@ -117,9 +117,9 @@ export function cordsToKey(coord: number[]) {
 }
 
 export function getRandomInt(min: number, max: number) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
+    var fmin = Math.ceil(min);
+    var fmax = Math.floor(max);
+    return Math.floor(Math.random() * (fmax - fmin) + fmin); // The maximum is exclusive and the minimum is inclusive
 }
 export function getRandomfloat(min: number, max: number) {
     return Math.random() * (max - min) + min;
@@ -133,10 +133,10 @@ export function DekVgeo(x: number, y: number, z: number)
     return [phi, lmbd];
 }
 
-export function GeoVdek(r: number, phi: number, lmbd: number)
+export function GeoVdek(r: number, fphi: number, flmbd: number)
 {
-    phi = phi * Math.PI / 180;
-    lmbd = lmbd * Math.PI / 180;
+    var phi = fphi * Math.PI / 180;
+    let lmbd = flmbd * Math.PI / 180;
     var X = r * Math.cos(phi) * Math.cos(lmbd);
     var Y = r * Math.cos(phi) * Math.sin(lmbd);
     var Z = r * Math.sin(phi);
@@ -187,9 +187,9 @@ export function MultiplyMatrix(A: number[][], B: number[])
     return C;
 }
 
-export function RotateAroundV(B: number[], V: number[], phi: number)
+export function RotateAroundV(B: number[], V: number[], angle: number)
 {
-    phi = phi * Math.PI / 180;
+    let phi = angle * Math.PI / 180;
 
     var x = V[0];
     var y = V[1];
@@ -207,9 +207,9 @@ export function RotateAroundV(B: number[], V: number[], phi: number)
     return C;
 }
 
-export function RotateAroundZ(B: number[], phi: number)
+export function RotateAroundZ(B: number[], angle: number)
 {
-    phi = phi * Math.PI / 180;
+    let phi = angle * Math.PI / 180;
 
     let A = [
                 [ Math.cos(phi), -Math.sin(phi), 0 ],
@@ -222,9 +222,9 @@ export function RotateAroundZ(B: number[], phi: number)
     return C;
 }
 
-export function RotateAroundY(B: number[], phi: number)
+export function RotateAroundY(B: number[], angle: number)
 {
-    phi = phi * Math.PI / 180;
+    let phi = angle * Math.PI / 180;
 
     let A = [
                 [ Math.cos(phi), 0, Math.sin(phi) ],
@@ -236,9 +236,9 @@ export function RotateAroundY(B: number[], phi: number)
 
     return C;
 }
-export function RotateAroundX(B: number[], phi: number)
+export function RotateAroundX(B: number[], angle: number)
 {
-    phi = phi * Math.PI / 180;
+    let phi = angle * Math.PI / 180;
 
     let A = [
                 [ 1, 0, 0 ],
@@ -298,9 +298,9 @@ export function get_perp(v1: number[],v2: number[])
 // circle plot func
 //-----------------------------------------------------------------------
 
-export function PlotCircle(direction: number[], phi: number, circle_points_numb: number)
+export function PlotCircle(dir: number[], phi: number, circle_points_numb: number)
 {
-    direction = NormalizeV(direction);
+    let direction = NormalizeV(dir);
 
     //-------------------------------------------------------------------
     //plot solid line
@@ -351,8 +351,8 @@ export function PlotCircle(direction: number[], phi: number, circle_points_numb:
 //-----------------------------------------------------------------------
 // begin
 //-----------------------------------------------------------------------
-export function to_center(point: number[], dir: number[]){
-    
+export function to_center(p: number[], dir: number[]){
+    let point = p;
     
     if (dir[0] >= 0 && dir[1] >= 0 && dir[2] >= 0) {
         var yrot = RotateAroundY(point, -angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
@@ -567,10 +567,10 @@ export function v_angle_2d(v1: number[], v2: number[])
 
 }
 
-export function rot_V_2d(v: number[], alpha: number)
+export function rot_V_2d(v: number[], angle: number)
 {
 
-    alpha = alpha * Math.PI / 180;
+    let alpha = angle * Math.PI / 180;
 
     var x =  v[0] * Math.cos(alpha) - v[1] * Math.sin(alpha);
     var y = v[0] * Math.sin(alpha) + v[1] * Math.cos(alpha);
@@ -581,9 +581,9 @@ export function rot_V_2d(v: number[], alpha: number)
 
 export function zone_square(points_number: number, all_points: number, ) { return points_number / all_points;};
 
-export function poly_contour(points: number[][], center: number[])
+export function poly_contour(points_mass: number[][], center: number[])
 {
-
+    let points = points_mass;
     for (var i = 0; i < points.length; i++)
     {
         points[i] = [points[i][0] - center[0], points[i][1] - center[1]];
