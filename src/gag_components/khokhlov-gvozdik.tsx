@@ -125,7 +125,7 @@ export function Khokhlov_Gvozdik() {
 
             //------------------------fix------------------------
             // dir_list.push([paleo_data[0], paleo_data[1], paleo_data[2]]);
-            // paleo_data = NormalizeV([1 + getRandomfloat(0, 0.2), -1  + getRandomfloat(0, 0.2), -1  + getRandomfloat(0, 0.2)]);
+            paleo_data = NormalizeV([1 + getRandomfloat(0, 0.2), 1  + getRandomfloat(0, 0.2), 1  + getRandomfloat(0, 0.2)]);
             dir_list.push([paleo_data[0], paleo_data[1], paleo_data[2]]);
         }
 
@@ -334,12 +334,12 @@ export function Khokhlov_Gvozdik() {
                     showRumbs={rumbs_isvis}
                     showPolygon={isvis}
                 />
-                {/* {center_zone[0]}
+                {sred_dir[0]}
                 <br></br>
-                {center_zone[1]}
+                {sred_dir[1]}
                 <br></br>
-                {center_zone[2]}
-                <br></br> */}
+                {sred_dir[2]}
+                <br></br>
             </div>
             <div className="table_container common-container">
             </div>

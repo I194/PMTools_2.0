@@ -140,7 +140,7 @@ export function GeoVdek(r: number, fphi: number, flmbd: number)
     var X = r * Math.cos(phi) * Math.cos(lmbd);
     var Y = r * Math.cos(phi) * Math.sin(lmbd);
     var Z = r * Math.sin(phi);
-    var C = RotateAroundV([X, Y, Z], [1,0,0], 90);
+    var C = RotateAroundX([X, Y, Z], 90);
     return C;
 }
 
@@ -236,6 +236,8 @@ export function RotateAroundY(B: number[], angle: number)
 
     return C;
 }
+
+
 export function RotateAroundX(B: number[], angle: number)
 {
     let phi = angle * Math.PI / 180;
