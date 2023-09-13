@@ -442,9 +442,9 @@ export function make_coords(points: number[][]){
     var res = [];
 
     for ( let j = 0; j < points.length; j ++ ) {
-        if (points[j][2] >= 0) {
+        // if (points[j][2] >= 0) {
             res.push([points[j][0], points[j][1]]);
-        }
+        // }
     }
 
     for ( let j = 0; j < res.length; j ++ ) {
