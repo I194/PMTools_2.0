@@ -140,7 +140,7 @@ export function GeoVdek(r: number, fphi: number, flmbd: number)
     var X = r * Math.cos(phi) * Math.cos(lmbd);
     var Y = r * Math.cos(phi) * Math.sin(lmbd);
     var Z = r * Math.sin(phi);
-    var C = RotateAroundX([X, Y, Z], 90);
+    var C = RotateAroundV([X, Y, Z], [1,0,0], 90);
     return C;
 }
 
@@ -236,8 +236,6 @@ export function RotateAroundY(B: number[], angle: number)
 
     return C;
 }
-
-
 export function RotateAroundX(B: number[], angle: number)
 {
     let phi = angle * Math.PI / 180;
@@ -414,30 +412,28 @@ export function to_center(p: number[], dir: number[]){
 
 export function centering(in_points: number[][], dir: number[]){
 
-    var res = [];
-    // var vertical_v = RotateAroundV([0, 1, 0], get_perp([0, 0, 1], dir), -angle_between_v([0, 0, 1], dir) * 180 / Math.PI);
-    var points = in_points;
-    for ( var i = 0; i < points.length; i ++ ) {
+    const res = [];
+    const allCenteredPoints = [];
+    
+    for (let i = 0; i < in_points.length; i++) {
+        const centeredPoint = to_center(in_points[i], dir);
+        allCenteredPoints.push(centeredPoint);
 
-        //working var
-        // points[i] = RotateAroundV(points[i], get_perp([0, 0, 1], dir), -angle_between_v([0, 0, 1], dir) * 180 / Math.PI);
-        points[i] = to_center(points[i], dir);
-
-
-        if (points[i][2] >= 0) {
-            res.push(points[i]);
+        if (centeredPoint[2] >= 0) {
+            res.push(centeredPoint);
         }
     }
 
-    if (res.length < points.length){
-        for ( var i = 0; i < points.length; i ++ ) {
-            if (res[i] != points[i]){
-                return res.slice(i,res.length).concat(res.slice(0, i));
-
+    //  Для меридианов и параллелей
+    if (res.length < allCenteredPoints.length) {
+        for (let i = 0; i < allCenteredPoints.length; i++) {
+            if (res[i] != allCenteredPoints[i]) {
+                return res.slice(i, res.length).concat(res.slice(0, i));
             }
         }
     }
-        return res;
+
+    return res;
 }
 
 export function make_coords(points: number[][]){

@@ -1,4 +1,4 @@
-import React, { createElement, useState } from 'react';
+import React, {createElement, useState} from 'react';
 import {
     GeoVdek,
     getRandomfloat,
@@ -17,10 +17,7 @@ import {
     to_center,
     points_dist_2d,
     to_new_basis,
-    to_new_basis_mass,
-    RotateAroundY,
-    RotateAroundX,
-    RotateAroundZ
+    to_new_basis_mass
 } from "./gag_functions";
 
 interface HGGraph {
@@ -57,7 +54,7 @@ export function ZoomedLambertGraph({
     const centerZoneColor = '#4054E7';
     // ToDo: понять, зачем передается проп pointsCount, если есть внутренняя переменная plotPointsCount. 
     // От чего то одного надо отказаться
-    let plotPointsCount = 170;
+    let plotPointsCount = 170; 
     let circlesRadius = 0.0025;
     let gridRadius = 0.0015;
     let centerZoneRadius = 0.003;
@@ -65,12 +62,12 @@ export function ZoomedLambertGraph({
     // ToDo: не путай == и ===. Тут было ==, это нестрогое сравнение которое тут можно было заменить на строгое,  
     // а если можно заменить на строгое, то лучше всегда именно так и поступать (потенциально багов меньше будет)
     if (angleList[0] === 0) {
-        return (
-            <div key={1227544233}>
-                <h5 className="my_text">Lambert svg</h5>
-                <svg className="svg interface" key={6534324} viewBox={"-1 -1 2 2"} />
-            </div>
-        );
+      return (
+        <div key={1227544233}>
+          <h5 className="my_text">Lambert svg</h5>
+          <svg className="svg interface" key={6534324} viewBox={"-1 -1 2 2"} />
+        </div>
+      );
     }
 
     //-----------------------------------------------------------------
@@ -82,9 +79,9 @@ export function ZoomedLambertGraph({
     // В связи с этим убери нафиг этот myKey и просто используй итератор в качестве ключа, если нет другого уникального поля для генерируемого объекта
     // у точек таким полем может быть их порядковый номер, например, который в импортируемом файле задается обычно. 
     let myKey = 0;
-    //-----------------fix---------------------------
-    const rotationCenterZone = to_center(centerZone, meanDir);
 
+    const rotationCenterZone = convertToLambert(to_center(centerZone, meanDir), meanDir);
+    console.log('rotationCenterZone');console.log(rotationCenterZone);
     // ToDo: избавиться от такого создания элементов, лучше создавать их итеративно в самом конце (в return)
     const lambertCenterZone = createElement(
         'circle',
@@ -112,8 +109,7 @@ export function ZoomedLambertGraph({
     const smallCircles = [];
 
     for (let i = 0; i < dirList.length; i++) {
-        //-----------------fix-----------------dont centering !!!-------
-        const dirCircle = PlotCircle(dirList[i], angleList[i], plotPointsCount);
+        const dirCircle = PlotCircle(to_center(dirList[i], meanDir), angleList[i], plotPointsCount);
 
         for (let j = 0; j < dirCircle.length; j++) {
             if (xMax != 1000000 && xMin != 1000000 && yMax != 1000000 && yMin != 1000000) {
@@ -143,9 +139,10 @@ export function ZoomedLambertGraph({
     gridRadius = (yMax - yMin) / 400;
 
     for (let i = 0; i < dirList.length; i++) {
-        //-----------------fix------------------------
-        const dirCircle =
-            centering(PlotCircle(dirList[i], angleList[i], plotPointsCount), meanDir);
+        const dirCircle = lambertMass(
+            PlotCircle(to_center(dirList[i], meanDir), angleList[i], plotPointsCount), 
+            meanDir
+        );
 
         for (let j = 0; j < dirCircle.length; j++) {
             smallCircles.push(
@@ -166,20 +163,8 @@ export function ZoomedLambertGraph({
     //-----------------------------------------------------------------
     // making grid on left svg
     //-----------------------------------------------------------------
-
-    // let gridPointsCentered = centering(gridPoints, meanDir);
-    let gridPointsCentered = gridPoints;
-
-    let rotmeanDir = RotateAroundY(meanDir, -angle_between_v([0, 0, 1], [meanDir[0], 0, meanDir[2]]) * 180 / Math.PI);
-
-    for (let i = 0; i < 200; i++) {
-        
-        
-        gridPointsCentered[i] = RotateAroundY(gridPointsCentered[i], -angle_between_v([0, 0, 1], [meanDir[0], 0, meanDir[2]]) * 180 / Math.PI);
-    }
-
-
-
+    
+    let gridPointsCentered = lambertMass(centering(gridPoints, meanDir), meanDir);
     const grid = [];
 
     for (let i = 0; i < gridPointsCentered.length; i++) {
@@ -188,7 +173,7 @@ export function ZoomedLambertGraph({
                 'circle',
                 {
                     key: myKey,
-                    r: 0.0031,
+                    r: 0.01,
                     // r: gridRadius,
                     cx: String(gridPointsCentered[i][0]),
                     cy: String(gridPointsCentered[i][1]),
@@ -225,7 +210,7 @@ export function ZoomedLambertGraph({
     //---------------------------------------------------------------------------------------
     // making alpha95 circle
     //---------------------------------------------------------------------------------------
-
+    
     // ToDo: убрать, как только заменишь на Dot (см. выше)
     const fisherCircle = [];
 
@@ -272,7 +257,7 @@ export function ZoomedLambertGraph({
     } else {
         rumbFontSize = yMax / 10;
         myMax = yMax;
-
+        
         myViewBox = String(-yMax - 2 * rumbFontSize) + " ";
         myViewBox += String(-yMax - 2 * rumbFontSize) + " ";
         myViewBox += String(yMax * 2 + 4 * rumbFontSize) + " ";
@@ -282,47 +267,45 @@ export function ZoomedLambertGraph({
     //---------------------------------------------------------------------------------------
     // degree grid
     //---------------------------------------------------------------------------------------
+    
+    // const coords = [];
 
-    const coords = [];
+    // let point = [1, 0, 0];
 
-    let point = [1, 0, 0];
-    //-----------------fix------------------------
-    // to_center(, lamb_sred_dir)
-    const meridianCount = 18;
-    for (let i = 0; i < meridianCount; i++) {
-        //-----------------fix------------------------
-        point = RotateAroundV(point, [0, 1, 0], 360 / meridianCount);
-        const meridian = centering(PlotCircle(point, 90, 90), meanDir);
-        coords.push(make_coords(meridian));
-    }
+    // // to_center(, lamb_sred_dir)
+    // const meridianCount = 18;
+    // for (let i = 0; i < meridianCount; i++) {
+    //     point = RotateAroundV(point, [0, 1, 0], 360/ meridianCount );
+    //     const meridian = lambertMass(centering(PlotCircle(point, 90, 90), meanDir), meanDir);
+    //     coords.push(make_coords(meridian));
+    // }
 
-    var parallelsCount = 18;
-    //-----------------fix------------------------
-    // let vert = to_center(, lamb_sred_dir)
-    for (let i = 0; i < parallelsCount; i++) {
-        const parallel = centering(PlotCircle([0, 1, 0], i * (360 / meridianCount), 90), meanDir);
-        coords.push(make_coords(parallel));
-    }
+    // var parallelsCount = 18;
+    // // let vert = to_center(, lamb_sred_dir)
+    // for (let i = 0; i < parallelsCount; i++) {
+    //     const parallel = lambertMass(centering(PlotCircle([0, 1, 0], i * (360 / meridianCount), 90), meanDir), meanDir);
+    //     coords.push(make_coords(parallel));
+    // }
 
-    // paralel = PlotCircle([0, 0, 1], 90, 90);
-    // coords.push(make_coords(paralel));
+    // // paralel = PlotCircle([0, 0, 1], 90, 90);
+    // // coords.push(make_coords(paralel));
 
-    const centerDegreeGrid = [];
-    for (let i = 0; i < coords.length; i++) {
-        centerDegreeGrid.push(
-            createElement(
-                'polyline',
-                {
-                    key: myKey,
-                    points: coords[i],
-                    stroke: "grey",
-                    fill: 'none',
-                    strokeWidth: "0.0005px"
-                }, ''
-            )
-        );
-        myKey += 1;
-    }
+    // const centerDegreeGrid = [];
+    // for (let i = 0; i < coords.length; i++) {
+    //     centerDegreeGrid.push(
+    //         createElement(
+    //             'polyline',
+    //             {
+    //                 key: myKey,
+    //                 points: coords[i],
+    //                 stroke: "grey",
+    //                 fill: 'none',
+    //                 strokeWidth:"0.0005px"
+    //             }, ''
+    //         )
+    //     );
+    //     myKey += 1;
+    // }
 
     const circlePointsToCalculateCount = 720 * 8;
     let input: [number, number][] = [];
@@ -330,10 +313,9 @@ export function ZoomedLambertGraph({
 
     for (let i = 0; i < dirList.length; i++) {
         // ToDo: ужасное наименование, никаких односимвольных имен кроме случаев с итераторами допускать нельзя, это нечитаемый код
-        //-----------------fix------------------------
-        const b = centering(PlotCircle(dirList[i], angleList[i], circlePointsToCalculateCount), meanDir);
+        const b = PlotCircle(to_center(dirList[i], meanDir), angleList[i], circlePointsToCalculateCount);
 
-        for (let j = 0; j < b.length; j++) {
+        for (let j = 0; j < b.length; j++){
             circlePoints.push(b[j]);
         }
     }
@@ -346,7 +328,7 @@ export function ZoomedLambertGraph({
     const polygonPoints3d = [];
 
     for (let i = 0; i < polygonPoints2d.length; i++) {
-        polygonPoints3d.push([polygonPoints2d[i][0], polygonPoints2d[i][1], 1]);
+        polygonPoints3d.push([polygonPoints2d[i][0], polygonPoints2d[i][1], 1 ]);
     }
 
     const polygonPoints = make_coords(polygonPoints3d);
@@ -361,51 +343,19 @@ export function ZoomedLambertGraph({
 
     // ToDo: убрать этот и другие комментарии, которые более не нужны (если нужны – подписать зачем)
     //------------------------------------------- fix ---------------------------------------
-    myViewBox = '-1 -1 2 2';
-
-
-
-
-    const mmm = createElement(
-        'circle',
-        {
-            key: myKey,
-            r: 0.020,
-            cx: String(meanDir[0]),
-            cy: String(meanDir[1]),
-            fill: 'green',
-
-        }, ''
-    );
-    const mmm1 = createElement(
-        'circle',
-        {
-            key: myKey,
-            r: 0.020,
-            cx: String(rotmeanDir[0]),
-            cy: String(rotmeanDir[1]),
-            fill: 'green',
-
-        }, ''
-    );
-
-
-
-
-
+      myViewBox = '-1 -1 2 2';
 
     return (
         <svg className="svg graph_interface" viewBox={myViewBox}>
-            {showDegreeGrid && centerDegreeGrid}
+            {/* {showDegreeGrid && centerDegreeGrid} */}
             {showPolygon && <polygon points={polygonPoints} fill={polygonColor} />}
             {showGrid && grid}
             {smallCircles}
             {fisherDir}
             {fisherCircle}
             {lambertCenterZone}
-            {mmm}
-            {mmm1}
-            {showRumbs &&
+
+            {showRumbs && 
                 <>
                     <text x={myMax + rumbFontSize} y={0} textAnchor="middle" fontSize={String(rumbFontSize)} fill="black">
                         {"E"}
