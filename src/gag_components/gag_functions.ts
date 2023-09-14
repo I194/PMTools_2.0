@@ -111,11 +111,6 @@ export function fisherStat(dirs: number[][]) {
     return result;
 }
 
-export function cordsToKey(coord: number[]) {
-    var key = Math.random;
-    return key;
-}
-
 export function getRandomInt(min: number, max: number) {
     var fmin = Math.ceil(min);
     var fmax = Math.floor(max);
@@ -135,25 +130,14 @@ export function DekVgeo(x: number, y: number, z: number)
 
 export function GeoVdek(r: number, fphi: number, flmbd: number)
 {
-    var phi = fphi * Math.PI / 180;
+    let phi = fphi * Math.PI / 180;
     let lmbd = flmbd * Math.PI / 180;
-    var X = r * Math.cos(phi) * Math.cos(lmbd);
+    let X = r * Math.cos(phi) * Math.cos(lmbd);
     var Y = r * Math.cos(phi) * Math.sin(lmbd);
     var Z = r * Math.sin(phi);
     var C = RotateAroundV([X, Y, Z], [1,0,0], 90);
     return C;
 }
-
-export function GeoVdekG(r: number, point1: number, point2: number): [number, number, number] {
-    const projectedX = point1;
-    const projectedY = point2;
-    const squaredSum = projectedX * projectedX + projectedY * projectedY;
-    const projectedZ = Math.sqrt(1 - squaredSum);
-  
-    return [projectedX, projectedY, projectedZ];
-}
-
-
 
 export function vector_length(v:number[]) { return Math.sqrt( v[0] * v[0] + v[1] * v[1] + v[2] * v[2] ); }
 
@@ -163,7 +147,7 @@ export function points_dist(p1:number[], p2:number[]) {
 
 export function angle_between_v(v1: number[], v2: number[])
 {
-    var angle;
+    let angle;
     angle = Math.acos( (v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]) / ( vector_length(v1) * vector_length(v2) ) );
 
     if (angle > 180) { angle -= 180; }
@@ -178,7 +162,7 @@ export function angle_between_v(v1: number[], v2: number[])
 
 export function MultiplyMatrix(A: number[][], B: number[])
 {
-    var C = [0, 0, 0];
+    let C = [0, 0, 0];
 
     C[0] = A[0][0] * B[0] + A[0][1] * B[1] + A[0][2] * B[2];
     C[1] = A[1][0] * B[0] + A[1][1] * B[1] + A[1][2] * B[2];
@@ -202,7 +186,7 @@ export function RotateAroundV(B: number[], V: number[], angle: number)
     ];
 
 
-    var C = MultiplyMatrix(A, B)
+    let C = MultiplyMatrix(A, B)
 
     return C;
 }
@@ -442,16 +426,26 @@ export function make_coords(points: number[][]){
     var res = [];
 
     for ( let j = 0; j < points.length; j ++ ) {
-        // if (points[j][2] >= 0) {
-            res.push([points[j][0], points[j][1]]);
-        // }
+        res.push([points[j][0], points[j][1]]);
     }
-
     for ( let j = 0; j < res.length; j ++ ) {
-            s += String(res[j][0]);
-            s += "," + String(res[j][1]) + " ";
+        s += String(res[j][0]);
+        s += "," + String(res[j][1]) + " ";
     }
     return s;
+}
+
+export function lambertPoints(points: number[][], fish_dir: number[]){
+ 
+
+    var result = [];
+    for (var i = 0; i < points.length; i++)
+    {
+        let mass3d = convertToLambert(points[i], fish_dir)
+        result.push([String(mass3d[0]), String(mass3d[1])]);
+    }
+
+    return result;
 
 }
 
@@ -466,13 +460,13 @@ export function lineSphereIntersect(v: number[]) {
     var t1 = (-b1 - Math.sqrt(d)) / (2 * a1);
     var t2 = (-b1 + Math.sqrt(d)) / (2 * a1);
 
-    var x1 = v[0] * t1;
-    var y1 = v[1] * t1;
-    var z1 = v[2] * t1;
+    let x1 = v[0] * t1;
+    let y1 = v[1] * t1;
+    let z1 = v[2] * t1;
 
-    var x2 = v[0] * t2;
-    var y2 = v[1] * t2;
-    var z2 = v[2] * t2;
+    let x2 = v[0] * t2;
+    let y2 = v[1] * t2;
+    let z2 = v[2] * t2;
 
 
     if (z1 > 0){
@@ -485,18 +479,14 @@ export function lineSphereIntersect(v: number[]) {
 
 
 export function convertToLambert(v: number[], fish_dir: number[]) {
-
-    var my_perp = get_perp([0, 0, 1], fish_dir);
-    // var r2_proj = RotateAroundV(v, my_perp, -angle_between_v([0, 0, 1], fish_dir) * 180 / Math.PI);
-
-    // return lineSphereIntersect(r2_proj);
+    let my_perp = get_perp([0, 0, 1], fish_dir);
     return lineSphereIntersect(v);
 }
 
 export function lambertMass(points: number[][], fish_dir: number[]){
 
-    var result = [];
-    for (var i = 0; i < points.length; i++)
+    let result = [];
+    for (let i = 0; i < points.length; i++)
     {
         result.push(convertToLambert(points[i], fish_dir));
     }
@@ -556,7 +546,7 @@ export function v_len_2d(v: number[]) { return Math.sqrt( v[0] * v[0] + v[1] * v
 
 export function v_angle_2d(v1: number[], v2: number[])
 {
-    var angle;
+    let angle;
     angle = Math.acos( (v1[0] * v2[0] + v1[1] * v2[1]) / ( v_len_2d(v1) * v_len_2d(v2) ) );
 
     if (angle > 180) { angle -= 180; };
@@ -567,11 +557,9 @@ export function v_angle_2d(v1: number[], v2: number[])
 
 export function rot_V_2d(v: number[], angle: number)
 {
-
     let alpha = angle * Math.PI / 180;
-
-    var x =  v[0] * Math.cos(alpha) - v[1] * Math.sin(alpha);
-    var y = v[0] * Math.sin(alpha) + v[1] * Math.cos(alpha);
+    let x =  v[0] * Math.cos(alpha) - v[1] * Math.sin(alpha);
+    let y = v[0] * Math.sin(alpha) + v[1] * Math.cos(alpha);
     return [x, y];
 }
 
@@ -582,24 +570,24 @@ export function zone_square(points_number: number, all_points: number, ) { retur
 export function poly_contour(points_mass: number[][], center: number[])
 {
     let points = points_mass;
-    for (var i = 0; i < points.length; i++)
+    for (let i = 0; i < points.length; i++)
     {
         points[i] = [points[i][0] - center[0], points[i][1] - center[1]];
     }
-    var sect_numb = 120;
+    let sect_numb = 120;
 
-    var alpha = 360 / sect_numb;
-    var dir = [0, 1];
-    var min_dist = 76548876;
-    var near_p = [87,8568,87658];
-    var near_plus = [ 200, 200];
+    let alpha = 360 / sect_numb;
+    let dir = [0, 1];
+    let min_dist = 76548876;
+    let near_p = [87,8568,87658];
+    let near_plus = [ 200, 200];
 
     var result = [];
 
 
-    for (var j = 0; j < sect_numb; j++)
+    for (let j = 0; j < sect_numb; j++)
     {
-        for (var i = 0; i < points.length - 1; i++)
+        for (let i = 0; i < points.length - 1; i++)
         {
             if (v_angle_2d(points[i], dir) < alpha / 2)
             {
@@ -623,158 +611,6 @@ export function poly_contour(points_mass: number[][], center: number[])
 
     return result;
 }
-
-// -------------------------centering2---------------------------------
-
-
-
- export function convertPoint(point: number[], newAxes: number[][]) {
-    const deltaX = point[0];
-    const deltaY = point[1];
-    const deltaZ = point[2];
-
-    const transformedX = newAxes[0][0] * deltaX + newAxes[1][0] * deltaY + newAxes[2][0] * deltaZ;
-    const transformedY = newAxes[0][1] * deltaX + newAxes[1][1] * deltaY + newAxes[2][1] * deltaZ;
-    const transformedZ = newAxes[0][2] * deltaX + newAxes[1][2] * deltaY + newAxes[2][2] * deltaZ;
-
-    return [transformedX, transformedY, transformedZ];
-  }
-
-
- // find new basis
-export function test(point: number[], center: number[], sign_numb: number, my_var: number) {
-  
-  //  basis
-  var x_axis = [1,0,0];
-  var y_axis = [0,1,0];
-  var z_axis = [0,0,1];
-  var basis = [x_axis, y_axis, z_axis];
-
-  if (sign_numb == 1) {
-    var my_sign = [1,1,1];
-  }
-  else if (sign_numb == 2) {
-    var my_sign = [1,-1,1];
-  }
-  else if (sign_numb == 3) {
-    var my_sign = [1,1,-1];
-  }
-  else if (sign_numb == 4) {
-    var my_sign = [1,-1,-1];
-  }
-  else if (sign_numb == 5) {
-    var my_sign = [-1,1,1];
-  }
-  else if (sign_numb == 6) {
-    var my_sign = [-1,-1,1];
-  }
-  else if (sign_numb == 7) {
-    var my_sign = [-1,1,-1];
-  }
-  else if (sign_numb == 8) {
-    var my_sign = [-1,-1,-1];
-  }
-  else {
-    return [0,0,0];
-  }
-
-  //  basis
-  var x_axis = [1,0,0];
-  var y_axis = [0,1,0];
-  var z_axis = [0,0,1];
-  var basis = [x_axis, y_axis, z_axis];
-
-  var x_axis1 = get_perp(y_axis, center);
-  var y_axis1 = get_perp(center, x_axis1);
-  var z_axis1 = center;
-
-
-  var x_axis2 = RotateAroundX( z_axis, -angle_between_v(center, y_axis) * 180 / Math.PI );
-  var x_axis2 = [my_sign[0] * x_axis2[0], my_sign[0] * x_axis2[1], my_sign[0] * x_axis2[2]];
-
-  var y_axis2 = RotateAroundV( x_axis, x_axis2, angle_between_v(x_axis1, x_axis) * 180 / Math.PI  );
-  var y_axis2 = [my_sign[1] * y_axis2[0], my_sign[1] * y_axis2[1], my_sign[1] * y_axis2[2]];
-
-  var z_axis2 = get_perp(x_axis2, y_axis2);
-  var z_axis2 = [my_sign[2] * z_axis2[0], my_sign[2] * z_axis2[1], my_sign[2] * z_axis2[2]];
-
-  var new_basis2 = [z_axis2, x_axis2, y_axis2];
-
-  if (my_var == 1){var new_basis2 = [ z_axis2, x_axis2, y_axis2];}
-  if (my_var == 2){var new_basis2 = [ z_axis2, y_axis2, x_axis2];}
-  if (my_var == 3){ var new_basis2 = [ y_axis2, x_axis2, z_axis2];}
-  if (my_var == 4){var new_basis2 = [ y_axis2, z_axis2, x_axis2];}
-  if (my_var == 5){var new_basis2 = [ x_axis2, z_axis2, y_axis2];}
-  if (my_var == 6){var new_basis2 = [ x_axis2, y_axis2, z_axis2];}
-
-
-  return convertPoint(point, new_basis2);
-
-}
-
-
-
-export function to_new_basis(point: number[], center: number[]){
-  // +++ 23 -63 -73
-  if (center[0] > 0 && center[1] > 0 && center[2] > 0) { return test(point, center, 2, 3) }
-  // +-+                                                       13  23 53 63        
-  if (center[0] > 0 && center[1] < 0 && center[2] > 0) { return test(point, center, 2, 3) }
-  // ++-                                                             23 maybe-63 check
-  if (center[0] > 0 && center[1] > 0 && center[2] < 0) { return test(point, center, 2, 3) }
-  // +--                                                                +-13 23 53 63 check
-  if (center[0] > 0 && center[1] < 0 && center[2] < 0) { return test(point, center, 2, 3) }
-  // -++                                                                   33 73 34  74            
-  if (center[0] < 0 && center[1] > 0 && center[2] > 0) { return test(point, center, 3, 3)}
-  // --+                                                                64 33 24+-  41+- 81+- 22 62  73               
-  if (center[0] < 0 && center[1] < 0 && center[2] > 0) { return test(point, center, 6, 4) }
-  // -+-
-  if (center[0] < 0 && center[1] > 0 && center[2] < 0) { return test(point, center, 3, 3) }
-  // ---
-  if (center[0] < 0 && center[1] < 0 && center[2] < 0) { return test(point, center, 3, 3) }
-
-  return [0,0,0];
-}
-
-
-export function to_new_basis_mass(points: number[][], center: number[]){
-    let new_points: number[][]=[];
-    let res: number[][]=[];
-    for ( let i = 0; i < points.length; i ++ ){
-        var m = to_new_basis(points[i], center);
-        
-        // if (m[2] != 0) {
-        new_points.push([m[0], m[1], m[2]]);
-        // }
-    }
-
-
-
-        // for ( var i = 0; i < new_points.length; i ++ ) {
-        //     if (new_points[i] != points[i]){
-        //         return new_points.slice(i,new_points.length).concat(new_points.slice(0, i));
-
-        //     }
-        // }
-    
-
-    return new_points;
-        
-    //     if (new_points[i][2] >= 0) {
-    //         res.push(points[i]);
-    //     }
-    // }
-
-    // if (res.length < new_points.length){
-    //     for ( var i = 0; i < new_points.length; i ++ ) {
-    //         if (res[i] != new_points[i]){
-    //             return res.slice(i,res.length).concat(res.slice(0, i));
-
-    //         }
-    //     }
-    // }
-    //     return res;
-}
-
 
 
 

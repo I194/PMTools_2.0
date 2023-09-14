@@ -1,8 +1,7 @@
 import React, {createElement as e, useEffect, useState} from 'react';
 import {ZoomedLambertGraph} from "./ZoomedLambertGraph";
-import {Rotate_sphere} from "./rotate_sphere";
 import {TooltipContent} from "./my-tooltip";
-import {Threedsphere} from "./3dsphere";
+
 
 import "./style.css";
 import {
@@ -11,21 +10,11 @@ import {
     NormalizeV,
     RotateAroundV,
     angle_between_v,
-    PlotCircle,
-    make_coords,
-    get_perp,
-    centering,
-    poly_contour,
-    zone_square,
-    convexHull,
-    convertToLambert,
     fisherStat,
-    lambertMass,
-    points_dist_2d,
     getRandomInt,
-    GeoVdekG,
     get_quantiles
     } from "./gag_functions";
+
 import HelpCenterOutlinedIcon from '@mui/icons-material/HelpCenterOutlined';
 import Tooltip from '@mui/material/Tooltip';   
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
@@ -248,30 +237,7 @@ export function Khokhlov_Gvozdik() {
     var grid_color = '#1975d2';
 
     
-    var my_props = {
-        center_zone: center_zone,
-        dir_list: dir_list,
-        grid_points: grid_points,
-        angle_list: angle_list,
-        sred_dir: sred_dir
-    };
-
-    var lambert_zoom_props = {
-        center_zone: center_zone,
-        dir_list: dir_list,
-        angle_list: angle_list,
-        grid_points: grid_points,
-        points_numb: points_numb,
-        sred_dir: sred_dir,
-        alpha95: alpha95,
-        isvis: isvis,
-        isvisgrid: isvisgrid,
-        grid_color: grid_color,
-        poly_color: poly_color,
-        degree_grid_isvis: degree_grid_isvis,
-        rumbs_isvis: rumbs_isvis
-    };
-
+ 
     // Функция для загрузки SVG
     const handleDownloadSVG = () => {
         const svgElement = document.querySelector('.svg.graph_interface');
@@ -324,7 +290,6 @@ export function Khokhlov_Gvozdik() {
                     dirList={dir_list}
                     angleList={angle_list}
                     gridPoints={grid_points}
-                    pointsCount={points_numb}
                     meanDir={sred_dir}
                     alpha95={alpha95}
                     gridColor={grid_color}
@@ -379,9 +344,8 @@ export function Khokhlov_Gvozdik() {
                         <option value={1500000}>grid = 1 500 000</option>
                         <option value={2000000}>grid = 2 000 000</option>
                         <option value={2500000}>grid = 2 500 000</option>
-                        <option value={3000000}>grid = 3 000 000</option>
-                        <option value={3500000}>grid = 3 500 000</option>
                     </select>
+                    
                     <select className="select2-item item my_select" value={selectedD} onChange={handleDChange}>
                         <option value={10}>d = 10</option>
                         <option value={5}>d = 5</option>

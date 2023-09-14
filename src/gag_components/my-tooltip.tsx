@@ -1,6 +1,6 @@
 import React, {createElement as e, useEffect, useState} from 'react';
 import "./style.css";
-import {Rotate_sphere} from "./rotate_sphere";
+// import {Rotate_sphere} from "./rotate_sphere";
 
 
   export function TooltipContent(tooltip_props:{type:string, sred_dir: number[], center_zone: number[], dir_list: number[][], angle_list: number[]}) {
@@ -33,11 +33,7 @@ import {Rotate_sphere} from "./rotate_sphere";
                 на панели параметров, также сам grid можно отобразить, нажав
                 на галочку show grid. При достаточной точности, центр
                 будет находиться ровно в гипоцентре зоны.
-                <Rotate_sphere
-                        sred_dir={sred_dir}
-                        center_zone={center_zone}
-                        dir_list={dir_list}
-                        angle_list={angle_list}/>
+
             </span>
         );
     } 
