@@ -64,7 +64,6 @@
 
 .common-container {
   background-color: var(--my-white);
-  
   box-shadow: var(--my-shadow) 0px 0px 10px 1px;
   overflow: auto;
   position: relative;
@@ -73,7 +72,6 @@
 }
 
 .common-container:hover {
-
   box-shadow: none;
   transition: 0.4s ease-in-out;
 
@@ -167,9 +165,9 @@
   }
 
   .graph_interface{
-    /* display: block; */
+
     height: 12vh;
-    padding: 5px;
+    
   }
 }
 
@@ -258,7 +256,7 @@
 
 .graph_interface{
   height: 52vh;
-  width: 100%;
+  width: 97%;
   border: 3px solid var(--my-grey);
   border-radius: 6px;
   padding: auto;

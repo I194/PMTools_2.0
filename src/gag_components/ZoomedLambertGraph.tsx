@@ -12,6 +12,10 @@ import {
     lambertPoints
 } from "./gag_functions";
 
+
+import AxesAndData from "../components/AppGraphs/StereoGraphDIR/AxesAndData"
+
+
 interface HGGraph {
     centerZone: number[],
     dirList: number[][],
@@ -43,11 +47,11 @@ export function ZoomedLambertGraph({
 }: HGGraph) {
 
 
-    const centerZoneColor = '#4054E7';
+    const centerZoneColor = '#2b3bb3';
     let plotPointsCount = 150; 
     let circlesRadius = 0.001;
     let gridRadius = 0.0015;
-    let centerZoneRadius = 0.003;
+    let centerZoneRadius = 0.0045;
     let viewBoxSize = '-0.25 -0.25 0.5 0.5'
 
     if (angleList[0] == 0) {
@@ -181,8 +185,9 @@ export function ZoomedLambertGraph({
     //---------------------------------------------------------------------------------------
     
     return (
-        <svg className="svg graph_interface" viewBox={ viewBoxSize }>
+        <svg className="graph_interface" viewBox={ viewBoxSize }>
 
+            {/* Градусная сетка */}
             { showDegreeGrid && degreeGrid.map((circles) => (
                 <polyline 
                     points={ circles } 
@@ -192,6 +197,7 @@ export function ZoomedLambertGraph({
                 />
             ))}
 
+            {/* Закраска зоны пересечения кругов */}
             { showPolygon && 
                 <polygon 
                     points={ polygonPoints } 
@@ -199,6 +205,7 @@ export function ZoomedLambertGraph({
                 />
             }
 
+            {/* Спиральный грид в зоне пересечения */}
             { showGrid && gridPointsCentered.map((gridPoints) => (
                 <circle
                     r={ gridRadius }
@@ -208,6 +215,7 @@ export function ZoomedLambertGraph({
                 />
             ))}
 
+            {/* Круги вокруг палеонаправлений */}
             { smallCircles.map((circles) => (
                 <circle 
                     r={ circlesRadius } 
@@ -218,6 +226,7 @@ export function ZoomedLambertGraph({
                 />
             ))}    
      
+            {/* Истинное направление по фишеру (удалю когда сравню результаты) */}
             <circle
                 r={0.0035}
                 cx={String(0)}
@@ -225,6 +234,7 @@ export function ZoomedLambertGraph({
                 fill={'red'}
             />
 
+            {/* Круг альфа 95 */}
             <polyline 
                 points={ make_coords(PlotCircle([0, 0, 1], alpha95, 90)) } 
                 stroke={ "red" }
@@ -233,6 +243,7 @@ export function ZoomedLambertGraph({
                 strokeDasharray={"0.01px, 0.003px"}
             />
 
+            {/* Истинное направление по Хохлову */}
             <circle 
                 r={ centerZoneRadius } 
                 cx={ rotationCenterZone[0] }
@@ -240,9 +251,22 @@ export function ZoomedLambertGraph({
                 fill={ centerZoneColor }
             />
 
+            <AxesAndData 
+              graphId={}
+              width={}
+              height={}
+              areaConstants={}
+              dataConstants={}
+              selectedIDs={}
+              inInterpretationIDs={}
+              cutoff={}
+              settings={}
+            />
+
         </svg>
     );
 }
+
 
 
     

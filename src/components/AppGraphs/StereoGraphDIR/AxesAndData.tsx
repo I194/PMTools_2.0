@@ -6,7 +6,7 @@ import { graphSelectedDotColor } from "../../../utils/ThemeConstants";
 import { Axis, Data, Dot } from "../../Sub/Graphs";
 
 interface IAxesAndData {
-  graphId: string;
+graphId: string;
   width: number;
   height: number;
   areaConstants: {
