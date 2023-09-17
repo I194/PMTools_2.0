@@ -1,4 +1,12 @@
-import React, {createElement, useState} from 'react';
+import React, {} from 'react';
+
+import { useTheme } from '@mui/material/styles';
+import { Cutoff } from "../utils/GlobalTypes";
+import { DotsData, GraphSettings, MeanDirection, TooltipDot } from "../utils/graphs/types";
+import { graphSelectedDotColor } from "../utils/ThemeConstants";
+import { Axis, Data, Dot } from "../components/Sub/Graphs";
+
+
 import {
     RotateAroundV,
     PlotCircle,
@@ -31,6 +39,33 @@ interface HGGraph {
     showPolygon: boolean,
 }
 
+
+interface IAxesAndData {
+    graphId: string;
+      width: number;
+      height: number;
+      areaConstants: {
+        graphAreaMargin: number;
+        zeroX: number;
+        zeroY: number;
+        unit: number;
+        unitCount: number;
+      };
+      dataConstants: {
+        labels: Array<string>;
+        dotsData: DotsData;
+        directionalData: Array<[number, number]>;
+        tooltipData: Array<TooltipDot>;
+        meanDirection: MeanDirection;
+      };
+      selectedIDs: Array<number>;
+      inInterpretationIDs: Array<number>;
+      cutoff?: Cutoff;
+      settings: GraphSettings;
+    }
+
+
+
 export function ZoomedLambertGraph({
     centerZone,
     dirList,
@@ -53,6 +88,7 @@ export function ZoomedLambertGraph({
     let gridRadius = 0.0015;
     let centerZoneRadius = 0.0045;
     let viewBoxSize = '-0.25 -0.25 0.5 0.5'
+    // viewBoxSize = '-1 -1 2 2';
 
     if (angleList[0] == 0) {
       return (
@@ -179,7 +215,6 @@ export function ZoomedLambertGraph({
     
     // ToDo: убрать, как только заменишь на Dot (см. выше)
 
-
     //---------------------------------------------------------------------------------------
     // RETURN
     //---------------------------------------------------------------------------------------
@@ -229,8 +264,8 @@ export function ZoomedLambertGraph({
             {/* Истинное направление по фишеру (удалю когда сравню результаты) */}
             <circle
                 r={0.0035}
-                cx={String(0)}
-                cy={String(0)}
+                cx={ to_center(meanDir, meanDir)[0] }
+                cy={ to_center(meanDir, meanDir)[1] }
                 fill={'red'}
             />
 
@@ -251,17 +286,18 @@ export function ZoomedLambertGraph({
                 fill={ centerZoneColor }
             />
 
-            <AxesAndData 
-              graphId={}
-              width={}
-              height={}
+
+            {/* <AxesAndData 
+              graphId={'54325432543'}
+              width={0.5}
+              height={0.5}
               areaConstants={}
               dataConstants={}
               selectedIDs={}
               inInterpretationIDs={}
               cutoff={}
               settings={}
-            />
+            /> */}
 
         </svg>
     );

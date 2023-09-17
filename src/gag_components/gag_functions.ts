@@ -355,14 +355,14 @@ export function to_center(p: number[], dir: number[]){
     if (dir[0] >= 0 && dir[1] <= 0 && dir[2] <= 0) {
         var diryrot = RotateAroundY(dir, -(90 + angle_between_v([1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI));
         var yrot = RotateAroundY(point, -(90 + angle_between_v([1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI));
-        yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+        yrot = RotateAroundX(yrot, -angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
         point = yrot;
     }
 
     if (dir[0] >= 0 && dir[1] <= 0 && dir[2] >= 0) {
         var diryrot = RotateAroundY(dir, -angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
         var yrot = RotateAroundY(point, -angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
-        yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+        yrot = RotateAroundX(yrot, -angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
         point = yrot;
     }
 
@@ -375,7 +375,7 @@ export function to_center(p: number[], dir: number[]){
     if (dir[0] <= 0 && dir[1] <= 0 && dir[2] >= 0) {
         var diryrot = RotateAroundY(dir, angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
         var yrot = RotateAroundY(point, angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
-        yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+        yrot = RotateAroundX(yrot, -angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
         point = yrot;
     }
     if (dir[0] <= 0 && dir[1] >= 0 && dir[2] <= 0) {
@@ -387,7 +387,7 @@ export function to_center(p: number[], dir: number[]){
     if (dir[0] <= 0 && dir[1] <= 0 && dir[2] <= 0) {
         var diryrot = RotateAroundY(dir, 90 + angle_between_v([-1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI);
         var yrot = RotateAroundY(point, 90 + angle_between_v([-1, 0, 0], [dir[0], 0, dir[2]]) * 180 / Math.PI);
-        yrot = RotateAroundX(yrot, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+        yrot = RotateAroundX(yrot, -angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
         point = yrot;
     }
 
