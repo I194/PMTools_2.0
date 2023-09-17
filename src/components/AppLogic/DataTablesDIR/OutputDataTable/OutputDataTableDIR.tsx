@@ -5,7 +5,7 @@ import { useDebounce } from "../../../../utils/GlobalHooks";
 import equal from "deep-equal"
 import { GetDataTableBaseStyle } from "../styleConstants";
 import StatisticsDataTablePMDSkeleton from './OutputDataTableDIRSkeleton';
-import PMDOutputDataTableToolbar from '../../../Sub/DataTable/Toolbar/PMDOutputDataTableToolbar';
+import PMDOutputDataTableToolbar from '../../../Common/DataTable/Toolbar/PMDOutputDataTableToolbar';
 import { DataGridDIRFromDIRRow } from "../../../../utils/GlobalTypes";
 import { deleteAllInterpretations, deleteInterpretation, setAllInterpretations, setOutputFilename, updateCurrentFileInterpretations, updateCurrentInterpretation } from "../../../../services/reducers/dirPage";
 import TextField from '@mui/material/TextField';
@@ -19,7 +19,7 @@ import {
   GridValueFormatterParams, 
 } from '@mui/x-data-grid';
 import { useTheme } from '@mui/material/styles';
-import DIROutputDataTableToolbar from "../../../Sub/DataTable/Toolbar/DIROutputDataTableToolbar";
+import DIROutputDataTableToolbar from "../../../Common/DataTable/Toolbar/DIROutputDataTableToolbar";
 
 const OutputDataTableDIR: FC = () => {
   

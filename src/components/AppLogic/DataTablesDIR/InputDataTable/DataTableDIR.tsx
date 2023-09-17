@@ -6,12 +6,12 @@ import DataTablePMDSkeleton from './DataTableDIRSkeleton';
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
 import { setSelectedDirectionsIDs, setHiddenDirectionsIDs, setReversedDirectionsIDs } from "../../../../services/reducers/dirPage";
 import { GetDataTableBaseStyle } from "../styleConstants";
-import PMDInputDataTableToolbar from "../../../Sub/DataTable/Toolbar/PMDInputDataTableToolbar";
+import PMDInputDataTableToolbar from "../../../Common/DataTable/Toolbar/PMDInputDataTableToolbar";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { StatisticsModeDIR } from "../../../../utils/graphs/types";
 import DataTableDIRSkeleton from "./DataTableDIRSkeleton";
-import DIRInputDataTableToolbar from "../../../Sub/DataTable/Toolbar/DIRInputDataTableToolbar";
+import DIRInputDataTableToolbar from "../../../Common/DataTable/Toolbar/DIRInputDataTableToolbar";
 import SwapVertRoundedIcon from '@mui/icons-material/SwapVertRounded';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 

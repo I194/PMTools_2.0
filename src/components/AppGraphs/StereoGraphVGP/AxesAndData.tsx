@@ -1,4 +1,6 @@
 import React, { FC } from "react";
+import { useTheme } from '@mui/material/styles';
+import { Cutoff } from "../../../utils/GlobalTypes";
 import { DotsData, GraphSettings, MeanDirection, TooltipDot } from "../../../utils/graphs/types";
 import { graphSelectedDotColor } from "../../../utils/ThemeConstants";
 import { Axis, Data, Dot } from "../../Common/Graphs";
@@ -23,6 +25,7 @@ interface IAxesAndData {
   };
   selectedIDs: Array<number>;
   inInterpretationIDs: Array<number>;
+  cutoff?: Cutoff;
   settings: GraphSettings;
 };
 
@@ -32,8 +35,11 @@ const AxesAndData: FC<IAxesAndData> = ({
   dataConstants,
   selectedIDs,
   inInterpretationIDs,
+  cutoff,
   settings,
 }) => {
+
+  const theme = useTheme();
 
   const {
     graphAreaMargin,
@@ -99,7 +105,6 @@ const AxesAndData: FC<IAxesAndData> = ({
           Добавить слушатель можно только к конкретному элементу по типу <circle />
           Потому лучше отрисовывать отдельно каждый <circle /> через map() массива координат
           Однако hover всё равно работать не будет и потому лучше использовать onMouseOver
-          Как раз при этом достигается условие zero-css (я его только что сам придумал, а может и раньше было оно)
       */}
       <g 
         id={`${graphId}-data`}
@@ -114,13 +119,14 @@ const AxesAndData: FC<IAxesAndData> = ({
           type='all'
           labels={labels}
           data={dotsData}
+          connectDots={false}
           directionalData={directionalData}
           tooltipData={tooltipData}
           selectedIDs={selectedIDs}
           inInterpretationIDs={inInterpretationIDs}
           dotFillColor='black'
           differentColors={true}
-          colorsType="light"
+          colorsType={theme.palette.mode}
           settings={settings.dots}
         />
         {
@@ -135,8 +141,9 @@ const AxesAndData: FC<IAxesAndData> = ({
             fillColor={meanDirection.dirData[1] > 0 ? graphSelectedDotColor('mean') : 'white'}
             strokeColor={meanDirection.confidenceCircle?.color || 'black'}
             confidenceCircle={meanDirection.confidenceCircle}
+            cutoffCircle={(cutoff?.enabled && cutoff?.borderCircle?.show) ? meanDirection.cutoffCircle : undefined}
             greatCircle={meanDirection.greatCircle}
-            settings={settings.dots}
+            settings={{...settings.dots, confidenceCircle: true}}
           />
         }
       </g>

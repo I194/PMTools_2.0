@@ -12,12 +12,12 @@ import {
 } from '@mui/x-data-grid';
 import { useTheme } from '@mui/material/styles';
 import { Button } from "@mui/material";
-import SitesInputDataTableToolbar from "../../../Sub/DataTable/Toolbar/SitesInputDataTableToolbar";
+import SitesInputDataTableToolbar from "../../../Common/DataTable/Toolbar/SitesInputDataTableToolbar";
 import calculateVGP from "../../../../utils/statistics/calculation/calculateVGP";
 import useApiRef from "../useApiRef";
 import { setVGPData } from "../../../../services/reducers/dirPage";
 import VGPDataTableSkeleton from "./VGPDataTableSkeleton";
-import VGPDataTableToolbar from "../../../Sub/DataTable/Toolbar/VGPDataTableToolbar";
+import VGPDataTableToolbar from "../../../Common/DataTable/Toolbar/VGPDataTableToolbar";
 
 type VGPRow = {
   id: number;

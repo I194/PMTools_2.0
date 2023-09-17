@@ -1,14 +1,17 @@
 import React, { Suspense, useEffect } from 'react';
 import styles from './App.module.scss';
 import { Route, Routes } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
+import { useAppDispatch, useAppSelector } from '../services/store/hooks';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { MainPageLayout, AppLayout } from '../Layouts';
-import { MainPage, DIRPage, PCAPage, NotFoundPage, WhyPMToolsPage, AuthorsAndHistory } from '../../pages';
-import { useSystemTheme } from '../../utils/GlobalHooks';
-import { setColorMode } from '../../services/reducers/appSettings';
-// import "./gag_components/style.css";
-import {Khokhlov_Gvozdik} from "../../gag_components/khokhlov-gvozdik";
+
+
+import { MainPageLayout, AppLayout } from '../components/Layouts';
+import { MainPage, DIRPage, PCAPage, NotFoundPage, WhyPMToolsPage, AuthorsAndHistory } from '../pages';
+import { useSystemTheme } from '../utils/GlobalHooks';
+import { setColorMode } from '../services/reducers/appSettings';
+
+import {Khokhlov_Gvozdik} from "../gag_components/khokhlov-gvozdik";
+
 function App() {
 
   const dispatch = useAppDispatch();

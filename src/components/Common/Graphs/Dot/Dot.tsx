@@ -7,25 +7,95 @@ import { useTheme } from '@mui/material/styles';
 import { graphSelectedDotColor, primaryColor } from "../../../../utils/ThemeConstants";
 import { createStraightPath } from "../../../../utils/graphs/createPath";
 
+/**
+ * Interface for the Dot component props.
+ * 
+ * Note: All positioning is relative to the top-left corner of the SVG element.
+ *       All units are in pixels unless otherwise stated.
+ */
 interface IDot {
+  /** The x-coordinate of the dot */
   x: number;
+  
+  /** The y-coordinate of the dot */
   y: number;
+  
+  /** Optional radius of the dot */
   r?: number;
+  
+  /** Unique identifier for the dot */
   id: string;
+  
+  /**
+   * The type of the dot. Can be one of:
+   * - 'h': Horizontal
+   * - 'v': Vertical
+   * - 'all': All
+   * - 'mean': Mean
+   * - string: Any custom type
+   */
   type: DotType;
+  
+  /** Text annotation data for the dot */
   annotation: {id: string, label: string};
+  
+  /** Optional tooltip data */
   tooltip?: TooltipDot;
+  
+  /** Whether the dot is selected or not */
   selected?: boolean;
+  
+  /** Whether to show text annotations */
   showText?: boolean;
+  
+  /** The fill color for the dot */
   fillColor: string;
+  
+  /** The stroke color for the dot */
   strokeColor: string;
+  
+  /** Optional stroke width (default is 1) */
   strokeWidth?: number;
+  
+  /**
+   * Optional data for rendering the confidence circle.
+   * PlaneData contains xyData for the coordinates and color for the circle.
+   */
   confidenceCircle?: PlaneData;
+  
+  /**
+   * Optional data for rendering the cutoff circle.
+   * PlaneData contains xyData for the coordinates and color for the circle.
+   */
   cutoffCircle?: PlaneData;
+  
+  /**
+   * Optional data for rendering the great circle.
+   * PlaneData contains xyData for the coordinates and color for the circle.
+   */
   greatCircle?: PlaneData;
+  
+  /**
+   * General settings for the Dot component.
+   * - annotations: Whether to show annotations.
+   * - tooltips: Whether to show tooltips.
+   * - id: Whether to display the ID in the annotation.
+   * - label: Whether to display the label in the annotation.
+   * - confidenceCircle: Whether to render the confidence circle.
+   */
   settings: DotSettings;
 }
 
+/**
+ * A Dot component for rendering various types of graph dots.
+ * 
+ * Note: All positioning is relative to the top-left corner of the SVG element.
+ *       All units are in pixels unless otherwise stated.
+ * 
+ * @param props - The properties of the Dot.
+ * 
+ * @returns The rendered Dot component.
+ */
 const Dot: FC<IDot> = ({
   x, 
   y, 

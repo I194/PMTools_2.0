@@ -3,11 +3,11 @@ import styles from "./ZijdGraph.module.scss";
 import { useAppSelector } from "../../../services/store/hooks";
 import { useGraphSelectableNodesDIR, useGraphSelectedIDs, useDIRGraphSettings } from "../../../utils/GlobalHooks";
 import { Cutoff, IDirData, IGraph, RawStatisticsDIR, VGPData } from "../../../utils/GlobalTypes";
-import { SelectableGraph, GraphSymbols } from "../../Sub/Graphs";
+import { SelectableGraph, GraphSymbols } from "../../Common/Graphs";
 import { stereoAreaConstants } from "./StereoConstants";
 import AxesAndData from "./AxesAndData";
 import getInterpretationIDs from "../../../utils/graphs/formatters/getInterpretationIDs";
-import CoordinateSystem from "../../Sub/Graphs/CoordinateSystem/CoordinateSystem";
+import CoordinateSystem from "../../Common/Graphs/CoordinateSystem/CoordinateSystem";
 import dataToStereoDIR from "../../../utils/graphs/formatters/stereo/dataToStereoDIR";
 import { GraphSettings, TMenuItem } from "../../../utils/graphs/types";
 

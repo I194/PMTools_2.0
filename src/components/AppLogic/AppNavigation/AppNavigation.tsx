@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from "../../../services/store/hooks";
 import { setColorMode } from "../../../services/reducers/appSettings";
 import GitHubIcon from '@mui/icons-material/GitHub';
 import OtherHousesIcon from '@mui/icons-material/OtherHouses';
-import { DefaultIconButton } from "../../Sub/Buttons";
+import { DefaultIconButton } from "../../Common/Buttons";
 import { useTranslation } from "react-i18next";
 import { Menu, MenuItem } from "@mui/material";
 import {Khokhlov_Gvozdik} from "../../../gag_components/khokhlov-gvozdik";

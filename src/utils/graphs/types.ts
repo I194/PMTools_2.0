@@ -26,6 +26,10 @@ export type MeanDirection = {
   tooltip: TooltipDot;
 } | null;
 
+/**
+ * Tooltip data for the Dot component.
+ * NOTE: This type is under revision and subject to change.
+ */
 export type TooltipDot = {
   posX?: number;
   posY?: number;
@@ -91,4 +95,4 @@ export type DirectionDot = {
   tooltip?: TooltipDot;
 }
 
-export type DotsData = DirectionDot[];//Array<{id: number, xyData: [number, number]}>;
+export type DotsData = DirectionDot[];

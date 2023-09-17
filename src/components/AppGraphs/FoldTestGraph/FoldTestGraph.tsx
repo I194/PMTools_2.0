@@ -4,7 +4,7 @@ import { useGraphSelectableNodesPCA, useGraphSelectedIDs, usePMDGraphSettings } 
 import { FoldTestResult, IGraph } from "../../../utils/GlobalTypes";
 import { IPmdData } from "../../../utils/GlobalTypes";
 import dataToMag from "../../../utils/graphs/formatters/mag/dataToMag";
-import { SelectableGraph } from "../../Sub/Graphs";
+import { SelectableGraph } from "../../Common/Graphs";
 import { magAreaConstants } from "./FoldTestConstants";
 import AxesAndData from "./AxesAndData";
 import getInterpretationIDs from "../../../utils/graphs/formatters/getInterpretationIDs";
@@ -16,11 +16,6 @@ export interface IFoldTestGraph extends IGraph {
 }
 
 const FoldTestGraph: FC<IFoldTestGraph> = ({ graphId, width, height, data }) => {
-
-  // ToDo: 
-  // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
-  // 2. zoom&pan
-
   const { menuItems, settings } = usePMDGraphSettings();
 
   const dataConstants = useMemo(() => dataToFoldTest(data, width, height), [data, width, height]);

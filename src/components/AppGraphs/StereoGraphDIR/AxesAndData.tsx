@@ -3,7 +3,7 @@ import { useTheme } from '@mui/material/styles';
 import { Cutoff } from "../../../utils/GlobalTypes";
 import { DotsData, GraphSettings, MeanDirection, TooltipDot } from "../../../utils/graphs/types";
 import { graphSelectedDotColor } from "../../../utils/ThemeConstants";
-import { Axis, Data, Dot } from "../../Sub/Graphs";
+import { Axis, Data, Dot } from "../../Common/Graphs";
 
 interface IAxesAndData {
 graphId: string;

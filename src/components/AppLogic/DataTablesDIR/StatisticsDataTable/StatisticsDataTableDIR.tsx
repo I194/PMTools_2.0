@@ -8,7 +8,7 @@ import { DataGridDIRFromDIRRow, StatisitcsInterpretationFromDIR } from "../../..
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
 import { deleteInterpretation, setAllInterpretations, updateCurrentFileInterpretations, updateCurrentInterpretation } from "../../../../services/reducers/dirPage";
-import DIRStatisticsDataTableToolbar from "../../../Sub/DataTable/Toolbar/DIRStatisticsDataTableToolbar";
+import DIRStatisticsDataTableToolbar from "../../../Common/DataTable/Toolbar/DIRStatisticsDataTableToolbar";
 import equal from "deep-equal"
 import { acitvateHotkeys, deactivateHotkeys } from "../../../../services/reducers/appSettings";
 

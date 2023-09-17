@@ -1,42 +1,35 @@
 import React, { FC, useEffect, useMemo, useState } from "react";
-import styles from "./ZijdGraph.module.scss";
 import { useAppSelector } from '../../../services/store/hooks';
 import { useGraphSelectableNodesPCA, useGraphSelectedIDs, usePMDGraphSettings } from "../../../utils/GlobalHooks";
 import { IGraph, RawStatisticsPCA } from "../../../utils/GlobalTypes";
 import { IPmdData } from "../../../utils/GlobalTypes";
+import { clamp } from "../../../utils";
 import dataToZijd from "../../../utils/graphs/formatters/zijd/dataToZijd";
-import { SelectableGraph, GraphSymbols, Unit} from "../../Sub/Graphs";
-import { zijdAreaConstants } from "./ZijdConstants";
+import { SelectableGraph, GraphSymbols, Unit} from "../../Common/Graphs";
+import { calculateZijdAreaParams } from "./ZijdConstants";
 import AxesAndData from "./AxesAndData";
 import getInterpretationIDs from "../../../utils/graphs/formatters/getInterpretationIDs";
 import { GraphSettings, Pan, TMenuItem } from "../../../utils/graphs/types";
-import CoordinateSystem from "../../Sub/Graphs/CoordinateSystem/CoordinateSystem";
+import CoordinateSystem from "../../Common/Graphs/CoordinateSystem/CoordinateSystem";
 
 export interface IZijdGraph extends IGraph {
   data: IPmdData;
-  menuSettings: {
-    menuItems: TMenuItem[];
+  rightClickMenu: {
+    items: TMenuItem[];
     settings: GraphSettings;
   }
 };
 
-const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data, menuSettings }) => {
-
-  // ToDo: 
-  // 1. менять viewBox в зависимости от размера группы data (horizontal-data + vertical-data) || STOPPED
-  // 2. zoom&pan
-
+export const ZijdGraph = ({ graphId, width, height, data, rightClickMenu: { items, settings } }: IZijdGraph) => {
   const [zoom, setZoom] = useState<number>(1);
   const [pan, setPan] = useState<Pan>({left: 0, top: 0});
 
   const { hotkeys } = useAppSelector(state => state.appSettingsReducer);
-  const { reference, projection, currentInterpretation, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
-  // const { menuItems, settings } = usePMDGraphSettings();
-  const { menuItems, settings } = menuSettings;
+  const { reference, projection, currentInterpretation, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer);
   const selectableNodes = useGraphSelectableNodesPCA(graphId, true);
   const selectedIDs = useGraphSelectedIDs();
 
-  const { viewWidth, viewHeight, ...areaConstants} = useMemo(() => zijdAreaConstants(width, height), [width, height]);
+  const { viewWidth, viewHeight, ...areaConstants} = useMemo(() => calculateZijdAreaParams(width, height), [width, height]);
   const { unitLabel, ...dataConstants } = useMemo(
     () => dataToZijd(
       data, 
@@ -50,12 +43,10 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data, menuSettings 
     ),
   [reference, projection, width, currentInterpretation, data, hiddenStepsIDs, zoom]);
 
-  const inInterpretationIDs = getInterpretationIDs(currentInterpretation, data);
+  const inInterpretationIDs = useMemo(() => getInterpretationIDs(currentInterpretation, data), [currentInterpretation, data]);
 
-  const onWheel = (event: React.WheelEvent<SVGSVGElement>) => {
-    let newZoom = zoom + -event.deltaY / width;
-    if (newZoom < 1) newZoom = 1;
-    if (newZoom > 6) newZoom = 6;
+  const handleWheelZoom = (event: React.WheelEvent<SVGSVGElement>) => {
+    const newZoom = clamp(zoom - event.deltaY / width, 1, 6);
     setZoom(newZoom);
   };
 
@@ -69,26 +60,27 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data, menuSettings 
     const leftHotkey = zijdHotkeys.find(hotkey => hotkey.label === 'Переместиться влево')?.hotkey.code;
     const upHotkey = zijdHotkeys.find(hotkey => hotkey.label === 'Переместиться вверх')?.hotkey.code;
     const downHotkey = zijdHotkeys.find(hotkey => hotkey.label === 'Переместиться вниз')?.hotkey.code;
-    
-    if (altKey && keyCode === leftHotkey) {
-      event.preventDefault();
-      setPan({...pan, left: pan.left - 10});
-    };
-    if (altKey && keyCode === rightHotkey) {
-      event.preventDefault();
-      setPan({...pan, left: pan.left + 10});
-    };
-    if (altKey && keyCode === upHotkey) {
-      event.preventDefault();
-      setPan({...pan, top: pan.top - 10});
-    };
-    if (altKey && keyCode === downHotkey) {
-      event.preventDefault();
-      setPan({...pan, top: pan.top + 10});
+
+    if (!altKey) return;
+    event.preventDefault();
+
+    switch (keyCode) {
+      case leftHotkey:
+        setPan({...pan, left: pan.left - 10});
+        return;
+      case rightHotkey:
+        setPan({...pan, left: pan.left + 10});
+        return;
+      case upHotkey:
+        setPan({...pan, top: pan.top - 10});
+        return;
+      case downHotkey:
+        setPan({...pan, top: pan.top + 10});
+        return;
     };
   };
 
-  const onResetZoomPan = () => {
+  const resetZoomPan = () => {
     setZoom(1);
     setPan({left: 0, top: 0});
   };
@@ -101,13 +93,13 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data, menuSettings 
         height={viewHeight}
         selectableNodes={selectableNodes}
         nodesDuplicated={true}
-        menuItems={menuItems}
+        menuItems={items}
         extraID={data.metadata.name}
-        onWheel={onWheel}
+        onWheel={handleWheelZoom}
         hotkeysListener={handleHotkeysPan}
         currentPan={pan}
         currentZoom={zoom}
-        onResetZoomPan={onResetZoomPan}
+        onResetZoomPan={resetZoomPan}
         graphName={`${data.metadata.name}_zijd_pca`}
       >
         <g>
@@ -136,6 +128,4 @@ const ZijdGraph: FC<IZijdGraph> = ({ graphId, width, height, data, menuSettings 
       </SelectableGraph>
     </>
   )
-}
-
-export default ZijdGraph;
+};

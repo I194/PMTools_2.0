@@ -7,7 +7,7 @@ import {
 } from '../../utils/ThemeConstants';
 import PMToolsChartsLight from '../../assets/pmtools_charts_light.riv';
 import PMToolsChartsDark from '../../assets/pmtools_charts_dark.riv';
-import { DynamicLogo, NavPanel, About, Description, FeatureCards, Footer } from '../../components/MainPage';
+import { DynamicLogo, NavPanel, About, Description, FeatureCards, Paper } from '../../components/MainPage';
 import { Typography } from '@mui/material';
 
 const MainPage: FC = ({}) => {
@@ -36,6 +36,7 @@ const MainPage: FC = ({}) => {
         <Rive src={PMToolsChartsDark} />
       </div>
       <About />
+      <Paper />
       <Description />
       <FeatureCards />
     </>

@@ -5,30 +5,83 @@ import { createStraightPath } from "../../../../utils/graphs/createPath";
 import { DotsData, DotSettings, DotType, TooltipDot } from "../../../../utils/graphs/types";
 import DotTooltip from "../Tooltip/DotTooltip";
 
+/**
+ * Interface for the Data component props.
+ * 
+ * Note: All positioning is relative to the top-left corner of the SVG element.
+ *       All units are in pixels unless otherwise stated.
+ */
 interface IData {
+  /** Unique identifier for the graph containing this data */
   graphId: string;
+  
+  /** Type of the data (DotType) */
   type: DotType;
+  
+  /** Optional labels for the data points */
   labels?: Array<string>;
+  
+  /** Array of data points (DotsData) */
   data: DotsData;
+  
+  /** Whether to connect the dots with a line */
   connectDots?: boolean;
+  
+  /** Whether to show individual dots */
   showDots?: boolean;
+  
+  /** Optional directional data for the dots */
   directionalData?: Array<[number, number]>;
+  
+  /** Optional tooltip data for the dots */
   tooltipData?: Array<TooltipDot>;
+  
+  /** IDs of selected dots */
   selectedIDs: Array<number>;
+  
+  /** IDs of dots in interpretation */
   inInterpretationIDs: Array<number>;
+  
+  /** Optional custom color for highlighted dots */
   dotHighlightedColor?: string;
+  
+  /** Default fill color for dots */
   dotFillColor: string;
-  differentColors?: boolean; 
+  
+  /** Whether to use different colors for dots */
+  differentColors?: boolean;
+  
+  /** Optional custom style for the connecting path */
   pathStyle?: {
     stroke?: string;
     strokeWidth?: number;
     fill?: string;
     strokeDasharray?: string;
   };
+  
+  /** Light or dark color scheme */
   colorsType?: 'light' | 'dark';
+  
+  /** General settings for all dots (the Dot component)
+   * - annotations: Whether to show annotations.
+   * - tooltips: Whether to show tooltips.
+   * - id: Whether to display the ID in the annotation.
+   * - label: Whether to display the label in the annotation.
+   * - confidenceCircle: Whether to render the confidence circle.
+   */
   settings: DotSettings;
 }
 
+/**
+ * Data component for rendering a set of data points in a graph.
+ * 
+ * Note: All positioning is relative to the top-left corner of the SVG element.
+ *       All units are in pixels unless otherwise stated.
+ * 
+ * @param props - The properties of the data.
+ * 
+ * @returns The rendered Data component.
+ */
 const Data: FC<IData> = ({
   graphId,
   type,
