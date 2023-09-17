@@ -4,7 +4,7 @@ import { useGraphSelectableNodesPCA, useGraphSelectedIDs, usePMDGraphSettings } 
 import { IDirData, IGraph } from "../../../utils/GlobalTypes";
 import { IPmdData } from "../../../utils/GlobalTypes";
 import dataToMag from "../../../utils/graphs/formatters/mag/dataToMag";
-import { SelectableGraph } from "../../Sub/Graphs";
+import { SelectableGraph } from "../../Common/Graphs";
 import getInterpretationIDs from "../../../utils/graphs/formatters/getInterpretationIDs";
 import { useAppSelector } from "../../../services/store/hooks";
 import { GraphSettings, TMenuItem } from "../../../utils/graphs/types";
