@@ -435,20 +435,6 @@ export function make_coords(points: number[][]){
     return s;
 }
 
-export function lambertPoints(points: number[][], fish_dir: number[]){
- 
-
-    var result = [];
-    for (var i = 0; i < points.length; i++)
-    {
-        let mass3d = convertToLambert(points[i], fish_dir)
-        result.push([String(mass3d[0]), String(mass3d[1])]);
-    }
-
-    return result;
-
-}
-
 
 export function lineSphereIntersect(v: number[]) {
 
@@ -479,7 +465,7 @@ export function lineSphereIntersect(v: number[]) {
 
 
 export function convertToLambert(v: number[], fish_dir: number[]) {
-    let my_perp = get_perp([0, 0, 1], fish_dir);
+    // let my_perp = get_perp([0, 0, 1], fish_dir);
     return lineSphereIntersect(v);
 }
 
@@ -612,8 +598,51 @@ export function poly_contour(points_mass: number[][], center: number[])
     return result;
 }
 
+export function getViewBoxSize(dirMass: number[][], anglesMass: number[], lambertCenter: number[])
+{
+    let xMax: number;
+    let xMin: number;
+    let yMax: number;
+    let yMin: number;
 
+    let max: number = 0;
 
+    for (let i = 0; i < dirMass.length; i ++){
+        
+        xMax = convertToLambert(RotateAroundY(dirMass[i], anglesMass[i]), lambertCenter)[0];
+        xMin = convertToLambert(RotateAroundY(dirMass[i], -anglesMass[i]), lambertCenter)[0];
+        yMax = convertToLambert(RotateAroundX(dirMass[i], anglesMass[i]), lambertCenter)[1];
+        yMin = convertToLambert(RotateAroundX(dirMass[i], -anglesMass[i]), lambertCenter)[1];
+
+        
+        if (Math.abs(xMax) > max) {
+          max = Math.abs(xMax);
+        }
+        if (Math.abs(xMin) > max) {
+          max = Math.abs(xMin);
+        }
+        if (Math.abs(yMax) > max) {
+          max = Math.abs(yMax);
+        }
+        if (Math.abs(yMin) > max) {
+          max = Math.abs(yMin);
+        }
+    }
+
+    let padding = 0.01;
+
+    let viewBoxSize: string = String(-max - padding) + ' ';
+    viewBoxSize += String(-max - padding) + ' ';
+    viewBoxSize += String(2 * (max + padding)) + ' ';
+    viewBoxSize += String(2 * (max + padding));
+
+    return viewBoxSize;
+}
+
+export function getPointSize(viewBoxSize: string){
+    let boxHeight =  parseFloat(viewBoxSize.split(' ')[3]) / 350;
+    return boxHeight;
+}
 
 
 

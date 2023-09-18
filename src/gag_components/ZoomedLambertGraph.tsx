@@ -4,7 +4,11 @@ import { useTheme } from '@mui/material/styles';
 import { Cutoff } from "../utils/GlobalTypes";
 import { DotsData, GraphSettings, MeanDirection, TooltipDot } from "../utils/graphs/types";
 import { graphSelectedDotColor } from "../utils/ThemeConstants";
-// import { Axis, Data, Dot } from "../components/Sub/Graphs";
+import { Axis, Data, Dot } from "../components/Common/Graphs";
+
+
+// import Graphs from '../pages/DIRPage/Graphs';
+// import { Rumbs } from "./rumbs";
 
 
 import {
@@ -17,11 +21,11 @@ import {
     lambertMass,
     to_center,
     points_dist_2d,
-    lambertPoints
+    getViewBoxSize,
+    getPointSize
 } from "./gag_functions";
 
 
-import AxesAndData from "../components/AppGraphs/StereoGraphDIR/AxesAndData"
 
 
 interface HGGraph {
@@ -38,31 +42,6 @@ interface HGGraph {
     showRumbs: boolean,
     showPolygon: boolean,
 }
-
-
-interface IAxesAndData {
-    graphId: string;
-      width: number;
-      height: number;
-      areaConstants: {
-        graphAreaMargin: number;
-        zeroX: number;
-        zeroY: number;
-        unit: number;
-        unitCount: number;
-      };
-      dataConstants: {
-        labels: Array<string>;
-        dotsData: DotsData;
-        directionalData: Array<[number, number]>;
-        tooltipData: Array<TooltipDot>;
-        meanDirection: MeanDirection;
-      };
-      selectedIDs: Array<number>;
-      inInterpretationIDs: Array<number>;
-      cutoff?: Cutoff;
-      settings: GraphSettings;
-    }
 
 
 
@@ -84,10 +63,19 @@ export function ZoomedLambertGraph({
 
     const centerZoneColor = '#2b3bb3';
     let plotPointsCount = 150; 
-    let circlesRadius = 0.001;
-    let gridRadius = 0.0015;
-    let centerZoneRadius = 0.0045;
-    let viewBoxSize = '-0.25 -0.25 0.5 0.5'
+
+
+    dirList = centering(dirList, meanDir);
+    let viewBoxSize = getViewBoxSize(dirList, angleList, meanDir);
+    
+
+    let circlesRadius = getPointSize(viewBoxSize);
+    let gridRadius = circlesRadius;
+    let centerZoneRadius = 3 * circlesRadius;
+    let fisherRadius = 2.5 * circlesRadius;
+    let alphaCircleWidth = 1.5 * circlesRadius;
+
+    // to see all sphere
     // viewBoxSize = '-1 -1 2 2';
 
     if (angleList[0] == 0) {
@@ -97,6 +85,9 @@ export function ZoomedLambertGraph({
         </div>
       );
     }
+
+
+
 
     //---------------------------------------------------------------------------------------
     // CENTER ZONE
@@ -108,15 +99,14 @@ export function ZoomedLambertGraph({
     // SMALL CIRCLES
     //---------------------------------------------------------------------------------------
 
-    let smallCircles: string[][] = [];
-    let circle: string[][] = [];
-
+    let smallCircles: number[][] = [];
+    let circle: number[][] = [];
 
     for (let i = 0; i < dirList.length; i++) {
         
-        circle = lambertPoints(
+        circle = lambertMass(
                         PlotCircle(
-                            to_center(dirList[i], meanDir), 
+                            dirList[i], 
                             angleList[i], 
                             plotPointsCount
                         ), 
@@ -130,7 +120,7 @@ export function ZoomedLambertGraph({
     // SPGERAL GRID
     //---------------------------------------------------------------------------------------
     
-    let gridPointsCentered = lambertPoints(centering(gridPoints, meanDir), meanDir);
+    let gridPointsCentered = lambertMass(centering(gridPoints, meanDir), meanDir);
 
     //---------------------------------------------------------------------------------------
     // POLYGON ZONE
@@ -142,7 +132,14 @@ export function ZoomedLambertGraph({
     let circlePoint = [];
 
     for (let i = 0; i < dirList.length; i++) {
-          circlePoint = lambertMass(PlotCircle(to_center(dirList[i], meanDir), angleList[i], circlePointsToCalculateCount), meanDir);
+          circlePoint = lambertMass(
+                            PlotCircle(
+                                dirList[i], 
+                                angleList[i], 
+                                circlePointsToCalculateCount
+                            ), 
+                            meanDir
+                        );
 
         for (let j = 0; j < circlePoint.length; j++){
             circlePoints.push(circlePoint[j]);
@@ -197,23 +194,22 @@ export function ZoomedLambertGraph({
     // RUMBS
     //---------------------------------------------------------------------------------------
     
-    // ToDo: Вообще все тут удалить (что связано с румбами). Происходят какие то непонятные преобразования, хотя стоит лишь
-    // взять компонент Axis и настроить его под себя. В качестве примера смотри на 
+    // ToDo: Вообще все тут удалить (что связано с румбами). Происходят 
+    // какие то непонятные преобразования, хотя стоит лишь
+    // взять компонент Axis и настроить его под себя. В качестве 
+    // примера смотри на 
     // components/AppGraphs/StereoGraphDIR/AxesAndData.tsx
 
     //---------------------------------------------------------------------------------------
     // making fisher stat
     //---------------------------------------------------------------------------------------
 
-    // ToDo: перейти на использование уже подгтовленных компонентов для графиков, в частности тут надо использовать Dot
+    // ToDo: перейти на использование уже подгтовленных компонентов для графиков, 
+    // в частности тут надо использовать Dot
     // в этой директории ищи: components/Sub/Graphs/
-    // Использование компонента Dot сразу даст тебе и тултип, и круг доверия (он опциональный), и в целом единый стиль со всем приложением
+    // Использование компонента Dot сразу даст тебе и тултип, и 
+    // круг доверия (он опциональный), и в целом единый стиль со всем приложением
 
-    //---------------------------------------------------------------------------------------
-    // making alpha95 circle
-    //---------------------------------------------------------------------------------------
-    
-    // ToDo: убрать, как только заменишь на Dot (см. выше)
 
     //---------------------------------------------------------------------------------------
     // RETURN
@@ -242,62 +238,71 @@ export function ZoomedLambertGraph({
 
             {/* Спиральный грид в зоне пересечения */}
             { showGrid && gridPointsCentered.map((gridPoints) => (
-                <circle
-                    r={ gridRadius }
-                    cx={ gridPoints[0] }
-                    cy={ gridPoints[1] }
-                    fill={ gridColor }
+                <Dot 
+                    x={gridPoints[0]} 
+                    y={gridPoints[1]} 
+                    r={gridRadius}
+                    id={'1'} 
+                    type={'mean'}
+                    annotation={{id: '', label: ''}}
+                    fillColor={gridColor}
+                    strokeColor={'purple'}
+                    strokeWidth={0}
                 />
             ))}
 
+
+
             {/* Круги вокруг палеонаправлений */}
             { smallCircles.map((circles) => (
-                <circle 
-                    r={ circlesRadius } 
-                    cx={ circles[0] } 
-                    cy={ circles[1] } 
-                    fill={"black"}
-
+                <Dot 
+                    x={circles[0]} 
+                    y={circles[1]} 
+                    r={circlesRadius}
+                    id={'1'} 
+                    type={'mean'}
+                    annotation={{id: '', label: ''}}
+                    fillColor={"black"}
+                    strokeColor={'purple'}
+                    strokeWidth={0}
                 />
             ))}    
      
             {/* Истинное направление по фишеру (удалю когда сравню результаты) */}
-            <circle
-                r={0.0035}
-                cx={ to_center(meanDir, meanDir)[0] }
-                cy={ to_center(meanDir, meanDir)[1] }
-                fill={'red'}
+            <Dot 
+                x={to_center(meanDir, meanDir)[0]} 
+                y={to_center(meanDir, meanDir)[1]} 
+                r={fisherRadius}
+                id={'1'} 
+                type={'mean'}
+                annotation={{id: '', label: ''}}
+                fillColor={'red'}
+                strokeColor={'purple'}
+                strokeWidth={0}
             />
+
 
             {/* Круг альфа 95 */}
             <polyline 
                 points={ make_coords(PlotCircle([0, 0, 1], alpha95, 90)) } 
                 stroke={ "red" }
                 fill={'none'}
-                strokeWidth={"0.0016px"} 
+                strokeWidth={alphaCircleWidth} 
                 strokeDasharray={"0.01px, 0.003px"}
             />
 
             {/* Истинное направление по Хохлову */}
-            <circle 
-                r={ centerZoneRadius } 
-                cx={ rotationCenterZone[0] }
-                cy={ rotationCenterZone[1] }
-                fill={ centerZoneColor }
+            <Dot 
+                x={rotationCenterZone[0]} 
+                y={rotationCenterZone[1]} 
+                r={centerZoneRadius}
+                id={'1'} 
+                type={'mean'}
+                annotation={{id: '', label: ''}}
+                fillColor={centerZoneColor}
+                strokeColor={'purple'}
+                strokeWidth={0}
             />
-
-
-            {/* <AxesAndData 
-              graphId={'54325432543'}
-              width={0.5}
-              height={0.5}
-              areaConstants={}
-              dataConstants={}
-              selectedIDs={}
-              inInterpretationIDs={}
-              cutoff={}
-              settings={}
-            /> */}
 
         </svg>
     );

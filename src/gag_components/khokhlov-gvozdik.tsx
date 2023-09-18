@@ -240,7 +240,7 @@ export function Khokhlov_Gvozdik() {
  
     // Функция для загрузки SVG
     const handleDownloadSVG = () => {
-        const svgElement = document.querySelector('.svg.graph_interface');
+        const svgElement = document.querySelector('.graph_interface');
         if (!svgElement) {
             console.error('SVG element not found');
             return;
