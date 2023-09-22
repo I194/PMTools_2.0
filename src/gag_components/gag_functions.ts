@@ -120,24 +120,35 @@ export function getRandomfloat(min: number, max: number) {
     return Math.random() * (max - min) + min;
 }
 
-export function DekVgeo(x: number, y: number, z: number)
+export function DekVgeo(point: number[])
 {
-    var R = 1;
-    var phi = Math.asin(z / R) * 180 / Math.PI;
-    var lmbd = Math.atan(y / x) * 180 / Math.PI;
+    let x = point[0];
+    let y = point[1];
+    let z = point[2];
+
+    let R = 1;
+    let phi = Math.asin(z / R) * 180 / Math.PI;
+    let lmbd = Math.atan(y / x) * 180 / Math.PI;
     return [phi, lmbd];
 }
 
-export function GeoVdek(r: number, fphi: number, flmbd: number)
+
+export function GeoVdek(phiAngle: number, lmbdAngle: number)
 {
-    let phi = fphi * Math.PI / 180;
-    let lmbd = flmbd * Math.PI / 180;
-    let X = r * Math.cos(phi) * Math.cos(lmbd);
-    var Y = r * Math.cos(phi) * Math.sin(lmbd);
-    var Z = r * Math.sin(phi);
-    var C = RotateAroundV([X, Y, Z], [1,0,0], 90);
+    let r: number = 1;
+    let phi: number = phiAngle * Math.PI / 180;
+    let lmbd: number = lmbdAngle * Math.PI / 180;
+
+    let X: number = r * Math.cos(phi) * Math.cos(lmbd);
+    let Y: number = r * Math.cos(phi) * Math.sin(lmbd);
+    let Z: number = r * Math.sin(phi);
+    
+    let C: number[] = RotateAroundV([X, Y, Z], [1,0,0], 90);
     return C;
 }
+
+
+
 
 export function vector_length(v:number[]) { return Math.sqrt( v[0] * v[0] + v[1] * v[1] + v[2] * v[2] ); }
 
@@ -289,34 +300,7 @@ export function PlotCircle(dir: number[], phi: number, circle_points_numb: numbe
     //-------------------------------------------------------------------
     //plot solid line
     //-------------------------------------------------------------------
-
-    if ((direction[0] == -1 || direction[0] == 1) && direction[1] == 0 && direction[2] == 0){
-        var xp = 0;
-        var yp = 1;
-        var zp = 1;
-        var perp = NormalizeV([xp, yp, zp]);
-    }
-    else if (direction[0] == 0 && (direction[1] == -1 || direction[1] == 1) && direction[2] == 0){
-        var xp = 1;
-        var yp = 0;
-        var zp = 1;
-        var perp = NormalizeV([xp, yp, zp]);
-    }
-    else if (direction[0] == 0 && direction[1] == 0 && (direction[2] == 1 || direction[2] == -1)){
-        var xp = 1;
-        var yp = 1;
-        var zp = 0;
-        var perp = NormalizeV([xp, yp, zp]);
-    }
-    else {
-        var xp = 0.0001;
-        var yp = 0.0001;
-        var zp = (-1) * (direction[0] * xp + direction[1] * yp) / direction[2];
-        var perp = NormalizeV([xp, yp, zp]);
-    }
-
-    var my_point = direction;
-    my_point = RotateAroundV(my_point, perp, phi);
+    let my_point = getOneCirclePoint(direction, phi);
 
     var points4 = [];
 
@@ -598,7 +582,7 @@ export function poly_contour(points_mass: number[][], center: number[])
     return result;
 }
 
-export function getViewBoxSize(dirMass: number[][], anglesMass: number[], lambertCenter: number[])
+export function getViewBoxSize(dirMass: number[][], anglesMass: number[], lambertCenter: number[], padding:number)
 {
     let xMax: number;
     let xMin: number;
@@ -629,7 +613,7 @@ export function getViewBoxSize(dirMass: number[][], anglesMass: number[], lamber
         }
     }
 
-    let padding = 0.01;
+
 
     let viewBoxSize: string = String(-max - padding) + ' ';
     viewBoxSize += String(-max - padding) + ' ';
@@ -645,6 +629,131 @@ export function getPointSize(viewBoxSize: string){
 }
 
 
+export function getOnePointInCenteredBox(dir: number[], phi:number, viewBoxSize: string){
+
+    let calcPointsNumb = 180;
+    dir = NormalizeV(dir);
+
+    let my_point = getOneCirclePoint(dir, phi);
+
+    let window: number = -parseFloat(viewBoxSize.split(' ')[0]);
+
+    let leftLimit: number = -window;
+    let rightLimit: number = window;
+    let topLimit: number = window;
+    let bottomLimit: number = -window;
+
+    let onePoint: number[] = [];
+
+    // find one point in window using big step
+    for ( let i = 0; i < calcPointsNumb; i ++ ) {
+        my_point = RotateAroundV(my_point, dir, 360 / calcPointsNumb);
+        
+        if (my_point[1] < topLimit && 
+            my_point[1] > bottomLimit && 
+            my_point[0] < rightLimit && 
+            my_point[0] > leftLimit && 
+            my_point[2] > 0) {
+                
+            onePoint = my_point;
+            break;
+        }
+        
+    }
+    return onePoint;
+}
+
+
+
+export function PlotArcInBox(dir: number[], phi:number, viewBoxSize: string, circlePointsNumb: number)
+{
+  
+    let points = [];
+    dir = NormalizeV(dir);
+    let window: number = -parseFloat(viewBoxSize.split(' ')[0]);
+
+    let leftLimit: number = -window;
+    let rightLimit: number = window;
+    let topLimit: number = window;
+    let bottomLimit: number = -window;
+
+    let onePoint: number[] = getOnePointInCenteredBox(dir, phi, viewBoxSize);
+
+    // rotate one point in + with little step
+    let rotPoint: number[] = onePoint;
+
+    while (
+        rotPoint[1] < topLimit && 
+        rotPoint[1] > bottomLimit && 
+        rotPoint[0] < rightLimit && 
+        rotPoint[0] > leftLimit && 
+        rotPoint[2] > 0
+        ) {
+
+        rotPoint = RotateAroundV(rotPoint, dir, -360 / circlePointsNumb);
+        points.push( rotPoint );
+    }
+
+    points.reverse();
+
+    // rotate one point in - with little step
+    rotPoint = onePoint;
+
+    while (
+        rotPoint[1] < topLimit && 
+        rotPoint[1] > bottomLimit && 
+        rotPoint[0] < rightLimit && 
+        rotPoint[0] > leftLimit && 
+        rotPoint[2] > 0
+        ) {
+
+        rotPoint = RotateAroundV(rotPoint, dir, 360 / circlePointsNumb);              
+        points.push( rotPoint );
+    }
+    return points;
+}
+
+
+
+
+
+export function getOneCirclePoint(dir: number[], phi:number){
+
+    let direction = NormalizeV(dir);
+
+    let xp: number;
+    let yp: number;
+    let zp: number;
+    let perp: number[];
+
+    if ((direction[0] == -1 || direction[0] == 1) && direction[1] == 0 && direction[2] == 0){
+        xp = 0;
+        yp = 1;
+        zp = 1;
+        perp = NormalizeV([xp, yp, zp]);
+    }
+    else if (direction[0] == 0 && (direction[1] == -1 || direction[1] == 1) && direction[2] == 0){
+        xp = 1;
+        yp = 0;
+        zp = 1;
+        perp = NormalizeV([xp, yp, zp]);
+    }
+    else if (direction[0] == 0 && direction[1] == 0 && (direction[2] == 1 || direction[2] == -1)){
+        xp = 1;
+        yp = 1;
+        zp = 0;
+        perp = NormalizeV([xp, yp, zp]);
+    }
+    else {
+        xp = 0.0001;
+        yp = 0.0001;
+        zp = (-1) * (direction[0] * xp + direction[1] * yp) / direction[2];
+        perp = NormalizeV([xp, yp, zp]);
+    }
+
+
+    return RotateAroundV(direction, perp, phi);
+}
 
 
 
@@ -652,6 +761,106 @@ export function getPointSize(viewBoxSize: string){
 
 
 
+
+
+
+export function centerToBack(input: number[], dir: number[]){
+    let point = input;
+    dir = NormalizeV(dir);
+
+    if (dir[0] >= 0 && dir[1] >= 0 && dir[2] >= 0) {
+
+        let diryrot = RotateAroundY(dir, -angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+        let xrot = RotateAroundX(point, -angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+        let yrot = RotateAroundY(xrot, angle_between_v([0, 0, 1], [dir[0], 0,dir[2]]) * 180 / Math.PI);
+        point = yrot;
+    }
+
+    if (dir[0] >= 0 && dir[1] >= 0 && dir[2] <= 0) {
+
+        let diryrot = RotateAroundY(dir, -(0 + angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI));
+        let xrot = RotateAroundX(point, -angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+        let yrot = RotateAroundY(xrot, (0 + angle_between_v([0, 0, 1], [dir[0], 0,dir[2]]) * 180 / Math.PI));
+        point = yrot;
+
+    }
+
+    if (dir[0] >= 0 && dir[1] <= 0 && dir[2] <= 0) {
+        let diryrot = RotateAroundY(dir, -(0 + angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI));
+        let xrot = RotateAroundX(point, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+        let yrot = RotateAroundY(xrot, (0 + angle_between_v([0, 0, 1], [dir[0], 0,dir[2]]) * 180 / Math.PI));
+        point = yrot;
+    }
+
+    if (dir[0] >= 0 && dir[1] <= 0 && dir[2] >= 0) {
+        let diryrot = RotateAroundY(dir, -angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+        let xrot = RotateAroundX(point, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+        let yrot = RotateAroundY(xrot, angle_between_v([0, 0, 1], [dir[0], 0,dir[2]]) * 180 / Math.PI);
+        point = yrot;
+    }
+
+    if (dir[0] <= 0 && dir[1] >= 0 && dir[2] >= 0) {
+        let diryrot = RotateAroundY(dir, angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+        let xrot = RotateAroundX(point, -angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+        let yrot = RotateAroundY(xrot, -angle_between_v([0, 0, 1], [dir[0], 0,dir[2]]) * 180 / Math.PI);
+        point = yrot;
+    }
+    if (dir[0] <= 0 && dir[1] <= 0 && dir[2] >= 0) {
+        let diryrot = RotateAroundY(dir, angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI);
+        let xrot = RotateAroundX(point, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+        let yrot = RotateAroundY(xrot, -angle_between_v([0, 0, 1], [dir[0], 0,dir[2]]) * 180 / Math.PI);
+        point = yrot;
+    }
+    if (dir[0] <= 0 && dir[1] >= 0 && dir[2] <= 0) {
+        let diryrot = RotateAroundY(dir, (0 + angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI));
+        let xrot = RotateAroundX(point, -angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+        let yrot = RotateAroundY(xrot, -(0 + angle_between_v([0, 0, 1], [dir[0], 0,dir[2]]) * 180 / Math.PI));
+        point = yrot;
+    }
+    if (dir[0] <= 0 && dir[1] <= 0 && dir[2] <= 0) {
+        let diryrot = RotateAroundY(dir, (0 + angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI));
+        let xrot = RotateAroundX(point, angle_between_v(diryrot, [0, 0, 1]) * 180 / Math.PI);
+        let yrot = RotateAroundY(xrot, -(0 + angle_between_v([0, 0, 1], [dir[0], 0,dir[2]]) * 180 / Math.PI));
+        point = yrot;
+    }
+
+    return point;
+}
+
+
+
+// эта функция рисует меридиан по парпендикуляру к плоскости меридиана. точки совпадают с градусной сеткой
+export function plotMeridianCircle(dir: number[], pointsCount: number){
+
+    dir = NormalizeV(dir);
+    let point = [0, 0, 1];
+    let res: number[][] = [point];
+    
+    for (let i = 0; i < pointsCount; i++){
+        point = RotateAroundX(point, 360 / pointsCount)
+        res.push(point);
+    }
+
+    for (let i = 0; i < pointsCount; i++){
+        res[i] = RotateAroundY(res[i], angle_between_v(dir, [0, 0, 1]) * 180 / Math.PI)
+        res.push(point);
+    }
+    return res;
+}
+
+// эта функция рисует паралель по точке, принадлежащейе паралали. точки совпадают с градусной сеткой
+export function plotParalellCircle(dir: number[], pointsCount: number){
+    dir = NormalizeV(dir);
+    
+    let point = RotateAroundX([0, 0, 1], angle_between_v([dir[0], 0, dir[2]], [dir[0], dir[1], dir[2]]) * 180 / Math.PI);
+    let res: number[][] = [point];
+    
+    for (let i = 0; i < pointsCount; i++){
+        point = RotateAroundY(point, 360 / pointsCount)
+        res.push(point);
+    }
+    return res;
+}
 
 
 

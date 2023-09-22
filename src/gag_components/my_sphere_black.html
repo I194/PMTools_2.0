@@ -256,14 +256,28 @@
       var point = [0, 0, 1];
       PlotCircle(point, 90, scene, 0x00849C, 0);
 
-      for ( var i = 0; i < 19; i ++ ) {
-          point = RotateAroundV(point, [0, 1, 0], 10);
+      var mers = 18;
+      var paralels = 18;
+
+
+      for ( var i = 0; i < mers; i ++ ) {
+          point = RotateAroundV(point, [0, 1, 0], 360 / mers);
           PlotCircle(point, 90, scene, 0x00849C, 0);
         }
 
-      for ( var i = 0; i < 19; i ++ ) {
+      for ( var i = 0; i < paralels; i ++ ) {
           PlotCircle([0, 1, 0], i * 10, scene, 0x00849C, 0);
         }
+
+        function DekVgeo(x, y, z)
+        {
+            var R = 1;
+            var phi = Math.asin(z / R) * 180 / Math.PI;
+            var lmbd = Math.atan(y / x) * 180 / Math.PI;
+            return [phi, lmbd];
+        }
+
+
 
 
       //-----------------------------------------------------------------------
@@ -384,8 +398,8 @@
       }
 
 
-     // find new basis
-     function test(center, sign_numb, my_var) {
+
+
       var green = 0x0f87a;
       var red = 0xFF5454;
       var blue = 0xaaaa;
@@ -393,157 +407,16 @@
       var pink = 0xeb34eb;
 
 
-      if (sign_numb == 1) {
-        var my_sign = [1,1,1];
-      }
-      if (sign_numb == 2) {
-        var my_sign = [1,-1,1];
-      }
-      if (sign_numb == 3) {
-        var my_sign = [1,1,-1];
-      }
-      if (sign_numb == 4) {
-        var my_sign = [1,-1,-1];
-      }
-      if (sign_numb == 5) {
-        var my_sign = [-1,1,1];
-      }
-      if (sign_numb == 6) {
-        var my_sign = [-1,-1,1];
-      }
-      if (sign_numb == 7) {
-        var my_sign = [-1,1,-1];
-      }
-      if (sign_numb == 8) {
-        var my_sign = [-1,-1,-1];
-      }
-
-      //  basis
-      var x_axis = [1,0,0];
-      var y_axis = [0,1,0];
-      var z_axis = [0,0,1];
-      var basis = [x_axis, y_axis, z_axis];
-
-      var x_axis1 = get_perp(y_axis, center);
-      var y_axis1 = get_perp(center, x_axis1);
-      var z_axis1 = center;
-      var new_basis1 = [x_axis1, y_axis1, z_axis1];
-
-      linePlot([x_axis1, [0,0,0], y_axis1, [0,0,0], z_axis1, [0,0,0]], purple);
+      // dotPlot(, red);
 
 
-      var x_axis2 = RotateAroundX( z_axis, -angle_between(center, y_axis) * 180 / Math.PI );
-      var x_axis2 = [my_sign[0] * x_axis2[0], my_sign[0] * x_axis2[1], my_sign[0] * x_axis2[2]];
+      // linePlot([x_axis, [0,0,0], y_axis, [0,0,0], z_axis, [0,0,0]], red);
+      dotPlot([1,0,0], red);
+      console.log(DekVgeo(1, 0, 0));
 
-      var y_axis2 = RotateAroundV( x_axis, x_axis2, angle_between(x_axis1, x_axis) * 180 / Math.PI  );
-      var y_axis2 = [my_sign[1] * y_axis2[0], my_sign[1] * y_axis2[1], my_sign[1] * y_axis2[2]];
+      dotPlot(RotateAroundY([1,0,0], 10), green);
 
-      var z_axis2 = get_perp(x_axis2, y_axis2);
-      var z_axis2 = [my_sign[2] * z_axis2[0], my_sign[2] * z_axis2[1], my_sign[2] * z_axis2[2]];
-
-      var new_basis2 = [z_axis2, x_axis2, y_axis2];
-
-      if (my_var == 1){var new_basis2 = [ z_axis2, x_axis2, y_axis2];}
-      if (my_var == 2){var new_basis2 = [ z_axis2, y_axis2, x_axis2];}
-      if (my_var == 3){ var new_basis2 = [ y_axis2, x_axis2, z_axis2];}
-      if (my_var == 4){var new_basis2 = [ y_axis2, z_axis2, x_axis2];}
-      if (my_var == 5){var new_basis2 = [ x_axis2, z_axis2, y_axis2];}
-      if (my_var == 6){var new_basis2 = [ x_axis2, y_axis2, z_axis2];}
-
-      linePlot([x_axis2, [0,0,0], y_axis2, [0,0,0], z_axis2, [0,0,0]]);
-
-      dotPlot(convertPoint(center, new_basis2), pink);
-
-      dotPlot(convertPoint(dot1, new_basis2), pink);
-      dotPlot(convertPoint(dot2, new_basis2), pink);
-      dotPlot(convertPoint(dot3, new_basis2), pink);
-      dotPlot(convertPoint(dot4, new_basis2), pink);
-
-    }
-
-      var green = 0x0f87a;
-      var red = 0xFF5454;
-      var blue = 0xaaaa;
-      var purple = 0xa834eb;
-      var pink = 0xeb34eb;
-
-      //  basis
-      var x_axis = [1,0,0];
-      var y_axis = [0,1,0];
-      var z_axis = [0,0,1];
-      var basis = [x_axis, y_axis, z_axis];
-
-
-      dotPlot(x_axis, red);
-      dotPlot(y_axis, red);
-      dotPlot(z_axis, red);
-
-
-      linePlot([x_axis, [0,0,0], y_axis, [0,0,0], z_axis, [0,0,0]], red);
-
-
-      var center = NormalizeV([-1,-1,-1]);
-
-      var dot1 = RotateAroundX( center, 5);
-      var dot2 = RotateAroundY( center, 5);
-      var dot3 = RotateAroundZ( center, 5);
-      var dot4 = RotateAroundV( center, [1, 0, 1], 5);
-
-      // +++
-      if (center[0] > 0 && center[1] > 0 && center[2] > 0) { test(center, 2, 1) }
-      // +-+
-      if (center[0] > 0 && center[1] < 0 && center[2] > 0) { test(center, 2, 1) }
-      // ++-
-      if (center[0] > 0 && center[1] > 0 && center[2] < 0) { test(center, 1, 1) }
-      // +--
-      if (center[0] > 0 && center[1] < 0 && center[2] < 0) { test(center, 1, 1) }
-      // -++  [-1,1,1] 5 
-      if (center[0] < 0 && center[1] > 0 && center[2] > 0) { test(center, 3, 3)}
-      // --+ 
-      if (center[0] < 0 && center[1] < 0 && center[2] > 0) { test(center, 3, 3) }
-      // -+-
-      if (center[0] < 0 && center[1] > 0 && center[2] < 0) { test(center, 3, 3) }
-      // ---
-      if (center[0] < 0 && center[1] < 0 && center[2] < 0) { test(center, 3, 3) }
-      
-      // 000
-
-      // 0--
-      // 0+-
-      // 0-+
-      // 0++
-
-      // 00-
-      // 00+
-
-      // 0-0
-      // 0+0
-
-      // -00
-      // +00
-      
-      // -0-
-      // +0-
-      // -0+
-      // +0+
-
-      // --0
-      // +-0
-      // -+0
-      // ++0
-
-
-
-
-
-      dotPlot(center, green);
-
-      dotPlot(dot1, blue);
-      dotPlot(dot2, blue);
-      dotPlot(dot3, blue);
-      dotPlot(dot4, blue);
-
-
+      console.log(DekVgeo(RotateAroundY([1,0,0], 10)[0], RotateAroundY([1,0,0], 10)[1], RotateAroundY([1,0,0], 10)[2]));
       //-----------------------------------------------------------------------
 	    // render anim
       //-----------------------------------------------------------------------

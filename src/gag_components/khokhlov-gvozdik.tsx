@@ -12,7 +12,8 @@ import {
     angle_between_v,
     fisherStat,
     getRandomInt,
-    get_quantiles
+    get_quantiles,
+    DekVgeo
     } from "./gag_functions";
 
 import HelpCenterOutlinedIcon from '@mui/icons-material/HelpCenterOutlined';
@@ -58,8 +59,7 @@ export function Khokhlov_Gvozdik() {
             new_ang_list.push(quantiles[step_list[i] - 3]);
         }
         setAngleList(new_ang_list);
-        console.log('angles changed');
-        console.log(new_ang_list);
+
 
     }, [selectedD, apc, selectedP, dir_number, step_list]);
 
@@ -101,11 +101,11 @@ export function Khokhlov_Gvozdik() {
         var step = 0;
 
         var random_dir = NormalizeV( [ getRandomfloat(0, 1), getRandomfloat(0, 1), getRandomfloat(0, 1) ] );
-        var random_angle = getRandomfloat(0, 180);
+        var random_angle = getRandomfloat(-180, 180);
 
         for ( var i = 0; i < dir_number; i ++ ) {
 
-            paleo_data = GeoVdek(1, random_list[i * 2], random_list[i * 2 + 1])
+            paleo_data = GeoVdek(random_list[i * 2], random_list[i * 2 + 1])
             paleo_data = NormalizeV(RotateAroundV(paleo_data, random_dir, random_angle));
             step = getRandomInt(6, quantiles.length);
 
@@ -114,7 +114,8 @@ export function Khokhlov_Gvozdik() {
 
             //------------------------fix------------------------
             
-            // paleo_data = NormalizeV([-1 + getRandomfloat(0, 0.2), -1 + getRandomfloat(0, 0.2), -1  + getRandomfloat(0, 0.2)]);
+            paleo_data = NormalizeV([0.0 + getRandomfloat(0.01, 1), 0.0 + getRandomfloat(0.01, 1), 0.0 + getRandomfloat(0.01, 1)]);
+            // paleo_data = NormalizeV([0.00001, 0.10001, 1]);
             dir_list.push([paleo_data[0], paleo_data[1], paleo_data[2]]);
         }
 
@@ -188,7 +189,7 @@ export function Khokhlov_Gvozdik() {
         x = (i * phi - Math.round(i * phi)) * 360;
         y = (i / points_numb - Math.round(i / points_numb)) * 360;
 
-        m = GeoVdek(1, x, y);
+        m = GeoVdek(x, y);
 
 
         for (var j = 0; j < dir_list.length; j++ )
@@ -308,6 +309,10 @@ export function Khokhlov_Gvozdik() {
                 <br></br>
                 {sred_dir[2]}
                 <br></br>
+
+                {DekVgeo(sred_dir)[0].toFixed(2)}
+                <br></br>
+                {DekVgeo(sred_dir)[1].toFixed(2)}
 
             </div>
             <div className="table2_container common-container">
