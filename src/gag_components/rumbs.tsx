@@ -1,9 +1,14 @@
 import React, { FC } from "react";
 import { useTheme } from '@mui/material/styles';
-import { Cutoff } from "../../../utils/GlobalTypes";
-import { DotsData, GraphSettings, MeanDirection, TooltipDot } from "../../../utils/graphs/types";
-import { graphSelectedDotColor } from "../../../utils/ThemeConstants";
-import { Axis, Data, Dot } from "../../Common/Graphs";
+// import { Cutoff } from "../../../utils/GlobalTypes";
+// import { DotsData, GraphSettings, MeanDirection, TooltipDot } from "../../../utils/graphs/types";
+// import { graphSelectedDotColor } from "../../../utils/ThemeConstants";
+// import { Axis, Data, Dot } from "../../Common/Graphs";
+
+import { Cutoff } from "../utils/GlobalTypes";
+import { DotsData, GraphSettings, MeanDirection, TooltipDot } from "../utils/graphs/types";
+import { graphSelectedDotColor } from "../utils/ThemeConstants";
+import { Axis, Data, Dot } from "../components/Common/Graphs";
 
 interface IAxesAndData {
 graphId: string;
@@ -29,7 +34,7 @@ graphId: string;
   settings: GraphSettings;
 };
 
-const AxesAndData: FC<IAxesAndData> = ({ 
+const Rumbs: FC<IAxesAndData> = ({ 
   graphId, width, height,
   areaConstants,
   dataConstants,
@@ -151,4 +156,4 @@ const AxesAndData: FC<IAxesAndData> = ({
   )
 }
 
-export default AxesAndData
+export default Rumbs
