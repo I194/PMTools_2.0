@@ -12,7 +12,8 @@ import {
     angle_between_v,
     fisherStat,
     getRandomInt,
-    get_quantiles
+    get_quantiles,
+    DekVgeo
     } from "./gag_functions";
 
 import HelpCenterOutlinedIcon from '@mui/icons-material/HelpCenterOutlined';
@@ -105,7 +106,7 @@ export function Khokhlov_Gvozdik() {
 
         for ( var i = 0; i < dir_number; i ++ ) {
 
-            paleo_data = GeoVdek(1, random_list[i * 2], random_list[i * 2 + 1])
+            paleo_data = GeoVdek(random_list[i * 2], random_list[i * 2 + 1])
             paleo_data = NormalizeV(RotateAroundV(paleo_data, random_dir, random_angle));
             step = getRandomInt(6, quantiles.length);
 
@@ -188,7 +189,7 @@ export function Khokhlov_Gvozdik() {
         x = (i * phi - Math.round(i * phi)) * 360;
         y = (i / points_numb - Math.round(i / points_numb)) * 360;
 
-        m = GeoVdek(1, x, y);
+        m = GeoVdek(x, y);
 
 
         for (var j = 0; j < dir_list.length; j++ )
@@ -307,6 +308,11 @@ export function Khokhlov_Gvozdik() {
                 {sred_dir[1]}
                 <br></br>
                 {sred_dir[2]}
+                <br></br>
+                <br></br>
+                {DekVgeo(sred_dir)[0].toFixed(2)}
+                <br></br>
+                {DekVgeo(sred_dir)[1].toFixed(2)}
                 <br></br>
 
             </div>

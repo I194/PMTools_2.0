@@ -9,6 +9,8 @@ import { Axis, Data, Dot } from "../components/Common/Graphs";
 
 // import Graphs from '../pages/DIRPage/Graphs';
 // import { Rumbs } from "./rumbs";
+import { DegreeGrid } from "../gag_components/degreeGrid";
+
 
 
 import {
@@ -66,14 +68,20 @@ export function ZoomedLambertGraph({
 
 
     dirList = centering(dirList, meanDir);
-    let viewBoxSize = getViewBoxSize(dirList, angleList, meanDir);
-    
+    let viewBoxSize = getViewBoxSize(dirList, angleList, meanDir, 0.65);
+    let fullViewBoxSize = viewBoxSize;
+    // let fullViewBoxSize = getViewBoxSize(dirList, angleList, meanDir, 0.5);
+
+    let parallelsCount = 18;
+    let meridianCount = 18;
 
     let circlesRadius = getPointSize(viewBoxSize);
     let gridRadius = circlesRadius;
     let centerZoneRadius = 3 * circlesRadius;
     let fisherRadius = 2.5 * circlesRadius;
     let alphaCircleWidth = 1.5 * circlesRadius;
+
+
 
     // to see all sphere
     // viewBoxSize = '-1 -1 2 2';
@@ -174,14 +182,14 @@ export function ZoomedLambertGraph({
 
     let point = [1, 0, 0];
 
-    let meridianCount = 18;
+
     for (let i = 0; i < meridianCount; i++) {
         point = RotateAroundV(point, [0, 1, 0], 360/ meridianCount );
         const meridian = lambertMass(centering(PlotCircle(point, 90, 90), meanDir), meanDir);
         degreeGrid.push(make_coords(meridian));
     }
 
-    let parallelsCount = 18;
+
     for (let i = 0; i < parallelsCount; i++) {
         const parallel = lambertMass(centering(PlotCircle([0, 1, 0], i * (360 / meridianCount), 90), meanDir), meanDir);
         degreeGrid.push(make_coords(parallel));
@@ -216,8 +224,16 @@ export function ZoomedLambertGraph({
     //---------------------------------------------------------------------------------------
     
     return (
-        <svg className="graph_interface" viewBox={ viewBoxSize }>
+        <svg className="graph_interface" viewBox={ fullViewBoxSize }>
+ 
+            <DegreeGrid
+                viewBoxSize={viewBoxSize}
+                meridianCount={meridianCount}
+                parallelsCount={parallelsCount}
+                meanDir={meanDir}
+            />
 
+            
             {/* Градусная сетка */}
             { showDegreeGrid && degreeGrid.map((circles) => (
                 <polyline 
@@ -227,6 +243,7 @@ export function ZoomedLambertGraph({
                     strokeWidth={"0.0005px"} 
                 />
             ))}
+
 
             {/* Закраска зоны пересечения кругов */}
             { showPolygon && 
