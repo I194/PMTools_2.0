@@ -68,9 +68,9 @@ export function ZoomedLambertGraph({
 
 
     dirList = centering(dirList, meanDir);
-    let viewBoxSize = getViewBoxSize(dirList, angleList, meanDir, 0.65);
+    let viewBoxSize = getViewBoxSize(dirList, angleList, meanDir, 0.1);
     let fullViewBoxSize = viewBoxSize;
-    // let fullViewBoxSize = getViewBoxSize(dirList, angleList, meanDir, 0.5);
+    // let fullViewBoxSize = getViewBoxSize(dirList, angleList, meanDir, 0);
 
     let parallelsCount = 18;
     let meridianCount = 18;
@@ -226,23 +226,17 @@ export function ZoomedLambertGraph({
     return (
         <svg className="graph_interface" viewBox={ fullViewBoxSize }>
  
-            <DegreeGrid
-                viewBoxSize={viewBoxSize}
-                meridianCount={meridianCount}
-                parallelsCount={parallelsCount}
-                meanDir={meanDir}
-            />
-
-            
             {/* Градусная сетка */}
-            { showDegreeGrid && degreeGrid.map((circles) => (
-                <polyline 
-                    points={ circles } 
-                    stroke={ "grey" }
-                    fill={'none'}
-                    strokeWidth={"0.0005px"} 
+            { showDegreeGrid && 
+                <DegreeGrid
+                    viewBoxSize={viewBoxSize}
+                    meridianCount={meridianCount}
+                    parallelsCount={parallelsCount}
+                    meanDir={meanDir}
                 />
-            ))}
+            }
+
+
 
 
             {/* Закраска зоны пересечения кругов */}

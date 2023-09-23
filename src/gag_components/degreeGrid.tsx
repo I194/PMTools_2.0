@@ -49,7 +49,7 @@ export function DegreeGrid({
     // RAM
     //---------------------------------------------------------------------------------------
     
-    let width = -viewBoxSize.split(' ')[0] * 0.4 ;
+    let width = -viewBoxSize.split(' ')[0] * 0.8 ;
 
     let ram = String(width) + ',' + String(width) + ' ';
     ram += String(width) + ',' + String(-width) + ' ';
@@ -146,17 +146,6 @@ export function DegreeGrid({
     //---------------------------------------------------------------------------------------
     
         
-    let degreeGrid: string[] = [];
-
-    
-    
-    // for (let i = 0; i < parallelsCount; i++) {
-    //     const parallel = PlotCircle([0, 1, 0], i * (360 / meridianCount), 90);
-    //     degreeGrid.push(make_coords(parallel));
-    // }
-
-    // let paralel = PlotCircle([0, 0, 1], 90, 90);
-    // degreeGrid.push(make_coords(paralel));
 
 
     let paralelsInBox = [];
@@ -166,83 +155,56 @@ export function DegreeGrid({
     let endParCords: number[][] = [];
 
     let degreeParLabelsShift: number[] = [0, 0];
-
-    let brownLabels:number[][] = [];
-    let brownPoints: number[][] = [];
     
     let parTicks: number[][][] = [];
 
     let parPoint: number[];
     let parTicksSift: number;
 
-    point = [1, 0, 0];
 
-    // for (let i = 0; i < parallelsCount / 2; i++) {
-    //     point = RotateAroundV(point, [0, 1, 0], 360 / parallelsCount );
-    //     let centeredMeridian = PlotArcInBox(to_center(point, meanDir), 90, width, 3000);
+    for (let i = 1; i < parallelsCount / 2; i++) {
+
+        let centeredParallel: number[][] = PlotArcInBox(to_center([0, 1, 0], meanDir), i * (360 / meridianCount), width, 1000);
        
-    //     if (centeredMeridian.length > 5){
+        if (centeredParallel.length > 5){
             
-    //         if (centeredMeridian[0][1] > centeredMeridian[2][1]) {
-    //             centeredMeridian.reverse();
-    //         }
+            if (centeredParallel[0][0] > centeredParallel[2][0]) {
+                centeredParallel.reverse();
+            }
             
-    //         paralelsInBox.push(make_coords(centeredMeridian ));
+            paralelsInBox.push(make_coords(centeredParallel ));
+
+            parPoint = centeredParallel[0];
+            degreeParLabelsShift = [-width/ 4, width/ 35];
+            parTicksSift = width / 25;
 
 
-    //         if (meanDir[1] < 0) {
-    //             parPoint = centeredMeridian[centeredMeridian.length - 1];
-    //             degreeParLabelsShift = [-width/ 15, width/ 8];
-    //             parTicksSift = width / 25;
-    //         }
-    //         else{
-    //             parPoint = centeredMeridian[0];
-    //             degreeParLabelsShift = [-width/ 15, -width/ 20];
-    //             parTicksSift = -width / 30;
-    //         }
-    //         endParCords.push(parPoint);
-            
-            
+            endParCords.push(parPoint);
 
-    //         if (parPoint[0] < -width * 0.95 || parPoint[0] > width * 0.95){
+            if (parPoint[1] < -width * 0.95 || parPoint[1] > width * 0.95){
 
-    //             parPoint = centerToBack(parPoint, meanDir);
+                parPoint = centerToBack(parPoint, meanDir);
+                degreeParLabels.push([1000, 1000]);
+            }
+            else {
+                parTicks.push(
+                    [
+                        parPoint, 
+                        [
+                            parPoint[0] - parTicksSift, 
+                            parPoint[1], 
+                            parPoint[2]
+                        ]
+                    ]
+                );
 
-    //             brownLabels.push(DekVgeo(parPoint));
-    //             degreeParLabels.push([1000, 1000]);
-    //         }
-    //         else {
+                parPoint = centerToBack(parPoint, meanDir);
+                degreeParLabels.push(DekVgeo(parPoint));
+            }
 
-    //             parTicks.push(
-    //                 [
-    //                     parPoint, 
-    //                     [
-    //                         parPoint[0], 
-    //                         parPoint[1] + parTicksSift, 
-    //                         parPoint[2]
-    //                     ]
-    //                 ]
-    //             );
+        }
 
-    //             parPoint = centerToBack(parPoint, meanDir);
-
-    //             brownLabels.push(DekVgeo(parPoint));
-    //             degreeParLabels.push(DekVgeo(parPoint));
-    //         }
-
-    //         brownPoints.push(parPoint);
-
-
-    //         // не отцетрированное окно
-    //         let meridian = [];
-    //         for (let j = 0; j < centeredMeridian .length; j ++){
-    //             meridian.push(centerToBack(centeredMeridian [j], meanDir));
-    //         }
-    //         paralels.push(make_coords(meridian));
-
-    //     }
-
-    // }
+    }
 
     //---------------------------------------------------------------------------------------
     // RETURN
@@ -260,18 +222,6 @@ export function DegreeGrid({
                 stroke={ "black" }
                 fill={'none'}
                 strokeWidth={width / 100} 
-            />
-
-            <Dot 
-                x={meanDir[0]} 
-                y={meanDir[1]} 
-                r={width / 40}
-                id={'1'} 
-                type={'mean'}
-                annotation={{id: '', label: '45, 45'}}
-                fillColor={'red'}
-                strokeColor={'purple'}
-                strokeWidth={0}
             />
 
             {/* ------------------------------------------- */}
@@ -309,12 +259,11 @@ export function DegreeGrid({
                 />
             ))}
 
-
             {/* ------------------------------------------- */}
-            {/* ------------------PARALLELS---------------- */}
+            {/* ------------------PARALLELS--------------- */}
             {/* ------------------------------------------- */}
             
-            { meridiansInBox.map((circles) => (
+            { paralelsInBox.map((circles) => (
                 <polyline 
                     points={ circles } 
                     stroke={ "grey" }
@@ -327,11 +276,11 @@ export function DegreeGrid({
             <PointsWithLabels
                 points={endParCords}
                 radius={0}
-                type={"lon"}
-                labelsValues={degreeMerLabels}
+                type={"lat"}
+                labelsValues={degreeParLabels}
                 fontSize={width / 12}
-                xShift={degreeMerLabelsShift[0]}
-                yShift={degreeMerLabelsShift[1]}
+                xShift={degreeParLabelsShift[0]}
+                yShift={degreeParLabelsShift[1]}
             />
 
 
@@ -342,41 +291,6 @@ export function DegreeGrid({
                     stroke={ "black" }
                     fill={'none'}
                     strokeWidth={width / 80} 
-                />
-            ))}
-
-            {/* ------------------------------------------- */}
-            {/* ------------------PARALLELS2--------------- */}
-            {/* ------------------------------------------- */}
-
-            {/* не повернутые точки на паралелях в внутри окна */}
-            <PointsWithLabels
-                points={brownPoints}
-                radius={width / 20}
-                color={"brown"}
-                labelsValues={brownLabels}
-                type={'lon'}
-                fontSize={width / 12}
-                xShift={width / 20}
-                yShift={width / 20}
-            />
-            
-            {/* Паралели */}
-            { degreeGrid.map((circles) => (
-                <polyline 
-                    points={ circles } 
-                    stroke={ "grey" }
-                    fill={'none'}
-                    strokeWidth={width / 230} 
-                />
-            ))}
-
-            { paralels.map((circles) => (
-                <polyline 
-                    points={ circles } 
-                    stroke={ "green" }
-                    fill={'none'}
-                    strokeWidth={width / 20} 
                 />
             ))}
 
