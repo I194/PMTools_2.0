@@ -1,0 +1,376 @@
+{
+  "mainLayout": {
+    "navPanel": {
+      "whyPMTools": "Why PMTools?",
+      "PCA": "Magnetic treatment (PCA)",
+      "DIR": "Directional statistics (DIR)",
+      "projectRepo": "Project repository",
+      "authorsAndHistory": "Authors and history"
+    },
+    "footer": {
+      "rights": "© 2022 PMTools 2.0. All rights reserved.",
+      "license": "The product is supplied under the MIT license."
+    }
+  },
+  "mainPage": {
+    "about": {
+      "firstLine": "Work with the results of paleomagnetic studies.",
+      "secondLine": "Anytime, anywhere, from any device.",
+      "thirdLine": "Without any data leaks.",
+      "startWork": "Get started"
+    },
+    "description": {
+      "tools": "PMTools is a web application that includes many tools for statistical processing of data obtained during paleomagnetic studies.",
+      "privacy": "PMTools is open source and has no connection to any other applications and servers. All data is stored and processed only on the user's device.",
+      "modules": "PMTools has all the necessary tools for component analysis (PCA module) and vector statistics on the sphere (DIR module).",
+      "table": "PMTools supports the import of data formats such as PMD, DIR, PM. Any tabular data from PMTools can be exported in the same formats. Moreover, it is possible to export data in XLSX and CSV formats.",
+      "graph": "All graphs and diagrams generated during data processing in PMTools can be exported in vector format and have an internal structure perfectly prepared for editing."
+    },
+    "featuresCards": {
+      "pca": {
+        "title": "Perform component analysis",
+        "description": "The Magnetic Treatment Page (PCA) provides classic tools for identifying magnetization components. Work directly with the specimen collection and export the selected directions in any convenient format."
+      },
+      "dir": {
+        "title": "Study the distribution of directions",
+        "description": "The Direction Statistics page (DIR) makes it possible to find mean directions using various methods. And on the same page you can conduct paleomagnetic statistical tests to test your hypotheses."
+      },
+      "vgp": {
+        "title": "Find Virtual Geomagnetic Poles",
+        "description": "To calculate the poles, it is enough to open the corresponding module on the DIR page and simply enter or import the coordinates of the sites (you can even from an XLSX file). And the resulting VGP can be immediately exported in a format suitable for the GPLates and GMap programs."
+      },
+      "selection": {
+        "title": "Interacting with data has never been so easy",
+        "description": "All data in PMTools is presented in the form of tables and graphs that are directly related to each other — you can choose the directions (points) you need directly from the tables, tracing them on the graphs, or simply entering them through a special field."
+      },
+      "exportData": {
+        "title": "Work with data in any format",
+        "description": "The built-in PMTools paleomagnetic data converter allows you to import classic data formats and export them to any convenient format, including Excel (XLSX, CSV)."  
+      },
+      "exportGraphs": {
+        "title": "Forget about any difficulties when working with graphics",
+        "description": "All graphs and diagrams in PMTools are written from scratch specifically for displaying paleomagnetic data — they are all prepared in advance for use in publications and presentations, and when you export them, you will receive an SVG file with a clear and easily editable structure."
+      },
+      "darkTheme": {
+        "title": "Comfortable work at any time",
+        "description": "In PMTools, you can switch to a dark theme and work comfortably in complete darkness."
+      }
+    }
+  },
+  "whyPMToolsPage": {
+    "headline": "PMTools is the latest statistical and visualization software for paleomagnetic data",
+    "importAndExport": {
+      "title": "Data import and export",
+      "lines": {
+        "first": "PMTools allows you to work with formats such as:",
+        "second": "as well as with their structural counterparts in <strong>.csv</strong> and <strong>.xlsx</strong> formats. Moreover, all these formats are available not only for import, but also for export. That is, you can upload your .pmd or .dir file and then export it as .xlsx, thus getting all the benefits of working with data in Microsoft Excel. The reverse is also possible!",
+        "third": "Moreover, you can export calculated Virtual Geomagnetic Poles (VGP) data directly in <strong>.gpml</strong> and <strong>.vgp</strong> formats, which are directly supported by GPlates and GMAP respectively."
+      }
+    },
+    "graphics": {
+      "title": "Graphs and diagrams",
+      "lines": {
+        "first": "All graphs and diagrams obtained while working with data in PMTools are maximally prepared for direct use in articles and presentations. In addition, they are vector and can be easily opened and edited in any vector graphics editor."
+      }
+    },
+    "dataManipulation": {
+      "title": "Data manipulation",
+      "lines": {
+        "first": "Interaction with all imported data in PMTools is based on a simple concept: any direction (point) can be \"selected\". You can select directions (points) directly on the chart, you can choose through the table, or you can even enter their serial numbers in a special input field. Complete freedom of choice!",
+        "second": "At the same time, when interacting with data through graphs, you can conveniently use zoom and pan. And when interacting with tables, you can filter data as you like, by absolutely any columns and with an abundance of conditions."
+      }
+    },
+    "hotkeys": {
+      "title": "Hotkeys",
+      "lines": {
+        "first": "PMTools can be controlled not only through the classic interaction with the graphical interface, but also through the hotkeys, which, for your convenience, were partially borrowed from the R. Enkin software package for OS DOS, and at the same time are editable - you can adjust the controls for yourself!"
+      }
+    }
+  },
+  "authorsAndHistoryPage": {
+    "headline": "Creators of PMTools",
+    "ie": {
+      "whois": "Ivan Efremov is the developer of PMTools.",
+      "about": "More info on the links below."
+    },
+    "rv": {
+      "whois": "Roman Veselovskiy is the initiator of the project and scientific consultant throughout the entire development process.",
+      "about": "Professor of the Russian Academy of Sciences, Doctor of Geological and Mineralogical Sciences, Chief Researcher of the Institute of Physics of the Earth of the Russian Academy of Sciences."
+    },
+    "historybutton": {
+      "show": "I want to see the history of development",
+      "hide": "I don't want to see the history of development"
+    },
+    "history": {
+      "headline": "The history of the PMTools development",
+      "shortdesc": "PMTools was created a little over 2 years, and during this two times it was rewritten from scratch.",
+      "lines": {
+        "first": "It was May 2019. And there was an extremely simple idea - to write a small program that would build streograms based on the results of magnetic treatment. This was necessary, because all the available programs that did this, among other things, exported stereograms that were not particularly convenient for subsequent use, which had to be manually completed for a long time in a graphics editor. For implementation, it was decided to use Python, Matplotlib, Pandas and PyQt5. Here's what the results of a week's work on it looked like:",
+        "second": "Having created this, it became clear that PyQT5 is not suitable for the task at hand, like Matplotlip. Therefore, the search for new ways to accomplish the task began. Variants in Python and C++ were considered. All C++ solutions were overly complex, and it was clear that implementation in this language would take too much time and effort. That's why Python was chosen. After a couple of weeks of searching and analyzing suitable solutions for this, among the libraries and frameworks, the choice fell on Plotly. At that time, this company had in its arsenal the charting library of the same name and the emerging framework for building web applications in Python - Dash. Thus, armed with Plotly and Dash, this was created over the summer of 2019:",
+        "third": "And over the following months, at a slow pace, minor improvements and minor changes were made:",
+        "fourth": "The created program was called PMTools and it was already something more than just a streogram builder. It was already a web application for component analysis, and also provided the ability to calculate the Fisher mean and build a stereogram setup, and a small paleomagnetic calculator was also created. However, it quickly became clear that this was not the final product, but rather an alpha version.",
+        "fifth": "Until the summer of 2020, it was necessary to decide how to make the next version of PMTools. It was clear that creating something really functional with Plotly and Dash would be difficult, as customizing all the built-in charts and other components would be too extensive, and sometimes even impossible. It was decided to write the next version in pure JavaScript. A similar web application from Palaomagnetism.org was taken as a guide. To speed up the development of graphics part, it was decided to build using ready-made tools, an analysis was made of various libraries and frameworks for building charts in JavaScript, as a result, the HighCharts library was chosen. At the same time, the researchers for whom PMTools was created asked to make it desktop, independent of the Internet connection. And so it was decided to use Electron. By the summer's end, this was created",
+        "sixth": "The new version of PMTools already made it possible to carry out a full cycle of paleomagnetic operations: component analysis, direction statistics, and calculation of poles. It was desktop and independent of internet connection. This version of PMTools has already been actively used by researchers. The version has been marked as beta.",
+        "seventh": "However, there were performance issues. Here it is worth noting that although it was 2020/2021, nevertheless, the jQuery library was widely used in PMTools and at the same time there were attempts to implement modularity, which, alas, did not was successful due to architectural problems at all levels of the program. Further, the author had, in a sense, a sabbatical:",
+        "eighth": "After this vacation, it was decided to rewrite PMTools on the TypeScript / React / Redux stack, make it a full-fledged web application and temporarily abandon the idea of ​​a desktop application. In the period from February 2021 to May 2022, PMTools was created from scratch on the specified technology stack, while it was decided to make all the charts on our own, without using any libraries to build them, since it was with such an implementation that full control over the display of data was achieved. As a result, in May 2022, PMTools v.2.0 was released."
+      }
+    }
+  },
+  "appLayout": {
+    "settings": {
+      "settings": "Settings",
+      "help": "Help",
+      "import": "Import file"
+    },
+    "navPanel": {
+      "PCA": "Magnetic treatment",
+      "DIR": "Directional statistics",
+      "projectRepo": "Project repository",
+      "mainPage": "Main page"
+    },
+    "dropFiles": "Drop files"
+  },
+  "importModal": {
+    "import": "Import files",
+    "useExample": "Or use an example",
+    "useDnD": "Or use drag and drop",
+    "close": "Close"
+  },
+  "pcaPage": {
+    "metadataModal": {
+      "apply": "Apply"
+    },
+    "tools": {
+      "currentFile": {
+        "title": "Current file"
+      },
+      "coordinateSystem": {
+        "title": "Coordinate system"
+      },
+      "statMethod": {
+        "title": "Statistics method"
+      },
+      "seeStats": {
+        "title": "Statistics",
+        "label": "By all files"
+      },
+      "visibility": {
+        "title": "Visibility"
+      }
+    }
+  },
+  "dirPage": {
+    "tools": {
+      "currentFile": {
+        "title": "Current file"
+      },
+      "coordinateSystem": {
+        "title": "Coordinate system"
+      },
+      "statMethod": {
+        "title": "Statistics method"
+      },
+      "seeStats": {
+        "title": "Statistics",
+        "label": "By all files"
+      },
+      "visibility": {
+        "title": "Visibility"
+      },
+      "reverse": {
+        "title": "Reverse"
+      },
+      "vgp": {
+        "title": "By all sites",
+        "label": "Calculate VGP"
+      },
+      "tests": {
+        "title": "Hypothesis testing",
+        "label": "Paleomagnetic tests"
+      }
+    }
+  },
+  "settings": {
+    "hotkeys": {
+      "title": "Hotkeys",
+      "buttonAlreadyUsed": "Key already used",
+      "statMethods": {
+        "title": "Statistics methods"
+      },
+      "visibility": {
+        "title": "Dots visibility",
+        "hide": "Hide dots",
+        "show": "Show dots"
+      },
+      "reverse": {
+        "title": "Reverse polarity",
+        "reversed": "Reversed",
+        "normal": "Normal"
+      },
+      "selection": {
+        "title": "Dots selection",
+        "deleteSelection": "Remove selection"
+      },
+      "zoom": {
+        "title": "Graphs zoom and pan",
+        "zoomInOut": "Zoom in/out",
+        "pan": "Pan"
+      },
+      "zijd": {
+        "title": "Zijd diagram manipulation",
+        "right": "Move right",
+        "left": "Move left",
+        "top": "Move up",
+        "bottom": "Move down"
+      },
+      "titles": {
+        "Статистические методы": "Statistics methods", 
+        "PCA": "PCA",
+        "PCA0": "PCA0",
+        "GC": "GC",
+        "GCN": "GCN",
+        "Fisher": "Fisher",
+        "McFadden": "McFadden",
+        "Видимость точек": "Dots visibility",
+        "Скрыть точки": "Hide dots",
+        "Показать точки": "Show dots",
+        "Обращение полярности направлений": "Reverse polarity",
+        "Обратная полярность": "Reversed",
+        "Прямая полярность": "Normal",
+        "Выделение точек": "Dots selection",
+        "Убрать выделение": "Remove selection",
+        "Масштабирование графиков": "Graphs zoom and pan",
+        "Изменение масштаба": "Zoom in/out",
+        "Перемещение области видимости": "Pan",
+        "Управление диграммой Зийдервельда": "Zijd diagram manipulation",
+        "Переместиться вправо": "Move right",
+        "Переместиться влево": "Move left",
+        "Переместиться вверх": "Move up",
+        "Переместиться вниз": "Move down"
+      }
+    },
+    "saveButton": "Save",
+    "toDefaultButton": "To default",
+    "onSaveMessage": "Settings saved",
+    "onDefaulSettings": "Default settings applied"
+  },
+  "inputDirs": {
+    "label": "Enter dots indexes",
+    "helper": "Examples:"
+  },
+  "vgp": {
+    "upload": {
+      "button": "Upload file",
+      "first": "Enter or upload site coordinates",
+      "second": "the file must contain the columns ",
+      "third": "Optional columns are ",
+      "fourth": " they are needed to export to format of "
+    },
+    "dataManipulation": {
+      "clear": "Remove imported",
+      "calculate": "Calculate VGPs"
+    }
+  },
+  "pmtests": {
+    "controls": {
+      "run": "Run",
+      "running": "Processing..."
+    },
+    "foldTest": {
+      "title": "Fold Test (Bootstrap Version)",
+      "first": "The densest grouping of vectors (accuracy, 95% confidence interval) is observed on:",
+      "second": "And the range of all bootstrap generations is as follows:"
+    },
+    "reverseAutoTest": {
+      "title": "Reversal Tests (Automatic)",
+      "first": "Bootstrap reversal test [Tauxe, 2010]",
+      "second": "If the areas within the 95% confidence boundaries (dashed lines) intersect in all three components, the data \"passed\" the reversal test. Otherwise (no intersections), the test failed."
+    },
+    "reverseTest": {
+      "title": "Reversal Test (manual input)",
+      "first": "Calculate",
+      "required": "Required"
+    },
+    "reverseTestResult": {
+      "title": "Classical reversal test [McFadden and McElhinny, 1990]",
+      "tooltip": "Press to copy"
+    },
+    "conglomerateTest": {
+      "title": "Conglomerate Test",
+      "first": "The test is performed automatically against the currently opened file.",
+      "second": "Test result:",
+      "res": "en"
+    }
+  },
+  "graphsInfo": {
+    "generalAdvice": {
+      "title": "General advice",
+      "line1": "If the PMTools controls take up too much space, zoom out on the page using the keyboard shortcut: "
+    },
+    "zijd": {
+      "zoomPan": {
+        "title": "Zoom&Pan",
+        "line1": "2 scaling options available: boundless and normal",
+        "line2": "Boundless zoom",
+        "line3": "Use mouse wheel to zoom",
+        "line4": "Use keys to position",
+        "line5": "Use button to reset",
+        "line6": "Only in this mode the Unit can be changed",
+        "line7": "Normal zoom",
+        "line8": "Use mouse wheel to zoom",
+        "line9": "Press left mouse button to pan "
+      },
+      "selecting": {
+        "title": "Dots selection",
+        "line1": "There are 4 options for selecting dots:",
+        "line2": "Hold the left mouse button and select an area on the chart",
+        "line3": "Left mouse button click on the desired point on the chart",
+        "line4": "Left mouse button click on the desired point (row) in the table",
+        "line5": "Enter dots numbers in the input field*",
+        "line6": "Hint: to combine the first two selection methods or to select the range of points in the table, hold down the key ",
+        "line7": "* Input field appears when using the static method or when hiding points when no points have been selected yet"
+      },
+      "interactiveLegend": {
+        "title": "Interactive legend",
+        "line1": "When you hover over the legend, the corresponding function on the chart changes style, and when you click on the legend element, you can adjust the visibility of the function*",
+        "line2": "* Does not affect the exported graph"
+      }
+    },
+    "stereoAndMagAndStereoDir": {
+      "zoomPan": {
+        "title": "Zoom&Pan",
+        "line1": "Only normal zoom option available",
+        "line2": "Normal zoom",
+        "line3": "Use mouse wheel to zoom",
+        "line4": "For paning, use the left mouse button while holding down the key "
+      },
+      "selecting": {
+        "title": "Dots selection",
+        "line1": "There are 4 options for selecting dots:",
+        "line2": "Hold the left mouse button and select an area on the chart",
+        "line3": "Left mouse button click on the desired point on the chart",
+        "line4": "Left mouse button click on the desired point (row) in the table",
+        "line5": "Enter dots numbers in the input field*",
+        "line6": "Hint: to combine the first two selection methods or to select the range of points in the table, hold down the key ",
+        "line7": "* Input field appears when using the static method or when hiding points when no points have been selected yet"
+      }
+    },
+    "stereoVGP": {
+      "zoomPan": {
+        "title": "Zoom&Pan",
+        "line1": "Only normal zoom option available",
+        "line2": "Normal zoom",
+        "line3": "Use mouse wheel to zoom",
+        "line4": "For paning, use the left mouse button while holding down the key "
+      },
+      "selecting": {
+        "title": "Dots selection",
+        "line1": "There are 2 options for selecting (selecting) points (directions):",
+        "line2": "Hold the left mouse button and select an area on the chart",
+        "line3": "Left mouse button click on the desired point on the chart",
+        "line6": "Hint: to combine the selection methods, hold down the key "
+      }
+    }
+  }
+}
+

@@ -1,6 +1,8 @@
 import React, {createElement as e, useEffect, useState} from 'react';
-import {Zoomed_lambert_graph} from "./zoomed_lambert_graph";
-import {Rotate_sphere} from "./rotate_sphere";
+import {ZoomedLambertGraph} from "./ZoomedLambertGraph";
+import {TooltipContent} from "./my-tooltip";
+
+
 import "./style.css";
 import {
     GeoVdek,
@@ -8,25 +10,19 @@ import {
     NormalizeV,
     RotateAroundV,
     angle_between_v,
-    PlotCircle,
-    make_coords,
-    get_perp,
-    centering,
-    poly_contour,
-    zone_square,
-    convexHull,
-    convertToLambert,
     fisherStat,
-    lambertMass,
-    points_dist_2d,
     getRandomInt,
-    get_quantiles
+    get_quantiles,
+    DekVgeo
     } from "./gag_functions";
 
-
+import HelpCenterOutlinedIcon from '@mui/icons-material/HelpCenterOutlined';
+import Tooltip from '@mui/material/Tooltip';   
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
+import { useMediaQuery } from 'react-responsive';
 
 export function Khokhlov_Gvozdik() {
-
+  
     //-----------------------------------------------------------
     // input data generating
     //-----------------------------------------------------------
@@ -36,35 +32,24 @@ export function Khokhlov_Gvozdik() {
     var max_lat = 0;
     var min_lat = 10;
 
-    // Ваня. проблема в участке кода с 40 по 150 строку. есть кнопка, три тега select(их 4, но первый обособлен и работает нормально) и строчка, которая выводится на экран.
-    // теги select задают значения радиусов кругов, при их переключении должны меняться радиусы кругов, записанные в переменную quantiles,
-    // первые значения quantiles выводятся на экран в виде строчки quantiles=___12.3___... эта строка должна меняться каждый
-    // раз, когда один из этих трех selectов переключаются, но этого не происходит при первом переключении любого select.
-    // при повторном переключении тега select, quantiles меняются на те значения, которые должны были высветиться при предыдущем переключении тега.
-    // Ваня. эти хуки работают корректно.
-    // Ваня. массив с количеством шагов размагничивания, случайное количество
+   
     const [step_list, setStepList] = useState<number[]>([]);
-    // Ваня. массив с направлениями == координаты центров кругов, случайные направления, расположенные примерно рядом
+
     const [dir_list, setDirList] = useState<[number, number, number][]>([]);
-    // Ваня. количество генерируемых образцов, случайное число
+
     const [dir_number, setDirNumb] = useState<number>(0);
 
-    // Ваня. c этими хуками возникают проблемы.
-    // Ваня. эти три значения задаются выбором в тегах select, и на их основе задается массив quantiles
+
     const [apc, setSelectedAPC] = useState<number>(0);
     const [selectedP, setSelectedP] = useState<number>(990);
     const [selectedD, setSelectedD] = useState<number>(10);
 
-    // Ваня. это массивы с радиусами кругов. quantiles - таблицные значения, получаемые из функции первые 5 значений выводятся на экран
+
     const [quantiles, setQuantiles] = useState<number[]>([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
-    // angle_list - массив с углами для каждого образца, рассчитывается из quantiles и step_list.
+
 	const [angle_list, setAngleList] = useState<number[]>([]);
 
-    // сеттеры в React работают асинхронно, вот тут детали работы указаны https://react.dev/reference/react/useState#setstate-caveats
-    // из-за этого поведения, когда ты пытался вызвать setQuantiles и setAngleList внутри handleDChange и других хэндлеров, у тебя еще не
-    // успевало обновиться состояние setSelectedD (аналогичное с двумя другими сеттерами) и потому ты наблюдал такое поведение
-    // useEffect как раз придуман для реагирования на асинхронные изменения в коде*
-    // *все что я тут написал может быть совсем иначе написано в документации и где либо в сети, это просто моё виденье всего этого процесса
+
     useEffect(() => {
         var quantiles = get_quantiles(selectedD, apc, selectedP);
         setQuantiles(quantiles);
@@ -74,38 +59,32 @@ export function Khokhlov_Gvozdik() {
             new_ang_list.push(quantiles[step_list[i] - 3]);
         }
         setAngleList(new_ang_list);
-        console.log('angles changed')
+        console.log('angles changed');
+        console.log(new_ang_list);
 
     }, [selectedD, apc, selectedP, dir_number, step_list]);
 
-    // Ваня. это select который выбирает параметр d = 10 или 5, для расчета quantiles и angle_list.
-    //  он должен при изменении менять quantiles и angle_list, и на экране менять строчку quantiles=___12.3___...
+
     const handleDChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const number = parseInt(event.target.value);
         setSelectedD(number);
     };
 
 
-    // Ваня. это select который выбирает параметр на 0.99/0.975/0.997..., для расчета quantiles и angle_list.
-    //  он должен при изменении менять quantiles и angle_list, и на экране менять строчку quantiles=___12.3___...
+
     const handlePChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const number = parseInt(event.target.value);
         setSelectedP(number);
     };
 
 
-    // Ваня. это select который выбирает параметр на aPC/PC, для расчета quantiles и angle_list.
-    //  он должен при изменении менять quantiles и angle_list, и на экране менять строчку quantiles=___12.3___...
+
     const handleAPCChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const number = parseInt(event.target.value);
         setSelectedAPC(number);
     };
 
 
-    // Ваня. это кнопка, которая генерирует направления(dir_list), число образцов(dir_number),
-    // количество шагов размагничивания в образцах(step_list) и рассчитывает из quantiles - angle_list
-    // она не меняет quantiles!! она просто генерирует данные, и раздает образцам
-    // радиусы их кругов на основе quantiles.
     const generateRandomNumbers = () => {
         var random_list = [];
         var dir_number = getRandomInt(5, 9 + 1);
@@ -127,13 +106,16 @@ export function Khokhlov_Gvozdik() {
 
         for ( var i = 0; i < dir_number; i ++ ) {
 
-            paleo_data = GeoVdek(1, random_list[i * 2], random_list[i * 2 + 1])
+            paleo_data = GeoVdek(random_list[i * 2], random_list[i * 2 + 1])
             paleo_data = NormalizeV(RotateAroundV(paleo_data, random_dir, random_angle));
             step = getRandomInt(6, quantiles.length);
 
 
             step_list.push(step);
 
+            //------------------------fix------------------------
+            
+            // paleo_data = NormalizeV([-1 + getRandomfloat(0, 0.2), -1 + getRandomfloat(0, 0.2), -1  + getRandomfloat(0, 0.2)]);
             dir_list.push([paleo_data[0], paleo_data[1], paleo_data[2]]);
         }
 
@@ -143,20 +125,25 @@ export function Khokhlov_Gvozdik() {
         setAngleList([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     };
 
-    //-----------------------------------------------------------------------
-    // Ваня. Дальше все работает корректно
-    //-----------------------------------------------------------------------
+
 
     const [isvis, setIsVisible] = useState(true);
     const handleCheckboxChange = () => {
         setIsVisible(!isvis);
     };
 
+    const [isdark, setdark] = useState(true);
+    const DarkTeamChange = () => {
+        setdark(!isdark);
+        const root = document.documentElement;
+        root.classList.toggle('dark', !isdark);
+    };
+
     const [isvisgrid, setisvisgrid] = useState(false);
     const gridCheckboxChange = () => {
         setisvisgrid(!isvisgrid);
     };
-
+    
     const [selectedNumber, setSelectedNumber] = useState<number>(100000);
 
     const handleNumberChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -168,31 +155,14 @@ export function Khokhlov_Gvozdik() {
 
 
 
-    //-----------------------------------------------------------------------
-    //
-    //-----------------------------------------------------------------------
-
-   var table_data = [];
-
-   for (var i = 0; i < dir_number; i++) {
-        table_data.push(
-            {
-                id: i + 1,
-                step_numb: step_list[i],
-                angles: angle_list[i],
-                dir_coords: String(dir_list[i][0]) + "\n" + String(dir_list[i][1]) + "\n" + String(dir_list[i][2]) + "\n"
-            }
-        );
-    }
-
-   let res = table_data.map(function(item) {
-      return <tr key={item.id}>
-         <td>{item.id}</td>
-         <td>{item.step_numb}</td>
-         <td>{item.angles}</td>
-         <td className="coords">{item.dir_coords}</td>
-      </tr>;
-   });
+    const [degree_grid_isvis, setDegree] = useState(true);
+    const degreeCheckboxChange = () => {
+        setDegree(!degree_grid_isvis);
+    };
+    const [rumbs_isvis, setRumbs] = useState(true);
+    const rumbCheckboxChange = () => {
+        setRumbs(!rumbs_isvis);
+    };
 
     //-----------------------------------------------------------------------
     // fisher stat
@@ -213,15 +183,13 @@ export function Khokhlov_Gvozdik() {
     var print_point = 0;
 
     var phi = 0.013;
-
-
-
+    
     for (var i = 0; i < points_numb; i++)
     {
         x = (i * phi - Math.round(i * phi)) * 360;
         y = (i / points_numb - Math.round(i / points_numb)) * 360;
 
-        m = GeoVdek(1, x, y);
+        m = GeoVdek(x, y);
 
 
         for (var j = 0; j < dir_list.length; j++ )
@@ -258,180 +226,229 @@ export function Khokhlov_Gvozdik() {
     //---------------------------------------------------------------------------------------
     // polygon of zone and max radius calculation
     //---------------------------------------------------------------------------------------
+    // import * as React from 'react';
+    // import { saveAs } from 'file-saver';
+    
+    // const exportToEPS = (svgElement: SVGSVGElement) => {
+    //   const svgData = new XMLSerializer().serializeToString(svgElement);
+    
+    //   const canvas = document.createElement('canvas');
+    //   canvas.width = svgElement.clientWidth;
+    //   canvas.height = svgElement.clientHeight;
+    
+    //   const ctx = canvas.getContext('2d');
+    //   const img = new Image();
+    //   const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+    //   const imgURL = URL.createObjectURL(svgBlob);
+    
+    //   img.onload = () => {
+    //     ctx?.drawImage(img, 0, 0);
+    
+    //     const canvasBlob = canvas.toDataURL('image/jpeg');
+    //     const imgData = canvasBlob.replace(/^data:image\/(png|jpeg);base64,/, '');
+    
+    //     const epsData = window.atob(imgData);
+    //     const bufferArray = new Uint8Array(epsData.length);
+    
+    //     for (let i = 0; i < epsData.length; i++) {
+    //       bufferArray[i] = epsData.charCodeAt(i);
+    //     }
+    
+    //     const epsBlob = new Blob([bufferArray.buffer], { type: 'application/postscript' });
+    //     saveAs(epsBlob, 'image.eps');
+    //   };
+    
+    //   img.src = imgURL;
+    // };
+    
+    // const SVGExportButton: React.FC = () => {
+    //   const svgRef = React.useRef<SVGSVGElement>(null);
+    
+    //   const handleExportClick = () => {
+    //     if (svgRef.current) {
+    //       exportToEPS(svgRef.current);
+    //     }
+    //   };
+    
 
-    var rot_center_zone = convertToLambert(center_zone, sred_dir);
-    var calc_circ_points = 720 * 8;
-    var input: [number, number][] = [];
-    var circ_p = [];
-
-    for ( var i = 0; i < dir_list.length; i ++ )
-    {
-        var b = lambertMass(PlotCircle(dir_list[i], angle_list[i], calc_circ_points), sred_dir);
-
-        for (var j = 0; j < b.length; j++){
-            circ_p.push(b[j]);
-        }
-    }
-
-    for ( let i = 0; i < circ_p.length; i ++ )
-    {
-        input.push([circ_p[i][0], circ_p[i][1]]);
-    }
-
-    var poly_points2d = poly_contour(input, [rot_center_zone[0], rot_center_zone[1]]);
-    var poly_points3d = [];
-
-    for ( let i = 0; i < poly_points2d.length; i ++ )
-    {
-        poly_points3d.push([poly_points2d[i][0], poly_points2d[i][1], 1 ]);
-    }
-
-    const polygonPoints = make_coords(poly_points3d);
-
-    var max_rad = -1;
-    for ( let i = 0; i < input.length; i ++ )
-    {
-        if (points_dist_2d(rot_center_zone, input[i]) > max_rad){max_rad = points_dist_2d(rot_center_zone, input[i]);}
-    }
+    
 
     //---------------------------------------------------------------------------------------
     // Interface
     //---------------------------------------------------------------------------------------
 
+    var poly_color = "#AAE1BF";
+    var grid_color = '#16732f';
 
+    var poly_color = "#5badff";
+    var grid_color = '#1975d2';
 
+    
+ 
+    // Функция для загрузки SVG
+    const handleDownloadSVG = () => {
+        const svgElement = document.querySelector('.graph_interface');
+        if (!svgElement) {
+            console.error('SVG element not found');
+            return;
+        }
 
-    var my_props = {
-        center_zone: center_zone,
-        dir_list: dir_list,
-        grid_points: grid_points,
-        angle_list: angle_list,
-        sred_dir: sred_dir
-    };
+        const svgData = new XMLSerializer().serializeToString(svgElement);
 
-    var lambert_zoom_props = {
-        center_zone: center_zone,
-        dir_list: dir_list,
-        angle_list: angle_list,
-        grid_points: grid_points,
-        points_numb: points_numb,
-        sred_dir: sred_dir,
-        alpha95: alpha95,
-        isvis: isvis,
-        isvisgrid: isvisgrid,
-        polygonPoints: polygonPoints
+        const downloadLink = document.createElement('a');
+        const blob = new Blob([svgData], { type: 'image/svg+xml' });
+        const url = URL.createObjectURL(blob);
+
+        downloadLink.href = url;
+        downloadLink.download = 'graph.svg';
+
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        URL.revokeObjectURL(url);
     };
 
     return (
-    <div>
-        <div className="container">
-            <Zoomed_lambert_graph
-                center_zone={center_zone}
-                dir_list={dir_list}
-                angle_list={angle_list}
-                grid_points={grid_points}
-                points_numb={points_numb}
-                sred_dir={sred_dir}
-                alpha95={alpha95}
-                isvis={isvis}
-                isvisgrid={isvisgrid}
-                polygonPoints={polygonPoints}
-            />
-
-            <Rotate_sphere
-                center_zone={center_zone}
-                dir_list={dir_list}
-                angle_list={angle_list}/>
-        </div>
-
-        <div className="container">
-            <h5 className="my_text">Interface</h5>
-            <div className="interface">
-                <select value={selectedNumber} onChange={handleNumberChange}>
-                    <option value={50000}>50 000</option>
-                    <option value={100000}>100 000</option>
-                    <option value={250000}>250 000</option>
-                    <option value={500000}>500 000</option>
-                    <option value={1000000}>1 000 000</option>
-                    <option value={1500000}>1 500 000</option>
-                    <option value={2000000}>2 000 000</option>
-                    <option value={2500000}>2 500 000</option>
-                    <option value={3000000}>3 000 000</option>
-                    <option value={3500000}>3 500 000</option>
-                </select>
-
-
-                <select value={selectedD} onChange={handleDChange}>
-                    <option value={10}>d = 10</option>
-                    <option value={5}>d = 5</option>
-                </select>
-
-                <br/>
-
-                <select value={selectedP} onChange={handlePChange}>
-                    <option value={950}>0.950</option>
-                    <option value={975}>0.975</option>
-                    <option value={990}>0.99</option>
-                </select>
-
-
-                <select value={apc} onChange={handleAPCChange}>
-                    <option value={1}>aPC</option>
-                    <option value={0}>PC</option>
-                </select>
-
-                <br/>
-                <button className="button" onClick={generateRandomNumbers}>Generate Random Numbers</button>
-                <br/>
-
-                <label className="my_input">Zone painting
-                    <input type="checkbox" checked={isvis} onChange={handleCheckboxChange}/>
-                    <span className="checkmark"></span>
-                </label>
-
-                <label className="my_input">Grid painting
-                    <input type="checkbox" checked={isvisgrid} onChange={gridCheckboxChange}/>
-                    <span className="checkmark"></span>
-                </label>
-
-                <b>The percentage of the zone from the sphere:</b>
-                {" " + String((zone_square(grid_points.length, points_numb) * 100).toFixed(3))}%.
-                <br/>
-                <b>Maxium radius of the zone: </b>{max_rad.toFixed(3)}
-
-                <br/>
-                <b>&#945;95: </b>{alpha95.toFixed(3)}
-
-                <br/>
+        <div className="main_container">
+            <h3 className="low-screen">Размер окна должен быть не меньше чем 720x560</h3>
+            <div className="graph_container common-container">
+                <Tooltip className="my-tooltip" title={<TooltipContent 
+                    type={'graph'}
+                    sred_dir={sred_dir}
+                    center_zone={center_zone}
+                    dir_list={dir_list}
+                    angle_list={angle_list}
+                />} arrow>               
+                    <HelpCenterOutlinedIcon className='graph-tooltip'/>
+                </Tooltip>
+                <a onClick={handleDownloadSVG}>
+                    <Tooltip className="my-tooltip" title={<TooltipContent 
+                        type={'download svg'} 
+                        sred_dir={sred_dir}
+                        center_zone={center_zone}
+                        dir_list={dir_list}
+                        angle_list={angle_list}
+                    />} arrow>
+                        <FileDownloadOutlinedIcon  className='graph-tooltip'/>
+                    </Tooltip>
+                </a>
+                <ZoomedLambertGraph
+                    centerZone={center_zone}
+                    dirList={dir_list}
+                    angleList={angle_list}
+                    gridPoints={grid_points}
+                    meanDir={sred_dir}
+                    alpha95={alpha95}
+                    gridColor={grid_color}
+                    polygonColor={poly_color}
+                    showGrid={isvisgrid}
+                    showDegreeGrid={degree_grid_isvis}
+                    showRumbs={rumbs_isvis}
+                    showPolygon={isvis}
+                />
 
             </div>
-            <div className="container">
-              <h5 className="data">Data view</h5>
-              <div className="interface my_scroll scrollable-table ">
+            <div className="table_container common-container">
+                {/* {sred_dir[0]}
+                <br></br>
+                {sred_dir[1]}
+                <br></br>
+                {sred_dir[2]}
+                <br></br>
+                <br></br>
+                {DekVgeo(sred_dir)[0].toFixed(2)}
+                <br></br>
+                {DekVgeo(sred_dir)[1].toFixed(2)}
+                <br></br> */}
 
-                  <table>
-                      <thead>
-                          <tr>
-                              <td className="table_head">id</td>
-                              <td className="table_head">Step</td>
-                              <td className="table_head">Angle</td>
-                              <td className="table_head">Dir</td>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          {res}
-                      </tbody>
-                  </table>
-
-
-
-              </div>
             </div>
-
-
-
-
+            <div className="table2_container common-container">
+                <label className="my_input">
+                    <div className="info">dark mode</div>
+                    <input type="checkbox" checked={isdark} onChange={DarkTeamChange}/>
+                    <span className="checkmark"></span>
+                </label>
+            </div>
+            <div className="container common-container">
+                <div className='interface-tooltip'>
+                    <Tooltip 
+                        style={{}}
+                        title={
+                            <TooltipContent 
+                                type={'checkbox'} 
+                                sred_dir={sred_dir}
+                                center_zone={center_zone}
+                                dir_list={dir_list}
+                                angle_list={angle_list}            
+                            />
+                        } 
+                        arrow
+                    >
+                        <HelpCenterOutlinedIcon className='interface-tooltip'/>
+                    </Tooltip>
+                </div>
+                <div className="interface">
+                    <select className="select1-item item my_select" value={selectedNumber} onChange={handleNumberChange}>
+                        <option value={10000}>grid = 10 000</option>
+                        <option value={50000}>grid = 50 000</option>
+                        <option value={100000}>grid = 100 000</option>
+                        <option value={250000}>grid = 250 000</option>
+                        <option value={500000}>grid = 500 000</option>
+                        <option value={1000000}>grid = 1 000 000</option>
+                        <option value={1500000}>grid = 1 500 000</option>
+                        <option value={2000000}>grid = 2 000 000</option>
+                        <option value={2500000}>grid = 2 500 000</option>
+                    </select>
+                    
+                    <select className="select2-item item my_select" value={selectedD} onChange={handleDChange}>
+                        <option value={10}>d = 10</option>
+                        <option value={5}>d = 5</option>
+                    </select>
+                    <select className="select3-item item my_select" value={selectedP} onChange={handlePChange}>
+                        <option value={950}>quantile = 0.950</option>
+                        <option value={975}>quantile = 0.975</option>
+                        <option value={990}>quantile = 0.99</option>
+                    </select>
+                    <select className="select4-item item my_select" value={apc} onChange={handleAPCChange}>
+                        <option className="select-option" value={1}>aPC</option>
+                        <option className="select-option" value={0}>PC</option>
+                    </select>
+                    <div className="button-item item">
+                        <button className="button" onClick={generateRandomNumbers}>Generate Random Numbers</button>
+                    </div>
+                        {/* <b>The percentage of the zone from the sphere:</b>
+                        {" " + String((zone_square(grid_points.length, points_numb) * 100).toFixed(3))}%.
+                        <br/>
+                        <b>Maxium radius of the zone: </b>{max_rad.toFixed(3)}
+                        <br/>
+                        <b>&#945;95: </b>{alpha95.toFixed(3)}
+                        <br/> */}
+                    <div className="info-item1">
+                        <label className="my_input"><div className="info">Show zone</div>
+                            <input type="checkbox" checked={isvis} onChange={handleCheckboxChange}/>
+                            <span className="checkmark"></span>
+                        </label>
+                    </div>
+                    <div className="info-item2">
+                        <label className="my_input"><div className="info">Show grid</div>
+                            <input type="checkbox" checked={isvisgrid} onChange={gridCheckboxChange}/>
+                            <span className="checkmark"></span>
+                        </label>
+                    </div>
+                    <div className="info-item3">
+                        <label className="my_input"><div className="info">show degree grid</div>
+                            <input type="checkbox" checked={degree_grid_isvis} onChange={degreeCheckboxChange}/>
+                            <span className="checkmark"></span>
+                        </label>
+                    </div>
+                    <div className="info-item4">
+                        <label className="my_input"><div className="info">show rumbs</div>
+                            <input type="checkbox" checked={rumbs_isvis} onChange={rumbCheckboxChange}/>
+                            <span className="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
     );
 }
