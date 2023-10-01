@@ -1,0 +1,589 @@
+:root {
+  --my-white: white;
+  --menu-blue: #4690db;
+  --my-grey: #c5c5c5;
+  --checkbox-hover: #1975d2;
+  --my-black: #202020;
+  --checkmark-hover: #ccc;
+  --my-checkmark: #e0e0e0;
+  --my-select: #e4e4e4;
+  --my-shadow: rgba(0, 0, 0, 0.15);
+  --my-shadow2: rgba(0, 0, 0, 0.15);
+  --button-blue: #4690db;
+  --button-blue2: #90caf9;
+  --button-blue3: #62b8ff;
+  --my-tooltip: #202020;
+  --my-tooltip-back: #c5c5c5;
+  
+  --color-scheme: light;
+}
+
+.dark {
+  --my-white: #424242;
+  --menu-blue: #90caf9;
+  --my-grey: #999999;
+  --checkbox-hover: #4892cf;
+  --my-black: #202020;
+  --checkmark-hover: #4892cf;
+  --my-checkmark: #90caf9;
+  --my-select: #90caf9;
+  --my-shadow: rgba(144, 202, 249, 0.31);
+  --my-shadow2: rgba(144, 202, 249, 0.55);
+
+  --button-blue: #0280fd;
+  --button-blue2: #2375c6;
+  --button-blue3: #229cff;
+  --my-tooltip: #90caf9;
+  --color-scheme: dark;
+  --my-tooltip-back: #424242;
+}
+
+
+.low-screen{
+  color: #2c94fc;
+
+  visibility: hidden;
+  display: none;
+}
+
+/* --------------------------------------------------------------*/
+/* main grid*/
+/* --------------------------------------------------------------*/
+.main_container{
+  display: grid;
+  grid-template-columns: 10fr 6fr 3fr;
+  grid-template-rows: 7fr 3fr;
+  grid-gap: 20px;
+  height: 100vh;
+  overflow:auto;
+  
+  /* grid-template-rows: minmax(0, 500px); */
+  /* justify-content: center;
+  justify-items: center; */
+}
+
+.common-container {
+  background-color: var(--my-white);
+  box-shadow: var(--my-shadow) 0px 0px 10px 1px;
+  overflow: auto;
+  position: relative;
+  padding: 10px;
+  transition: 0.4s ease-in-out;
+}
+
+.common-container:hover {
+  box-shadow: none;
+  transition: 0.4s ease-in-out;
+
+}
+
+.table_container{
+  grid-column-start: 1;
+  grid-column-end: 1;
+  grid-row-start: 1;
+  grid-row-end: 1;
+}
+
+.graph_container {
+  grid-column-start: 2;
+  grid-column-end: 4;
+  grid-row-start: 1;
+  grid-row-end: 1;
+}
+
+
+
+.table2_container{
+  grid-column-start: 1;
+  grid-column-end: 1;
+  grid-row-start: 2;
+  grid-row-end: 2;
+}
+
+.container {
+  grid-column-start: 2;
+  grid-column-end: 4;
+  grid-row-start: 2;
+  grid-row-end: 2;
+}
+
+@media screen and (max-width: 720px){
+  .main_container{
+    
+    overflow: scroll;
+    display: block;
+
+    /* grid-template-columns: 2fr 3fr; */
+    /* grid-template-rows: 6fr 2fr 6fr 2fr; */
+    /* grid-gap: 5px; */
+    /* height: 150vh;
+    overflow: scroll; */
+
+
+  }
+  .low-screen{
+    visibility: visible;
+    display: block;
+  }
+  .common-container {
+    background-color: var(--my-white);
+    box-shadow: var(--my-shadow) 0px 0px 10px 1px;
+    overflow: auto;
+    position: relative;
+    padding: 10px;
+    margin: 5px;
+    display: none;
+  }
+  
+  .table_container{
+   height: 300px;
+  }
+  
+  .graph_container {
+    height: 300px;
+  }
+  
+  .sphere_container {
+    /* height: 200vh; */
+  }
+  
+  .table2_container{
+    height: 150px;
+  }
+  
+  .container {
+    height: 150px;
+  }
+
+  .interface{
+    padding: 5px;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 5fr 5fr 5fr;
+    grid-template-rows: 1fr 1fr 2fr;
+    grid-gap: 10px;
+  }
+
+  .graph_interface{
+
+    height: 12vh;
+    
+  }
+}
+
+@media screen and (max-height: 580px){
+  .main_container{
+    
+    overflow: scroll;
+    display: block;
+
+    /* grid-template-columns: 2fr 3fr; */
+    /* grid-template-rows: 6fr 2fr 6fr 2fr; */
+    /* grid-gap: 5px; */
+    /* height: 150vh;
+    overflow: scroll; */
+
+
+  }
+  .low-screen{
+    visibility: visible;
+    display: block;
+  }
+  .common-container {
+    background-color: var(--my-white);
+    box-shadow: var(--my-shadow) 0px 0px 10px 1px;
+    overflow: auto;
+    position: relative;
+    padding: 10px;
+    margin: 5px;
+    display: none;
+  }
+  
+  .table_container{
+   height: 300px;
+  }
+  
+  .graph_container {
+    height: 300px;
+  }
+  
+  .sphere_container {
+
+  }
+  
+  .table2_container{
+    height: 150px;
+  }
+  
+  .container {
+    height: 150px;
+  }
+
+  .interface{
+    padding: 5px;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 5fr 5fr 3fr ;
+    grid-template-rows: 1fr 1fr 2fr;
+    grid-gap: 10px;
+  }
+
+  .graph_interface{
+    /* display: block; */
+    height: 200px;
+    padding: 5px;
+  }
+}
+
+
+/* --------------------------------------------------------------*/
+/* intefrace grid*/
+/* --------------------------------------------------------------*/
+
+.sphere_interface{
+  border: 3px solid var(--menu-blue);
+  border-radius: 6px;
+  padding: 10px;
+  height: 500px;
+  width: 90%;
+
+}
+.sphere_interface:hover{
+  border: 3px solid var(--menu-blue);
+  /* border-radius: 12px; */
+  transition: 0.4s ease-in-out;
+}
+
+.graph_interface{
+  height: 52vh;
+  width: 97%;
+  border: 3px solid var(--my-grey);
+  border-radius: 6px;
+  padding: auto;
+
+  position: relative; 
+  
+  
+}
+
+.graph_interface:hover{
+  border: 3px solid var(--menu-blue);
+  /* border-radius: 12px; */
+  transition: 0.4s ease-in-out;
+
+}
+
+/* --------------------------------------------------------------*/
+/* INTERFACE */
+/* --------------------------------------------------------------*/
+
+.interface{
+  border: 3px solid var(--my-grey);
+  border-radius: 6px;
+  padding: 1vh;
+  height: 17.5vh;
+  display: grid;
+  grid-template-columns: 6fr 6fr 4fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-gap: 10px;
+}
+
+.interface:hover{
+  border: 3px solid var(--menu-blue);
+  /* border-radius: 12px; */
+  transition: 0.4s ease-in-out;
+}
+
+
+
+.item{
+  border-radius: 5px;
+}
+
+.select1-item {
+  grid-column-start: 1;
+  grid-column-end: 1;
+  grid-row-start: 1;
+  grid-row-end: 1;
+}
+.select2-item {
+  grid-column-start: 2;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 1;
+}
+
+.select3-item {
+  grid-column-start: 1;
+  grid-column-end: 1;
+  grid-row-start: 2;
+  grid-row-end: 2;
+}
+
+.select4-item {
+  grid-column-start: 2;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  grid-row-end: 2;
+}
+
+.button-item {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 3;
+  grid-row-end: 5;
+  justify-self: center;
+  align-self: center;
+}
+
+.info-item1 {
+  grid-column-start: 3;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 1;
+  align-self: center;
+  
+}
+.info-item2 {
+
+  grid-column-start: 3;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 2;
+  align-self: center;
+
+
+}
+.info-item3 {
+  grid-column-start: 3;
+  grid-column-end: 3;
+  grid-row-start: 3;
+  grid-row-end: 3;
+  align-self: center;
+}
+
+.info-item4 {
+  grid-column-start: 3;
+  grid-column-end: 3;
+  grid-row-start: 4;
+  grid-row-end: 4;
+  align-self: center;
+}
+
+
+.my_text {
+  text-align: center;
+  margin-bottom: 10px;
+  margin-top: 0px;
+  font-size: 18px;
+
+}
+
+.info {
+  /* background-color: #1975d2; */
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  /* flex-direction: column; */
+
+}
+
+.button {
+  font-size: 16px;
+  font-family: 'Open Sans', sans-serif;
+  transition-duration: 0.15s;
+  border: none;
+  color: white;
+  background: var(--button-blue3);
+  padding: 6px;
+  text-align: center;
+  
+  border-radius: 8px;
+  height: 5.5vh;
+  transition: transform 0.6s ease-in-out;
+}
+
+@media screen and (max-width: 900px){
+  .button {
+    font-size: 13px;
+
+  }
+}
+
+.button:hover {
+  background-color: var(--button-blue);
+  color: var(--my-white);
+  border-radius: 6px;
+  box-shadow: 0px 2px 7px var(--my-shadow2);
+  transition: transform 0.6s ease-in-out;
+}
+
+.button:active {
+  background-color: var(--my-select);
+  box-shadow: none;
+  transition: transform 0.6s ease-in-out;
+}
+
+.my_select {
+
+  font-size: 14px;
+  font-family: 'Open Sans', sans-serif;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  -ms-appearance:none;
+  appearance:none;
+  outline:0;
+  box-shadow:none;
+  border:0!important;
+  background: var(--my-select);
+  background-image: none;
+  flex: 1;
+  padding: 5px 12px;
+  color: var(--my-black);
+  cursor:pointer;
+  border-radius: 3px;
+  transition: transform 0.6s ease-in-out;
+}
+
+.my_select:hover {
+  transition: transform 0.6s ease-in-out;
+  box-shadow: 0px 2px 7px var(--my-shadow2);
+}
+.my_select option {
+
+  border-radius: 5px;
+  outline: none;
+}
+
+.my_select option:checked {
+  background-color: var(--checkmark-hover);
+  color: var(--my-white);
+}
+
+.select-option:hover {
+  background-color: var(--checkmark-hover);
+  color: var(--my-white);
+}
+.my_select.decorated option:hover {
+  background-color: var(--checkmark-hover);
+  color: var(--my-white);
+}
+/* --------------------------------------------------------------*/
+/* CHECKBOX */
+/* --------------------------------------------------------------*/
+
+.my_input {
+  display: block;
+  position: relative;
+  padding-left: 27px;
+  /* margin-bottom: 30px; */
+  /* margin-top: 0px; */
+  font-family: 'Open Sans', sans-serif;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  /* height: 100%; */
+}
+
+/* Hide the browser's default checkbox */
+.my_input input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+
+  left: 0px;
+  height: 20px;
+  width: 20px;
+  background-color: var(--my-checkmark);
+  border-radius: 5px;
+
+  
+  
+}
+
+/* On mouse-over, add a g rey background color */
+.my_input:hover input ~ .checkmark {
+  background-color: var(--checkmark-hover);
+}
+
+
+/* When the checkbox is checked, add a blue background */
+.my_input input:checked ~ .checkmark {
+  background-color: var(--checkbox-hover);
+}
+.my_input input:checked:hover ~ .checkmark {
+  background-color: var(--button-blue2);
+  border-radius: 2px;
+}
+
+
+
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.my_input input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.my_input .checkmark:after {
+  left: 7px;
+  top: 2px;
+  width: 3px;
+  height: 10px;
+  border: solid var(--my-white);
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.graph-tooltip{
+  color: var(--menu-blue);
+  display: block;
+  float: right;
+}
+
+
+.interface-tooltip{
+  color: var(--menu-blue);
+  display: block;
+  width: 100%;
+  float: right;
+}
+
+
+
+
+.my-tooltip{
+
+}
+
+.tooltip-span{
+  color: var(--my-tooltip);
+}
+
+.MuiTooltip-tooltip {
+  background-color: var(--my-tooltip-back) !important;
+}
+
+.my-tooltip-arrow:before {
+  border-bottom-color: green;
+}
+
