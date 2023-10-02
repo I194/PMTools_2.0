@@ -87,7 +87,7 @@ export function Khokhlov_Gvozdik() {
 
     const generateRandomNumbers = () => {
         var random_list = [];
-        var dir_number = getRandomInt(5, 9 + 1);
+        var dir_number = getRandomInt(5, 7 + 1);
 
         for (var i = 0; i < dir_number; i++)
         {
