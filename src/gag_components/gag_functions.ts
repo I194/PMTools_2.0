@@ -116,31 +116,16 @@ export function getRandomInt(min: number, max: number) {
     var fmax = Math.floor(max);
     return Math.floor(Math.random() * (fmax - fmin) + fmin); // The maximum is exclusive and the minimum is inclusive
 }
+
 export function getRandomfloat(min: number, max: number) {
     return Math.random() * (max - min) + min;
 }
 
 
 
-export function DekVgeo(point: number[])
+export function GridVdek(phiAngle: number, lmbdAngle: number)
 {
-    
-    point = RotateAroundX(point, 90);
-    point = RotateAroundZ(point, 90);
-    
-    let x = point[0];
-    let y = point[1];
-    let z = point[2];
 
-    let R = 1;
-    let phi = Math.asin(z / R) * 180 / Math.PI;
-    let lmbd = Math.atan(y / x) * 180 / Math.PI;
-    return [-phi, lmbd];
-}
-
-
-export function GeoVdek(phiAngle: number, lmbdAngle: number)
-{
     let r: number = 1;
     let phi: number = phiAngle * Math.PI / 180;
     let lmbd: number = lmbdAngle * Math.PI / 180;
@@ -151,13 +136,193 @@ export function GeoVdek(phiAngle: number, lmbdAngle: number)
     
     let C: number[] = RotateAroundV([X, Y, Z], [1,0,0], 90);
     return C;
+
+}
+
+
+
+export function DekVgeo(point: number[])
+{
+    
+    // point = RotateAroundX(point, 90);
+    // point = RotateAroundZ(point, 90);
+    
+    // let x = point[0];
+    // let y = point[1];
+    // let z = point[2];
+
+    // let R = 1;
+    // let phi = Math.asin(z / R) * 180 / Math.PI;
+    // let lmbd = Math.atan(y / x) * 180 / Math.PI;
+
+    // return [-phi, lmbd];
+
+
+    let dir: number[] = NormalizeV(point);
+    let phi: number = 0;
+    let lmbd: number = 90;
+
+    if (dir[0] > 0 && dir[1] > 0 && dir[2] > 0) {
+        phi = angle_between_v([0, 0, 1], [dir[0], 0, dir[2]])  * 180 / Math.PI;
+        lmbd = -angle_between_v([dir[0], dir[1], dir[2]], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        return [phi, lmbd];
+    }
+
+    if (dir[0] > 0 && dir[1] > 0 && dir[2] < 0) {
+        phi = angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        lmbd = -angle_between_v([dir[0], dir[1], dir[2]], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        return [phi, lmbd];
+    }
+
+    if (dir[0] > 0 && dir[1] < 0 && dir[2] > 0) {
+        phi = angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        lmbd = angle_between_v([dir[0], dir[1], dir[2]], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        return [phi, lmbd];
+    }
+
+    if (dir[0] > 0 && dir[1] < 0 && dir[2] < 0) {
+        phi =  angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        lmbd = angle_between_v([dir[0], dir[1], dir[2]], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        return [phi, lmbd];
+    }
+
+    if (dir[0] < 0 && dir[1] > 0 && dir[2] > 0) {
+        phi =  -angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        lmbd = -angle_between_v([dir[0], dir[1], dir[2]], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        return [phi, lmbd];
+    }
+
+    if (dir[0] < 0 && dir[1] > 0 && dir[2] < 0) {
+        phi = -angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        lmbd = -angle_between_v([dir[0], dir[1], dir[2]], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        return [phi, lmbd];
+    }
+
+    if (dir[0] < 0 && dir[1] < 0 && dir[2] > 0) {
+        phi = -angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        lmbd = angle_between_v([dir[0], dir[1], dir[2]], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        return [phi, lmbd];
+    }
+
+    if (dir[0] < 0 && dir[1] < 0 && dir[2] < 0) {
+        phi = -angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        lmbd = angle_between_v([dir[0], dir[1], dir[2]], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        return [phi, lmbd];
+    }
+    // TODO: if dir[0] = 0 || dir[1] == 0 ???!
+    return [phi, lmbd];
+}
+
+export function getOcto(point: number[]){
+
+    let dir: number[] = NormalizeV(point);
+
+
+    if (dir[0] > 0 && dir[1] > 0 && dir[2] > 0) {
+        return '+++';
+    }
+
+    if (dir[0] > 0 && dir[1] > 0 && dir[2] < 0) {
+        return '++-';
+    }
+
+    if (dir[0] > 0 && dir[1] < 0 && dir[2] > 0) {
+        return '+-+';
+    }
+
+    if (dir[0] > 0 && dir[1] < 0 && dir[2] < 0) {
+        return '+--';
+    }
+
+    if (dir[0] < 0 && dir[1] > 0 && dir[2] > 0) {
+        return '-++';
+    }
+
+    if (dir[0] < 0 && dir[1] > 0 && dir[2] < 0) {
+        return '-+-';
+    }
+
+    if (dir[0] < 0 && dir[1] < 0 && dir[2] > 0) {
+        return '--+';
+    }
+
+    if (dir[0] < 0 && dir[1] < 0 && dir[2] < 0) {
+        return '---';
+    }
+
+    // TODO: if dir[0] = 0 || dir[1] == 0 ???!
+
+    return 0;
+}
+
+export function GeoVdek(phiAngle: number, lmbdAngle: number)
+{
+
+    // let r: number = 1;
+    // let phi: number = phiAngle * Math.PI / 180;
+    // let lmbd: number = lmbdAngle * Math.PI / 180;
+
+    // let X: number = r * Math.cos(phi) * Math.cos(lmbd);
+    // let Y: number = r * Math.cos(phi) * Math.sin(lmbd);
+    // let Z: number = r * Math.sin(phi);
+    
+    // let C: number[] = RotateAroundV([X, Y, Z], [1,0,0], 90);
+    // return C;
+
+    let point: number[] = [0, 0, 1];
+
+    if (phiAngle > 0 && phiAngle < 90 && lmbdAngle > -90 && lmbdAngle < 0){
+        point = RotateAroundY(point, phiAngle);
+        point = RotateAroundV(point, get_perp(point, [0, 1, 0]), -lmbdAngle);
+    }
+
+    if (phiAngle > 90 && phiAngle < 180 && lmbdAngle > -90 && lmbdAngle < 0){
+        point = RotateAroundY(point, phiAngle);
+        point = RotateAroundV(point, get_perp(point, [0, 1, 0]), -lmbdAngle);
+    }
+
+    if (phiAngle > 0 && phiAngle < 90 && lmbdAngle > 0 && lmbdAngle < 90){
+        point = RotateAroundY(point, phiAngle);
+        point = RotateAroundV(point, get_perp(point, [0, -1, 0]), lmbdAngle);
+    }
+
+    if (phiAngle > 90 && phiAngle < 180 && lmbdAngle > 0 && lmbdAngle < 90){
+        point = RotateAroundY(point, phiAngle);
+        point = RotateAroundV(point, get_perp(point, [0, -1, 0]), lmbdAngle);
+    }
+
+    if (phiAngle > -90 && phiAngle < 0 && lmbdAngle > -90 && lmbdAngle < 0){
+        point = RotateAroundY(point, phiAngle);
+        point = RotateAroundV(point, get_perp(point, [0, 1, 0]), -lmbdAngle);
+    }
+
+    if (phiAngle > -180 && phiAngle < -90 && lmbdAngle > -90 && lmbdAngle < 0){
+        point = RotateAroundY(point, phiAngle);
+        point = RotateAroundV(point, get_perp(point, [0, -1, 0]), lmbdAngle);
+    }
+
+    if (phiAngle > -90 && phiAngle < 0 && lmbdAngle > 0 && lmbdAngle < 90){
+        point = RotateAroundY(point, phiAngle);
+        point = RotateAroundV(point, get_perp(point, [0, -1, 0]), lmbdAngle);
+    }
+
+    if (phiAngle > -180 && phiAngle < -90 && lmbdAngle > 0 && lmbdAngle < 90){
+        point = RotateAroundY(point, phiAngle);
+        point = RotateAroundV(point, get_perp(point, [0, -1, 0]), lmbdAngle);
+    }
+    // TODO: if dir[0] = 0 || dir[1] == 0 ???!
+    return point;
 }
 
 
 export function vector_length(v:number[]) { return Math.sqrt( v[0] * v[0] + v[1] * v[1] + v[2] * v[2] ); }
 
 export function points_dist(p1:number[], p2:number[]) {
-    return Math.sqrt( (p1[0] - p2[0]) * (p1[0] - p2[0]) + (p1[1] - p2[1]) * (p1[1] - p2[1]) + (p1[2] - p2[2]) * (p1[2] - p2[2]));
+    return Math.sqrt( 
+            (p1[0] - p2[0]) * (p1[0] - p2[0]) + 
+            (p1[1] - p2[1]) * (p1[1] - p2[1]) + 
+            (p1[2] - p2[2]) * (p1[2] - p2[2])
+        );
 }
 
 export function angle_between_v(v1: number[], v2: number[])

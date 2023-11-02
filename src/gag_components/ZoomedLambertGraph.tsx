@@ -72,8 +72,8 @@ export function ZoomedLambertGraph({
     let fullViewBoxSize = viewBoxSize;
     // let fullViewBoxSize = getViewBoxSize(dirList, angleList, meanDir, 0);
 
-    let parallelsCount = 18;
-    let meridianCount = 18;
+    let parallelsCount = 36;
+    let meridianCount = 36;
 
     let circlesRadius = getPointSize(viewBoxSize);
     let gridRadius = circlesRadius;
@@ -84,6 +84,7 @@ export function ZoomedLambertGraph({
 
 
     // to see all sphere
+    // fullViewBoxSize = '-1 -1 2 2';
     // viewBoxSize = '-1 -1 2 2';
 
     if (angleList[0] == 0) {

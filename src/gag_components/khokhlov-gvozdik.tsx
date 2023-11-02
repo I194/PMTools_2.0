@@ -13,7 +13,9 @@ import {
     fisherStat,
     getRandomInt,
     get_quantiles,
-    DekVgeo
+    DekVgeo,
+    get_perp,
+    GridVdek
     } from "./gag_functions";
 
 import HelpCenterOutlinedIcon from '@mui/icons-material/HelpCenterOutlined';
@@ -32,7 +34,14 @@ export function Khokhlov_Gvozdik() {
     var max_lat = 0;
     var min_lat = 10;
 
-   
+    // for debug
+    const [octo, setOcto] = useState<number>(1);
+
+    const octoChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const number = parseInt(event.target.value);
+        setOcto(number);
+    };
+
     const [step_list, setStepList] = useState<number[]>([]);
 
     const [dir_list, setDirList] = useState<[number, number, number][]>([]);
@@ -59,9 +68,6 @@ export function Khokhlov_Gvozdik() {
             new_ang_list.push(quantiles[step_list[i] - 3]);
         }
         setAngleList(new_ang_list);
-        console.log('angles changed');
-        console.log(new_ang_list);
-
     }, [selectedD, apc, selectedP, dir_number, step_list]);
 
 
@@ -87,12 +93,84 @@ export function Khokhlov_Gvozdik() {
 
     const generateRandomNumbers = () => {
         var random_list = [];
-        var dir_number = getRandomInt(5, 9 + 1);
+        var dir_number = getRandomInt(5, 7 + 1);
+
+        let maxlot: number = -2.5;
+        let minlot:number = 3;
+        let maxlat: number = -2;
+        let minlat: number = 2;  
+
+        // for debug
+        if (octo == 1){
+            maxlot = 47;
+            minlot = 43;
+            maxlat = -43;
+            minlat = -47;  
+        }
+
+        if (octo == 2){
+            maxlot = 137;
+            minlot = 133;
+            maxlat = -43;
+            minlat = -47;  
+        }
+
+        if (octo == 3){
+            maxlot = 47;
+            minlot = 43;
+            maxlat = 47;
+            minlat = 43;  
+        }
+
+        if (octo == 4){
+            maxlot = 137;
+            minlot = 133;
+            maxlat = 47;
+            minlat = 43;  
+        }
+
+        if (octo == 5){
+            maxlot = -43;
+            minlot = -47;
+            maxlat = -43;
+            minlat = -47;  
+        }
+
+        if (octo == 6){
+            maxlot = -133;
+            minlot = -137;
+            maxlat = -43;
+            minlat = -47;  
+        }
+
+        if (octo == 7){
+            maxlot = -43;
+            minlot = -47;
+            maxlat = 47;
+            minlat = 43;  
+        }
+
+        if (octo == 8){
+            maxlot = -133;
+            minlot = -137;
+            maxlat = 47;
+            minlat = 43;  
+        }
+
+        if (octo == 9){
+            maxlot = 2;
+            minlot = -2;
+            maxlat = 89;
+            minlat = 86;  
+        }
+
 
         for (var i = 0; i < dir_number; i++)
         {
-            random_list.push(getRandomfloat(min_lat, max_lat));
-            random_list.push(getRandomfloat(min_lon, max_lon));
+            // random_list.push(getRandomfloat(min_lat, max_lat));
+            // random_list.push(getRandomfloat(min_lon, max_lon));
+            random_list.push(getRandomfloat(minlot, maxlot));
+            random_list.push(getRandomfloat(minlat, maxlat));
         }
 
         var dir_list: [number, number, number][] = [];
@@ -101,13 +179,17 @@ export function Khokhlov_Gvozdik() {
         var paleo_data: number[];
         var step = 0;
 
-        var random_dir = NormalizeV( [ getRandomfloat(0, 1), getRandomfloat(0, 1), getRandomfloat(0, 1) ] );
-        var random_angle = getRandomfloat(0, 180);
+        let testDir = (GeoVdek(20, 60));
+        var random_dir = NormalizeV( testDir );
+        random_dir = NormalizeV( [ getRandomfloat(0, 1), getRandomfloat(0, 1), getRandomfloat(0, 1) ] );
+        random_dir = NormalizeV( [ 1, 1, 1 ] );
+        var random_angle = getRandomfloat(0, 180);  
+        random_angle = 0;  
 
-        for ( var i = 0; i < dir_number; i ++ ) {
+        for ( var i = 0; i < dir_number; i ++ ) {   
 
             paleo_data = GeoVdek(random_list[i * 2], random_list[i * 2 + 1])
-            paleo_data = NormalizeV(RotateAroundV(paleo_data, random_dir, random_angle));
+            // paleo_data = NormalizeV(RotateAroundV(paleo_data, random_dir, random_angle));
             step = getRandomInt(6, quantiles.length);
 
 
@@ -124,8 +206,6 @@ export function Khokhlov_Gvozdik() {
         setDirNumb(dir_number);
         setAngleList([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     };
-
-
 
     const [isvis, setIsVisible] = useState(true);
     const handleCheckboxChange = () => {
@@ -189,7 +269,7 @@ export function Khokhlov_Gvozdik() {
         x = (i * phi - Math.round(i * phi)) * 360;
         y = (i / points_numb - Math.round(i / points_numb)) * 360;
 
-        m = GeoVdek(x, y);
+        m = GridVdek(x, y);
 
 
         for (var j = 0; j < dir_list.length; j++ )
@@ -226,6 +306,52 @@ export function Khokhlov_Gvozdik() {
     //---------------------------------------------------------------------------------------
     // polygon of zone and max radius calculation
     //---------------------------------------------------------------------------------------
+    // import * as React from 'react';
+    // import { saveAs } from 'file-saver';
+    
+    // const exportToEPS = (svgElement: SVGSVGElement) => {
+    //   const svgData = new XMLSerializer().serializeToString(svgElement);
+    
+    //   const canvas = document.createElement('canvas');
+    //   canvas.width = svgElement.clientWidth;
+    //   canvas.height = svgElement.clientHeight;
+    
+    //   const ctx = canvas.getContext('2d');
+    //   const img = new Image();
+    //   const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+    //   const imgURL = URL.createObjectURL(svgBlob);
+    
+    //   img.onload = () => {
+    //     ctx?.drawImage(img, 0, 0);
+    
+    //     const canvasBlob = canvas.toDataURL('image/jpeg');
+    //     const imgData = canvasBlob.replace(/^data:image\/(png|jpeg);base64,/, '');
+    
+    //     const epsData = window.atob(imgData);
+    //     const bufferArray = new Uint8Array(epsData.length);
+    
+    //     for (let i = 0; i < epsData.length; i++) {
+    //       bufferArray[i] = epsData.charCodeAt(i);
+    //     }
+    
+    //     const epsBlob = new Blob([bufferArray.buffer], { type: 'application/postscript' });
+    //     saveAs(epsBlob, 'image.eps');
+    //   };
+    
+    //   img.src = imgURL;
+    // };
+    
+    // const SVGExportButton: React.FC = () => {
+    //   const svgRef = React.useRef<SVGSVGElement>(null);
+    
+    //   const handleExportClick = () => {
+    //     if (svgRef.current) {
+    //       exportToEPS(svgRef.current);
+    //     }
+    //   };
+    
+
+    
 
     //---------------------------------------------------------------------------------------
     // Interface
@@ -303,6 +429,22 @@ export function Khokhlov_Gvozdik() {
 
             </div>
             <div className="table_container common-container">
+                {/* for debug */}
+                <select className="select2-item item my_select" value={octo} onChange={octoChange}>
+                    <option value={1}>+++</option>
+                    <option value={2}>++-</option>
+                    <option value={3}>+-+</option>
+                    <option value={4}>+--</option>
+                    <option value={5}>-++</option>
+                    <option value={6}>-+-</option>
+                    <option value={7}>--+</option>
+                    <option value={8}>---</option>
+                    <option value={9}>010</option>
+                </select>
+                <br></br>
+  
+                <br></br>
+
                 {sred_dir[0]}
                 <br></br>
                 {sred_dir[1]}
@@ -314,6 +456,8 @@ export function Khokhlov_Gvozdik() {
                 <br></br>
                 {DekVgeo(sred_dir)[1].toFixed(2)}
                 <br></br>
+                <br></br>
+            
 
             </div>
             <div className="table2_container common-container">

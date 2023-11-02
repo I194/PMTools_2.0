@@ -74,11 +74,10 @@ export function DegreeGrid({
     //---------------------------------------------------------------------------------------
     // MERIDIANS PLOT
     //---------------------------------------------------------------------------------------
-    
+    let p: number[][] = [];
 
 
     let meridiansInBox = [];
-    let meridians: string[] = [];
 
     let degreeMerLabels:number[][] = [];
     let endMerCords: number[][] = [];
@@ -134,8 +133,13 @@ export function DegreeGrid({
                         ]
                     ]
                 );
+
                 merPoint = centerToBack(merPoint, meanDir);
                 degreeMerLabels.push(DekVgeo(merPoint));
+
+                p.push(merPoint);
+
+  
             }
         }
     }
@@ -162,9 +166,10 @@ export function DegreeGrid({
     let parTicksSift: number;
 
 
-    for (let i = 1; i < parallelsCount / 2; i++) {
+    for (let i = 2; i < parallelsCount / 2; i++) {
 
-        let centeredParallel: number[][] = PlotArcInBox(to_center([0, 1, 0], meanDir), i * (360 / meridianCount), width, 1000);
+        let centeredParallel: number[][] = PlotArcInBox(to_center([0, 1, 0], meanDir), i * (360 / meridianCount), width, 3000);
+
        
         if (centeredParallel.length > 5){
             
@@ -198,8 +203,13 @@ export function DegreeGrid({
                     ]
                 );
 
+
                 parPoint = centerToBack(parPoint, meanDir);
                 degreeParLabels.push(DekVgeo(parPoint));
+
+                p.push(parPoint);
+
+  
             }
 
         }
@@ -212,17 +222,35 @@ export function DegreeGrid({
 
     return (
         <g>
-            {/* ------------------------------------------- */}
-            {/* -------------------COMMON------------------ */}
-            {/* ------------------------------------------- */}
 
-            {/* ram */}
-            <polyline 
-                points={ ram } 
-                stroke={ "black" }
-                fill={'none'}
-                strokeWidth={width / 100} 
+            {/* debug */}
+            {/* { p.map((t) => (
+            <Dot 
+                x={t[0]} 
+                y={t[1]} 
+                r={0.01}
+                id={'1'} 
+                type={'mean'}
+                annotation={{id: '', label: ''}}
+                fillColor={'purple'}
+                strokeColor={'purple'}
+                strokeWidth={0.0002}
             />
+            ))}
+
+            <PointsWithLabels
+                points={p}
+                radius={0}
+                type={"lon"}
+                labelsValues={degreeMerLabels}
+                fontSize={width / 12}
+                xShift={degreeMerLabelsShift[0]}
+                yShift={degreeMerLabelsShift[1]}
+            />
+
+ */}
+
+
 
             {/* ------------------------------------------- */}
             {/* ------------------MERIDIANS---------------- */}
@@ -241,7 +269,7 @@ export function DegreeGrid({
             <PointsWithLabels
                 points={endMerCords}
                 radius={0}
-                type={"lon"}
+                type={"lat"}
                 labelsValues={degreeMerLabels}
                 fontSize={width / 12}
                 xShift={degreeMerLabelsShift[0]}
@@ -276,7 +304,7 @@ export function DegreeGrid({
             <PointsWithLabels
                 points={endParCords}
                 radius={0}
-                type={"lat"}
+                type={"lon"}
                 labelsValues={degreeParLabels}
                 fontSize={width / 12}
                 xShift={degreeParLabelsShift[0]}
@@ -293,6 +321,22 @@ export function DegreeGrid({
                     strokeWidth={width / 80} 
                 />
             ))}
+
+
+
+
+            {/* ------------------------------------------- */}
+            {/* -------------------COMMON------------------ */}
+            {/* ------------------------------------------- */}
+
+            {/* ram */}
+            <polyline 
+                points={ ram } 
+                stroke={ "black" }
+                fill={'none'}
+                strokeWidth={width / 100} 
+            />
+
 
         </g>
     );

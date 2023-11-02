@@ -55,22 +55,22 @@ export function PointsWithLabels({
 
     if (labelsValues && type && type == 'lat'){
         for ( let i = 0; i < labelsValues.length; i ++){
-            labels.push(labelsValues[i][0].toFixed(1));
+            labels.push(labelsValues[i][0].toFixed(0));
         }
     }
 
     else if (labelsValues && type && type == 'lon'){
         for ( let i = 0; i < labelsValues.length; i ++){
-            labels.push(labelsValues[i][1].toFixed(1));
+            labels.push(labelsValues[i][1].toFixed(0));
         }
     }
 
     else if (labelsValues && type && (type == 'lat & lon' || !type)){
         let label: string;
         for ( let i = 0; i < labelsValues.length; i ++){
-            label = labelsValues[i][0].toFixed(1);
+            label = labelsValues[i][0].toFixed(0);
             label += " ";
-            label += labelsValues[i][1].toFixed(1);
+            label += labelsValues[i][1].toFixed(0);
             labels.push(label);
         }
     }
