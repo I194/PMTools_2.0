@@ -1,5 +1,5 @@
 import React, {createElement as e, useEffect, useState} from 'react';
-import "./style.css";
+// import "./style.css";
 // import {Rotate_sphere} from "./rotate_sphere";
 
 

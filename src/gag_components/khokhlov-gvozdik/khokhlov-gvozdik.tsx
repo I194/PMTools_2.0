@@ -1,9 +1,10 @@
 import React, {createElement as e, useEffect, useState} from 'react';
-import {ZoomedLambertGraph} from "./ZoomedLambertGraph";
-import {TooltipContent} from "./my-tooltip";
+import {ZoomedLambertGraph} from "../ZoomedLambertGraph/ZoomedLambertGraph";
+import {TooltipContent} from "../debugCrash/my-tooltip";
+import styles from "./khokhlov-gvozdik.module.scss" 
+import { Footer, NavPanel } from "../../components/MainPage";
 
 
-import "./style.css";
 import {
     GeoVdek,
     getRandomfloat,
@@ -16,7 +17,7 @@ import {
     DekVgeo,
     get_perp,
     GridVdek
-    } from "./gag_functions";
+    } from "../gag_functions";
 
 import HelpCenterOutlinedIcon from '@mui/icons-material/HelpCenterOutlined';
 import Tooltip from '@mui/material/Tooltip';   
@@ -103,65 +104,65 @@ export function Khokhlov_Gvozdik() {
         // for debug
         if (octo == 1){
             maxlot = 47;
-            minlot = 43;
-            maxlat = -43;
+            minlot = 41;
+            maxlat = -40;
             minlat = -47;  
         }
 
         if (octo == 2){
             maxlot = 137;
-            minlot = 133;
-            maxlat = -43;
+            minlot = 130;
+            maxlat = -40;
             minlat = -47;  
         }
 
         if (octo == 3){
             maxlot = 47;
-            minlot = 43;
+            minlot = 40;
             maxlat = 47;
-            minlat = 43;  
+            minlat = 40;  
         }
 
         if (octo == 4){
             maxlot = 137;
-            minlot = 133;
+            minlot = 130;
             maxlat = 47;
-            minlat = 43;  
+            minlat = 40;  
         }
 
         if (octo == 5){
-            maxlot = -43;
+            maxlot = -40;
             minlot = -47;
-            maxlat = -43;
+            maxlat = -40;
             minlat = -47;  
         }
 
         if (octo == 6){
-            maxlot = -133;
+            maxlot = -130;
             minlot = -137;
-            maxlat = -43;
+            maxlat = -40;
             minlat = -47;  
         }
 
         if (octo == 7){
-            maxlot = -43;
+            maxlot = -40;
             minlot = -47;
             maxlat = 47;
-            minlat = 43;  
+            minlat = 40;  
         }
 
         if (octo == 8){
-            maxlot = -133;
+            maxlot = -130;
             minlot = -137;
             maxlat = 47;
-            minlat = 43;  
+            minlat = 40;  
         }
 
         if (octo == 9){
-            maxlot = 2;
-            minlot = -2;
+            maxlot = 8;
+            minlot = -6;
             maxlat = 89;
-            minlat = 86;  
+            minlat = 78;  
         }
 
 
@@ -212,12 +213,12 @@ export function Khokhlov_Gvozdik() {
         setIsVisible(!isvis);
     };
 
-    const [isdark, setdark] = useState(true);
-    const DarkTeamChange = () => {
-        setdark(!isdark);
-        const root = document.documentElement;
-        root.classList.toggle('dark', !isdark);
-    };
+    // const [isdark, setdark] = useState(true);
+    // const DarkTeamChange = () => {
+    //     setdark(!isdark);
+    //     const root = document.documentElement;
+    //     root.classList.toggle('dark', !isdark);
+    // };
 
     const [isvisgrid, setisvisgrid] = useState(false);
     const gridCheckboxChange = () => {
@@ -230,19 +231,16 @@ export function Khokhlov_Gvozdik() {
         const number = parseInt(event.target.value);
         setSelectedNumber(number);
     };
+
     const outsideVariable = selectedNumber;
     var points_numb = outsideVariable;
-
-
 
     const [degree_grid_isvis, setDegree] = useState(true);
     const degreeCheckboxChange = () => {
         setDegree(!degree_grid_isvis);
     };
-    const [rumbs_isvis, setRumbs] = useState(true);
-    const rumbCheckboxChange = () => {
-        setRumbs(!rumbs_isvis);
-    };
+
+
 
     //-----------------------------------------------------------------------
     // fisher stat
@@ -253,7 +251,7 @@ export function Khokhlov_Gvozdik() {
     //-----------------------------------------------------------------------
     // making grid dots
     //-----------------------------------------------------------------------
-
+    
     var x;
     var y;
     var m;
@@ -364,54 +362,16 @@ export function Khokhlov_Gvozdik() {
     var grid_color = '#1975d2';
 
     
- 
-    // Функция для загрузки SVG
-    const handleDownloadSVG = () => {
-        const svgElement = document.querySelector('.graph_interface');
-        if (!svgElement) {
-            console.error('SVG element not found');
-            return;
-        }
-
-        const svgData = new XMLSerializer().serializeToString(svgElement);
-
-        const downloadLink = document.createElement('a');
-        const blob = new Blob([svgData], { type: 'image/svg+xml' });
-        const url = URL.createObjectURL(blob);
-
-        downloadLink.href = url;
-        downloadLink.download = 'graph.svg';
-
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-        URL.revokeObjectURL(url);
-    };
 
     return (
-        <div className="main_container">
-            <h3 className="low-screen">Размер окна должен быть не меньше чем 720x560</h3>
-            <div className="graph_container common-container">
-                <Tooltip className="my-tooltip" title={<TooltipContent 
-                    type={'graph'}
-                    sred_dir={sred_dir}
-                    center_zone={center_zone}
-                    dir_list={dir_list}
-                    angle_list={angle_list}
-                />} arrow>               
-                    <HelpCenterOutlinedIcon className='graph-tooltip'/>
-                </Tooltip>
-                <a onClick={handleDownloadSVG}>
-                    <Tooltip className="my-tooltip" title={<TooltipContent 
-                        type={'download svg'} 
-                        sred_dir={sred_dir}
-                        center_zone={center_zone}
-                        dir_list={dir_list}
-                        angle_list={angle_list}
-                    />} arrow>
-                        <FileDownloadOutlinedIcon  className='graph-tooltip'/>
-                    </Tooltip>
-                </a>
+        <div className={styles.main_container}>
+            <h3 className={styles.lowScreen}>Размер окна должен быть не меньше чем 720x560</h3>
+            <div className={styles.graph_container + ' ' + styles.commonContainer}>
+             
+                <HelpCenterOutlinedIcon className={styles.graphTooltip}/>
+
+                <FileDownloadOutlinedIcon  className={styles.graphTooltip}/>
+
                 <ZoomedLambertGraph
                     centerZone={center_zone}
                     dirList={dir_list}
@@ -423,14 +383,13 @@ export function Khokhlov_Gvozdik() {
                     polygonColor={poly_color}
                     showGrid={isvisgrid}
                     showDegreeGrid={degree_grid_isvis}
-                    showRumbs={rumbs_isvis}
                     showPolygon={isvis}
                 />
 
             </div>
-            <div className="table_container common-container">
+            <div className={styles.table_container + ' ' + styles.commonContainer}>
                 {/* for debug */}
-                <select className="select2-item item my_select" value={octo} onChange={octoChange}>
+                <select className={styles.select2Item + ' ' + styles.item + ' ' + styles.my_select} value={octo} onChange={octoChange}>
                     <option value={1}>+++</option>
                     <option value={2}>++-</option>
                     <option value={3}>+-+</option>
@@ -460,33 +419,17 @@ export function Khokhlov_Gvozdik() {
             
 
             </div>
-            <div className="table2_container common-container">
-                <label className="my_input">
-                    <div className="info">dark mode</div>
-                    <input type="checkbox" checked={isdark} onChange={DarkTeamChange}/>
-                    <span className="checkmark"></span>
-                </label>
+            <div className={styles.table2_container + ' ' + styles.commonContainer}>
+
             </div>
-            <div className="container common-container">
-                <div className='interface-tooltip'>
-                    <Tooltip 
-                        style={{}}
-                        title={
-                            <TooltipContent 
-                                type={'checkbox'} 
-                                sred_dir={sred_dir}
-                                center_zone={center_zone}
-                                dir_list={dir_list}
-                                angle_list={angle_list}            
-                            />
-                        } 
-                        arrow
-                    >
-                        <HelpCenterOutlinedIcon className='interface-tooltip'/>
-                    </Tooltip>
+            <div className={styles.container + ' ' + styles.commonContainer}>
+
+                <div className={styles.interfaceTooltip}>
+                    <HelpCenterOutlinedIcon className={styles.interfaceTooltip}/>
                 </div>
-                <div className="interface">
-                    <select className="select1-item item my_select" value={selectedNumber} onChange={handleNumberChange}>
+
+                <div className={styles.interface}>
+                    <select className={styles.select1Item + ' ' + styles.item + ' ' + styles.my_select} value={selectedNumber} onChange={handleNumberChange}>
                         <option value={10000}>grid = 10 000</option>
                         <option value={50000}>grid = 50 000</option>
                         <option value={100000}>grid = 100 000</option>
@@ -498,22 +441,26 @@ export function Khokhlov_Gvozdik() {
                         <option value={2500000}>grid = 2 500 000</option>
                     </select>
                     
-                    <select className="select2-item item my_select" value={selectedD} onChange={handleDChange}>
+                    <select className={styles.select2Item + ' ' + styles.item + ' ' + styles.my_select} value={selectedD} onChange={handleDChange}>
                         <option value={10}>d = 10</option>
                         <option value={5}>d = 5</option>
                     </select>
-                    <select className="select3-item item my_select" value={selectedP} onChange={handlePChange}>
+
+                    <select className={styles.select3Item + ' ' + styles.item + ' ' + styles.my_select} value={selectedP} onChange={handlePChange}>
                         <option value={950}>quantile = 0.950</option>
                         <option value={975}>quantile = 0.975</option>
                         <option value={990}>quantile = 0.99</option>
                     </select>
-                    <select className="select4-item item my_select" value={apc} onChange={handleAPCChange}>
-                        <option className="select-option" value={1}>aPC</option>
-                        <option className="select-option" value={0}>PC</option>
+
+                    <select className={styles.select4Item + ' ' + styles.item + ' ' + styles.my_select} value={apc} onChange={handleAPCChange}>
+                        <option className={styles.selectOption} value={1}>aPC</option>
+                        <option className={styles.selectOption} value={0}>PC</option>
                     </select>
-                    <div className="button-item item">
-                        <button className="button" onClick={generateRandomNumbers}>Generate Random Numbers</button>
+
+                    <div className={styles.buttonItem + ' ' + styles.item}>
+                        <button className={styles.button} onClick={generateRandomNumbers}>Generate Random Numbers</button>
                     </div>
+
                         {/* <b>The percentage of the zone from the sphere:</b>
                         {" " + String((zone_square(grid_points.length, points_numb) * 100).toFixed(3))}%.
                         <br/>
@@ -521,32 +468,35 @@ export function Khokhlov_Gvozdik() {
                         <br/>
                         <b>&#945;95: </b>{alpha95.toFixed(3)}
                         <br/> */}
-                    <div className="info-item1">
-                        <label className="my_input"><div className="info">Show zone</div>
+
+                    <div className={styles.infoItem1}>
+                        <label className={styles.my_input}><div className={styles.info}>Show zone</div>
                             <input type="checkbox" checked={isvis} onChange={handleCheckboxChange}/>
-                            <span className="checkmark"></span>
+                            <span className={styles.checkmark}></span>
                         </label>
                     </div>
-                    <div className="info-item2">
-                        <label className="my_input"><div className="info">Show grid</div>
+
+                    <div className={styles.infoItem2}>
+                        <label className={styles.my_input}><div className={styles.info}>Show grid</div>
                             <input type="checkbox" checked={isvisgrid} onChange={gridCheckboxChange}/>
-                            <span className="checkmark"></span>
+                            <span className={styles.checkmark}></span>
                         </label>
                     </div>
-                    <div className="info-item3">
-                        <label className="my_input"><div className="info">show degree grid</div>
+
+                    <div className={styles.infoItem3}>
+                        <label className={styles.my_input}><div className={styles.info}>show degree grid</div>
                             <input type="checkbox" checked={degree_grid_isvis} onChange={degreeCheckboxChange}/>
-                            <span className="checkmark"></span>
+                            <span className={styles.checkmark}></span>
                         </label>
                     </div>
-                    <div className="info-item4">
-                        <label className="my_input"><div className="info">show rumbs</div>
-                            <input type="checkbox" checked={rumbs_isvis} onChange={rumbCheckboxChange}/>
-                            <span className="checkmark"></span>
-                        </label>
-                    </div>
+
+
                 </div>
             </div>
         </div>
     );
 }
+
+
+
+

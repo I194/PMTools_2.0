@@ -1,17 +1,17 @@
 import React, {} from 'react';
 
 import { useTheme } from '@mui/material/styles';
-import { Cutoff } from "../utils/GlobalTypes";
-import { DotsData, GraphSettings, MeanDirection, TooltipDot } from "../utils/graphs/types";
-import { graphSelectedDotColor } from "../utils/ThemeConstants";
-import { Axis, Data, Dot } from "../components/Common/Graphs";
+import { Cutoff } from "../../utils/GlobalTypes";
+import { DotsData, GraphSettings, MeanDirection, TooltipDot } from "../../utils/graphs/types";
+import { graphSelectedDotColor } from "../../utils/ThemeConstants";
+import { Axis, Data, Dot } from "../../components/Common/Graphs";
 
 
 // import Graphs from '../pages/DIRPage/Graphs';
 // import { Rumbs } from "./rumbs";
-import { DegreeGrid } from "../gag_components/degreeGrid";
+import { DegreeGrid } from "../degreeGrid/degreeGrid";
 
-
+import styles from "./ZoomedLabertGraph.module.scss" 
 
 import {
     RotateAroundV,
@@ -25,7 +25,7 @@ import {
     points_dist_2d,
     getViewBoxSize,
     getPointSize
-} from "./gag_functions";
+} from "../gag_functions";
 
 
 
@@ -41,7 +41,6 @@ interface HGGraph {
     polygonColor: string,
     showGrid: boolean,
     showDegreeGrid: boolean,
-    showRumbs: boolean,
     showPolygon: boolean,
 }
 
@@ -58,7 +57,6 @@ export function ZoomedLambertGraph({
     polygonColor,
     showGrid,
     showDegreeGrid,
-    showRumbs,
     showPolygon
 }: HGGraph) {
 
@@ -84,13 +82,15 @@ export function ZoomedLambertGraph({
 
 
     // to see all sphere
+    // fullViewBoxSize = '-0.5 -0.5 1 1';
+    // viewBoxSize = '-0.5 -0.5 1 1';
     // fullViewBoxSize = '-1 -1 2 2';
     // viewBoxSize = '-1 -1 2 2';
 
     if (angleList[0] == 0) {
       return (
         <div>
-          <svg className="svg interface" key={6534324} viewBox={"-1 -1 2 2"} />
+          <svg className={styles.svg + ' ' + styles.interface} key={6534324} viewBox={"-1 -1 2 2"} />
         </div>
       );
     }
@@ -225,7 +225,7 @@ export function ZoomedLambertGraph({
     //---------------------------------------------------------------------------------------
     
     return (
-        <svg className="graph_interface" viewBox={ fullViewBoxSize }>
+        <svg className={styles.graph_interface} viewBox={ fullViewBoxSize }>
  
             {/* Градусная сетка */}
             { showDegreeGrid && 
@@ -236,8 +236,6 @@ export function ZoomedLambertGraph({
                     meanDir={meanDir}
                 />
             }
-
-
 
 
             {/* Закраска зоны пересечения кругов */}

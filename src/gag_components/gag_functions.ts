@@ -620,6 +620,7 @@ export function lineSphereIntersect(v: number[]) {
 export function convertToLambert(v: number[], fish_dir: number[]) {
     // let my_perp = get_perp([0, 0, 1], fish_dir);
     return lineSphereIntersect(v);
+    // return v;
 }
 
 export function lambertMass(points: number[][], fish_dir: number[]){
@@ -855,16 +856,16 @@ export function PlotArcInBox(dir: number[], phi:number, window: number, circlePo
     // rotate one point in + with little step
     let rotPoint: number[] = onePoint;
 
-    while (
-        rotPoint[1] < topLimit && 
-        rotPoint[1] > bottomLimit && 
-        rotPoint[0] < rightLimit && 
-        rotPoint[0] > leftLimit && 
-        rotPoint[2] > 0
+    for ( let i = 0; i < circlePointsNumb; i ++ ) {
+        if (
+            rotPoint[1] < topLimit && 
+            rotPoint[1] > bottomLimit && 
+            rotPoint[0] < rightLimit && 
+            rotPoint[0] > leftLimit 
         ) {
-
-        rotPoint = RotateAroundV(rotPoint, dir, -360 / circlePointsNumb);
-        points.push( rotPoint );
+            rotPoint = RotateAroundV(rotPoint, dir, -360 / circlePointsNumb);
+            points.push( rotPoint );
+        }
     }
 
     points.reverse();
@@ -872,16 +873,18 @@ export function PlotArcInBox(dir: number[], phi:number, window: number, circlePo
     // rotate one point in - with little step
     rotPoint = onePoint;
 
-    while (
-        rotPoint[1] < topLimit && 
-        rotPoint[1] > bottomLimit && 
-        rotPoint[0] < rightLimit && 
-        rotPoint[0] > leftLimit && 
-        rotPoint[2] > 0
-        ) {
 
-        rotPoint = RotateAroundV(rotPoint, dir, 360 / circlePointsNumb);              
-        points.push( rotPoint );
+    for ( let i = 0; i < circlePointsNumb; i ++ ) {
+
+        if (
+            rotPoint[1] < topLimit && 
+            rotPoint[1] > bottomLimit && 
+            rotPoint[0] < rightLimit && 
+            rotPoint[0] > leftLimit 
+        ) {
+            rotPoint = RotateAroundV(rotPoint, dir, 360 / circlePointsNumb);              
+            points.push( rotPoint );
+        }
     }
     return points;
 }

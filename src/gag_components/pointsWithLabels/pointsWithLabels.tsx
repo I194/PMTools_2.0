@@ -24,7 +24,7 @@ import {
 
     GeoVdek,
 
-} from "./gag_functions";
+} from "../gag_functions";
 
 interface PointsWithLabels {
     points: number[][],

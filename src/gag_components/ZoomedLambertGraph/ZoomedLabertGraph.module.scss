@@ -1,0 +1,108 @@
+
+:root {
+  --my-white: white;
+  --menu-blue: #4690db;
+  --my-grey: #c5c5c5;
+  --checkbox-hover: #1975d2;
+  --my-black: #202020;
+  --checkmark-hover: #ccc;
+  --my-checkmark: #e0e0e0;
+  --my-select: #e4e4e4;
+  --my-shadow: rgba(0, 0, 0, 0.15);
+  --my-shadow2: rgba(0, 0, 0, 0.15);
+  --button-blue: #4690db;
+  --button-blue2: #90caf9;
+  --button-blue3: #62b8ff;
+  --my-tooltip: #202020;
+  --my-tooltip-back: #c5c5c5;
+  
+  --color-scheme: light;
+}
+
+.dark {
+  --my-white: #424242;
+  --menu-blue: #90caf9;
+  --my-grey: #999999;
+  --checkbox-hover: #4892cf;
+  --my-black: #202020;
+  --checkmark-hover: #4892cf;
+  --my-checkmark: #90caf9;
+  --my-select: #90caf9;
+  --my-shadow: rgba(144, 202, 249, 0.31);
+  --my-shadow2: rgba(144, 202, 249, 0.55);
+
+  --button-blue: #0280fd;
+  --button-blue2: #2375c6;
+  --button-blue3: #229cff;
+  --my-tooltip: #90caf9;
+  --color-scheme: dark;
+  --my-tooltip-back: #424242;
+}
+
+.interface{
+  border: 3px solid var(--my-grey);
+  border-radius: 6px;
+  padding: 1vh;
+  height: 17.5vh;
+  display: grid;
+  grid-template-columns: 6fr 6fr 4fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-gap: 10px;
+}
+
+.interface:hover{
+  border: 3px solid var(--menu-blue);
+  /* border-radius: 12px; */
+  transition: 0.4s ease-in-out;
+}
+
+
+.graph_interface{
+  height: 52vh;
+  width: 97%;
+  border: 3px solid var(--my-grey);
+  border-radius: 6px;
+  padding: auto;
+  position: relative; 
+}
+
+.graph_interface:hover{
+  border: 3px solid var(--menu-blue);
+  /* border-radius: 12px; */
+  transition: 0.4s ease-in-out;
+
+}
+
+@media screen and (max-width: 720px){
+ 
+  .interface{
+    padding: 5px;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 5fr 5fr 5fr;
+    grid-template-rows: 1fr 1fr 2fr;
+    grid-gap: 10px;
+  }
+
+  .graph_interface{
+    height: 12vh;
+  }
+}
+
+@media screen and (max-height: 580px){
+ 
+  .interface{
+    padding: 5px;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 5fr 5fr 3fr ;
+    grid-template-rows: 1fr 1fr 2fr;
+    grid-gap: 10px;
+  }
+
+  .graph_interface{
+    /* display: block; */
+    height: 200px;
+    padding: 5px;
+  }
+}

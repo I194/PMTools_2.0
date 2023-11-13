@@ -10,7 +10,7 @@ import { MainPage, DIRPage, PCAPage, NotFoundPage, WhyPMToolsPage, AuthorsAndHis
 import { useSystemTheme } from '../utils/GlobalHooks';
 import { setColorMode } from '../services/reducers/appSettings';
 
-import {Khokhlov_Gvozdik} from "../gag_components/khokhlov-gvozdik";
+import {Khokhlov_Gvozdik} from "../gag_components/khokhlov-gvozdik/khokhlov-gvozdik";
 
 function App() {
 
