@@ -1,9 +1,8 @@
-import React, {createElement as e, useEffect, useState} from 'react';
-import {ZoomedLambertGraph} from "../ZoomedLambertGraph/ZoomedLambertGraph";
-import {TooltipContent} from "../debugCrash/my-tooltip";
+import React, { createElement as e, useEffect, useState } from 'react';
+import { ZoomedLambertGraph } from "../ZoomedLambertGraph/ZoomedLambertGraph";
 import styles from "./khokhlov-gvozdik.module.scss" 
 import { Footer, NavPanel } from "../../components/MainPage";
-
+import {CACTable} from "../CACTable/CACTable";
 
 import {
     GeoVdek,
@@ -36,7 +35,7 @@ export function Khokhlov_Gvozdik() {
     var min_lat = 10;
 
     // for debug
-    const [octo, setOcto] = useState<number>(1);
+    const [octo, setOcto] = useState<number>(9);
 
     const octoChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const number = parseInt(event.target.value);
@@ -225,7 +224,7 @@ export function Khokhlov_Gvozdik() {
         setisvisgrid(!isvisgrid);
     };
     
-    const [selectedNumber, setSelectedNumber] = useState<number>(100000);
+    const [selectedNumber, setSelectedNumber] = useState<number>(10000);
 
     const handleNumberChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         const number = parseInt(event.target.value);
@@ -387,7 +386,12 @@ export function Khokhlov_Gvozdik() {
                 />
 
             </div>
+
             <div className={styles.table_container + ' ' + styles.commonContainer}>
+                <CACTable />
+            </div>
+
+            <div className={styles.table2_container + ' ' + styles.commonContainer}>
                 {/* for debug */}
                 <select className={styles.select2Item + ' ' + styles.item + ' ' + styles.my_select} value={octo} onChange={octoChange}>
                     <option value={1}>+++</option>
@@ -399,29 +403,23 @@ export function Khokhlov_Gvozdik() {
                     <option value={7}>--+</option>
                     <option value={8}>---</option>
                     <option value={9}>010</option>
+
                 </select>
-                <br></br>
-  
+
                 <br></br>
 
-                {sred_dir[0]}
+                {sred_dir[0].toFixed(2)}
                 <br></br>
-                {sred_dir[1]}
+                {sred_dir[1].toFixed(2)}
                 <br></br>
-                {sred_dir[2]}
-                <br></br>
+                {sred_dir[2].toFixed(2)}
                 <br></br>
                 {DekVgeo(sred_dir)[0].toFixed(2)}
                 <br></br>
                 {DekVgeo(sred_dir)[1].toFixed(2)}
                 <br></br>
-                <br></br>
-            
-
             </div>
-            <div className={styles.table2_container + ' ' + styles.commonContainer}>
 
-            </div>
             <div className={styles.container + ' ' + styles.commonContainer}>
 
                 <div className={styles.interfaceTooltip}>

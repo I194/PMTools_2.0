@@ -933,13 +933,6 @@ export function getOneCirclePoint(dir: number[], phi:number){
 
 
 
-
-
-
-
-
-
-
 export function centerToBack(input: number[], dir: number[]){
     let point = input;
     dir = NormalizeV(dir);
@@ -1038,10 +1031,223 @@ export function plotParalellCircle(dir: number[], pointsCount: number){
     return res;
 }
 
+// эта функция обрезает концы паралелей, выходящие за рамку. концы могут пересекать 
+// рамку через две из 4 сторон рамки. тут рассматриваются все варианты пересечения
+export function cutParEnd(line: number[][], window: number){
+    if (line.length == 0){
+        return [];
+    }
+    let leftLimit: number = -window;
+    let rightLimit: number = window;
+    let topLimit: number = window;
+    let bottomLimit: number = -window;
+
+    let res: number[][] = line;
+    let endPoint: number[] = line[line.length - 1];
+    let startPoint: number[] = line[0];
+
+    if (startPoint[0] < leftLimit) {
+
+        let k:number = (startPoint[1] - res[1][1]) / (startPoint[0] - res[1][0]);
+        let b: number = startPoint[1] - k * startPoint[0];
+        startPoint = [-window, -window * k + b, startPoint[2]];
+
+        for (let i: number = 0; i < res.length - 1; i++){
+            if (res[i][0] < leftLimit){
+                res[i] = startPoint;
+            }
+            else{
+                break;
+            }
+        }
+
+
+    }
+    
+    if (endPoint[0] > rightLimit) {
+
+        let k:number = (endPoint[1] - res[res.length - 2][1]) / (endPoint[0] - res[res.length - 2][0]);
+        let b: number = endPoint[1] - k * endPoint[0];
+        endPoint = [window, window * k + b, endPoint[2]];
+
+        let i: number = res.length - 1;
+        for (let i: number = res.length - 1; i > 1; i--){
+            if (res[i][0] > rightLimit){
+                res[i] = endPoint;
+            }
+            else{
+                break;
+            }
+        }
+
+
+    }
+
+    if (endPoint[1] < bottomLimit) {
+        let i: number = line.length - 1;
+        for (let i: number = line.length - 1; i > 1; i--){
+            if (line[i][1] > -topLimit){
+                res.splice(i + 1, res.length - i + 1);
+                break;
+            }
+        }
+        let k:number = (endPoint[1] - line[line.length - 2][1]) / (endPoint[0] - line[line.length - 2][0]);
+        let b: number = endPoint[1] - k * endPoint[0];
+        endPoint = [(-window - b) / k, -window, endPoint[2]];
+    }
+
+
+    if (startPoint[1] < bottomLimit) {
+        for (let i: number = 0; i < res.length - 1; i++){
+            if (line[i][1] > -topLimit){
+                res = res.slice(i - 1);
+                break;
+            }
+        }
+        let k:number = (startPoint[1] - line[1][1]) / (startPoint[0] - line[1][0]);
+        let b: number = startPoint[1] - k * startPoint[0];
+        startPoint = [(-window - b) / k, -window, startPoint[2]];
+    }
+
+
+    // res[line.length - 1] = endPoint;
+    // res[0] = startPoint;
+    for (let i: number = 0; i < res.length; i++){
+        if (line[i][1] > topLimit){
+            line[i][1] = topLimit;
+        }
+    }
+
+
+    return res;
+
+}
 
 
 
 
+
+
+
+
+// // эта функция обрезает концы меридианов, выходящие за рамку. концы могут пересекать 
+// // рамку через две из 4 сторон рамки. тут рассматриваются все варианты пересечения
+// // если конец пересекает одну из 4 сторон, то функция меняет его координаты так,
+// // чтобы конец лег на рамку
+
+// for meridians
+export function cutMerEnd(line: number[][], window: number){
+    
+    if (line.length == 0){
+            return [];
+    }
+    let leftLimit: number = -window;
+    let rightLimit: number = window;
+    let topLimit: number = window;
+    let bottomLimit: number = -window;
+
+    let res: number[][] = cutParEnd(line, window);
+    // let res: number[][] = line;
+
+    let endPoint: number[] = res[res.length - 1];
+    let startPoint: number[] = res[0];
+
+
+    if (res[res.length - 1][1] == topLimit){
+        let k: number = (res[res.length - 4][1] - res[res.length - 3][1]) / (res[res.length - 4][0] - res[res.length - 3][0]);
+        let b: number = res[res.length - 4][1] - k * res[res.length - 4][0];
+        
+        res[res.length - 1][0] = (topLimit - b) / k;
+        
+        let i: number = res.length - 1;
+        for (let i: number = res.length - 1; i > 1; i--){
+            if (res[i][1] == topLimit){
+                res[i][0] = res[res.length - 1][0];
+            }
+            else{
+                break;
+            }
+        }
+    
+    }
+
+    if (startPoint[0] > rightLimit) {
+
+        let k:number = (startPoint[1] - res[res.length - 2][1]) / (startPoint[0] - res[res.length - 2][0]);
+        let b: number = startPoint[1] - k * startPoint[0];
+        startPoint = [window, window * k + b, startPoint[2]];
+
+
+        for (let i: number = 0; i < res.length - 1; i++){
+            if (res[i][0] > rightLimit){
+                res[i] = startPoint;
+            }
+            else{
+                break;
+            }
+        }
+    }
+    res[0] = startPoint;
+
+    if (endPoint[0] < leftLimit) {
+
+        let k:number = (endPoint[1] - res[res.length - 2][1]) / (endPoint[0] - res[res.length - 2][0]);
+        let b: number = endPoint[1] - k * endPoint[0];
+        endPoint = [-window, -window * k + b, endPoint[2]];
+
+        let i: number = res.length - 1;
+        for (let i: number = res.length - 1; i > 1; i--){
+            if (res[i][0] < leftLimit){
+                res[i] = endPoint;
+            }
+            else{
+                break;
+            }
+        }
+    }
+
+
+
+    
+    if (res[0][1] < -topLimit) {
+        let k:number = (res[1][1] - res[2][1]) / (res[1][0] - res[2][0]);
+        let b: number = res[1][1] - k * res[1][0];
+        res[0] = [(-window - b) / k, -window, res[0][2]];
+
+
+        for (let i: number = 0; i < res.length - 1; i++){
+            if (res[i][1] < -topLimit){
+                res[i] = res[0];
+            }
+            else{
+                break;
+            }
+        }
+
+    }
+
+
+    
+    if (res[res.length - 1][1] > -bottomLimit) {
+        let k:number = (res[res.length - 1][1] - res[res.length - 2][1]) / (res[res.length - 1][0] - res[res.length - 2][0]);
+        let b: number = res[res.length - 1][1] - k * res[res.length - 1][0];
+        res[res.length - 1] = [(window - b) / k, window, res[res.length - 1][2]];
+
+
+        for (let i: number = res.length - 1; i > 1; i--){
+            if (res[res.length - 1][1] > -bottomLimit){
+                res[i] = res[res.length - 1];
+            }
+            else{
+                break;
+            }
+        }
+
+    }
+
+    return res;
+
+}
 
 
 

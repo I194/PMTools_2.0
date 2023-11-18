@@ -24,6 +24,8 @@ import {
     plotParalellCircle,
     plotMeridianCircle,
     GeoVdek,
+    cutParEnd,
+    cutMerEnd,
 
 } from "../gag_functions";
 import { Axis, Data, Dot } from "../../components/Common/Graphs";
@@ -44,7 +46,7 @@ export function DegreeGrid({
                                 meanDir
                             }: degreeGraticules) {
    
-   
+
     //---------------------------------------------------------------------------------------
     // RAM
     //---------------------------------------------------------------------------------------
@@ -54,8 +56,8 @@ export function DegreeGrid({
     
                 
     // расчет спроецированных координат рамки
-    let lamberWidth =  convertToLambert([width, 0, Math.sqrt(1 - width * width)], meanDir)[0] * 1.02;       
-    width = lamberWidth * 0.98;
+    let lamberWidth =  width;       
+   
     // width = lamberWidth * 0.98;
 
 
@@ -77,155 +79,134 @@ export function DegreeGrid({
     // MERIDIANS PLOT
     //---------------------------------------------------------------------------------------
 
-    let p: number[][] = [];
-
     let meridiansInBox: number[][][] = [];
 
     let degreeMerLabels:number[][] = [];
     let endMerCords: number[][] = [];
 
-    let degreeMerLabelsShift: number[] = [0, 0];
+    let degreeMerLabelsShift: number[] = [0, width / 8];
     
     let merTicks: number[][][] = [];
 
-    let merPoint: number[];
-    let merTicksSift: number;
+    let merTicksSift: number = width / 25;
 
     let point = [1, 0, 0];
 
+    let centeredMeridian: number[][] = [];
+
     for (let i = 0; i < meridianCount / 2; i++) {
 
+
         point = RotateAroundV(point, [0, 1, 0], 360 / meridianCount );
-        let centeredMeridian = PlotArcInBox(to_center(point, meanDir), 90, width, 3000);
+        centeredMeridian = PlotArcInBox(to_center(point, meanDir), 90, width, 200);
        
-        if (centeredMeridian.length > 5){
+        // слабое место. здесь происходит вылет, без ошибки если убрать это условие, не знаю почему
+        if (centeredMeridian.length > 3){
             
+            // разварачиваю массивы с точками меридианов, чтобы нулевая точка была внизу сетки
             if (centeredMeridian[0][1] > centeredMeridian[2][1]) {
                 centeredMeridian.reverse();
             }
 
-            meridiansInBox.push(centeredMeridian );
-
-            if (meanDir[1] < 0) {
-                merPoint = centeredMeridian[centeredMeridian.length - 1];
-                degreeMerLabelsShift = [-width/ 15, width/ 8];
-                merTicksSift = width / 25;
-            }
-            else{
-                merPoint = centeredMeridian[0];
-                degreeMerLabelsShift = [-width/ 15, -width/ 20];
-                merTicksSift = -width / 30;
-            }
-
-            endMerCords.push(merPoint);
+            // обрезаю концы параллелей и меридианов по краю рамки
+            centeredMeridian = cutMerEnd(lambertMass(centeredMeridian, meanDir), width);
+            meridiansInBox.push(centeredMeridian);
             
-            if (merPoint[0] < -width * 0.95 || merPoint[0] > width * 0.95){
+            // координата конца меридиана
+            let merEnd: number[] = centeredMeridian[centeredMeridian.length - 1]
 
-                merPoint = centerToBack(merPoint, meanDir);
-                degreeMerLabels.push([1000, 1000]);
-            }
-            else {
+            // координаты делений и подписи к ним
+            // только внизу сетки
+            if (merEnd[1] == width) {
+                degreeMerLabels.push(DekVgeo(centerToBack(merEnd, meanDir)));
+                 
                 merTicks.push(
                     [
-                        merPoint, 
+                        merEnd, 
                         [
-                            merPoint[0], 
-                            merPoint[1] + merTicksSift, 
-                            merPoint[2]
+                            merEnd[0], 
+                            merEnd[1] + merTicksSift, 
+                            merEnd[2]
                         ]
                     ]
                 );
-
-                merPoint = centerToBack(merPoint, meanDir);
-                degreeMerLabels.push(DekVgeo(merPoint));
-
-                p.push(merPoint);
-
+                
+                // задаю координаты подписи долготы и сдвиг для разного числа символов подписи
+                let xMerLabelSift: number = 0;
+                let lenOfLabel: number = String(degreeMerLabels[degreeMerLabels.length - 1][0].toFixed()).length
   
-            }
+                if (lenOfLabel == 1) {
+                    xMerLabelSift = width / 50;
+                }
+                else if (lenOfLabel == 2) {
+                    xMerLabelSift = width / 22;
+                }
+                else if (lenOfLabel == 3) {
+                    xMerLabelSift = width / 15;
+                }
+                else {
+                    xMerLabelSift = width / 11;
+                }
+                endMerCords.push(
+                    [
+                        merEnd[0] - xMerLabelSift, 
+                        merEnd[1], 
+                        merEnd[2]
+                    ]
+                );
+            }      
         }
     }
+
+
 
     //---------------------------------------------------------------------------------------
     // PARALELS PLOT
     //---------------------------------------------------------------------------------------
     
     let paralelsInBox:number[][][] = [];
-    let paralels: string[] = [];
 
     let degreeParLabels:number[][] = [];
     let endParCords: number[][] = [];
 
-    let degreeParLabelsShift: number[] = [0, 0];
-    
     let parTicks: number[][][] = [];
 
-    let parPoint: number[];
-    let parTicksSift: number;
-
+    let parTicksSift: number =  width / 25;
+    let degreeParLabelsShift: number[] = [-width / 5.5, width / 35];
 
     for (let i = 2; i < parallelsCount / 2; i++) {
 
-        let centeredParallel: number[][] = PlotArcInBox(to_center([0, 1, 0], meanDir), i * (360 / meridianCount), width, 3000);
-       
+        let centeredParallel: number[][] = PlotArcInBox(to_center([0, 1, 0], meanDir), i * (360 / meridianCount), width, 300);
+
         if (centeredParallel.length > 5){
-            
+
             if (centeredParallel[0][0] > centeredParallel[2][0]) {
                 centeredParallel.reverse();
             }
+            centeredParallel = cutParEnd(lambertMass(centeredParallel, meanDir), width);
             
             paralelsInBox.push(centeredParallel);
 
-            parPoint = centeredParallel[0];
-            degreeParLabelsShift = [-width / 6, width / 35];
-            parTicksSift = width / 25;
+            if (centeredParallel[0][0] == -width){
+                endParCords.push(centeredParallel[0]);
 
-            endParCords.push(parPoint);
-            // это проверка на то, чтобы подписи паралелей были только с одной стороны
-            if (parPoint[1] < -width * 0.95 || parPoint[1] > width * 0.95){
+                degreeParLabels.push(DekVgeo(centerToBack(centeredParallel[0], meanDir)));
 
-                parPoint = centerToBack(parPoint, meanDir);
-                degreeParLabels.push([1000, 1000]);
-            }
-            // проверка на то, чтобы подписи в полярных областях не появлялись внутри рамки на 80 или -80 паралели
-            else if (parPoint[0] < -width * 0.95 || parPoint[0] > width * 0.95){
                 parTicks.push(
                     [
-                        parPoint, 
+                        centeredParallel[0], 
                         [
-                            parPoint[0] - parTicksSift, 
-                            parPoint[1], 
-                            parPoint[2]
+                            centeredParallel[0][0] - parTicksSift, 
+                            centeredParallel[0][1], 
+                            centeredParallel[0][2]
                         ]
                     ]
-                );
-
-                parPoint = centerToBack(parPoint, meanDir);
-                degreeParLabels.push(DekVgeo(parPoint));
-
-                p.push(parPoint);
-
-  
+                );    
             }
-
         }
-
-    }
-
-    if (isNaN(degreeParLabels[0][1])){
-        degreeParLabels[0][1] = 0;
     }
 
 
-    // convertToLambert
-    // lambertMass
-
-
-    // merTicks = lambertMass(merTicks, meanDir);
-    // parTicks = lambertMass(parTicks, meanDir);
-
-    endMerCords = lambertMass(endMerCords, meanDir);
-    endParCords = lambertMass(endParCords, meanDir);
 
     //---------------------------------------------------------------------------------------
     // RETURN
@@ -240,7 +221,7 @@ export function DegreeGrid({
 
             { meridiansInBox.map((circles) => (
                 <polyline 
-                    points={ make_coords(lambertMass(circles, meanDir)) } 
+                    points={ make_coords(circles) } 
                     stroke={ "grey" }
                     fill={'none'}
                     strokeWidth={width / 230} 
@@ -258,11 +239,10 @@ export function DegreeGrid({
                 yShift={degreeMerLabelsShift[1]}
             />
 
-
             {/* MERIDIANS TICKS */}
             { merTicks.map((tick) => (
                 <polyline 
-                    points={ make_coords(lambertMass(tick, meanDir)) } 
+                    points={ make_coords(tick) } 
                     stroke={ "black" }
                     fill={'none'}
                     strokeWidth={width / 80} 
@@ -275,12 +255,37 @@ export function DegreeGrid({
             
             { paralelsInBox.map((circles) => (
                 <polyline 
-                    points={ make_coords(lambertMass(circles, meanDir)) } 
+                    points={ make_coords(circles) } 
                     stroke={ "grey" }
                     fill={'none'}
                     strokeWidth={width / 230} 
                 />
             ))}
+
+
+            {/* debug */}
+            {/* { paralelsInBox.map((circles) => (
+                <>
+                    {cutMerEnd(lambertMass(circles, meanDir), width).map((circle) => (
+                        <circle 
+                            cx={circle[0]} 
+                            cy={circle[1]} 
+                            r={width / 130} // радиус точки 
+                            fill="purple" // цвет точки
+                        />
+                    ))}
+                </>
+            ))} */}
+
+            {/* {endParCords.map((circles) => (
+                <circle 
+                    cx={circles[0]} 
+                    cy={circles[1]} 
+                    r={width / 27} 
+                    fill="red" 
+                />
+            ))} */}
+
 
             {/* PARALELS LABELS */}
             <PointsWithLabels
@@ -296,7 +301,7 @@ export function DegreeGrid({
             {/* PARALLELS TICKS */}
             { parTicks.map((tick) => (
                 <polyline 
-                    points={ make_coords(lambertMass(tick, meanDir)) } 
+                    points={ make_coords(tick) } 
                     stroke={ "black" }
                     fill={'none'}
                     strokeWidth={width / 80} 
@@ -314,7 +319,6 @@ export function DegreeGrid({
                 fill={'none'}
                 strokeWidth={width / 100} 
             />
-
 
         </g>
     );
