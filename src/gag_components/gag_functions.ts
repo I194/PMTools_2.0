@@ -135,6 +135,7 @@ export function GridVdek(phiAngle: number, lmbdAngle: number)
     let Z: number = r * Math.sin(phi);
     
     let C: number[] = RotateAroundV([X, Y, Z], [1,0,0], 90);
+
     return C;
 
 }

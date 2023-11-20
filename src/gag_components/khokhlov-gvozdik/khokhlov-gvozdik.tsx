@@ -3,6 +3,7 @@ import { ZoomedLambertGraph } from "../ZoomedLambertGraph/ZoomedLambertGraph";
 import styles from "./khokhlov-gvozdik.module.scss" 
 import { Footer, NavPanel } from "../../components/MainPage";
 import {CACTable} from "../CACTable/CACTable";
+import {CACResultTable} from "../CACResultTable/CACResultTable";
 
 import {
     GeoVdek,
@@ -347,9 +348,42 @@ export function Khokhlov_Gvozdik() {
     //     }
     //   };
     
+    //---------------------------------------------------------------------------------------
+    // Result Table props
+    //---------------------------------------------------------------------------------------
 
     
+    const rows: Row[] = [
+        { 
+            id: 1, 
+            Code: 'CAC', 
+            N: dir_number, 
+            Lat: DekVgeo(center_zone)[0].toFixed(2), 
+            Lon: DekVgeo(center_zone)[1].toFixed(2), 
+            ZoneRad: 999,
+            FishLat: DekVgeo(sred_dir)[0].toFixed(2),
+            FishLon: DekVgeo(sred_dir)[1].toFixed(2),
+            alpha95: alpha95.toFixed(2)
+        },
+    ];
+    
+    
 
+    interface HGGResult {
+        rows: Row[]
+    }
+
+    type Row = {
+        id: number,
+        Code: string,
+        N: number,
+        Lat: string,
+        Lon: string,
+        ZoneRad: number,
+        FishLat: string,
+        FishLon: string,
+        alpha95: string
+    };
     //---------------------------------------------------------------------------------------
     // Interface
     //---------------------------------------------------------------------------------------
@@ -389,10 +423,9 @@ export function Khokhlov_Gvozdik() {
 
             <div className={styles.table_container + ' ' + styles.commonContainer}>
                 <CACTable />
-            </div>
-
-            <div className={styles.table2_container + ' ' + styles.commonContainer}>
+                
                 {/* for debug */}
+                <br></br>
                 <select className={styles.select2Item + ' ' + styles.item + ' ' + styles.my_select} value={octo} onChange={octoChange}>
                     <option value={1}>+++</option>
                     <option value={2}>++-</option>
@@ -407,17 +440,12 @@ export function Khokhlov_Gvozdik() {
                 </select>
 
                 <br></br>
+            </div>
 
-                {sred_dir[0].toFixed(2)}
-                <br></br>
-                {sred_dir[1].toFixed(2)}
-                <br></br>
-                {sred_dir[2].toFixed(2)}
-                <br></br>
-                {DekVgeo(sred_dir)[0].toFixed(2)}
-                <br></br>
-                {DekVgeo(sred_dir)[1].toFixed(2)}
-                <br></br>
+            <div className={styles.table2_container + ' ' + styles.commonContainer}>
+                <CACResultTable 
+                    rows={rows}
+                />
             </div>
 
             <div className={styles.container + ' ' + styles.commonContainer}>
