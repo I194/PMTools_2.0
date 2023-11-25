@@ -1,11 +1,8 @@
-import React, { FC, useCallback, useEffect, useState } from "react";
-import styles from './DataTablePMD.module.scss';
+import React, { FC, useState } from "react";
 import { IPmdData } from "../../../../utils/GlobalTypes";
 import { DataGrid, GridActionsCellItem, GridColDef, GridColumns, GridEditRowsModel, GridEventListener, GridEvents, GridRowParams, GridValueFormatterParams, MuiEvent, useGridApiRef } from '@mui/x-data-grid';
 import MetaDataTablePMDSkeleton from './MetaDataTablePMDSkeleton';
 import { GetDataTableBaseStyle } from "../styleConstants";
-import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
-import { setTreatmentData } from "../../../../services/reducers/parsedData";
 import EditIcon from '@mui/icons-material/Edit';
 import MetaDataChange from "../../../Common/DataTable/MetaDataChange/MetaDataChange";
 import ModalWrapper from "../../../Common/Modal/ModalWrapper";

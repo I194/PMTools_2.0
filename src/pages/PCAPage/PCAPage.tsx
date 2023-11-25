@@ -7,7 +7,6 @@ import {
   showStepsInput, 
   updateCurrentInterpretation 
 } from '../../services/reducers/pcaPage';
-import { filesToData } from '../../services/axios/filesAndData';
 import { IPmdData } from '../../utils/GlobalTypes';
 import calculateStatisticsPMD from '../../utils/statistics/calculateStatisticsPMD';
 import { MetaDataTablePMD, ToolsPMD } from '../../components/AppLogic';
@@ -29,16 +28,11 @@ const PCAPage: FC = ({}) => {
   const heightLessThan560 = useMediaQuery({ maxHeight: 559 });
   const unsupportedResolution = widthLessThan720 || heightLessThan560;
 
-  const files = useAppSelector(state => state.filesReducer.treatmentFiles);
   const { treatmentData, currentDataPMDid } = useAppSelector(state => state.parsedDataReducer);
   const { statisticsMode, selectedStepsIDs, hiddenStepsIDs, currentFileInterpretations, allInterpretations } = useAppSelector(state => state.pcaPageReducer);
 
   const [dataToShow, setDataToShow] = useState<IPmdData | null>(null);
   const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (files) dispatch(filesToData({files, format: 'pmd'}));
-  }, [files, files?.length]); 
 
   useEffect(() => {
     if (treatmentData && treatmentData.length > 0) {

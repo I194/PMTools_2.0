@@ -27,7 +27,6 @@ const DIRPage: FC = ({}) => {
   const heightLessThan560 = useMediaQuery({ maxHeight: 559 });
   const unsupportedResolution = widthLessThan720 || heightLessThan560;
 
-  const files = useAppSelector(state => state.filesReducer.dirStatFiles);
   const { dirStatData, currentDataDIRid } = useAppSelector(state => state.parsedDataReducer);
   const { 
     statisticsMode, 
@@ -40,10 +39,6 @@ const DIRPage: FC = ({}) => {
 
   const [dataToShow, setDataToShow] = useState<IDirData | null>(null);
   const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (files) dispatch(filesToData({files, format: 'dir'}));
-  }, [files, files?.length]);
 
   useEffect(() => {
     if (dirStatData && dirStatData.length > 0) {

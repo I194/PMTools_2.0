@@ -2,7 +2,6 @@ import React, { FC, useCallback } from "react";
 import styles from "./AppLayout.module.scss";
 import { Outlet, RouteProps, useLocation, } from "react-router-dom";
 import { useAppDispatch } from "../../../services/store/hooks";
-import { addDirStatFiles, addTreatmentFiles } from "../../../services/reducers/files";
 import { AppSettings, AppNavigation } from "../../AppLogic";
 import { useDropzone } from "react-dropzone";
 import { useTheme } from '@mui/material/styles';
@@ -15,6 +14,7 @@ import {
 import GraphSelector from "../../AppLogic/GraphsSelector/GraphsSelector";
 import { useMediaQuery } from "react-responsive";
 import { useTranslation } from "react-i18next";
+import { filesToData } from "../../../services/axios/filesAndData";
 
 const AppLayout: FC<RouteProps> = () => {
 
@@ -26,9 +26,9 @@ const AppLayout: FC<RouteProps> = () => {
   const currentPage = location.pathname.split('/').pop() || location.pathname;
 
   const handleFileUpload = (event: any, files?: Array<File>) => {;
-    const acceptedFiles = files ? files : Array.from(event.currentTarget.files);
-    if (currentPage === 'pca') dispatch(addTreatmentFiles(acceptedFiles));
-    if (currentPage === 'dir') dispatch(addDirStatFiles(acceptedFiles));
+    const acceptedFiles: File[] = files ? files : Array.from(event.currentTarget.files);
+    if (currentPage === 'pca') dispatch(filesToData({files: acceptedFiles, format: 'pmd'}));
+    if (currentPage === 'dir') dispatch(filesToData({files: acceptedFiles, format: 'dir'}));
   };
 
   const onDrop = useCallback(acceptedFiles => {

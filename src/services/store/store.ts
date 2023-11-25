@@ -1,6 +1,5 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import appSettingsReducer from "../reducers/appSettings";
-import filesReducer from "../reducers/files";
 import parsedDataReducer from "../reducers/parsedData";
 import pcaPageReducer from "../reducers/pcaPage";
 import dirPageReducer from "../reducers/dirPage";
@@ -9,7 +8,6 @@ import { pcaMiddleware } from './middleware';
 
 export const rootReducer = combineReducers({
   appSettingsReducer,
-  filesReducer,
   parsedDataReducer,
   pcaPageReducer,
   dirPageReducer,

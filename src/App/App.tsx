@@ -7,6 +7,7 @@ import { MainPageLayout, AppLayout } from '../components/Layouts';
 import { MainPage, DIRPage, PCAPage, NotFoundPage, WhyPMToolsPage, AuthorsAndHistory } from '../pages';
 import { useSystemTheme } from '../utils/GlobalHooks';
 import { setColorMode } from '../services/reducers/appSettings';
+import { setDirStatData, setTreatmentData } from '../services/reducers/parsedData';
 
 function App() {
 
@@ -30,6 +31,19 @@ function App() {
       mode: colorMode
     },
   });
+
+  useEffect(() => {
+    const treatmentData = localStorage.getItem('treatmentData');
+    const dirStatData = localStorage.getItem('dirStatData');
+
+    if (treatmentData) {
+      dispatch(setTreatmentData(JSON.parse(treatmentData)));
+    }
+
+    if (dirStatData) {
+      dispatch(setDirStatData(JSON.parse(dirStatData)));
+    }
+  }, []);
 
   return (
     <Suspense fallback="loading">

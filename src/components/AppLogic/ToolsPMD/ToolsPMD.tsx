@@ -12,13 +12,12 @@ import InputApply from '../../Common/InputApply/InputApply';
 import ToolsPMDSkeleton from './ToolsPMDSkeleton';
 import OutputDataTablePMD from '../DataTablesPMD/OutputDataTable/OutputDataTablePMD';
 import StatModeButton from './StatModeButton';
-import { setCurrentPMDid } from '../../../services/reducers/parsedData';
+import { deleteAllTreatmentData, deleteTreatmentData, setCurrentPMDid } from '../../../services/reducers/parsedData';
 import parseDotsIndexesInput from '../../../utils/parsers/parseDotsIndexesInput';
 import DropdownSelectWithButtons from '../../Common/DropdownSelect/DropdownSelectWithButtons';
 import ShowHideDotsButtons from './ShowHideDotsButtons';
 import { referenceToLabel } from '../../../utils/parsers/labelToReference';
 import { enteredIndexesToIDsPMD } from '../../../utils/parsers/enteredIndexesToIDs';
-import { setTreatmentFiles } from '../../../services/reducers/files';
 import { useTranslation } from 'react-i18next';
 
 interface IToolsPMD {
@@ -31,7 +30,6 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   const { t, i18n } = useTranslation('translation');
 
   const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
-  const { treatmentFiles } = useAppSelector(state => state.filesReducer);
   const { treatmentData, currentDataPMDid } = useAppSelector(state => state.parsedDataReducer);
   const { reference, selectedStepsIDs, statisticsMode, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
 
@@ -144,11 +142,11 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
     dispatch(setCurrentPMDid(pmdID));
   };
 
-  const handleFileDelete = (option: string) => {
-    if (treatmentFiles) {
-      const updatedFiles = treatmentFiles.filter(file => file.name !== option);
-      dispatch(setTreatmentFiles(updatedFiles));
-      dispatch(deleteInterepretationByParentFile(option));
+  const handleFileDelete = (fileName: string) => {
+    if (treatmentData) {
+      // const updatedFiles = treatmentFiles.filter(file => file.name !== fileName);
+      dispatch(deleteTreatmentData(fileName));
+      dispatch(deleteInterepretationByParentFile(fileName));
       dispatch(updateCurrentInterpretation());
       dispatch(setSelectedStepsIDs(null));
       dispatch(setHiddenStepsIDs([]));
@@ -157,7 +155,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   };
 
   const handleAllFilesDelete = () => {
-    dispatch(setTreatmentFiles([]));
+    dispatch(deleteAllTreatmentData());
     dispatch(deleteAllInterpretations());
     dispatch(updateCurrentInterpretation());
     dispatch(setSelectedStepsIDs(null));

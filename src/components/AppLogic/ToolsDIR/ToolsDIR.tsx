@@ -8,7 +8,7 @@ import { IDirData } from '../../../utils/GlobalTypes';
 import ModalWrapper from '../../Common/Modal/ModalWrapper';
 import ToolsPMDSkeleton from './ToolsDIRSkeleton';
 import StatModeButton from './StatModeButton';
-import { setCurrentDIRid } from '../../../services/reducers/parsedData';
+import { deleteAllDirStatData, deleteDirStatData, setCurrentDIRid } from '../../../services/reducers/parsedData';
 import InputApply from '../../Common/InputApply/InputApply';
 import parseDotsIndexesInput from '../../../utils/parsers/parseDotsIndexesInput';
 import DropdownSelectWithButtons from '../../Common/DropdownSelect/DropdownSelectWithButtons';
@@ -28,7 +28,6 @@ import {
 import { Reference } from '../../../utils/graphs/types';
 import OutputDataTableDIR from '../DataTablesDIR/OutputDataTable/OutputDataTableDIR';
 import VGPModalContent from '../VGP/VGPmodalContent';
-import { setDirStatFiles } from '../../../services/reducers/files';
 import FoldTestContainer from './PMTests/FoldTestContainer';
 import PMTestsModalContent from './PMTests/PMTestsModalContent';
 import ReversePolarityButtons from './ReversePolarityButtons';
@@ -46,7 +45,6 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
   const widthLessThan1400 = useMediaQuery({ query: '(max-width: 1400px)' });
   
   const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
-  const { dirStatFiles } = useAppSelector(state => state.filesReducer);
   const { dirStatData, currentDataDIRid } = useAppSelector(state => state.parsedDataReducer);
   const { selectedDirectionsIDs, hiddenDirectionsIDs, statisticsMode, reference } = useAppSelector(state => state.dirPageReducer); 
 
@@ -163,11 +161,10 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
     dispatch(setCurrentDIRid(dirID));
   };
 
-  const handleFileDelete = (option: string) => {
-    if (dirStatFiles) {
-      const updatedFiles = dirStatFiles.filter(file => file.name !== option);
-      dispatch(setDirStatFiles(updatedFiles));
-      dispatch(deleteInterepretationByParentFile(option));
+  const handleFileDelete = (fileName: string) => {
+    if (dirStatData) {
+      dispatch(deleteDirStatData(fileName));
+      dispatch(deleteInterepretationByParentFile(fileName));
       dispatch(updateCurrentInterpretation());
       dispatch(setSelectedDirectionsIDs(null));
       dispatch(setHiddenDirectionsIDs([]));
@@ -176,7 +173,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
   };
 
   const handleAllFilesDelete = () => {
-    dispatch(setDirStatFiles([]));
+    dispatch(deleteAllDirStatData());
     dispatch(deleteAllInterpretations());
     dispatch(updateCurrentInterpretation());
     dispatch(setSelectedDirectionsIDs(null));

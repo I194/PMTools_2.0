@@ -44,14 +44,18 @@ const pcaPage = createSlice({
   name: "pcaPage",
   initialState,
   reducers: {
+    // Главная панель управления
     setCurrentFile(state, action) {
       state.currentFile = action.payload;
     },
     setReference(state, action) {
       state.reference = action.payload;
     },
-    setProjection(state, action) {
-      state.projection = action.payload;
+    setStatisticsMode(state, action) {
+      state.statisticsMode = action.payload;
+    },
+    showStepsInput(state, action) {
+      state.showStepsInput = action.payload;
     },
     setSelectedStepsIDs(state, action) {
       state.selectedStepsIDs = action.payload;
@@ -65,12 +69,15 @@ const pcaPage = createSlice({
       ];
       state.hiddenStepsIDs = updatedHiddenStepsIDs;
     },
-    setStatisticsMode(state, action) {
-      state.statisticsMode = action.payload;
+    // Панели управления на графикаъ
+    setProjection(state, action) {
+      state.projection = action.payload;
     },
-    showStepsInput(state, action) {
-      state.showStepsInput = action.payload;
+    // Дополнительная панель управления для малых экранов
+    setLargeGraph(state, action: PayloadAction<GraphPMD>) {
+      state.largeGraph = action.payload;
     },
+    // Работа с результатами статистических методов обработки данных магнитных чисток
     addInterpretation(state, action) {
       state.currentInterpretation = action.payload?.interpretation;
       state.currentFileInterpretations.push(action.payload?.interpretation);
@@ -116,9 +123,6 @@ const pcaPage = createSlice({
     },
     setOutputFilename(state, action) {
       state.outputFilename = action.payload;
-    },
-    setLargeGraph(state, action: PayloadAction<GraphPMD>) {
-      state.largeGraph = action.payload;
     },
   },
   extraReducers: (builder) => {},

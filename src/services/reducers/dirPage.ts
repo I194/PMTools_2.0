@@ -44,12 +44,6 @@ const dirPage = createSlice({
     setCurrentFile (state, action) {
       state.currentFile = action.payload;
     },
-    setVGPData (state, action) {
-      state.vgpData = action.payload;
-    },
-    setVGPMean (state, action) {
-      state.vgpMean = action.payload;
-    },
     setReference (state, action) {
       state.reference = action.payload;
     },
@@ -82,6 +76,16 @@ const dirPage = createSlice({
     },
     setStatisticsMode (state, action) {
       state.statisticsMode = action.payload;
+    },
+    // VGP
+    toggleShowVGPMean (state) {
+      state.showVGPMean = !state.showVGPMean;
+    },
+    setVGPData (state, action) {
+      state.vgpData = action.payload;
+    },
+    setVGPMean (state, action) {
+      state.vgpMean = action.payload;
     },
     // interpretations manipulations below
     addInterpretation (state, action) {
@@ -129,9 +133,6 @@ const dirPage = createSlice({
     setOutputFilename (state, action) {
       state.outputFilename = action.payload;
     },
-    toggleShowVGPMean (state) {
-      state.showVGPMean = !state.showVGPMean;
-    }
   },
   extraReducers: (builder) => {
   }
