@@ -27,7 +27,6 @@ const OutputDataTableDIR: FC = () => {
   const theme = useTheme();
 
   const data = useAppSelector(state => state.dirPageReducer.allInterpretations);
-  const currentFile = useAppSelector(state => state.dirPageReducer.currentFile);
   const { dirStatData, currentDataDIRid } = useAppSelector(state => state.parsedDataReducer);
   const [editRowsModel, setEditRowsModel] = useState<GridEditRowsModel>({});
   const [filename, setFilename] = useState<string>('DIR Interpretations');
@@ -42,7 +41,7 @@ const OutputDataTableDIR: FC = () => {
     dispatch(deleteInterpretation(label));
     
     // это всё надо упростить и перенести в мидлвару
-    // и ещё заполнять поле currentFile при обновлении currentDataDIR/PMDid (тоже в мидлваре)
+    // upd: зачем?
     const currentFileName = dirStatData![currentDataDIRid || 0]?.name;
     const deletedRowParentFile = data.filter(
       interpretation => interpretation.label === label

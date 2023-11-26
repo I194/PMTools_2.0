@@ -54,9 +54,11 @@ const parsedDataSlice = createSlice({
     },
     setCurrentPMDid (state, action) {
       state.currentDataPMDid = action.payload;
+      localStorage.setItem('currentDataPMDid', JSON.stringify(state.currentDataPMDid));
     },
     setCurrentDIRid (state, action) {
       state.currentDataDIRid = action.payload;
+      localStorage.setItem('currentDataDIRid', JSON.stringify(state.currentDataDIRid));
     },
     setSiteData (state, action) {
       state.siteData = action.payload;

@@ -150,7 +150,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
         dispatch(setSelectedDirectionsIDs(null));
         dispatch(setHiddenDirectionsIDs([]));
         dispatch(setStatisticsMode(null));
-      } else dispatch(setCurrentDIRid(0));
+      }
     }
   }, [currentDataDIRid, allDirData]);
   
@@ -186,7 +186,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
       <DropdownSelectWithButtons 
         label={t('dirPage.tools.currentFile.title')}
         options={allDirData.map(dir => dir.name)}
-        defaultValue={allDirData[0].name}
+        defaultValue={currentFileName}
         onOptionSelect={handleFileSelect}
         minWidth={'210px'}
         maxWidth={'210px'}

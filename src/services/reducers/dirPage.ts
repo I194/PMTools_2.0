@@ -4,7 +4,6 @@ import { StatisitcsInterpretationFromDIR } from "../../utils/GlobalTypes";
 import { Reference, StatisticsModeDIR } from "../../utils/graphs/types";
 
 interface IInitialState {
-  currentFile: IDirData | null;
   vgpData: VGPData | null;
   vgpMean: MeanDir | null;
   reference: Reference;
@@ -21,7 +20,6 @@ interface IInitialState {
 };
 
 const initialState: IInitialState = {
-  currentFile: null,
   vgpData: null,
   vgpMean: null,
   reference: 'geographic',
@@ -41,9 +39,6 @@ const dirPage = createSlice({
   name: 'dirPage',
   initialState,
   reducers: {
-    setCurrentFile (state, action) {
-      state.currentFile = action.payload;
-    },
     setReference (state, action) {
       state.reference = action.payload;
     },
@@ -138,8 +133,7 @@ const dirPage = createSlice({
   }
 });
 
-export const { 
-  setCurrentFile,
+export const {
   setVGPData,
   setVGPMean,
   setReference,

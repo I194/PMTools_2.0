@@ -31,6 +31,12 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
   const [open, setOpen] = React.useState(false);
 
   useEffect(() => {
+    if (defaultValue) {
+      setSelectedOption(defaultValue);
+    }
+  }, [defaultValue]);
+
+  useEffect(() => {
     if (!options.length) setSelectedOption(''); 
     else if (!options.includes(selectedOption)) setSelectedOption(options[0]);
   }, [selectedOption, options]);

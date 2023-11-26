@@ -95,7 +95,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
         dispatch(setSelectedStepsIDs(null));
         dispatch(setHiddenStepsIDs([]));
         dispatch(setStatisticsMode(null));
-      } else dispatch(setCurrentPMDid(0));
+      }
     }
   }, [currentDataPMDid, allDataPMD]);
 
@@ -137,8 +137,8 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
     setShowStepsInput(false);
   };
 
-  const handleFileSelect = (option: string) => {
-    const pmdID = allDataPMD.findIndex(pmd => pmd.metadata.name === option);
+  const handleFileSelect = (fileName: string) => {
+    const pmdID = allDataPMD.findIndex(pmd => pmd.metadata.name === fileName);
     dispatch(setCurrentPMDid(pmdID));
   };
 

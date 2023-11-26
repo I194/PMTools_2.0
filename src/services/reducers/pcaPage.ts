@@ -11,7 +11,6 @@ import {
 } from "../../utils/graphs/types";
 
 interface IInitialState {
-  currentFile: IPmdData | null;
   reference: Reference;
   projection: Projection;
   selectedStepsIDs: Array<number> | null;
@@ -26,7 +25,6 @@ interface IInitialState {
 }
 
 const initialState: IInitialState = {
-  currentFile: null,
   reference: "geographic",
   projection: { y: "W, UP", x: "N, N" },
   selectedStepsIDs: null,
@@ -45,9 +43,6 @@ const pcaPage = createSlice({
   initialState,
   reducers: {
     // Главная панель управления
-    setCurrentFile(state, action) {
-      state.currentFile = action.payload;
-    },
     setReference(state, action) {
       state.reference = action.payload;
     },
@@ -129,7 +124,6 @@ const pcaPage = createSlice({
 });
 
 export const {
-  setCurrentFile,
   setReference,
   setProjection,
   setSelectedStepsIDs,

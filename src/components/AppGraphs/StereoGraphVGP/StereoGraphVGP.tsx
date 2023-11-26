@@ -16,7 +16,7 @@ export interface IStereoGraphVGP extends IGraph {
 };
 
 const StereoGraphVGP: FC<IStereoGraphVGP> = ({ graphId, width, height, data }) => {
-  const { reference, currentInterpretation, hiddenDirectionsIDs, currentFile } = useAppSelector(state => state.dirPageReducer);
+  const { reference, currentInterpretation, hiddenDirectionsIDs } = useAppSelector(state => state.dirPageReducer);
   const { menuItems, settings } = useDIRGraphSettings();
   const selectableNodes = useGraphSelectableNodesDIR(graphId); 
   const selectedIDs = useGraphSelectedIDs('dir');

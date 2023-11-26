@@ -7,7 +7,7 @@ import { MainPageLayout, AppLayout } from '../components/Layouts';
 import { MainPage, DIRPage, PCAPage, NotFoundPage, WhyPMToolsPage, AuthorsAndHistory } from '../pages';
 import { useSystemTheme } from '../utils/GlobalHooks';
 import { setColorMode } from '../services/reducers/appSettings';
-import { setDirStatData, setTreatmentData } from '../services/reducers/parsedData';
+import { setCurrentDIRid, setCurrentPMDid, setDirStatData, setTreatmentData } from '../services/reducers/parsedData';
 
 function App() {
 
@@ -35,6 +35,8 @@ function App() {
   useEffect(() => {
     const treatmentData = localStorage.getItem('treatmentData');
     const dirStatData = localStorage.getItem('dirStatData');
+    const currentDataPMDid = localStorage.getItem('currentDataPMDid');
+    const currentDataDIRid = localStorage.getItem('currentDataDIRid');
 
     if (treatmentData) {
       dispatch(setTreatmentData(JSON.parse(treatmentData)));
@@ -42,6 +44,14 @@ function App() {
 
     if (dirStatData) {
       dispatch(setDirStatData(JSON.parse(dirStatData)));
+    }
+
+    if (currentDataPMDid) {
+      dispatch(setCurrentPMDid(JSON.parse(currentDataPMDid)));
+    }
+
+    if (currentDataDIRid) {
+      dispatch(setCurrentDIRid(JSON.parse(currentDataDIRid)));
     }
   }, []);
 
