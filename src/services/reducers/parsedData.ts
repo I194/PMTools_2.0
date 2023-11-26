@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IPmdData, IDirData, ISitesData } from "../../utils/GlobalTypes";
 import { filesToData, sitesFileToLatLon } from "../axios/filesAndData";
 
@@ -52,8 +52,12 @@ const parsedDataSlice = createSlice({
       state.dirStatData = state.dirStatData.filter(dirStatData => dirStatData.name !== action.payload);
       localStorage.setItem('dirStatData', JSON.stringify(state.dirStatData));
     },
-    setCurrentPMDid (state, action) {
-      state.currentDataPMDid = action.payload;
+    setCurrentPMDid (state, action: PayloadAction<number | null>) {
+      let pmdID = action.payload;
+      if (pmdID !== null && pmdID < 0) {
+        pmdID = 0;
+      }
+      state.currentDataPMDid = pmdID;
       localStorage.setItem('currentDataPMDid', JSON.stringify(state.currentDataPMDid));
     },
     setCurrentDIRid (state, action) {

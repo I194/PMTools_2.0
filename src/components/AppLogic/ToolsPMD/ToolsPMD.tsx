@@ -5,7 +5,16 @@ import { ButtonGroupWithLabel } from '../../Common/Buttons';
 import { Button } from '@mui/material';
 import { Reference } from '../../../utils/graphs/types';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
-import { deleteAllInterpretations, deleteInterepretationByParentFile, setHiddenStepsIDs, setReference, setSelectedStepsIDs, setStatisticsMode, updateCurrentFileInterpretations, updateCurrentInterpretation } from '../../../services/reducers/pcaPage';
+import { 
+  deleteAllInterpretations, 
+  deleteInterepretationByParentFile, 
+  setHiddenStepsIDs, 
+  setReference, 
+  setSelectedStepsIDs, 
+  setStatisticsMode, 
+  updateCurrentFileInterpretations, 
+  updateCurrentInterpretation 
+} from '../../../services/reducers/pcaPage';
 import { IPmdData } from '../../../utils/GlobalTypes';
 import ModalWrapper from '../../Common/Modal/ModalWrapper';
 import InputApply from '../../Common/InputApply/InputApply';
@@ -138,13 +147,23 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   };
 
   const handleFileSelect = (fileName: string) => {
-    const pmdID = allDataPMD.findIndex(pmd => pmd.metadata.name === fileName);
-    dispatch(setCurrentPMDid(pmdID));
+    if (!allDataPMD.length) {
+      dispatch(setCurrentPMDid(null));
+      return;
+    }
+
+    const pmdIndex = allDataPMD.findIndex(pmd => pmd.metadata.name === fileName);
+    dispatch(setCurrentPMDid(pmdIndex));
   };
 
   const handleFileDelete = (fileName: string) => {
     if (treatmentData) {
-      // const updatedFiles = treatmentFiles.filter(file => file.name !== fileName);
+      // Надо переключиться на прошлый файл если удаляем файл на котором сейчас сидим, иначе currentDataPMDid будет ссылаться на некорректный индекс
+      let fileNamePMDDataIndex = allDataPMD.findIndex(pmd => pmd.metadata.name === fileName);
+      if (fileNamePMDDataIndex === currentDataPMDid) {
+        dispatch(setCurrentPMDid(fileNamePMDDataIndex - 1));
+      }
+
       dispatch(deleteTreatmentData(fileName));
       dispatch(deleteInterepretationByParentFile(fileName));
       dispatch(updateCurrentInterpretation());

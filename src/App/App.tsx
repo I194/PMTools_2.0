@@ -8,6 +8,7 @@ import { MainPage, DIRPage, PCAPage, NotFoundPage, WhyPMToolsPage, AuthorsAndHis
 import { useSystemTheme } from '../utils/GlobalHooks';
 import { setColorMode } from '../services/reducers/appSettings';
 import { setCurrentDIRid, setCurrentPMDid, setDirStatData, setTreatmentData } from '../services/reducers/parsedData';
+import * as pcaPageReducer from '../services/reducers/pcaPage';
 
 function App() {
 
@@ -52,6 +53,21 @@ function App() {
 
     if (currentDataDIRid) {
       dispatch(setCurrentDIRid(JSON.parse(currentDataDIRid)));
+    }
+
+
+    const pcaPage_reference = localStorage.getItem('pcaPage_reference');
+    const pcaPage_projection = localStorage.getItem('pcaPage_projection');
+    const pcaPage_allInterpretations = localStorage.getItem('pcaPage_allInterpretations');
+
+    if (pcaPage_reference) {
+      dispatch(pcaPageReducer.setReference(JSON.parse(pcaPage_reference)));
+    }
+    if (pcaPage_projection) {
+      dispatch(pcaPageReducer.setProjection(JSON.parse(pcaPage_projection)));
+    }
+    if (pcaPage_allInterpretations) {
+      dispatch(pcaPageReducer.setAllInterpretations(JSON.parse(pcaPage_allInterpretations)));
     }
   }, []);
 

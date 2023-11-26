@@ -48,7 +48,7 @@ const PCAPage: FC = ({}) => {
       // решил оставить id на совесть пользователя - теперь это просто название файла
       // statistics.interpretation.label = `${allInterpretations.length}${statistics.interpretation.label}/${currentFileInterpretations.length}`;
       // statistics.interpretation.label = `${statistics.interpretation.label}`;
-      dispatch(addInterpretation(statistics));
+      dispatch(addInterpretation(statistics.interpretation));
       dispatch(setStatisticsMode(null));
     } else dispatch(updateCurrentInterpretation());
   }, [statisticsMode, selectedStepsIDs, dataToShow]);

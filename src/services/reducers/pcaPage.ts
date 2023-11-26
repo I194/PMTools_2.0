@@ -43,8 +43,9 @@ const pcaPage = createSlice({
   initialState,
   reducers: {
     // Главная панель управления
-    setReference(state, action) {
+    setReference(state, action: PayloadAction<Reference>) {
       state.reference = action.payload;
+      localStorage.setItem('pcaPage_reference', JSON.stringify(state.reference));
     },
     setStatisticsMode(state, action) {
       state.statisticsMode = action.payload;
@@ -65,45 +66,51 @@ const pcaPage = createSlice({
       state.hiddenStepsIDs = updatedHiddenStepsIDs;
     },
     // Панели управления на графикаъ
-    setProjection(state, action) {
+    setProjection(state, action: PayloadAction<Projection>) {
       state.projection = action.payload;
+      localStorage.setItem('pcaPage_projection', JSON.stringify(state.projection));
     },
     // Дополнительная панель управления для малых экранов
     setLargeGraph(state, action: PayloadAction<GraphPMD>) {
       state.largeGraph = action.payload;
     },
     // Работа с результатами статистических методов обработки данных магнитных чисток
-    addInterpretation(state, action) {
-      state.currentInterpretation = action.payload?.interpretation;
-      state.currentFileInterpretations.push(action.payload?.interpretation);
-      state.allInterpretations.push(action.payload?.interpretation);
+    addInterpretation(state, action: PayloadAction<StatisitcsInterpretationFromPCA>) {
+      state.currentInterpretation = action.payload;
+      state.currentFileInterpretations.push(action.payload);
+      state.allInterpretations.push(action.payload);
+      localStorage.setItem('pcaPage_allInterpretations', JSON.stringify(state.allInterpretations));
     },
-    deleteInterpretation(state, action) {
+    deleteInterpretation(state, action: PayloadAction<string>) {
       const interpretationUUID = action.payload;
       const updatedInterpretations = state.allInterpretations.filter(
         (interpretation) => interpretation.uuid !== interpretationUUID
       );
       state.allInterpretations = updatedInterpretations;
+      localStorage.setItem('pcaPage_allInterpretations', JSON.stringify(state.allInterpretations));
     },
-    deleteInterepretationByParentFile(state, action) {
-      const parentFile = action.payload;
+    deleteInterepretationByParentFile(state, action: PayloadAction<string>) {
+      const parentFileName = action.payload;
       const updatedInterpretations = state.allInterpretations.filter(
-        (interpretation) => interpretation.parentFile !== parentFile
+        (interpretation) => interpretation.parentFile !== parentFileName
       );
       state.allInterpretations = updatedInterpretations;
+      localStorage.setItem('pcaPage_allInterpretations', JSON.stringify(state.allInterpretations));
     },
-    setAllInterpretations(state, action) {
+    setAllInterpretations(state, action: PayloadAction<StatisitcsInterpretationFromPCA[]>) {
       state.allInterpretations = action.payload;
+      localStorage.setItem('pcaPage_allInterpretations', JSON.stringify(state.allInterpretations));
     },
     deleteAllInterpretations(state) {
       state.allInterpretations = [];
       state.currentFileInterpretations = [];
       state.currentInterpretation = null;
+      localStorage.setItem('pcaPage_allInterpretations', JSON.stringify(state.allInterpretations));
     },
-    updateCurrentFileInterpretations(state, action) {
-      const filename = action.payload;
+    updateCurrentFileInterpretations(state, action: PayloadAction<string>) {
+      const fileName = action.payload;
       state.currentFileInterpretations = state.allInterpretations.filter(
-        (interpretation) => interpretation.parentFile === filename
+        (interpretation) => interpretation.parentFile === fileName
       );
     },
     updateCurrentInterpretation(state) {
@@ -111,12 +118,9 @@ const pcaPage = createSlice({
         state.currentInterpretation = null;
         return;
       }
-      state.currentInterpretation =
-        state.currentFileInterpretations[
-          state.currentFileInterpretations.length - 1
-        ];
+      state.currentInterpretation = state.currentFileInterpretations[state.currentFileInterpretations.length - 1];
     },
-    setOutputFilename(state, action) {
+    setOutputFilename(state, action: PayloadAction<string>) {
       state.outputFilename = action.payload;
     },
   },
