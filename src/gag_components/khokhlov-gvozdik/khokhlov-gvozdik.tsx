@@ -5,6 +5,21 @@ import { Footer, NavPanel } from "../../components/MainPage";
 import {CACTable} from "../CACTable/CACTable";
 import {CACResultTable} from "../CACResultTable/CACResultTable";
 
+import Tables from '../../pages/DIRPage/Tables';
+import Graphs from '../../pages/DIRPage/Graphs';
+import ModalWrapper from '../../components/Common/Modal/ModalWrapper';
+import UploadModal from '../../components/Common/Modal/UploadModal/UploadModal';
+import { IDirData } from '../../utils/GlobalTypes';
+import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
+import { filesToData } from '../../services/axios/filesAndData';
+import { 
+    addInterpretation, 
+    setStatisticsMode, 
+    showSelectionInput, 
+    updateCurrentInterpretation 
+  } from '../../services/reducers/dirPage';
+import calculateStatisticsDIR from '../../utils/statistics/calculateStatisticsDIR';
+
 import {
     GeoVdek,
     getRandomfloat,
@@ -58,6 +73,7 @@ export function Khokhlov_Gvozdik() {
     const [quantiles, setQuantiles] = useState<number[]>([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
 
 	const [angle_list, setAngleList] = useState<number[]>([]);
+
 
 
     useEffect(() => {
@@ -163,6 +179,13 @@ export function Khokhlov_Gvozdik() {
             minlot = -6;
             maxlat = 89;
             minlat = 78;  
+        }
+
+        if (octo == 10){
+            maxlot = 8;
+            minlot = -6;
+            maxlat = -89;
+            minlat = -78;  
         }
 
 
@@ -352,26 +375,55 @@ export function Khokhlov_Gvozdik() {
     // Result Table props
     //---------------------------------------------------------------------------------------
 
+
+    let rows: Row[] = [];
+
+    // let myList: number[] = [2, 1];
+
+
+    const [ResultTableRow, setResultTableRow] = useState<Row[]>([]);
+    const [resultId, setResultId] = useState<number>(1);
+
+    const calculateResultTable = () => {
+        
+        setResultId(resultId + 1);
+
+        let newRow = 
+            { 
+                id: resultId, 
+                Code: 'CAC', 
+                N: dir_number, 
+                Lat: DekVgeo(center_zone)[0].toFixed(2), 
+                Lon: DekVgeo(center_zone)[1].toFixed(2), 
+                ZoneRad: 999,
+                FishLat: DekVgeo(sred_dir)[0].toFixed(2),
+                FishLon: DekVgeo(sred_dir)[1].toFixed(2),
+                alpha95: alpha95.toFixed(2)
+            };
+        
+        setResultTableRow(prevList => [...prevList, newRow]);
+    };
     
-    const rows: Row[] = [
-        { 
-            id: 1, 
-            Code: 'CAC', 
-            N: dir_number, 
-            Lat: DekVgeo(center_zone)[0].toFixed(2), 
-            Lon: DekVgeo(center_zone)[1].toFixed(2), 
-            ZoneRad: 999,
-            FishLat: DekVgeo(sred_dir)[0].toFixed(2),
-            FishLon: DekVgeo(sred_dir)[1].toFixed(2),
-            alpha95: alpha95.toFixed(2)
-        },
-    ];
-    
+    // useEffect(() => {
+
+    //     rows.push(
+    //         { 
+    //             id: 1, 
+    //             Code: 'CAC', 
+    //             N: dir_number, 
+    //             Lat: DekVgeo(center_zone)[0].toFixed(2), 
+    //             Lon: DekVgeo(center_zone)[1].toFixed(2), 
+    //             ZoneRad: 999,
+    //             FishLat: DekVgeo(sred_dir)[0].toFixed(2),
+    //             FishLon: DekVgeo(sred_dir)[1].toFixed(2),
+    //             alpha95: alpha95.toFixed(2)
+    //         }
+    //     )
+
+    //     setResultTableRow(rows);
+    // }, [ResultTableRow]);
     
 
-    interface HGGResult {
-        rows: Row[]
-    }
 
     type Row = {
         id: number,
@@ -384,6 +436,7 @@ export function Khokhlov_Gvozdik() {
         FishLon: string,
         alpha95: string
     };
+
     //---------------------------------------------------------------------------------------
     // Interface
     //---------------------------------------------------------------------------------------
@@ -394,16 +447,75 @@ export function Khokhlov_Gvozdik() {
     var poly_color = "#5badff";
     var grid_color = '#1975d2';
 
+    //---------------------------------------------------------------------------------------
+    // Ванин код из DIRTable
+    //---------------------------------------------------------------------------------------
     
 
+    const dispatch = useAppDispatch();
+    const widthLessThan720 = useMediaQuery({ maxWidth: 719 });
+    const heightLessThan560 = useMediaQuery({ maxHeight: 559 });
+    const unsupportedResolution = widthLessThan720 || heightLessThan560;
+
+    const files = useAppSelector(state => state.filesReducer.dirStatFiles);
+    const { dirStatData, currentDataDIRid } = useAppSelector(state => state.parsedDataReducer);
+    const { 
+        statisticsMode, 
+        selectedDirectionsIDs, 
+        hiddenDirectionsIDs, 
+        reversedDirectionsIDs,
+        currentFileInterpretations,
+        allInterpretations
+    } = useAppSelector(state => state.dirPageReducer);
+
+    const [dataToShow, setDataToShow] = useState<IDirData | null>(null);
+    const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (files) dispatch(filesToData({files, format: 'dir'}));
+    }, [files, files?.length]);
+
+    useEffect(() => {
+        if (dirStatData && dirStatData.length > 0) {
+        const dirID = currentDataDIRid || 0;
+        setDataToShow(dirStatData[dirID]);
+        } else setDataToShow(null);
+    }, [dirStatData, currentDataDIRid, hiddenDirectionsIDs]);
+
+    useEffect(() => {
+        if (statisticsMode && !selectedDirectionsIDs) dispatch(showSelectionInput(true));
+        if (statisticsMode && selectedDirectionsIDs && selectedDirectionsIDs.length >= 2 && dataToShow) {
+        const statistics = calculateStatisticsDIR(dataToShow, statisticsMode, selectedDirectionsIDs, reversedDirectionsIDs);
+        statistics.interpretation.label = `${allInterpretations.length}${statistics.interpretation.label}/${currentFileInterpretations.length}`;
+        dispatch(addInterpretation(statistics));
+        dispatch(setStatisticsMode(null));
+        } else dispatch(updateCurrentInterpretation());
+    }, [statisticsMode, selectedDirectionsIDs, dataToShow]);
+
+    useEffect(() => {
+        if (!dataToShow) setShowUploadModal(true);
+        else setShowUploadModal(false);
+    }, [dataToShow]);
+
+    if (unsupportedResolution) return <>Размер окна должен быть не меньше чем 720x560</>
     return (
         <div className={styles.main_container}>
             <h3 className={styles.lowScreen}>Размер окна должен быть не меньше чем 720x560</h3>
+            
+            
+            <div className={styles.table2_container + ' ' + styles.commonContainer}>
+                <CACResultTable 
+                    rows={ResultTableRow}
+                />
+            </div>
+            
+            
             <div className={styles.graph_container + ' ' + styles.commonContainer}>
-             
-                <HelpCenterOutlinedIcon className={styles.graphTooltip}/>
-
-                <FileDownloadOutlinedIcon  className={styles.graphTooltip}/>
+                
+                <div className={styles.interfaceTooltip}>
+                    <HelpCenterOutlinedIcon className={styles.question}/>
+                    <FileDownloadOutlinedIcon className={styles.question}/>
+                </div>
 
                 <ZoomedLambertGraph
                     centerZone={center_zone}
@@ -422,49 +534,64 @@ export function Khokhlov_Gvozdik() {
             </div>
 
             <div className={styles.table_container + ' ' + styles.commonContainer}>
-                <CACTable />
+                {/* <CACTable /> */}
+                <Tables dataToShow={dataToShow}/>     
+                <ModalWrapper
+                    open={showUploadModal}
+                    setOpen={setShowUploadModal}
+                    size={{width: '60vw', height: '60vh'}}
+                    showBottomClose
+                >
+                <UploadModal page='dir' />
+                </ModalWrapper>
                 
                 {/* for debug */}
-                <br></br>
-                <select className={styles.select2Item + ' ' + styles.item + ' ' + styles.my_select} value={octo} onChange={octoChange}>
-                    <option value={1}>+++</option>
-                    <option value={2}>++-</option>
-                    <option value={3}>+-+</option>
-                    <option value={4}>+--</option>
-                    <option value={5}>-++</option>
-                    <option value={6}>-+-</option>
-                    <option value={7}>--+</option>
-                    <option value={8}>---</option>
-                    <option value={9}>010</option>
+                <h3>Debug panel</h3>
 
-                </select>
+                <div className={styles.debug}>
+                    
+
+                    <div className={styles.debugItem1}>
+                        <button className={styles.button} onClick={generateRandomNumbers}>Generate Random Numbers</button>
+                    </div>
+                    
+                    <div className={styles.debugItem2}>
+                        <select className={styles.my_select} value={octo} onChange={octoChange}>
+                            <option value={1}>+++</option>
+                            <option value={2}>++-</option>
+                            <option value={3}>+-+</option>
+                            <option value={4}>+--</option>
+                            <option value={5}>-++</option>
+                            <option value={6}>-+-</option>
+                            <option value={7}>--+</option>
+                            <option value={8}>---</option>
+                            <option value={9}>0 1 0</option>
+                            <option value={10}>0 -1 0</option>
+                        </select>
+                    </div>
+                </div>
 
                 <br></br>
+
             </div>
 
-            <div className={styles.table2_container + ' ' + styles.commonContainer}>
-                <CACResultTable 
-                    rows={rows}
-                />
-            </div>
+
 
             <div className={styles.container + ' ' + styles.commonContainer}>
 
                 <div className={styles.interfaceTooltip}>
-                    <HelpCenterOutlinedIcon className={styles.interfaceTooltip}/>
+                    <HelpCenterOutlinedIcon className={styles.question}/>
                 </div>
+                <br></br>
 
                 <div className={styles.interface}>
                     <select className={styles.select1Item + ' ' + styles.item + ' ' + styles.my_select} value={selectedNumber} onChange={handleNumberChange}>
-                        <option value={10000}>grid = 10 000</option>
-                        <option value={50000}>grid = 50 000</option>
-                        <option value={100000}>grid = 100 000</option>
-                        <option value={250000}>grid = 250 000</option>
-                        <option value={500000}>grid = 500 000</option>
-                        <option value={1000000}>grid = 1 000 000</option>
-                        <option value={1500000}>grid = 1 500 000</option>
-                        <option value={2000000}>grid = 2 000 000</option>
-                        <option value={2500000}>grid = 2 500 000</option>
+                        <option value={10000}>N = 10 000</option>
+                        <option value={50000}>N = 50 000</option>
+                        <option value={100000}>N = 100 000</option>
+                        <option value={250000}>N = 250 000</option>
+                        <option value={500000}>N = 500 000</option>
+                        <option value={1000000}>N = 1 000 000</option>
                     </select>
                     
                     <select className={styles.select2Item + ' ' + styles.item + ' ' + styles.my_select} value={selectedD} onChange={handleDChange}>
@@ -484,9 +611,8 @@ export function Khokhlov_Gvozdik() {
                     </select>
 
                     <div className={styles.buttonItem + ' ' + styles.item}>
-                        <button className={styles.button} onClick={generateRandomNumbers}>Generate Random Numbers</button>
+                        <button className={styles.button} onClick={calculateResultTable}>Calculate result table</button>
                     </div>
-
                         {/* <b>The percentage of the zone from the sphere:</b>
                         {" " + String((zone_square(grid_points.length, points_numb) * 100).toFixed(3))}%.
                         <br/>

@@ -67,10 +67,7 @@ export function DegreeGrid({
     ram += String(-lamberWidth) + ',' + String(lamberWidth) + ' ';
     ram += String(lamberWidth) + ',' + String(lamberWidth) + ' ';
 
-    //---------------------------------------------------------------------------------------
-    // 
-    //---------------------------------------------------------------------------------------
-    
+
     //---------------------------------------------------------------------------------------
     // DEGREE GRID
     //---------------------------------------------------------------------------------------
@@ -118,6 +115,9 @@ export function DegreeGrid({
             // координаты делений и подписи к ним
             // только внизу сетки
             if (merEnd[1] == width) {
+                
+                
+
                 degreeMerLabels.push(DekVgeo(centerToBack(merEnd, meanDir)));
                  
                 merTicks.push(
@@ -157,6 +157,21 @@ export function DegreeGrid({
             }      
         }
     }
+
+
+    // делаю подписи через одну рядос с северным полюсом
+
+
+    if (meanDir[1] > 0.95){
+        for (let i = 0; i < merTicks.length; i++){
+            if ((i + 1) % 3 != 0) {
+                if(merTicks[i][0][0] > -width){
+                    merTicks[i][0] = merTicks[i][1];
+                }
+            }
+        }
+    }
+
 
 
 
@@ -237,6 +252,8 @@ export function DegreeGrid({
                 fontSize={width / 12}
                 xShift={degreeMerLabelsShift[0]}
                 yShift={degreeMerLabelsShift[1]}
+                width = {width}
+                meanDir = {meanDir}
             />
 
             {/* MERIDIANS TICKS */}
@@ -262,31 +279,6 @@ export function DegreeGrid({
                 />
             ))}
 
-
-            {/* debug */}
-            {/* { paralelsInBox.map((circles) => (
-                <>
-                    {cutMerEnd(lambertMass(circles, meanDir), width).map((circle) => (
-                        <circle 
-                            cx={circle[0]} 
-                            cy={circle[1]} 
-                            r={width / 130} // радиус точки 
-                            fill="purple" // цвет точки
-                        />
-                    ))}
-                </>
-            ))} */}
-
-            {/* {endParCords.map((circles) => (
-                <circle 
-                    cx={circles[0]} 
-                    cy={circles[1]} 
-                    r={width / 27} 
-                    fill="red" 
-                />
-            ))} */}
-
-
             {/* PARALELS LABELS */}
             <PointsWithLabels
                 points={endParCords}
@@ -296,6 +288,8 @@ export function DegreeGrid({
                 fontSize={width / 12}
                 xShift={degreeParLabelsShift[0]}
                 yShift={degreeParLabelsShift[1]}
+                width = {width}
+                meanDir = {meanDir}
             />
 
             {/* PARALLELS TICKS */}

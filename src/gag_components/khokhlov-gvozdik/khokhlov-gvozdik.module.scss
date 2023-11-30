@@ -1,4 +1,5 @@
 :root {
+
     --my-white: white;
     --menu-blue: #4690db;
     --my-grey: #c5c5c5;
@@ -45,6 +46,45 @@
     visibility: hidden;
     display: none;
   }
+  
+  /* --------------------------------------------------------------*/
+  /* debug */
+  /* --------------------------------------------------------------*/
+    
+  .question{
+    float: right;
+  }
+  
+  .debug{
+    border: 3px solid var(--my-grey);
+    border-radius: 6px;
+    padding: 1vh;
+    height: 10.5vh;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-gap: 10px;
+  }
+  
+  .debug:hover{
+    border: 3px solid var(--menu-blue);
+    /* border-radius: 12px; */
+    transition: 0.4s ease-in-out;
+  }
+.debugItem1{
+
+    grid-column-start: 1;
+    grid-column-end: 1;
+    grid-row-start: 1;
+    grid-row-end: 2;
+}
+  
+.debugItem2{
+  grid-column-start: 1;
+  grid-column-end: 1;
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
   
   /* --------------------------------------------------------------*/
   /* main grid*/

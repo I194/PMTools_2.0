@@ -35,6 +35,8 @@ interface PointsWithLabels {
     fontSize?: number,
     xShift?: number,
     yShift?:number,
+    width: number,
+    meanDir: number[]
 }
 
 export function PointsWithLabels({
@@ -45,7 +47,9 @@ export function PointsWithLabels({
                                 type,
                                 fontSize,
                                 xShift,
-                                yShift
+                                yShift,
+                                width,
+                                meanDir
                             }: PointsWithLabels) {
    
     //---------------------------------------------------------------------------------------
@@ -76,20 +80,22 @@ export function PointsWithLabels({
     }
 
 
-    for ( let i = 0; i < points.length; i ++){
-        if (points[i][1] > 0.95 || points[i][1] < -0.95) {
-            labels[i] = '';
-        }
-    }
 
-
-    if (labelsValues){
-        for ( let i = 0; i < labels.length; i ++){
-            if (labelsValues[i][0] == 1000){
-                labels[i] = '';
+    // делаю подписи через одну рядос с северным полюсом
+    if (meanDir[1] > 0.95){
+        for ( let i = 0; i < points.length; i ++){
+            if ((i + 1) % 3 != 0) {
+                if(points[i][0] > -width){
+                    labels[i] = '';
+                }
             }
         }
     }
+
+
+
+
+
 
 
     return (
