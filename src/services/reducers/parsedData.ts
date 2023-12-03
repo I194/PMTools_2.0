@@ -60,8 +60,12 @@ const parsedDataSlice = createSlice({
       state.currentDataPMDid = pmdID;
       localStorage.setItem('currentDataPMDid', JSON.stringify(state.currentDataPMDid));
     },
-    setCurrentDIRid (state, action) {
-      state.currentDataDIRid = action.payload;
+    setCurrentDIRid (state, action: PayloadAction<number | null>) {
+      let dirID = action.payload;
+      if (dirID !== null && dirID < 0) {
+        dirID = 0;
+      }
+      state.currentDataDIRid = dirID;
       localStorage.setItem('currentDataDIRid', JSON.stringify(state.currentDataDIRid));
     },
     setSiteData (state, action) {

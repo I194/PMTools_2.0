@@ -18,6 +18,7 @@ import { bgColorMain } from '../../utils/ThemeConstants';
 import ModalWrapper from '../../components/Common/Modal/ModalWrapper';
 import UploadModal from '../../components/Common/Modal/UploadModal/UploadModal';
 import { useMediaQuery } from 'react-responsive';
+import { setCurrentDIRid } from '../../services/reducers/parsedData';
 
 const DIRPage: FC = ({}) => {
 
@@ -42,6 +43,9 @@ const DIRPage: FC = ({}) => {
 
   useEffect(() => {
     if (dirStatData && dirStatData.length > 0) {
+      if (!currentDataDIRid) {
+        dispatch(setCurrentDIRid(0));
+      }
       const dirID = currentDataDIRid || 0;
       setDataToShow(dirStatData[dirID]);
     } else setDataToShow(null);

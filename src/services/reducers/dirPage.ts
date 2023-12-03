@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IDirData, MeanDir, VGPData } from "../../utils/GlobalTypes";
 import { StatisitcsInterpretationFromDIR } from "../../utils/GlobalTypes";
 import { Reference, StatisticsModeDIR } from "../../utils/graphs/types";
@@ -41,6 +41,7 @@ const dirPage = createSlice({
   reducers: {
     setReference (state, action) {
       state.reference = action.payload;
+      localStorage.setItem('dirPage_reference', JSON.stringify(state.reference));
     },
     setSelectedDirectionsIDs (state, action) {
       state.selectedDirectionsIDs = action.payload;
@@ -49,12 +50,10 @@ const dirPage = createSlice({
       state.hiddenDirectionsIDs = action.payload;
     },
     addHiddenDirectionsIDs (state, action: {payload: Array<number>}) {
-      // Set делает значения уникальными
       const updatedHiddenDirectionsIDs = [...new Set([...state.hiddenDirectionsIDs, ...action.payload])];
       state.hiddenDirectionsIDs = updatedHiddenDirectionsIDs;
     },
     removeHiddenDirectionsIDs (state, action: {payload: Array<number>}) {
-      // Set делает значения уникальными
       const visibleDirectionsIDs = [...new Set([...state.hiddenDirectionsIDs, ...action.payload])];
       state.hiddenDirectionsIDs = state.hiddenDirectionsIDs.filter(id => !visibleDirectionsIDs.includes(id));
     },
@@ -62,7 +61,6 @@ const dirPage = createSlice({
       state.reversedDirectionsIDs = action.payload;
     },
     addReversedDirectionsIDs (state, action: {payload: Array<number>}) {
-      // Set делает значения уникальными
       const updatedReversedDirectionsIDs = [...new Set([...state.reversedDirectionsIDs, ...action.payload])];
       state.reversedDirectionsIDs = updatedReversedDirectionsIDs;
     },
@@ -87,6 +85,7 @@ const dirPage = createSlice({
       state.currentInterpretation = action.payload?.interpretation;
       state.currentFileInterpretations.push(action.payload?.interpretation);
       state.allInterpretations.push(action.payload?.interpretation);
+      localStorage.setItem('dirPage_allInterpretations', JSON.stringify(state.allInterpretations));
     },
     deleteInterpretation (state, action) {
       const interpretationLabel = action.payload;
@@ -94,6 +93,7 @@ const dirPage = createSlice({
         interpretation => interpretation.label !== interpretationLabel
       );
       state.allInterpretations = updatedInterpretations;
+      localStorage.setItem('dirPage_allInterpretations', JSON.stringify(state.allInterpretations));
     },
     deleteInterepretationByParentFile (state, action) {
       const parentFile = action.payload;
@@ -101,17 +101,21 @@ const dirPage = createSlice({
         interpretation => interpretation.parentFile !== parentFile
       );
       state.allInterpretations = updatedInterpretations;
+      localStorage.setItem('dirPage_allInterpretations', JSON.stringify(state.allInterpretations));
     },
     setAllInterpretations (state, action) {
       state.allInterpretations = action.payload;
+      localStorage.setItem('dirPage_allInterpretations', JSON.stringify(state.allInterpretations));
     },
     deleteAllInterpretations (state) {
       state.allInterpretations = [];
       state.currentFileInterpretations = [];
       state.currentInterpretation = null;
+      localStorage.setItem('dirPage_allInterpretations', JSON.stringify(state.allInterpretations));
     },
-    updateCurrentFileInterpretations (state, action) {
+    updateCurrentFileInterpretations (state, action: PayloadAction<string>) {
       const filename = action.payload;
+      console.log('here', filename);
       state.currentFileInterpretations = state.allInterpretations.filter(
         interpretation => interpretation.parentFile === filename
       );

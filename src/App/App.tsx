@@ -9,6 +9,7 @@ import { useSystemTheme } from '../utils/GlobalHooks';
 import { setColorMode } from '../services/reducers/appSettings';
 import { setCurrentDIRid, setCurrentPMDid, setDirStatData, setTreatmentData } from '../services/reducers/parsedData';
 import * as pcaPageReducer from '../services/reducers/pcaPage';
+import * as dirPageReducer from '../services/reducers/dirPage';
 
 function App() {
 
@@ -68,6 +69,16 @@ function App() {
     }
     if (pcaPage_allInterpretations) {
       dispatch(pcaPageReducer.setAllInterpretations(JSON.parse(pcaPage_allInterpretations)));
+    }
+
+    const dirPage_reference = localStorage.getItem('dirPage_reference');
+    const dirPage_allInterpretations = localStorage.getItem('dirPage_allInterpretations');
+
+    if (dirPage_reference) {
+      dispatch(dirPageReducer.setReference(JSON.parse(dirPage_reference)));
+    }
+    if (dirPage_allInterpretations) {
+      dispatch(dirPageReducer.setAllInterpretations(JSON.parse(dirPage_allInterpretations)));
     }
   }, []);
 

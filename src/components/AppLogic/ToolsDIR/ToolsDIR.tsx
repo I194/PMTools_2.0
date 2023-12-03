@@ -141,8 +141,10 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
 
   // при смене текущего файла обновляет данные для отображения
   useEffect(() => {
+    console.log('here 000', currentDataDIRid, allDirData);
     if (currentDataDIRid !== null && allDirData.length) {
       const filename = allDirData[currentDataDIRid]?.name;
+      console.log('here 0', filename)
       if (filename) {
         setCurrentFileName(filename);
         dispatch(updateCurrentFileInterpretations(filename));
@@ -156,13 +158,24 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
   
   if (!data) return <ToolsPMDSkeleton />;
 
-  const handleFileSelect = (option: string) => {
-    const dirID = allDirData.findIndex(dir => dir.name === option);
-    dispatch(setCurrentDIRid(dirID));
+  const handleFileSelect = (fileName: string) => {
+    if (!allDirData.length) {
+      dispatch(setCurrentDIRid(null));
+      return;
+    }
+
+    const dirIndex = allDirData.findIndex(dir => dir.name === fileName);
+    dispatch(setCurrentDIRid(dirIndex));
   };
 
   const handleFileDelete = (fileName: string) => {
     if (dirStatData) {
+      // Надо переключиться на прошлый файл если удаляем файл на котором сейчас сидим, иначе currentDataPMDid будет ссылаться на некорректный индекс
+      let fileNameDirDataIndex = allDirData.findIndex(dir => dir.name === fileName);
+      if (fileNameDirDataIndex === currentDataDIRid) {
+        dispatch(setCurrentDIRid(fileNameDirDataIndex - 1));
+      }
+
       dispatch(deleteDirStatData(fileName));
       dispatch(deleteInterepretationByParentFile(fileName));
       dispatch(updateCurrentInterpretation());

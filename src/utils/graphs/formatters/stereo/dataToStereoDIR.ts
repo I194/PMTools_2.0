@@ -43,7 +43,8 @@ const dataToStereoDIR = (
   let meanDirection: MeanDirection = null;
   if (statistics) {
     const mean = statistics.mean[reference as 'geographic' | 'stratigraphic']; 
-    const { direction, MAD } = mean;
+    let { direction, MAD } = mean;
+    direction = new Direction(direction.declination, direction.inclination, direction.length);
     const centeredDirection = new Direction(0, 90, 1);
     // let centeredDirectionCoords = new Direction(0, 90, 1).toCartesian();
     // const firstRotation = centeredDirectionCoords.rotateTo(0, 90);

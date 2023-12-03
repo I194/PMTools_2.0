@@ -19,6 +19,7 @@ import {
 import ModalWrapper from '../../components/Common/Modal/ModalWrapper';
 import UploadModal from '../../components/Common/Modal/UploadModal/UploadModal';
 import { useMediaQuery } from 'react-responsive';
+import { setCurrentPMDid } from '../../services/reducers/parsedData';
 
 const PCAPage: FC = ({}) => {
 
@@ -36,6 +37,9 @@ const PCAPage: FC = ({}) => {
 
   useEffect(() => {
     if (treatmentData && treatmentData.length > 0) {
+      if (!currentDataPMDid) {
+        dispatch(setCurrentPMDid(0));
+      }
       const pmdID = currentDataPMDid || 0;
       setDataToShow(treatmentData[pmdID]);
     } else setDataToShow(null);

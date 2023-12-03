@@ -42,7 +42,8 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
   const cutoffOuterDotsIDs: number[] = useMemo(() => {
     if (!currentInterpretation?.rawData || !dataToShow) return [];
     // сначала берём среднее направление, относительно него будем строить cutoff
-    const { direction: meanDirection }  = currentInterpretation.rawData.mean[reference as 'geographic' | 'stratigraphic']; 
+    let { direction: meanDirection } = currentInterpretation.rawData.mean[reference as 'geographic' | 'stratigraphic']; 
+    meanDirection = new Direction(meanDirection.declination, meanDirection.inclination, meanDirection.length);
     // затем берём все имеющиеся векторы и фильтруем их по их удалённости от среднего направления
     const newDirsToHideIDs = dataToShow.interpretations.filter(
       direction => {
