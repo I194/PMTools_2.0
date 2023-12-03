@@ -6,6 +6,8 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { FormControl, IconButton, InputLabel, ListItem, ListItemText, MenuItem, Select, SelectChangeEvent,  } from '@mui/material';
 import DropdownSelect, { IDropdownSelect } from './DropdownSelect';
 import { DefaultIconButton } from '../Buttons';
+import { primaryBorderColor } from '../../../utils/ThemeConstants';
+import { useTheme } from '@mui/material/styles';
 
 interface IDropdownSelectWithButtons extends IDropdownSelect {
   useArrowListeners?: boolean;
@@ -29,6 +31,8 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
 
   const [selectedOption, setSelectedOption] = useState(defaultValue || '');
   const [open, setOpen] = React.useState(false);
+
+  const theme = useTheme();
 
   useEffect(() => {
     if (defaultValue) {
@@ -90,11 +94,10 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
   };
   
   return (
-    <div className={styles.DropdownSelectWithButtons}>
+    <div className={styles.DropdownSelectWithButtons} style={{borderColor: primaryBorderColor(theme.palette.mode)}}>
       <DefaultIconButton
         sx={{
           p: 0,
-          mt: '16px'
         }}
         onClick={handleLeftClick}
       >
@@ -106,10 +109,12 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
           minWidth: minWidth || '200px', 
           width,
           maxWidth,
-          m: m || '0', 
+          m: m || '0',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
-        <InputLabel>{ label }</InputLabel>
         <Select
           value={selectedOption}
           onChange={handleSelect}
@@ -118,12 +123,17 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
           onOpen={() => setOpen(true)}
           sx={{
             margin: 0,
+            border: 0,
+            '::before': {
+              border: 0
+            },
             '& .MuiListItem-root': {
               display: 'none',
             },
             '& .MuiListItemText-root': {
               textOverflow: "ellipsis",
               overflow: 'hidden',
+              margin: 0
             }
           }}
         >
@@ -152,7 +162,6 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
       <DefaultIconButton
         sx={{
           p: 0,
-          mt: '16px'
         }}
         onClick={handleRightClick}
       >
@@ -163,7 +172,6 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
         <DefaultIconButton
           sx={{
             p: 0,
-            mt: '16px'
           }}
           onClick={onDeleteAll}
         >

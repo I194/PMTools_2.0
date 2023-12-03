@@ -115,7 +115,6 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
 
   return (
     <ToolsPMDSkeleton>
-      <CurrentPMDFileSelector />
       <ButtonGroupWithLabel label={t('pcaPage.tools.coordinateSystem.title')}>
         {
           availableReferences.map(availRef => (

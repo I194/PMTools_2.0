@@ -123,7 +123,6 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
 
   return (
     <ToolsPMDSkeleton>
-      <CurrentDIRFileSelector />
       <ButtonGroupWithLabel label={t('dirPage.tools.coordinateSystem.title')}>
         {
           availableReferences.map(availRef => (

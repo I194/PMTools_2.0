@@ -24,6 +24,7 @@ import HelpModal from "../../Common/Modal/HelpModal/HelpModal";
 import * as dirPageReducer from '../../../services/reducers/dirPage';
 import OutputDataTablePMD from "../DataTablesPMD/OutputDataTable/OutputDataTablePMD";
 import OutputDataTableDIR from "../DataTablesDIR/OutputDataTable/OutputDataTableDIR";
+import CurrentFileSelector from "./CurrentFileSelector";
 
 interface IAppSettings {
   onFileUpload: (event: any, files?: Array<File>) => void;
@@ -137,6 +138,7 @@ const AppSettings: FC<IAppSettings> = ({
           text={t('appLayout.settings.export')}
           onClick={onOpenExportModalClick}
         />
+        <CurrentFileSelector currentPage={currentPage} /> 
       </div>
       <ModalWrapper
         open={showSettings}
