@@ -1,6 +1,6 @@
 {
   "name": "pmtools_2.0",
-  "version": "2.1.16",
+  "version": "2.2.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.9.0",
