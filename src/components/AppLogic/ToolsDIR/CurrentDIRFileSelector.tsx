@@ -11,6 +11,7 @@ import {
   deleteInterepretationByParentFile,
   setHiddenDirectionsIDs,
   deleteAllInterpretations,
+  setReversedDirectionsIDs,
 } from '../../../services/reducers/dirPage';
 import { useTranslation } from 'react-i18next';
 
@@ -39,6 +40,7 @@ const CurrentDIRFileSelector: FC = () => {
         dispatch(updateCurrentInterpretation());
         dispatch(setSelectedDirectionsIDs(null));
         dispatch(setHiddenDirectionsIDs([]));
+        dispatch(setReversedDirectionsIDs([]));
         dispatch(setStatisticsMode(null));
       }
     }
@@ -67,6 +69,7 @@ const CurrentDIRFileSelector: FC = () => {
       dispatch(updateCurrentInterpretation());
       dispatch(setSelectedDirectionsIDs(null));
       dispatch(setHiddenDirectionsIDs([]));
+      dispatch(setReversedDirectionsIDs([]));
       dispatch(setStatisticsMode(null));
     };
   };
@@ -77,6 +80,7 @@ const CurrentDIRFileSelector: FC = () => {
     dispatch(updateCurrentInterpretation());
     dispatch(setSelectedDirectionsIDs(null));
     dispatch(setHiddenDirectionsIDs([]));
+    dispatch(setReversedDirectionsIDs([]));
     dispatch(setStatisticsMode(null));
   };
 
