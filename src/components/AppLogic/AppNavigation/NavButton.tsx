@@ -9,9 +9,10 @@ interface INavButton {
   icon: React.ReactNode;
   to: string;
   external?: boolean;
+  forceSmall?: boolean;
 }
 
-const NavButton: FC<INavButton> = ({ label, icon, to, external }) => {
+const NavButton: FC<INavButton> = ({ label, icon, to, external, forceSmall }) => {
 
   const onClickExternal = () => {
     window.location.href = to;
@@ -23,6 +24,7 @@ const NavButton: FC<INavButton> = ({ label, icon, to, external }) => {
         text={label}
         icon={icon}
         onClick={onClickExternal}
+        forceSmall={forceSmall}
       />
     )
   };
@@ -36,6 +38,7 @@ const NavButton: FC<INavButton> = ({ label, icon, to, external }) => {
               text={label}
               icon={icon}
               color={ isActive ? 'secondary' : 'primary' }
+              forceSmall={forceSmall}
             />
           );
         }

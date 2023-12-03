@@ -19,7 +19,6 @@ import { IPmdData } from '../../../utils/GlobalTypes';
 import ModalWrapper from '../../Common/Modal/ModalWrapper';
 import InputApply from '../../Common/InputApply/InputApply';
 import ToolsPMDSkeleton from './ToolsPMDSkeleton';
-import OutputDataTablePMD from '../DataTablesPMD/OutputDataTable/OutputDataTablePMD';
 import StatModeButton from './StatModeButton';
 import { deleteAllTreatmentData, deleteTreatmentData, setCurrentPMDid } from '../../../services/reducers/parsedData';
 import parseDotsIndexesInput from '../../../utils/parsers/parseDotsIndexesInput';
@@ -45,7 +44,6 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   const [allDataPMD, setAllDataPMD] = useState<Array<IPmdData>>([]);
   const [currentFileName, setCurrentFileName] = useState<string>('');
   const [coordinateSystem, setCoordinateSystem] = useState<Reference>('geographic');
-  const [allFilesStatOpen, setAllFilesStatOpen] = useState<boolean>(false);
   const [showStepsInput, setShowStepsInput] = useState<boolean>(false);
 
   const availableReferences: Array<Reference> = ['specimen', 'geographic', 'stratigraphic'];
@@ -214,20 +212,8 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
         <StatModeButton mode='gc' hotkey={gcHotkey.key}/>
         <StatModeButton mode='gcn' hotkey={gcnHotkey.key}/>
       </ButtonGroupWithLabel>
-      <ButtonGroupWithLabel label={t('pcaPage.tools.seeStats.title')}>
-        <Button onClick={() => setAllFilesStatOpen(true)}>
-          {t('pcaPage.tools.seeStats.label')}
-        </Button>
-      </ButtonGroupWithLabel>
       {/* <ShowHideDotsButtons setShowStepsInput={setShowStepsInput} showStepsInput={showStepsInput}/> */}
       <ShowHideDotsButtons data={data} />
-      <ModalWrapper
-        open={allFilesStatOpen}
-        setOpen={setAllFilesStatOpen}
-        size={{width: '80vw', height: '60vh'}}
-      >
-        <OutputDataTablePMD />
-      </ModalWrapper>
       {
         showStepsInput && 
         <ModalWrapper

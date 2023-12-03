@@ -61,11 +61,13 @@ const AppNavigation: FC = ({}) => {
         icon={<GitHubIcon />}
         to={'https://github.com/I194/PMTools_2.0'}
         external={true}
+        forceSmall
       />
       <NavButton 
         label={t('appLayout.navPanel.mainPage')}
         icon={<OtherHousesIcon />}
         to={'/'}
+        forceSmall
       />
       <div style={{position: 'absolute', right: '0px'}}>
         <DefaultIconButton onClick={onColorModeClick}>

@@ -26,7 +26,6 @@ import {
   deleteAllInterpretations,
 } from '../../../services/reducers/dirPage';
 import { Reference } from '../../../utils/graphs/types';
-import OutputDataTableDIR from '../DataTablesDIR/OutputDataTable/OutputDataTableDIR';
 import VGPModalContent from '../VGP/VGPmodalContent';
 import FoldTestContainer from './PMTests/FoldTestContainer';
 import PMTestsModalContent from './PMTests/PMTestsModalContent';
@@ -50,7 +49,6 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
 
   const [allDirData, setAllDirData] = useState<Array<IDirData>>([]);
   const [currentFileName, setCurrentFileName] = useState<string>('');
-  const [allFilesStatOpen, setAllFilesStatOpen] = useState<boolean>(false);
   const [showIndexesInput, setShowIndexesInput] = useState<boolean>(false);
   const [showVGP, setShowVGP] = useState<boolean>(false);
   const [showPMTests, setShowPMTests] = useState<boolean>(false);
@@ -141,10 +139,8 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
 
   // при смене текущего файла обновляет данные для отображения
   useEffect(() => {
-    console.log('here 000', currentDataDIRid, allDirData);
     if (currentDataDIRid !== null && allDirData.length) {
       const filename = allDirData[currentDataDIRid]?.name;
-      console.log('here 0', filename)
       if (filename) {
         setCurrentFileName(filename);
         dispatch(updateCurrentFileInterpretations(filename));
@@ -226,11 +222,6 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
         <StatModeButton mode='mcFad' hotkey={mcFaddenHotkey.key}/>
         <StatModeButton mode='gc' hotkey={gcHotkey.key}/>
       </ButtonGroupWithLabel>
-      <ButtonGroupWithLabel label={t('dirPage.tools.seeStats.title')}>
-        <Button onClick={() => setAllFilesStatOpen(true)}>
-          {t('dirPage.tools.seeStats.label')}
-        </Button>
-      </ButtonGroupWithLabel>
       <ShowHideDotsButtons data={data} />
       <ReversePolarityButtons data={data} />
       <ButtonGroupWithLabel label={t('dirPage.tools.vgp.title')}>
@@ -243,13 +234,6 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
           {t('dirPage.tools.tests.label')}
         </Button>
       </ButtonGroupWithLabel>
-      <ModalWrapper
-        open={allFilesStatOpen}
-        setOpen={setAllFilesStatOpen}
-        size={{width: '80vw', height: '60vh'}}
-      >
-        <OutputDataTableDIR />
-      </ModalWrapper>
       <ModalWrapper
         open={showVGP}
         setOpen={setShowVGP}

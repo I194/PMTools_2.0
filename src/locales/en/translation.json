@@ -133,7 +133,8 @@
     "settings": {
       "settings": "Settings",
       "help": "Help",
-      "import": "Import file"
+      "import": "Import file",
+      "export": "Export statistics"
     },
     "navPanel": {
       "PCA": "Magnetic treatment",
