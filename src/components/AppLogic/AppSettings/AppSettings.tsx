@@ -98,12 +98,14 @@ const AppSettings: FC<IAppSettings> = ({
           text={t('appLayout.settings.settings')}
           onClick={onSettingsClick}
           variant='outlined'
+          forceSmall
         />
         <DefaultResponsiveButton
           icon={<HelpOutlineOutlinedIcon />}
           text={t('appLayout.settings.help')}
           onClick={onHelpClick}
           variant='outlined'
+          forceSmall
         />
         <label 
           htmlFor="upload-file" 
