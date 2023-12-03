@@ -1,32 +1,24 @@
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
-import styles from './ToolsPMD.module.scss';
-import DropdownSelect from '../../Common/DropdownSelect/DropdownSelect';
+import React, { FC, useEffect, useState } from 'react';
 import { ButtonGroupWithLabel } from '../../Common/Buttons';
 import { Button } from '@mui/material';
 import { Reference } from '../../../utils/graphs/types';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
 import { 
-  deleteAllInterpretations, 
-  deleteInterepretationByParentFile, 
-  setHiddenStepsIDs, 
   setReference, 
   setSelectedStepsIDs, 
   setStatisticsMode, 
-  updateCurrentFileInterpretations, 
-  updateCurrentInterpretation 
 } from '../../../services/reducers/pcaPage';
 import { IPmdData } from '../../../utils/GlobalTypes';
 import ModalWrapper from '../../Common/Modal/ModalWrapper';
 import InputApply from '../../Common/InputApply/InputApply';
 import ToolsPMDSkeleton from './ToolsPMDSkeleton';
 import StatModeButton from './StatModeButton';
-import { deleteAllTreatmentData, deleteTreatmentData, setCurrentPMDid } from '../../../services/reducers/parsedData';
 import parseDotsIndexesInput from '../../../utils/parsers/parseDotsIndexesInput';
-import DropdownSelectWithButtons from '../../Common/DropdownSelect/DropdownSelectWithButtons';
 import ShowHideDotsButtons from './ShowHideDotsButtons';
 import { referenceToLabel } from '../../../utils/parsers/labelToReference';
 import { enteredIndexesToIDsPMD } from '../../../utils/parsers/enteredIndexesToIDs';
 import { useTranslation } from 'react-i18next';
+import CurrentPMDFileSelector from './CurrentPMDFileSelector';
 
 interface IToolsPMD {
   data: IPmdData | null;
@@ -38,11 +30,8 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   const { t, i18n } = useTranslation('translation');
 
   const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
-  const { treatmentData, currentDataPMDid } = useAppSelector(state => state.parsedDataReducer);
   const { reference, selectedStepsIDs, statisticsMode, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
 
-  const [allDataPMD, setAllDataPMD] = useState<Array<IPmdData>>([]);
-  const [currentFileName, setCurrentFileName] = useState<string>('');
   const [coordinateSystem, setCoordinateSystem] = useState<Reference>('geographic');
   const [showStepsInput, setShowStepsInput] = useState<boolean>(false);
 
@@ -67,12 +56,6 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   }, [hotkeys]);
 
   useEffect(() => {
-    if (treatmentData) {
-      setAllDataPMD(treatmentData);
-    };
-  }, [treatmentData]);
-
-  useEffect(() => {
     if ((!selectedStepsIDs || !selectedStepsIDs.length) && statisticsMode) {
       setShowStepsInput(true);
     } else {
@@ -91,20 +74,6 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   useEffect(() => {
     setCoordinateSystem(reference);
   }, [reference]);
-
-  useEffect(() => {
-    if (currentDataPMDid !== null) {
-      const filename = allDataPMD[currentDataPMDid]?.metadata.name;
-      if (filename) {
-        setCurrentFileName(filename);
-        dispatch(updateCurrentFileInterpretations(filename));
-        dispatch(updateCurrentInterpretation());
-        dispatch(setSelectedStepsIDs(null));
-        dispatch(setHiddenStepsIDs([]));
-        dispatch(setStatisticsMode(null));
-      }
-    }
-  }, [currentDataPMDid, allDataPMD]);
 
   const handleReferenceSelect = (selectedReference: Reference) => {
     dispatch(setReference(selectedReference));
@@ -144,56 +113,9 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
     setShowStepsInput(false);
   };
 
-  const handleFileSelect = (fileName: string) => {
-    if (!allDataPMD.length) {
-      dispatch(setCurrentPMDid(null));
-      return;
-    }
-
-    const pmdIndex = allDataPMD.findIndex(pmd => pmd.metadata.name === fileName);
-    dispatch(setCurrentPMDid(pmdIndex));
-  };
-
-  const handleFileDelete = (fileName: string) => {
-    if (treatmentData) {
-      // Надо переключиться на прошлый файл если удаляем файл на котором сейчас сидим, иначе currentDataPMDid будет ссылаться на некорректный индекс
-      let fileNamePMDDataIndex = allDataPMD.findIndex(pmd => pmd.metadata.name === fileName);
-      if (fileNamePMDDataIndex === currentDataPMDid) {
-        dispatch(setCurrentPMDid(fileNamePMDDataIndex - 1));
-      }
-
-      dispatch(deleteTreatmentData(fileName));
-      dispatch(deleteInterepretationByParentFile(fileName));
-      dispatch(updateCurrentInterpretation());
-      dispatch(setSelectedStepsIDs(null));
-      dispatch(setHiddenStepsIDs([]));
-      dispatch(setStatisticsMode(null));
-    };
-  };
-
-  const handleAllFilesDelete = () => {
-    dispatch(deleteAllTreatmentData());
-    dispatch(deleteAllInterpretations());
-    dispatch(updateCurrentInterpretation());
-    dispatch(setSelectedStepsIDs(null));
-    dispatch(setHiddenStepsIDs([]));
-    dispatch(setStatisticsMode(null));
-  };
-
   return (
     <ToolsPMDSkeleton>
-      <DropdownSelectWithButtons 
-        label={t('pcaPage.tools.currentFile.title')}
-        options={allDataPMD.map(pmd => pmd.metadata.name)}
-        defaultValue={currentFileName}
-        onOptionSelect={handleFileSelect}
-        minWidth={'210px'}
-        maxWidth={'210px'}
-        useArrowListeners
-        showDelete
-        onDelete={handleFileDelete}
-        onDeleteAll={handleAllFilesDelete}
-      />
+      <CurrentPMDFileSelector />
       <ButtonGroupWithLabel label={t('pcaPage.tools.coordinateSystem.title')}>
         {
           availableReferences.map(availRef => (

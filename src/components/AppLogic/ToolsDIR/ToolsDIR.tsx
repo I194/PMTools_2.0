@@ -1,6 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
-import styles from './ToolsDIR.module.scss';
-import DropdownSelect from '../../Common/DropdownSelect/DropdownSelect';
+import React, { FC, useEffect, useState } from 'react';
 import ButtonGroupWithLabel from '../../Common/Buttons/ButtonGroupWithLabel/ButtonGroupWithLabel';
 import { Button } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
@@ -8,22 +6,15 @@ import { IDirData } from '../../../utils/GlobalTypes';
 import ModalWrapper from '../../Common/Modal/ModalWrapper';
 import ToolsPMDSkeleton from './ToolsDIRSkeleton';
 import StatModeButton from './StatModeButton';
-import { deleteAllDirStatData, deleteDirStatData, setCurrentDIRid } from '../../../services/reducers/parsedData';
 import InputApply from '../../Common/InputApply/InputApply';
 import parseDotsIndexesInput from '../../../utils/parsers/parseDotsIndexesInput';
-import DropdownSelectWithButtons from '../../Common/DropdownSelect/DropdownSelectWithButtons';
 import ShowHideDotsButtons from './ShowHideDotsButtons';
 import { referenceToLabel } from '../../../utils/parsers/labelToReference';
 import { enteredIndexesToIDsDIR } from '../../../utils/parsers/enteredIndexesToIDs';
 import { 
   setReference, 
   setSelectedDirectionsIDs, 
-  setStatisticsMode, 
-  updateCurrentInterpretation, 
-  updateCurrentFileInterpretations, 
-  deleteInterepretationByParentFile,
-  setHiddenDirectionsIDs,
-  deleteAllInterpretations,
+  setStatisticsMode,
 } from '../../../services/reducers/dirPage';
 import { Reference } from '../../../utils/graphs/types';
 import VGPModalContent from '../VGP/VGPmodalContent';
@@ -32,6 +23,7 @@ import PMTestsModalContent from './PMTests/PMTestsModalContent';
 import ReversePolarityButtons from './ReversePolarityButtons';
 import { useMediaQuery } from 'react-responsive';
 import { useTranslation } from 'react-i18next';
+import CurrentDIRFileSelector from './CurrentDIRFileSelector';
 
 interface IToolsDIR {
   data: IDirData | null;
@@ -44,11 +36,8 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
   const widthLessThan1400 = useMediaQuery({ query: '(max-width: 1400px)' });
   
   const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
-  const { dirStatData, currentDataDIRid } = useAppSelector(state => state.parsedDataReducer);
   const { selectedDirectionsIDs, hiddenDirectionsIDs, statisticsMode, reference } = useAppSelector(state => state.dirPageReducer); 
 
-  const [allDirData, setAllDirData] = useState<Array<IDirData>>([]);
-  const [currentFileName, setCurrentFileName] = useState<string>('');
   const [showIndexesInput, setShowIndexesInput] = useState<boolean>(false);
   const [showVGP, setShowVGP] = useState<boolean>(false);
   const [showPMTests, setShowPMTests] = useState<boolean>(false);
@@ -72,13 +61,6 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
       setUnselectHotkey(selectionHotkeys.find(hotkey => hotkey.label === 'Убрать выделение')!.hotkey);
     }
   }, [hotkeys]);
-
-  // для списка всех файлов
-  useEffect(() => {
-    if (dirStatData) {
-      setAllDirData(dirStatData);
-    };
-  }, [dirStatData]);
 
   // открывает окно ввода номеров точек (точки, номера которых будут введены, будут выбраны)
   useEffect(() => {
@@ -136,74 +118,12 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
     dispatch(setSelectedDirectionsIDs(IDs));
     setShowIndexesInput(false);
   };
-
-  // при смене текущего файла обновляет данные для отображения
-  useEffect(() => {
-    if (currentDataDIRid !== null && allDirData.length) {
-      const filename = allDirData[currentDataDIRid]?.name;
-      if (filename) {
-        setCurrentFileName(filename);
-        dispatch(updateCurrentFileInterpretations(filename));
-        dispatch(updateCurrentInterpretation());
-        dispatch(setSelectedDirectionsIDs(null));
-        dispatch(setHiddenDirectionsIDs([]));
-        dispatch(setStatisticsMode(null));
-      }
-    }
-  }, [currentDataDIRid, allDirData]);
   
   if (!data) return <ToolsPMDSkeleton />;
 
-  const handleFileSelect = (fileName: string) => {
-    if (!allDirData.length) {
-      dispatch(setCurrentDIRid(null));
-      return;
-    }
-
-    const dirIndex = allDirData.findIndex(dir => dir.name === fileName);
-    dispatch(setCurrentDIRid(dirIndex));
-  };
-
-  const handleFileDelete = (fileName: string) => {
-    if (dirStatData) {
-      // Надо переключиться на прошлый файл если удаляем файл на котором сейчас сидим, иначе currentDataPMDid будет ссылаться на некорректный индекс
-      let fileNameDirDataIndex = allDirData.findIndex(dir => dir.name === fileName);
-      if (fileNameDirDataIndex === currentDataDIRid) {
-        dispatch(setCurrentDIRid(fileNameDirDataIndex - 1));
-      }
-
-      dispatch(deleteDirStatData(fileName));
-      dispatch(deleteInterepretationByParentFile(fileName));
-      dispatch(updateCurrentInterpretation());
-      dispatch(setSelectedDirectionsIDs(null));
-      dispatch(setHiddenDirectionsIDs([]));
-      dispatch(setStatisticsMode(null));
-    };
-  };
-
-  const handleAllFilesDelete = () => {
-    dispatch(deleteAllDirStatData());
-    dispatch(deleteAllInterpretations());
-    dispatch(updateCurrentInterpretation());
-    dispatch(setSelectedDirectionsIDs(null));
-    dispatch(setHiddenDirectionsIDs([]));
-    dispatch(setStatisticsMode(null));
-  };
-
   return (
     <ToolsPMDSkeleton>
-      <DropdownSelectWithButtons 
-        label={t('dirPage.tools.currentFile.title')}
-        options={allDirData.map(dir => dir.name)}
-        defaultValue={currentFileName}
-        onOptionSelect={handleFileSelect}
-        minWidth={'210px'}
-        maxWidth={'210px'}
-        useArrowListeners
-        showDelete
-        onDelete={handleFileDelete}
-        onDeleteAll={handleAllFilesDelete}
-      />
+      <CurrentDIRFileSelector />
       <ButtonGroupWithLabel label={t('dirPage.tools.coordinateSystem.title')}>
         {
           availableReferences.map(availRef => (
