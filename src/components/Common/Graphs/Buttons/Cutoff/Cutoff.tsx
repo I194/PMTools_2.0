@@ -16,7 +16,7 @@ const Cutoff = ({
   isUseful, isUsefulBorder, isUsefulDots 
 }: Props) => {
   return (
-    <div className={styles.centerByMean}>
+    <div className={styles.cutoff}>
       <ButtonGroup variant='outlined' size='small' sx={{height: 24, mt: '4px'}}>
         <Button
           color={isUseful ? 'warning' : 'primary'}

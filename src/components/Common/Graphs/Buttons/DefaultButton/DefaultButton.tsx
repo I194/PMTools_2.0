@@ -12,7 +12,7 @@ type Props = {
 const DefaultButton = ({ onClick, isUseful, label, extraStyle }: Props) => {
   console.log('custom zoom', isUseful)
   return (
-    <div className={styles.projectionSelect} style={{...extraStyle}}>
+    <div className={styles.toDefault} style={{...extraStyle}}>
       <Button
         color={isUseful ? 'warning' : 'primary'}
         onClick={onClick}

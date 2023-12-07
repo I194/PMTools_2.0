@@ -135,7 +135,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
       <ContextMenu items={menuItems}>
         {
           graphId === 'zijd' && 
-          <>
+          <div className={styles.zijdChartExtraSettings}>
             <ProjectionSelect />
             <ResetZoomPan 
               onClick={onResetZoomPan!} 
@@ -149,7 +149,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
                 left: '338px'
               }}
             />
-          </>
+          </div>
         }
         {
           graphId === 'stereoDir' &&
