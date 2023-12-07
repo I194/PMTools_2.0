@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { ButtonGroupWithLabel } from '../../Common/Buttons';
-import { Button } from '@mui/material';
+import { Button, Tooltip, Typography } from '@mui/material';
 import { Reference } from '../../../utils/graphs/types';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
 import { 
@@ -37,6 +37,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
 
   const availableReferences: Array<Reference> = ['specimen', 'geographic', 'stratigraphic'];
 
+  const [coordinateSystemHotkey, setCoordinateSystemHotkey] = useState<{key: string, code: string}>({key: 'Q', code: 'KeyQ'});
   const [pcaHotkey, setPcaHotkey] = useState<{key: string, code: string}>({key: 'D', code: 'KeyD'});
   const [pca0Hotkey, setPca0Hotkey] = useState<{key: string, code: string}>({key: 'O', code: 'KeyO'});
   const [gcHotkey, setGcHotkey] = useState<{key: string, code: string}>({key: 'G', code: 'KeyG'});
@@ -44,9 +45,12 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   const [unselectHotkey, setUnselectHotkey] = useState<{key: string, code: string}>({key: 'U', code: 'KeyU'});
 
   useEffect(() => {
+    const coordinateSystemHotkeys = hotkeys.find(block => block.title === 'Система координат')?.hotkeys;
     const statHotkeys = hotkeys.find(block => block.title === 'Статистические методы')?.hotkeys;
     const selectionHotkeys = hotkeys.find(block => block.title === 'Выделение точек')?.hotkeys;
-    if (statHotkeys && selectionHotkeys) {
+
+    if (coordinateSystemHotkeys && statHotkeys && selectionHotkeys) {
+      setCoordinateSystemHotkey(coordinateSystemHotkeys.find(hotkey => hotkey.label === 'Прокручивание систем координат')!.hotkey);
       setPcaHotkey(statHotkeys.find(hotkey => hotkey.label === 'PCA')!.hotkey);
       setPca0Hotkey(statHotkeys.find(hotkey => hotkey.label === 'PCA0')!.hotkey);
       setGcHotkey(statHotkeys.find(hotkey => hotkey.label === 'GC')!.hotkey);
@@ -69,7 +73,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
     return () => {
       window.removeEventListener("keydown", handleHotkeys);
     };
-  }, [hotkeysActive, hotkeys]);
+  }, [hotkeysActive, hotkeys, reference]);
   
   useEffect(() => {
     setCoordinateSystem(reference);
@@ -82,6 +86,12 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   const handleHotkeys = (event: KeyboardEvent) => {
     const keyCode = event.code;
 
+    if (keyCode === coordinateSystemHotkey.code) {
+      event.preventDefault();
+      const currReferenceIndex = availableReferences.findIndex(coordRef => coordRef === reference);
+      const nextReferenceIndex = (currReferenceIndex + 1) % 3;
+      dispatch(setReference(availableReferences[nextReferenceIndex]));
+    }
     if (keyCode === pcaHotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('pca'))
@@ -118,12 +128,18 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
       <ButtonGroupWithLabel label={t('pcaPage.tools.coordinateSystem.title')}>
         {
           availableReferences.map(availRef => (
-            <Button 
-              color={reference === availRef ? 'secondary' : 'primary'}
-              onClick={() => handleReferenceSelect(availRef)}
+            <Tooltip
+              title={<Typography variant='body1'>{coordinateSystemHotkey.key}</Typography>}
+              enterDelay={250}
+              arrow
             >
-              { referenceToLabel(availRef) }
-            </Button>
+              <Button 
+                color={reference === availRef ? 'secondary' : 'primary'}
+                onClick={() => handleReferenceSelect(availRef)}
+              >
+                { referenceToLabel(availRef) }
+              </Button>
+            </Tooltip>
           ))
         }
       </ButtonGroupWithLabel>

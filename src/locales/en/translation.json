@@ -235,7 +235,14 @@
         "right": "Move right",
         "left": "Move left",
         "top": "Move up",
-        "bottom": "Move down"
+        "bottom": "Move down",
+        "projection": {
+          "scroll": "Projection scroll"
+        }
+      },
+      "coordinates": {
+        "title": "Coordinate system",
+        "scroll": "Coordinate system scroll"
       },
       "fileSelector": {
         "title": "File Selector",
@@ -266,6 +273,9 @@
         "Переместиться влево": "Move left",
         "Переместиться вверх": "Move up",
         "Переместиться вниз": "Move down",
+        "Прокручивание проекции": "Projection scroll",
+        "Система координат": "Coordinate system",
+        "Прокручивание систем координат": "Coordinate system scroll",
         "Выбор активного файла": "File Selector",
         "Выбрать следующий файл": "Select next file",
         "Выбрать предыдущий файл": "Select previous file"

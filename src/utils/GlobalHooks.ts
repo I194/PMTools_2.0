@@ -384,10 +384,32 @@ export const useDefaultHotkeys = (): HotkeysType => {
             code: 'ArrowDown',
           }
         },
+        {
+          id: 6,
+          label: t('settings.hotkeys.zijd.projection.scroll'),
+          hotkey: {
+            key: 'P',
+            code: 'KeyP',
+          }
+        }
       ]
     },
     {
       id: 7,
+      title: t('settings.hotkeys.coordinates.title'),
+      hotkeys: [
+        {
+          id: 1,
+          label: t('settings.hotkeys.coordinates.scroll'),
+          hotkey: {
+            key: 'Q',
+            code: 'KeyQ',
+          }
+        },
+      ]
+    },
+    {
+      id: 8,
       title: t('settings.hotkeys.fileSelector.title'),
       hotkeys: [
         {
@@ -396,7 +418,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
           disabled: true,
           hotkey: {
             key: 'Shift + ArrowLeft',
-            code: 'ArrowLeft',
+            code: 'Shift + ArrowLeft',
           }
         },
         {
@@ -405,11 +427,11 @@ export const useDefaultHotkeys = (): HotkeysType => {
           disabled: true,
           hotkey: {
             key: 'Shift + ArrowRight',
-            code: 'ArrowRight',
+            code: 'Shift + ArrowRight',
           }
         },
       ]
-    }
+    },
   ];
 
   return defaultHotkeys;
