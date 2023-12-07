@@ -237,6 +237,11 @@
         "top": "Move up",
         "bottom": "Move down"
       },
+      "fileSelector": {
+        "title": "File Selector",
+        "right": "Select next file",
+        "left": "Select previous file"
+      },
       "titles": {
         "Статистические методы": "Statistics methods", 
         "PCA": "PCA",
@@ -260,7 +265,10 @@
         "Переместиться вправо": "Move right",
         "Переместиться влево": "Move left",
         "Переместиться вверх": "Move up",
-        "Переместиться вниз": "Move down"
+        "Переместиться вниз": "Move down",
+        "Выбор активного файла": "File Selector",
+        "Выбрать следующий файл": "Select next file",
+        "Выбрать предыдущий файл": "Select previous file"
       }
     },
     "saveButton": "Save",

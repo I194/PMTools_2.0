@@ -385,6 +385,30 @@ export const useDefaultHotkeys = (): HotkeysType => {
           }
         },
       ]
+    },
+    {
+      id: 7,
+      title: t('settings.hotkeys.fileSelector.title'),
+      hotkeys: [
+        {
+          id: 1,
+          label: t('settings.hotkeys.fileSelector.right'),
+          disabled: true,
+          hotkey: {
+            key: 'Shift + ArrowLeft',
+            code: 'ArrowLeft',
+          }
+        },
+        {
+          id: 2,
+          label: t('settings.hotkeys.fileSelector.left'),
+          disabled: true,
+          hotkey: {
+            key: 'Shift + ArrowRight',
+            code: 'ArrowRight',
+          }
+        },
+      ]
     }
   ];
 
