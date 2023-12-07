@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import ButtonGroupWithLabel from '../../Common/Buttons/ButtonGroupWithLabel/ButtonGroupWithLabel';
-import { Button } from '@mui/material';
+import { Button, Tooltip, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
 import { IDirData } from '../../../utils/GlobalTypes';
 import ModalWrapper from '../../Common/Modal/ModalWrapper';
@@ -44,6 +44,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
 
   const availableReferences: Array<Reference> = ['geographic', 'stratigraphic'];
 
+  const [coordinateSystemHotkey, setCoordinateSystemHotkey] = useState<{key: string, code: string}>({key: 'Q', code: 'KeyQ'});
   const [fisherHotkey, setFisherHotkey] = useState<{key: string, code: string}>({key: 'F', code: 'KeyF'});
   const [mcFaddenHotkey, setMcFaddenHotkey] = useState<{key: string, code: string}>({key: 'M', code: 'KeyM'});
   const [gcHotkey, setGcHotkey] = useState<{key: string, code: string}>({key: 'G', code: 'KeyG'});
@@ -51,9 +52,12 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
   const [unselectHotkey, setUnselectHotkey] = useState<{key: string, code: string}>({key: 'U', code: 'KeyU'});
 
   useEffect(() => {
+    const coordinateSystemHotkeys = hotkeys.find(block => block.title === 'Система координат')?.hotkeys;
     const statHotkeys = hotkeys.find(block => block.title === 'Статистические методы')?.hotkeys;
     const selectionHotkeys = hotkeys.find(block => block.title === 'Выделение точек')?.hotkeys;
-    if (statHotkeys && selectionHotkeys) {
+
+    if (coordinateSystemHotkeys && statHotkeys && selectionHotkeys) {
+      setCoordinateSystemHotkey(coordinateSystemHotkeys.find(hotkey => hotkey.label === 'Прокручивание систем координат')!.hotkey);
       setFisherHotkey(statHotkeys.find(hotkey => hotkey.label === 'Fisher')!.hotkey);
       setMcFaddenHotkey(statHotkeys.find(hotkey => hotkey.label === 'McFadden')!.hotkey);
       setGcHotkey(statHotkeys.find(hotkey => hotkey.label === 'GC')!.hotkey);
@@ -78,12 +82,18 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
     return () => {
       window.removeEventListener("keydown", handleHotkeys);
     };
-  }, [hotkeysActive, hotkeys]);
+  }, [hotkeysActive, hotkeys, reference]);
 
   // обработчик нажатий на клавиатуру
   const handleHotkeys = (event: KeyboardEvent) => {
     const keyCode = event.code;
 
+    if (keyCode === coordinateSystemHotkey.code) {
+      event.preventDefault();
+      const currReferenceIndex = availableReferences.findIndex(coordRef => coordRef === reference);
+      const nextReferenceIndex = (currReferenceIndex + 1) % 2;
+      dispatch(setReference(availableReferences[nextReferenceIndex]));
+    };
     if (keyCode === fisherHotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('fisher'))
@@ -126,13 +136,19 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
       <ButtonGroupWithLabel label={t('dirPage.tools.coordinateSystem.title')}>
         {
           availableReferences.map(availRef => (
-            <Button 
-              color={reference === availRef ? 'secondary' : 'primary'}
-              onClick={() => handleReferenceSelect(availRef)}
-              sx={{width: '80px'}}
+            <Tooltip
+              title={<Typography variant='body1'>{coordinateSystemHotkey.key}</Typography>}
+              enterDelay={250}
+              arrow
             >
-              { referenceToLabel(availRef) }
-            </Button>
+              <Button 
+                color={reference === availRef ? 'secondary' : 'primary'}
+                onClick={() => handleReferenceSelect(availRef)}
+                sx={{width: '80px'}}
+              >
+                { referenceToLabel(availRef) }
+              </Button>
+            </Tooltip>
           ))
         }
       </ButtonGroupWithLabel>
