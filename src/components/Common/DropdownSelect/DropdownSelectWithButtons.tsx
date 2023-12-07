@@ -3,7 +3,7 @@ import styles from './DropdownSelect.module.scss';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { FormControl, IconButton, InputLabel, ListItem, ListItemText, MenuItem, Select, SelectChangeEvent,  } from '@mui/material';
+import { FormControl, IconButton, InputLabel, ListItem, ListItemText, MenuItem, Select, SelectChangeEvent, Tooltip, Typography,  } from '@mui/material';
 import DropdownSelect, { IDropdownSelect } from './DropdownSelect';
 import { DefaultIconButton } from '../Buttons';
 import { primaryBorderColor } from '../../../utils/ThemeConstants';
@@ -101,7 +101,13 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
         }}
         onClick={handleLeftClick}
       >
-        <KeyboardArrowLeftIcon />
+        <Tooltip 
+          title={<Typography variant='body1'>Shift + ←</Typography>}
+          enterDelay={250}
+          arrow
+        >
+          <KeyboardArrowLeftIcon />
+        </Tooltip>
       </DefaultIconButton>
       <FormControl 
         variant="standard" 
@@ -165,7 +171,13 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
         }}
         onClick={handleRightClick}
       >
-        <KeyboardArrowRightIcon />
+        <Tooltip 
+          title={<Typography variant='body1'>Shift + →</Typography>}
+          enterDelay={250}
+          arrow
+        >
+          <KeyboardArrowRightIcon />
+        </Tooltip>
       </DefaultIconButton>
       {
         !!onDeleteAll &&

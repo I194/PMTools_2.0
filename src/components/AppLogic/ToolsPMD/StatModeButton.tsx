@@ -22,7 +22,7 @@ const StatModeButton: FC<IStatModeButton> = ({ mode, hotkey }) => {
   return (
     <Tooltip 
       title={<Typography variant='body1'>{hotkey}</Typography>}
-      enterDelay={1000}
+      enterDelay={250}
       arrow
     >
       <Button
