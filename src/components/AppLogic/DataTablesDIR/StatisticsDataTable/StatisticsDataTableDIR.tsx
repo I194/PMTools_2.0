@@ -13,15 +13,15 @@ import equal from "deep-equal"
 import { acitvateHotkeys, deactivateHotkeys } from "../../../../services/reducers/appSettings";
 
 interface IStatisticsDataTableDIR {
-  data: Array<StatisitcsInterpretationFromDIR> | null;
+  currentFileInterpretations: Array<StatisitcsInterpretationFromDIR> | null;
 };
 
-const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ data }) => {
+const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ currentFileInterpretations }) => {
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
 
-  const { currentInterpretation } = useAppSelector(state => state.dirPageReducer);
+  const { currentInterpretation, allInterpretations } = useAppSelector(state => state.dirPageReducer);
   const [editRowsModel, setEditRowsModel] = useState<GridEditRowsModel>({});
   const [currentClass, setCurrentClass] = useState(styles.current_dark);
 
@@ -34,40 +34,41 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ data }) => {
   }, [theme]);
 
   useEffect(() => {
-    if (data && Object.keys(editRowsModel).length !== 0) {
-      const updatedData = data.map((interpretation, index) => {
+    if (currentFileInterpretations && Object.keys(editRowsModel).length !== 0) {
+      const updatedAllInterpretations = allInterpretations.map((interpretation) => {
         const rowId = Object.keys(editRowsModel)[0];
         const newComment = editRowsModel[rowId]?.comment?.value as string;
+        console.log('here', rowId, interpretation.uuid);
         if (rowId !== interpretation.label) return interpretation;
         return {
           ...interpretation,
           comment: newComment
         };
       });
-      if (!equal(updatedData, data)) {
-        dispatch(setAllInterpretations(updatedData));
-        dispatch(updateCurrentFileInterpretations(data[0].parentFile));
+      if (!equal(updatedAllInterpretations, allInterpretations)) {
+        dispatch(setAllInterpretations(updatedAllInterpretations));
+        dispatch(updateCurrentFileInterpretations(currentFileInterpretations[0].parentFile));
         dispatch(updateCurrentInterpretation());
       }
     };
-  }, [data, editRowsModel]);
+  }, [currentFileInterpretations, editRowsModel, allInterpretations]);
 
   const handleRowDelete = (id: string) => (event: any) => {
     event.stopPropagation();
     dispatch(deleteInterpretation(id));
-    if (data) {
-      dispatch(updateCurrentFileInterpretations(data[0].parentFile));
+    if (currentFileInterpretations) {
+      dispatch(updateCurrentFileInterpretations(currentFileInterpretations[0].parentFile));
       dispatch(updateCurrentInterpretation());
     };
   };
 
   const handleDeleteAllRows = (event: any) => {
     event.stopPropagation();
-    if (data) {
-      data.forEach(interpretation => {
+    if (currentFileInterpretations) {
+      currentFileInterpretations.forEach(interpretation => {
         dispatch(deleteInterpretation(interpretation.label));
       });
-      dispatch(updateCurrentFileInterpretations(data[0].parentFile));
+      dispatch(updateCurrentFileInterpretations(currentFileInterpretations[0].parentFile));
       dispatch(updateCurrentInterpretation());
     };
   };
@@ -135,9 +136,9 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ data }) => {
     col.disableColumnMenu = true;
   });
 
-  if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
+  if (!currentFileInterpretations || !currentFileInterpretations.length) return <StatisticsDataTablePMDSkeleton />;
 
-  const rows: Array<Omit<DataGridDIRFromDIRRow, | 'id' | 'label'>> = data.map((statistics, index) => {
+  const rows: Array<Omit<DataGridDIRFromDIRRow, | 'id' | 'label'>> = currentFileInterpretations.map((statistics) => {
     const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadiusGeo, Kgeo, confidenceRadiusStrat, Kstrat, comment } = statistics;
     return {
       id: label,

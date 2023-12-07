@@ -124,7 +124,7 @@ const OutputDataTablePMD: FC = () => {
       const updatedData = data.map((interpretation, index) => {
         const rowId = Object.keys(editRowsModel)[0];
         const newComment = editRowsModel[rowId]?.comment?.value as string;
-        if (rowId !== interpretation.label) return interpretation;
+        if (rowId !== interpretation.uuid) return interpretation;
         return {
           ...interpretation,
           comment: newComment

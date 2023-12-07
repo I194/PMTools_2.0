@@ -16,15 +16,15 @@ import equal from "deep-equal";
 import { acitvateHotkeys, deactivateHotkeys } from "../../../../services/reducers/appSettings";
 
 interface IStatisticsDataTablePMD {
-  data: Array<StatisitcsInterpretationFromPCA> | null;
+  currentFileInterpretations: Array<StatisitcsInterpretationFromPCA> | null;
 };
 
-const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
+const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ currentFileInterpretations }) => {
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
 
-  const { currentInterpretation } = useAppSelector(state => state.pcaPageReducer);
+  const { currentInterpretation, allInterpretations } = useAppSelector(state => state.pcaPageReducer);
   const [editRowsModel, setEditRowsModel] = useState<GridEditRowsModel>({});
   const [currentClass, setCurrentClass] = useState(styles.current_dark);
 
@@ -33,23 +33,23 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
   }, []);
 
   useEffect(() => {
-    if (data && Object.keys(editRowsModel).length !== 0) {
-      const updatedData = data.map((interpretation, index) => {
+    if (currentFileInterpretations && Object.keys(editRowsModel).length !== 0) {
+      const updatedAllInterpretations = allInterpretations.map((interpretation) => {
         const rowId = Object.keys(editRowsModel)[0];
         const newComment = editRowsModel[rowId]?.comment?.value as string;
-        if (rowId !== interpretation.label) return interpretation;
+        if (rowId !== interpretation.uuid) return interpretation;
         return {
           ...interpretation,
           comment: newComment
         };
       });
-      if (!equal(updatedData, data)) {
-        dispatch(setAllInterpretations(updatedData));
-        dispatch(updateCurrentFileInterpretations(data[0].parentFile));
+      if (!equal(updatedAllInterpretations, allInterpretations)) {
+        dispatch(setAllInterpretations(updatedAllInterpretations));
+        dispatch(updateCurrentFileInterpretations(currentFileInterpretations[0].parentFile));
         dispatch(updateCurrentInterpretation());
       }
     };
-  }, [data, editRowsModel]);
+  }, [currentFileInterpretations, editRowsModel, allInterpretations]);
 
   useEffect(() => {
     setCurrentClass(theme.palette.mode === 'dark' ? styles.current_dark : styles.current_light);
@@ -58,19 +58,19 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
   const handleRowDelete = (id: string) => (event: any) => {
     event.stopPropagation();
     dispatch(deleteInterpretation(id));
-    if (data) {
-      dispatch(updateCurrentFileInterpretations(data[0].parentFile));
+    if (currentFileInterpretations) {
+      dispatch(updateCurrentFileInterpretations(currentFileInterpretations[0].parentFile));
       dispatch(updateCurrentInterpretation());
     };
   };
 
   const handleDeleteAllRows = (event: any) => {
     event.stopPropagation();
-    if (data) {
-      data.forEach(interpretation => {
+    if (currentFileInterpretations) {
+      currentFileInterpretations.forEach(interpretation => {
         dispatch(deleteInterpretation(interpretation.label));
       });
-      dispatch(updateCurrentFileInterpretations(data[0].parentFile));
+      dispatch(updateCurrentFileInterpretations(currentFileInterpretations[0].parentFile));
       dispatch(updateCurrentInterpretation());
     };
   };
@@ -130,9 +130,9 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ data }) => {
     col.disableColumnMenu = true;
   });
 
-  if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
+  if (!currentFileInterpretations || !currentFileInterpretations.length) return <StatisticsDataTablePMDSkeleton />;
 
-  const rows: Array<Omit<DataGridDIRFromPCARow, 'comment' | 'id' | 'label' | 'uuid'>> = data.map((statistics, index) => {
+  const rows: Array<Omit<DataGridDIRFromPCARow, 'comment' | 'id' | 'label' | 'uuid'>> = currentFileInterpretations.map((statistics, index) => {
     const { uuid, label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadius, comment } = statistics;
     return {
       id: uuid,
