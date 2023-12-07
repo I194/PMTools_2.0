@@ -15,11 +15,11 @@ const toReferenceCoordinates = (
   // Иногда по ошибке можно передать вместо coordinates просто объект {x, y, z} и он пройдет тайпчек пропсов и тут это вызовет ошибки ниже
   // И потому, чтобы такие ошибки не допустить, приходится создавать coordsHelper, у которого наверняка определены все методы Coordinates
   const {x, y, z} = coordinates;
-  const coordsHelper = new Coordinates(x, y, z);
+  let coordsHelper = new Coordinates(x, y, z);
   // Do the geographic correction
-  coordinates = coordsHelper.rotateTo(metadata.a, metadata.b);
+  coordsHelper = coordsHelper.rotateTo(metadata.a, metadata.b);
 
-  if (reference == "geographic") return coordinates;
+  if (reference == "geographic") return coordsHelper;
 
   // Do the stratigraphic correction
   // See Lisa Tauxe: 9.3 Changing coordinate systems; last paragraph
