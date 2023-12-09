@@ -1,4 +1,3 @@
-import { showStepsInput } from '../reducers/pcaPage';
 import { useAppSelector } from './hooks';
 
 export const pcaMiddleware = () => {

@@ -290,6 +290,10 @@
     "label": "Enter dots indexes",
     "helper": "Examples:"
   },
+  "inputComment": {
+    "label": "Enter comment",
+    "placeholder": "Any text"
+  },
   "vgp": {
     "upload": {
       "button": "Upload file",

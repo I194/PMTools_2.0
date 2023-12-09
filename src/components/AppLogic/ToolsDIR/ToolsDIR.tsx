@@ -24,6 +24,7 @@ import ReversePolarityButtons from './ReversePolarityButtons';
 import { useMediaQuery } from 'react-responsive';
 import { useTranslation } from 'react-i18next';
 import CurrentDIRFileSelector from './CurrentDIRFileSelector';
+import CommentsToggleButton from './CommentsToggleButton';
 
 interface IToolsDIR {
   data: IDirData | null;
@@ -144,7 +145,11 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
               <Button 
                 color={reference === availRef ? 'secondary' : 'primary'}
                 onClick={() => handleReferenceSelect(availRef)}
-                sx={{width: '80px'}}
+                sx={{
+                  width: '80px',
+                  borderRadius: '16px',
+                  fontWeight: reference === availRef ? 600 : 400,
+                }}
               >
                 { referenceToLabel(availRef) }
               </Button>
@@ -169,6 +174,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
           {t('dirPage.tools.tests.label')}
         </Button>
       </ButtonGroupWithLabel>
+      <CommentsToggleButton />
       <ModalWrapper
         open={showVGP}
         setOpen={setShowVGP}

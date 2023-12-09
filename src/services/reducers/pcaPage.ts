@@ -16,6 +16,7 @@ interface IInitialState {
   selectedStepsIDs: Array<number> | null;
   hiddenStepsIDs: Array<number>;
   statisticsMode: StatisticsModePCA;
+  isCommentsInputVisible: boolean;
   currentInterpretation: StatisitcsInterpretationFromPCA | null;
   currentFileInterpretations: Array<StatisitcsInterpretationFromPCA>;
   allInterpretations: Array<StatisitcsInterpretationFromPCA>;
@@ -30,6 +31,7 @@ const initialState: IInitialState = {
   selectedStepsIDs: null,
   hiddenStepsIDs: [],
   statisticsMode: null,
+  isCommentsInputVisible: true,
   currentInterpretation: null,
   currentFileInterpretations: [],
   allInterpretations: [],
@@ -50,7 +52,7 @@ const pcaPage = createSlice({
     setStatisticsMode(state, action) {
       state.statisticsMode = action.payload;
     },
-    showStepsInput(state, action) {
+    setShowStepsInput(state, action) {
       state.showStepsInput = action.payload;
     },
     setSelectedStepsIDs(state, action) {
@@ -64,6 +66,14 @@ const pcaPage = createSlice({
         ...new Set([...state.hiddenStepsIDs, ...action.payload]),
       ];
       state.hiddenStepsIDs = updatedHiddenStepsIDs;
+    },
+    toggleCommentsInput(state) {
+      state.isCommentsInputVisible = !state.isCommentsInputVisible;
+      localStorage.setItem('pcaPage_isCommentsInputVisible', JSON.stringify(state.isCommentsInputVisible));
+    },
+    setCommentsInput(state, action: { payload: boolean }) {
+      state.isCommentsInputVisible = action.payload;
+      localStorage.setItem('pcaPage_isCommentsInputVisible', JSON.stringify(state.isCommentsInputVisible));
     },
     // Панели управления на графикаъ
     setProjection(state, action: PayloadAction<Projection>) {
@@ -134,7 +144,9 @@ export const {
   setHiddenStepsIDs,
   addHiddenStepsIDs,
   setStatisticsMode,
-  showStepsInput,
+  setShowStepsInput,
+  toggleCommentsInput,
+  setCommentsInput,
   addInterpretation,
   deleteInterpretation,
   setAllInterpretations,

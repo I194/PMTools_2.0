@@ -1,15 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import styles from './DIRPage.module.scss';
 import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
-import { 
-  addInterpretation, 
-  setStatisticsMode, 
-  showSelectionInput, 
-  updateCurrentInterpretation 
-} from '../../services/reducers/dirPage';
-import { filesToData } from '../../services/axios/filesAndData';
 import { IDirData } from '../../utils/GlobalTypes';
-import calculateStatisticsDIR from '../../utils/statistics/calculateStatisticsDIR';
 import Tables from './Tables';
 import Graphs from './Graphs';
 import { ToolsDIR } from '../../components/AppLogic';
@@ -19,6 +11,7 @@ import ModalWrapper from '../../components/Common/Modal/ModalWrapper';
 import UploadModal from '../../components/Common/Modal/UploadModal/UploadModal';
 import { useMediaQuery } from 'react-responsive';
 import { setCurrentDIRid } from '../../services/reducers/parsedData';
+import InterpretationSetter from './InterpretationSetter';
 
 const DIRPage: FC = ({}) => {
 
@@ -29,14 +22,7 @@ const DIRPage: FC = ({}) => {
   const unsupportedResolution = widthLessThan720 || heightLessThan560;
 
   const { dirStatData, currentDataDIRid } = useAppSelector(state => state.parsedDataReducer);
-  const { 
-    statisticsMode, 
-    selectedDirectionsIDs, 
-    hiddenDirectionsIDs, 
-    reversedDirectionsIDs,
-    currentFileInterpretations,
-    allInterpretations
-  } = useAppSelector(state => state.dirPageReducer);
+  const { hiddenDirectionsIDs } = useAppSelector(state => state.dirPageReducer);
 
   const [dataToShow, setDataToShow] = useState<IDirData | null>(null);
   const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
@@ -50,16 +36,6 @@ const DIRPage: FC = ({}) => {
       setDataToShow(dirStatData[dirID]);
     } else setDataToShow(null);
   }, [dirStatData, currentDataDIRid, hiddenDirectionsIDs]);
-
-  useEffect(() => {
-    if (statisticsMode && !selectedDirectionsIDs) dispatch(showSelectionInput(true));
-    if (statisticsMode && selectedDirectionsIDs && selectedDirectionsIDs.length >= 2 && dataToShow) {
-      const statistics = calculateStatisticsDIR(dataToShow, statisticsMode, selectedDirectionsIDs, reversedDirectionsIDs);
-      statistics.interpretation.label = `${allInterpretations.length}${statistics.interpretation.label}/${currentFileInterpretations.length}`;
-      dispatch(addInterpretation(statistics));
-      dispatch(setStatisticsMode(null));
-    } else dispatch(updateCurrentInterpretation());
-  }, [statisticsMode, selectedDirectionsIDs, dataToShow]);
 
   useEffect(() => {
     if (!dataToShow) setShowUploadModal(true);
@@ -91,6 +67,7 @@ const DIRPage: FC = ({}) => {
       >
         <UploadModal page='dir' />
       </ModalWrapper>
+      <InterpretationSetter dataToShow={dataToShow} />
     </>
   )
 }

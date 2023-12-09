@@ -10,7 +10,6 @@ type Props = {
 }
 
 const DefaultButton = ({ onClick, isUseful, label, extraStyle }: Props) => {
-  console.log('custom zoom', isUseful)
   return (
     <div className={styles.toDefault} style={{...extraStyle}}>
       <Button
@@ -18,7 +17,12 @@ const DefaultButton = ({ onClick, isUseful, label, extraStyle }: Props) => {
         onClick={onClick}
         variant='outlined'
         size='small'
-        sx={{m: '4px', height: '24px'}} 
+        sx={{
+          m: '4px', 
+          height: '24px', 
+          borderRadius: '16px', 
+          fontWeight: isUseful ? 600 : 400,
+        }} 
       >
         { label }
       </Button>

@@ -11,6 +11,7 @@ interface IInitialState {
   hiddenDirectionsIDs: Array<number>;
   reversedDirectionsIDs: Array<number>;
   statisticsMode: StatisticsModeDIR;
+  isCommentsInputVisible: boolean;
   currentInterpretation: StatisitcsInterpretationFromDIR | null;
   currentFileInterpretations: Array<StatisitcsInterpretationFromDIR>;
   allInterpretations: Array<StatisitcsInterpretationFromDIR>;
@@ -27,6 +28,7 @@ const initialState: IInitialState = {
   hiddenDirectionsIDs: [],
   reversedDirectionsIDs: [],
   statisticsMode: null,
+  isCommentsInputVisible: true,
   currentInterpretation: null,
   currentFileInterpretations: [],
   allInterpretations: [],
@@ -69,6 +71,14 @@ const dirPage = createSlice({
     },
     setStatisticsMode (state, action) {
       state.statisticsMode = action.payload;
+    },
+    toggleCommentsInput(state) {
+      state.isCommentsInputVisible = !state.isCommentsInputVisible;
+      localStorage.setItem('dirPage_isCommentsInputVisible', JSON.stringify(state.isCommentsInputVisible));
+    },
+    setCommentsInput(state, action: { payload: boolean }) {
+      state.isCommentsInputVisible = action.payload;
+      localStorage.setItem('dirPage_isCommentsInputVisible', JSON.stringify(state.isCommentsInputVisible));
     },
     // VGP
     toggleShowVGPMean (state) {
@@ -148,6 +158,8 @@ export const {
   setReversedDirectionsIDs,
   addReversedDirectionsIDs,
   setStatisticsMode,
+  toggleCommentsInput,
+  setCommentsInput,
   showSelectionInput,
   addInterpretation,
   deleteInterpretation,

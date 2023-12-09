@@ -5,8 +5,8 @@ import { Reference } from '../../../utils/graphs/types';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
 import { 
   setReference, 
-  setSelectedStepsIDs, 
-  setStatisticsMode, 
+  setSelectedStepsIDs,
+  setStatisticsMode,
 } from '../../../services/reducers/pcaPage';
 import { IPmdData } from '../../../utils/GlobalTypes';
 import ModalWrapper from '../../Common/Modal/ModalWrapper';
@@ -18,7 +18,7 @@ import ShowHideDotsButtons from './ShowHideDotsButtons';
 import { referenceToLabel } from '../../../utils/parsers/labelToReference';
 import { enteredIndexesToIDsPMD } from '../../../utils/parsers/enteredIndexesToIDs';
 import { useTranslation } from 'react-i18next';
-import CurrentPMDFileSelector from './CurrentPMDFileSelector';
+import CommentsToggleButton from './CommentsToggleButton';
 
 interface IToolsPMD {
   data: IPmdData | null;
@@ -30,7 +30,9 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   const { t, i18n } = useTranslation('translation');
 
   const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
-  const { reference, selectedStepsIDs, statisticsMode, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
+  const { 
+    reference, selectedStepsIDs, statisticsMode, hiddenStepsIDs
+  } = useAppSelector(state => state.pcaPageReducer); 
 
   const [coordinateSystem, setCoordinateSystem] = useState<Reference>('geographic');
   const [showStepsInput, setShowStepsInput] = useState<boolean>(false);
@@ -136,6 +138,10 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
               <Button 
                 color={reference === availRef ? 'secondary' : 'primary'}
                 onClick={() => handleReferenceSelect(availRef)}
+                sx={{
+                  borderRadius: '16px',
+                  fontWeight: reference === availRef ? 600 : 400,
+                }}
               >
                 { referenceToLabel(availRef) }
               </Button>
@@ -151,6 +157,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
       </ButtonGroupWithLabel>
       {/* <ShowHideDotsButtons setShowStepsInput={setShowStepsInput} showStepsInput={showStepsInput}/> */}
       <ShowHideDotsButtons data={data} />
+      <CommentsToggleButton />
       {
         showStepsInput && 
         <ModalWrapper

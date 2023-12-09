@@ -62,7 +62,8 @@ const ProjectionButton: FC<IProjectionButton> = ({ label }) => {
       <Button
         color={label.y === projection.y ? 'secondary' : 'primary'}
         sx={{
-          fontWeight: label.y === projection.y ? 600 : 400
+          fontWeight: label.y === projection.y ? 600 : 400,
+          borderRadius: '16px'
         }}
         onClick={handleProjectionSelect}
       >
