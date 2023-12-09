@@ -68,7 +68,7 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ currentFileInterp
     event.stopPropagation();
     if (currentFileInterpretations) {
       currentFileInterpretations.forEach(interpretation => {
-        dispatch(deleteInterpretation(interpretation.label));
+        dispatch(deleteInterpretation(interpretation.uuid));
       });
       dispatch(updateCurrentFileInterpretations(currentFileInterpretations[0].parentFile));
       dispatch(updateCurrentInterpretation());
