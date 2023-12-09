@@ -8,7 +8,7 @@ export const bgColorBlocks = (themeMode: ThemeMode) => themeMode === 'dark'
   ? '#393939' 
   : '#fff';
 export const bgColorCharts = (themeMode: ThemeMode) => themeMode === 'dark' 
-  ? '#424242' 
+  ? '#393939' 
   : '#fff';
 export const separatorColor = (themeMode: ThemeMode) => themeMode === 'dark' 
   ? '#e2e2e2' 
