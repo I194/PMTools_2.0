@@ -407,6 +407,11 @@
         "line6": "Hint: to combine the selection methods, hold down the key "
       }
     }
+  },
+  "helper": {
+    "issues": "If you encounter an error while using PMTools, please create an issue about it in the PMTools repository on GitHub.",
+    "blankScreen": "If you see empty white screens on the PCA/DIR pages (pmtools.ru/app/pca and https://pmtools.ru/app/dir respectively), try clicking the button below – it will clear the content of your localStorage for the PMTools site.",
+    "clearLocalStorage": "❗❗❗Keep in mind that this will delete ALL entries in the localStorage, including automatically loaded file data and the results of their statistical processing, as well as your hotkey settings."
   }
 }
 
