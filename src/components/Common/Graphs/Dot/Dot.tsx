@@ -151,7 +151,7 @@ const Dot: FC<IDot> = ({
     <g>
       {
         [
-          ((showText || selected) && settings.annotations) &&
+          (settings.annotations) &&
           <text 
             id={`${id}__annotation`}
             x={x}

@@ -34,7 +34,7 @@ export const usePMDGraphSettings = () => {
   const [ticks, setTicks] = useState<boolean>(true);
   const [annotations, setAnnotations] = useState<boolean>(true);
   const [stepID, setStepID] = useState<boolean>(true);
-  const [stepLabel, setStepLabel] = useState<boolean>(true);
+  const [stepLabel, setStepLabel] = useState<boolean>(false);
 
   const menuItems: Array<TMenuItem> = [
     {label: 'Tooltips', onClick: () => setTooltips(!tooltips), state: tooltips},
@@ -63,7 +63,7 @@ export const useDIRGraphSettings = () => {
   const [ticks, setTicks] = useState<boolean>(true);
   const [annotations, setAnnotations] = useState<boolean>(true);
   const [directionID, setDirectionID] = useState<boolean>(true);
-  const [directionLabel, setDirectionLabel] = useState<boolean>(true);
+  const [directionLabel, setDirectionLabel] = useState<boolean>(false);
   const [confidenceCircle, setConfidenceCircle] = useState<boolean>(false);
 
   const menuItems: Array<TMenuItem> = [
