@@ -5,7 +5,7 @@ import { toggleCommentsInput } from '../../../services/reducers/dirPage';
 
 const CommentsToggleButton: FC = () => {
   const dispatch = useAppDispatch();
-  const { isCommentsInputVisible } = useAppSelector(state => state.pcaPageReducer);
+  const { isCommentsInputVisible } = useAppSelector(state => state.dirPageReducer);
 
   const handleClick = () => {
     dispatch(toggleCommentsInput());
