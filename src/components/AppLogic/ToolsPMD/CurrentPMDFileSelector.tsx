@@ -7,7 +7,7 @@ import {
   setSelectedStepsIDs, 
   setStatisticsMode, 
   updateCurrentFileInterpretations, 
-  updateCurrentInterpretation 
+  setLastInterpretationAsCurrent 
 } from '../../../services/reducers/pcaPage';
 import { IPmdData } from '../../../utils/GlobalTypes';
 import { deleteAllTreatmentData, deleteTreatmentData, setCurrentPMDid } from '../../../services/reducers/parsedData';
@@ -36,7 +36,6 @@ const CurrentPMDFileSelector: FC = () => {
       if (filename) {
         setCurrentFileName(filename);
         dispatch(updateCurrentFileInterpretations(filename));
-        dispatch(updateCurrentInterpretation());
         dispatch(setSelectedStepsIDs(null));
         dispatch(setHiddenStepsIDs([]));
         dispatch(setStatisticsMode(null));
@@ -64,7 +63,7 @@ const CurrentPMDFileSelector: FC = () => {
 
       dispatch(deleteTreatmentData(fileName));
       dispatch(deleteInterepretationByParentFile(fileName));
-      dispatch(updateCurrentInterpretation());
+      dispatch(setLastInterpretationAsCurrent());
       dispatch(setSelectedStepsIDs(null));
       dispatch(setHiddenStepsIDs([]));
       dispatch(setStatisticsMode(null));
@@ -74,7 +73,7 @@ const CurrentPMDFileSelector: FC = () => {
   const handleAllFilesDelete = () => {
     dispatch(deleteAllTreatmentData());
     dispatch(deleteAllInterpretations());
-    dispatch(updateCurrentInterpretation());
+    dispatch(setLastInterpretationAsCurrent());
     dispatch(setSelectedStepsIDs(null));
     dispatch(setHiddenStepsIDs([]));
     dispatch(setStatisticsMode(null));

@@ -4,8 +4,7 @@ import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
 import { 
   addInterpretation, 
   setStatisticsMode, 
-  setShowStepsInput,
-  updateCurrentInterpretation 
+  setShowStepsInput, 
 } from '../../services/reducers/pcaPage';
 import { IPmdData, StatisitcsInterpretationFromPCA } from '../../utils/GlobalTypes';
 import calculateStatisticsPMD from '../../utils/statistics/calculateStatisticsPMD';
@@ -52,7 +51,7 @@ const InterpretationSetter: FC<IInterpretationSetter> = ({ dataToShow }) => {
       // statistics.interpretation.label = `${statistics.interpretation.label}`;
       dispatch(addInterpretation(statistics.interpretation));
       dispatch(setStatisticsMode(null));
-    } else dispatch(updateCurrentInterpretation());
+    } //else dispatch(updateCurrentInterpretation());
   }, [statisticsMode, selectedStepsIDs, dataToShow]);
 
   const handleAddComment = (comment: string) => {

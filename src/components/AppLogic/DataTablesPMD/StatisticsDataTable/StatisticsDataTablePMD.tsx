@@ -10,7 +10,7 @@ import { GetDataTableBaseStyle } from "../styleConstants";
 import { DataGridDIRFromPCARow, StatisitcsInterpretationFromPCA } from "../../../../utils/GlobalTypes";
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
-import { deleteInterpretation, setAllInterpretations, updateCurrentFileInterpretations, updateCurrentInterpretation } from "../../../../services/reducers/pcaPage";
+import { deleteInterpretation, setAllInterpretations, setCurrentInterpretationByUUID, updateCurrentFileInterpretations, setLastInterpretationAsCurrent } from "../../../../services/reducers/pcaPage";
 import PMDStatisticsDataTableToolbar from "../../../Common/DataTable/Toolbar/PMDStatisticsDataTableToolbar";
 import equal from "deep-equal";
 import { acitvateHotkeys, deactivateHotkeys } from "../../../../services/reducers/appSettings";
@@ -46,7 +46,7 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ currentFileInterp
       if (!equal(updatedAllInterpretations, allInterpretations)) {
         dispatch(setAllInterpretations(updatedAllInterpretations));
         dispatch(updateCurrentFileInterpretations(currentFileInterpretations[0].parentFile));
-        dispatch(updateCurrentInterpretation());
+        dispatch(setLastInterpretationAsCurrent());
       }
     };
   }, [currentFileInterpretations, editRowsModel, allInterpretations]);
@@ -60,7 +60,7 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ currentFileInterp
     dispatch(deleteInterpretation(id));
     if (currentFileInterpretations) {
       dispatch(updateCurrentFileInterpretations(currentFileInterpretations[0].parentFile));
-      dispatch(updateCurrentInterpretation());
+      dispatch(setLastInterpretationAsCurrent());
     };
   };
 
@@ -71,7 +71,7 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ currentFileInterp
         dispatch(deleteInterpretation(interpretation.uuid));
       });
       dispatch(updateCurrentFileInterpretations(currentFileInterpretations[0].parentFile));
-      dispatch(updateCurrentInterpretation());
+      dispatch(setLastInterpretationAsCurrent());
     };
   };
 
@@ -149,6 +149,10 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ currentFileInterp
     };
   });
 
+  const setRowAsCurrentInterpretation = (rowId: string) => {
+    dispatch(setCurrentInterpretationByUUID({uuid: rowId}));
+  }
+
   return (
     <StatisticsDataTablePMDSkeleton>
       <DataGrid 
@@ -176,11 +180,12 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ currentFileInterp
         density={'compact'}
         disableSelectionOnClick={true}
         getRowClassName={
-          (params) => params.row.id === currentInterpretation?.label ? currentClass : ''
+          (params) => params.row.id === currentInterpretation?.uuid ? currentClass : ''
         }
         components={{
           Toolbar: PMDStatisticsDataTableToolbar,
         }}
+        onRowClick={(params) => setRowAsCurrentInterpretation(params.row.id)}
       />
     </StatisticsDataTablePMDSkeleton>
   );

@@ -90,6 +90,7 @@ const pcaPage = createSlice({
       state.currentFileInterpretations.push(action.payload);
       state.allInterpretations.push(action.payload);
       localStorage.setItem('pcaPage_allInterpretations', JSON.stringify(state.allInterpretations));
+      localStorage.setItem('pcaPage_currentInterpretation', JSON.stringify(state.currentInterpretation.uuid));
     },
     deleteInterpretation(state, action: PayloadAction<string>) {
       const interpretationUUID = action.payload;
@@ -116,6 +117,7 @@ const pcaPage = createSlice({
       state.currentFileInterpretations = [];
       state.currentInterpretation = null;
       localStorage.setItem('pcaPage_allInterpretations', JSON.stringify(state.allInterpretations));
+      localStorage.setItem('pcaPage_currentInterpretation', JSON.stringify(''));
     },
     updateCurrentFileInterpretations(state, action: PayloadAction<string>) {
       const fileName = action.payload;
@@ -123,12 +125,22 @@ const pcaPage = createSlice({
         (interpretation) => interpretation.parentFile === fileName
       );
     },
-    updateCurrentInterpretation(state) {
+    setLastInterpretationAsCurrent(state) {
       if (!state.currentFileInterpretations.length) {
         state.currentInterpretation = null;
         return;
       }
       state.currentInterpretation = state.currentFileInterpretations[state.currentFileInterpretations.length - 1];
+      localStorage.setItem('pcaPage_currentInterpretation', JSON.stringify(state.currentInterpretation.uuid));
+    },
+    setCurrentInterpretationByUUID(state, action: PayloadAction<{uuid: string}>) {
+      const { uuid } = action.payload;
+      const interpretationToSet = state.allInterpretations.find(interpretation => interpretation.uuid === uuid);
+      if (!interpretationToSet) {
+        return;
+      }
+      state.currentInterpretation = interpretationToSet;
+      localStorage.setItem('pcaPage_currentInterpretation', JSON.stringify(state.currentInterpretation.uuid));
     },
     setOutputFilename(state, action: PayloadAction<string>) {
       state.outputFilename = action.payload;
@@ -150,9 +162,10 @@ export const {
   addInterpretation,
   deleteInterpretation,
   setAllInterpretations,
+  setCurrentInterpretationByUUID,
   deleteAllInterpretations,
   updateCurrentFileInterpretations,
-  updateCurrentInterpretation,
+  setLastInterpretationAsCurrent,
   deleteInterepretationByParentFile,
   setOutputFilename,
   setLargeGraph,

@@ -7,7 +7,7 @@ import { GetDataTableBaseStyle } from "../styleConstants";
 import StatisticsDataTablePMDSkeleton from './OutputDataTablePMDSkeleton';
 import PMDOutputDataTableToolbar from '../../../Common/DataTable/Toolbar/PMDOutputDataTableToolbar';
 import { DataGridDIRFromPCARow } from "../../../../utils/GlobalTypes";
-import { deleteAllInterpretations, deleteInterpretation, setAllInterpretations, setOutputFilename, updateCurrentFileInterpretations, updateCurrentInterpretation } from "../../../../services/reducers/pcaPage";
+import { deleteAllInterpretations, deleteInterpretation, setAllInterpretations, setOutputFilename, updateCurrentFileInterpretations, setLastInterpretationAsCurrent } from "../../../../services/reducers/pcaPage";
 import TextField from '@mui/material/TextField';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { 
@@ -48,7 +48,7 @@ const OutputDataTablePMD: FC = () => {
 
     if (deletedRowParentFile === currentFileName) {
       dispatch(updateCurrentFileInterpretations(deletedRowParentFile));
-      dispatch(updateCurrentInterpretation());
+      dispatch(setLastInterpretationAsCurrent());
     };
   };
 
@@ -134,7 +134,7 @@ const OutputDataTablePMD: FC = () => {
         dispatch(setAllInterpretations(updatedData));
         const currentFileName = treatmentData![currentDataPMDid || 0]?.metadata.name;
         dispatch(updateCurrentFileInterpretations(currentFileName));
-        dispatch(updateCurrentInterpretation());
+        dispatch(setLastInterpretationAsCurrent());
       }
     };
   }, [data, editRowsModel]);

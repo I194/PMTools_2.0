@@ -61,6 +61,7 @@ function App() {
     const pcaPage_projection = localStorage.getItem('pcaPage_projection');
     const pcaPage_commentsInput = localStorage.getItem('pcaPage_isCommentsInputVisible');
     const pcaPage_allInterpretations = localStorage.getItem('pcaPage_allInterpretations');
+    const pcaPage_currentInterpretationUUID = localStorage.getItem('pcaPage_currentInterpretation');
 
     if (pcaPage_reference) {
       dispatch(pcaPageReducer.setReference(JSON.parse(pcaPage_reference)));
@@ -73,6 +74,9 @@ function App() {
     }
     if (pcaPage_allInterpretations) {
       dispatch(pcaPageReducer.setAllInterpretations(JSON.parse(pcaPage_allInterpretations)));
+    }
+    if (pcaPage_currentInterpretationUUID) {
+      dispatch(pcaPageReducer.setCurrentInterpretationByUUID({uuid: JSON.parse(pcaPage_currentInterpretationUUID)}));
     }
 
     const dirPage_reference = localStorage.getItem('dirPage_reference');
