@@ -3,8 +3,7 @@ import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
 import { 
   addInterpretation, 
   setStatisticsMode, 
-  showSelectionInput, 
-  updateCurrentInterpretation 
+  showSelectionInput
 } from '../../services/reducers/dirPage';
 import { IDirData, RawStatisticsDIR, StatisitcsInterpretationFromDIR } from '../../utils/GlobalTypes';
 import calculateStatisticsDIR from '../../utils/statistics/calculateStatisticsDIR';
@@ -52,7 +51,7 @@ const InterpretationSetter: FC<IInterpretationSetter> = ({ dataToShow }) => {
 
       dispatch(addInterpretation(statistics));
       dispatch(setStatisticsMode(null));
-    } else dispatch(updateCurrentInterpretation());
+    }
   }, [statisticsMode, selectedDirectionsIDs, dataToShow]);
 
   const handleAddComment = (comment: string) => {

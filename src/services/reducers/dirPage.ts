@@ -96,6 +96,7 @@ const dirPage = createSlice({
       state.currentFileInterpretations.push(action.payload?.interpretation);
       state.allInterpretations.push(action.payload?.interpretation);
       localStorage.setItem('dirPage_allInterpretations', JSON.stringify(state.allInterpretations));
+      localStorage.setItem('dirPage_currentInterpretation', JSON.stringify(state.currentInterpretation?.label || ''));
     },
     deleteInterpretation (state, action) {
       const interpretationLabel = action.payload;
@@ -122,15 +123,15 @@ const dirPage = createSlice({
       state.currentFileInterpretations = [];
       state.currentInterpretation = null;
       localStorage.setItem('dirPage_allInterpretations', JSON.stringify(state.allInterpretations));
+      localStorage.setItem('dirPage_currentInterpretation', JSON.stringify(''));
     },
     updateCurrentFileInterpretations (state, action: PayloadAction<string>) {
       const filename = action.payload;
-      console.log('here', filename);
       state.currentFileInterpretations = state.allInterpretations.filter(
         interpretation => interpretation.parentFile === filename
       );
     },
-    updateCurrentInterpretation (state) {
+    setLastInterpretationAsCurrent (state) {
       if (!state.currentFileInterpretations.length) {
         state.currentInterpretation = null;
         return;
@@ -138,6 +139,16 @@ const dirPage = createSlice({
       state.currentInterpretation = state.currentFileInterpretations[
         state.currentFileInterpretations.length - 1
       ];
+      localStorage.setItem('dirPage_currentInterpretation', JSON.stringify(state.currentInterpretation.label));
+    },
+    setCurrentInterpretationByLabel(state, action: PayloadAction<{label: string}>) {
+      const { label } = action.payload;
+      const interpretationToSet = state.allInterpretations.find(interpretation => interpretation.label === label);
+      if (!interpretationToSet) {
+        return;
+      }
+      state.currentInterpretation = interpretationToSet;
+      localStorage.setItem('dirPage_currentInterpretation', JSON.stringify(state.currentInterpretation.label));
     },
     setOutputFilename (state, action) {
       state.outputFilename = action.payload;
@@ -166,7 +177,8 @@ export const {
   setAllInterpretations,
   deleteAllInterpretations,
   updateCurrentFileInterpretations,
-  updateCurrentInterpretation,
+  setLastInterpretationAsCurrent,
+  setCurrentInterpretationByLabel,
   setOutputFilename,
   toggleShowVGPMean,
   deleteInterepretationByParentFile,

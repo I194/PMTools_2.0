@@ -7,7 +7,7 @@ import { GetDataTableBaseStyle } from "../styleConstants";
 import { DataGridDIRFromDIRRow, StatisitcsInterpretationFromDIR } from "../../../../utils/GlobalTypes";
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
-import { deleteInterpretation, setAllInterpretations, updateCurrentFileInterpretations, updateCurrentInterpretation } from "../../../../services/reducers/dirPage";
+import { deleteInterpretation, setAllInterpretations, updateCurrentFileInterpretations, setLastInterpretationAsCurrent, setCurrentInterpretationByLabel } from "../../../../services/reducers/dirPage";
 import DIRStatisticsDataTableToolbar from "../../../Common/DataTable/Toolbar/DIRStatisticsDataTableToolbar";
 import equal from "deep-equal"
 import { acitvateHotkeys, deactivateHotkeys } from "../../../../services/reducers/appSettings";
@@ -48,7 +48,7 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ currentFileInterp
       if (!equal(updatedAllInterpretations, allInterpretations)) {
         dispatch(setAllInterpretations(updatedAllInterpretations));
         dispatch(updateCurrentFileInterpretations(currentFileInterpretations[0].parentFile));
-        dispatch(updateCurrentInterpretation());
+        dispatch(setLastInterpretationAsCurrent());
       }
     };
   }, [currentFileInterpretations, editRowsModel, allInterpretations]);
@@ -58,7 +58,7 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ currentFileInterp
     dispatch(deleteInterpretation(id));
     if (currentFileInterpretations) {
       dispatch(updateCurrentFileInterpretations(currentFileInterpretations[0].parentFile));
-      dispatch(updateCurrentInterpretation());
+      dispatch(setLastInterpretationAsCurrent());
     };
   };
 
@@ -69,7 +69,7 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ currentFileInterp
         dispatch(deleteInterpretation(interpretation.label));
       });
       dispatch(updateCurrentFileInterpretations(currentFileInterpretations[0].parentFile));
-      dispatch(updateCurrentInterpretation());
+      dispatch(setLastInterpretationAsCurrent());
     };
   };
 
@@ -157,6 +157,10 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ currentFileInterp
     };
   });
 
+  const setRowAsCurrentInterpretation = (rowId: string) => {
+    dispatch(setCurrentInterpretationByLabel({label: rowId}));
+  }
+
   return (
     <StatisticsDataTablePMDSkeleton>
       <DataGrid 
@@ -189,6 +193,7 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ currentFileInterp
         components={{
           Toolbar: DIRStatisticsDataTableToolbar
         }}
+        onRowClick={(params) => setRowAsCurrentInterpretation(params.row.id)}
       />
     </StatisticsDataTablePMDSkeleton>
   );

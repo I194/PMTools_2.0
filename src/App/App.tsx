@@ -82,6 +82,7 @@ function App() {
     const dirPage_reference = localStorage.getItem('dirPage_reference');
     const dirPage_commentsInput = localStorage.getItem('dirPage_isCommentsInputVisible');
     const dirPage_allInterpretations = localStorage.getItem('dirPage_allInterpretations');
+    const dirPage_currentInterpretationLabel = localStorage.getItem('dirPage_currentInterpretation');
 
     if (dirPage_reference) {
       dispatch(dirPageReducer.setReference(JSON.parse(dirPage_reference)));
@@ -91,6 +92,9 @@ function App() {
     }
     if (dirPage_allInterpretations) {
       dispatch(dirPageReducer.setAllInterpretations(JSON.parse(dirPage_allInterpretations)));
+    }
+    if (dirPage_currentInterpretationLabel) {
+      dispatch(dirPageReducer.setCurrentInterpretationByLabel({label: JSON.parse(dirPage_currentInterpretationLabel)}));
     }
   }, []);
 

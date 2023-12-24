@@ -6,7 +6,7 @@ import DropdownSelectWithButtons from '../../Common/DropdownSelect/DropdownSelec
 import {
   setSelectedDirectionsIDs, 
   setStatisticsMode, 
-  updateCurrentInterpretation, 
+  setLastInterpretationAsCurrent, 
   updateCurrentFileInterpretations, 
   deleteInterepretationByParentFile,
   setHiddenDirectionsIDs,
@@ -37,7 +37,6 @@ const CurrentDIRFileSelector: FC = () => {
       if (filename) {
         setCurrentFileName(filename);
         dispatch(updateCurrentFileInterpretations(filename));
-        dispatch(updateCurrentInterpretation());
         dispatch(setSelectedDirectionsIDs(null));
         dispatch(setHiddenDirectionsIDs([]));
         dispatch(setReversedDirectionsIDs([]));
@@ -66,7 +65,7 @@ const CurrentDIRFileSelector: FC = () => {
 
       dispatch(deleteDirStatData(fileName));
       dispatch(deleteInterepretationByParentFile(fileName));
-      dispatch(updateCurrentInterpretation());
+      dispatch(setLastInterpretationAsCurrent());
       dispatch(setSelectedDirectionsIDs(null));
       dispatch(setHiddenDirectionsIDs([]));
       dispatch(setReversedDirectionsIDs([]));
@@ -77,7 +76,7 @@ const CurrentDIRFileSelector: FC = () => {
   const handleAllFilesDelete = () => {
     dispatch(deleteAllDirStatData());
     dispatch(deleteAllInterpretations());
-    dispatch(updateCurrentInterpretation());
+    dispatch(setLastInterpretationAsCurrent());
     dispatch(setSelectedDirectionsIDs(null));
     dispatch(setHiddenDirectionsIDs([]));
     dispatch(setReversedDirectionsIDs([]));
