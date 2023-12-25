@@ -249,6 +249,11 @@
         "right": "Select next file",
         "left": "Select previous file"
       },
+      "interpretationSelector": {
+        "title": "Выбор активного результата стат. обработки",
+        "down": "Выбрать следующий результат",
+        "up": "Выбрать предыдущий результат"
+      },
       "titles": {
         "Статистические методы": "Statistics methods", 
         "PCA": "PCA",
@@ -278,7 +283,10 @@
         "Прокручивание систем координат": "Coordinate system scroll",
         "Выбор активного файла": "File Selector",
         "Выбрать следующий файл": "Select next file",
-        "Выбрать предыдущий файл": "Select previous file"
+        "Выбрать предыдущий файл": "Select previous file",
+        "Выбор активного результата стат. обработки": "Active result of stat. data processing Selector",
+        "Выбрать следующий результат": "Select next result",
+        "Выбрать предыдущий результат": "Select previous result"
       }
     },
     "saveButton": "Save",

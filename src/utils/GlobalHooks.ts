@@ -432,6 +432,30 @@ export const useDefaultHotkeys = (): HotkeysType => {
         },
       ]
     },
+    {
+      id: 9,
+      title: t('settings.hotkeys.interpretationSelector.title'),
+      hotkeys: [
+        {
+          id: 1,
+          label: t('settings.hotkeys.interpretationSelector.down'),
+          disabled: true,
+          hotkey: {
+            key: 'Shift + ArrowDown',
+            code: 'Shift + ArrowDown',
+          }
+        },
+        {
+          id: 2,
+          label: t('settings.hotkeys.interpretationSelector.up'),
+          disabled: true,
+          hotkey: {
+            key: 'Shift + ArrowUp',
+            code: 'Shift + ArrowUp',
+          }
+        },
+      ]
+    },
   ];
 
   return defaultHotkeys;
