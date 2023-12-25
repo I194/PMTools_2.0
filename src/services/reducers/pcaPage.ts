@@ -142,6 +142,28 @@ const pcaPage = createSlice({
       state.currentInterpretation = interpretationToSet;
       localStorage.setItem('pcaPage_currentInterpretation', JSON.stringify(state.currentInterpretation.uuid));
     },
+    setNextOrPrevInterpretationAsCurrent(state, action: PayloadAction<{changeDirection: 'up' | 'down'}>) {
+      if (!state.currentFileInterpretations.length || !state.currentInterpretation) {
+        state.currentInterpretation = null;
+        return;
+      }
+      const currentInterpretationIndex = state.currentFileInterpretations.findIndex(
+        (interpretation) => (
+          interpretation.uuid === state.currentInterpretation?.uuid
+        )
+      )
+
+      const { changeDirection } = action.payload;
+
+      const toNext = changeDirection === 'up' ? -1 : 1;
+
+      const totalInterpretations = state.currentFileInterpretations.length;
+      const nextInterpretationIndex = (currentInterpretationIndex + toNext) % totalInterpretations;
+
+      const nextInterpretation = state.currentFileInterpretations[nextInterpretationIndex];
+      state.currentInterpretation = nextInterpretation;
+      localStorage.setItem('pcaPage_currentInterpretation', JSON.stringify(state.currentInterpretation.uuid));
+    },
     setOutputFilename(state, action: PayloadAction<string>) {
       state.outputFilename = action.payload;
     },
@@ -166,6 +188,7 @@ export const {
   deleteAllInterpretations,
   updateCurrentFileInterpretations,
   setLastInterpretationAsCurrent,
+  setNextOrPrevInterpretationAsCurrent,
   deleteInterepretationByParentFile,
   setOutputFilename,
   setLargeGraph,

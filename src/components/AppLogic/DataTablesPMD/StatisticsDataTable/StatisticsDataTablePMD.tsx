@@ -10,7 +10,7 @@ import { GetDataTableBaseStyle } from "../styleConstants";
 import { DataGridDIRFromPCARow, StatisitcsInterpretationFromPCA } from "../../../../utils/GlobalTypes";
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
-import { deleteInterpretation, setAllInterpretations, setCurrentInterpretationByUUID, updateCurrentFileInterpretations, setLastInterpretationAsCurrent } from "../../../../services/reducers/pcaPage";
+import { deleteInterpretation, setAllInterpretations, setCurrentInterpretationByUUID, updateCurrentFileInterpretations, setLastInterpretationAsCurrent, setNextOrPrevInterpretationAsCurrent } from "../../../../services/reducers/pcaPage";
 import PMDStatisticsDataTableToolbar from "../../../Common/DataTable/Toolbar/PMDStatisticsDataTableToolbar";
 import equal from "deep-equal";
 import { acitvateHotkeys, deactivateHotkeys } from "../../../../services/reducers/appSettings";
@@ -54,6 +54,24 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ currentFileInterp
   useEffect(() => {
     setCurrentClass(theme.palette.mode === 'dark' ? styles.current_dark : styles.current_light);
   }, [theme]);
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleArrowBtnClick);
+    return () => {
+      window.removeEventListener("keydown", handleArrowBtnClick);
+    };
+  }, []);
+
+  const handleArrowBtnClick = (e: any) => {
+    const key = (e.code as string);
+    const { shiftKey } = e; 
+    if ((shiftKey) && key === 'ArrowUp') {
+      dispatch(setNextOrPrevInterpretationAsCurrent({ changeDirection: 'up' }));
+    };
+    if ((shiftKey) && key === 'ArrowDown') {
+      dispatch(setNextOrPrevInterpretationAsCurrent({ changeDirection: 'down' }));
+    };
+  }
 
   const handleRowDelete = (id: string) => (event: any) => {
     event.stopPropagation();
