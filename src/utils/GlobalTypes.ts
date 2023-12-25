@@ -289,3 +289,5 @@ export type BasicGraphExportType =
   | "export_stereoDir"
   | "export_stereoVGP";
 export type PMTestsGraphType = "foldTest" | "reversalTest";
+
+export type ContentType = GraphType | 'statisticsDataTable';
