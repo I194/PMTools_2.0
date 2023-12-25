@@ -49,6 +49,9 @@ const Helper = () => {
           borderStyle='2px solid lime'
         >
           <div className={styles.modalContent}>
+            <Typography textAlign='center' variant='h4'>
+              PMTools v.{process.env.REACT_APP_VERSION}
+            </Typography>
             <Typography>
               {t('helper.issues')}
             </Typography>
@@ -58,13 +61,12 @@ const Helper = () => {
             <Typography mt='8px'>
               {t('helper.blankScreen')}
             </Typography>
-
-            <Typography mt='16px' mb='8px'>
+            <Typography mt='16px' mb='8px' fontWeight={600}>
               {t('helper.clearLocalStorage')}
             </Typography>
             <div className={styles.buttonWrapper}>
               <button className={styles.clearLocalStorage} onClick={handleClearLocalStorage}>
-                ❗Clear Your PMTools localStorage❗
+                ❗Click Here To Clear Your PMTools <code>localStorage</code>❗
               </button>
             </div>
           </div>
