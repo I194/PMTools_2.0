@@ -150,6 +150,28 @@ const dirPage = createSlice({
       state.currentInterpretation = interpretationToSet;
       localStorage.setItem('dirPage_currentInterpretation', JSON.stringify(state.currentInterpretation.label));
     },
+    setNextOrPrevInterpretationAsCurrent(state, action: PayloadAction<{changeDirection: 'up' | 'down'}>) {
+      if (!state.currentFileInterpretations.length || !state.currentInterpretation) {
+        state.currentInterpretation = null;
+        return;
+      }
+      const currentInterpretationIndex = state.currentFileInterpretations.findIndex(
+        (interpretation) => (
+          interpretation.label === state.currentInterpretation?.label
+        )
+      )
+
+      const { changeDirection } = action.payload;
+
+      const toNext = changeDirection === 'up' ? -1 : 1;
+
+      const totalInterpretations = state.currentFileInterpretations.length;
+      const nextInterpretationIndex = (currentInterpretationIndex + toNext) % totalInterpretations;
+
+      const nextInterpretation = state.currentFileInterpretations[nextInterpretationIndex];
+      state.currentInterpretation = nextInterpretation;
+      localStorage.setItem('dirPage_currentInterpretation', JSON.stringify(state.currentInterpretation.label));
+    },
     setOutputFilename (state, action) {
       state.outputFilename = action.payload;
     },
@@ -179,6 +201,7 @@ export const {
   updateCurrentFileInterpretations,
   setLastInterpretationAsCurrent,
   setCurrentInterpretationByLabel,
+  setNextOrPrevInterpretationAsCurrent,
   setOutputFilename,
   toggleShowVGPMean,
   deleteInterepretationByParentFile,

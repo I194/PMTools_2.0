@@ -7,7 +7,7 @@ import { GetDataTableBaseStyle } from "../styleConstants";
 import { DataGridDIRFromDIRRow, StatisitcsInterpretationFromDIR } from "../../../../utils/GlobalTypes";
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
-import { deleteInterpretation, setAllInterpretations, updateCurrentFileInterpretations, setLastInterpretationAsCurrent, setCurrentInterpretationByLabel } from "../../../../services/reducers/dirPage";
+import { deleteInterpretation, setAllInterpretations, updateCurrentFileInterpretations, setLastInterpretationAsCurrent, setCurrentInterpretationByLabel, setNextOrPrevInterpretationAsCurrent } from "../../../../services/reducers/dirPage";
 import DIRStatisticsDataTableToolbar from "../../../Common/DataTable/Toolbar/DIRStatisticsDataTableToolbar";
 import equal from "deep-equal"
 import { acitvateHotkeys, deactivateHotkeys } from "../../../../services/reducers/appSettings";
@@ -52,6 +52,24 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ currentFileInterp
       }
     };
   }, [currentFileInterpretations, editRowsModel, allInterpretations]);
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleArrowBtnClick);
+    return () => {
+      window.removeEventListener("keydown", handleArrowBtnClick);
+    };
+  }, []);
+
+  const handleArrowBtnClick = (e: any) => {
+    const key = (e.code as string);
+    const { shiftKey } = e; 
+    if ((shiftKey) && key === 'ArrowUp') {
+      dispatch(setNextOrPrevInterpretationAsCurrent({ changeDirection: 'up' }));
+    };
+    if ((shiftKey) && key === 'ArrowDown') {
+      dispatch(setNextOrPrevInterpretationAsCurrent({ changeDirection: 'down' }));
+    };
+  }
 
   const handleRowDelete = (id: string) => (event: any) => {
     event.stopPropagation();
