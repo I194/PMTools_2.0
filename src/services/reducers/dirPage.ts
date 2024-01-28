@@ -166,7 +166,13 @@ const dirPage = createSlice({
       const toNext = changeDirection === 'up' ? -1 : 1;
 
       const totalInterpretations = state.currentFileInterpretations.length;
-      const nextInterpretationIndex = (currentInterpretationIndex + toNext) % totalInterpretations;
+      let nextInterpretationIndex = currentInterpretationIndex + toNext;
+
+      if (nextInterpretationIndex < 0) {
+        nextInterpretationIndex = totalInterpretations - 1;
+      } else if (nextInterpretationIndex >= totalInterpretations) {
+        nextInterpretationIndex = 0;
+      }
 
       const nextInterpretation = state.currentFileInterpretations[nextInterpretationIndex];
       state.currentInterpretation = nextInterpretation;
