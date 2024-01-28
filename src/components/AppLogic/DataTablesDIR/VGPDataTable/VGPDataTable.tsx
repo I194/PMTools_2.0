@@ -6,8 +6,6 @@ import SitesDataTableSkeleton from './VGPDataTableSkeleton';
 import { VGPData } from "../../../../utils/GlobalTypes";
 import { 
   DataGrid, 
-  GridColumns, 
-  GridEditRowsModel,
   GridValueFormatterParams, 
 } from '@mui/x-data-grid';
 import { useTheme } from '@mui/material/styles';
@@ -18,36 +16,15 @@ import useApiRef from "../useApiRef";
 import { setVGPData } from "../../../../services/reducers/dirPage";
 import VGPDataTableSkeleton from "./VGPDataTableSkeleton";
 import VGPDataTableToolbar from "../../../Common/DataTable/Toolbar/VGPDataTableToolbar";
-
-type VGPRow = {
-  id: number;
-  index: number | string;
-  poleLatitude: number,
-  poleLongitude?: number,
-  poleLongitudeW?: number,
-  poleLongitudeE?: number,
-  paleoLatitude: number,
-  dp: number,
-  dm: number,
-  sLat: number,
-  sLon: number,
-  age: number,
-  plateId: number,
-};
+import { useCellModesModel } from "../../hooks";
+import { VGPDataTableColumns, VGPRow } from "../types";
 
 const VGPDataTable: FC = () => {
-  
-  const dispatch = useAppDispatch();
-  const theme = useTheme();
+  const { cellModesModel, handleCellModesModelChange } = useCellModesModel();
 
-  const { selectedDirectionsIDs, hiddenDirectionsIDs, reference, vgpData } = useAppSelector(state => state.dirPageReducer);
-  const [editRowsModel, setEditRowsModel] = useState<GridEditRowsModel>({});
+  const { hiddenDirectionsIDs, vgpData } = useAppSelector(state => state.dirPageReducer);
 
-  const handleEditRowsModelChange = useCallback((model: GridEditRowsModel) => {
-    setEditRowsModel(model);
-  }, []);
-
-  const columns: GridColumns = [
+  const columns: VGPDataTableColumns = [
     { field: 'id', headerName: 'ID', type: 'string', minWidth: 20, width: 30 },
     { field: 'index', headerName: '№', type: 'string', minWidth: 20, width: 30 },
     { field: 'poleLatitude', headerName: 'pole lat', type: 'number', width: 60,
@@ -95,7 +72,7 @@ const VGPDataTable: FC = () => {
   if (!vgpData) return <VGPDataTableSkeleton />;
 
   let visibleIndex = 1;
-  const rows: Array<VGPRow> = vgpData.map((vgp, index) => {
+  const rows: VGPRow[] = vgpData.map((vgp, index) => {
     const { id, poleLatitude, poleLongitude, paleoLatitude, dp, dm } = vgp;
     return {
       id,
@@ -114,34 +91,31 @@ const VGPDataTable: FC = () => {
     };
   });
 
-  return (
-    <>
-      <VGPDataTableSkeleton>
-        <DataGrid 
-          rows={rows} 
-          columns={columns}
-          editRowsModel={editRowsModel}
-          onEditRowsModelChange={handleEditRowsModelChange}
-          sx={{
-            ...GetDataTableBaseStyle(),
-            '& .MuiDataGrid-cell': {
-              padding: '0px 0px',
-            },
-            '& .MuiDataGrid-columnHeader': {
-              padding: '0px 0px',
-            }
-          }}
-          hideFooter={rows.length < 100}
-          density={'compact'}
-          components={{
-            Toolbar: VGPDataTableToolbar,
-          }}
-          disableSelectionOnClick={true}
-        />
-      </VGPDataTableSkeleton>
-    </>
-    
-  );
+  return <>
+    <VGPDataTableSkeleton>
+      <DataGrid 
+        rows={rows} 
+        columns={columns}
+        cellModesModel={cellModesModel}
+        onCellModesModelChange={handleCellModesModelChange}
+        sx={{
+          ...GetDataTableBaseStyle(),
+          '& .MuiDataGrid-cell': {
+            padding: '0px 0px',
+          },
+          '& .MuiDataGrid-columnHeader': {
+            padding: '0px 0px',
+          }
+        }}
+        hideFooter={rows.length < 100}
+        density={'compact'}
+        components={{
+          Toolbar: VGPDataTableToolbar,
+        }}
+        disableRowSelectionOnClick={true}
+      />
+    </VGPDataTableSkeleton>
+  </>;
 };
 
 export default VGPDataTable;

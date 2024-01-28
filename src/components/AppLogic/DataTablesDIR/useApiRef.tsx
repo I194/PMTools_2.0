@@ -1,7 +1,7 @@
-import { GridColumns } from "@mui/x-data-grid";
 import React, { useMemo, useRef } from "react";
+import { AnyColumns } from "./types";
 
-const useApiRef = (columns: GridColumns) =>{
+const useApiRef = (columns: AnyColumns) =>{
   const apiRef = useRef<any>(null);
   const _columns = useMemo(
     () =>

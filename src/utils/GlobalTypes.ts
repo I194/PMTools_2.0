@@ -230,7 +230,7 @@ export type DataGridPMDRow = {
 export type DataGridDIRFromPCARow = Omit<
   StatisitcsInterpretationFromPCA,
   "demagType" | "parentFile" | "rawData" | "steps"
-> & { readonly id: number };
+> & { readonly id: string };
 export type DataGridDIRFromDIRRow = Omit<
   StatisitcsInterpretationFromDIR,
   "demagType" | "parentFile" | "rawData" | "directions" | "uuid"

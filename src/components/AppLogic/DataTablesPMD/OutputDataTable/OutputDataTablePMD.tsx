@@ -13,28 +13,23 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { 
   DataGrid, 
   GridActionsCellItem, 
-  GridColumnHeaderParams, 
-  GridColumns, 
-  GridEditRowsModel,
   GridValueFormatterParams, 
 } from '@mui/x-data-grid';
 import { useTheme } from '@mui/material/styles';
+import { useCellModesModel } from "../../hooks";
+import { StatisticsDataTableColumns, StatisticsDataTableRow } from "../types";
 
 const OutputDataTablePMD: FC = () => {
   
   const dispatch = useAppDispatch();
   const theme = useTheme();
+  const { cellModesModel, handleCellModesModelChange } = useCellModesModel();
 
   const data = useAppSelector(state => state.pcaPageReducer.allInterpretations);
   const { treatmentData, currentDataPMDid } = useAppSelector(state => state.parsedDataReducer);
-  const [editRowsModel, setEditRowsModel] = useState<GridEditRowsModel>({});
   const [filename, setFilename] = useState<string>('PCA Interpretations');
   const debouncedFilename = useDebounce(filename, 500);
 
-  const handleEditRowsModelChange = useCallback((model: GridEditRowsModel) => {
-    setEditRowsModel(model);
-  }, []);
-  
   const handleRowDelete = (uuid: string) => (event: any) => {
     event.stopPropagation();
     dispatch(deleteInterpretation(uuid));
@@ -57,12 +52,12 @@ const OutputDataTablePMD: FC = () => {
     dispatch(deleteAllInterpretations());
   };
 
-  const columns: GridColumns = [
+  const columns: StatisticsDataTableColumns = [
     {
       field: 'actions',
       type: 'actions',
       width: 40,
-      renderHeader: (params: GridColumnHeaderParams) => (
+      renderHeader: () => (
         <GridActionsCellItem
           icon={<DeleteIcon />}
           label="Delete all interpretations"
@@ -81,7 +76,7 @@ const OutputDataTablePMD: FC = () => {
         ];
       },
     },
-    { field: 'id', headerName: 'ID', type: 'string', width: 50, hide: true},
+    { field: 'id', headerName: 'ID', type: 'string', width: 50},
     { field: 'label', headerName: 'Label', type: 'string', width: 120  },
     { field: 'code', headerName: 'Code', type: 'string', width: 70 },
     { field: 'stepRange', headerName: 'StepRange', type: 'string', width: 120 },
@@ -119,29 +114,29 @@ const OutputDataTablePMD: FC = () => {
     };
   }, [debouncedFilename]);
 
-  useEffect(() => {
-    if (data && Object.keys(editRowsModel).length !== 0) {
-      const updatedData = data.map((interpretation, index) => {
-        const rowId = Object.keys(editRowsModel)[0];
-        const newComment = editRowsModel[rowId]?.comment?.value as string;
-        if (rowId !== interpretation.uuid) return interpretation;
-        return {
-          ...interpretation,
-          comment: newComment
-        };
-      });
-      if (!equal(updatedData, data)) {
-        dispatch(setAllInterpretations(updatedData));
-        const currentFileName = treatmentData![currentDataPMDid || 0]?.metadata.name;
-        dispatch(updateCurrentFileInterpretations(currentFileName));
-        dispatch(setLastInterpretationAsCurrent());
-      }
-    };
-  }, [data, editRowsModel]);
+  // useEffect(() => {
+  //   if (data && Object.keys(editRowsModel).length !== 0) {
+  //     const updatedData = data.map((interpretation, index) => {
+  //       const rowId = Object.keys(editRowsModel)[0];
+  //       const newComment = editRowsModel[rowId]?.comment?.value as string;
+  //       if (rowId !== interpretation.uuid) return interpretation;
+  //       return {
+  //         ...interpretation,
+  //         comment: newComment
+  //       };
+  //     });
+  //     if (!equal(updatedData, data)) {
+  //       dispatch(setAllInterpretations(updatedData));
+  //       const currentFileName = treatmentData![currentDataPMDid || 0]?.metadata.name;
+  //       dispatch(updateCurrentFileInterpretations(currentFileName));
+  //       dispatch(setLastInterpretationAsCurrent());
+  //     }
+  //   };
+  // }, [data, editRowsModel]);
 
   if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
 
-  const rows: Array<Omit<DataGridDIRFromPCARow, 'id' | 'label' | 'uuid'>> = data.map((statistics, index) => {
+  const rows: StatisticsDataTableRow[] = data.map((statistics, index) => {
     const { uuid, label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadius, comment } = statistics;
     console.log(label)
     return {
@@ -163,35 +158,39 @@ const OutputDataTablePMD: FC = () => {
     setFilename(event.target.value);
   };  
 
-  return (
-    <>
-      <div className={styles.toolbar}>
-        <TextField
-          id="allInterpretationsPCA_filename"
-          label="File name"
-          value={filename}
-          onChange={handleFilenameChange}
-          variant="standard"
-        />
-      </div>
-      <StatisticsDataTablePMDSkeleton>
-        <DataGrid 
-          rows={rows} 
-          columns={columns} 
-          editRowsModel={editRowsModel}
-          onEditRowsModelChange={handleEditRowsModelChange}
-          sx={GetDataTableBaseStyle()}
-          hideFooter={rows.length < 100}
-          density={'compact'}
-          components={{
-            Toolbar: PMDOutputDataTableToolbar,
-          }}
-          disableSelectionOnClick={true}
-        />
-      </StatisticsDataTablePMDSkeleton>
-    </>
-    
-  );
+  return <>
+    <div className={styles.toolbar}>
+      <TextField
+        id="allInterpretationsPCA_filename"
+        label="File name"
+        value={filename}
+        onChange={handleFilenameChange}
+        variant="standard"
+      />
+    </div>
+    <StatisticsDataTablePMDSkeleton>
+      <DataGrid 
+        rows={rows} 
+        columns={columns} 
+        cellModesModel={cellModesModel}
+        onCellModesModelChange={handleCellModesModelChange}
+        initialState={{
+          columns: {
+            columnVisibilityModel: {
+              id: false,
+            },
+          },
+        }}
+        sx={GetDataTableBaseStyle()}
+        hideFooter={rows.length < 100}
+        density={'compact'}
+        components={{
+          Toolbar: PMDOutputDataTableToolbar,
+        }}
+        disableRowSelectionOnClick={true}
+      />
+    </StatisticsDataTablePMDSkeleton>
+  </>;
 };
 
 export default OutputDataTablePMD;

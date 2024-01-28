@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import styles from './DataTablePMD.module.scss';
 import { IPmdData } from "../../../../utils/GlobalTypes";
-import { DataGrid, GridActionsCellItem, GridColDef, GridColumnHeaderParams, GridColumns, GridSelectionModel, GridValueFormatterParams } from '@mui/x-data-grid';
+import { DataGrid, GridActionsCellItem, GridRowSelectionModel } from '@mui/x-data-grid';
 import DataTablePMDSkeleton from './DataTablePMDSkeleton';
 import { DataGridPMDRow } from "../../../../utils/GlobalTypes";
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
@@ -10,10 +10,7 @@ import { GetDataTableBaseStyle } from "../styleConstants";
 import PMDInputDataTableToolbar from "../../../Common/DataTable/Toolbar/PMDInputDataTableToolbar";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-
-interface IDataTablePMD {
-  data: IPmdData | null;
-};
+import { IDataTablePMD, PMDDataTableColumns } from "../types";
 
 const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
 
@@ -21,7 +18,7 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
 
   const { selectedStepsIDs, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer);
   // selectionModel is array of ID's of rows
-  const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
+  const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
   const [selectedRows, setSelectedRows] = useState<Array<DataGridPMDRow>>([]);
 
   useEffect(() => {
@@ -41,12 +38,12 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
     dispatch(setHiddenStepsIDs([]));
   };
 
-  const columns: GridColumns = [
+  const columns: PMDDataTableColumns = [
     {
       field: 'actions',
       type: 'actions',
       width: 40,
-      renderHeader: (params: GridColumnHeaderParams) => (
+      renderHeader: () => (
         <GridActionsCellItem
           icon={<VisibilityIcon />}
           label="Hide all steps"
@@ -85,7 +82,7 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
   
   if (!data) return <DataTablePMDSkeleton />;
   let visibleIndex = 1;
-  const rows: Array<DataGridPMDRow> = data.steps.map((stepData, index) => {
+  const rows: DataGridPMDRow[] = data.steps.map((stepData, index) => {
     const { id, step, Dgeo, Igeo, Dstrat, Istrat, mag, a95, comment } = stepData;
     return {
       id,
@@ -107,8 +104,8 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
         rows={rows} 
         columns={columns} 
         checkboxSelection
-        selectionModel={selectionModel}
-        onSelectionModelChange={(e) => {
+        rowSelectionModel={selectionModel}
+        onRowSelectionModelChange={(e) => {
           setSelectionModel(e);
           const selectedIDs = new Set(e);
           if ([...selectedIDs].length > 0) dispatch(setSelectedStepsIDs([...selectedIDs]));
@@ -143,7 +140,7 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
         }
       />
     </DataTablePMDSkeleton>
-  )
+  );
 }
 
 export default DataTablePMD;

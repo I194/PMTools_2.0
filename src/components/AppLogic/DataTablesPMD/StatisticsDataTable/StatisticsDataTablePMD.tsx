@@ -2,8 +2,8 @@ import React, { FC, useEffect, useState, useCallback } from "react";
 import styles from './StatisticsDataTablePMD.module.scss';
 import { useTheme } from '@mui/material/styles';
 import { 
-  DataGrid, GridActionsCellItem, GridColumns, GridColumnHeaderParams, GridValueFormatterParams, 
-  GridEditRowsModel, MuiEvent, GridCellParams,
+  DataGrid, GridActionsCellItem, GridColDef, GridValueFormatterParams, 
+  MuiEvent, GridCellParams, useGridApiContext, GridCellModesModel, useGridApiRef
 } from '@mui/x-data-grid';
 import StatisticsDataTablePMDSkeleton from './StatisticsDataTablePMDSkeleton';
 import { GetDataTableBaseStyle } from "../styleConstants";
@@ -14,42 +14,40 @@ import { deleteInterpretation, setAllInterpretations, setCurrentInterpretationBy
 import PMDStatisticsDataTableToolbar from "../../../Common/DataTable/Toolbar/PMDStatisticsDataTableToolbar";
 import equal from "deep-equal";
 import { acitvateHotkeys, deactivateHotkeys } from "../../../../services/reducers/appSettings";
-
-interface IStatisticsDataTablePMD {
-  currentFileInterpretations: Array<StatisitcsInterpretationFromPCA> | null;
-};
+import { useCellModesModel } from "../../hooks";
+import { IStatisticsDataTablePMD, StatisticsDataTableColumns, StatisticsDataTableRow } from "../types";
+import { useScrollToInterpretationRow } from "../../hooks/useScrollToInterpretationRow";
 
 const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ currentFileInterpretations }) => {
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
+  const apiRef = useGridApiRef();
+  const { cellModesModel, handleCellModesModelChange } = useCellModesModel();
 
   const { currentInterpretation, allInterpretations } = useAppSelector(state => state.pcaPageReducer);
-  const [editRowsModel, setEditRowsModel] = useState<GridEditRowsModel>({});
   const [currentClass, setCurrentClass] = useState(styles.current_dark);
 
-  const handleEditRowsModelChange = useCallback((model: GridEditRowsModel) => {
-    setEditRowsModel(model);
-  }, []);
+  // useEffect(() => {
+  //   if (currentFileInterpretations && Object.keys(editRowsModel).length !== 0) {
+  //     const updatedAllInterpretations = allInterpretations.map((interpretation) => {
+  //       const rowId = Object.keys(editRowsModel)[0];
+  //       const newComment = editRowsModel[rowId]?.comment?.value as string;
+  //       if (rowId !== interpretation.uuid) return interpretation;
+  //       return {
+  //         ...interpretation,
+  //         comment: newComment
+  //       };
+  //     });
+  //     if (!equal(updatedAllInterpretations, allInterpretations)) {
+  //       dispatch(setAllInterpretations(updatedAllInterpretations));
+  //       dispatch(updateCurrentFileInterpretations(currentFileInterpretations[0].parentFile));
+  //       dispatch(setLastInterpretationAsCurrent());
+  //     }
+  //   };
+  // }, [currentFileInterpretations, editRowsModel, allInterpretations]);
 
-  useEffect(() => {
-    if (currentFileInterpretations && Object.keys(editRowsModel).length !== 0) {
-      const updatedAllInterpretations = allInterpretations.map((interpretation) => {
-        const rowId = Object.keys(editRowsModel)[0];
-        const newComment = editRowsModel[rowId]?.comment?.value as string;
-        if (rowId !== interpretation.uuid) return interpretation;
-        return {
-          ...interpretation,
-          comment: newComment
-        };
-      });
-      if (!equal(updatedAllInterpretations, allInterpretations)) {
-        dispatch(setAllInterpretations(updatedAllInterpretations));
-        dispatch(updateCurrentFileInterpretations(currentFileInterpretations[0].parentFile));
-        dispatch(setLastInterpretationAsCurrent());
-      }
-    };
-  }, [currentFileInterpretations, editRowsModel, allInterpretations]);
+  useScrollToInterpretationRow({apiRef, pageType: 'pca'});
 
   useEffect(() => {
     setCurrentClass(theme.palette.mode === 'dark' ? styles.current_dark : styles.current_light);
@@ -93,13 +91,13 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ currentFileInterp
     };
   };
 
-  const columns: GridColumns = [
+  const columns: StatisticsDataTableColumns = [
     {
       field: 'actions',
       type: 'actions',
       minWidth: 40,
       width: 40,
-      renderHeader: (params: GridColumnHeaderParams) => (
+      renderHeader: () => (
         <GridActionsCellItem
           icon={<DeleteIcon />}
           label="Delete all interpretations"
@@ -107,18 +105,18 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ currentFileInterp
           color="inherit"
         />
       ),
-      getActions: ({ id }) => {
+      getActions: (params: any) => {
         return [
           <GridActionsCellItem
             icon={<DeleteIcon />}
             label="Delete interpretation"
-            onClick={handleRowDelete(id as string)}
+            onClick={handleRowDelete(params.id as string)}
             color="inherit"
           />,
         ];
       },
     },
-    { field: 'id', headerName: 'ID', type: 'string', width: 50, hide: true},
+    { field: 'id', headerName: 'ID', type: 'string', width: 50},
     { field: 'label', headerName: 'Label', type: 'string', width: 70  },
     { field: 'code', headerName: 'Code', type: 'string', width: 50 },
     { field: 'stepRange', headerName: 'StepRange', type: 'string', width: 90 },
@@ -141,7 +139,7 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ currentFileInterp
     { field: 'comment', headerName: 'Comment', type: 'string', minWidth: 210, flex: 1, editable: true, cellClassName: styles[`editableCell_${theme.palette.mode}`] },
   ];
 
-  columns.forEach((col) => {
+  columns.forEach((col: any) => {
     col.align = 'center';
     col.headerAlign = 'center';
     col.hideSortIcons = true;
@@ -150,7 +148,7 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ currentFileInterp
 
   if (!currentFileInterpretations || !currentFileInterpretations.length) return <StatisticsDataTablePMDSkeleton />;
 
-  const rows: Array<Omit<DataGridDIRFromPCARow, 'comment' | 'id' | 'label' | 'uuid'>> = currentFileInterpretations.map((statistics, index) => {
+  const rows: StatisticsDataTableRow[] = currentFileInterpretations.map((statistics, index) => {
     const { uuid, label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadius, comment } = statistics;
     return {
       id: uuid,
@@ -174,10 +172,18 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ currentFileInterp
   return (
     <StatisticsDataTablePMDSkeleton>
       <DataGrid 
+        apiRef={apiRef}
         rows={rows} 
         columns={columns} 
-        editRowsModel={editRowsModel}
-        onEditRowsModelChange={handleEditRowsModelChange}
+        cellModesModel={cellModesModel}
+        onCellModesModelChange={handleCellModesModelChange}
+        initialState={{
+          columns: {
+            columnVisibilityModel: {
+              id: false,
+            },
+          },
+        }}
         onCellEditStart={(params: GridCellParams, event: MuiEvent) => {
           dispatch(deactivateHotkeys());
         }}
@@ -196,7 +202,7 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ currentFileInterp
         }}
         hideFooter={rows.length < 100}
         density={'compact'}
-        disableSelectionOnClick={true}
+        disableRowSelectionOnClick={true}
         getRowClassName={
           (params) => params.row.id === currentInterpretation?.uuid ? currentClass : ''
         }
