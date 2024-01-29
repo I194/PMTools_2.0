@@ -28,25 +28,6 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ currentFileInterp
   const { currentInterpretation, allInterpretations } = useAppSelector(state => state.pcaPageReducer);
   const [currentClass, setCurrentClass] = useState(styles.current_dark);
 
-  // useEffect(() => {
-  //   if (currentFileInterpretations && Object.keys(editRowsModel).length !== 0) {
-  //     const updatedAllInterpretations = allInterpretations.map((interpretation) => {
-  //       const rowId = Object.keys(editRowsModel)[0];
-  //       const newComment = editRowsModel[rowId]?.comment?.value as string;
-  //       if (rowId !== interpretation.uuid) return interpretation;
-  //       return {
-  //         ...interpretation,
-  //         comment: newComment
-  //       };
-  //     });
-  //     if (!equal(updatedAllInterpretations, allInterpretations)) {
-  //       dispatch(setAllInterpretations(updatedAllInterpretations));
-  //       dispatch(updateCurrentFileInterpretations(currentFileInterpretations[0].parentFile));
-  //       dispatch(setLastInterpretationAsCurrent());
-  //     }
-  //   };
-  // }, [currentFileInterpretations, editRowsModel, allInterpretations]);
-
   useScrollToInterpretationRow({apiRef, pageType: 'pca'});
 
   useEffect(() => {
@@ -90,6 +71,21 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ currentFileInterp
       dispatch(setLastInterpretationAsCurrent());
     };
   };
+
+  const handleRowUpdate = useCallback((newRow: StatisticsDataTableRow) => {
+    if (!currentFileInterpretations) return;
+
+    const newInterpretIndex = allInterpretations.findIndex(interpet => interpet.uuid === newRow.id);
+    const updatedAllInterpretations = [...allInterpretations];
+    updatedAllInterpretations[newInterpretIndex] = {...updatedAllInterpretations[newInterpretIndex], comment: newRow.comment};
+
+    dispatch(setAllInterpretations(updatedAllInterpretations));
+    dispatch(updateCurrentFileInterpretations(currentFileInterpretations[0].parentFile));
+  }, [allInterpretations, currentFileInterpretations]);
+
+  const setRowAsCurrentInterpretation = (rowId: string) => {
+    dispatch(setCurrentInterpretationByUUID({uuid: rowId}));
+  }
 
   const columns: StatisticsDataTableColumns = [
     {
@@ -163,11 +159,7 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ currentFileInterp
       confidenceRadius: +confidenceRadius.toFixed(1),
       comment
     };
-  });
-
-  const setRowAsCurrentInterpretation = (rowId: string) => {
-    dispatch(setCurrentInterpretationByUUID({uuid: rowId}));
-  }
+  }).reverse();
 
   return (
     <StatisticsDataTablePMDSkeleton>
@@ -210,6 +202,10 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ currentFileInterp
           Toolbar: PMDStatisticsDataTableToolbar,
         }}
         onRowClick={(params) => setRowAsCurrentInterpretation(params.row.id)}
+        processRowUpdate={(newRow, oldRow) => {
+          handleRowUpdate(newRow);
+          return newRow;
+        }}
       />
     </StatisticsDataTablePMDSkeleton>
   );

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import styles from './OutputDataTableDIR.module.scss';
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
 import { useDebounce } from "../../../../utils/GlobalHooks";
@@ -17,7 +17,7 @@ import {
 import { useTheme } from '@mui/material/styles';
 import DIROutputDataTableToolbar from "../../../Common/DataTable/Toolbar/DIROutputDataTableToolbar";
 import { useCellModesModel } from "../../hooks";
-import { StatisticDataTableRow, StatisticsDataTableColumns } from "../types";
+import { StatisticsDataTableRow, StatisticsDataTableColumns } from "../types";
 
 const OutputDataTableDIR: FC = () => {
   
@@ -51,6 +51,19 @@ const OutputDataTableDIR: FC = () => {
     event.stopPropagation();
     dispatch(deleteAllInterpretations());
   };
+
+  const handleRowUpdate = useCallback((newRow: StatisticsDataTableRow) => {
+    if (!data) return;
+
+    const newInterpretIndex = data.findIndex(interpet => interpet.label === newRow.id);
+    const updatedAllInterpretations = [...data];
+    updatedAllInterpretations[newInterpretIndex] = {...updatedAllInterpretations[newInterpretIndex], comment: newRow.comment};
+
+    dispatch(setAllInterpretations(updatedAllInterpretations));
+
+    const currentFileName = dirStatData![currentDataDIRid || 0]?.name;
+    dispatch(updateCurrentFileInterpretations(currentFileName));
+  }, [data]);
 
   const columns: StatisticsDataTableColumns = [
     {
@@ -122,29 +135,9 @@ const OutputDataTableDIR: FC = () => {
     };
   }, [debouncedFilename]);
 
-  // useEffect(() => {
-  //   if (data && Object.keys(editRowsModel).length !== 0) {
-  //     const updatedData = data.map((interpretation, index) => {
-  //       const rowId = Object.keys(editRowsModel)[0];
-  //       const newComment = editRowsModel[rowId]?.comment?.value as string;
-  //       if (rowId !== interpretation.label) return interpretation;
-  //       return {
-  //         ...interpretation,
-  //         comment: newComment
-  //       };
-  //     });
-  //     if (!equal(updatedData, data)) {
-  //       dispatch(setAllInterpretations(updatedData));
-  //       const currentFileName = dirStatData![currentDataDIRid || 0]?.name;
-  //       dispatch(updateCurrentFileInterpretations(currentFileName));
-  //       dispatch(setLastInterpretationAsCurrent());
-  //     }
-  //   };
-  // }, [data, editRowsModel]);
-
   if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
 
-  const rows: StatisticDataTableRow[] = data.map((statistics, index) => {
+  const rows: StatisticsDataTableRow[] = data.map((statistics, index) => {
     const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadiusGeo, Kgeo, confidenceRadiusStrat, Kstrat, comment } = statistics;
     return {
       id: label,
@@ -198,6 +191,10 @@ const OutputDataTableDIR: FC = () => {
           Toolbar: DIROutputDataTableToolbar,
         }}
         disableRowSelectionOnClick={true}
+        processRowUpdate={(newRow, oldRow) => {
+          handleRowUpdate(newRow);
+          return newRow;
+        }}
       />
     </StatisticsDataTablePMDSkeleton>
   </>;

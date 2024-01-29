@@ -1,23 +1,17 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import styles from './StatisticsDataTableDIR.module.scss';
 import { useTheme } from '@mui/material/styles';
-import { DataGrid, GridActionsCellItem, GridColumnHeaderParams, GridValueFormatterParams, GridCellParams, MuiEvent, useGridApiRef } from '@mui/x-data-grid';
+import { DataGrid, GridActionsCellItem, GridValueFormatterParams, GridCellParams, MuiEvent, useGridApiRef } from '@mui/x-data-grid';
 import StatisticsDataTablePMDSkeleton from './StatisticsDataTableDIRSkeleton';
 import { GetDataTableBaseStyle } from "../styleConstants";
-import { DataGridDIRFromDIRRow, StatisitcsInterpretationFromDIR } from "../../../../utils/GlobalTypes";
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
 import { deleteInterpretation, setAllInterpretations, updateCurrentFileInterpretations, setLastInterpretationAsCurrent, setCurrentInterpretationByLabel, setNextOrPrevInterpretationAsCurrent } from "../../../../services/reducers/dirPage";
 import DIRStatisticsDataTableToolbar from "../../../Common/DataTable/Toolbar/DIRStatisticsDataTableToolbar";
-import equal from "deep-equal"
 import { acitvateHotkeys, deactivateHotkeys } from "../../../../services/reducers/appSettings";
 import { useCellModesModel } from "../../hooks";
-import { StatisticDataTableRow, StatisticsDataTableColumns } from "../types";
+import { IStatisticsDataTableDIR, StatisticsDataTableRow, StatisticsDataTableColumns } from "../types";
 import { useScrollToInterpretationRow } from "../../hooks/useScrollToInterpretationRow";
-
-interface IStatisticsDataTableDIR {
-  currentFileInterpretations: Array<StatisitcsInterpretationFromDIR> | null;
-};
 
 const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ currentFileInterpretations }) => {
 
@@ -32,26 +26,6 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ currentFileInterp
   useEffect(() => {
     setCurrentClass(theme.palette.mode === 'dark' ? styles.current_dark : styles.current_light);
   }, [theme]);
-
-  // useEffect(() => {
-  //   if (currentFileInterpretations && Object.keys(editRowsModel).length !== 0) {
-  //     const updatedAllInterpretations = allInterpretations.map((interpretation) => {
-  //       const rowId = Object.keys(editRowsModel)[0];
-  //       const newComment = editRowsModel[rowId]?.comment?.value as string;
-  //       console.log('here', rowId, interpretation.uuid);
-  //       if (rowId !== interpretation.label) return interpretation;
-  //       return {
-  //         ...interpretation,
-  //         comment: newComment
-  //       };
-  //     });
-  //     if (!equal(updatedAllInterpretations, allInterpretations)) {
-  //       dispatch(setAllInterpretations(updatedAllInterpretations));
-  //       dispatch(updateCurrentFileInterpretations(currentFileInterpretations[0].parentFile));
-  //       dispatch(setLastInterpretationAsCurrent());
-  //     }
-  //   };
-  // }, [currentFileInterpretations, editRowsModel, allInterpretations]);
 
   useScrollToInterpretationRow({apiRef, pageType: 'dir'});
 
@@ -92,6 +66,21 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ currentFileInterp
       dispatch(setLastInterpretationAsCurrent());
     };
   };
+
+  const handleRowUpdate = useCallback((newRow: StatisticsDataTableRow) => {
+    if (!currentFileInterpretations) return;
+
+    const newInterpretIndex = allInterpretations.findIndex(interpet => interpet.label === newRow.id);
+    const updatedAllInterpretations = [...allInterpretations];
+    updatedAllInterpretations[newInterpretIndex] = {...updatedAllInterpretations[newInterpretIndex], comment: newRow.comment};
+
+    dispatch(setAllInterpretations(updatedAllInterpretations));
+    dispatch(updateCurrentFileInterpretations(currentFileInterpretations[0].parentFile));
+  }, [allInterpretations, currentFileInterpretations]);
+
+  const setRowAsCurrentInterpretation = (rowId: string) => {
+    dispatch(setCurrentInterpretationByLabel({label: rowId}));
+  }
 
   const columns: StatisticsDataTableColumns = [
     {
@@ -158,7 +147,7 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ currentFileInterp
 
   if (!currentFileInterpretations || !currentFileInterpretations.length) return <StatisticsDataTablePMDSkeleton />;
 
-  const rows: StatisticDataTableRow[] = currentFileInterpretations.map((statistics) => {
+  const rows: StatisticsDataTableRow[] = currentFileInterpretations.map((statistics) => {
     const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadiusGeo, Kgeo, confidenceRadiusStrat, Kstrat, comment } = statistics;
     return {
       id: label,
@@ -175,11 +164,7 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ currentFileInterp
       accuracyStrat: +(Kstrat || 0).toFixed(1),
       comment
     };
-  });
-
-  const setRowAsCurrentInterpretation = (rowId: string) => {
-    dispatch(setCurrentInterpretationByLabel({label: rowId}));
-  }
+  }).reverse();
 
   return (
     <StatisticsDataTablePMDSkeleton>
@@ -215,6 +200,10 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ currentFileInterp
           Toolbar: DIRStatisticsDataTableToolbar
         }}
         onRowClick={(params) => setRowAsCurrentInterpretation(params.row.id)}
+        processRowUpdate={(newRow, oldRow) => {
+          handleRowUpdate(newRow);
+          return newRow;
+        }}
       />
     </StatisticsDataTablePMDSkeleton>
   );

@@ -1,15 +1,19 @@
 import { GridColDef } from "@mui/x-data-grid";
-import { DataGridDIRFromDIRRow, IDirData } from "../../../utils/GlobalTypes";
+import { DataGridDIRFromDIRRow, IDirData, StatisitcsInterpretationFromDIR } from "../../../utils/GlobalTypes";
 
 export interface IDataTableDIR {
   data: IDirData | null;
 };
 
+export interface IStatisticsDataTableDIR {
+  currentFileInterpretations: Array<StatisitcsInterpretationFromDIR> | null;
+};
+
 export type DIRDataTableColumns = readonly GridColDef<DataGridDIRFromDIRRow>[];
 
-export type StatisticDataTableRow = Omit<DataGridDIRFromDIRRow, "label" | "id"> & {id: string};
+export type StatisticsDataTableRow = Omit<DataGridDIRFromDIRRow, "label" | "id"> & {id: string};
 
-export type StatisticsDataTableColumns = readonly GridColDef<StatisticDataTableRow>[];
+export type StatisticsDataTableColumns = readonly GridColDef<StatisticsDataTableRow>[];
 
 export type SiteRow = {
   id: number;

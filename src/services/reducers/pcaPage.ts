@@ -155,7 +155,7 @@ const pcaPage = createSlice({
 
       const { changeDirection } = action.payload;
 
-      const toNext = changeDirection === 'up' ? -1 : 1;
+      const toNext = changeDirection === 'up' ? 1 : -1;
 
       const totalInterpretations = state.currentFileInterpretations.length;
       let nextInterpretationIndex = currentInterpretationIndex + toNext;

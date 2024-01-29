@@ -52,6 +52,18 @@ const OutputDataTablePMD: FC = () => {
     dispatch(deleteAllInterpretations());
   };
 
+  const handleRowUpdate = useCallback((newRow: StatisticsDataTableRow) => {
+    if (!data) return;
+
+    const newInterpretIndex = data.findIndex(interpet => interpet.uuid === newRow.id);
+    const updatedAllInterpretations = [...data];
+    updatedAllInterpretations[newInterpretIndex] = {...updatedAllInterpretations[newInterpretIndex], comment: newRow.comment};
+
+    dispatch(setAllInterpretations(updatedAllInterpretations));
+    const currentFileName = treatmentData![currentDataPMDid || 0]?.metadata.name;
+    dispatch(updateCurrentFileInterpretations(currentFileName));
+  }, [data]);
+
   const columns: StatisticsDataTableColumns = [
     {
       field: 'actions',
@@ -113,27 +125,7 @@ const OutputDataTablePMD: FC = () => {
       dispatch(setOutputFilename(filename));
     };
   }, [debouncedFilename]);
-
-  // useEffect(() => {
-  //   if (data && Object.keys(editRowsModel).length !== 0) {
-  //     const updatedData = data.map((interpretation, index) => {
-  //       const rowId = Object.keys(editRowsModel)[0];
-  //       const newComment = editRowsModel[rowId]?.comment?.value as string;
-  //       if (rowId !== interpretation.uuid) return interpretation;
-  //       return {
-  //         ...interpretation,
-  //         comment: newComment
-  //       };
-  //     });
-  //     if (!equal(updatedData, data)) {
-  //       dispatch(setAllInterpretations(updatedData));
-  //       const currentFileName = treatmentData![currentDataPMDid || 0]?.metadata.name;
-  //       dispatch(updateCurrentFileInterpretations(currentFileName));
-  //       dispatch(setLastInterpretationAsCurrent());
-  //     }
-  //   };
-  // }, [data, editRowsModel]);
-
+  
   if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
 
   const rows: StatisticsDataTableRow[] = data.map((statistics, index) => {
@@ -188,6 +180,10 @@ const OutputDataTablePMD: FC = () => {
           Toolbar: PMDOutputDataTableToolbar,
         }}
         disableRowSelectionOnClick={true}
+        processRowUpdate={(newRow, oldRow) => {
+          handleRowUpdate(newRow);
+          return newRow;
+        }}
       />
     </StatisticsDataTablePMDSkeleton>
   </>;
