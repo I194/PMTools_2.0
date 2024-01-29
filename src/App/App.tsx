@@ -6,7 +6,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { MainPageLayout, AppLayout } from '../components/Layouts';
 import { MainPage, DIRPage, PCAPage, NotFoundPage, WhyPMToolsPage, AuthorsAndHistory } from '../pages';
 import { useSystemTheme } from '../utils/GlobalHooks';
-import { setColorMode } from '../services/reducers/appSettings';
+import { acitvateHotkeys, deactivateHotkeys, setColorMode } from '../services/reducers/appSettings';
 import { setCurrentDIRid, setCurrentPMDid, setDirStatData, setTreatmentData } from '../services/reducers/parsedData';
 import * as pcaPageReducer from '../services/reducers/pcaPage';
 import * as dirPageReducer from '../services/reducers/dirPage';
@@ -97,6 +97,27 @@ function App() {
       dispatch(dirPageReducer.setCurrentInterpretationByLabel({label: JSON.parse(dirPage_currentInterpretationLabel)}));
     }
   }, []);
+
+  useEffect(() => {
+    window.addEventListener('focusin', handleFocusIn);
+    window.addEventListener('focusout', handleFocusOut);
+
+    return () => {
+      window.removeEventListener('focusin', handleFocusIn);
+      window.removeEventListener('focusout', handleFocusOut);
+    }
+  }, [])
+  
+  const handleFocusIn = (event: FocusEvent) => {
+    const target = event.target as HTMLElement;
+    if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
+      dispatch(deactivateHotkeys());  
+    }
+  }
+  
+  const handleFocusOut = () => {
+    dispatch(acitvateHotkeys());
+  }
 
   return (
     <Suspense fallback="loading">
