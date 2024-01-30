@@ -38,6 +38,7 @@ const dataToStereoDIR = (
 
   // annotations for dots ('id' field added right in the Data.tsx as dot index)
   const labels = directions.map((direction) => direction.label);
+  const codes = directions.map((direction) => direction.code);
 
   // mean direction calculation
   let meanDirection: MeanDirection = null;
@@ -116,6 +117,8 @@ const dataToStereoDIR = (
         : directions[index].MADstrat
     }
     const confidenceCircle = createStereoPlaneData(direction, graphSize, a95);
+    const greatCircle = codes[index] === 'gc' || codes[index] === 'gcn' ? createStereoPlaneData(direction, graphSize) : undefined;
+
     return {
       id: directions[index].id, 
       xyData: [coords.x, coords.y],
@@ -125,6 +128,11 @@ const dataToStereoDIR = (
         xyDataSplitted: confidenceCircle, 
         color: '#000'
       },
+      greatCircle: greatCircle && {
+        xyData: greatCircle.all, 
+        xyDataSplitted: greatCircle, 
+        color: '#000'
+      }
     };
   });
 

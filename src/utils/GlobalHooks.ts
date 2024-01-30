@@ -69,6 +69,7 @@ export const useDIRGraphSettings = () => {
   const [directionLabel, setDirectionLabel] = useState<boolean>(false);
   const [confidenceCircle, setConfidenceCircle] = useState<boolean>(false);
   const [highlightStatistics, setHighlightStatistics] = useState<boolean>(false);
+  const [showGC, setShowGC] = useState<boolean>(true);
 
   const menuItems: Array<TMenuItem> = [
     {label: 'Tooltips', onClick: () => setTooltips(!tooltips), state: tooltips},
@@ -78,6 +79,7 @@ export const useDIRGraphSettings = () => {
     {label: 'Show label', onClick: () => setDirectionLabel(!directionLabel), state: directionLabel, divider: true},
     {label: 'Show confidence circles', onClick: () => setConfidenceCircle(!confidenceCircle), state: confidenceCircle},
     {label: 'Highlight statistics', onClick: () => setHighlightStatistics(!highlightStatistics), state: highlightStatistics},
+    {label: 'Show Great Circles (gc/gcn)', onClick: () => setShowGC(!showGC), state: showGC},
   ];
 
   const settings: GraphSettings = {
@@ -88,7 +90,8 @@ export const useDIRGraphSettings = () => {
       id: directionID,
       label: directionLabel,
       confidenceCircle,
-      highlightStatistics
+      highlightStatistics,
+      showGC
     },
   };
 

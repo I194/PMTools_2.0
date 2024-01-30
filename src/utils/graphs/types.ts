@@ -72,6 +72,7 @@ export type DotSettings = {
   label?: boolean;
   confidenceCircle?: boolean;
   highlightStatistics?: boolean;
+  showGC?: boolean;
 };
 
 export type GraphAreaSettings = {
@@ -94,6 +95,7 @@ export type DirectionDot = {
   xyData: [number, number];
   confidenceCircle?: PlaneData;
   tooltip?: TooltipDot;
+  greatCircle?: PlaneData;
 }
 
 export type DotsData = DirectionDot[];

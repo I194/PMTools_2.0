@@ -83,6 +83,7 @@ interface IDot {
    * @param label Whether to display the label in the annotation.
    * @param confidenceCircle Whether to render the confidence circle.
    * @param highlightStatistics Whether to render orange highlights
+   * @param showGC Whether to render great circles for dirs with 'gc' or 'gcn' code
    */
   settings: DotSettings;
 }

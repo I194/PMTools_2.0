@@ -69,6 +69,7 @@ interface IData {
    * @param label Whether to display the label in the annotation.
    * @param confidenceCircle Whether to render the confidence circle.
    * @param highlightStatistics Whether to render orange highlights
+   * @param showGC Whether to render great circles for dirs with 'gc' or 'gcn' code
    */
   settings: DotSettings;
 }
@@ -129,7 +130,7 @@ const Data: FC<IData> = ({
           id={`${graphId}-${type}-dots`}
         >
           {
-            data.map(({id, xyData, confidenceCircle}, index) => (
+            data.map(({id, xyData, confidenceCircle, greatCircle}, index) => (
               <Dot 
                 x={xyData[0]} 
                 y={xyData[1]} 
@@ -160,6 +161,7 @@ const Data: FC<IData> = ({
                 }
                 confidenceCircle={confidenceCircle}
                 settings={settings}
+                greatCircle={settings.showGC ? greatCircle : undefined}         
               />
             )
           )}
