@@ -63,11 +63,12 @@ interface IData {
   colorsType?: 'light' | 'dark';
   
   /** General settings for all dots (the Dot component)
-   * - annotations: Whether to show annotations.
-   * - tooltips: Whether to show tooltips.
-   * - id: Whether to display the ID in the annotation.
-   * - label: Whether to display the label in the annotation.
-   * - confidenceCircle: Whether to render the confidence circle.
+   * @param annotations Whether to show annotations.
+   * @param tooltips Whether to show tooltips.
+   * @param id Whether to display the ID in the annotation.
+   * @param label Whether to display the label in the annotation.
+   * @param confidenceCircle Whether to render the confidence circle.
+   * @param highlightStatistics Whether to render orange highlights
    */
   settings: DotSettings;
 }
@@ -147,7 +148,7 @@ const Data: FC<IData> = ({
                     : dotFillColor
                 }
                 strokeColor={
-                  inInterpretationIDs.includes(id) 
+                  inInterpretationIDs.includes(id) && settings.highlightStatistics
                     ? dotHighlightedColor || 'orange' 
                     // : colorsType === 'dark' ? '#119dff' : "black"
                     : "black"

@@ -35,6 +35,7 @@ export const usePMDGraphSettings = () => {
   const [annotations, setAnnotations] = useState<boolean>(true);
   const [stepID, setStepID] = useState<boolean>(true);
   const [stepLabel, setStepLabel] = useState<boolean>(false);
+  const [highlightStatistics, setHighlightStatistics] = useState<boolean>(true);
 
   const menuItems: Array<TMenuItem> = [
     {label: 'Tooltips', onClick: () => setTooltips(!tooltips), state: tooltips},
@@ -42,6 +43,7 @@ export const usePMDGraphSettings = () => {
     {label: 'Annotations', onClick: () => setAnnotations(!annotations), state: annotations},
     {label: 'Show №', onClick: () => setStepID(!stepID), state: stepID},
     {label: 'Show label', onClick: () => setStepLabel(!stepLabel), state: stepLabel},
+    {label: 'Highlight statistics', onClick: () => setHighlightStatistics(!highlightStatistics), state: highlightStatistics},
   ];
 
   const settings: GraphSettings = {
@@ -51,6 +53,7 @@ export const usePMDGraphSettings = () => {
       tooltips,
       id: stepID,
       label: stepLabel,
+      highlightStatistics
     },
   };
 
@@ -65,6 +68,7 @@ export const useDIRGraphSettings = () => {
   const [directionID, setDirectionID] = useState<boolean>(true);
   const [directionLabel, setDirectionLabel] = useState<boolean>(false);
   const [confidenceCircle, setConfidenceCircle] = useState<boolean>(false);
+  const [highlightStatistics, setHighlightStatistics] = useState<boolean>(false);
 
   const menuItems: Array<TMenuItem> = [
     {label: 'Tooltips', onClick: () => setTooltips(!tooltips), state: tooltips},
@@ -73,6 +77,7 @@ export const useDIRGraphSettings = () => {
     {label: 'Show №', onClick: () => setDirectionID(!directionID), state: directionID},
     {label: 'Show label', onClick: () => setDirectionLabel(!directionLabel), state: directionLabel, divider: true},
     {label: 'Show confidence circles', onClick: () => setConfidenceCircle(!confidenceCircle), state: confidenceCircle},
+    {label: 'Highlight statistics', onClick: () => setHighlightStatistics(!highlightStatistics), state: highlightStatistics},
   ];
 
   const settings: GraphSettings = {
@@ -82,7 +87,8 @@ export const useDIRGraphSettings = () => {
       tooltips,
       id: directionID,
       label: directionLabel,
-      confidenceCircle
+      confidenceCircle,
+      highlightStatistics
     },
   };
 

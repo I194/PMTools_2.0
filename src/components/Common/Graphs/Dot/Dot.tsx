@@ -77,11 +77,12 @@ interface IDot {
   
   /**
    * General settings for the Dot component.
-   * - annotations: Whether to show annotations.
-   * - tooltips: Whether to show tooltips.
-   * - id: Whether to display the ID in the annotation.
-   * - label: Whether to display the label in the annotation.
-   * - confidenceCircle: Whether to render the confidence circle.
+   * @param annotations Whether to show annotations.
+   * @param tooltips Whether to show tooltips.
+   * @param id Whether to display the ID in the annotation.
+   * @param label Whether to display the label in the annotation.
+   * @param confidenceCircle Whether to render the confidence circle.
+   * @param highlightStatistics Whether to render orange highlights
    */
   settings: DotSettings;
 }

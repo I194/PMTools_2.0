@@ -71,6 +71,7 @@ export type DotSettings = {
   id?: boolean;
   label?: boolean;
   confidenceCircle?: boolean;
+  highlightStatistics?: boolean;
 };
 
 export type GraphAreaSettings = {
