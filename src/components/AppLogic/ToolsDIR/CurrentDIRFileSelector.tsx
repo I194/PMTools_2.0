@@ -37,6 +37,7 @@ const CurrentDIRFileSelector: FC = () => {
       if (filename) {
         setCurrentFileName(filename);
         dispatch(updateCurrentFileInterpretations(filename));
+        dispatch(setLastInterpretationAsCurrent());
         dispatch(setSelectedDirectionsIDs(null));
         dispatch(setHiddenDirectionsIDs([]));
         dispatch(setReversedDirectionsIDs([]));

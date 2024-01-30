@@ -36,6 +36,7 @@ const CurrentPMDFileSelector: FC = () => {
       if (filename) {
         setCurrentFileName(filename);
         dispatch(updateCurrentFileInterpretations(filename));
+        dispatch(setLastInterpretationAsCurrent());
         dispatch(setSelectedStepsIDs(null));
         dispatch(setHiddenStepsIDs([]));
         dispatch(setStatisticsMode(null));
