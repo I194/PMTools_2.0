@@ -6,6 +6,7 @@ import {
   bgColorBlocks,
   boxShadowStyle
 } from '../../../../utils/ThemeConstants';
+import InfoButton from "../../../Common/Buttons/InfoButton/InfoButton";
 
 const StatisticsDataTablePMDSkeleton: FC = ({ children }) => {
 
@@ -22,6 +23,7 @@ const StatisticsDataTablePMDSkeleton: FC = ({ children }) => {
       }}
     >
       { children }
+      <InfoButton contentType="statisticsDataTable" position={{right: 0}} />
     </div>
   )
 

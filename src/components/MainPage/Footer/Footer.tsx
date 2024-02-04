@@ -21,7 +21,7 @@ const Footer = () => {
       <div className={styles.rowContainer}>
         <div>
           <Typography variant='body2' color={textColor(theme.palette.mode)}>
-            {t('mainLayout.footer.rights')}
+            {t('mainLayout.footer.rights1')} v.{process.env.REACT_APP_VERSION} {t('mainLayout.footer.rights2')}
           </Typography>
           <Typography variant='body2' color={textColor(theme.palette.mode)}>
             Разработка программы выполнена при финансовой поддержке РНФ, грант 22-27-00597

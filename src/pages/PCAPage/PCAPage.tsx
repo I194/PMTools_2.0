@@ -1,15 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import styles from './PCAPage.module.scss';
 import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
-import { 
-  addInterpretation, 
-  setStatisticsMode, 
-  showStepsInput, 
-  updateCurrentInterpretation 
-} from '../../services/reducers/pcaPage';
-import { filesToData } from '../../services/axios/filesAndData';
 import { IPmdData } from '../../utils/GlobalTypes';
-import calculateStatisticsPMD from '../../utils/statistics/calculateStatisticsPMD';
 import { MetaDataTablePMD, ToolsPMD } from '../../components/AppLogic';
 import Graphs from './Graphs';
 import Tables from './Tables';
@@ -20,6 +12,8 @@ import {
 import ModalWrapper from '../../components/Common/Modal/ModalWrapper';
 import UploadModal from '../../components/Common/Modal/UploadModal/UploadModal';
 import { useMediaQuery } from 'react-responsive';
+import { setCurrentPMDid } from '../../services/reducers/parsedData';
+import InterpretationSetter from './InterpretationSetter';
 
 const PCAPage: FC = ({}) => {
 
@@ -29,35 +23,21 @@ const PCAPage: FC = ({}) => {
   const heightLessThan560 = useMediaQuery({ maxHeight: 559 });
   const unsupportedResolution = widthLessThan720 || heightLessThan560;
 
-  const files = useAppSelector(state => state.filesReducer.treatmentFiles);
   const { treatmentData, currentDataPMDid } = useAppSelector(state => state.parsedDataReducer);
-  const { statisticsMode, selectedStepsIDs, hiddenStepsIDs, currentFileInterpretations, allInterpretations } = useAppSelector(state => state.pcaPageReducer);
+  const { hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer);
 
   const [dataToShow, setDataToShow] = useState<IPmdData | null>(null);
   const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
 
   useEffect(() => {
-    if (files) dispatch(filesToData({files, format: 'pmd'}));
-  }, [files, files?.length]); 
-
-  useEffect(() => {
     if (treatmentData && treatmentData.length > 0) {
+      if (!currentDataPMDid) {
+        dispatch(setCurrentPMDid(0));
+      }
       const pmdID = currentDataPMDid || 0;
       setDataToShow(treatmentData[pmdID]);
     } else setDataToShow(null);
   }, [treatmentData, currentDataPMDid, hiddenStepsIDs]);
-
-  useEffect(() => {
-    if (statisticsMode && !selectedStepsIDs) dispatch(showStepsInput(true));
-    if (statisticsMode && selectedStepsIDs && selectedStepsIDs.length >= 2 && dataToShow) {
-      const statistics = calculateStatisticsPMD(dataToShow, statisticsMode, selectedStepsIDs);
-      // решил оставить id на совесть пользователя - теперь это просто название файла
-      // statistics.interpretation.label = `${allInterpretations.length}${statistics.interpretation.label}/${currentFileInterpretations.length}`;
-      // statistics.interpretation.label = `${statistics.interpretation.label}`;
-      dispatch(addInterpretation(statistics));
-      dispatch(setStatisticsMode(null));
-    } else dispatch(updateCurrentInterpretation());
-  }, [statisticsMode, selectedStepsIDs, dataToShow]);
 
   useEffect(() => {
     if (!dataToShow) setShowUploadModal(true);
@@ -90,6 +70,7 @@ const PCAPage: FC = ({}) => {
       >
         <UploadModal page='pca' />
       </ModalWrapper>
+      <InterpretationSetter dataToShow={dataToShow} />
     </>
   )
 };

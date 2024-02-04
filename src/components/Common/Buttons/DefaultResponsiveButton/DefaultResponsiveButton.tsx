@@ -11,6 +11,7 @@ type Props = {
   onClick?: () => void;
   variant?: "text" | "contained" | "outlined";
   color?: "inherit" | "primary" | "default" | "secondary" | "error" | "info" | "success" | "warning";
+  forceSmall?: boolean;
 } & ButtonProps & {component?: React.ElementType}
 
 const DefaultResponsiveButton = ({ 
@@ -19,6 +20,7 @@ const DefaultResponsiveButton = ({
   onClick, 
   variant='contained', 
   color='primary',
+  forceSmall,
   ...props
 }: Props) => {
   const widthLessThan1400 = useMediaQuery({ query: '(max-width: 1400px)' });
@@ -26,7 +28,7 @@ const DefaultResponsiveButton = ({
   return (
     <>
       {
-        widthLessThan1400 
+        (widthLessThan1400 || forceSmall)
           ? 
             <DefaultIconButton 
               color={color}

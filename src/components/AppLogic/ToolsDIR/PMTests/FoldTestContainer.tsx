@@ -94,7 +94,7 @@ const FoldTestContainer = ({ dataToAnalyze }: Props) => {
           <Typography variant='body1' color={textColor(theme.palette.mode)}>
             {t("pmtests.foldTest.first")}
           </Typography>
-          <Typography variant='body1' color={successColor(theme.palette.mode)} ml='8px' fontWeight={600}>
+          <Typography variant='body1' color={primaryColor(theme.palette.mode)} ml='8px' fontWeight={600}>
             {`${unfoldingMinimun} — ${unfoldingMaximum}`}
           </Typography>
         </div>
@@ -102,7 +102,7 @@ const FoldTestContainer = ({ dataToAnalyze }: Props) => {
           <Typography variant='body1' color={textColor(theme.palette.mode)}>
             {t("pmtests.foldTest.second")}
           </Typography>
-          <Typography variant='body1' color={primaryColor(theme.palette.mode)} ml='8px' fontWeight={600}>
+          <Typography variant='body1' color={successColor(theme.palette.mode)} ml='8px' fontWeight={600}>
             {`${Math.min(...dataToShow.untilts)} — ${Math.max(...dataToShow.untilts)}`}
           </Typography>
         </div>

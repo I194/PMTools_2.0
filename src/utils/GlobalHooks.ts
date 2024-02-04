@@ -34,7 +34,8 @@ export const usePMDGraphSettings = () => {
   const [ticks, setTicks] = useState<boolean>(true);
   const [annotations, setAnnotations] = useState<boolean>(true);
   const [stepID, setStepID] = useState<boolean>(true);
-  const [stepLabel, setStepLabel] = useState<boolean>(true);
+  const [stepLabel, setStepLabel] = useState<boolean>(false);
+  const [highlightStatistics, setHighlightStatistics] = useState<boolean>(true);
 
   const menuItems: Array<TMenuItem> = [
     {label: 'Tooltips', onClick: () => setTooltips(!tooltips), state: tooltips},
@@ -42,6 +43,7 @@ export const usePMDGraphSettings = () => {
     {label: 'Annotations', onClick: () => setAnnotations(!annotations), state: annotations},
     {label: 'Show №', onClick: () => setStepID(!stepID), state: stepID},
     {label: 'Show label', onClick: () => setStepLabel(!stepLabel), state: stepLabel},
+    {label: 'Highlight statistics', onClick: () => setHighlightStatistics(!highlightStatistics), state: highlightStatistics},
   ];
 
   const settings: GraphSettings = {
@@ -51,6 +53,7 @@ export const usePMDGraphSettings = () => {
       tooltips,
       id: stepID,
       label: stepLabel,
+      highlightStatistics
     },
   };
 
@@ -63,8 +66,10 @@ export const useDIRGraphSettings = () => {
   const [ticks, setTicks] = useState<boolean>(true);
   const [annotations, setAnnotations] = useState<boolean>(true);
   const [directionID, setDirectionID] = useState<boolean>(true);
-  const [directionLabel, setDirectionLabel] = useState<boolean>(true);
+  const [directionLabel, setDirectionLabel] = useState<boolean>(false);
   const [confidenceCircle, setConfidenceCircle] = useState<boolean>(false);
+  const [highlightStatistics, setHighlightStatistics] = useState<boolean>(false);
+  const [showGC, setShowGC] = useState<boolean>(true);
 
   const menuItems: Array<TMenuItem> = [
     {label: 'Tooltips', onClick: () => setTooltips(!tooltips), state: tooltips},
@@ -73,6 +78,8 @@ export const useDIRGraphSettings = () => {
     {label: 'Show №', onClick: () => setDirectionID(!directionID), state: directionID},
     {label: 'Show label', onClick: () => setDirectionLabel(!directionLabel), state: directionLabel, divider: true},
     {label: 'Show confidence circles', onClick: () => setConfidenceCircle(!confidenceCircle), state: confidenceCircle},
+    {label: 'Highlight statistics', onClick: () => setHighlightStatistics(!highlightStatistics), state: highlightStatistics},
+    {label: 'Show Great Circles (gc/gcn)', onClick: () => setShowGC(!showGC), state: showGC},
   ];
 
   const settings: GraphSettings = {
@@ -82,7 +89,9 @@ export const useDIRGraphSettings = () => {
       tooltips,
       id: directionID,
       label: directionLabel,
-      confidenceCircle
+      confidenceCircle,
+      highlightStatistics,
+      showGC
     },
   };
 
@@ -384,8 +393,78 @@ export const useDefaultHotkeys = (): HotkeysType => {
             code: 'ArrowDown',
           }
         },
+        {
+          id: 6,
+          label: t('settings.hotkeys.zijd.projection.scroll'),
+          hotkey: {
+            key: 'P',
+            code: 'KeyP',
+          }
+        }
       ]
-    }
+    },
+    {
+      id: 7,
+      title: t('settings.hotkeys.coordinates.title'),
+      hotkeys: [
+        {
+          id: 1,
+          label: t('settings.hotkeys.coordinates.scroll'),
+          hotkey: {
+            key: 'Q',
+            code: 'KeyQ',
+          }
+        },
+      ]
+    },
+    {
+      id: 8,
+      title: t('settings.hotkeys.fileSelector.title'),
+      hotkeys: [
+        {
+          id: 1,
+          label: t('settings.hotkeys.fileSelector.right'),
+          disabled: true,
+          hotkey: {
+            key: 'Shift + ArrowLeft',
+            code: 'Shift + ArrowLeft',
+          }
+        },
+        {
+          id: 2,
+          label: t('settings.hotkeys.fileSelector.left'),
+          disabled: true,
+          hotkey: {
+            key: 'Shift + ArrowRight',
+            code: 'Shift + ArrowRight',
+          }
+        },
+      ]
+    },
+    {
+      id: 9,
+      title: t('settings.hotkeys.interpretationSelector.title'),
+      hotkeys: [
+        {
+          id: 1,
+          label: t('settings.hotkeys.interpretationSelector.down'),
+          disabled: true,
+          hotkey: {
+            key: 'Shift + ArrowDown',
+            code: 'Shift + ArrowDown',
+          }
+        },
+        {
+          id: 2,
+          label: t('settings.hotkeys.interpretationSelector.up'),
+          disabled: true,
+          hotkey: {
+            key: 'Shift + ArrowUp',
+            code: 'Shift + ArrowUp',
+          }
+        },
+      ]
+    },
   ];
 
   return defaultHotkeys;

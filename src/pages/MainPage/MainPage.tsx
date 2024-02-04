@@ -9,6 +9,7 @@ import PMToolsChartsLight from '../../assets/pmtools_charts_light.riv';
 import PMToolsChartsDark from '../../assets/pmtools_charts_dark.riv';
 import { DynamicLogo, NavPanel, About, Description, FeatureCards, Paper } from '../../components/MainPage';
 import { Typography } from '@mui/material';
+import Helper from '../../components/MainPage/Helper/Helper';
 
 const MainPage: FC = ({}) => {
   const theme = useTheme();
@@ -39,6 +40,7 @@ const MainPage: FC = ({}) => {
       <Paper />
       <Description />
       <FeatureCards />
+      <Helper />
     </>
   )
 }
