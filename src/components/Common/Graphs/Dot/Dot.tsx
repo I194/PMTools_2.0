@@ -77,11 +77,13 @@ interface IDot {
   
   /**
    * General settings for the Dot component.
-   * - annotations: Whether to show annotations.
-   * - tooltips: Whether to show tooltips.
-   * - id: Whether to display the ID in the annotation.
-   * - label: Whether to display the label in the annotation.
-   * - confidenceCircle: Whether to render the confidence circle.
+   * @param annotations Whether to show annotations.
+   * @param tooltips Whether to show tooltips.
+   * @param id Whether to display the ID in the annotation.
+   * @param label Whether to display the label in the annotation.
+   * @param confidenceCircle Whether to render the confidence circle.
+   * @param highlightStatistics Whether to render orange highlights
+   * @param showGC Whether to render great circles for dirs with 'gc' or 'gcn' code
    */
   settings?: DotSettings;
 }
@@ -151,7 +153,11 @@ const Dot: FC<IDot> = ({
     <g>
       {
         [
+<<<<<<< HEAD
           settings && (((showText || selected) && settings.annotations) &&
+=======
+          (settings.annotations) &&
+>>>>>>> upstream/main
           <text 
             id={`${id}__annotation`}
             x={x}

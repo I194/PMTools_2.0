@@ -8,7 +8,7 @@ export const bgColorBlocks = (themeMode: ThemeMode) => themeMode === 'dark'
   ? '#393939' 
   : '#fff';
 export const bgColorCharts = (themeMode: ThemeMode) => themeMode === 'dark' 
-  ? '#424242' 
+  ? '#393939' 
   : '#fff';
 export const separatorColor = (themeMode: ThemeMode) => themeMode === 'dark' 
   ? '#e2e2e2' 
@@ -16,6 +16,9 @@ export const separatorColor = (themeMode: ThemeMode) => themeMode === 'dark'
 export const borderColor = (themeMode: ThemeMode) => themeMode === 'dark' 
   ? 'rgba(81, 81, 81, 1)' 
   : '#abb6bc';
+export const primaryBorderColor = (themeMode: ThemeMode) => themeMode === 'dark'
+  ? 'rgba(144, 202, 249, 0.5)'
+  : 'rgba(25, 118, 210, 0.5)'
 export const boxShadowStyle = (themeMode: ThemeMode) => themeMode ==='dark' 
   ? '0px 0px 10px 1px rgba(144, 202, 249, 0.21)' 
   : '0px 0px 10px 1px rgba(34, 60, 80, 0.21)';

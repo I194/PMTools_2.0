@@ -232,7 +232,7 @@ export type DataGridPMDRow = {
 export type DataGridDIRFromPCARow = Omit<
   StatisitcsInterpretationFromPCA,
   "demagType" | "parentFile" | "rawData" | "steps"
-> & { readonly id: number };
+> & { readonly id: string };
 export type DataGridDIRFromDIRRow = Omit<
   StatisitcsInterpretationFromDIR,
   "demagType" | "parentFile" | "rawData" | "directions" | "uuid"
@@ -291,3 +291,5 @@ export type BasicGraphExportType =
   | "export_stereoDir"
   | "export_stereoVGP";
 export type PMTestsGraphType = "foldTest" | "reversalTest";
+
+export type ContentType = GraphType | 'statisticsDataTable';

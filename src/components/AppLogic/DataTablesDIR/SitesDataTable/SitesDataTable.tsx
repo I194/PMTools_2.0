@@ -6,8 +6,6 @@ import SitesDataTableSkeleton from './SitesDataTableSkeleton';
 import { IDirData, ISitesData, VGPData } from "../../../../utils/GlobalTypes";
 import { 
   DataGrid, 
-  GridColumns, 
-  GridEditRowsModel,
   GridValueFormatterParams, 
 } from '@mui/x-data-grid';
 import { useTheme } from '@mui/material/styles';
@@ -20,22 +18,7 @@ import { setSiteData } from "../../../../services/reducers/parsedData";
 import { textColor } from "../../../../utils/ThemeConstants";
 import Direction from "../../../../utils/graphs/classes/Direction";
 import { useTranslation } from "react-i18next";
-
-type SiteRow = {
-  id: number;
-  label: string;
-  index: number | string;
-  lat: number;
-  lon: number;
-  age: number;
-  plateId: number;
-};
-
-interface IDataTableDIR {
-  data: IDirData | null;
-  // sitesData?: ISitesData['data'];
-};
-
+import { IDataTableDIR, SiteDataTableColumns, SiteRow } from "../types";
 
 const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
   
@@ -46,7 +29,7 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
   const { hiddenDirectionsIDs, reversedDirectionsIDs, reference } = useAppSelector(state => state.dirPageReducer);
   const sitesData = useAppSelector(state => state.parsedDataReducer.siteData)?.data;
 
-  const columns: GridColumns = [
+  const columns: SiteDataTableColumns = [
     { field: 'id', headerName: 'ID', type: 'string', minWidth: 20, width: 30 },
     { field: 'index', headerName: '№', type: 'string', minWidth: 20, width: 30 },
     { field: 'label', headerName: 'Label', type: 'string', width: 70 },
@@ -80,7 +63,7 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
   if (!data) return <SitesDataTableSkeleton />;
   
   let visibleIndex = 1;
-  const rows: Array<SiteRow> = data.interpretations.map((interpretation, index) => {
+  const rows: SiteRow[] = data.interpretations.map((interpretation, index) => {
     const { id, label } = interpretation;
     return {
       id,
@@ -175,7 +158,7 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
           components={{
             Toolbar: SitesInputDataTableToolbar,
           }}
-          disableSelectionOnClick={true}
+          disableRowSelectionOnClick={true}
           getRowClassName={
             (params) =>  hiddenDirectionsIDs.includes(params.row.id) ? styles.hiddenRow : ''
           }
@@ -205,7 +188,6 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
         </Button>
       </div>
     </div>
-    
   );
 };
 

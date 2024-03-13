@@ -16,7 +16,7 @@ import CenterByMean from "../Buttons/CenterByMean/CenterByMean";
 import Cutoff from "../Buttons/Cutoff/Cutoff";
 import DefaultButton from "../Buttons/DefaultButton/DefaultButton";
 import { GraphType } from "../../../../utils/GlobalTypes";
-import InfoButton from "../Buttons/InfoButton/InfoButton";
+import InfoButton from "../../Buttons/InfoButton/InfoButton";
 
 interface ISelectableGraph {
   graphId: GraphType;
@@ -135,7 +135,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
       <ContextMenu items={menuItems}>
         {
           graphId === 'zijd' && 
-          <>
+          <div className={styles.zijdChartExtraSettings}>
             <ProjectionSelect />
             <ResetZoomPan 
               onClick={onResetZoomPan!} 
@@ -149,7 +149,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
                 left: '338px'
               }}
             />
-          </>
+          </div>
         }
         {
           graphId === 'stereoDir' &&
@@ -173,7 +173,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
         }
         {/* <ExportButton graphId={ID} name={graphName} /> */}
         <ExportButton graphId={`export_${ID}`} name={graphName} />
-        <InfoButton graphType={graphId} />
+        <InfoButton contentType={graphId} />
         <TransformWrapper
           panning={{
             activationKeys: ['Alt'],

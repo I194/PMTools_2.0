@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import styles from './DataTableDIR.module.scss';
 import { DataGridDIRFromDIRRow, IDirData } from "../../../../utils/GlobalTypes";
-import { DataGrid, GridActionsCellItem, GridColumnHeaderParams, GridColumns, GridSelectionModel, GridValueFormatterParams } from '@mui/x-data-grid';
+import { DataGrid, GridActionsCellItem, GridValueFormatterParams, GridRowSelectionModel } from '@mui/x-data-grid';
 import DataTablePMDSkeleton from './DataTableDIRSkeleton';
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
 import { setSelectedDirectionsIDs, setHiddenDirectionsIDs, setReversedDirectionsIDs } from "../../../../services/reducers/dirPage";
@@ -20,10 +20,7 @@ import {
   primaryColor,
 } from '../../../../utils/ThemeConstants';
 import Direction from "../../../../utils/graphs/classes/Direction";
-
-interface IDataTableDIR {
-  data: IDirData | null;
-};
+import { DIRDataTableColumns, IDataTableDIR } from "../types";
 
 const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
 
@@ -33,7 +30,7 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
   const { selectedDirectionsIDs, hiddenDirectionsIDs, reversedDirectionsIDs } = useAppSelector(state => state.dirPageReducer);
 
   // selectionModel is array of ID's of rows
-  const [selectionModel, setSelectionModel] = useState<GridSelectionModel>([]);
+  const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
   const [selectedRows, setSelectedRows] = useState<Array<DataGridDIRFromDIRRow>>([]);
 
   useEffect(() => {
@@ -67,12 +64,12 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
       dispatch(setReversedDirectionsIDs(data?.interpretations?.map(interpretation => interpretation.id) ?? []));
   };
 
-  const columns: GridColumns = [
+  const columns: DIRDataTableColumns = [
     {
       field: 'toggleVisibility',
       type: 'actions',
       width: 40,
-      renderHeader: (params: GridColumnHeaderParams) => (
+      renderHeader: () => (
         <GridActionsCellItem
           icon={<VisibilityIcon />}
           label="Hide all directions" 
@@ -95,7 +92,7 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
       field: 'reversePolarity',
       type: 'actions',
       width: 40,
-      renderHeader: (params: GridColumnHeaderParams) => (
+      renderHeader: () => (
         <GridActionsCellItem
           icon={<SwapVertRoundedIcon />}
           label="Reverse polarity for all directions"
@@ -198,8 +195,8 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
         rows={rows} 
         columns={columns} 
         checkboxSelection
-        selectionModel={selectionModel}
-        onSelectionModelChange={(e) => {
+        rowSelectionModel={selectionModel}
+        onRowSelectionModelChange={(e) => {
           setSelectionModel(e);
           const selectedIDs = new Set(e);
           if ([...selectedIDs].length > 0) dispatch(setSelectedDirectionsIDs([...selectedIDs]));
@@ -226,7 +223,7 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
         }
       />
     </DataTablePMDSkeleton>
-  )
+  );
 }
 
 export default DataTableDIR;
