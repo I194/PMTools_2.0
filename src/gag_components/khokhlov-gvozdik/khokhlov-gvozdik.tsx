@@ -2,8 +2,8 @@ import React, { createElement as e, useEffect, useState } from 'react';
 import { ZoomedLambertGraph } from "../ZoomedLambertGraph/ZoomedLambertGraph";
 import styles from "./khokhlov-gvozdik.module.scss" 
 import { Footer, NavPanel } from "../../components/MainPage";
-import {CACTable} from "../CACTable/CACTable";
-import {CACResultTable} from "../CACResultTable/CACResultTable";
+import CACTable from "../CACTable/CACTable";
+import {CACResultTable} from "../CACResultTableTest/CACResultTable";
 
 import Tables from '../../pages/DIRPage/Tables';
 import Graphs from '../../pages/DIRPage/Graphs';
@@ -38,6 +38,7 @@ import HelpCenterOutlinedIcon from '@mui/icons-material/HelpCenterOutlined';
 import Tooltip from '@mui/material/Tooltip';   
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import { useMediaQuery } from 'react-responsive';
+import CACResTable from '../CACResTable/CACResTable';
 
 export function Khokhlov_Gvozdik() {
   
@@ -191,8 +192,6 @@ export function Khokhlov_Gvozdik() {
 
         for (var i = 0; i < dir_number; i++)
         {
-            // random_list.push(getRandomfloat(min_lat, max_lat));
-            // random_list.push(getRandomfloat(min_lon, max_lon));
             random_list.push(getRandomfloat(minlot, maxlot));
             random_list.push(getRandomfloat(minlat, maxlat));
         }
@@ -497,17 +496,23 @@ export function Khokhlov_Gvozdik() {
         else setShowUploadModal(false);
     }, [dataToShow]);
 
+
+
+
+
+
+
     if (unsupportedResolution) return <>Размер окна должен быть не меньше чем 720x560</>
     return (
         <div className={styles.main_container}>
             <h3 className={styles.lowScreen}>Размер окна должен быть не меньше чем 720x560</h3>
             
             
-            <div className={styles.table2_container + ' ' + styles.commonContainer}>
+            {/* <div className={styles.table2_container + ' ' + styles.commonContainer}>
                 <CACResultTable 
                     rows={ResultTableRow}
                 />
-            </div>
+            </div> */}
             
             
             <div className={styles.graph_container + ' ' + styles.commonContainer}>
@@ -533,9 +538,12 @@ export function Khokhlov_Gvozdik() {
 
             </div>
 
-            <div className={styles.table_container + ' ' + styles.commonContainer}>
-                {/* <CACTable /> */}
-                <Tables dataToShow={dataToShow}/>     
+
+
+                <CACTable dataToShow={dataToShow}/> 
+                {/* <CACResTable dataToShow={dataToShow}/>   */}
+
+            
                 <ModalWrapper
                     open={showUploadModal}
                     setOpen={setShowUploadModal}
@@ -544,9 +552,24 @@ export function Khokhlov_Gvozdik() {
                 >
                 <UploadModal page='dir' />
                 </ModalWrapper>
+
+
+                <div className={styles.table2_container + ' ' + styles.commonContainer}>
+
+                </div>
+
+                {/* <div className={styles.table_container + ' ' + styles.commonContainer}> */}
+                {/* </div> */}
+
+                {/* <div className={styles.table2_container + ' ' + styles.commonContainer}>
+                </div> */}
+
+            {/* <div className={styles.table_container + ' ' + styles.commonContainer}> */}
+                {/* <CACTable /> */}
+                
                 
                 {/* for debug */}
-                <h3>Debug panel</h3>
+                {/* <h3>Debug panel</h3>
 
                 <div className={styles.debug}>
                     
@@ -571,9 +594,9 @@ export function Khokhlov_Gvozdik() {
                     </div>
                 </div>
 
-                <br></br>
+                <br></br> */}
 
-            </div>
+            {/* </div> */}
 
 
 

@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
 import styles from '../khokhlov-gvozdik/khokhlov-gvozdik.module.scss';
-import CACDataTable from '../CACDataTable/CACDataTable';
 import { useAppSelector } from '../../services/store/hooks';
 import { IDirData, StatisitcsInterpretationFromDIR } from "../../utils/GlobalTypes";
 import { DataTableDIR, StatisticsDataTableDIR } from '../../components/AppLogic';
@@ -8,27 +7,13 @@ import { useTheme } from '@mui/material/styles';
 import {
   bgColorMain,
 } from '../../utils/ThemeConstants';
-
-
-// export function CACTable() {
-
-
-//   return (
-//     <div style={{ height: 400, width: '100%' }}>
-     
-//     </div>
-//   );
-// }
-
-
-
-
+import CACResultTable from '../CACResultTable/CACResultTable';
 
 interface ITables {
   dataToShow: IDirData | null;
 };
 
-const CACTable: FC<ITables> = ({ dataToShow }) => {
+const CACResTable: FC<ITables> = ({ dataToShow }) => {
 
 
 // export function CACTable({ dataToShow }) {
@@ -46,16 +31,15 @@ const CACTable: FC<ITables> = ({ dataToShow }) => {
 
   return (
     <div 
-    className={styles.table_container + ' ' + styles.commonContainer}
-    // style={{backgroundColor: bgColorMain(theme.palette.mode)}}
-    >
-        <CACDataTable data={dataToShow}/>
 
+      className={styles.table2_container + ' ' + styles.commonContainer}
+      // style={{backgroundColor: bgColorMain(theme.palette.mode)}}
+    >
         {/* <DataTableDIR data={dataToShow}/> */}
+        <CACResultTable data={interpretations}/>
+      
     </div>
   )
 };
 
-export default CACTable;
-
-
+export default CACResTable;
