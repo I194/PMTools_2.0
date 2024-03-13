@@ -132,6 +132,7 @@ const dirPage = createSlice({
     toggleShowVGPMean (state) {
       state.showVGPMean = !state.showVGPMean;
     }
+    
   },
   extraReducers: (builder) => {
   }

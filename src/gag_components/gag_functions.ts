@@ -277,39 +277,42 @@ export function GeoVdek(phiAngle: number, lmbdAngle: number)
         point = RotateAroundV(point, get_perp(point, [0, 1, 0]), -lmbdAngle);
     }
 
-    if (phiAngle > 90 && phiAngle < 180 && lmbdAngle > -90 && lmbdAngle < 0){
+    else if (phiAngle > 90 && phiAngle < 180 && lmbdAngle > -90 && lmbdAngle < 0){
         point = RotateAroundY(point, phiAngle);
         point = RotateAroundV(point, get_perp(point, [0, 1, 0]), -lmbdAngle);
     }
 
-    if (phiAngle > 0 && phiAngle < 90 && lmbdAngle > 0 && lmbdAngle < 90){
+    else if (phiAngle > 0 && phiAngle < 90 && lmbdAngle > 0 && lmbdAngle < 90){
         point = RotateAroundY(point, phiAngle);
         point = RotateAroundV(point, get_perp(point, [0, -1, 0]), lmbdAngle);
     }
 
-    if (phiAngle > 90 && phiAngle < 180 && lmbdAngle > 0 && lmbdAngle < 90){
+    else if (phiAngle > 90 && phiAngle < 180 && lmbdAngle > 0 && lmbdAngle < 90){
         point = RotateAroundY(point, phiAngle);
         point = RotateAroundV(point, get_perp(point, [0, -1, 0]), lmbdAngle);
     }
 
-    if (phiAngle > -90 && phiAngle < 0 && lmbdAngle > -90 && lmbdAngle < 0){
+    else if (phiAngle > -90 && phiAngle < 0 && lmbdAngle > -90 && lmbdAngle < 0){
         point = RotateAroundY(point, phiAngle);
         point = RotateAroundV(point, get_perp(point, [0, 1, 0]), -lmbdAngle);
     }
 
-    if (phiAngle > -180 && phiAngle < -90 && lmbdAngle > -90 && lmbdAngle < 0){
+    else if (phiAngle > -180 && phiAngle < -90 && lmbdAngle > -90 && lmbdAngle < 0){
         point = RotateAroundY(point, phiAngle);
         point = RotateAroundV(point, get_perp(point, [0, -1, 0]), lmbdAngle);
     }
 
-    if (phiAngle > -90 && phiAngle < 0 && lmbdAngle > 0 && lmbdAngle < 90){
+    else if (phiAngle > -90 && phiAngle < 0 && lmbdAngle > 0 && lmbdAngle < 90){
         point = RotateAroundY(point, phiAngle);
         point = RotateAroundV(point, get_perp(point, [0, -1, 0]), lmbdAngle);
     }
 
-    if (phiAngle > -180 && phiAngle < -90 && lmbdAngle > 0 && lmbdAngle < 90){
+    else if (phiAngle > -180 && phiAngle < -90 && lmbdAngle > 0 && lmbdAngle < 90){
         point = RotateAroundY(point, phiAngle);
         point = RotateAroundV(point, get_perp(point, [0, -1, 0]), lmbdAngle);
+    }
+    else {
+        point = [1, 1, 1]
     }
     // TODO: if dir[0] = 0 || dir[1] == 0 ???!
     return point;

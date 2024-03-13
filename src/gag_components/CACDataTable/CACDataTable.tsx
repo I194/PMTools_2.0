@@ -51,6 +51,7 @@ import Direction from "../../../src/utils/graphs/classes/Direction";
 
 interface IDataTableDIR {
   data: IDirData | null;
+  selData?: number[] | null;
 };
 
 const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
@@ -91,6 +92,8 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
 
   const toggleAllRowsPolarity = (event: any) => {
     reversedDirectionsIDs.length > 0 ? 
+      
+
       dispatch(setReversedDirectionsIDs([])) : 
       dispatch(setReversedDirectionsIDs(data?.interpretations?.map(interpretation => interpretation.id) ?? []));
   };
@@ -187,7 +190,7 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
     col.hideSortIcons = true;
   });
   
-  if (!data) return <DataTableDIRSkeleton />;
+  if (!data) return <></>;
   let visibleIndex = 1;
   const rows: Array<DataGridDIRFromDIRRow> = data.interpretations.map((interpretation, index) => {
     const { id, label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, MADgeo, Kgeo, MADstrat, Kstrat, comment } = interpretation;
@@ -222,6 +225,8 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
 
   return (
     // <DataTablePMDSkeleton>
+    <>
+
       <DataGrid 
         rows={rows} 
         columns={columns} 
@@ -234,6 +239,7 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
           else dispatch(setSelectedDirectionsIDs(null));
           const selectedRows = rows.filter((r) => selectedIDs.has(r.id));
           setSelectedRows(selectedRows);
+          console.log(selectedRows);
         }}
         components={{
         //   Toolbar: DIRInputDataTableToolbar, 
@@ -253,7 +259,7 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
           (params) =>  hiddenDirectionsIDs.includes(params.row.id) ? styles.hiddenRow : ''
         }
       />
-    // </DataTablePMDSkeleton>
+    </>
   )
 }
 

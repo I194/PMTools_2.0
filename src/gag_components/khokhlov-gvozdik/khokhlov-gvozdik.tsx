@@ -9,7 +9,7 @@ import Tables from '../../pages/DIRPage/Tables';
 import Graphs from '../../pages/DIRPage/Graphs';
 import ModalWrapper from '../../components/Common/Modal/ModalWrapper';
 import UploadModal from '../../components/Common/Modal/UploadModal/UploadModal';
-import { IDirData } from '../../utils/GlobalTypes';
+// import { IDirData } from '../../utils/GlobalTypes';
 import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
 import { filesToData } from '../../services/axios/filesAndData';
 import { 
@@ -39,6 +39,10 @@ import Tooltip from '@mui/material/Tooltip';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import { useMediaQuery } from 'react-responsive';
 import CACResTable from '../CACResTable/CACResTable';
+import Direction from "../../../src/utils/graphs/classes/Direction";
+import { DataGridDIRFromDIRRow, IDirData } from "../../../src/utils/GlobalTypes";
+import selectedRows from '../CACDataTable/CACDataTable';
+
 
 export function Khokhlov_Gvozdik() {
   
@@ -59,7 +63,7 @@ export function Khokhlov_Gvozdik() {
         setOcto(number);
     };
 
-    const [step_list, setStepList] = useState<number[]>([]);
+    const [step_list, setStepList] = useState<number[] | undefined >([]);
 
     const [dir_list, setDirList] = useState<[number, number, number][]>([]);
 
@@ -82,10 +86,14 @@ export function Khokhlov_Gvozdik() {
         setQuantiles(quantiles);
 
         var new_ang_list = [];
-        for ( var i = 0; i < dir_number; i ++ ) {
-            new_ang_list.push(quantiles[step_list[i] - 3]);
+        
+        if (step_list != undefined){
+            for ( var i = 0; i < dir_number; i ++ ) {
+                new_ang_list.push(quantiles[step_list[i] - 3]);
+            }
+            setAngleList(new_ang_list);
         }
-        setAngleList(new_ang_list);
+        
     }, [selectedD, apc, selectedP, dir_number, step_list]);
 
 
@@ -108,122 +116,76 @@ export function Khokhlov_Gvozdik() {
         setSelectedAPC(number);
     };
 
+    // const [selectedRows, setSelectedRows] = useState<Array<DataGridDIRFromDIRRow>>([]);
 
-    const generateRandomNumbers = () => {
-        var random_list = [];
-        var dir_number = getRandomInt(5, 7 + 1);
-
-        let maxlot: number = -2.5;
-        let minlot:number = 3;
-        let maxlat: number = -2;
-        let minlat: number = 2;  
-
-        // for debug
-        if (octo == 1){
-            maxlot = 47;
-            minlot = 41;
-            maxlat = -40;
-            minlat = -47;  
-        }
-
-        if (octo == 2){
-            maxlot = 137;
-            minlot = 130;
-            maxlat = -40;
-            minlat = -47;  
-        }
-
-        if (octo == 3){
-            maxlot = 47;
-            minlot = 40;
-            maxlat = 47;
-            minlat = 40;  
-        }
-
-        if (octo == 4){
-            maxlot = 137;
-            minlot = 130;
-            maxlat = 47;
-            minlat = 40;  
-        }
-
-        if (octo == 5){
-            maxlot = -40;
-            minlot = -47;
-            maxlat = -40;
-            minlat = -47;  
-        }
-
-        if (octo == 6){
-            maxlot = -130;
-            minlot = -137;
-            maxlat = -40;
-            minlat = -47;  
-        }
-
-        if (octo == 7){
-            maxlot = -40;
-            minlot = -47;
-            maxlat = 47;
-            minlat = 40;  
-        }
-
-        if (octo == 8){
-            maxlot = -130;
-            minlot = -137;
-            maxlat = 47;
-            minlat = 40;  
-        }
-
-        if (octo == 9){
-            maxlot = 8;
-            minlot = -6;
-            maxlat = 89;
-            minlat = 78;  
-        }
-
-        if (octo == 10){
-            maxlot = 8;
-            minlot = -6;
-            maxlat = -89;
-            minlat = -78;  
-        }
+    const getData = () => {
+        
+        // dataToShow.name
 
 
-        for (var i = 0; i < dir_number; i++)
-        {
-            random_list.push(getRandomfloat(minlot, maxlot));
-            random_list.push(getRandomfloat(minlat, maxlat));
-        }
-
-        var dir_list: [number, number, number][] = [];
-
-        var step_list = [];
-        var paleo_data: number[];
-        var step = 0;
-
-        let testDir = (GeoVdek(20, 60));
-        var random_dir = NormalizeV( testDir );
-        random_dir = NormalizeV( [ getRandomfloat(0, 1), getRandomfloat(0, 1), getRandomfloat(0, 1) ] );
-        random_dir = NormalizeV( [ 1, 1, 1 ] );
-        var random_angle = getRandomfloat(0, 180);  
-        random_angle = 0;  
-
-        for ( var i = 0; i < dir_number; i ++ ) {   
-
-            paleo_data = GeoVdek(random_list[i * 2], random_list[i * 2 + 1])
-            // paleo_data = NormalizeV(RotateAroundV(paleo_data, random_dir, random_angle));
-            step = getRandomInt(6, quantiles.length);
+        // for (let i = 0; i < dataToShow.lenght(); )
+        
+        //   dataToShow.interpretations.map(interpretation => (
+        //     interpretation.id
+        //     interpretation.label
+        //     interpretation.code
+        //     interpretation.stepRange
+              
+         
 
 
-            step_list.push(step);
+        // Мне нужно чтобы ```let readDir: string[] | undefined = dataToShow?.interpretations.map(interpretation => interpretation.stepRange);```
+        // ```let dir_list: [number, number, number][] = [];```
 
-            //------------------------fix------------------------
+        
+        
+        let step_list: number[] | undefined = dataToShow?.interpretations.map(interpretation => interpretation.stepCount);
+
+        let igeoList: number[] | undefined = dataToShow?.interpretations.map(interpretation => interpretation.Igeo);
+        let dgeoList: number[] | undefined = dataToShow?.interpretations.map(interpretation => interpretation.Dgeo);
+        let idList: number[] | undefined = dataToShow?.interpretations.map(interpretation => interpretation.id);
+        
+        let dir_list: [number, number, number][] = [];
+        let paleo_data: number[] = [];
+        
+        let dir_number = 0;
+        
+
+        // let testDir = (GeoVdek(20, 60));
+        if (igeoList != undefined && dgeoList != undefined && idList != undefined){
+
+            dir_number = igeoList.length;
+
+            for ( var i = 0; i < igeoList.length; i ++ ) {   
+                
+                if (selectedDirectionsIDs != null){
+                    for ( var j = 0; j < selectedDirectionsIDs.length; j ++ ) { 
+                        if (idList[i] == selectedDirectionsIDs[j]){
+                            if (dgeoList[i] > 180){
+                                paleo_data = GeoVdek(dgeoList[i] - 360, igeoList[i]);
             
-            // paleo_data = NormalizeV([-1 + getRandomfloat(0, 0.2), -1 + getRandomfloat(0, 0.2), -1  + getRandomfloat(0, 0.2)]);
-            dir_list.push([paleo_data[0], paleo_data[1], paleo_data[2]]);
-        }
+                            }
+                            else{
+                                paleo_data = GeoVdek(dgeoList[i], igeoList[i]);
+            
+                            }
+                            // paleo_data = NormalizeV([-1 + getRandomfloat(0, 0.2), -1 + getRandomfloat(0, 0.2), -1  + getRandomfloat(0, 0.2)]);
+                            // console.log(GeoVdek(dgeoList[i], igeoList[i]));
+                            // НУЖНО ЛИ НОРМАЛИЗОВЫВАТЬ???
+                            
+                            // console.log(Math.pow(paleo_data[0] * paleo_data[0] + paleo_data[1] * paleo_data[1] + paleo_data[2] * paleo_data[2], 0.5));
+                            if (paleo_data[0] == 1 && paleo_data[1] == 1 && paleo_data[2] == 1){
+                            }
+                            else {
+                                dir_list.push([paleo_data[0], paleo_data[1], paleo_data[2]]);
+                            }
+                            
+                        }
+                    }
+                }
 
+            }
+        }
         setDirList(dir_list);
         setStepList(step_list);
         setDirNumb(dir_number);
@@ -497,7 +459,7 @@ export function Khokhlov_Gvozdik() {
     }, [dataToShow]);
 
 
-
+    // const [selectedRows, setSelectedRows] = useState<Array<DataGridDIRFromDIRRow>>([]);
 
 
 
@@ -506,7 +468,7 @@ export function Khokhlov_Gvozdik() {
     return (
         <div className={styles.main_container}>
             <h3 className={styles.lowScreen}>Размер окна должен быть не меньше чем 720x560</h3>
-            
+
             
             {/* <div className={styles.table2_container + ' ' + styles.commonContainer}>
                 <CACResultTable 
@@ -541,7 +503,8 @@ export function Khokhlov_Gvozdik() {
 
 
                 <CACTable dataToShow={dataToShow}/> 
-                {/* <CACResTable dataToShow={dataToShow}/>   */}
+                <CACResTable dataToShow={dataToShow}/>  
+
 
             
                 <ModalWrapper
@@ -554,9 +517,13 @@ export function Khokhlov_Gvozdik() {
                 </ModalWrapper>
 
 
-                <div className={styles.table2_container + ' ' + styles.commonContainer}>
+                {/* <div className={styles.table2_container + ' ' + styles.commonContainer}>
+                    {DekVgeo(sred_dir)[0].toFixed(2)}
+                    <br></br>
+                    {DekVgeo(sred_dir)[1].toFixed(2)}
+                    
 
-                </div>
+                </div> */}
 
                 {/* <div className={styles.table_container + ' ' + styles.commonContainer}> */}
                 {/* </div> */}
@@ -634,7 +601,8 @@ export function Khokhlov_Gvozdik() {
                     </select>
 
                     <div className={styles.buttonItem + ' ' + styles.item}>
-                        <button className={styles.button} onClick={calculateResultTable}>Calculate result table</button>
+                        <button className={styles.button} onClick={getData}>Calculate result table</button>
+                        {/* <button className={styles.button} onClick={calculateResultTable}>Calculate result table</button> */}
                     </div>
                         {/* <b>The percentage of the zone from the sphere:</b>
                         {" " + String((zone_square(grid_points.length, points_numb) * 100).toFixed(3))}%.

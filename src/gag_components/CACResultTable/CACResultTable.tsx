@@ -135,7 +135,7 @@ const CACDataTable: FC<IStatisticsDataTableDIR> = ({ data }) => {
     col.disableColumnMenu = true;
   });
 
-  if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
+  if (!data || !data.length) return <></>;
 
   const rows: Array<Omit<DataGridDIRFromDIRRow, | 'id' | 'label'>> = data.map((statistics, index) => {
     const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadiusGeo, Kgeo, confidenceRadiusStrat, Kstrat, comment } = statistics;
@@ -157,6 +157,14 @@ const CACDataTable: FC<IStatisticsDataTableDIR> = ({ data }) => {
   });
 
   return (
+
+    <>
+    {
+      data[0].label
+      
+    }
+
+
 
       <DataGrid 
         rows={rows} 
@@ -189,6 +197,8 @@ const CACDataTable: FC<IStatisticsDataTableDIR> = ({ data }) => {
           Toolbar: DIRStatisticsDataTableToolbar
         }}
       />
+  </>
+
 
   );
 };

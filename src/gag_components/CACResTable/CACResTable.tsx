@@ -35,6 +35,7 @@ const CACResTable: FC<ITables> = ({ dataToShow }) => {
       className={styles.table2_container + ' ' + styles.commonContainer}
       // style={{backgroundColor: bgColorMain(theme.palette.mode)}}
     >
+      
         {/* <DataTableDIR data={dataToShow}/> */}
         <CACResultTable data={interpretations}/>
       
