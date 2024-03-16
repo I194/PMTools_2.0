@@ -1,1 +1,0 @@
-export { default as clamp } from './math/clamp';
