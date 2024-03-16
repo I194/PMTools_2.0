@@ -1,0 +1,27 @@
+.logo {
+  width: 100%;
+  margin-top: 24px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  @media (max-width: 920px) { 
+    display: none;
+  }
+}
+
+.about {
+  padding: 24px 164px;
+  margin-top: 32px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  @media (max-width: 920px) { 
+    padding: 0 8px;
+  }
+}

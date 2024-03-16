@@ -270,8 +270,14 @@ export function GeoVdek(phiAngle: number, lmbdAngle: number)
     // let C: number[] = RotateAroundV([X, Y, Z], [1,0,0], 90);
     // return C;
 
+
+
     let point: number[] = [0, 0, 1];
 
+
+
+
+    
     if (phiAngle > 0 && phiAngle < 90 && lmbdAngle > -90 && lmbdAngle < 0){
         point = RotateAroundY(point, phiAngle);
         point = RotateAroundV(point, get_perp(point, [0, 1, 0]), -lmbdAngle);
@@ -315,6 +321,14 @@ export function GeoVdek(phiAngle: number, lmbdAngle: number)
         point = [1, 1, 1]
     }
     // TODO: if dir[0] = 0 || dir[1] == 0 ???!
+    // point = RotateAroundX(point, 90);
+
+    // if (phiAngle < 0){
+    //     phiAngle += 360;
+    //     let g = DekVgeo([point[0], point[1], point[2]]);
+    //     point = 
+    // }
+
     return point;
 }
 

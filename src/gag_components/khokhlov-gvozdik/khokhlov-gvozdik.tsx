@@ -47,7 +47,59 @@ import selectedRows from '../CACDataTable/CACDataTable';
 
 
 export function Khokhlov_Gvozdik() {
-  
+      //---------------------------------------------------------------------------------------
+    // Ванин код из DIRTable
+    //---------------------------------------------------------------------------------------
+    
+
+    const dispatch = useAppDispatch();
+    const widthLessThan720 = useMediaQuery({ maxWidth: 719 });
+    const heightLessThan560 = useMediaQuery({ maxHeight: 559 });
+    const unsupportedResolution = widthLessThan720 || heightLessThan560;
+
+    const files = useAppSelector(state => state.filesReducer.dirStatFiles);
+    const { dirStatData, currentDataDIRid } = useAppSelector(state => state.parsedDataReducer);
+    const { 
+        statisticsMode, 
+        selectedDirectionsIDs, 
+        hiddenDirectionsIDs, 
+        reversedDirectionsIDs,
+        currentFileInterpretations,
+        allInterpretations
+    } = useAppSelector(state => state.dirPageReducer);
+
+    const [dataToShow, setDataToShow] = useState<IDirData | null>(null);
+    const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (files) dispatch(filesToData({files, format: 'dir'}));
+    }, [files, files?.length]);
+
+    useEffect(() => {
+        if (dirStatData && dirStatData.length > 0) {
+        const dirID = currentDataDIRid || 0;
+        setDataToShow(dirStatData[dirID]);
+        } else setDataToShow(null);
+    }, [dirStatData, currentDataDIRid, hiddenDirectionsIDs]);
+
+    useEffect(() => {
+        if (statisticsMode && !selectedDirectionsIDs) dispatch(showSelectionInput(true));
+        if (statisticsMode && selectedDirectionsIDs && selectedDirectionsIDs.length >= 2 && dataToShow) {
+        const statistics = calculateStatisticsDIR(dataToShow, statisticsMode, selectedDirectionsIDs, reversedDirectionsIDs);
+        statistics.interpretation.label = `${allInterpretations.length}${statistics.interpretation.label}/${currentFileInterpretations.length}`;
+        dispatch(addInterpretation(statistics));
+        dispatch(setStatisticsMode(null));
+        } else dispatch(updateCurrentInterpretation());
+    }, [statisticsMode, selectedDirectionsIDs, dataToShow]);
+
+    useEffect(() => {
+        if (!dataToShow) setShowUploadModal(true);
+        else setShowUploadModal(false);
+    }, [dataToShow]);
+
+
+    // const [selectedRows, setSelectedRows] = useState<Array<DataGridDIRFromDIRRow>>([]);
+
     //-----------------------------------------------------------
     // input data generating
     //-----------------------------------------------------------
@@ -65,9 +117,11 @@ export function Khokhlov_Gvozdik() {
         setOcto(number);
     };
 
-    const [step_list, setStepList] = useState<number[] | undefined >([]);
+    let [step_list, setStepList] = useState<number[] | undefined >([]);
 
     const [dir_list, setDirList] = useState<[number, number, number][]>([]);
+
+
 
     const [dir_number, setDirNumb] = useState<number>(0);
 
@@ -120,6 +174,17 @@ export function Khokhlov_Gvozdik() {
 
     // const [selectedRows, setSelectedRows] = useState<Array<DataGridDIRFromDIRRow>>([]);
 
+    step_list = dataToShow?.interpretations.map(interpretation => interpretation.stepCount);
+
+    let igeoList: number[] | undefined = dataToShow?.interpretations.map(interpretation => interpretation.Igeo);
+    let dgeoList: number[] | undefined = dataToShow?.interpretations.map(interpretation => interpretation.Dgeo);
+    let idList: number[] | undefined = dataToShow?.interpretations.map(interpretation => interpretation.id);
+    
+
+    let paleo_data: number[] = [];
+    
+
+
     const getData = () => {
         
         // dataToShow.name
@@ -141,15 +206,7 @@ export function Khokhlov_Gvozdik() {
 
         
         
-        let step_list: number[] | undefined = dataToShow?.interpretations.map(interpretation => interpretation.stepCount);
 
-        let igeoList: number[] | undefined = dataToShow?.interpretations.map(interpretation => interpretation.Igeo);
-        let dgeoList: number[] | undefined = dataToShow?.interpretations.map(interpretation => interpretation.Dgeo);
-        let idList: number[] | undefined = dataToShow?.interpretations.map(interpretation => interpretation.id);
-        
-        let dir_list: [number, number, number][] = [];
-        let paleo_data: number[] = [];
-        
         let dir_number = 0;
         
 
@@ -165,7 +222,6 @@ export function Khokhlov_Gvozdik() {
                         if (idList[i] == selectedDirectionsIDs[j]){
                             if (dgeoList[i] > 180){
                                 paleo_data = GeoVdek(dgeoList[i] - 360, igeoList[i]);
-            
                             }
                             else{
                                 paleo_data = GeoVdek(dgeoList[i], igeoList[i]);
@@ -347,25 +403,25 @@ export function Khokhlov_Gvozdik() {
     const [ResultTableRow, setResultTableRow] = useState<Row[]>([]);
     const [resultId, setResultId] = useState<number>(1);
 
-    const calculateResultTable = () => {
+    // const calculateResultTable = () => {
         
-        setResultId(resultId + 1);
+    //     setResultId(resultId + 1);
 
-        let newRow = 
-            { 
-                id: resultId, 
-                Code: 'CAC', 
-                N: dir_number, 
-                Lat: DekVgeo(center_zone)[0].toFixed(2), 
-                Lon: DekVgeo(center_zone)[1].toFixed(2), 
-                ZoneRad: 999,
-                FishLat: DekVgeo(sred_dir)[0].toFixed(2),
-                FishLon: DekVgeo(sred_dir)[1].toFixed(2),
-                alpha95: alpha95.toFixed(2)
-            };
+    //     let newRow = 
+    //         { 
+    //             id: resultId, 
+    //             Code: 'CAC', 
+    //             N: dir_number, 
+    //             Lat: DekVgeo(center_zone)[0].toFixed(2), 
+    //             Lon: DekVgeo(center_zone)[1].toFixed(2), 
+    //             ZoneRad: 999,
+    //             FishLat: DekVgeo(sred_dir)[0].toFixed(2),
+    //             FishLon: DekVgeo(sred_dir)[1].toFixed(2),
+    //             alpha95: alpha95.toFixed(2)
+    //         };
         
-        setResultTableRow(prevList => [...prevList, newRow]);
-    };
+    //     setResultTableRow(prevList => [...prevList, newRow]);
+    // };
     
     // useEffect(() => {
 
@@ -410,58 +466,110 @@ export function Khokhlov_Gvozdik() {
     var poly_color = "#5badff";
     var grid_color = '#1975d2';
 
-    //---------------------------------------------------------------------------------------
-    // Ванин код из DIRTable
-    //---------------------------------------------------------------------------------------
+
+
     
+    const generateRandomNumbers = () => {
+        // var random_list = [];
+        // var dir_number = getRandomInt(5, 7 + 1);
+        // let maxlot: number = -2.5;
+        // let minlot:number = 3;
+        // let maxlat: number = -2;
+        // let minlat: number = 2;  
+        // // for debug
+        // if (octo == 1){
+        //     maxlot = 47;
+        //     minlot = 41;
+        //     maxlat = -40;
+        //     minlat = -47;  
+        // }
+        // if (octo == 2){
+        //     maxlot = 137;
+        //     minlot = 130;
+        //     maxlat = -40;
+        //     minlat = -47;  
+        // }
+        // if (octo == 3){
+        //     maxlot = 47;
+        //     minlot = 40;
+        //     maxlat = 47;
+        //     minlat = 40;  
+        // }
+        // if (octo == 4){
+        //     maxlot = 137;
+        //     minlot = 130;
+        //     maxlat = 47;
+        //     minlat = 40;  
+        // }
+        // if (octo == 5){
+        //     maxlot = -40;
+        //     minlot = -47;
+        //     maxlat = -40;
+        //     minlat = -47;  
+        // }
+        // if (octo == 6){
+        //     maxlot = -130;
+        //     minlot = -137;
+        //     maxlat = -40;
+        //     minlat = -47;  
+        // }
+        // if (octo == 7){
+        //     maxlot = -40;
+        //     minlot = -47;
+        //     maxlat = 47;
+        //     minlat = 40;  
+        // }
+        // if (octo == 8){
+        //     maxlot = -130;
+        //     minlot = -137;
+        //     maxlat = 47;
+        //     minlat = 40;  
+        // }
+        // if (octo == 9){
+        //     maxlot = 8;
+        //     minlot = -6;
+        //     maxlat = 89;
+        //     minlat = 78;  
+        // }
+        // for (var i = 0; i < dir_number; i++)
+        // {
+        //     // random_list.push(getRandomfloat(min_lat, max_lat));
+        //     // random_list.push(getRandomfloat(min_lon, max_lon));
+        //     random_list.push(getRandomfloat(minlot, maxlot));
+        //     random_list.push(getRandomfloat(minlat, maxlat));
+        // }
+        // var dir_list: [number, number, number][] = [];
+        // var step_list = [];
+        // var paleo_data: number[];
+        // var step = 0;
+        // let testDir = (GeoVdek(20, 60));
+        // var random_dir = NormalizeV( testDir );
+        // random_dir = NormalizeV( [ getRandomfloat(0, 1), getRandomfloat(0, 1), getRandomfloat(0, 1) ] );
+        // random_dir = NormalizeV( [ 1, 1, 1 ] );
+        // var random_angle = getRandomfloat(0, 180);  
+        // random_angle = 0;  
+        // for ( var i = 0; i < dir_number; i ++ ) {   
+        //     paleo_data = GeoVdek(random_list[i * 2], random_list[i * 2 + 1])
+        //     // paleo_data = NormalizeV(RotateAroundV(paleo_data, random_dir, random_angle));
+        //     step = getRandomInt(6, quantiles.length);
+        //     step_list.push(step);
+        //     //------------------------fix------------------------
+            
+        //     // paleo_data = NormalizeV([-1 + getRandomfloat(0, 0.2), -1 + getRandomfloat(0, 0.2), -1  + getRandomfloat(0, 0.2)]);
+        //     dir_list.push([paleo_data[0], paleo_data[1], paleo_data[2]]);
+        // }
+        // setDirList(dir_list);
+        // setStepList(step_list);
+        // setDirNumb(dir_number);
+        // setAngleList([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    };
 
-    const dispatch = useAppDispatch();
-    const widthLessThan720 = useMediaQuery({ maxWidth: 719 });
-    const heightLessThan560 = useMediaQuery({ maxHeight: 559 });
-    const unsupportedResolution = widthLessThan720 || heightLessThan560;
 
-    const files = useAppSelector(state => state.filesReducer.dirStatFiles);
-    const { dirStatData, currentDataDIRid } = useAppSelector(state => state.parsedDataReducer);
-    const { 
-        statisticsMode, 
-        selectedDirectionsIDs, 
-        hiddenDirectionsIDs, 
-        reversedDirectionsIDs,
-        currentFileInterpretations,
-        allInterpretations
-    } = useAppSelector(state => state.dirPageReducer);
-
-    const [dataToShow, setDataToShow] = useState<IDirData | null>(null);
-    const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
-
-    useEffect(() => {
-        if (files) dispatch(filesToData({files, format: 'dir'}));
-    }, [files, files?.length]);
-
-    useEffect(() => {
-        if (dirStatData && dirStatData.length > 0) {
-        const dirID = currentDataDIRid || 0;
-        setDataToShow(dirStatData[dirID]);
-        } else setDataToShow(null);
-    }, [dirStatData, currentDataDIRid, hiddenDirectionsIDs]);
-
-    useEffect(() => {
-        if (statisticsMode && !selectedDirectionsIDs) dispatch(showSelectionInput(true));
-        if (statisticsMode && selectedDirectionsIDs && selectedDirectionsIDs.length >= 2 && dataToShow) {
-        const statistics = calculateStatisticsDIR(dataToShow, statisticsMode, selectedDirectionsIDs, reversedDirectionsIDs);
-        statistics.interpretation.label = `${allInterpretations.length}${statistics.interpretation.label}/${currentFileInterpretations.length}`;
-        dispatch(addInterpretation(statistics));
-        dispatch(setStatisticsMode(null));
-        } else dispatch(updateCurrentInterpretation());
-    }, [statisticsMode, selectedDirectionsIDs, dataToShow]);
-
-    useEffect(() => {
-        if (!dataToShow) setShowUploadModal(true);
-        else setShowUploadModal(false);
-    }, [dataToShow]);
-
-
-    // const [selectedRows, setSelectedRows] = useState<Array<DataGridDIRFromDIRRow>>([]);
+    // console.log('Lat:');
+    // console.log(DekVgeo(center_zone)[0].toFixed(2));
+    // console.log('Lon:');
+    // console.log(DekVgeo(center_zone)[1].toFixed(2));
+    // console.log('--------------------------------');
 
 
 
@@ -538,7 +646,8 @@ export function Khokhlov_Gvozdik() {
                 
                 
                 {/* for debug */}
-                {/* <h3>Debug panel</h3>
+                <div className={styles.table3_container + ' ' + styles.commonContainer}>
+                <h3>Debug panel</h3>
 
                 <div className={styles.debug}>
                     
@@ -561,11 +670,21 @@ export function Khokhlov_Gvozdik() {
                             <option value={10}>0 -1 0</option>
                         </select>
                     </div>
+
+
                 </div>
 
-                <br></br> */}
+                {/* <br></br> */}
+                {DekVgeo(sred_dir)[0].toFixed(2)}{' ; '}{DekVgeo(sred_dir)[1].toFixed(2)}
+                <br></br>
+                {sred_dir[0].toFixed(2)}{' ; '}{sred_dir[1].toFixed(2)}{' ; '}{sred_dir[2].toFixed(2)}
 
-            {/* </div> */}
+                <br></br>
+                {/* {dgeoList[0].toFixed(2)}{' ; '}{igeoList[0].toFixed(2)} */}
+                {/* {dgeoList}{' ; '} */}
+
+
+            </div>
 
 
 
