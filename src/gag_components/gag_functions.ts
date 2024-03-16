@@ -116,12 +116,17 @@ export function getRandomInt(min: number, max: number) {
     var fmax = Math.floor(max);
     return Math.floor(Math.random() * (fmax - fmin) + fmin); // The maximum is exclusive and the minimum is inclusive
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/integrate_table
 export function getRandomfloat(min: number, max: number) {
     return Math.random() * (max - min) + min;
 }
 
 
 
+<<<<<<< HEAD
 export function DekVgeo(point: number[])
 {
     
@@ -141,6 +146,11 @@ export function DekVgeo(point: number[])
 
 export function GeoVdek(phiAngle: number, lmbdAngle: number)
 {
+=======
+export function GridVdek(phiAngle: number, lmbdAngle: number)
+{
+
+>>>>>>> origin/integrate_table
     let r: number = 1;
     let phi: number = phiAngle * Math.PI / 180;
     let lmbd: number = lmbdAngle * Math.PI / 180;
@@ -150,14 +160,206 @@ export function GeoVdek(phiAngle: number, lmbdAngle: number)
     let Z: number = r * Math.sin(phi);
     
     let C: number[] = RotateAroundV([X, Y, Z], [1,0,0], 90);
+<<<<<<< HEAD
     return C;
+=======
+
+    return C;
+
+}
+
+
+
+export function DekVgeo(point: number[])
+{
+    
+    // point = RotateAroundX(point, 90);
+    // point = RotateAroundZ(point, 90);
+    
+    // let x = point[0];
+    // let y = point[1];
+    // let z = point[2];
+
+    // let R = 1;
+    // let phi = Math.asin(z / R) * 180 / Math.PI;
+    // let lmbd = Math.atan(y / x) * 180 / Math.PI;
+
+    // return [-phi, lmbd];
+
+
+    let dir: number[] = NormalizeV(point);
+    let phi: number = 0;
+    let lmbd: number = 90;
+
+    if (dir[0] > 0 && dir[1] > 0 && dir[2] > 0) {
+        phi = angle_between_v([0, 0, 1], [dir[0], 0, dir[2]])  * 180 / Math.PI;
+        lmbd = -angle_between_v([dir[0], dir[1], dir[2]], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        return [phi, lmbd];
+    }
+
+    if (dir[0] > 0 && dir[1] > 0 && dir[2] < 0) {
+        phi = angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        lmbd = -angle_between_v([dir[0], dir[1], dir[2]], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        return [phi, lmbd];
+    }
+
+    if (dir[0] > 0 && dir[1] < 0 && dir[2] > 0) {
+        phi = angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        lmbd = angle_between_v([dir[0], dir[1], dir[2]], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        return [phi, lmbd];
+    }
+
+    if (dir[0] > 0 && dir[1] < 0 && dir[2] < 0) {
+        phi =  angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        lmbd = angle_between_v([dir[0], dir[1], dir[2]], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        return [phi, lmbd];
+    }
+
+    if (dir[0] < 0 && dir[1] > 0 && dir[2] > 0) {
+        phi =  -angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        lmbd = -angle_between_v([dir[0], dir[1], dir[2]], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        return [phi, lmbd];
+    }
+
+    if (dir[0] < 0 && dir[1] > 0 && dir[2] < 0) {
+        phi = -angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        lmbd = -angle_between_v([dir[0], dir[1], dir[2]], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        return [phi, lmbd];
+    }
+
+    if (dir[0] < 0 && dir[1] < 0 && dir[2] > 0) {
+        phi = -angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        lmbd = angle_between_v([dir[0], dir[1], dir[2]], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        return [phi, lmbd];
+    }
+
+    if (dir[0] < 0 && dir[1] < 0 && dir[2] < 0) {
+        phi = -angle_between_v([0, 0, 1], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        lmbd = angle_between_v([dir[0], dir[1], dir[2]], [dir[0], 0, dir[2]]) * 180 / Math.PI;
+        return [phi, lmbd];
+    }
+    // TODO: if dir[0] = 0 || dir[1] == 0 ???!
+    return [phi, lmbd];
+}
+
+export function getOcto(point: number[]){
+
+    let dir: number[] = NormalizeV(point);
+
+
+    if (dir[0] > 0 && dir[1] > 0 && dir[2] > 0) {
+        return '+++';
+    }
+
+    if (dir[0] > 0 && dir[1] > 0 && dir[2] < 0) {
+        return '++-';
+    }
+
+    if (dir[0] > 0 && dir[1] < 0 && dir[2] > 0) {
+        return '+-+';
+    }
+
+    if (dir[0] > 0 && dir[1] < 0 && dir[2] < 0) {
+        return '+--';
+    }
+
+    if (dir[0] < 0 && dir[1] > 0 && dir[2] > 0) {
+        return '-++';
+    }
+
+    if (dir[0] < 0 && dir[1] > 0 && dir[2] < 0) {
+        return '-+-';
+    }
+
+    if (dir[0] < 0 && dir[1] < 0 && dir[2] > 0) {
+        return '--+';
+    }
+
+    if (dir[0] < 0 && dir[1] < 0 && dir[2] < 0) {
+        return '---';
+    }
+
+    // TODO: if dir[0] = 0 || dir[1] == 0 ???!
+
+    return 0;
+}
+
+export function GeoVdek(phiAngle: number, lmbdAngle: number)
+{
+
+    // let r: number = 1;
+    // let phi: number = phiAngle * Math.PI / 180;
+    // let lmbd: number = lmbdAngle * Math.PI / 180;
+
+    // let X: number = r * Math.cos(phi) * Math.cos(lmbd);
+    // let Y: number = r * Math.cos(phi) * Math.sin(lmbd);
+    // let Z: number = r * Math.sin(phi);
+    
+    // let C: number[] = RotateAroundV([X, Y, Z], [1,0,0], 90);
+    // return C;
+
+    let point: number[] = [0, 0, 1];
+
+    if (phiAngle > 0 && phiAngle < 90 && lmbdAngle > -90 && lmbdAngle < 0){
+        point = RotateAroundY(point, phiAngle);
+        point = RotateAroundV(point, get_perp(point, [0, 1, 0]), -lmbdAngle);
+    }
+
+    else if (phiAngle > 90 && phiAngle < 180 && lmbdAngle > -90 && lmbdAngle < 0){
+        point = RotateAroundY(point, phiAngle);
+        point = RotateAroundV(point, get_perp(point, [0, 1, 0]), -lmbdAngle);
+    }
+
+    else if (phiAngle > 0 && phiAngle < 90 && lmbdAngle > 0 && lmbdAngle < 90){
+        point = RotateAroundY(point, phiAngle);
+        point = RotateAroundV(point, get_perp(point, [0, -1, 0]), lmbdAngle);
+    }
+
+    else if (phiAngle > 90 && phiAngle < 180 && lmbdAngle > 0 && lmbdAngle < 90){
+        point = RotateAroundY(point, phiAngle);
+        point = RotateAroundV(point, get_perp(point, [0, -1, 0]), lmbdAngle);
+    }
+
+    else if (phiAngle > -90 && phiAngle < 0 && lmbdAngle > -90 && lmbdAngle < 0){
+        point = RotateAroundY(point, phiAngle);
+        point = RotateAroundV(point, get_perp(point, [0, 1, 0]), -lmbdAngle);
+    }
+
+    else if (phiAngle > -180 && phiAngle < -90 && lmbdAngle > -90 && lmbdAngle < 0){
+        point = RotateAroundY(point, phiAngle);
+        point = RotateAroundV(point, get_perp(point, [0, -1, 0]), lmbdAngle);
+    }
+
+    else if (phiAngle > -90 && phiAngle < 0 && lmbdAngle > 0 && lmbdAngle < 90){
+        point = RotateAroundY(point, phiAngle);
+        point = RotateAroundV(point, get_perp(point, [0, -1, 0]), lmbdAngle);
+    }
+
+    else if (phiAngle > -180 && phiAngle < -90 && lmbdAngle > 0 && lmbdAngle < 90){
+        point = RotateAroundY(point, phiAngle);
+        point = RotateAroundV(point, get_perp(point, [0, -1, 0]), lmbdAngle);
+    }
+    else {
+        point = [1, 1, 1]
+    }
+    // TODO: if dir[0] = 0 || dir[1] == 0 ???!
+    return point;
+>>>>>>> origin/integrate_table
 }
 
 
 export function vector_length(v:number[]) { return Math.sqrt( v[0] * v[0] + v[1] * v[1] + v[2] * v[2] ); }
 
 export function points_dist(p1:number[], p2:number[]) {
+<<<<<<< HEAD
     return Math.sqrt( (p1[0] - p2[0]) * (p1[0] - p2[0]) + (p1[1] - p2[1]) * (p1[1] - p2[1]) + (p1[2] - p2[2]) * (p1[2] - p2[2]));
+=======
+    return Math.sqrt( 
+            (p1[0] - p2[0]) * (p1[0] - p2[0]) + 
+            (p1[1] - p2[1]) * (p1[1] - p2[1]) + 
+            (p1[2] - p2[2]) * (p1[2] - p2[2])
+        );
+>>>>>>> origin/integrate_table
 }
 
 export function angle_between_v(v1: number[], v2: number[])
@@ -455,6 +657,10 @@ export function lineSphereIntersect(v: number[]) {
 export function convertToLambert(v: number[], fish_dir: number[]) {
     // let my_perp = get_perp([0, 0, 1], fish_dir);
     return lineSphereIntersect(v);
+<<<<<<< HEAD
+=======
+    // return v;
+>>>>>>> origin/integrate_table
 }
 
 export function lambertMass(points: number[][], fish_dir: number[]){
@@ -690,6 +896,7 @@ export function PlotArcInBox(dir: number[], phi:number, window: number, circlePo
     // rotate one point in + with little step
     let rotPoint: number[] = onePoint;
 
+<<<<<<< HEAD
     while (
         rotPoint[1] < topLimit && 
         rotPoint[1] > bottomLimit && 
@@ -700,6 +907,18 @@ export function PlotArcInBox(dir: number[], phi:number, window: number, circlePo
 
         rotPoint = RotateAroundV(rotPoint, dir, -360 / circlePointsNumb);
         points.push( rotPoint );
+=======
+    for ( let i = 0; i < circlePointsNumb; i ++ ) {
+        if (
+            rotPoint[1] < topLimit && 
+            rotPoint[1] > bottomLimit && 
+            rotPoint[0] < rightLimit && 
+            rotPoint[0] > leftLimit 
+        ) {
+            rotPoint = RotateAroundV(rotPoint, dir, -360 / circlePointsNumb);
+            points.push( rotPoint );
+        }
+>>>>>>> origin/integrate_table
     }
 
     points.reverse();
@@ -707,6 +926,7 @@ export function PlotArcInBox(dir: number[], phi:number, window: number, circlePo
     // rotate one point in - with little step
     rotPoint = onePoint;
 
+<<<<<<< HEAD
     while (
         rotPoint[1] < topLimit && 
         rotPoint[1] > bottomLimit && 
@@ -717,6 +937,20 @@ export function PlotArcInBox(dir: number[], phi:number, window: number, circlePo
 
         rotPoint = RotateAroundV(rotPoint, dir, 360 / circlePointsNumb);              
         points.push( rotPoint );
+=======
+
+    for ( let i = 0; i < circlePointsNumb; i ++ ) {
+
+        if (
+            rotPoint[1] < topLimit && 
+            rotPoint[1] > bottomLimit && 
+            rotPoint[0] < rightLimit && 
+            rotPoint[0] > leftLimit 
+        ) {
+            rotPoint = RotateAroundV(rotPoint, dir, 360 / circlePointsNumb);              
+            points.push( rotPoint );
+        }
+>>>>>>> origin/integrate_table
     }
     return points;
 }
@@ -765,6 +999,7 @@ export function getOneCirclePoint(dir: number[], phi:number){
 
 
 
+<<<<<<< HEAD
 
 
 
@@ -772,6 +1007,8 @@ export function getOneCirclePoint(dir: number[], phi:number){
 
 
 
+=======
+>>>>>>> origin/integrate_table
 export function centerToBack(input: number[], dir: number[]){
     let point = input;
     dir = NormalizeV(dir);
@@ -870,6 +1107,100 @@ export function plotParalellCircle(dir: number[], pointsCount: number){
     return res;
 }
 
+<<<<<<< HEAD
+=======
+// эта функция обрезает концы паралелей, выходящие за рамку. концы могут пересекать 
+// рамку через две из 4 сторон рамки. тут рассматриваются все варианты пересечения
+export function cutParEnd(line: number[][], window: number){
+    if (line.length == 0){
+        return [];
+    }
+    let leftLimit: number = -window;
+    let rightLimit: number = window;
+    let topLimit: number = window;
+    let bottomLimit: number = -window;
+
+    let res: number[][] = line;
+    let endPoint: number[] = line[line.length - 1];
+    let startPoint: number[] = line[0];
+
+    if (startPoint[0] < leftLimit) {
+
+        let k:number = (startPoint[1] - res[1][1]) / (startPoint[0] - res[1][0]);
+        let b: number = startPoint[1] - k * startPoint[0];
+        startPoint = [-window, -window * k + b, startPoint[2]];
+
+        for (let i: number = 0; i < res.length - 1; i++){
+            if (res[i][0] < leftLimit){
+                res[i] = startPoint;
+            }
+            else{
+                break;
+            }
+        }
+
+
+    }
+    
+    if (endPoint[0] > rightLimit) {
+
+        let k:number = (endPoint[1] - res[res.length - 2][1]) / (endPoint[0] - res[res.length - 2][0]);
+        let b: number = endPoint[1] - k * endPoint[0];
+        endPoint = [window, window * k + b, endPoint[2]];
+
+        let i: number = res.length - 1;
+        for (let i: number = res.length - 1; i > 1; i--){
+            if (res[i][0] > rightLimit){
+                res[i] = endPoint;
+            }
+            else{
+                break;
+            }
+        }
+
+
+    }
+
+    if (endPoint[1] < bottomLimit) {
+        let i: number = line.length - 1;
+        for (let i: number = line.length - 1; i > 1; i--){
+            if (line[i][1] > -topLimit){
+                res.splice(i + 1, res.length - i + 1);
+                break;
+            }
+        }
+        let k:number = (endPoint[1] - line[line.length - 2][1]) / (endPoint[0] - line[line.length - 2][0]);
+        let b: number = endPoint[1] - k * endPoint[0];
+        endPoint = [(-window - b) / k, -window, endPoint[2]];
+    }
+
+
+    if (startPoint[1] < bottomLimit) {
+        for (let i: number = 0; i < res.length - 1; i++){
+            if (line[i][1] > -topLimit){
+                res = res.slice(i - 1);
+                break;
+            }
+        }
+        let k:number = (startPoint[1] - line[1][1]) / (startPoint[0] - line[1][0]);
+        let b: number = startPoint[1] - k * startPoint[0];
+        startPoint = [(-window - b) / k, -window, startPoint[2]];
+    }
+
+
+    // res[line.length - 1] = endPoint;
+    // res[0] = startPoint;
+    for (let i: number = 0; i < res.length; i++){
+        if (line[i][1] > topLimit){
+            line[i][1] = topLimit;
+        }
+    }
+
+
+    return res;
+
+}
+>>>>>>> origin/integrate_table
 
 
 
@@ -878,6 +1209,131 @@ export function plotParalellCircle(dir: number[], pointsCount: number){
 
 
 
+<<<<<<< HEAD
+=======
+// // эта функция обрезает концы меридианов, выходящие за рамку. концы могут пересекать 
+// // рамку через две из 4 сторон рамки. тут рассматриваются все варианты пересечения
+// // если конец пересекает одну из 4 сторон, то функция меняет его координаты так,
+// // чтобы конец лег на рамку
+
+// for meridians
+export function cutMerEnd(line: number[][], window: number){
+    
+    if (line.length == 0){
+            return [];
+    }
+    let leftLimit: number = -window;
+    let rightLimit: number = window;
+    let topLimit: number = window;
+    let bottomLimit: number = -window;
+
+    let res: number[][] = cutParEnd(line, window);
+    // let res: number[][] = line;
+
+    let endPoint: number[] = res[res.length - 1];
+    let startPoint: number[] = res[0];
+
+
+    if (res[res.length - 1][1] == topLimit){
+        let k: number = (res[res.length - 4][1] - res[res.length - 3][1]) / (res[res.length - 4][0] - res[res.length - 3][0]);
+        let b: number = res[res.length - 4][1] - k * res[res.length - 4][0];
+        
+        res[res.length - 1][0] = (topLimit - b) / k;
+        
+        let i: number = res.length - 1;
+        for (let i: number = res.length - 1; i > 1; i--){
+            if (res[i][1] == topLimit){
+                res[i][0] = res[res.length - 1][0];
+            }
+            else{
+                break;
+            }
+        }
+    
+    }
+
+    if (startPoint[0] > rightLimit) {
+
+        let k:number = (startPoint[1] - res[res.length - 2][1]) / (startPoint[0] - res[res.length - 2][0]);
+        let b: number = startPoint[1] - k * startPoint[0];
+        startPoint = [window, window * k + b, startPoint[2]];
+
+
+        for (let i: number = 0; i < res.length - 1; i++){
+            if (res[i][0] > rightLimit){
+                res[i] = startPoint;
+            }
+            else{
+                break;
+            }
+        }
+    }
+    res[0] = startPoint;
+
+    if (endPoint[0] < leftLimit) {
+
+        let k:number = (endPoint[1] - res[res.length - 2][1]) / (endPoint[0] - res[res.length - 2][0]);
+        let b: number = endPoint[1] - k * endPoint[0];
+        endPoint = [-window, -window * k + b, endPoint[2]];
+
+        let i: number = res.length - 1;
+        for (let i: number = res.length - 1; i > 1; i--){
+            if (res[i][0] < leftLimit){
+                res[i] = endPoint;
+            }
+            else{
+                break;
+            }
+        }
+    }
+
+
+
+    
+    if (res[0][1] < -topLimit) {
+        let k:number = (res[1][1] - res[2][1]) / (res[1][0] - res[2][0]);
+        let b: number = res[1][1] - k * res[1][0];
+        res[0] = [(-window - b) / k, -window, res[0][2]];
+
+
+        for (let i: number = 0; i < res.length - 1; i++){
+            if (res[i][1] < -topLimit){
+                res[i] = res[0];
+            }
+            else{
+                break;
+            }
+        }
+
+    }
+
+
+    
+    if (res[res.length - 1][1] > -bottomLimit) {
+        let k:number = (res[res.length - 1][1] - res[res.length - 2][1]) / (res[res.length - 1][0] - res[res.length - 2][0]);
+        let b: number = res[res.length - 1][1] - k * res[res.length - 1][0];
+        res[res.length - 1] = [(window - b) / k, window, res[res.length - 1][2]];
+
+
+        for (let i: number = res.length - 1; i > 1; i--){
+            if (res[res.length - 1][1] > -bottomLimit){
+                res[i] = res[res.length - 1];
+            }
+            else{
+                break;
+            }
+        }
+
+    }
+
+    return res;
+
+}
+
+
+
+
+>>>>>>> origin/integrate_table
 
 
 

@@ -12,7 +12,11 @@ import OtherHousesIcon from '@mui/icons-material/OtherHouses';
 import { DefaultIconButton } from "../../Common/Buttons";
 import { useTranslation } from "react-i18next";
 import { Menu, MenuItem } from "@mui/material";
+<<<<<<< HEAD
 import {Khokhlov_Gvozdik} from "../../../gag_components/khokhlov-gvozdik";
+=======
+import {Khokhlov_Gvozdik} from "../../../gag_components/khokhlov-gvozdik/khokhlov-gvozdik";
+>>>>>>> origin/integrate_table
 
 const AppNavigation: FC = ({}) => {
 
