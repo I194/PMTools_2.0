@@ -12,8 +12,12 @@ import { getFileName, putParamToString } from '../subFunctions';
  */
 export const toDIR = async (parsedData: IDirData): Promise<void> => {
   const data = parsedData;
+  const interpretationsWithFixedLabel = data.interpretations.map(
+    interpretation => ({...interpretation, label: interpretation.label.slice(0, 6)})
+  );
+  const dataWithFixedLabel: IDirData = {...data, interpretations: interpretationsWithFixedLabel};
 
-  const lines = data.interpretations.map((interpretation: any) => {
+  const lines = dataWithFixedLabel.interpretations.map((interpretation: any) => {
     const line = Object.keys(dataModel_interpretation_from_pca).reduce((line, param) => {
       return line + putParamToString(interpretation[param], dataModel_interpretation_from_pca[param])
     }, '');
