@@ -1,6 +1,28 @@
+const parseSimplifiedInput = (enteredIDs: string, maxIndex: number) => {
+  const trimmedText = enteredIDs.trim();
+
+  if (trimmedText[trimmedText.length - 1] !== '-') {
+    return;
+  }
+
+  const startNumber = Number(trimmedText.split('-')[0]);
+
+  if (typeof startNumber !== 'number') {
+    return;
+  }
+
+  return Array.from({ length: maxIndex - startNumber + 1 }, (_, index) => startNumber + index);;
+}
+
 const parseDotsIndexesInput = (
-  enteredIDs: string
+  enteredIDs: string,
+  maxIndex: number,
 ) => {
+  const simplifiedResult = parseSimplifiedInput(enteredIDs, maxIndex);
+  if (simplifiedResult?.length) {
+    return simplifiedResult;
+  }
+
   // parse id's input (like steps to select)
   // example of valid enteredIDs: 
   // 1-9 || 2,4,8,9 || 2-4;8,9 || 2-4;8,9;12-14

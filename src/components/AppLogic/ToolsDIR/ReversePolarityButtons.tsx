@@ -92,7 +92,8 @@ const ReversePolarityButtons = ({ data }: Props) => {
   };
 
   const handleEnteredDotsIndexesApply = (indexes: string) => {
-    const parsedIndexes = parseDotsIndexesInput(indexes || `1-${data?.interpretations.length}`);
+    const maxIndex = data?.interpretations.length;
+    const parsedIndexes = parseDotsIndexesInput(indexes || `1-${maxIndex}`, maxIndex);
     const IDs = enteredIndexesToIDsDIR(parsedIndexes, hiddenDirectionsIDs, data!);
     dispatch(setSelectedDirectionsIDs(IDs));
     setShowIndexesInput(false);

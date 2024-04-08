@@ -88,6 +88,7 @@ const dirPage = createSlice({
       state.currentInterpretation = action.payload?.interpretation;
       state.currentFileInterpretations.push(action.payload?.interpretation);
       state.allInterpretations.push(action.payload?.interpretation);
+      state.selectedDirectionsIDs = null;
     },
     deleteInterpretation (state, action) {
       const interpretationLabel = action.payload;

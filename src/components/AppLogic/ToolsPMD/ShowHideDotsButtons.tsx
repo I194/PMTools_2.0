@@ -81,7 +81,8 @@ const ShowHideDotsButtons = ({ data }: Props) => {
   };
 
   const handleEnteredStepsApply = (steps: string) => {
-    const parsedIndexes = parseDotsIndexesInput(steps || `1-${data.steps.length}`);
+    const maxIndex = data.steps.length;
+    const parsedIndexes = parseDotsIndexesInput(steps || `1-${maxIndex}`, maxIndex);
     const IDs = enteredIndexesToIDsPMD(parsedIndexes, hiddenStepsIDs, data!);
     dispatch(setSelectedStepsIDs(IDs));
     setShowStepsInput(false);

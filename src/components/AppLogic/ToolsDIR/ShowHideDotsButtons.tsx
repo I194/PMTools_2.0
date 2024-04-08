@@ -86,7 +86,8 @@ const ShowHideDotsButtons = ({ data }: Props) => {
   };
 
   const handleEnteredDotsIndexesApply = (steps: string) => {
-    const parsedIndexes = parseDotsIndexesInput(steps || `1-${data?.interpretations.length}`);
+    const maxIndex = data?.interpretations.length || 0;
+    const parsedIndexes = parseDotsIndexesInput(steps || `1-${maxIndex}`, maxIndex);
     const IDs = enteredIndexesToIDsDIR(parsedIndexes, hiddenDirectionsIDs, data!);
     dispatch(setSelectedDirectionsIDs(IDs));
     setShowIndexesInput(false);
