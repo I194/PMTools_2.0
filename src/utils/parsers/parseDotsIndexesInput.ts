@@ -31,6 +31,10 @@ const parseDotsIndexesInput = (
   const commaSegements = segments.filter(segment => segment.includes(','));
   const dashSegments = segments.filter(segment => segment.includes('-'));
 
+  if (!commaSegements.length && !dashSegments.length) {
+    return [+enteredIDs];
+  }
+
   const commaIDs: Array<number> = [];
   const dashIDs: Array<number> = [];
 

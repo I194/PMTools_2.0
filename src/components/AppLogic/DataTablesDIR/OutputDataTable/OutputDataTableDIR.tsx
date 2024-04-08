@@ -5,44 +5,37 @@ import { useDebounce } from "../../../../utils/GlobalHooks";
 import equal from "deep-equal"
 import { GetDataTableBaseStyle } from "../styleConstants";
 import StatisticsDataTablePMDSkeleton from './OutputDataTableDIRSkeleton';
-import PMDOutputDataTableToolbar from '../../../Common/DataTable/Toolbar/PMDOutputDataTableToolbar';
 import { DataGridDIRFromDIRRow } from "../../../../utils/GlobalTypes";
-import { deleteAllInterpretations, deleteInterpretation, setAllInterpretations, setOutputFilename, updateCurrentFileInterpretations, updateCurrentInterpretation } from "../../../../services/reducers/dirPage";
+import { deleteAllInterpretations, deleteInterpretation, setAllInterpretations, setOutputFilename, updateCurrentFileInterpretations, setLastInterpretationAsCurrent } from "../../../../services/reducers/dirPage";
 import TextField from '@mui/material/TextField';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { 
   DataGrid, 
   GridActionsCellItem, 
-  GridColumnHeaderParams, 
-  GridColumns, 
-  GridEditRowsModel,
   GridValueFormatterParams, 
 } from '@mui/x-data-grid';
 import { useTheme } from '@mui/material/styles';
 import DIROutputDataTableToolbar from "../../../Common/DataTable/Toolbar/DIROutputDataTableToolbar";
+import { useCellModesModel } from "../../hooks";
+import { StatisticsDataTableRow, StatisticsDataTableColumns } from "../types";
 
 const OutputDataTableDIR: FC = () => {
   
   const dispatch = useAppDispatch();
   const theme = useTheme();
+  const {cellModesModel, handleCellModesModelChange } = useCellModesModel();
 
   const data = useAppSelector(state => state.dirPageReducer.allInterpretations);
-  const currentFile = useAppSelector(state => state.dirPageReducer.currentFile);
   const { dirStatData, currentDataDIRid } = useAppSelector(state => state.parsedDataReducer);
-  const [editRowsModel, setEditRowsModel] = useState<GridEditRowsModel>({});
   const [filename, setFilename] = useState<string>('DIR Interpretations');
   const debouncedFilename = useDebounce(filename, 500);
-
-  const handleEditRowsModelChange = useCallback((model: GridEditRowsModel) => {
-    setEditRowsModel(model);
-  }, []);
   
   const handleRowDelete = (label: string) => (event: any) => {
     event.stopPropagation();
     dispatch(deleteInterpretation(label));
     
     // это всё надо упростить и перенести в мидлвару
-    // и ещё заполнять поле currentFile при обновлении currentDataDIR/PMDid (тоже в мидлваре)
+    // upd: зачем?
     const currentFileName = dirStatData![currentDataDIRid || 0]?.name;
     const deletedRowParentFile = data.filter(
       interpretation => interpretation.label === label
@@ -50,7 +43,7 @@ const OutputDataTableDIR: FC = () => {
 
     if (deletedRowParentFile === currentFileName) {
       dispatch(updateCurrentFileInterpretations(deletedRowParentFile));
-      dispatch(updateCurrentInterpretation());
+      dispatch(setLastInterpretationAsCurrent());
     };
   };
 
@@ -59,12 +52,25 @@ const OutputDataTableDIR: FC = () => {
     dispatch(deleteAllInterpretations());
   };
 
-  const columns: GridColumns = [
+  const handleRowUpdate = useCallback((newRow: StatisticsDataTableRow) => {
+    if (!data) return;
+
+    const newInterpretIndex = data.findIndex(interpet => interpet.label === newRow.id);
+    const updatedAllInterpretations = [...data];
+    updatedAllInterpretations[newInterpretIndex] = {...updatedAllInterpretations[newInterpretIndex], comment: newRow.comment};
+
+    dispatch(setAllInterpretations(updatedAllInterpretations));
+
+    const currentFileName = dirStatData![currentDataDIRid || 0]?.name;
+    dispatch(updateCurrentFileInterpretations(currentFileName));
+  }, [data]);
+
+  const columns: StatisticsDataTableColumns = [
     {
       field: 'actions',
       type: 'actions',
       width: 40,
-      renderHeader: (params: GridColumnHeaderParams) => (
+      renderHeader: () => (
         <GridActionsCellItem
           icon={<DeleteIcon />}
           label="Delete all interpretations"
@@ -129,29 +135,9 @@ const OutputDataTableDIR: FC = () => {
     };
   }, [debouncedFilename]);
 
-  useEffect(() => {
-    if (data && Object.keys(editRowsModel).length !== 0) {
-      const updatedData = data.map((interpretation, index) => {
-        const rowId = Object.keys(editRowsModel)[0];
-        const newComment = editRowsModel[rowId]?.comment?.value as string;
-        if (rowId !== interpretation.label) return interpretation;
-        return {
-          ...interpretation,
-          comment: newComment
-        };
-      });
-      if (!equal(updatedData, data)) {
-        dispatch(setAllInterpretations(updatedData));
-        const currentFileName = dirStatData![currentDataDIRid || 0]?.name;
-        dispatch(updateCurrentFileInterpretations(currentFileName));
-        dispatch(updateCurrentInterpretation());
-      }
-    };
-  }, [data, editRowsModel]);
-
   if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
 
-  const rows: Array<Omit<DataGridDIRFromDIRRow, 'id' | 'label'>> = data.map((statistics, index) => {
+  const rows: StatisticsDataTableRow[] = data.map((statistics, index) => {
     const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadiusGeo, Kgeo, confidenceRadiusStrat, Kstrat, comment } = statistics;
     return {
       id: label,
@@ -174,43 +160,44 @@ const OutputDataTableDIR: FC = () => {
     setFilename(event.target.value);
   };  
 
-  return (
-    <>
-      <div className={styles.toolbar}>
-        <TextField
-          id="allInterpretationsPCA_filename"
-          label="File name"
-          value={filename}
-          onChange={handleFilenameChange}
-          variant="standard"
-        />
-      </div>
-      <StatisticsDataTablePMDSkeleton>
-        <DataGrid 
-          rows={rows} 
-          columns={columns} 
-          editRowsModel={editRowsModel}
-          onEditRowsModelChange={handleEditRowsModelChange}
-          sx={{
-            ...GetDataTableBaseStyle(),
-            '& .MuiDataGrid-cell': {
-              padding: '0px 0px',
-            },
-            '& .MuiDataGrid-columnHeader': {
-              padding: '0px 0px',
-            }
-          }}
-          hideFooter={rows.length < 100}
-          density={'compact'}
-          components={{
-            Toolbar: DIROutputDataTableToolbar,
-          }}
-          disableSelectionOnClick={true}
-        />
-      </StatisticsDataTablePMDSkeleton>
-    </>
-    
-  );
+  return <>
+    <div className={styles.toolbar}>
+      <TextField
+        id="allInterpretationsPCA_filename"
+        label="File name"
+        value={filename}
+        onChange={handleFilenameChange}
+        variant="standard"
+      />
+    </div>
+    <StatisticsDataTablePMDSkeleton>
+      <DataGrid 
+        rows={rows} 
+        columns={columns} 
+        cellModesModel={cellModesModel}
+        onCellModesModelChange={handleCellModesModelChange}
+        sx={{
+          ...GetDataTableBaseStyle(),
+          '& .MuiDataGrid-cell': {
+            padding: '0px 0px',
+          },
+          '& .MuiDataGrid-columnHeader': {
+            padding: '0px 0px',
+          }
+        }}
+        hideFooter={rows.length < 100}
+        density={'compact'}
+        components={{
+          Toolbar: DIROutputDataTableToolbar,
+        }}
+        disableRowSelectionOnClick={true}
+        processRowUpdate={(newRow, oldRow) => {
+          handleRowUpdate(newRow);
+          return newRow;
+        }}
+      />
+    </StatisticsDataTablePMDSkeleton>
+  </>;
 };
 
 export default OutputDataTableDIR;

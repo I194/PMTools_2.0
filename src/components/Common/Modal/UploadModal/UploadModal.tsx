@@ -1,7 +1,6 @@
 import { Typography, Button } from "@mui/material";
 import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-import { addDirStatFiles, addTreatmentFiles } from "../../../../services/reducers/files";
 import { useAppDispatch } from "../../../../services/store/hooks";
 import { textColor } from "../../../../utils/ThemeConstants";
 import { UploadButton } from "../../Buttons";
@@ -12,6 +11,7 @@ import examplePCA from '../../../../assets/examples/examplePCA.pmd'
 import exampleDIR from '../../../../assets/examples/exampleDIR.pmm'
 import { useMediaQuery } from "react-responsive";
 import { useTranslation } from "react-i18next";
+import { filesToData } from "../../../../services/axios/filesAndData";
 
 type Props = {
   page: 'pca' | 'dir';
@@ -25,9 +25,9 @@ const UploadModal = ({page}: Props) => {
   const widthLessThan720 = useMediaQuery({ maxWidth: 719 });
 
   const handleFileUpload = (event: any, files?: Array<File>) => {;
-    const acceptedFiles = files ? files : Array.from(event.currentTarget.files);
-    if (page === 'pca') dispatch(addTreatmentFiles(acceptedFiles));
-    if (page === 'dir') dispatch(addDirStatFiles(acceptedFiles));
+    const acceptedFiles: File[] = files ? files : Array.from(event.currentTarget.files);
+    if (page === 'pca') dispatch(filesToData({files: acceptedFiles, format: 'pmd'}));
+    if (page === 'dir') dispatch(filesToData({files: acceptedFiles, format: 'dir'}));
   };
 
   const onDrop = useCallback(acceptedFiles => {

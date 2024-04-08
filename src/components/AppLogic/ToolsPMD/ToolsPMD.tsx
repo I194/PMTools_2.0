@@ -1,25 +1,24 @@
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
-import styles from './ToolsPMD.module.scss';
-import DropdownSelect from '../../Common/DropdownSelect/DropdownSelect';
+import React, { FC, useEffect, useState } from 'react';
 import { ButtonGroupWithLabel } from '../../Common/Buttons';
-import { Button } from '@mui/material';
+import { Button, Tooltip, Typography } from '@mui/material';
 import { Reference } from '../../../utils/graphs/types';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
-import { deleteAllInterpretations, deleteInterepretationByParentFile, setHiddenStepsIDs, setReference, setSelectedStepsIDs, setStatisticsMode, updateCurrentFileInterpretations, updateCurrentInterpretation } from '../../../services/reducers/pcaPage';
+import { 
+  setReference, 
+  setSelectedStepsIDs,
+  setStatisticsMode,
+} from '../../../services/reducers/pcaPage';
 import { IPmdData } from '../../../utils/GlobalTypes';
 import ModalWrapper from '../../Common/Modal/ModalWrapper';
 import InputApply from '../../Common/InputApply/InputApply';
 import ToolsPMDSkeleton from './ToolsPMDSkeleton';
-import OutputDataTablePMD from '../DataTablesPMD/OutputDataTable/OutputDataTablePMD';
 import StatModeButton from './StatModeButton';
-import { setCurrentPMDid } from '../../../services/reducers/parsedData';
 import parseDotsIndexesInput from '../../../utils/parsers/parseDotsIndexesInput';
-import DropdownSelectWithButtons from '../../Common/DropdownSelect/DropdownSelectWithButtons';
 import ShowHideDotsButtons from './ShowHideDotsButtons';
 import { referenceToLabel } from '../../../utils/parsers/labelToReference';
 import { enteredIndexesToIDsPMD } from '../../../utils/parsers/enteredIndexesToIDs';
-import { setTreatmentFiles } from '../../../services/reducers/files';
 import { useTranslation } from 'react-i18next';
+import CommentsToggleButton from './CommentsToggleButton';
 
 interface IToolsPMD {
   data: IPmdData | null;
@@ -31,18 +30,16 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   const { t, i18n } = useTranslation('translation');
 
   const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
-  const { treatmentFiles } = useAppSelector(state => state.filesReducer);
-  const { treatmentData, currentDataPMDid } = useAppSelector(state => state.parsedDataReducer);
-  const { reference, selectedStepsIDs, statisticsMode, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
+  const { 
+    reference, selectedStepsIDs, statisticsMode, hiddenStepsIDs
+  } = useAppSelector(state => state.pcaPageReducer); 
 
-  const [allDataPMD, setAllDataPMD] = useState<Array<IPmdData>>([]);
-  const [currentFileName, setCurrentFileName] = useState<string>('');
   const [coordinateSystem, setCoordinateSystem] = useState<Reference>('geographic');
-  const [allFilesStatOpen, setAllFilesStatOpen] = useState<boolean>(false);
   const [showStepsInput, setShowStepsInput] = useState<boolean>(false);
 
   const availableReferences: Array<Reference> = ['specimen', 'geographic', 'stratigraphic'];
 
+  const [coordinateSystemHotkey, setCoordinateSystemHotkey] = useState<{key: string, code: string}>({key: 'Q', code: 'KeyQ'});
   const [pcaHotkey, setPcaHotkey] = useState<{key: string, code: string}>({key: 'D', code: 'KeyD'});
   const [pca0Hotkey, setPca0Hotkey] = useState<{key: string, code: string}>({key: 'O', code: 'KeyO'});
   const [gcHotkey, setGcHotkey] = useState<{key: string, code: string}>({key: 'G', code: 'KeyG'});
@@ -50,9 +47,12 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   const [unselectHotkey, setUnselectHotkey] = useState<{key: string, code: string}>({key: 'U', code: 'KeyU'});
 
   useEffect(() => {
+    const coordinateSystemHotkeys = hotkeys.find(block => block.title === 'Система координат')?.hotkeys;
     const statHotkeys = hotkeys.find(block => block.title === 'Статистические методы')?.hotkeys;
     const selectionHotkeys = hotkeys.find(block => block.title === 'Выделение точек')?.hotkeys;
-    if (statHotkeys && selectionHotkeys) {
+
+    if (coordinateSystemHotkeys && statHotkeys && selectionHotkeys) {
+      setCoordinateSystemHotkey(coordinateSystemHotkeys.find(hotkey => hotkey.label === 'Прокручивание систем координат')!.hotkey);
       setPcaHotkey(statHotkeys.find(hotkey => hotkey.label === 'PCA')!.hotkey);
       setPca0Hotkey(statHotkeys.find(hotkey => hotkey.label === 'PCA0')!.hotkey);
       setGcHotkey(statHotkeys.find(hotkey => hotkey.label === 'GC')!.hotkey);
@@ -60,12 +60,6 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
       setUnselectHotkey(selectionHotkeys.find(hotkey => hotkey.label === 'Убрать выделение')!.hotkey);
     }
   }, [hotkeys]);
-
-  useEffect(() => {
-    if (treatmentData) {
-      setAllDataPMD(treatmentData);
-    };
-  }, [treatmentData]);
 
   useEffect(() => {
     if ((!selectedStepsIDs || !selectedStepsIDs.length) && statisticsMode) {
@@ -81,25 +75,11 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
     return () => {
       window.removeEventListener("keydown", handleHotkeys);
     };
-  }, [hotkeysActive, hotkeys]);
+  }, [hotkeysActive, hotkeys, reference]);
   
   useEffect(() => {
     setCoordinateSystem(reference);
   }, [reference]);
-
-  useEffect(() => {
-    if (currentDataPMDid !== null) {
-      const filename = allDataPMD[currentDataPMDid]?.metadata.name;
-      if (filename) {
-        setCurrentFileName(filename);
-        dispatch(updateCurrentFileInterpretations(filename));
-        dispatch(updateCurrentInterpretation());
-        dispatch(setSelectedStepsIDs(null));
-        dispatch(setHiddenStepsIDs([]));
-        dispatch(setStatisticsMode(null));
-      } else dispatch(setCurrentPMDid(0));
-    }
-  }, [currentDataPMDid, allDataPMD]);
 
   const handleReferenceSelect = (selectedReference: Reference) => {
     dispatch(setReference(selectedReference));
@@ -108,6 +88,12 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   const handleHotkeys = (event: KeyboardEvent) => {
     const keyCode = event.code;
 
+    if (keyCode === coordinateSystemHotkey.code) {
+      event.preventDefault();
+      const currReferenceIndex = availableReferences.findIndex(coordRef => coordRef === reference);
+      const nextReferenceIndex = (currReferenceIndex + 1) % 3;
+      dispatch(setReference(availableReferences[nextReferenceIndex]));
+    }
     if (keyCode === pcaHotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('pca'))
@@ -140,55 +126,27 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
     setShowStepsInput(false);
   };
 
-  const handleFileSelect = (option: string) => {
-    const pmdID = allDataPMD.findIndex(pmd => pmd.metadata.name === option);
-    dispatch(setCurrentPMDid(pmdID));
-  };
-
-  const handleFileDelete = (option: string) => {
-    if (treatmentFiles) {
-      const updatedFiles = treatmentFiles.filter(file => file.name !== option);
-      dispatch(setTreatmentFiles(updatedFiles));
-      dispatch(deleteInterepretationByParentFile(option));
-      dispatch(updateCurrentInterpretation());
-      dispatch(setSelectedStepsIDs(null));
-      dispatch(setHiddenStepsIDs([]));
-      dispatch(setStatisticsMode(null));
-    };
-  };
-
-  const handleAllFilesDelete = () => {
-    dispatch(setTreatmentFiles([]));
-    dispatch(deleteAllInterpretations());
-    dispatch(updateCurrentInterpretation());
-    dispatch(setSelectedStepsIDs(null));
-    dispatch(setHiddenStepsIDs([]));
-    dispatch(setStatisticsMode(null));
-  };
-
   return (
     <ToolsPMDSkeleton>
-      <DropdownSelectWithButtons 
-        label={t('pcaPage.tools.currentFile.title')}
-        options={allDataPMD.map(pmd => pmd.metadata.name)}
-        defaultValue={currentFileName}
-        onOptionSelect={handleFileSelect}
-        minWidth={'210px'}
-        maxWidth={'210px'}
-        useArrowListeners
-        showDelete
-        onDelete={handleFileDelete}
-        onDeleteAll={handleAllFilesDelete}
-      />
       <ButtonGroupWithLabel label={t('pcaPage.tools.coordinateSystem.title')}>
         {
           availableReferences.map(availRef => (
-            <Button 
-              color={reference === availRef ? 'secondary' : 'primary'}
-              onClick={() => handleReferenceSelect(availRef)}
+            <Tooltip
+              title={<Typography variant='body1'>{coordinateSystemHotkey.key}</Typography>}
+              enterDelay={250}
+              arrow
             >
-              { referenceToLabel(availRef) }
-            </Button>
+              <Button 
+                color={reference === availRef ? 'secondary' : 'primary'}
+                onClick={() => handleReferenceSelect(availRef)}
+                sx={{
+                  borderRadius: '16px',
+                  fontWeight: reference === availRef ? 600 : 400,
+                }}
+              >
+                { referenceToLabel(availRef) }
+              </Button>
+            </Tooltip>
           ))
         }
       </ButtonGroupWithLabel>
@@ -198,20 +156,9 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
         <StatModeButton mode='gc' hotkey={gcHotkey.key}/>
         <StatModeButton mode='gcn' hotkey={gcnHotkey.key}/>
       </ButtonGroupWithLabel>
-      <ButtonGroupWithLabel label={t('pcaPage.tools.seeStats.title')}>
-        <Button onClick={() => setAllFilesStatOpen(true)}>
-          {t('pcaPage.tools.seeStats.label')}
-        </Button>
-      </ButtonGroupWithLabel>
       {/* <ShowHideDotsButtons setShowStepsInput={setShowStepsInput} showStepsInput={showStepsInput}/> */}
       <ShowHideDotsButtons data={data} />
-      <ModalWrapper
-        open={allFilesStatOpen}
-        setOpen={setAllFilesStatOpen}
-        size={{width: '80vw', height: '60vh'}}
-      >
-        <OutputDataTablePMD />
-      </ModalWrapper>
+      <CommentsToggleButton />
       {
         showStepsInput && 
         <ModalWrapper

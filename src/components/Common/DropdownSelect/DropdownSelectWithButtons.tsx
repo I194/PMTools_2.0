@@ -3,9 +3,11 @@ import styles from './DropdownSelect.module.scss';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { FormControl, IconButton, InputLabel, ListItem, ListItemText, MenuItem, Select, SelectChangeEvent,  } from '@mui/material';
+import { FormControl, IconButton, InputLabel, ListItem, ListItemText, MenuItem, Select, SelectChangeEvent, Tooltip, Typography,  } from '@mui/material';
 import DropdownSelect, { IDropdownSelect } from './DropdownSelect';
 import { DefaultIconButton } from '../Buttons';
+import { primaryBorderColor } from '../../../utils/ThemeConstants';
+import { useTheme } from '@mui/material/styles';
 
 interface IDropdownSelectWithButtons extends IDropdownSelect {
   useArrowListeners?: boolean;
@@ -29,6 +31,14 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
 
   const [selectedOption, setSelectedOption] = useState(defaultValue || '');
   const [open, setOpen] = React.useState(false);
+
+  const theme = useTheme();
+
+  useEffect(() => {
+    if (defaultValue) {
+      setSelectedOption(defaultValue);
+    }
+  }, [defaultValue]);
 
   useEffect(() => {
     if (!options.length) setSelectedOption(''); 
@@ -84,15 +94,20 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
   };
   
   return (
-    <div className={styles.DropdownSelectWithButtons}>
+    <div className={styles.DropdownSelectWithButtons} style={{borderColor: primaryBorderColor(theme.palette.mode)}}>
       <DefaultIconButton
         sx={{
           p: 0,
-          mt: '16px'
         }}
         onClick={handleLeftClick}
       >
-        <KeyboardArrowLeftIcon />
+        <Tooltip 
+          title={<Typography variant='body1'>Shift + ←</Typography>}
+          enterDelay={250}
+          arrow
+        >
+          <KeyboardArrowLeftIcon />
+        </Tooltip>
       </DefaultIconButton>
       <FormControl 
         variant="standard" 
@@ -100,10 +115,12 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
           minWidth: minWidth || '200px', 
           width,
           maxWidth,
-          m: m || '0', 
+          m: m || '0',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
-        <InputLabel>{ label }</InputLabel>
         <Select
           value={selectedOption}
           onChange={handleSelect}
@@ -112,12 +129,17 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
           onOpen={() => setOpen(true)}
           sx={{
             margin: 0,
+            border: 0,
+            '::before': {
+              border: 0
+            },
             '& .MuiListItem-root': {
               display: 'none',
             },
             '& .MuiListItemText-root': {
               textOverflow: "ellipsis",
               overflow: 'hidden',
+              margin: 0
             }
           }}
         >
@@ -146,18 +168,22 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
       <DefaultIconButton
         sx={{
           p: 0,
-          mt: '16px'
         }}
         onClick={handleRightClick}
       >
-        <KeyboardArrowRightIcon />
+        <Tooltip 
+          title={<Typography variant='body1'>Shift + →</Typography>}
+          enterDelay={250}
+          arrow
+        >
+          <KeyboardArrowRightIcon />
+        </Tooltip>
       </DefaultIconButton>
       {
         !!onDeleteAll &&
         <DefaultIconButton
           sx={{
             p: 0,
-            mt: '16px'
           }}
           onClick={onDeleteAll}
         >

@@ -21,6 +21,8 @@ interface IModal {
   position?: {left?: string, top?: string};
   isDraggable?: boolean;
   showBottomClose?: boolean;
+  bgColor?: string;
+  borderStyle?: string;
 };
 
 const ModalWrapper: FC<IModal> = ({ 
@@ -31,6 +33,8 @@ const ModalWrapper: FC<IModal> = ({
   position, 
   isDraggable,
   showBottomClose,
+  bgColor,
+  borderStyle,
   children
 }) => {
 
@@ -69,7 +73,8 @@ const ModalWrapper: FC<IModal> = ({
         style={{ 
           ...size,
           ...position,
-          backgroundColor: bgColorMain(theme.palette.mode),
+          backgroundColor: bgColor ? bgColor : bgColorMain(theme.palette.mode),
+          border: borderStyle ? borderStyle : 'none'
         }}
         className={styles.container}
       >

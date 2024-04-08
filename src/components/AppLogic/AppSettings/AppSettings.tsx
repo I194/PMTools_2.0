@@ -4,6 +4,7 @@ import { IconButton, Button, Input } from '@mui/material';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
+import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
 import { useAppDispatch, useAppSelector } from "../../../services/store/hooks";
 import { useTheme } from '@mui/material/styles';
 import {
@@ -19,6 +20,11 @@ import { useTranslation } from "react-i18next";
 import { HotkeysType } from "../../../utils/GlobalTypes";
 import { useDefaultHotkeys } from "../../../utils/GlobalHooks";
 import HelpModal from "../../Common/Modal/HelpModal/HelpModal";
+
+import * as dirPageReducer from '../../../services/reducers/dirPage';
+import OutputDataTablePMD from "../DataTablesPMD/OutputDataTable/OutputDataTablePMD";
+import OutputDataTableDIR from "../DataTablesDIR/OutputDataTable/OutputDataTableDIR";
+import CurrentFileSelector from "./CurrentFileSelector";
 
 interface IAppSettings {
   onFileUpload: (event: any, files?: Array<File>) => void;
@@ -47,6 +53,8 @@ const AppSettings: FC<IAppSettings> = ({
 
   const [showSettings, setShowSettings] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
+  const [showPMDTotalStatisticsOutput, setShowPMDTotalStatisticsOutput] = useState<boolean>(false);
+  const [showDIRTotalStatisticsOutput, setShowDIRTotalStatisticsOutput] = useState<boolean>(false);
 
   const onSettingsClick = () => {
     setShowSettings(true);
@@ -55,6 +63,16 @@ const AppSettings: FC<IAppSettings> = ({
   const onHelpClick = () => {
     setShowHelp(true);
   };
+
+  const onOpenExportModalClick = () => {
+    if (currentPage === 'pca') {
+      setShowPMDTotalStatisticsOutput(true);
+    }
+
+    if (currentPage === 'dir') {
+      setShowDIRTotalStatisticsOutput(true);
+    }
+  }
 
   const loadHotkeys = () => {
     const hotkeysStored: HotkeysType = JSON.parse(localStorage.getItem('hotkeys')!);
@@ -79,11 +97,15 @@ const AppSettings: FC<IAppSettings> = ({
           icon={<SettingsOutlinedIcon />}
           text={t('appLayout.settings.settings')}
           onClick={onSettingsClick}
+          variant='outlined'
+          forceSmall
         />
         <DefaultResponsiveButton
           icon={<HelpOutlineOutlinedIcon />}
           text={t('appLayout.settings.help')}
           onClick={onHelpClick}
+          variant='outlined'
+          forceSmall
         />
         <label 
           htmlFor="upload-file" 
@@ -108,12 +130,17 @@ const AppSettings: FC<IAppSettings> = ({
           <DefaultResponsiveButton
             icon={<UploadFileOutlinedIcon />}
             text={t('appLayout.settings.import')}
-            variant='outlined'
             disabled={currentPage !== 'pca' && currentPage !== 'dir'}
             component="span"
             id="upload-file-button"
           />
         </label>
+        <DefaultResponsiveButton
+          icon={<FileDownloadOutlinedIcon />}
+          text={t('appLayout.settings.export')}
+          onClick={onOpenExportModalClick}
+        />
+        <CurrentFileSelector currentPage={currentPage} /> 
       </div>
       <ModalWrapper
         open={showSettings}
@@ -128,6 +155,20 @@ const AppSettings: FC<IAppSettings> = ({
         // size={{width: '21vw', height: '12vh'}}
       >
         <HelpModal />
+      </ModalWrapper>
+      <ModalWrapper
+        open={showPMDTotalStatisticsOutput}
+        setOpen={setShowPMDTotalStatisticsOutput}
+        size={{width: '80vw', height: '60vh'}}
+      >
+        <OutputDataTablePMD />
+      </ModalWrapper>
+      <ModalWrapper
+        open={showDIRTotalStatisticsOutput}
+        setOpen={setShowDIRTotalStatisticsOutput}
+        size={{width: '80vw', height: '60vh'}}
+      >
+        <OutputDataTableDIR />
       </ModalWrapper>
     </>
   )

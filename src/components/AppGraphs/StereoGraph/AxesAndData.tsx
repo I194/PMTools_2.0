@@ -2,6 +2,8 @@ import React, { FC } from "react";
 import { DotsData, GraphSettings, MeanDirection, TooltipDot } from "../../../utils/graphs/types";
 import { graphSelectedDotColor } from "../../../utils/ThemeConstants";
 import { Axis, Data, Dot } from "../../Common/Graphs";
+import axesNamesByReference from "../../../utils/graphs/formatters/stereo/axesNamesByReference";
+import { useAppSelector } from "../../../services/store/hooks";
 
 interface IAxesAndData {
   graphId: string;
@@ -51,6 +53,9 @@ const AxesAndData: FC<IAxesAndData> = ({
     meanDirection,
   } = dataConstants;
 
+  const { reference } = useAppSelector(state => state.pcaPageReducer);
+  const axesNames = axesNamesByReference(reference);
+
   return (
     <g 
       id={`${graphId}-axes-and-data`}
@@ -69,8 +74,8 @@ const AxesAndData: FC<IAxesAndData> = ({
         <Axis 
           graphId={graphId}
           type='x'
-          name='E'
-          mirrorName='W'
+          name={axesNames.E}
+          mirrorName={axesNames.W}
           zero={zeroY}
           length={width}
           unit={unit}
@@ -82,8 +87,8 @@ const AxesAndData: FC<IAxesAndData> = ({
         <Axis 
           graphId={graphId}
           type='y'
-          name='N'
-          mirrorName='S'
+          name={axesNames.N}
+          mirrorName={axesNames.S}
           mirrorNamePosition={{x: zeroX, y: height + 15}}
           zero={zeroX}
           length={height}

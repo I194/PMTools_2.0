@@ -9,7 +9,7 @@ interface IResetZoomPan {
 
 const ResetZoomPan: FC<IResetZoomPan> = ({ onClick, isUseful }) => {
   return (
-    <div className={styles.projectionSelect}>
+    <div className={styles.resetZoomPan}>
       <Button
         color={isUseful ? 'warning' : 'primary'}
         onClick={onClick}

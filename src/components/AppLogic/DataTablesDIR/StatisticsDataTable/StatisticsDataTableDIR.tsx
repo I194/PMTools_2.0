@@ -1,84 +1,94 @@
-import React, { FC, useEffect, useState, useCallback } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import styles from './StatisticsDataTableDIR.module.scss';
 import { useTheme } from '@mui/material/styles';
-import { DataGrid, GridActionsCellItem, GridColumns, GridColumnHeaderParams, GridValueFormatterParams, GridEditRowsModel, GridCellParams, MuiEvent } from '@mui/x-data-grid';
+import { DataGrid, GridActionsCellItem, GridValueFormatterParams, GridCellParams, MuiEvent, useGridApiRef } from '@mui/x-data-grid';
 import StatisticsDataTablePMDSkeleton from './StatisticsDataTableDIRSkeleton';
 import { GetDataTableBaseStyle } from "../styleConstants";
-import { DataGridDIRFromDIRRow, StatisitcsInterpretationFromDIR } from "../../../../utils/GlobalTypes";
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
-import { deleteInterpretation, setAllInterpretations, updateCurrentFileInterpretations, updateCurrentInterpretation } from "../../../../services/reducers/dirPage";
+import { deleteInterpretation, setAllInterpretations, updateCurrentFileInterpretations, setLastInterpretationAsCurrent, setCurrentInterpretationByLabel, setNextOrPrevInterpretationAsCurrent } from "../../../../services/reducers/dirPage";
 import DIRStatisticsDataTableToolbar from "../../../Common/DataTable/Toolbar/DIRStatisticsDataTableToolbar";
-import equal from "deep-equal"
 import { acitvateHotkeys, deactivateHotkeys } from "../../../../services/reducers/appSettings";
+import { useCellModesModel } from "../../hooks";
+import { IStatisticsDataTableDIR, StatisticsDataTableRow, StatisticsDataTableColumns } from "../types";
+import { useScrollToInterpretationRow } from "../../hooks/useScrollToInterpretationRow";
 
-interface IStatisticsDataTableDIR {
-  data: Array<StatisitcsInterpretationFromDIR> | null;
-};
-
-const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ data }) => {
+const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ currentFileInterpretations }) => {
 
   const dispatch = useAppDispatch();
   const theme = useTheme();
+  const apiRef = useGridApiRef();
+  const { cellModesModel, handleCellModesModelChange } = useCellModesModel();
 
-  const { currentInterpretation } = useAppSelector(state => state.dirPageReducer);
-  const [editRowsModel, setEditRowsModel] = useState<GridEditRowsModel>({});
+  const { currentInterpretation, allInterpretations } = useAppSelector(state => state.dirPageReducer);
   const [currentClass, setCurrentClass] = useState(styles.current_dark);
-
-  const handleEditRowsModelChange = useCallback((model: GridEditRowsModel) => {
-    setEditRowsModel(model);
-  }, []);
 
   useEffect(() => {
     setCurrentClass(theme.palette.mode === 'dark' ? styles.current_dark : styles.current_light);
   }, [theme]);
 
+  useScrollToInterpretationRow({apiRef, pageType: 'dir'});
+
   useEffect(() => {
-    if (data && Object.keys(editRowsModel).length !== 0) {
-      const updatedData = data.map((interpretation, index) => {
-        const rowId = Object.keys(editRowsModel)[0];
-        const newComment = editRowsModel[rowId]?.comment?.value as string;
-        if (rowId !== interpretation.label) return interpretation;
-        return {
-          ...interpretation,
-          comment: newComment
-        };
-      });
-      if (!equal(updatedData, data)) {
-        dispatch(setAllInterpretations(updatedData));
-        dispatch(updateCurrentFileInterpretations(data[0].parentFile));
-        dispatch(updateCurrentInterpretation());
-      }
+    window.addEventListener("keydown", handleArrowBtnClick);
+    return () => {
+      window.removeEventListener("keydown", handleArrowBtnClick);
     };
-  }, [data, editRowsModel]);
+  }, []);
+
+  const handleArrowBtnClick = (e: any) => {
+    const key = (e.code as string);
+    const { shiftKey } = e; 
+    if ((shiftKey) && key === 'ArrowUp') {
+      dispatch(setNextOrPrevInterpretationAsCurrent({ changeDirection: 'up' }));
+    };
+    if ((shiftKey) && key === 'ArrowDown') {
+      dispatch(setNextOrPrevInterpretationAsCurrent({ changeDirection: 'down' }));
+    };
+  }
 
   const handleRowDelete = (id: string) => (event: any) => {
     event.stopPropagation();
     dispatch(deleteInterpretation(id));
-    if (data) {
-      dispatch(updateCurrentFileInterpretations(data[0].parentFile));
-      dispatch(updateCurrentInterpretation());
+    if (currentFileInterpretations) {
+      dispatch(updateCurrentFileInterpretations(currentFileInterpretations[0].parentFile));
+      dispatch(setLastInterpretationAsCurrent());
     };
   };
 
   const handleDeleteAllRows = (event: any) => {
     event.stopPropagation();
-    if (data) {
-      data.forEach(interpretation => {
+    if (currentFileInterpretations) {
+      currentFileInterpretations.forEach(interpretation => {
         dispatch(deleteInterpretation(interpretation.label));
       });
-      dispatch(updateCurrentFileInterpretations(data[0].parentFile));
-      dispatch(updateCurrentInterpretation());
+      dispatch(updateCurrentFileInterpretations(currentFileInterpretations[0].parentFile));
+      dispatch(setLastInterpretationAsCurrent());
     };
   };
 
-  const columns: GridColumns = [
+  const handleRowUpdate = useCallback((newRow: StatisticsDataTableRow) => {
+    if (!currentFileInterpretations) return;
+
+    const newInterpretIndex = allInterpretations.findIndex(interpet => interpet.label === newRow.id);
+    const updatedAllInterpretations = [...allInterpretations];
+    updatedAllInterpretations[newInterpretIndex] = {...updatedAllInterpretations[newInterpretIndex], comment: newRow.comment};
+
+    dispatch(setAllInterpretations(updatedAllInterpretations));
+    dispatch(updateCurrentFileInterpretations(currentFileInterpretations[0].parentFile));
+  }, [allInterpretations, currentFileInterpretations]);
+
+  const setRowAsCurrentInterpretation = (rowId: string) => {
+    dispatch(setCurrentInterpretationByLabel({label: rowId}));
+  }
+
+  const columns: StatisticsDataTableColumns = [
     {
       field: 'actions',
       type: 'actions',
       minWidth: 40,
       width: 40,
-      renderHeader: (params: GridColumnHeaderParams) => (
+      renderHeader: () => (
         <GridActionsCellItem
           icon={<DeleteIcon />}
           label="Delete all interpretations"
@@ -135,9 +145,9 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ data }) => {
     col.disableColumnMenu = true;
   });
 
-  if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
+  if (!currentFileInterpretations || !currentFileInterpretations.length) return <StatisticsDataTablePMDSkeleton />;
 
-  const rows: Array<Omit<DataGridDIRFromDIRRow, | 'id' | 'label'>> = data.map((statistics, index) => {
+  const rows: StatisticsDataTableRow[] = currentFileInterpretations.map((statistics) => {
     const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadiusGeo, Kgeo, confidenceRadiusStrat, Kstrat, comment } = statistics;
     return {
       id: label,
@@ -154,15 +164,16 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ data }) => {
       accuracyStrat: +(Kstrat || 0).toFixed(1),
       comment
     };
-  });
+  }).reverse();
 
   return (
     <StatisticsDataTablePMDSkeleton>
       <DataGrid 
+        apiRef={apiRef}
         rows={rows} 
         columns={columns} 
-        editRowsModel={editRowsModel}
-        onEditRowsModelChange={handleEditRowsModelChange}
+        cellModesModel={cellModesModel}
+        onCellModesModelChange={handleCellModesModelChange}
         onCellEditStart={(params: GridCellParams, event: MuiEvent) => {
           dispatch(deactivateHotkeys());
         }}
@@ -181,12 +192,17 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ data }) => {
         }}
         hideFooter={rows.length < 100}
         density={'compact'}
-        disableSelectionOnClick={true}
+        disableRowSelectionOnClick={true}
         getRowClassName={
           (params) => params.row.id === currentInterpretation?.label ? currentClass : ''
         }
         components={{
           Toolbar: DIRStatisticsDataTableToolbar
+        }}
+        onRowClick={(params) => setRowAsCurrentInterpretation(params.row.id)}
+        processRowUpdate={(newRow, oldRow) => {
+          handleRowUpdate(newRow);
+          return newRow;
         }}
       />
     </StatisticsDataTablePMDSkeleton>

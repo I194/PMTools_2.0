@@ -3,9 +3,9 @@ import style from './InfoButton.module.scss';
 import IconButton from '@mui/material/IconButton';
 import HelpCenterOutlinedIcon from '@mui/icons-material/HelpCenterOutlined';
 import { Popover, Typography } from '@mui/material';
-import { GraphType } from '../../../../../utils/GlobalTypes';
+import { ContentType, GraphType } from '../../../../utils/GlobalTypes';
 import { useTheme } from '@mui/material/styles';
-import { primaryColor } from '../../../../../utils/ThemeConstants';
+import { primaryColor } from '../../../../utils/ThemeConstants';
 import { useTranslation } from 'react-i18next';
 
 const InfoDivider = () => {
@@ -27,16 +27,20 @@ const InfoDivider = () => {
 }
 
 type Props = {
-  graphType: GraphType;
+  contentType: ContentType;
+  position?: {
+    right?: number;
+    top?: number;
+  }
 }
 
-const InfoButton = ({ graphType }: Props) => {
+const InfoButton = ({ contentType, position }: Props) => {
 
   const { t, i18n } = useTranslation('translation');
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
   const content = useMemo(() => {
-    switch (graphType) {
+    switch (contentType) {
       case 'zijd':
         return (
           <>
@@ -125,11 +129,29 @@ const InfoButton = ({ graphType }: Props) => {
             <Typography variant='body2'>{t('graphsInfo.generalAdvice.line1')}<code>'Ctrl'</code> + <code>'-'</code></Typography>
           </>
         )
+      case 'statisticsDataTable':
+        return (
+          <>
+            <Typography variant='h6'>{t('tablesInfo.interpretationSetter.title')}</Typography>
+            <Typography variant='body2'>{t('tablesInfo.interpretationSetter.line1')}</Typography>
+            <ul>
+              <li><Typography variant='body2'>{t('tablesInfo.interpretationSetter.line2')}</Typography></li>
+              <li><Typography variant='body2'>{t('tablesInfo.interpretationSetter.line3')} <code>'Shift'</code> + <code>'Arrow Up/Down'</code></Typography></li>
+            </ul>
+            <InfoDivider />
+            <Typography variant='h6'>{t('tablesInfo.comments.title')}</Typography>
+            <Typography variant='body2'>{t('tablesInfo.comments.line1')}</Typography>
+            <ul>
+              <li><Typography variant='body2'>{t('tablesInfo.comments.line2')}</Typography></li>
+              <li><Typography variant='body2'>{t('tablesInfo.comments.line3')}</Typography></li>
+            </ul>
+          </>
+        )
       default:
         return null;
         break;
     }
-  }, [graphType, i18n, t]);
+  }, [contentType, i18n, t]);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -145,7 +167,13 @@ const InfoButton = ({ graphType }: Props) => {
   if (!content) return null;
 
   return (
-    <div className={style.container}>
+    <div 
+      className={style.container} 
+      style={{
+        top: `${position?.top}px`,
+        right: `${position?.right}px`
+      }}
+    >
       <IconButton 
         color="primary" 
         component="span"

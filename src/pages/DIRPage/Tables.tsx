@@ -30,7 +30,7 @@ const Tables: FC<ITables> = ({ dataToShow }) => {
       className={styles.tables}
       style={{backgroundColor: bgColorMain(theme.palette.mode)}}
     >
-      <StatisticsDataTableDIR data={interpretations}/>
+      <StatisticsDataTableDIR currentFileInterpretations={interpretations}/>
       <DataTableDIR data={dataToShow}/>
     </div>
   )

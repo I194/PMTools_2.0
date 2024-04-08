@@ -6,10 +6,10 @@ import { Cutoff, IDirData, IGraph, RawStatisticsDIR, VGPData } from "../../../ut
 import { SelectableGraph, GraphSymbols } from "../../Common/Graphs";
 import { stereoAreaConstants } from "./StereoConstants";
 import AxesAndData from "./AxesAndData";
-import getInterpretationIDs from "../../../utils/graphs/formatters/getInterpretationIDs";
 import CoordinateSystem from "../../Common/Graphs/CoordinateSystem/CoordinateSystem";
 import dataToStereoDIR from "../../../utils/graphs/formatters/stereo/dataToStereoDIR";
 import { GraphSettings, TMenuItem } from "../../../utils/graphs/types";
+import getInterpretationIDsDIR from "../../../utils/graphs/formatters/getInterpretationIDsDIR";
 
 export interface IStereoGraphDIR extends IGraph {
   data: IDirData;
@@ -36,6 +36,8 @@ const StereoGraphDIR: FC<IStereoGraphDIR> = ({
   const { menuItems, settings } = menuSettings;
   const { reference, currentInterpretation, hiddenDirectionsIDs, reversedDirectionsIDs } = useAppSelector(state => state.dirPageReducer);
   const selectableNodes = useGraphSelectableNodesDIR(graphId); 
+
+  const inInterpretationIDs = useMemo(() => getInterpretationIDsDIR(currentInterpretation, data), [currentInterpretation, data]);
 
   const selectedIDs = useGraphSelectedIDs('dir');
   const {viewHeight, viewWidth, ...areaConstants} = stereoAreaConstants(width, height);
@@ -84,7 +86,7 @@ const StereoGraphDIR: FC<IStereoGraphDIR> = ({
             height={height}
             areaConstants={areaConstants}
             dataConstants={dataConstants}
-            inInterpretationIDs={[]}
+            inInterpretationIDs={inInterpretationIDs}
             selectedIDs={selectedIDs}
             cutoff={cutoff}
             settings={settings}
