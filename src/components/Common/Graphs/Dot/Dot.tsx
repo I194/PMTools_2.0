@@ -85,7 +85,7 @@ interface IDot {
    * @param highlightStatistics Whether to render orange highlights
    * @param showGC Whether to render great circles for dirs with 'gc' or 'gcn' code
    */
-  settings: DotSettings;
+  settings?: DotSettings;
 }
 
 /**
@@ -153,7 +153,11 @@ const Dot: FC<IDot> = ({
     <g>
       {
         [
+<<<<<<< HEAD
+          settings && (((showText || selected) && settings.annotations) &&
+=======
           (settings.annotations) &&
+>>>>>>> upstream/main
           <text 
             id={`${id}__annotation`}
             x={x}
@@ -188,7 +192,7 @@ const Dot: FC<IDot> = ({
             <line x1={x} x2={x} y1={y - 8} y2={y + 8} stroke={graphSelectedDotColor(type)}/>
           </g>,
 
-          confidenceCircle && settings.confidenceCircle &&
+          settings && (confidenceCircle && settings.confidenceCircle &&
           [
             <path 
               d={createStraightPath(confidenceCircle.xyDataSplitted.neg)}
@@ -249,8 +253,8 @@ const Dot: FC<IDot> = ({
               strokeLinecap="round"
               fillOpacity="0"
             />
-          ]
-        ]
+          ])
+  )]
       }
       {/* <circle 
         cx={x} 
@@ -278,7 +282,7 @@ const Dot: FC<IDot> = ({
         onMouseOut={() => handleOut(id)}
       />
       {
-        tooltipData && settings.tooltips && 
+        settings && tooltipData && settings.tooltips && 
           <Tooltip
             position={tooltipData.position} 
             isVisible={tooltipData.isVisible} 
