@@ -67,6 +67,7 @@ export const useDIRGraphSettings = () => {
   const [annotations, setAnnotations] = useState<boolean>(true);
   const [directionID, setDirectionID] = useState<boolean>(true);
   const [directionLabel, setDirectionLabel] = useState<boolean>(false);
+  const [directionComment, setDirectionComment] = useState<boolean>(false);
   const [confidenceCircle, setConfidenceCircle] = useState<boolean>(false);
   const [highlightStatistics, setHighlightStatistics] = useState<boolean>(false);
   const [showGC, setShowGC] = useState<boolean>(true);
@@ -76,7 +77,8 @@ export const useDIRGraphSettings = () => {
     {label: 'Ticks', onClick: () => setTicks(!ticks), state: ticks, divider: true},
     {label: 'Annotations', onClick: () => setAnnotations(!annotations), state: annotations},
     {label: 'Show №', onClick: () => setDirectionID(!directionID), state: directionID},
-    {label: 'Show label', onClick: () => setDirectionLabel(!directionLabel), state: directionLabel, divider: true},
+    {label: 'Show label', onClick: () => setDirectionLabel(!directionLabel), state: directionLabel},
+    {label: 'Show comment', onClick: () => setDirectionComment(!directionComment), state: directionComment, divider: true},
     {label: 'Show confidence circles', onClick: () => setConfidenceCircle(!confidenceCircle), state: confidenceCircle},
     {label: 'Highlight statistics', onClick: () => setHighlightStatistics(!highlightStatistics), state: highlightStatistics},
     {label: 'Show Great Circles (gc/gcn)', onClick: () => setShowGC(!showGC), state: showGC},
@@ -89,6 +91,7 @@ export const useDIRGraphSettings = () => {
       tooltips,
       id: directionID,
       label: directionLabel,
+      showComment: directionComment,
       confidenceCircle,
       highlightStatistics,
       showGC

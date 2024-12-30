@@ -37,7 +37,7 @@ interface IDot {
   type: DotType;
   
   /** Text annotation data for the dot */
-  annotation: {id: string, label: string};
+  annotation: {id: string, label: string, comment: string};
   
   /** Optional tooltip data */
   tooltip?: TooltipDot;
@@ -81,6 +81,7 @@ interface IDot {
    * @param tooltips Whether to show tooltips.
    * @param id Whether to display the ID in the annotation.
    * @param label Whether to display the label in the annotation.
+   * @param showComment Whether to display the comment in the annotation.
    * @param confidenceCircle Whether to render the confidence circle.
    * @param highlightStatistics Whether to render orange highlights
    * @param showGC Whether to render great circles for dirs with 'gc' or 'gcn' code
@@ -163,8 +164,13 @@ const Dot: FC<IDot> = ({
             {
               [
                 settings.id && annotation.id,
+                // Пишем ':' перед label если есть id
                 settings.id && settings.label && ': ',
-                settings.label && annotation.label
+                settings.label && annotation.label,
+                // Переходим на следующую строку прежде чем написать comment, 
+                // если перед ним есть id и/или label
+                settings.id || settings.label && settings.showComment && '\n ',
+                settings.showComment && `${annotation.comment}`
               ]
             }
           </text>,

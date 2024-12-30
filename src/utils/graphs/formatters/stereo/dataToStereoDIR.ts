@@ -38,6 +38,7 @@ const dataToStereoDIR = (
 
   // annotations for dots ('id' field added right in the Data.tsx as dot index)
   const labels = directions.map((direction) => direction.label);
+  const comments = directions.map((direction) => direction.comment);
   const codes = directions.map((direction) => direction.code);
 
   // mean direction calculation
@@ -132,7 +133,7 @@ const dataToStereoDIR = (
         xyData: greatCircle.all, 
         xyDataSplitted: greatCircle, 
         color: '#000'
-      }
+      },
     };
   });
 
@@ -153,6 +154,7 @@ const dataToStereoDIR = (
     dotsData,
     tooltipData,
     labels,
+    comments,
     meanDirection,
   };
 }

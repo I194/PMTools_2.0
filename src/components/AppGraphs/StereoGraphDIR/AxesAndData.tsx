@@ -18,6 +18,7 @@ interface IAxesAndData {
   };
   dataConstants: {
     labels: Array<string>;
+    comments: Array<string>;
     dotsData: DotsData;
     directionalData: Array<[number, number]>;
     tooltipData: Array<TooltipDot>;
@@ -53,6 +54,7 @@ const AxesAndData: FC<IAxesAndData> = ({
     directionalData,
     tooltipData,
     labels,
+    comments,
     dotsData,
     meanDirection,
   } = dataConstants;
@@ -118,6 +120,7 @@ const AxesAndData: FC<IAxesAndData> = ({
           graphId={graphId}
           type='all'
           labels={labels}
+          comments={comments}
           data={dotsData}
           connectDots={false}
           directionalData={directionalData}
@@ -136,7 +139,7 @@ const AxesAndData: FC<IAxesAndData> = ({
             y={meanDirection.xyData[1]} 
             id={`${graphId}-mean-dot`} 
             type={'mean'}
-            annotation={{id: '', label: ''}}
+            annotation={{id: '', label: '', comment: ''}}
             tooltip={meanDirection.tooltip}
             fillColor={meanDirection.dirData[1] > 0 ? graphSelectedDotColor('mean') : 'white'}
             strokeColor={meanDirection.confidenceCircle?.color || 'black'}
