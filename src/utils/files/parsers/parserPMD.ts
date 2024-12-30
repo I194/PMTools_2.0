@@ -23,6 +23,12 @@ const parsePMD = (data: string, name: string): IPmdData => {
     v: +headLine.slice(52, headLine.length).trim().toLowerCase().split('m')[0],
   }
 
+  // there is no standard for demagnetization symbol... and idk why
+  const thermalTypes = ['T', 't'];
+  const alternatingTypes = ['M', 'm'];
+
+  let demagType: 'thermal' | 'alternating field' | undefined = undefined;
+
   const steps = lines.slice(2).map((line, index) => {
 
     // PAL | Xc (Am2) | Yc (Am2) | Zc (Am2) | MAG (A/m) | Dg | Ig | Ds | Is| a95
@@ -40,15 +46,12 @@ const parsePMD = (data: string, name: string): IPmdData => {
     const a95 = +line.slice(68, 74).trim();
     const comment = line.slice(74, line.length).trim();
 
-    // there is no standard for demagnetization symbol... and idk why
-    const demagSmbl = line.slice(0, 1);
-    const thermalTypes = ['T', 't'];
-    const alternatingTypes = ['M', 'm'];
-
-    let demagType: 'thermal' | 'alternating field' | undefined = undefined;
-
-    if (thermalTypes.indexOf(demagSmbl) > -1) demagType = 'thermal';
-    else if (alternatingTypes.indexOf(demagSmbl) > -1) demagType = 'alternating field';
+    if (!demagType) {
+      const demagSmbl = line.slice(0, 1);
+  
+      if (thermalTypes.indexOf(demagSmbl) > -1) demagType = 'thermal';
+      else if (alternatingTypes.indexOf(demagSmbl) > -1) demagType = 'alternating field';
+    }
 
     return {
       id: index + 1,

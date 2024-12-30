@@ -54,7 +54,9 @@ const dataToMag = (
     stepLabels.push(i.toString());
   };
 
-  const demagnetizationType = data.steps[data.steps.length - 1].demagType;
+  // Demagnetization type determined by the first step of demagnetization, 
+  // switches in demagnetization types (methods) are NOT supported
+  const demagnetizationType = data.steps[0].demagType;
   
   return { 
     dotsData, 
