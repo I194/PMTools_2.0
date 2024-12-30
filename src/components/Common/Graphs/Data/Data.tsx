@@ -20,6 +20,9 @@ interface IData {
   
   /** Optional labels for the data points */
   labels?: Array<string>;
+
+  /** Optional comments for the data points */
+  comments?: Array<string>;
   
   /** Array of data points (DotsData) */
   data: DotsData;
@@ -67,6 +70,7 @@ interface IData {
    * @param tooltips Whether to show tooltips.
    * @param id Whether to display the ID in the annotation.
    * @param label Whether to display the label in the annotation.
+   * @param showComment Whether to display the comment in the annotation.
    * @param confidenceCircle Whether to render the confidence circle.
    * @param highlightStatistics Whether to render orange highlights
    * @param showGC Whether to render great circles for dirs with 'gc' or 'gcn' code
@@ -88,6 +92,7 @@ const Data: FC<IData> = ({
   graphId,
   type,
   labels,
+  comments,
   data,
   connectDots = true,
   showDots = true,
@@ -137,7 +142,11 @@ const Data: FC<IData> = ({
                 id={`${graphId}-${type}-dot-${id}`} 
                 key={index} 
                 type={type}
-                annotation={{id: (index + 1).toString(), label: labels ? labels[index] : ''}}
+                annotation={{
+                  id: (index + 1).toString(), 
+                  label: labels ? labels[index] : '', 
+                  comment: comments ? comments[index] : '',
+                }}
                 selected={selectedIDs.includes(id)}
                 tooltip={tooltipData ? tooltipData[index] : undefined}
                 fillColor={

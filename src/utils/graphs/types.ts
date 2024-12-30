@@ -70,6 +70,7 @@ export type DotSettings = {
   tooltips: boolean;
   id?: boolean;
   label?: boolean;
+  showComment?: boolean;
   confidenceCircle?: boolean;
   highlightStatistics?: boolean;
   showGC?: boolean;
