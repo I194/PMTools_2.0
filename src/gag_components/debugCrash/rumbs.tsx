@@ -1,9 +1,14 @@
 import React, { FC } from "react";
 import { useTheme } from '@mui/material/styles';
-import { Cutoff } from "../../../utils/GlobalTypes";
-import { DotsData, GraphSettings, MeanDirection, TooltipDot } from "../../../utils/graphs/types";
-import { graphSelectedDotColor } from "../../../utils/ThemeConstants";
-import { Axis, Data, Dot } from "../../Common/Graphs";
+// import { Cutoff } from "../../../utils/GlobalTypes";
+// import { DotsData, GraphSettings, MeanDirection, TooltipDot } from "../../../utils/graphs/types";
+// import { graphSelectedDotColor } from "../../../utils/ThemeConstants";
+// import { Axis, Data, Dot } from "../../Common/Graphs";
+
+import { Cutoff } from "../../utils/GlobalTypes";
+import { DotsData, GraphSettings, MeanDirection, TooltipDot } from "../../utils/graphs/types";
+import { graphSelectedDotColor } from "../../utils/ThemeConstants";
+import { Axis, Data, Dot } from "../../components/Common/Graphs";
 
 interface IAxesAndData {
 graphId: string;
@@ -18,7 +23,6 @@ graphId: string;
   };
   dataConstants: {
     labels: Array<string>;
-    comments: Array<string>;
     dotsData: DotsData;
     directionalData: Array<[number, number]>;
     tooltipData: Array<TooltipDot>;
@@ -30,7 +34,7 @@ graphId: string;
   settings: GraphSettings;
 };
 
-const AxesAndData: FC<IAxesAndData> = ({ 
+const Rumbs: FC<IAxesAndData> = ({ 
   graphId, width, height,
   areaConstants,
   dataConstants,
@@ -54,7 +58,6 @@ const AxesAndData: FC<IAxesAndData> = ({
     directionalData,
     tooltipData,
     labels,
-    comments,
     dotsData,
     meanDirection,
   } = dataConstants;
@@ -120,7 +123,6 @@ const AxesAndData: FC<IAxesAndData> = ({
           graphId={graphId}
           type='all'
           labels={labels}
-          comments={comments}
           data={dotsData}
           connectDots={false}
           directionalData={directionalData}
@@ -139,7 +141,7 @@ const AxesAndData: FC<IAxesAndData> = ({
             y={meanDirection.xyData[1]} 
             id={`${graphId}-mean-dot`} 
             type={'mean'}
-            annotation={{id: '', label: '', comment: ''}}
+            annotation={{id: '', label: ''}}
             tooltip={meanDirection.tooltip}
             fillColor={meanDirection.dirData[1] > 0 ? graphSelectedDotColor('mean') : 'white'}
             strokeColor={meanDirection.confidenceCircle?.color || 'black'}
@@ -154,4 +156,4 @@ const AxesAndData: FC<IAxesAndData> = ({
   )
 }
 
-export default AxesAndData
+export default Rumbs
