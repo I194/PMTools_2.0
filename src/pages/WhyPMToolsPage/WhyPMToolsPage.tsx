@@ -4,7 +4,7 @@ import { useTheme } from '@mui/material/styles';
 import {
   textColor,
 } from '../../utils/ThemeConstants';
-import { DynamicLogo, NavPanel, About, Description, FeatureCards, Footer } from '../../components/MainPage';
+import { NavPanel, About, Description, FeatureCards, Footer } from '../../components/MainPage';
 import { Typography } from '@mui/material';
 import pmtoolsLogo from './pmtools_logo.png';
 import { useMediaQuery } from 'react-responsive';
