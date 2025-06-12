@@ -114,8 +114,8 @@ const dataToStereoDIR = (
     let a95 = 0;
     if (directions[index]) {
       a95 = reference === 'stratigraphic' 
-        ? directions[index].MADgeo 
-        : directions[index].MADstrat
+        ? directions[index].MADstrat 
+        : directions[index].MADgeo
     }
     const confidenceCircle = createStereoPlaneData(direction, graphSize, a95);
     const greatCircle = codes[index] === 'gc' || codes[index] === 'gcn' ? createStereoPlaneData(direction, graphSize) : undefined;
