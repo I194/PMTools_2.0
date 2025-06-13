@@ -1,0 +1,37 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write     # для OIDC-деплоя
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4          # git clone
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+      # хак для роутинга: index.html → 404.html
+      - run: cp -f dist/index.html dist/404.html
+      - uses: actions/upload-pages-artifact@v2
+        with:
+          path: dist                       # или build, если CRA
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/deploy-pages@v2      # сам деплой
+        id: deployment
