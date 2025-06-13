@@ -7,13 +7,13 @@ on:
 permissions:
   contents: read
   pages: write
-  id-token: write     # для OIDC-деплоя
+  id-token: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4          # git clone
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -21,10 +21,10 @@ jobs:
       - run: npm ci
       - run: npm run build
       # хак для роутинга: index.html → 404.html
-      - run: cp -f dist/index.html dist/404.html
-      - uses: actions/upload-pages-artifact@v2
+      - run: cp -f build/index.html build/404.html
+      - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist                       # или build, если CRA
+          path: build
 
   deploy:
     needs: build
@@ -33,5 +33,5 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/deploy-pages@v2      # сам деплой
+      - uses: actions/deploy-pages@v4
         id: deployment
