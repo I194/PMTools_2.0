@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { ButtonGroupWithLabel } from '../../Common/Buttons';
 import { Button, Tooltip, Typography } from '@mui/material';
 import { Reference } from '../../../utils/graphs/types';
@@ -24,6 +24,8 @@ interface IToolsPMD {
   data: IPmdData | null;
 };
 
+const AVAILABLE_REFERENCES: Array<Reference> = ['specimen', 'geographic', 'stratigraphic'];
+
 const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
 
   const dispatch = useAppDispatch();
@@ -36,8 +38,6 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
 
   const [coordinateSystem, setCoordinateSystem] = useState<Reference>('geographic');
   const [showStepsInput, setShowStepsInput] = useState<boolean>(false);
-
-  const availableReferences: Array<Reference> = ['specimen', 'geographic', 'stratigraphic'];
 
   const [coordinateSystemHotkey, setCoordinateSystemHotkey] = useState<{key: string, code: string}>({key: 'Q', code: 'KeyQ'});
   const [pcaHotkey, setPcaHotkey] = useState<{key: string, code: string}>({key: 'D', code: 'KeyD'});
@@ -70,29 +70,21 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   }, [selectedStepsIDs, statisticsMode]);
 
   useEffect(() => {
-    if (hotkeysActive) window.addEventListener("keydown", handleHotkeys);
-    else window.removeEventListener("keydown", handleHotkeys);
-    return () => {
-      window.removeEventListener("keydown", handleHotkeys);
-    };
-  }, [hotkeysActive, hotkeys, reference]);
-  
-  useEffect(() => {
     setCoordinateSystem(reference);
   }, [reference]);
 
-  const handleReferenceSelect = (selectedReference: Reference) => {
+  const handleReferenceSelect = useCallback((selectedReference: Reference) => {
     dispatch(setReference(selectedReference));
-  };
+  }, [dispatch]);
 
-  const handleHotkeys = (event: KeyboardEvent) => {
+  const handleHotkeys = useCallback((event: KeyboardEvent) => {
     const keyCode = event.code;
 
     if (keyCode === coordinateSystemHotkey.code) {
       event.preventDefault();
-      const currReferenceIndex = availableReferences.findIndex(coordRef => coordRef === reference);
-      const nextReferenceIndex = (currReferenceIndex + 1) % 3;
-      dispatch(setReference(availableReferences[nextReferenceIndex]));
+      const currReferenceIndex = AVAILABLE_REFERENCES.findIndex(coordRef => coordRef === reference);
+      const nextReferenceIndex = (currReferenceIndex + 1) % AVAILABLE_REFERENCES.length;
+      dispatch(setReference(AVAILABLE_REFERENCES[nextReferenceIndex]));
     }
     if (keyCode === pcaHotkey.code) {
       event.preventDefault();
@@ -114,7 +106,15 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
       event.preventDefault();
       dispatch(setSelectedStepsIDs(null));
     };
-  };
+  }, [coordinateSystemHotkey, pcaHotkey, pca0Hotkey, gcHotkey, gcnHotkey, unselectHotkey, reference, dispatch]);
+
+  useEffect(() => {
+    if (!hotkeysActive) return;
+    window.addEventListener("keydown", handleHotkeys);
+    return () => {
+      window.removeEventListener("keydown", handleHotkeys);
+    };
+  }, [hotkeysActive, handleHotkeys]);
 
   if (!data) return <ToolsPMDSkeleton />;
 
@@ -130,7 +130,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
     <ToolsPMDSkeleton>
       <ButtonGroupWithLabel label={t('pcaPage.tools.coordinateSystem.title')}>
         {
-          availableReferences.map(availRef => (
+          AVAILABLE_REFERENCES.map(availRef => (
             <Tooltip
               title={<Typography variant='body1'>{coordinateSystemHotkey.key}</Typography>}
               enterDelay={250}

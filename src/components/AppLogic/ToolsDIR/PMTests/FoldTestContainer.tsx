@@ -53,7 +53,13 @@ const FoldTestContainer = ({ dataToAnalyze }: Props) => {
   const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
-    if (dataToAnalyze && isRunning) foldTestBootstrap(dataToAnalyze, 1000, setDataToShow, setIsRunning);
+    if (!dataToAnalyze || !isRunning) return;
+
+    const cancelBootstrap = foldTestBootstrap(dataToAnalyze, 1000, setDataToShow, setIsRunning);
+
+    return () => {
+      cancelBootstrap?.();
+    };
   }, [dataToAnalyze, isRunning]);
 
   const [wv, wh] = useWindowSize();

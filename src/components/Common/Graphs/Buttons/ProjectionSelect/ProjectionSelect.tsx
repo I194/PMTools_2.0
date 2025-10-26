@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import styles from './ProjectionSelect.module.scss';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from '@mui/material/Button';
@@ -12,13 +12,17 @@ interface IProjectionButton {
   label: Projection
 };
 
+const AVAILABLE_PROJECTIONS: Projection[] = [
+  { y: 'W, UP', x: 'N, N' },
+  { y: 'N, UP', x: 'E, E' },
+  { y: 'N, N', x: 'E, UP' },
+];
+
 const ProjectionButton: FC<IProjectionButton> = ({ label }) => {
   const dispatch = useAppDispatch();
 
   const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
   const { projection, reference } = useAppSelector(state => state.pcaPageReducer); 
-
-  const availableProjections: Projection[] = [{y: 'W, UP', x: 'N, N'}, {y: 'N, UP', x: 'E, E'}, {y: 'N, N', x: 'E, UP'}];
 
   const [projectionHotkey, setProjectionHotkey] = useState<{key: string, code: string}>({key: 'P', code: 'KeyP'});
 
@@ -30,28 +34,28 @@ const ProjectionButton: FC<IProjectionButton> = ({ label }) => {
     }
   }, [hotkeys]);
 
-  useEffect(() => {
-    if (hotkeysActive) window.addEventListener("keydown", handleHotkeys);
-    else window.removeEventListener("keydown", handleHotkeys);
-    return () => {
-      window.removeEventListener("keydown", handleHotkeys);
-    };
-  }, [hotkeysActive, hotkeys, projection]);
-
-  const handleProjectionSelect = () => {
+  const handleProjectionSelect = useCallback(() => {
     dispatch(setProjection(label));
-  };
+  }, [dispatch, label]);
 
-  const handleHotkeys = (event: KeyboardEvent) => {
+  const handleHotkeys = useCallback((event: KeyboardEvent) => {
     const keyCode = event.code;
 
     if (keyCode === projectionHotkey.code) {
       event.preventDefault();
-      const currProjectionIndex = availableProjections.findIndex(proj => proj.y === projection.y);
-      const nextProjectionIndex = (currProjectionIndex + 1) % 3;
-      dispatch(setProjection(availableProjections[nextProjectionIndex]));
+      const currProjectionIndex = AVAILABLE_PROJECTIONS.findIndex(proj => proj.y === projection.y);
+      const nextProjectionIndex = (currProjectionIndex + 1) % AVAILABLE_PROJECTIONS.length;
+      dispatch(setProjection(AVAILABLE_PROJECTIONS[nextProjectionIndex]));
     }
-  }
+  }, [projection, projectionHotkey, dispatch]);
+
+  useEffect(() => {
+    if (!hotkeysActive) return;
+    window.addEventListener("keydown", handleHotkeys);
+    return () => {
+      window.removeEventListener("keydown", handleHotkeys);
+    };
+  }, [hotkeysActive, handleHotkeys]);
 
   return (
     <Tooltip

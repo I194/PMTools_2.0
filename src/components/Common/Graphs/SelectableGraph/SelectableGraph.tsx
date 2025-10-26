@@ -71,7 +71,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
 
   const Viewer = useRef<any>(null);
 
-  const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
+  const { hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
   const [disableCustomZoomPan, setDisableCustomZoomPan] = useState<boolean>(false);
 
   const handleDoubleClick = (event: any) => {
@@ -82,7 +82,7 @@ const SelectableGraph: FC<ISelectableGraph> = ({
 
   const handleHotkeys = useCallback((e: KeyboardEvent) => {
     if (hotkeysListener) hotkeysListener(e);
-  }, [currentPan]);
+  }, [hotkeysListener]);
 
   const [ID, setID] = useState<string>(`${graphId}-graph`);
   const [selectableTargets, setSelectableTargets] = useState<(string | HTMLElement)[]>([]);
@@ -121,12 +121,12 @@ const SelectableGraph: FC<ISelectableGraph> = ({
   }, [handleIsPanning])
 
   useEffect(() => {
-    if (hotkeysActive) window.addEventListener("keydown", handleHotkeys);
-    else window.removeEventListener("keydown", handleHotkeys);
+    if (!hotkeysActive) return;
+    window.addEventListener("keydown", handleHotkeys);
     return () => {
       window.removeEventListener("keydown", handleHotkeys);
     };
-  }, [hotkeysActive, hotkeys, currentPan]);
+  }, [hotkeysActive, handleHotkeys]);
 
   console.log('drag', dragContainerID, document.getElementById(ID))
   
