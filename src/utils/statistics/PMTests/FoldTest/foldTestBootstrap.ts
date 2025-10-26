@@ -17,7 +17,7 @@ const foldTestBootstrap = (
   numberOfSimulations = 1000,
   setResult?: React.Dispatch<React.SetStateAction<FoldTestResult>>,
   setIsRunning?: React.Dispatch<React.SetStateAction<boolean>>
-) => {
+): (() => void) => {
   // Fold Test by L. Tauxe* and G.S. Watson, 1994
   // "We combine eigen analysis and parameter estimation techniques
   // for a newly constituted, more versatile fold test.
@@ -57,26 +57,41 @@ const foldTestBootstrap = (
 
   // No bootstrap, only unfold the data
 
-  let next: {
-    (): { 
-      untilts: number[]; 
-      savedBootstraps: { x: number; y: number; }[][]; 
-    } | undefined; 
-    (): void; 
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+  let cancelled = false;
+
+  const clearTimer = () => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      timeoutId = null;
+    }
+  };
+
+  const scheduleNext = (callback: () => void) => {
+    timeoutId = setTimeout(callback);
+  };
+
+  const finish = () => {
+    clearTimer();
+    if (cancelled) return;
+    if (setResult) setResult({untilts, savedBootstraps});
+    else localStorage.setItem("foldTestBootstrap", JSON.stringify({untilts: untilts, bootstrap: savedBootstraps}));
+    setIsRunning?.(false);
   };
 
   let iterationResult: {index: number, taus: Array<{x: number, y: number}>} = {index: 0, taus: []};
   let iteration: number = 0;
 
-  // Asynchronous bootstrapping
-  (next = () => {
-    // Number of bootstraps were completed
+  const next = () => {
+    if (cancelled) {
+      clearTimer();
+      return;
+    }
+
     if (++iteration > numberOfSimulations) {
-      if (setResult) setResult({untilts, savedBootstraps});
-      else localStorage.setItem("foldTestBootstrap", JSON.stringify({untilts: untilts, bootstrap: savedBootstraps}))
-      setIsRunning?.(false);
-      return {untilts, savedBootstraps};
-    };
+      finish();
+      return;
+    }
 
     iterationResult = unfold(drawBootstrap(vectors), iteration);
 
@@ -86,9 +101,15 @@ const foldTestBootstrap = (
     // Save the first N bootstraps
     if (iteration < numberOfSavedSimulations) savedBootstraps.push(iterationResult.taus);
 
-    // Queue for next bootstrap iteration
-    setTimeout(next);
-  })();
+    scheduleNext(next);
+  };
+
+  next();
+
+  return () => {
+    cancelled = true;
+    clearTimer();
+  };
 };
 
 export default foldTestBootstrap;

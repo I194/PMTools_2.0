@@ -35,13 +35,13 @@ const ReversePolarityButtons = ({ data }: Props) => {
   const [reverseDirs, setReverseDirs] = useState<boolean>(false);
   const [showIndexesInput, setShowIndexesInput] = useState<boolean>(false);
 
-  const onUnreverseClick = () => {
+  const onUnreverseClick = useCallback(() => {
     dispatch(setReversedDirectionsIDs([]));
-  };
+  }, [dispatch]);
 
-  const onReverseClick = () => {
+  const onReverseClick = useCallback(() => {
     setReverseDirs(true);
-  };
+  }, []);
 
   // const [showHotkey, setShowHotkey] = useState<{key: string, code: string}>({key: 'S', code: 'KeyS'});
   // const [hideHotkey, setHideHotkey] = useState<{key: string, code: string}>({key: 'H', code: 'KeyH'});
@@ -61,7 +61,6 @@ const ReversePolarityButtons = ({ data }: Props) => {
       setShowIndexesInput(true);
     }
     if (reverseDirs && selectedDirectionsIDs && selectedDirectionsIDs.length) {
-      console.log(selectedDirectionsIDs)
       dispatch(addReversedDirectionsIDs(selectedDirectionsIDs));
       setReverseDirs(false);
       dispatch(setSelectedDirectionsIDs(null));
@@ -69,16 +68,7 @@ const ReversePolarityButtons = ({ data }: Props) => {
     };
   }, [reverseDirs, selectedDirectionsIDs]);
 
-  useEffect(() => {
-    console.log('what', hotkeysActive)
-    if (hotkeysActive) window.addEventListener("keydown", handleHotkeys);
-    else window.removeEventListener("keydown", handleHotkeys);
-    return () => {
-      window.removeEventListener("keydown", handleHotkeys);
-    };
-  }, [hotkeysActive, hotkeys]);
-
-  const handleHotkeys = (event: KeyboardEvent) => {
+  const handleHotkeys = useCallback((event: KeyboardEvent) => {
     const keyCode = event.code;
 
     if (keyCode === reverseHotkey.code) {
@@ -89,7 +79,15 @@ const ReversePolarityButtons = ({ data }: Props) => {
       event.preventDefault();
       onUnreverseClick();
     };
-  };
+  }, [reverseHotkey, unreverseHotkey, onReverseClick, onUnreverseClick]);
+
+  useEffect(() => {
+    if (!hotkeysActive) return;
+    window.addEventListener("keydown", handleHotkeys);
+    return () => {
+      window.removeEventListener("keydown", handleHotkeys);
+    };
+  }, [hotkeysActive, handleHotkeys]);
 
   const handleEnteredDotsIndexesApply = (indexes: string) => {
     const maxIndex = data?.interpretations.length;

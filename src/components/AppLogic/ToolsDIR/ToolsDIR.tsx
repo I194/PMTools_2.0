@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import ButtonGroupWithLabel from '../../Common/Buttons/ButtonGroupWithLabel/ButtonGroupWithLabel';
 import { Button, Tooltip, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
@@ -30,6 +30,8 @@ interface IToolsDIR {
   data: IDirData | null;
 };
 
+const AVAILABLE_REFERENCES: Array<Reference> = ['geographic', 'stratigraphic'];
+
 const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
 
   const dispatch = useAppDispatch();
@@ -42,8 +44,6 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
   const [showIndexesInput, setShowIndexesInput] = useState<boolean>(false);
   const [showVGP, setShowVGP] = useState<boolean>(false);
   const [showPMTests, setShowPMTests] = useState<boolean>(false);
-
-  const availableReferences: Array<Reference> = ['geographic', 'stratigraphic'];
 
   const [coordinateSystemHotkey, setCoordinateSystemHotkey] = useState<{key: string, code: string}>({key: 'Q', code: 'KeyQ'});
   const [fisherHotkey, setFisherHotkey] = useState<{key: string, code: string}>({key: 'F', code: 'KeyF'});
@@ -77,23 +77,14 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
   }, [selectedDirectionsIDs, statisticsMode]);
 
   // добавляет слушатель нажатий на клавиатуру (для использования сочетаний клавиш)
-  useEffect(() => {
-    if (hotkeysActive) window.addEventListener("keydown", handleHotkeys);
-    else window.removeEventListener("keydown", handleHotkeys);
-    return () => {
-      window.removeEventListener("keydown", handleHotkeys);
-    };
-  }, [hotkeysActive, hotkeys, reference]);
-
-  // обработчик нажатий на клавиатуру
-  const handleHotkeys = (event: KeyboardEvent) => {
+  const handleHotkeys = useCallback((event: KeyboardEvent) => {
     const keyCode = event.code;
 
     if (keyCode === coordinateSystemHotkey.code) {
       event.preventDefault();
-      const currReferenceIndex = availableReferences.findIndex(coordRef => coordRef === reference);
-      const nextReferenceIndex = (currReferenceIndex + 1) % 2;
-      dispatch(setReference(availableReferences[nextReferenceIndex]));
+      const currReferenceIndex = AVAILABLE_REFERENCES.findIndex(coordRef => coordRef === reference);
+      const nextReferenceIndex = (currReferenceIndex + 1) % AVAILABLE_REFERENCES.length;
+      dispatch(setReference(AVAILABLE_REFERENCES[nextReferenceIndex]));
     };
     if (keyCode === fisherHotkey.code) {
       event.preventDefault();
@@ -115,7 +106,15 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
       event.preventDefault();
       dispatch(setSelectedDirectionsIDs([]));
     };
-  };
+  }, [coordinateSystemHotkey, fisherHotkey, mcFaddenHotkey, gcHotkey, gcnHotkey, unselectHotkey, reference, dispatch]);
+
+  useEffect(() => {
+    if (!hotkeysActive) return;
+    window.addEventListener("keydown", handleHotkeys);
+    return () => {
+      window.removeEventListener("keydown", handleHotkeys);
+    };
+  }, [hotkeysActive, handleHotkeys]);
 
   // обработчик выбранной системы координат 
   const handleReferenceSelect = (selectedReference: Reference) => {
@@ -137,7 +136,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
     <ToolsPMDSkeleton>
       <ButtonGroupWithLabel label={t('dirPage.tools.coordinateSystem.title')}>
         {
-          availableReferences.map(availRef => (
+          AVAILABLE_REFERENCES.map(availRef => (
             <Tooltip
               title={<Typography variant='body1'>{coordinateSystemHotkey.key}</Typography>}
               enterDelay={250}

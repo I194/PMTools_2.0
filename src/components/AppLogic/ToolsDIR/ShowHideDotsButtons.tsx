@@ -33,13 +33,13 @@ const ShowHideDotsButtons = ({ data }: Props) => {
   const [hideDirs, setHideDirs] = useState<boolean>(false);
   const [showIndexesInput, setShowIndexesInput] = useState<boolean>(false);
 
-  const onShowClick = () => {
+  const onShowClick = useCallback(() => {
     dispatch(setHiddenDirectionsIDs([]));
-  };
+  }, [dispatch]);
 
-  const onHideClick = () => {
+  const onHideClick = useCallback(() => {
     setHideDirs(true);
-  };
+  }, []);
 
   const [showHotkey, setShowHotkey] = useState<{key: string, code: string}>({key: 'S', code: 'KeyS'});
   const [hideHotkey, setHideHotkey] = useState<{key: string, code: string}>({key: 'H', code: 'KeyH'});
@@ -64,15 +64,7 @@ const ShowHideDotsButtons = ({ data }: Props) => {
     };
   }, [hideDirs, selectedDirectionsIDs]);
 
-  useEffect(() => {
-    if (hotkeysActive) window.addEventListener("keydown", handleHotkeys);
-    else window.removeEventListener("keydown", handleHotkeys);
-    return () => {
-      window.removeEventListener("keydown", handleHotkeys);
-    };
-  }, [hotkeysActive, hotkeys]);
-
-  const handleHotkeys = (event: KeyboardEvent) => {
+  const handleHotkeys = useCallback((event: KeyboardEvent) => {
     const keyCode = event.code;
 
     if (keyCode === showHotkey.code) {
@@ -83,7 +75,15 @@ const ShowHideDotsButtons = ({ data }: Props) => {
       event.preventDefault();
       onHideClick();
     };
-  };
+  }, [showHotkey, hideHotkey, onShowClick, onHideClick]);
+
+  useEffect(() => {
+    if (!hotkeysActive) return;
+    window.addEventListener("keydown", handleHotkeys);
+    return () => {
+      window.removeEventListener("keydown", handleHotkeys);
+    };
+  }, [hotkeysActive, handleHotkeys]);
 
   const handleEnteredDotsIndexesApply = (steps: string) => {
     const maxIndex = data?.interpretations.length || 0;
