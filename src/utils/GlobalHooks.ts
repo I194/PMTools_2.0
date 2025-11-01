@@ -7,13 +7,15 @@ import { GraphSettings, TMenuItem } from './graphs/types';
 export const useWindowSize = () => {
   // отслеживает изменения в размере окна (в том числе при его масштабировании, например, посредством ctrl+, ctrl-)
   const [size, setSize] = useState([0, 0]);
-  useLayoutEffect(() => {
+  useEffect(() => {
     const updateSize = () => {
       setSize([window.innerWidth, window.innerHeight]);
-    }
-    // window.onresize = () => updateSize();
+    };
     window.addEventListener('resize', updateSize);
     updateSize();
+    return () => {
+      window.removeEventListener('resize', updateSize);
+    };
   }, []);
   return size;
 };

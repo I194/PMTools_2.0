@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import ButtonGroupWithLabel from '../../Common/Buttons/ButtonGroupWithLabel/ButtonGroupWithLabel';
 import { Button, Tooltip, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
@@ -77,16 +77,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
   }, [selectedDirectionsIDs, statisticsMode]);
 
   // добавляет слушатель нажатий на клавиатуру (для использования сочетаний клавиш)
-  useEffect(() => {
-    if (hotkeysActive) window.addEventListener("keydown", handleHotkeys);
-    else window.removeEventListener("keydown", handleHotkeys);
-    return () => {
-      window.removeEventListener("keydown", handleHotkeys);
-    };
-  }, [hotkeysActive, hotkeys, reference]);
-
-  // обработчик нажатий на клавиатуру
-  const handleHotkeys = (event: KeyboardEvent) => {
+  const handleHotkeys = useCallback((event: KeyboardEvent) => {
     const keyCode = event.code;
 
     if (keyCode === coordinateSystemHotkey.code) {
@@ -94,28 +85,39 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
       const currReferenceIndex = availableReferences.findIndex(coordRef => coordRef === reference);
       const nextReferenceIndex = (currReferenceIndex + 1) % 2;
       dispatch(setReference(availableReferences[nextReferenceIndex]));
-    };
+    }
     if (keyCode === fisherHotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('fisher'))
-    };
+    }
     if (keyCode === mcFaddenHotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('mcFad'))
-    };
+    }
     if (keyCode === gcHotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('gc'))
-    };
+    }
     if (keyCode === gcnHotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('gcn'))
-    };
+    }
     if (keyCode === unselectHotkey.code) {
       event.preventDefault();
       dispatch(setSelectedDirectionsIDs([]));
+    }
+  }, [coordinateSystemHotkey, fisherHotkey, mcFaddenHotkey, gcHotkey, gcnHotkey, unselectHotkey, availableReferences, reference, dispatch]);
+
+  useEffect(() => {
+    if (!hotkeysActive) return;
+    window.addEventListener("keydown", handleHotkeys);
+    return () => {
+      window.removeEventListener("keydown", handleHotkeys);
     };
-  };
+  }, [hotkeysActive, handleHotkeys]);
+
+  // обработчик нажатий на клавиатуру
+  
 
   // обработчик выбранной системы координат 
   const handleReferenceSelect = (selectedReference: Reference) => {

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { ButtonGroupWithLabel } from '../../Common/Buttons';
 import { Button, Tooltip, Typography } from '@mui/material';
 import { Reference } from '../../../utils/graphs/types';
@@ -69,23 +69,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
     }
   }, [selectedStepsIDs, statisticsMode]);
 
-  useEffect(() => {
-    if (hotkeysActive) window.addEventListener("keydown", handleHotkeys);
-    else window.removeEventListener("keydown", handleHotkeys);
-    return () => {
-      window.removeEventListener("keydown", handleHotkeys);
-    };
-  }, [hotkeysActive, hotkeys, reference]);
-  
-  useEffect(() => {
-    setCoordinateSystem(reference);
-  }, [reference]);
-
-  const handleReferenceSelect = (selectedReference: Reference) => {
-    dispatch(setReference(selectedReference));
-  };
-
-  const handleHotkeys = (event: KeyboardEvent) => {
+  const handleHotkeys = useCallback((event: KeyboardEvent) => {
     const keyCode = event.code;
 
     if (keyCode === coordinateSystemHotkey.code) {
@@ -97,24 +81,42 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
     if (keyCode === pcaHotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('pca'))
-    };
+    }
     if (keyCode === pca0Hotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('pca0'))
-    };
+    }
     if (keyCode === gcHotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('gc'))
-    };
+    }
     if (keyCode === gcnHotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('gcn'))
-    };
+    }
     if (keyCode === unselectHotkey.code) {
       event.preventDefault();
       dispatch(setSelectedStepsIDs(null));
+    }
+  }, [coordinateSystemHotkey, pcaHotkey, pca0Hotkey, gcHotkey, gcnHotkey, unselectHotkey, availableReferences, reference, dispatch]);
+
+  useEffect(() => {
+    if (!hotkeysActive) return;
+    window.addEventListener("keydown", handleHotkeys);
+    return () => {
+      window.removeEventListener("keydown", handleHotkeys);
     };
+  }, [hotkeysActive, handleHotkeys]);
+  
+  useEffect(() => {
+    setCoordinateSystem(reference);
+  }, [reference]);
+
+  const handleReferenceSelect = (selectedReference: Reference) => {
+    dispatch(setReference(selectedReference));
   };
+
+  
 
   if (!data) return <ToolsPMDSkeleton />;
 

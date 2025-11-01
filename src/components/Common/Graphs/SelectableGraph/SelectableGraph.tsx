@@ -88,10 +88,10 @@ const SelectableGraph: FC<ISelectableGraph> = ({
   const [selectableTargets, setSelectableTargets] = useState<(string | HTMLElement)[]>([]);
 
   const [dragContainerID, setDragContainerID] = useState<string>('#'+ID);
-  const handleIsPanning = (event: KeyboardEvent) => {
+  const handleIsPanning = useCallback((event: KeyboardEvent) => {
     if (event.altKey) setDragContainerID('');
     else setDragContainerID('#'+ID);
-  };
+  }, [ID]);
   
   useEffect(() => {
     if (Viewer.current) {
@@ -127,8 +127,6 @@ const SelectableGraph: FC<ISelectableGraph> = ({
       window.removeEventListener("keydown", handleHotkeys);
     };
   }, [hotkeysActive, hotkeys, currentPan]);
-
-  console.log('drag', dragContainerID, document.getElementById(ID))
   
   return (
     <>

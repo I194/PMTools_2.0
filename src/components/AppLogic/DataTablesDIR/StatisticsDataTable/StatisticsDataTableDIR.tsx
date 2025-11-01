@@ -29,23 +29,23 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ currentFileInterp
 
   useScrollToInterpretationRow({apiRef, pageType: 'dir'});
 
+  const handleArrowBtnClick = useCallback((e: KeyboardEvent) => {
+    const key = e.code;
+    const { shiftKey } = e; 
+    if (shiftKey && key === 'ArrowUp') {
+      dispatch(setNextOrPrevInterpretationAsCurrent({ changeDirection: 'up' }));
+    }
+    if (shiftKey && key === 'ArrowDown') {
+      dispatch(setNextOrPrevInterpretationAsCurrent({ changeDirection: 'down' }));
+    }
+  }, [dispatch]);
+
   useEffect(() => {
     window.addEventListener("keydown", handleArrowBtnClick);
     return () => {
       window.removeEventListener("keydown", handleArrowBtnClick);
     };
-  }, []);
-
-  const handleArrowBtnClick = (e: any) => {
-    const key = (e.code as string);
-    const { shiftKey } = e; 
-    if ((shiftKey) && key === 'ArrowUp') {
-      dispatch(setNextOrPrevInterpretationAsCurrent({ changeDirection: 'up' }));
-    };
-    if ((shiftKey) && key === 'ArrowDown') {
-      dispatch(setNextOrPrevInterpretationAsCurrent({ changeDirection: 'down' }));
-    };
-  }
+  }, [handleArrowBtnClick]);
 
   const handleRowDelete = (id: string) => (event: any) => {
     event.stopPropagation();
