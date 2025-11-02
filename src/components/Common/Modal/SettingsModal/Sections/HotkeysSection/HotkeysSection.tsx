@@ -38,12 +38,11 @@ const HotkeysSection = () => {
     event.preventDefault();
 
     const { key, code } = event;
-    const currentKeyIndex = hotkeys.findIndex(block => block.title === label);
-    const allCurrentCodes = Object.keys(getValues())
-      .map(key => getValues()[key].code)
-      .filter((code, index) => index !== currentKeyIndex);
+    const otherCodes = Object.keys(getValues())
+      .filter(field => field !== label)
+      .map(field => getValues()[field]?.code);
 
-    if (allCurrentCodes.includes(code)) setError(label, { message: t("settings.hotkeys.buttonAlreadyUsed") })
+    if (otherCodes.includes(code)) setError(label, { message: t("settings.hotkeys.buttonAlreadyUsed") })
     else clearErrors(label);
 
     setValue(label, { key: key.length === 1 ? key.toUpperCase() : key, code });
@@ -93,7 +92,7 @@ const HotkeysSection = () => {
         hotkeys.map((block, index) => (
           <div key={index} className={styles.block}>
             <Typography variant="h6" color={textColor(theme.palette.mode)} mt={index === 0 ? '0' : '16px'}>
-              {t(`settings.hotkeys.titles.${block.title}`)}
+              { block.titleKey ? t(`settings.hotkeys.${block.titleKey}.title`) : block.title }
             </Typography>
             <Divider />
             {
@@ -106,7 +105,7 @@ const HotkeysSection = () => {
                   }}
                 >
                   <Typography variant="body1" color={textColor(theme.palette.mode)}>
-                    {t(`settings.hotkeys.titles.${hotkey.label}`)}
+                    { hotkey.labelKey ? t(`settings.hotkeys.${hotkey.labelKey}`) : hotkey.label }
                   </Typography>
                   <div className={styles.hotkeyBlock}>
                     <Typography variant="body1" color='error' mr='16px'>

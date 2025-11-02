@@ -53,13 +53,13 @@ export const ZijdGraph = ({ graphId, width, height, data, rightClickMenu: { item
   const handleHotkeysPan = (event: KeyboardEvent) => {
     const keyCode = event.code;
     const altKey = event.altKey;
-    const zijdHotkeys = hotkeys.find(block => block.title === 'Управление диграммой Зийдервельда')?.hotkeys;
+    const zijdHotkeys = hotkeys.find(block => block.titleKey === 'zijd' || block.title === 'Управление диграммой Зийдервельда' || block.title === 'Zijd diagram manipulation')?.hotkeys;
     if (!zijdHotkeys) return;
 
-    const rightHotkey = zijdHotkeys.find(hotkey => hotkey.label === 'Переместиться вправо')?.hotkey.code;
-    const leftHotkey = zijdHotkeys.find(hotkey => hotkey.label === 'Переместиться влево')?.hotkey.code;
-    const upHotkey = zijdHotkeys.find(hotkey => hotkey.label === 'Переместиться вверх')?.hotkey.code;
-    const downHotkey = zijdHotkeys.find(hotkey => hotkey.label === 'Переместиться вниз')?.hotkey.code;
+    const rightHotkey = (zijdHotkeys.find(h => h.labelKey === 'zijd.right') || zijdHotkeys.find(h => h.label === 'Переместиться вправо') || zijdHotkeys.find(h => h.label === 'Move right'))?.hotkey.code;
+    const leftHotkey = (zijdHotkeys.find(h => h.labelKey === 'zijd.left') || zijdHotkeys.find(h => h.label === 'Переместиться влево') || zijdHotkeys.find(h => h.label === 'Move left'))?.hotkey.code;
+    const upHotkey = (zijdHotkeys.find(h => h.labelKey === 'zijd.top') || zijdHotkeys.find(h => h.label === 'Переместиться вверх') || zijdHotkeys.find(h => h.label === 'Move up'))?.hotkey.code;
+    const downHotkey = (zijdHotkeys.find(h => h.labelKey === 'zijd.bottom') || zijdHotkeys.find(h => h.label === 'Переместиться вниз') || zijdHotkeys.find(h => h.label === 'Move down'))?.hotkey.code;
 
     if (!altKey) return;
     event.preventDefault();

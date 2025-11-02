@@ -47,17 +47,30 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   const [unselectHotkey, setUnselectHotkey] = useState<{key: string, code: string}>({key: 'U', code: 'KeyU'});
 
   useEffect(() => {
-    const coordinateSystemHotkeys = hotkeys.find(block => block.title === 'Система координат')?.hotkeys;
-    const statHotkeys = hotkeys.find(block => block.title === 'Статистические методы')?.hotkeys;
-    const selectionHotkeys = hotkeys.find(block => block.title === 'Выделение точек')?.hotkeys;
+    const getGroup = (titleKey: string, ru: string, en: string) =>
+      hotkeys.find(block => block.titleKey === titleKey || block.title === ru || block.title === en)?.hotkeys;
+
+    const coordinateSystemHotkeys = getGroup('coordinates', 'Система координат', 'Coordinate system');
+    const statHotkeys = getGroup('statMethods', 'Статистические методы', 'Statistics methods');
+    const selectionHotkeys = getGroup('selection', 'Выделение точек', 'Dots selection');
 
     if (coordinateSystemHotkeys && statHotkeys && selectionHotkeys) {
-      setCoordinateSystemHotkey(coordinateSystemHotkeys.find(hotkey => hotkey.label === 'Прокручивание систем координат')!.hotkey);
-      setPcaHotkey(statHotkeys.find(hotkey => hotkey.label === 'PCA')!.hotkey);
-      setPca0Hotkey(statHotkeys.find(hotkey => hotkey.label === 'PCA0')!.hotkey);
-      setGcHotkey(statHotkeys.find(hotkey => hotkey.label === 'GC')!.hotkey);
-      setGcnHotkey(statHotkeys.find(hotkey => hotkey.label === 'GCN')!.hotkey);
-      setUnselectHotkey(selectionHotkeys.find(hotkey => hotkey.label === 'Убрать выделение')!.hotkey);
+      setCoordinateSystemHotkey(
+        (coordinateSystemHotkeys.find(h => h.labelKey === 'coordinates.scroll') ||
+         coordinateSystemHotkeys.find(h => h.label === 'Прокручивание систем координат') ||
+         coordinateSystemHotkeys.find(h => h.label === 'Coordinate system scroll')
+        )!.hotkey
+      );
+      setPcaHotkey((statHotkeys.find(h => h.label === 'PCA'))!.hotkey);
+      setPca0Hotkey((statHotkeys.find(h => h.label === 'PCA0'))!.hotkey);
+      setGcHotkey((statHotkeys.find(h => h.label === 'GC'))!.hotkey);
+      setGcnHotkey((statHotkeys.find(h => h.label === 'GCN'))!.hotkey);
+      setUnselectHotkey(
+        (selectionHotkeys.find(h => h.labelKey === 'selection.deleteSelection') ||
+         selectionHotkeys.find(h => h.label === 'Убрать выделение') ||
+         selectionHotkeys.find(h => h.label === 'Remove selection')
+        )!.hotkey
+      );
     }
   }, [hotkeys]);
 

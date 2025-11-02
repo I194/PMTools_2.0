@@ -216,10 +216,12 @@ export const useDefaultHotkeys = (): HotkeysType => {
     {
       id: 1,
       title: t('settings.hotkeys.statMethods.title'),
+      titleKey: 'statMethods',
       hotkeys: [
         {
           id: 1,
           label: 'PCA',
+          // Intentionally no labelKey for acronyms
           hotkey: {
             key: 'D',
             code: 'KeyD',
@@ -228,6 +230,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
         {
           id: 2,
           label: 'PCA0',
+          // Intentionally no labelKey for acronyms
           hotkey: {
             key: 'O',
             code: 'KeyO',
@@ -236,6 +239,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
         {
           id: 3,
           label: 'GC',
+          // Intentionally no labelKey for acronyms
           hotkey: {
             key: 'G',
             code: 'KeyG',
@@ -244,6 +248,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
         {
           id: 4,
           label: 'GCN',
+          // Intentionally no labelKey for acronyms
           hotkey: {
             key: 'I',
             code: 'KeyI',
@@ -252,6 +257,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
         {
           id: 5,
           label: 'Fisher',
+          // Intentionally no labelKey for method name
           hotkey: {
             key: 'F',
             code: 'KeyF',
@@ -260,6 +266,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
         {
           id: 6,
           label: 'McFadden',
+          // Intentionally no labelKey for method name
           hotkey: {
             key: 'M',
             code: 'KeyM',
@@ -270,10 +277,12 @@ export const useDefaultHotkeys = (): HotkeysType => {
     {
       id: 2,
       title: t('settings.hotkeys.visibility.title'),
+      titleKey: 'visibility',
       hotkeys: [
         {
           id: 1,
           label: t('settings.hotkeys.visibility.hide'),
+          labelKey: 'visibility.hide',
           hotkey: {
             key: 'H',
             code: 'KeyH',
@@ -282,6 +291,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
         {
           id: 2,
           label: t('settings.hotkeys.visibility.show'),
+          labelKey: 'visibility.show',
           hotkey: {
             key: 'S',
             code: 'KeyS',
@@ -292,10 +302,12 @@ export const useDefaultHotkeys = (): HotkeysType => {
     {
       id: 3,
       title: t('settings.hotkeys.reverse.title'),
+      titleKey: 'reverse',
       hotkeys: [
         {
           id: 1,
           label: t('settings.hotkeys.reverse.reversed'),
+          labelKey: 'reverse.reversed',
           hotkey: {
             key: 'R',
             code: 'KeyR',
@@ -304,6 +316,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
         {
           id: 2,
           label: t('settings.hotkeys.reverse.normal'),
+          labelKey: 'reverse.normal',
           hotkey: {
             key: 'T',
             code: 'KeyT',
@@ -314,10 +327,12 @@ export const useDefaultHotkeys = (): HotkeysType => {
     {
       id: 4,
       title: t('settings.hotkeys.selection.title'),
+      titleKey: 'selection',
       hotkeys: [
         {
           id: 1,
           label: t('settings.hotkeys.selection.deleteSelection'),
+          labelKey: 'selection.deleteSelection',
           hotkey: {
             key: 'U',
             code: 'KeyU',
@@ -328,11 +343,13 @@ export const useDefaultHotkeys = (): HotkeysType => {
     {
       id: 4,
       title: t('settings.hotkeys.zoom.title'),
+      titleKey: 'zoom',
       hotkeys: [
         {
           id: 1,
           label: t('settings.hotkeys.zoom.zoomInOut'),
           disabled: true,
+          labelKey: 'zoom.zoomInOut',
           hotkey: {
             key: 'MouseWheel',
             code: 'MouseWheel',
@@ -342,6 +359,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
           id: 2,
           label: t('settings.hotkeys.zoom.pan'),
           disabled: true,
+          labelKey: 'zoom.pan',
           hotkey: {
             key: 'Alt + MouseClick',
             code: 'Alt + MouseClick',
@@ -352,6 +370,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
     {
       id: 6,
       title: t('settings.hotkeys.zijd.title'),
+      titleKey: 'zijd',
       hotkeys: [
         // {
         //   id: 1,
@@ -366,6 +385,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
           id: 2,
           label: t('settings.hotkeys.zijd.right'),
           disabled: true,
+          labelKey: 'zijd.right',
           hotkey: {
             key: 'Alt + ArrowRight',
             code: 'ArrowRight',
@@ -375,6 +395,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
           id: 3,
           label: t('settings.hotkeys.zijd.left'),
           disabled: true,
+          labelKey: 'zijd.left',
           hotkey: {
             key: 'Alt + ArrowLeft',
             code: 'ArrowLeft',
@@ -384,6 +405,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
           id: 4,
           label: t('settings.hotkeys.zijd.top'),
           disabled: true,
+          labelKey: 'zijd.top',
           hotkey: {
             key: 'Alt + ArrowUp',
             code: 'ArrowUp',
@@ -393,6 +415,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
           id: 5,
           label: t('settings.hotkeys.zijd.bottom'),
           disabled: true,
+          labelKey: 'zijd.bottom',
           hotkey: {
             key: 'Alt + ArrowDown',
             code: 'ArrowDown',
@@ -401,6 +424,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
         {
           id: 6,
           label: t('settings.hotkeys.zijd.projection.scroll'),
+          labelKey: 'zijd.projection.scroll',
           hotkey: {
             key: 'P',
             code: 'KeyP',
@@ -411,10 +435,12 @@ export const useDefaultHotkeys = (): HotkeysType => {
     {
       id: 7,
       title: t('settings.hotkeys.coordinates.title'),
+      titleKey: 'coordinates',
       hotkeys: [
         {
           id: 1,
           label: t('settings.hotkeys.coordinates.scroll'),
+          labelKey: 'coordinates.scroll',
           hotkey: {
             key: 'Q',
             code: 'KeyQ',
@@ -425,11 +451,13 @@ export const useDefaultHotkeys = (): HotkeysType => {
     {
       id: 8,
       title: t('settings.hotkeys.fileSelector.title'),
+      titleKey: 'fileSelector',
       hotkeys: [
         {
           id: 1,
           label: t('settings.hotkeys.fileSelector.right'),
           disabled: true,
+          labelKey: 'fileSelector.right',
           hotkey: {
             key: 'Shift + ArrowLeft',
             code: 'Shift + ArrowLeft',
@@ -439,6 +467,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
           id: 2,
           label: t('settings.hotkeys.fileSelector.left'),
           disabled: true,
+          labelKey: 'fileSelector.left',
           hotkey: {
             key: 'Shift + ArrowRight',
             code: 'Shift + ArrowRight',
@@ -449,11 +478,13 @@ export const useDefaultHotkeys = (): HotkeysType => {
     {
       id: 9,
       title: t('settings.hotkeys.interpretationSelector.title'),
+      titleKey: 'interpretationSelector',
       hotkeys: [
         {
           id: 1,
           label: t('settings.hotkeys.interpretationSelector.down'),
           disabled: true,
+          labelKey: 'interpretationSelector.down',
           hotkey: {
             key: 'Shift + ArrowDown',
             code: 'Shift + ArrowDown',
@@ -463,6 +494,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
           id: 2,
           label: t('settings.hotkeys.interpretationSelector.up'),
           disabled: true,
+          labelKey: 'interpretationSelector.up',
           hotkey: {
             key: 'Shift + ArrowUp',
             code: 'Shift + ArrowUp',
