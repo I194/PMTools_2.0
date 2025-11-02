@@ -30,6 +30,7 @@ const ToggleButton: FC<ToggleButtonProps> = ({
       sx={{
         borderRadius: '16px',
         fontWeight: isActive ? 600 : 400,
+        maxHeight: '36.5px',
         ...sx,
       }}
       {...rest}
