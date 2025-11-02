@@ -30,15 +30,15 @@ const OutputDataTableDIR: FC = () => {
   const [filename, setFilename] = useState<string>('DIR Interpretations');
   const debouncedFilename = useDebounce(filename, 500);
   
-  const handleRowDelete = (label: string) => (event: any) => {
+  const handleRowDelete = (uuid: string) => (event: any) => {
     event.stopPropagation();
-    dispatch(deleteInterpretation(label));
+    dispatch(deleteInterpretation(uuid));
     
     // это всё надо упростить и перенести в мидлвару
     // upd: зачем?
     const currentFileName = dirStatData![currentDataDIRid || 0]?.name;
     const deletedRowParentFile = data.filter(
-      interpretation => interpretation.label === label
+      interpretation => interpretation.uuid === uuid
     )[0].parentFile;
 
     if (deletedRowParentFile === currentFileName) {
@@ -55,7 +55,7 @@ const OutputDataTableDIR: FC = () => {
   const handleRowUpdate = useCallback((newRow: StatisticsDataTableRow) => {
     if (!data) return;
 
-    const newInterpretIndex = data.findIndex(interpet => interpet.label === newRow.id);
+    const newInterpretIndex = data.findIndex(interpet => interpet.uuid === newRow.id);
     const updatedAllInterpretations = [...data];
     updatedAllInterpretations[newInterpretIndex] = {...updatedAllInterpretations[newInterpretIndex], comment: newRow.comment};
 
@@ -89,7 +89,7 @@ const OutputDataTableDIR: FC = () => {
         ];
       },
     },
-    { field: 'id', headerName: 'Label', type: 'string', width: 120 },
+    { field: 'label', headerName: 'Label', type: 'string', width: 120 },
     { field: 'code', headerName: 'Code', type: 'string', width: 70 },
     { field: 'stepRange', headerName: 'StepRange', type: 'string', width: 120 },
     { field: 'stepCount', headerName: 'N', type: 'number', width: 40 },
@@ -138,9 +138,10 @@ const OutputDataTableDIR: FC = () => {
   if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
 
   const rows: StatisticsDataTableRow[] = data.map((statistics, index) => {
-    const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadiusGeo, Kgeo, confidenceRadiusStrat, Kstrat, comment } = statistics;
+    const { uuid, label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadiusGeo, Kgeo, confidenceRadiusStrat, Kstrat, comment } = statistics;
     return {
-      id: label,
+      id: uuid,
+      label,
       code, 
       stepRange,
       stepCount,

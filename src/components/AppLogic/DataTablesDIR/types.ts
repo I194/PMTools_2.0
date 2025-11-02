@@ -11,7 +11,7 @@ export interface IStatisticsDataTableDIR {
 
 export type DIRDataTableColumns = readonly GridColDef<DataGridDIRFromDIRRow>[];
 
-export type StatisticsDataTableRow = Omit<DataGridDIRFromDIRRow, "label" | "id"> & {id: string};
+export type StatisticsDataTableRow = Omit<DataGridDIRFromDIRRow, "id"> & {id: string};
 
 export type StatisticsDataTableColumns = readonly GridColDef<StatisticsDataTableRow>[];
 

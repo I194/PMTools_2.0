@@ -32,7 +32,7 @@ const InterpretationSetter: FC<IInterpretationSetter> = ({ dataToShow }) => {
 
   const { t, i18n } = useTranslation('translation');
 
-  const { statisticsMode, selectedStepsIDs, isCommentsInputVisible } = useAppSelector(state => state.pcaPageReducer);
+  const { statisticsMode, selectedStepsIDs, isCommentsInputVisible, labelModeIsNumeric, currentFileInterpretations, allInterpretations } = useAppSelector(state => state.pcaPageReducer);
 
   const [showCommentModal, setShowCommentModal] = useState<boolean>(false);
   const [interpretationOnHold, setInterpretationOnHold] = useState<StatisitcsInterpretationFromPCA | null>(null);
@@ -41,6 +41,9 @@ const InterpretationSetter: FC<IInterpretationSetter> = ({ dataToShow }) => {
     if (statisticsMode && !selectedStepsIDs) dispatch(setShowStepsInput(true));
     if (statisticsMode && selectedStepsIDs && selectedStepsIDs.length >= 2 && dataToShow) {
       const statistics = calculateStatisticsPMD(dataToShow, statisticsMode, selectedStepsIDs);
+      if (labelModeIsNumeric) {
+        statistics.interpretation.label = `${allInterpretations.length}${statistics.interpretation.label}/${currentFileInterpretations.length}`;
+      }
       if (isCommentsInputVisible) {
         setInterpretationOnHold(statistics.interpretation);
         setShowCommentModal(true);

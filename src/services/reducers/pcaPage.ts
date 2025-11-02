@@ -23,6 +23,7 @@ interface IInitialState {
   outputFilename: string;
   showStepsInput: boolean;
   largeGraph: GraphPMD;
+  labelModeIsNumeric: boolean;
 }
 
 const initialState: IInitialState = {
@@ -38,6 +39,7 @@ const initialState: IInitialState = {
   outputFilename: "",
   showStepsInput: false,
   largeGraph: 0,
+  labelModeIsNumeric: false,
 };
 
 const pcaPage = createSlice({
@@ -74,6 +76,15 @@ const pcaPage = createSlice({
     setCommentsInput(state, action: { payload: boolean }) {
       state.isCommentsInputVisible = action.payload;
       localStorage.setItem('pcaPage_isCommentsInputVisible', JSON.stringify(state.isCommentsInputVisible));
+    },
+    // Label mode (numeric vs filename)
+    toggleLabelMode(state) {
+      state.labelModeIsNumeric = !state.labelModeIsNumeric;
+      localStorage.setItem('pcaPage_isNumericLabel', JSON.stringify(state.labelModeIsNumeric));
+    },
+    setLabelMode(state, action: { payload: boolean }) {
+      state.labelModeIsNumeric = action.payload;
+      localStorage.setItem('pcaPage_isNumericLabel', JSON.stringify(state.labelModeIsNumeric));
     },
     // Панели управления на графикаъ
     setProjection(state, action: PayloadAction<Projection>) {
@@ -188,6 +199,8 @@ export const {
   setShowStepsInput,
   toggleCommentsInput,
   setCommentsInput,
+  toggleLabelMode,
+  setLabelMode,
   addInterpretation,
   deleteInterpretation,
   setAllInterpretations,

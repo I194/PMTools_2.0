@@ -19,6 +19,7 @@ import { referenceToLabel } from '../../../utils/parsers/labelToReference';
 import { enteredIndexesToIDsPMD } from '../../../utils/parsers/enteredIndexesToIDs';
 import { useTranslation } from 'react-i18next';
 import CommentsToggleButton from './CommentsToggleButton';
+import NumericLabelToggleButton from './NumericLabelToggleButton';
 
 interface IToolsPMD {
   data: IPmdData | null;
@@ -174,6 +175,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
       {/* <ShowHideDotsButtons setShowStepsInput={setShowStepsInput} showStepsInput={showStepsInput}/> */}
       <ShowHideDotsButtons data={data} />
       <CommentsToggleButton />
+      <NumericLabelToggleButton />
       {
         showStepsInput && 
         <ModalWrapper

@@ -25,6 +25,7 @@ import { useMediaQuery } from 'react-responsive';
 import { useTranslation } from 'react-i18next';
 import CurrentDIRFileSelector from './CurrentDIRFileSelector';
 import CommentsToggleButton from './CommentsToggleButton';
+import NumericLabelToggleButton from './NumericLabelToggleButton';
 
 interface IToolsDIR {
   data: IDirData | null;
@@ -191,6 +192,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
         </Button>
       </ButtonGroupWithLabel>
       <CommentsToggleButton />
+      <NumericLabelToggleButton />
       <ModalWrapper
         open={showVGP}
         setOpen={setShowVGP}
