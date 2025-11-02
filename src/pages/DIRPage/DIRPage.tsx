@@ -29,12 +29,22 @@ const DIRPage: FC = ({}) => {
 
   useEffect(() => {
     if (dirStatData && dirStatData.length > 0) {
-      if (!currentDataDIRid) {
-        dispatch(setCurrentDIRid(0));
+      const hasValidId =
+        typeof currentDataDIRid === 'number' &&
+        Number.isInteger(currentDataDIRid) &&
+        currentDataDIRid >= 0 &&
+        currentDataDIRid < dirStatData.length;
+
+      const safeId = hasValidId ? (currentDataDIRid as number) : 0;
+
+      if (safeId !== currentDataDIRid) {
+        dispatch(setCurrentDIRid(safeId));
       }
-      const dirID = currentDataDIRid || 0;
-      setDataToShow(dirStatData[dirID]);
-    } else setDataToShow(null);
+
+      setDataToShow(dirStatData[safeId]);
+    } else {
+      setDataToShow(null);
+    }
   }, [dirStatData, currentDataDIRid, hiddenDirectionsIDs]);
 
   useEffect(() => {

@@ -35,6 +35,8 @@ const parsedDataSlice = createSlice({
     deleteAllTreatmentData (state) {
       state.treatmentData = [];
       localStorage.setItem('treatmentData', JSON.stringify(state.treatmentData));
+      state.currentDataPMDid = null;
+      localStorage.setItem('currentDataPMDid', JSON.stringify(state.currentDataPMDid));
     },
     deleteTreatmentData (state, action) {
       state.treatmentData = state.treatmentData.filter(pmdData => pmdData.metadata.name !== action.payload);
@@ -47,25 +49,41 @@ const parsedDataSlice = createSlice({
     deleteAllDirStatData (state) {
       state.dirStatData = [];
       localStorage.setItem('dirStatData', JSON.stringify(state.dirStatData));
+      state.currentDataDIRid = null;
+      localStorage.setItem('currentDataDIRid', JSON.stringify(state.currentDataDIRid));
     },
     deleteDirStatData (state, action) {
       state.dirStatData = state.dirStatData.filter(dirStatData => dirStatData.name !== action.payload);
       localStorage.setItem('dirStatData', JSON.stringify(state.dirStatData));
     },
     setCurrentPMDid (state, action: PayloadAction<number | null>) {
-      let pmdID = action.payload;
-      if (pmdID !== null && pmdID < 0) {
-        pmdID = 0;
+      const length = state.treatmentData.length;
+      let newId: number | null = action.payload as number | null;
+
+      if (typeof newId !== 'number') {
+        newId = null;
+      } else {
+        if (newId < 0) newId = 0;
+        if (length === 0) newId = null;
+        else if (newId >= length) newId = length - 1;
       }
-      state.currentDataPMDid = pmdID;
+
+      state.currentDataPMDid = newId;
       localStorage.setItem('currentDataPMDid', JSON.stringify(state.currentDataPMDid));
     },
     setCurrentDIRid (state, action: PayloadAction<number | null>) {
-      let dirID = action.payload;
-      if (dirID !== null && dirID < 0) {
-        dirID = 0;
+      const length = state.dirStatData.length;
+      let newId: number | null = action.payload as number | null;
+
+      if (typeof newId !== 'number') {
+        newId = null;
+      } else {
+        if (newId < 0) newId = 0;
+        if (length === 0) newId = null;
+        else if (newId >= length) newId = length - 1;
       }
-      state.currentDataDIRid = dirID;
+
+      state.currentDataDIRid = newId;
       localStorage.setItem('currentDataDIRid', JSON.stringify(state.currentDataDIRid));
     },
     setSiteData (state, action) {
