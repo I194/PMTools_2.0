@@ -113,12 +113,24 @@ const parsedDataSlice = createSlice({
         state.treatmentData.push(...newTreatmentData);
 
         localStorage.setItem('treatmentData', JSON.stringify(state.treatmentData));
+
+        // Ensure a valid current file is selected after first import
+        if (state.currentDataPMDid === null && state.treatmentData.length > 0) {
+          state.currentDataPMDid = 0;
+          localStorage.setItem('currentDataPMDid', JSON.stringify(state.currentDataPMDid));
+        }
       };
 
       if (format === 'dir' || format === 'pmm') {
         state.dirStatData.push(...action.payload.data as IDirData[]);
 
         localStorage.setItem('dirStatData', JSON.stringify(state.dirStatData));
+
+        // Ensure a valid current file is selected after first import
+        if (state.currentDataDIRid === null && state.dirStatData.length > 0) {
+          state.currentDataDIRid = 0;
+          localStorage.setItem('currentDataDIRid', JSON.stringify(state.currentDataDIRid));
+        }
       };
       state.loading = 'succeeded';
       state.error = false;
