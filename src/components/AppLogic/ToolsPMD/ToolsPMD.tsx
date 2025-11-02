@@ -7,6 +7,8 @@ import {
   setReference, 
   setSelectedStepsIDs,
   setStatisticsMode,
+  toggleCommentsInput,
+  toggleLabelMode,
 } from '../../../services/reducers/pcaPage';
 import { IPmdData } from '../../../utils/GlobalTypes';
 import ModalWrapper from '../../Common/Modal/ModalWrapper';
@@ -18,8 +20,7 @@ import ShowHideDotsButtons from './ShowHideDotsButtons';
 import { referenceToLabel } from '../../../utils/parsers/labelToReference';
 import { enteredIndexesToIDsPMD } from '../../../utils/parsers/enteredIndexesToIDs';
 import { useTranslation } from 'react-i18next';
-import CommentsToggleButton from './CommentsToggleButton';
-import NumericLabelToggleButton from './NumericLabelToggleButton';
+import { ToggleButton } from '../../Common/Buttons';
 
 interface IToolsPMD {
   data: IPmdData | null;
@@ -32,7 +33,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
 
   const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
   const { 
-    reference, selectedStepsIDs, statisticsMode, hiddenStepsIDs
+    reference, selectedStepsIDs, statisticsMode, hiddenStepsIDs, isCommentsInputVisible, labelModeIsNumeric
   } = useAppSelector(state => state.pcaPageReducer); 
 
   const [coordinateSystem, setCoordinateSystem] = useState<Reference>('geographic');
@@ -174,8 +175,16 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
       </ButtonGroupWithLabel>
       {/* <ShowHideDotsButtons setShowStepsInput={setShowStepsInput} showStepsInput={showStepsInput}/> */}
       <ShowHideDotsButtons data={data} />
-      <CommentsToggleButton />
-      <NumericLabelToggleButton />
+      <ToggleButton
+        isActive={isCommentsInputVisible}
+        onToggle={() => dispatch(toggleCommentsInput())}
+        label={'Comments Input'}
+      />
+      <ToggleButton
+        isActive={labelModeIsNumeric}
+        onToggle={() => dispatch(toggleLabelMode())}
+        label={'Numeric Label'}
+      />
       {
         showStepsInput && 
         <ModalWrapper

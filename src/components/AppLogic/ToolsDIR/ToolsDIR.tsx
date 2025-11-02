@@ -15,6 +15,8 @@ import {
   setReference, 
   setSelectedDirectionsIDs, 
   setStatisticsMode,
+  toggleCommentsInput,
+  toggleLabelMode,
 } from '../../../services/reducers/dirPage';
 import { Reference } from '../../../utils/graphs/types';
 import VGPModalContent from '../VGP/VGPmodalContent';
@@ -24,8 +26,7 @@ import ReversePolarityButtons from './ReversePolarityButtons';
 import { useMediaQuery } from 'react-responsive';
 import { useTranslation } from 'react-i18next';
 import CurrentDIRFileSelector from './CurrentDIRFileSelector';
-import CommentsToggleButton from './CommentsToggleButton';
-import NumericLabelToggleButton from './NumericLabelToggleButton';
+import { ToggleButton } from '../../Common/Buttons';
 
 interface IToolsDIR {
   data: IDirData | null;
@@ -38,7 +39,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
   const widthLessThan1400 = useMediaQuery({ query: '(max-width: 1400px)' });
   
   const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
-  const { selectedDirectionsIDs, hiddenDirectionsIDs, statisticsMode, reference } = useAppSelector(state => state.dirPageReducer); 
+  const { selectedDirectionsIDs, hiddenDirectionsIDs, statisticsMode, reference, isCommentsInputVisible, labelModeIsNumeric } = useAppSelector(state => state.dirPageReducer); 
 
   const [showIndexesInput, setShowIndexesInput] = useState<boolean>(false);
   const [showVGP, setShowVGP] = useState<boolean>(false);
@@ -191,8 +192,16 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
           {t('dirPage.tools.tests.label')}
         </Button>
       </ButtonGroupWithLabel>
-      <CommentsToggleButton />
-      <NumericLabelToggleButton />
+      <ToggleButton
+        isActive={isCommentsInputVisible}
+        onToggle={() => dispatch(toggleCommentsInput())}
+        label={'Comments Input'}
+      />
+      <ToggleButton
+        isActive={labelModeIsNumeric}
+        onToggle={() => dispatch(toggleLabelMode())}
+        label={'Numeric Label'}
+      />
       <ModalWrapper
         open={showVGP}
         setOpen={setShowVGP}

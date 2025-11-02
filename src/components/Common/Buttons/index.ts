@@ -4,6 +4,7 @@ import DefaultResponsiveButton from "./DefaultResponsiveButton/DefaultResponsive
 import ButtonGroupWithLabel from "./ButtonGroupWithLabel/ButtonGroupWithLabel";
 import UploadButton from "./UploadButton/UploadButton";
 import PrettyButton from "./PrettyButton/PrettyButton";
+import ToggleButton from "./ToggleButton/ToggleButton";
 
 export {
   DefaultButton,
@@ -12,4 +13,5 @@ export {
   ButtonGroupWithLabel,
   UploadButton,
   PrettyButton,
+  ToggleButton,
 }
