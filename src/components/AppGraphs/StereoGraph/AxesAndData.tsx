@@ -1,9 +1,13 @@
-import React, { FC } from "react";
-import { DotsData, GraphSettings, MeanDirection, TooltipDot } from "../../../utils/graphs/types";
+import React, { FC, useMemo } from "react";
+import { DotsData, GraphSettings, MeanDirection, TooltipDot, Reference } from "../../../utils/graphs/types";
 import { graphSelectedDotColor } from "../../../utils/ThemeConstants";
 import { Axis, Data, Dot } from "../../Common/Graphs";
 import axesNamesByReference from "../../../utils/graphs/formatters/stereo/axesNamesByReference";
 import { useAppSelector } from "../../../services/store/hooks";
+import { IPmdData } from "../../../utils/GlobalTypes";
+import { createStraightPath } from "../../../utils/graphs/createPath";
+import { generateArc2DForPair, makePairKey } from "../../../utils/graphs/stereoGreatCircle";
+import { getOrComputePairPolyline } from "../../../utils/graphs/greatCircleCache";
 
 interface IAxesAndData {
   graphId: string;
@@ -23,6 +27,7 @@ interface IAxesAndData {
     tooltipData: Array<TooltipDot>;
     meanDirection: MeanDirection;
   };
+  rawData: IPmdData;
   selectedIDs: Array<number>;
   inInterpretationIDs: Array<number>;
   settings: GraphSettings;
@@ -32,6 +37,7 @@ const AxesAndData: FC<IAxesAndData> = ({
   graphId, width, height,
   areaConstants,
   dataConstants,
+  rawData,
   selectedIDs,
   inInterpretationIDs,
   settings,
@@ -55,6 +61,49 @@ const AxesAndData: FC<IAxesAndData> = ({
 
   const { reference } = useAppSelector(state => state.pcaPageReducer);
   const axesNames = axesNamesByReference(reference);
+
+  // Build GC polyline path (per current reference, but cache per all refs)
+  const gcPathD = useMemo(() => {
+    if (!settings.dots.connectByGC) return '';
+    const graphSize = width / 2;
+    const visibleIds = dataConstants.dotsData.map(d => d.id);
+    if (visibleIds.length < 2) return '';
+
+    const refs: Reference[] = ['specimen', 'geographic', 'stratigraphic'];
+
+    let combined: Array<[number, number]> = [];
+    for (let i = 1; i < visibleIds.length; i++) {
+      const a = visibleIds[i - 1];
+      const b = visibleIds[i];
+      const key = makePairKey(a, b);
+
+      // Precompute for all refs to ensure instant switching later
+      refs.forEach((r) => {
+        getOrComputePairPolyline(
+          rawData,
+          graphSize,
+          r,
+          key,
+          () => generateArc2DForPair(rawData, r, graphSize, a, b),
+        );
+      });
+
+      const seg = getOrComputePairPolyline(
+        rawData,
+        graphSize,
+        reference,
+        key,
+        () => generateArc2DForPair(rawData, reference, graphSize, a, b),
+      );
+
+      if (seg.length === 0) continue;
+      if (combined.length === 0) combined.push(...seg);
+      else combined.push(...seg.slice(1));
+    }
+
+    if (combined.length === 0) return '';
+    return createStraightPath(combined);
+  }, [settings.dots.connectByGC, width, dataConstants.dotsData, rawData, reference]);
 
   return (
     <g 
@@ -114,11 +163,23 @@ const AxesAndData: FC<IAxesAndData> = ({
           `
         }
       >
+        {
+          settings.dots.connectByGC && gcPathD && (
+            <path 
+              id={`${graphId}-gc-connections`}
+              d={gcPathD}
+              fill={'none'}
+              stroke={'black'}
+              strokeWidth={1}
+            />
+          )
+        }
         <Data 
           graphId={graphId}
           type='all'
           labels={labels}
           data={dotsData}
+          connectDots={!settings.dots.connectByGC}
           directionalData={directionalData}
           tooltipData={tooltipData}
           selectedIDs={selectedIDs}

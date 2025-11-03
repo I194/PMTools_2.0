@@ -17,7 +17,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
   const widthLessThan1400 = useMediaQuery({ query: '(max-width: 1400px)' });
   const largeGraphToShow = useAppSelector(state => state.pcaPageReducer.largeGraph);
   const zjdMenuSettings = usePMDGraphSettings();
-  const strMenuSettings = usePMDGraphSettings();
+  const strMenuSettings = usePMDGraphSettings({ isStereo: true });
   const dmgMenuSettings = usePMDGraphSettings();
 
   const graphLargeRef = useRef<HTMLDivElement>(null);
