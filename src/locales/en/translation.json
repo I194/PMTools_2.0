@@ -206,6 +206,13 @@
     }
   },
   "settings": {
+    "display": {
+      "title": "Display",
+      "numericLabel": {
+        "pca": "Numeric labels for statistics results (PCA)",
+        "dir": "Numeric labels for statistics results (DIR)"
+      }
+    },
     "hotkeys": {
       "title": "Hotkeys",
       "buttonAlreadyUsed": "Key already used",
@@ -251,9 +258,9 @@
         "left": "Select previous file"
       },
       "interpretationSelector": {
-        "title": "Выбор активного результата стат. обработки",
-        "down": "Выбрать следующий результат",
-        "up": "Выбрать предыдущий результат"
+        "title": "Active result selection",
+        "down": "Select next result",
+        "up": "Select previous result"
       },
       "titles": {
         "Статистические методы": "Statistics methods", 

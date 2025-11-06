@@ -38,7 +38,7 @@ export const usePMDGraphSettings = (opts?: { isStereo?: boolean }) => {
   const [stepID, setStepID] = useState<boolean>(true);
   const [stepLabel, setStepLabel] = useState<boolean>(false);
   const [highlightStatistics, setHighlightStatistics] = useState<boolean>(true);
-  const [connectByGC, setConnectByGC] = useState<boolean>(false);
+  const [connectByGC, setConnectByGC] = useState<boolean>(true);
 
   const menuItems: Array<TMenuItem> = [
     {label: 'Tooltips', onClick: () => setTooltips(!tooltips), state: tooltips},

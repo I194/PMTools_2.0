@@ -206,6 +206,13 @@
     }
   },
   "settings": {
+    "display": {
+      "title": "Отображение",
+      "numericLabel": {
+        "pca": "Числовые подписи (PCA/PMD)",
+        "dir": "Числовые подписи (DIR)"
+      }
+    },
     "hotkeys": {
       "title": "Горячие клавиши",
       "buttonAlreadyUsed": "Клавиша уже используется",

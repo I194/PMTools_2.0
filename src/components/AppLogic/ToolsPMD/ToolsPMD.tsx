@@ -8,7 +8,6 @@ import {
   setSelectedStepsIDs,
   setStatisticsMode,
   toggleCommentsInput,
-  toggleLabelMode,
 } from '../../../services/reducers/pcaPage';
 import { IPmdData } from '../../../utils/GlobalTypes';
 import ModalWrapper from '../../Common/Modal/ModalWrapper';
@@ -33,7 +32,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
 
   const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
   const { 
-    reference, selectedStepsIDs, statisticsMode, hiddenStepsIDs, isCommentsInputVisible, labelModeIsNumeric
+    reference, selectedStepsIDs, statisticsMode, hiddenStepsIDs, isCommentsInputVisible
   } = useAppSelector(state => state.pcaPageReducer); 
 
   const [coordinateSystem, setCoordinateSystem] = useState<Reference>('geographic');
@@ -180,11 +179,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
         onToggle={() => dispatch(toggleCommentsInput())}
         label={'Comments Input'}
       />
-      <ToggleButton
-        isActive={labelModeIsNumeric}
-        onToggle={() => dispatch(toggleLabelMode())}
-        label={'Numeric Label'}
-      />
+      
       {
         showStepsInput && 
         <ModalWrapper
