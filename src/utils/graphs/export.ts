@@ -45,11 +45,68 @@ var exportSVG = function(svg: any, name?: string) {
 
 };
 
+// Compose three Reversal Test component SVGs into a single SVG laid out in a row
+const exportReversalTestCombined = (id: string, name?: string) => {
+  const NS = 'http://www.w3.org/2000/svg';
+  const baseId = id.startsWith('export_') ? id.split('export_')[1] : id;
+
+  // Collect all three SVGs. Support both duplicated id and optional suffixed ids if present.
+  const selector = `svg[id="${baseId}"], svg[id^="${baseId}-"]`;
+  const svgNodes = Array.from(document.querySelectorAll(selector)) as SVGSVGElement[];
+
+  if (!svgNodes.length) {
+    // Fallback to default single export if nothing matched
+    const fallback = document.getElementById(baseId);
+    if (fallback) exportSVG(fallback, name || 'reversalTest');
+    return;
+  }
+
+  // Sort by horizontal position to keep X, Y, Z left-to-right
+  const positioned = svgNodes
+    .map(el => ({ el, rect: el.getBoundingClientRect() }))
+    .sort((a, b) => a.rect.left - b.rect.left);
+
+  const minLeft = Math.min(...positioned.map(p => p.rect.left));
+  const minTop = Math.min(...positioned.map(p => p.rect.top));
+  const maxRight = Math.max(...positioned.map(p => p.rect.right));
+  const maxBottom = Math.max(...positioned.map(p => p.rect.bottom));
+
+  const totalWidth = maxRight - minLeft;
+  const totalHeight = maxBottom - minTop;
+
+  // Create combined root SVG
+  const combined = document.createElementNS(NS, 'svg');
+  combined.setAttribute('xmlns', NS);
+  combined.setAttribute('version', '1.1');
+  combined.setAttribute('width', String(totalWidth));
+  combined.setAttribute('height', String(totalHeight));
+  combined.setAttribute('viewBox', `0 0 ${totalWidth} ${totalHeight}`);
+
+  // Append cloned child SVGs with proper offsets
+  positioned.forEach(({ el, rect }) => {
+    const clone = el.cloneNode(true) as SVGSVGElement;
+    const x = rect.left - minLeft;
+    const y = rect.top - minTop;
+    clone.setAttribute('x', String(x));
+    clone.setAttribute('y', String(y));
+    combined.appendChild(clone);
+  });
+
+  exportSVG(combined, name || 'reversalTest');
+};
+
 export const handleExportGraph = (id: string, name?: string) => {
   let svgElement = document.getElementById(id);
+  const defaultId = id.split('export_')[1] || id;
   if (!svgElement) {
-    const defaultId = id.split('export_')[1];
     svgElement = document.getElementById(defaultId);
   }
-	exportSVG(svgElement, name);
+
+  // Reversal Test: export a single combined SVG for X/Y/Z components
+  if (defaultId.indexOf('reversalTest-graph') !== -1) {
+    exportReversalTestCombined(defaultId, name || 'reversalTest');
+    return;
+  }
+
+  exportSVG(svgElement, name);
 };
