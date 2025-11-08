@@ -76,14 +76,100 @@ const AppSettings: FC<IAppSettings> = ({
 
   const loadHotkeys = () => {
     const hotkeysStored: HotkeysType = JSON.parse(localStorage.getItem('hotkeys')!);
-  
-    if (!hotkeysStored || !hotkeysStored.length) {
-      // Дублирование функционала, актуальная операция в редьюсере
-      // localStorage.setItem('hotkeys', JSON.stringify(defaultHotkeys));
-      return defaultHotkeys;
-    }
-  
-    return hotkeysStored;
+
+    // If nothing stored — use defaults (already include stable keys)
+    if (!hotkeysStored || !hotkeysStored.length) return defaultHotkeys;
+
+    // Migration helpers: map localized titles/labels (RU/EN) to stable keys
+    const groupKeyByTitle: Record<string, string> = {
+      // RU
+      'Статистические методы': 'statMethods',
+      'Видимость точек': 'visibility',
+      'Обращение полярности направлений': 'reverse',
+      'Выделение точек': 'selection',
+      'Масштабирование графиков': 'zoom',
+      'Управление диграммой Зийдервельда': 'zijd',
+      'Система координат': 'coordinates',
+      'Выбор активного файла': 'fileSelector',
+      'Выбор активного результата стат. обработки': 'interpretationSelector',
+      // EN
+      'Statistics methods': 'statMethods',
+      'Dots visibility': 'visibility',
+      'Reverse polarity': 'reverse',
+      'Dots selection': 'selection',
+      'Graphs zoom and pan': 'zoom',
+      'Zijd diagram manipulation': 'zijd',
+      'Coordinate system': 'coordinates',
+      'File Selector': 'fileSelector',
+      'Active result of stat. data processing Selector': 'interpretationSelector',
+    };
+
+    const actionKeyByLabel: Record<string, Record<string, string>> = {
+      visibility: {
+        // RU
+        'Скрыть точки': 'visibility.hide',
+        'Показать точки': 'visibility.show',
+        // EN
+        'Hide dots': 'visibility.hide',
+        'Show dots': 'visibility.show',
+      },
+      reverse: {
+        'Обратная полярность': 'reverse.reversed',
+        'Прямая полярность': 'reverse.normal',
+        'Reversed': 'reverse.reversed',
+        'Normal': 'reverse.normal',
+      },
+      selection: {
+        'Убрать выделение': 'selection.deleteSelection',
+        'Remove selection': 'selection.deleteSelection',
+      },
+      coordinates: {
+        'Прокручивание систем координат': 'coordinates.scroll',
+        'Coordinate system scroll': 'coordinates.scroll',
+      },
+      zijd: {
+        'Переместиться вправо': 'zijd.right',
+        'Переместиться влево': 'zijd.left',
+        'Переместиться вверх': 'zijd.top',
+        'Переместиться вниз': 'zijd.bottom',
+        'Прокручивание проекций': 'zijd.projection.scroll',
+        'Move right': 'zijd.right',
+        'Move left': 'zijd.left',
+        'Move up': 'zijd.top',
+        'Move down': 'zijd.bottom',
+        'Projection scroll': 'zijd.projection.scroll',
+      },
+      fileSelector: {
+        'Выбрать следующий файл': 'fileSelector.right',
+        'Выбрать предыдущий файл': 'fileSelector.left',
+        'Select next file': 'fileSelector.right',
+        'Select previous file': 'fileSelector.left',
+      },
+      interpretationSelector: {
+        'Выбрать следующий результат': 'interpretationSelector.down',
+        'Выбрать предыдущий результат': 'interpretationSelector.up',
+        'Select next result': 'interpretationSelector.down',
+        'Select previous result': 'interpretationSelector.up',
+      },
+      zoom: {
+        'Изменение масштаба': 'zoom.zoomInOut',
+        'Перемещение области видимости': 'zoom.pan',
+        'Zoom in/out': 'zoom.zoomInOut',
+        'Pan': 'zoom.pan',
+      },
+    };
+
+    const withKeys: HotkeysType = hotkeysStored.map((block) => {
+      const inferredTitleKey = block.titleKey || groupKeyByTitle[block.title];
+      const migratedHotkeys = block.hotkeys.map((hk) => {
+        const groupKey = inferredTitleKey;
+        const labelKey = hk.labelKey || (groupKey && actionKeyByLabel[groupKey]?.[hk.label]);
+        return { ...hk, labelKey };
+      });
+      return { ...block, titleKey: inferredTitleKey, hotkeys: migratedHotkeys };
+    });
+
+    return withKeys;
   };
 
   useEffect(() => {

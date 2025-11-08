@@ -16,3 +16,17 @@
   }
 
 }
+
+.rightBlock {
+  position: absolute;
+  right: 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.versionButton {
+  border-radius: 8px;
+  font-size: 16px;
+}

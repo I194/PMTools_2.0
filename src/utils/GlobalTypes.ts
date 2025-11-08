@@ -241,9 +241,13 @@ export type ThemeMode = "dark" | "light";
 export type HotkeysType = Array<{
   id: number;
   title: string;
+  // Stable i18n key for the group (e.g., 'statMethods', 'coordinates')
+  titleKey?: string;
   hotkeys: Array<{
     id: number;
     label: string;
+    // Stable i18n key for the action within the group (e.g., 'coordinates.scroll', 'visibility.show')
+    labelKey?: string;
     disabled?: boolean;
     hotkey: {
       key: string;

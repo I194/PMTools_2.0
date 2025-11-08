@@ -68,8 +68,21 @@ const foldTestBootstrap = (
   let iterationResult: {index: number, taus: Array<{x: number, y: number}>} = {index: 0, taus: []};
   let iteration: number = 0;
 
+  let cancelled = false;
+  let timeoutId: number | null = null;
+
+  const cancel = () => {
+    cancelled = true;
+    if (timeoutId !== null) {
+      clearTimeout(timeoutId);
+      timeoutId = null;
+    }
+    setIsRunning?.(false);
+  };
+
   // Asynchronous bootstrapping
   (next = () => {
+    if (cancelled) return;
     // Number of bootstraps were completed
     if (++iteration > numberOfSimulations) {
       if (setResult) setResult({untilts, savedBootstraps});
@@ -87,8 +100,10 @@ const foldTestBootstrap = (
     if (iteration < numberOfSavedSimulations) savedBootstraps.push(iterationResult.taus);
 
     // Queue for next bootstrap iteration
-    setTimeout(next);
+    timeoutId = setTimeout(next) as unknown as number;
   })();
+  
+  return cancel;
 };
 
 export default foldTestBootstrap;

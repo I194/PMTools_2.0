@@ -16,8 +16,7 @@ export const useScrollToInterpretationRow = ({apiRef, pageType}: IUseScrollToInt
     if (currentInterpretation && apiRef?.current?.getAllRowIds) {
       const allRowIDs = apiRef.current.getAllRowIds();
 
-      const dataUuid = pageType === 'pca' ? 'uuid' : 'label';
-      const currentInterpretationRowIndex = allRowIDs.findIndex(rowId => rowId === currentInterpretation[dataUuid]);
+      const currentInterpretationRowIndex = allRowIDs.findIndex(rowId => rowId === currentInterpretation.uuid);
       if (currentInterpretationRowIndex >= 0) {
         apiRef.current.scrollToIndexes({rowIndex: currentInterpretationRowIndex});
       }

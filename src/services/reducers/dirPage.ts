@@ -18,6 +18,7 @@ interface IInitialState {
   outputFilename: string;
   showSelectionInput: boolean;
   showVGPMean: boolean;
+  labelModeIsNumeric: boolean;
 };
 
 const initialState: IInitialState = {
@@ -35,6 +36,7 @@ const initialState: IInitialState = {
   outputFilename: '',
   showSelectionInput: false,
   showVGPMean: false,
+  labelModeIsNumeric: false,
 };
 
 const dirPage = createSlice({
@@ -80,6 +82,15 @@ const dirPage = createSlice({
       state.isCommentsInputVisible = action.payload;
       localStorage.setItem('dirPage_isCommentsInputVisible', JSON.stringify(state.isCommentsInputVisible));
     },
+    // Label mode (numeric vs filename)
+    toggleLabelMode(state) {
+      state.labelModeIsNumeric = !state.labelModeIsNumeric;
+      localStorage.setItem('dirPage_isNumericLabel', JSON.stringify(state.labelModeIsNumeric));
+    },
+    setLabelMode(state, action: { payload: boolean }) {
+      state.labelModeIsNumeric = action.payload;
+      localStorage.setItem('dirPage_isNumericLabel', JSON.stringify(state.labelModeIsNumeric));
+    },
     // VGP
     toggleShowVGPMean (state) {
       state.showVGPMean = !state.showVGPMean;
@@ -97,12 +108,12 @@ const dirPage = createSlice({
       state.allInterpretations.push(action.payload?.interpretation);
       state.selectedDirectionsIDs = null;
       localStorage.setItem('dirPage_allInterpretations', JSON.stringify(state.allInterpretations));
-      localStorage.setItem('dirPage_currentInterpretation', JSON.stringify(state.currentInterpretation?.label || ''));
+      localStorage.setItem('dirPage_currentInterpretation', JSON.stringify(state.currentInterpretation?.uuid || ''));
     },
     deleteInterpretation (state, action) {
-      const interpretationLabel = action.payload;
+      const interpretationUUID = action.payload as string;
       const updatedInterpretations = state.allInterpretations.filter(
-        interpretation => interpretation.label !== interpretationLabel
+        interpretation => interpretation.uuid !== interpretationUUID
       );
       state.allInterpretations = updatedInterpretations;
       localStorage.setItem('dirPage_allInterpretations', JSON.stringify(state.allInterpretations));
@@ -140,7 +151,16 @@ const dirPage = createSlice({
       state.currentInterpretation = state.currentFileInterpretations[
         state.currentFileInterpretations.length - 1
       ];
-      localStorage.setItem('dirPage_currentInterpretation', JSON.stringify(state.currentInterpretation.label));
+      localStorage.setItem('dirPage_currentInterpretation', JSON.stringify(state.currentInterpretation.uuid));
+    },
+    setCurrentInterpretationByUUID(state, action: PayloadAction<{uuid: string}>) {
+      const { uuid } = action.payload;
+      const interpretationToSet = state.allInterpretations.find(interpretation => interpretation.uuid === uuid);
+      if (!interpretationToSet) {
+        return;
+      }
+      state.currentInterpretation = interpretationToSet;
+      localStorage.setItem('dirPage_currentInterpretation', JSON.stringify(state.currentInterpretation.uuid));
     },
     setCurrentInterpretationByLabel(state, action: PayloadAction<{label: string}>) {
       const { label } = action.payload;
@@ -149,7 +169,7 @@ const dirPage = createSlice({
         return;
       }
       state.currentInterpretation = interpretationToSet;
-      localStorage.setItem('dirPage_currentInterpretation', JSON.stringify(state.currentInterpretation.label));
+      localStorage.setItem('dirPage_currentInterpretation', JSON.stringify(state.currentInterpretation.uuid));
     },
     setNextOrPrevInterpretationAsCurrent(state, action: PayloadAction<{changeDirection: 'up' | 'down'}>) {
       if (!state.currentFileInterpretations.length || !state.currentInterpretation) {
@@ -158,7 +178,7 @@ const dirPage = createSlice({
       }
       const currentInterpretationIndex = state.currentFileInterpretations.findIndex(
         (interpretation) => (
-          interpretation.label === state.currentInterpretation?.label
+          interpretation.uuid === state.currentInterpretation?.uuid
         )
       )
 
@@ -177,7 +197,7 @@ const dirPage = createSlice({
 
       const nextInterpretation = state.currentFileInterpretations[nextInterpretationIndex];
       state.currentInterpretation = nextInterpretation;
-      localStorage.setItem('dirPage_currentInterpretation', JSON.stringify(state.currentInterpretation.label));
+      localStorage.setItem('dirPage_currentInterpretation', JSON.stringify(state.currentInterpretation.uuid));
     },
     setOutputFilename (state, action) {
       state.outputFilename = action.payload;
@@ -207,11 +227,14 @@ export const {
   deleteAllInterpretations,
   updateCurrentFileInterpretations,
   setLastInterpretationAsCurrent,
+  setCurrentInterpretationByUUID,
   setCurrentInterpretationByLabel,
   setNextOrPrevInterpretationAsCurrent,
   setOutputFilename,
   toggleShowVGPMean,
   deleteInterepretationByParentFile,
+  toggleLabelMode,
+  setLabelMode,
 } = dirPage.actions;
 
 const dirPageReducer = dirPage.reducer;

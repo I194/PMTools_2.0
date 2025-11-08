@@ -45,10 +45,16 @@ const ShowHideDotsButtons = ({ data }: Props) => {
   const [hideHotkey, setHideHotkey] = useState<{key: string, code: string}>({key: 'H', code: 'KeyH'});
 
   useEffect(() => {
-    const visibilityHotkeys = hotkeys.find(block => block.title === 'Видимость точек')?.hotkeys;
+    const visibilityHotkeys = hotkeys.find(block => block.titleKey === 'visibility' || block.title === 'Видимость точек' || block.title === 'Dots visibility')?.hotkeys;
     if (visibilityHotkeys) {
-      setShowHotkey(visibilityHotkeys.find(hotkey => hotkey.label === 'Показать точки')!.hotkey);
-      setHideHotkey(visibilityHotkeys.find(hotkey => hotkey.label === 'Скрыть точки')!.hotkey);
+      const show = visibilityHotkeys.find(h => h.labelKey === 'visibility.show')
+        || visibilityHotkeys.find(h => h.label === 'Показать точки')
+        || visibilityHotkeys.find(h => h.label === 'Show dots');
+      const hide = visibilityHotkeys.find(h => h.labelKey === 'visibility.hide')
+        || visibilityHotkeys.find(h => h.label === 'Скрыть точки')
+        || visibilityHotkeys.find(h => h.label === 'Hide dots');
+      if (show) setShowHotkey(show.hotkey);
+      if (hide) setHideHotkey(hide.hotkey);
     };
   }, [hotkeys]);
 

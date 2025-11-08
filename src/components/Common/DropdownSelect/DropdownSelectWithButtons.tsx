@@ -51,40 +51,41 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
     setOpen(false);
   };
 
-  const handleLeftClick = () => {
+  const handleLeftClick = useCallback(() => {
     let newOptionIndex = (options.findIndex((option) => option === selectedOption ) - 1);
     if (newOptionIndex < 0) newOptionIndex += options.length;
     const newSelectedOption = options[newOptionIndex];
     setSelectedOption(newSelectedOption);
     onOptionSelect(newSelectedOption);
-  };
+  }, [options, selectedOption, onOptionSelect]);
 
-  const handleRightClick = () => {
+  const handleRightClick = useCallback(() => {
     const newSelectedOption = options[
       (options.findIndex((option) => option === selectedOption ) + 1) % options.length
     ];
     setSelectedOption(newSelectedOption);
     onOptionSelect(newSelectedOption);
-  };
+  }, [options, selectedOption, onOptionSelect]);
 
-  const handleArrowBtnClick = (e: any) => {
-    if (!useArrowListeners) return null; 
-    const key = (e.code as string);
-    const { ctrlKey, shiftKey, altKey } = e; 
-    if ((shiftKey) && key === 'ArrowLeft') {
+  const handleArrowBtnClick = useCallback((e: KeyboardEvent) => {
+    if (!useArrowListeners) return;
+    const key = e.code;
+    const { shiftKey } = e; 
+    if (shiftKey && key === 'ArrowLeft') {
       handleLeftClick();
-    };
-    if ((shiftKey) && key === 'ArrowRight') {
+    }
+    if (shiftKey && key === 'ArrowRight') {
       handleRightClick();
-    };
-  }
+    }
+  }, [useArrowListeners, handleLeftClick, handleRightClick]);
 
   useEffect(() => {
+    if (!useArrowListeners) return;
     window.addEventListener("keydown", handleArrowBtnClick);
     return () => {
       window.removeEventListener("keydown", handleArrowBtnClick);
     };
-  }, [selectedOption]);
+  }, [useArrowListeners, handleArrowBtnClick]);
 
   const handleDeleteClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, option: string) => {
     event.stopPropagation();

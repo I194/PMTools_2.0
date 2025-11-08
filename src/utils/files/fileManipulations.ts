@@ -34,7 +34,20 @@ export const getDirectionalData = (file: File, as: string) => {
         }
       }
 
-      resolve(handleRawData(reader.result));
+      try {
+        // Guard against empty text files to avoid downstream parser crashes
+        if (ext !== 'xlsx') {
+          const raw = reader.result;
+          if (raw === null || (typeof raw === 'string' && raw.trim().length === 0)) {
+            throw new Error(`Empty file: ${file.name}`);
+          }
+        }
+
+        const parsed = handleRawData(reader.result);
+        resolve(parsed);
+      } catch (err) {
+        reject(err);
+      }
 
     };
 

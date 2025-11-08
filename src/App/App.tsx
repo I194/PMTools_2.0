@@ -62,6 +62,7 @@ function App() {
     const pcaPage_commentsInput = localStorage.getItem('pcaPage_isCommentsInputVisible');
     const pcaPage_allInterpretations = localStorage.getItem('pcaPage_allInterpretations');
     const pcaPage_currentInterpretationUUID = localStorage.getItem('pcaPage_currentInterpretation');
+    const pcaPage_isNumericLabel = localStorage.getItem('pcaPage_isNumericLabel');
 
     if (pcaPage_reference) {
       dispatch(pcaPageReducer.setReference(JSON.parse(pcaPage_reference)));
@@ -78,11 +79,15 @@ function App() {
     if (pcaPage_currentInterpretationUUID) {
       dispatch(pcaPageReducer.setCurrentInterpretationByUUID({uuid: JSON.parse(pcaPage_currentInterpretationUUID)}));
     }
+    if (pcaPage_isNumericLabel) {
+      dispatch(pcaPageReducer.setLabelMode(JSON.parse(pcaPage_isNumericLabel)));
+    }
 
     const dirPage_reference = localStorage.getItem('dirPage_reference');
     const dirPage_commentsInput = localStorage.getItem('dirPage_isCommentsInputVisible');
     const dirPage_allInterpretations = localStorage.getItem('dirPage_allInterpretations');
-    const dirPage_currentInterpretationLabel = localStorage.getItem('dirPage_currentInterpretation');
+    const dirPage_currentInterpretationRaw = localStorage.getItem('dirPage_currentInterpretation');
+    const dirPage_isNumericLabel = localStorage.getItem('dirPage_isNumericLabel');
 
     if (dirPage_reference) {
       dispatch(dirPageReducer.setReference(JSON.parse(dirPage_reference)));
@@ -93,8 +98,17 @@ function App() {
     if (dirPage_allInterpretations) {
       dispatch(dirPageReducer.setAllInterpretations(JSON.parse(dirPage_allInterpretations)));
     }
-    if (dirPage_currentInterpretationLabel) {
-      dispatch(dirPageReducer.setCurrentInterpretationByLabel({label: JSON.parse(dirPage_currentInterpretationLabel)}));
+    if (dirPage_isNumericLabel) {
+      dispatch(dirPageReducer.setLabelMode(JSON.parse(dirPage_isNumericLabel)));
+    }
+    if (dirPage_currentInterpretationRaw) {
+      const parsed = JSON.parse(dirPage_currentInterpretationRaw);
+      const isUuid = typeof parsed === 'string' && /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(parsed);
+      if (isUuid) {
+        dispatch(dirPageReducer.setCurrentInterpretationByUUID({uuid: parsed}));
+      } else {
+        dispatch(dirPageReducer.setCurrentInterpretationByLabel({label: parsed}));
+      }
     }
   }, []);
 

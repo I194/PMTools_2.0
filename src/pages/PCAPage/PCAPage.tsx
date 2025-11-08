@@ -31,12 +31,22 @@ const PCAPage: FC = ({}) => {
 
   useEffect(() => {
     if (treatmentData && treatmentData.length > 0) {
-      if (!currentDataPMDid) {
-        dispatch(setCurrentPMDid(0));
+      const hasValidId =
+        typeof currentDataPMDid === 'number' &&
+        Number.isInteger(currentDataPMDid) &&
+        currentDataPMDid >= 0 &&
+        currentDataPMDid < treatmentData.length;
+
+      const safeId = hasValidId ? (currentDataPMDid as number) : 0;
+
+      if (safeId !== currentDataPMDid) {
+        dispatch(setCurrentPMDid(safeId));
       }
-      const pmdID = currentDataPMDid || 0;
-      setDataToShow(treatmentData[pmdID]);
-    } else setDataToShow(null);
+
+      setDataToShow(treatmentData[safeId]);
+    } else {
+      setDataToShow(null);
+    }
   }, [treatmentData, currentDataPMDid, hiddenStepsIDs]);
 
   useEffect(() => {

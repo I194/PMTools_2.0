@@ -6,7 +6,7 @@ import StatisticsDataTablePMDSkeleton from './StatisticsDataTableDIRSkeleton';
 import { GetDataTableBaseStyle } from "../styleConstants";
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
-import { deleteInterpretation, setAllInterpretations, updateCurrentFileInterpretations, setLastInterpretationAsCurrent, setCurrentInterpretationByLabel, setNextOrPrevInterpretationAsCurrent } from "../../../../services/reducers/dirPage";
+import { deleteInterpretation, setAllInterpretations, updateCurrentFileInterpretations, setLastInterpretationAsCurrent, setCurrentInterpretationByUUID, setNextOrPrevInterpretationAsCurrent } from "../../../../services/reducers/dirPage";
 import DIRStatisticsDataTableToolbar from "../../../Common/DataTable/Toolbar/DIRStatisticsDataTableToolbar";
 import { acitvateHotkeys, deactivateHotkeys } from "../../../../services/reducers/appSettings";
 import { useCellModesModel } from "../../hooks";
@@ -29,23 +29,23 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ currentFileInterp
 
   useScrollToInterpretationRow({apiRef, pageType: 'dir'});
 
+  const handleArrowBtnClick = useCallback((e: KeyboardEvent) => {
+    const key = e.code;
+    const { shiftKey } = e; 
+    if (shiftKey && key === 'ArrowUp') {
+      dispatch(setNextOrPrevInterpretationAsCurrent({ changeDirection: 'up' }));
+    }
+    if (shiftKey && key === 'ArrowDown') {
+      dispatch(setNextOrPrevInterpretationAsCurrent({ changeDirection: 'down' }));
+    }
+  }, [dispatch]);
+
   useEffect(() => {
     window.addEventListener("keydown", handleArrowBtnClick);
     return () => {
       window.removeEventListener("keydown", handleArrowBtnClick);
     };
-  }, []);
-
-  const handleArrowBtnClick = (e: any) => {
-    const key = (e.code as string);
-    const { shiftKey } = e; 
-    if ((shiftKey) && key === 'ArrowUp') {
-      dispatch(setNextOrPrevInterpretationAsCurrent({ changeDirection: 'up' }));
-    };
-    if ((shiftKey) && key === 'ArrowDown') {
-      dispatch(setNextOrPrevInterpretationAsCurrent({ changeDirection: 'down' }));
-    };
-  }
+  }, [handleArrowBtnClick]);
 
   const handleRowDelete = (id: string) => (event: any) => {
     event.stopPropagation();
@@ -60,7 +60,7 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ currentFileInterp
     event.stopPropagation();
     if (currentFileInterpretations) {
       currentFileInterpretations.forEach(interpretation => {
-        dispatch(deleteInterpretation(interpretation.label));
+        dispatch(deleteInterpretation(interpretation.uuid));
       });
       dispatch(updateCurrentFileInterpretations(currentFileInterpretations[0].parentFile));
       dispatch(setLastInterpretationAsCurrent());
@@ -70,7 +70,7 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ currentFileInterp
   const handleRowUpdate = useCallback((newRow: StatisticsDataTableRow) => {
     if (!currentFileInterpretations) return;
 
-    const newInterpretIndex = allInterpretations.findIndex(interpet => interpet.label === newRow.id);
+    const newInterpretIndex = allInterpretations.findIndex(interpet => interpet.uuid === newRow.id);
     const updatedAllInterpretations = [...allInterpretations];
     updatedAllInterpretations[newInterpretIndex] = {...updatedAllInterpretations[newInterpretIndex], comment: newRow.comment};
 
@@ -79,7 +79,7 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ currentFileInterp
   }, [allInterpretations, currentFileInterpretations]);
 
   const setRowAsCurrentInterpretation = (rowId: string) => {
-    dispatch(setCurrentInterpretationByLabel({label: rowId}));
+    dispatch(setCurrentInterpretationByUUID({uuid: rowId}));
   }
 
   const columns: StatisticsDataTableColumns = [
@@ -107,7 +107,7 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ currentFileInterp
         ];
       },
     },
-    { field: 'id', headerName: 'Label', type: 'string', width: 70 },
+    { field: 'label', headerName: 'Label', type: 'string', width: 70 },
     { field: 'code', headerName: 'Code', type: 'string', width: 60 },
     { field: 'stepRange', headerName: 'StepRange', type: 'string', width: 90 },
     { field: 'stepCount', headerName: 'N', type: 'number', minWidth: 30, width: 30 },
@@ -148,9 +148,10 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ currentFileInterp
   if (!currentFileInterpretations || !currentFileInterpretations.length) return <StatisticsDataTablePMDSkeleton />;
 
   const rows: StatisticsDataTableRow[] = currentFileInterpretations.map((statistics) => {
-    const { label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadiusGeo, Kgeo, confidenceRadiusStrat, Kstrat, comment } = statistics;
+    const { uuid, label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, confidenceRadiusGeo, Kgeo, confidenceRadiusStrat, Kstrat, comment } = statistics;
     return {
-      id: label,
+      id: uuid,
+      label,
       code, 
       stepRange,
       stepCount,
@@ -194,7 +195,7 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ currentFileInterp
         density={'compact'}
         disableRowSelectionOnClick={true}
         getRowClassName={
-          (params) => params.row.id === currentInterpretation?.label ? currentClass : ''
+          (params) => params.row.id === currentInterpretation?.uuid ? currentClass : ''
         }
         components={{
           Toolbar: DIRStatisticsDataTableToolbar

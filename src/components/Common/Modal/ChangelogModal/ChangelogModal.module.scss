@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.title {
+  margin-bottom: 12px;
+}
+
+.list {
+  overflow-y: auto;
+  width: 100%;
+  padding-right: 4px;
+}
+
+.entry {
+  margin-bottom: 16px;
+}
+
+.entryHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.version {
+  font-weight: 600;
+}
+
+.date {
+  opacity: 0.8;
+  font-size: 0.9rem;
+}
+
+.items {
+  margin: 6px 0 0 18px;
+}
+
+

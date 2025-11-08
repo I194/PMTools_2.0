@@ -32,7 +32,8 @@ const InterpretationSetter: FC<IInterpretationSetter> = ({ dataToShow }) => {
     reversedDirectionsIDs,
     currentFileInterpretations,
     allInterpretations,
-    isCommentsInputVisible
+    isCommentsInputVisible,
+    labelModeIsNumeric
   } = useAppSelector(state => state.dirPageReducer);
 
   const [showCommentModal, setShowCommentModal] = useState<boolean>(false);
@@ -42,7 +43,9 @@ const InterpretationSetter: FC<IInterpretationSetter> = ({ dataToShow }) => {
     if (statisticsMode && !selectedDirectionsIDs) dispatch(showSelectionInput(true));
     if (statisticsMode && selectedDirectionsIDs && selectedDirectionsIDs.length >= 2 && dataToShow) {
       const statistics = calculateStatisticsDIR(dataToShow, statisticsMode, selectedDirectionsIDs, reversedDirectionsIDs);
-      statistics.interpretation.label = `${allInterpretations.length}${statistics.interpretation.label}/${currentFileInterpretations.length}`;
+      if (labelModeIsNumeric) {
+        statistics.interpretation.label = `${allInterpretations.length}${statistics.interpretation.label}/${currentFileInterpretations.length}`;
+      }
       if (isCommentsInputVisible) {
         setStatisticsOnHold(statistics);
         setShowCommentModal(true);

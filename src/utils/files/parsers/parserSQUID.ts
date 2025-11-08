@@ -10,10 +10,18 @@ import toReferenceCoordinates from "../../graphs/formatters/toReferenceCoordinat
  */
 const parseSQUID = (data: string, name: string): IPmdData => {
   
+  // Validate input to avoid crashes on empty or invalid files
+  if (!data || typeof data !== 'string' || data.trim().length === 0) {
+    throw new Error(`Empty .squid file: ${name}`);
+  }
+  
   // eslint-disable-next-line no-control-regex
   const eol = new RegExp("\r?\n");
   // Get all lines except the first one (it's just copy of filename) and all too-short lines
   const lines = data.split(eol).slice(1).filter(line => line.length > 1);
+  if (!lines.length) {
+    throw new Error(`Invalid .squid file (no data lines): ${name}`);
+  }
   
   const headLine = lines[0].replace(/\s+/g, ' ').split(' '); // line with orientation params - metadata in other words
   const metadata = {

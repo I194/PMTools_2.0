@@ -49,10 +49,20 @@ const ReversePolarityButtons = ({ data }: Props) => {
   const [unreverseHotkey, setUnreverseHotkey] = useState<{key: string, code: string}>({key: 'T', code: 'KeyT'});
 
   useEffect(() => {
-    const visibilityHotkeys = hotkeys.find(block => block.title === 'Обращение полярности')?.hotkeys;
-    if (visibilityHotkeys) {
-      setUnreverseHotkey(visibilityHotkeys.find(hotkey => hotkey.label === 'Прямая полярность')!.hotkey);
-      setReverseHotkey(visibilityHotkeys.find(hotkey => hotkey.label === 'Обратная полярность')!.hotkey);
+    const reverseHotkeys = hotkeys.find(block => block.titleKey === 'reverse' || block.title === 'Обращение полярности направлений' || block.title === 'Reverse polarity')?.hotkeys;
+    if (reverseHotkeys) {
+      setUnreverseHotkey(
+        (reverseHotkeys.find(h => h.labelKey === 'reverse.normal') ||
+         reverseHotkeys.find(h => h.label === 'Прямая полярность') ||
+         reverseHotkeys.find(h => h.label === 'Normal')
+        )!.hotkey
+      );
+      setReverseHotkey(
+        (reverseHotkeys.find(h => h.labelKey === 'reverse.reversed') ||
+         reverseHotkeys.find(h => h.label === 'Обратная полярность') ||
+         reverseHotkeys.find(h => h.label === 'Reversed')
+        )!.hotkey
+      );
     };
   }, [hotkeys]);
 

@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { ButtonGroupWithLabel } from '../../Common/Buttons';
 import { Button, Tooltip, Typography } from '@mui/material';
 import { Reference } from '../../../utils/graphs/types';
@@ -7,6 +7,7 @@ import {
   setReference, 
   setSelectedStepsIDs,
   setStatisticsMode,
+  toggleCommentsInput,
 } from '../../../services/reducers/pcaPage';
 import { IPmdData } from '../../../utils/GlobalTypes';
 import ModalWrapper from '../../Common/Modal/ModalWrapper';
@@ -18,7 +19,7 @@ import ShowHideDotsButtons from './ShowHideDotsButtons';
 import { referenceToLabel } from '../../../utils/parsers/labelToReference';
 import { enteredIndexesToIDsPMD } from '../../../utils/parsers/enteredIndexesToIDs';
 import { useTranslation } from 'react-i18next';
-import CommentsToggleButton from './CommentsToggleButton';
+import { ToggleButton } from '../../Common/Buttons';
 
 interface IToolsPMD {
   data: IPmdData | null;
@@ -31,7 +32,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
 
   const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
   const { 
-    reference, selectedStepsIDs, statisticsMode, hiddenStepsIDs
+    reference, selectedStepsIDs, statisticsMode, hiddenStepsIDs, isCommentsInputVisible
   } = useAppSelector(state => state.pcaPageReducer); 
 
   const [coordinateSystem, setCoordinateSystem] = useState<Reference>('geographic');
@@ -47,17 +48,30 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
   const [unselectHotkey, setUnselectHotkey] = useState<{key: string, code: string}>({key: 'U', code: 'KeyU'});
 
   useEffect(() => {
-    const coordinateSystemHotkeys = hotkeys.find(block => block.title === 'Система координат')?.hotkeys;
-    const statHotkeys = hotkeys.find(block => block.title === 'Статистические методы')?.hotkeys;
-    const selectionHotkeys = hotkeys.find(block => block.title === 'Выделение точек')?.hotkeys;
+    const getGroup = (titleKey: string, ru: string, en: string) =>
+      hotkeys.find(block => block.titleKey === titleKey || block.title === ru || block.title === en)?.hotkeys;
+
+    const coordinateSystemHotkeys = getGroup('coordinates', 'Система координат', 'Coordinate system');
+    const statHotkeys = getGroup('statMethods', 'Статистические методы', 'Statistics methods');
+    const selectionHotkeys = getGroup('selection', 'Выделение точек', 'Dots selection');
 
     if (coordinateSystemHotkeys && statHotkeys && selectionHotkeys) {
-      setCoordinateSystemHotkey(coordinateSystemHotkeys.find(hotkey => hotkey.label === 'Прокручивание систем координат')!.hotkey);
-      setPcaHotkey(statHotkeys.find(hotkey => hotkey.label === 'PCA')!.hotkey);
-      setPca0Hotkey(statHotkeys.find(hotkey => hotkey.label === 'PCA0')!.hotkey);
-      setGcHotkey(statHotkeys.find(hotkey => hotkey.label === 'GC')!.hotkey);
-      setGcnHotkey(statHotkeys.find(hotkey => hotkey.label === 'GCN')!.hotkey);
-      setUnselectHotkey(selectionHotkeys.find(hotkey => hotkey.label === 'Убрать выделение')!.hotkey);
+      setCoordinateSystemHotkey(
+        (coordinateSystemHotkeys.find(h => h.labelKey === 'coordinates.scroll') ||
+         coordinateSystemHotkeys.find(h => h.label === 'Прокручивание систем координат') ||
+         coordinateSystemHotkeys.find(h => h.label === 'Coordinate system scroll')
+        )!.hotkey
+      );
+      setPcaHotkey((statHotkeys.find(h => h.label === 'PCA'))!.hotkey);
+      setPca0Hotkey((statHotkeys.find(h => h.label === 'PCA0'))!.hotkey);
+      setGcHotkey((statHotkeys.find(h => h.label === 'GC'))!.hotkey);
+      setGcnHotkey((statHotkeys.find(h => h.label === 'GCN'))!.hotkey);
+      setUnselectHotkey(
+        (selectionHotkeys.find(h => h.labelKey === 'selection.deleteSelection') ||
+         selectionHotkeys.find(h => h.label === 'Убрать выделение') ||
+         selectionHotkeys.find(h => h.label === 'Remove selection')
+        )!.hotkey
+      );
     }
   }, [hotkeys]);
 
@@ -69,23 +83,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
     }
   }, [selectedStepsIDs, statisticsMode]);
 
-  useEffect(() => {
-    if (hotkeysActive) window.addEventListener("keydown", handleHotkeys);
-    else window.removeEventListener("keydown", handleHotkeys);
-    return () => {
-      window.removeEventListener("keydown", handleHotkeys);
-    };
-  }, [hotkeysActive, hotkeys, reference]);
-  
-  useEffect(() => {
-    setCoordinateSystem(reference);
-  }, [reference]);
-
-  const handleReferenceSelect = (selectedReference: Reference) => {
-    dispatch(setReference(selectedReference));
-  };
-
-  const handleHotkeys = (event: KeyboardEvent) => {
+  const handleHotkeys = useCallback((event: KeyboardEvent) => {
     const keyCode = event.code;
 
     if (keyCode === coordinateSystemHotkey.code) {
@@ -97,24 +95,42 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
     if (keyCode === pcaHotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('pca'))
-    };
+    }
     if (keyCode === pca0Hotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('pca0'))
-    };
+    }
     if (keyCode === gcHotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('gc'))
-    };
+    }
     if (keyCode === gcnHotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('gcn'))
-    };
+    }
     if (keyCode === unselectHotkey.code) {
       event.preventDefault();
       dispatch(setSelectedStepsIDs(null));
+    }
+  }, [coordinateSystemHotkey, pcaHotkey, pca0Hotkey, gcHotkey, gcnHotkey, unselectHotkey, availableReferences, reference, dispatch]);
+
+  useEffect(() => {
+    if (!hotkeysActive) return;
+    window.addEventListener("keydown", handleHotkeys);
+    return () => {
+      window.removeEventListener("keydown", handleHotkeys);
     };
+  }, [hotkeysActive, handleHotkeys]);
+  
+  useEffect(() => {
+    setCoordinateSystem(reference);
+  }, [reference]);
+
+  const handleReferenceSelect = (selectedReference: Reference) => {
+    dispatch(setReference(selectedReference));
   };
+
+  
 
   if (!data) return <ToolsPMDSkeleton />;
 
@@ -158,7 +174,12 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
       </ButtonGroupWithLabel>
       {/* <ShowHideDotsButtons setShowStepsInput={setShowStepsInput} showStepsInput={showStepsInput}/> */}
       <ShowHideDotsButtons data={data} />
-      <CommentsToggleButton />
+      <ToggleButton
+        isActive={isCommentsInputVisible}
+        onToggle={() => dispatch(toggleCommentsInput())}
+        label={'Comments Input'}
+      />
+      
       {
         showStepsInput && 
         <ModalWrapper

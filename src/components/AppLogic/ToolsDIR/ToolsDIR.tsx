@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import ButtonGroupWithLabel from '../../Common/Buttons/ButtonGroupWithLabel/ButtonGroupWithLabel';
 import { Button, Tooltip, Typography } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
@@ -15,6 +15,7 @@ import {
   setReference, 
   setSelectedDirectionsIDs, 
   setStatisticsMode,
+  toggleCommentsInput,
 } from '../../../services/reducers/dirPage';
 import { Reference } from '../../../utils/graphs/types';
 import VGPModalContent from '../VGP/VGPmodalContent';
@@ -24,7 +25,7 @@ import ReversePolarityButtons from './ReversePolarityButtons';
 import { useMediaQuery } from 'react-responsive';
 import { useTranslation } from 'react-i18next';
 import CurrentDIRFileSelector from './CurrentDIRFileSelector';
-import CommentsToggleButton from './CommentsToggleButton';
+import { ToggleButton } from '../../Common/Buttons';
 
 interface IToolsDIR {
   data: IDirData | null;
@@ -37,7 +38,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
   const widthLessThan1400 = useMediaQuery({ query: '(max-width: 1400px)' });
   
   const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
-  const { selectedDirectionsIDs, hiddenDirectionsIDs, statisticsMode, reference } = useAppSelector(state => state.dirPageReducer); 
+  const { selectedDirectionsIDs, hiddenDirectionsIDs, statisticsMode, reference, isCommentsInputVisible } = useAppSelector(state => state.dirPageReducer); 
 
   const [showIndexesInput, setShowIndexesInput] = useState<boolean>(false);
   const [showVGP, setShowVGP] = useState<boolean>(false);
@@ -53,17 +54,30 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
   const [unselectHotkey, setUnselectHotkey] = useState<{key: string, code: string}>({key: 'U', code: 'KeyU'});
 
   useEffect(() => {
-    const coordinateSystemHotkeys = hotkeys.find(block => block.title === 'Система координат')?.hotkeys;
-    const statHotkeys = hotkeys.find(block => block.title === 'Статистические методы')?.hotkeys;
-    const selectionHotkeys = hotkeys.find(block => block.title === 'Выделение точек')?.hotkeys;
+    const getGroup = (titleKey: string, ru: string, en: string) =>
+      hotkeys.find(block => block.titleKey === titleKey || block.title === ru || block.title === en)?.hotkeys;
+
+    const coordinateSystemHotkeys = getGroup('coordinates', 'Система координат', 'Coordinate system');
+    const statHotkeys = getGroup('statMethods', 'Статистические методы', 'Statistics methods');
+    const selectionHotkeys = getGroup('selection', 'Выделение точек', 'Dots selection');
 
     if (coordinateSystemHotkeys && statHotkeys && selectionHotkeys) {
-      setCoordinateSystemHotkey(coordinateSystemHotkeys.find(hotkey => hotkey.label === 'Прокручивание систем координат')!.hotkey);
-      setFisherHotkey(statHotkeys.find(hotkey => hotkey.label === 'Fisher')!.hotkey);
-      setMcFaddenHotkey(statHotkeys.find(hotkey => hotkey.label === 'McFadden')!.hotkey);
-      setGcHotkey(statHotkeys.find(hotkey => hotkey.label === 'GC')!.hotkey);
-      setGcnHotkey(statHotkeys.find(hotkey => hotkey.label === 'GCN')!.hotkey);
-      setUnselectHotkey(selectionHotkeys.find(hotkey => hotkey.label === 'Убрать выделение')!.hotkey);
+      setCoordinateSystemHotkey(
+        (coordinateSystemHotkeys.find(h => h.labelKey === 'coordinates.scroll') ||
+         coordinateSystemHotkeys.find(h => h.label === 'Прокручивание систем координат') ||
+         coordinateSystemHotkeys.find(h => h.label === 'Coordinate system scroll')
+        )!.hotkey
+      );
+      setFisherHotkey((statHotkeys.find(h => h.label === 'Fisher'))!.hotkey);
+      setMcFaddenHotkey((statHotkeys.find(h => h.label === 'McFadden'))!.hotkey);
+      setGcHotkey((statHotkeys.find(h => h.label === 'GC'))!.hotkey);
+      setGcnHotkey((statHotkeys.find(h => h.label === 'GCN'))!.hotkey);
+      setUnselectHotkey(
+        (selectionHotkeys.find(h => h.labelKey === 'selection.deleteSelection') ||
+         selectionHotkeys.find(h => h.label === 'Убрать выделение') ||
+         selectionHotkeys.find(h => h.label === 'Remove selection')
+        )!.hotkey
+      );
     }
   }, [hotkeys]);
 
@@ -77,16 +91,7 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
   }, [selectedDirectionsIDs, statisticsMode]);
 
   // добавляет слушатель нажатий на клавиатуру (для использования сочетаний клавиш)
-  useEffect(() => {
-    if (hotkeysActive) window.addEventListener("keydown", handleHotkeys);
-    else window.removeEventListener("keydown", handleHotkeys);
-    return () => {
-      window.removeEventListener("keydown", handleHotkeys);
-    };
-  }, [hotkeysActive, hotkeys, reference]);
-
-  // обработчик нажатий на клавиатуру
-  const handleHotkeys = (event: KeyboardEvent) => {
+  const handleHotkeys = useCallback((event: KeyboardEvent) => {
     const keyCode = event.code;
 
     if (keyCode === coordinateSystemHotkey.code) {
@@ -94,28 +99,39 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
       const currReferenceIndex = availableReferences.findIndex(coordRef => coordRef === reference);
       const nextReferenceIndex = (currReferenceIndex + 1) % 2;
       dispatch(setReference(availableReferences[nextReferenceIndex]));
-    };
+    }
     if (keyCode === fisherHotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('fisher'))
-    };
+    }
     if (keyCode === mcFaddenHotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('mcFad'))
-    };
+    }
     if (keyCode === gcHotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('gc'))
-    };
+    }
     if (keyCode === gcnHotkey.code) {
       event.preventDefault();
       dispatch(setStatisticsMode('gcn'))
-    };
+    }
     if (keyCode === unselectHotkey.code) {
       event.preventDefault();
       dispatch(setSelectedDirectionsIDs([]));
+    }
+  }, [coordinateSystemHotkey, fisherHotkey, mcFaddenHotkey, gcHotkey, gcnHotkey, unselectHotkey, availableReferences, reference, dispatch]);
+
+  useEffect(() => {
+    if (!hotkeysActive) return;
+    window.addEventListener("keydown", handleHotkeys);
+    return () => {
+      window.removeEventListener("keydown", handleHotkeys);
     };
-  };
+  }, [hotkeysActive, handleHotkeys]);
+
+  // обработчик нажатий на клавиатуру
+  
 
   // обработчик выбранной системы координат 
   const handleReferenceSelect = (selectedReference: Reference) => {
@@ -175,7 +191,12 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
           {t('dirPage.tools.tests.label')}
         </Button>
       </ButtonGroupWithLabel>
-      <CommentsToggleButton />
+      <ToggleButton
+        isActive={isCommentsInputVisible}
+        onToggle={() => dispatch(toggleCommentsInput())}
+        label={'Comments Input'}
+      />
+      
       <ModalWrapper
         open={showVGP}
         setOpen={setShowVGP}

@@ -1,6 +1,6 @@
 {
   "name": "pmtools_2.0",
-  "version": "2.5.8",
+  "version": "2.6.0",
   "private": true,
   "homepage": "https://pmtools.ru/",
   "dependencies": {
@@ -80,5 +80,8 @@
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
+  },
+  "engines": {
+    "node": "22.10.0"
   }
 }

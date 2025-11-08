@@ -23,10 +23,15 @@ const ProjectionButton: FC<IProjectionButton> = ({ label }) => {
   const [projectionHotkey, setProjectionHotkey] = useState<{key: string, code: string}>({key: 'P', code: 'KeyP'});
 
   useEffect(() => {
-    const zijdHotkeys = hotkeys.find(block => block.title === 'Управление диграммой Зийдервельда')?.hotkeys;
+    const zijdHotkeys = hotkeys.find(block => block.titleKey === 'zijd' || block.title === 'Управление диграммой Зийдервельда' || block.title === 'Zijd diagram manipulation')?.hotkeys;
 
     if (zijdHotkeys) {
-      setProjectionHotkey(zijdHotkeys.find(hotkey => hotkey.label === 'Прокручивание проекций')!.hotkey);
+      setProjectionHotkey(
+        (zijdHotkeys.find(h => h.labelKey === 'zijd.projection.scroll') ||
+         zijdHotkeys.find(h => h.label === 'Прокручивание проекций') ||
+         zijdHotkeys.find(h => h.label === 'Projection scroll')
+        )!.hotkey
+      );
     }
   }, [hotkeys]);
 

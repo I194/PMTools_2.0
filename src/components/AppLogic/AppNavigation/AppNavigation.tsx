@@ -11,7 +11,9 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import OtherHousesIcon from '@mui/icons-material/OtherHouses';
 import { DefaultIconButton } from "../../Common/Buttons";
 import { useTranslation } from "react-i18next";
-import { Menu, MenuItem } from "@mui/material";
+import { Menu, MenuItem, Typography, Button } from "@mui/material";
+import ModalWrapper from "../../Common/Modal/ModalWrapper";
+import ChangelogModal from "../../Common/Modal/ChangelogModal/ChangelogModal";
 
 const AppNavigation: FC = ({}) => {
 
@@ -29,6 +31,7 @@ const AppNavigation: FC = ({}) => {
   
   const [anchorElLang, setAnchorElLang] = useState<null | HTMLElement>(null);
   const openLang = Boolean(anchorElLang);
+  const [showChangelog, setShowChangelog] = useState<boolean>(false);
 
   const handleClickLang = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElLang(event.currentTarget);
@@ -69,13 +72,21 @@ const AppNavigation: FC = ({}) => {
         to={'/'}
         forceSmall
       />
-      <div style={{position: 'absolute', right: '0px'}}>
-        <DefaultIconButton onClick={onColorModeClick}>
+      <div style={{position: 'absolute', right: '0px'}} className={styles.rightBlock}>
+        <Button 
+          variant="text" 
+          color="primary" 
+          className={styles.versionButton}
+          onClick={() => setShowChangelog(true)}
+        >
+          v{process.env.REACT_APP_VERSION}
+        </Button>
+        <DefaultIconButton onClick={onColorModeClick} color="primary">
           {theme.palette.mode === 'dark' ? <Brightness7Icon color="primary" /> : <Brightness4Icon color="primary" />}
         </DefaultIconButton>
         <DefaultIconButton 
           onClick={handleClickLang} 
-          color="inherit"
+          color="primary"
           id="lang-button"
           aria-controls={openLang ? 'lang-menu' : undefined}
           aria-expanded={openLang ? 'true' : undefined}
@@ -105,6 +116,13 @@ const AppNavigation: FC = ({}) => {
           </MenuItem>
         </Menu>
       </div>
+      <ModalWrapper
+        open={showChangelog}
+        setOpen={setShowChangelog}
+        size={{ width: '56vw', height: '70vh' }}
+      >
+        <ChangelogModal />
+      </ModalWrapper>
   </div>
   )
 }

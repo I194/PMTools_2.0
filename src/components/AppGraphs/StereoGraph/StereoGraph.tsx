@@ -52,6 +52,7 @@ const StereoGraph: FC<IStereoGraph> = ({ graphId, width, height, data, menuSetti
             height={height}
             areaConstants={areaConstants}
             dataConstants={dataConstants}
+            rawData={data}
             inInterpretationIDs={inInterpretationIDs}
             selectedIDs={selectedIDs}
             settings={settings}
