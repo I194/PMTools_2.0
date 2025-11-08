@@ -11,7 +11,7 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import OtherHousesIcon from '@mui/icons-material/OtherHouses';
 import { DefaultIconButton } from "../../Common/Buttons";
 import { useTranslation } from "react-i18next";
-import { Menu, MenuItem } from "@mui/material";
+import { Menu, MenuItem, Typography, Button } from "@mui/material";
 
 const AppNavigation: FC = ({}) => {
 
@@ -69,13 +69,16 @@ const AppNavigation: FC = ({}) => {
         to={'/'}
         forceSmall
       />
-      <div style={{position: 'absolute', right: '0px'}}>
-        <DefaultIconButton onClick={onColorModeClick}>
+      <div style={{position: 'absolute', right: '0px'}} className={styles.rightBlock}>
+        <Button variant="text" color="primary" className={styles.versionButton}>
+          v{process.env.REACT_APP_VERSION}
+        </Button>
+        <DefaultIconButton onClick={onColorModeClick} color="primary">
           {theme.palette.mode === 'dark' ? <Brightness7Icon color="primary" /> : <Brightness4Icon color="primary" />}
         </DefaultIconButton>
         <DefaultIconButton 
           onClick={handleClickLang} 
-          color="inherit"
+          color="primary"
           id="lang-button"
           aria-controls={openLang ? 'lang-menu' : undefined}
           aria-expanded={openLang ? 'true' : undefined}
