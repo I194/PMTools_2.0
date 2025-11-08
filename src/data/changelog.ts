@@ -18,6 +18,7 @@ export const CHANGELOG: ChangelogEntry[] = [
       'Hotkeys: fixed hotkey initialization.',
       'Settings: added Display settings section; added numeric label controls for PCA/DIR.',
       'PCA stereo: added great-circle connections and enabled them by default.',
+      'Reversal Test: fixed SVG export – now exports a single combined SVG for X/Y/Z components.',
       'Changelog: added version history.',
     ],
   },
