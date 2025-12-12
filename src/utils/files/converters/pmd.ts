@@ -15,6 +15,7 @@ export const toPMD = async (parsedData: IPmdData): Promise<void> => {
 
   const extraMeta: any = {
     ...data.metadata,
+    b: 90 - data.metadata.b, // convert plunge back to hade for PMD format
     aName: 'a=',
     bName: '   b=',
     sName: '   s=',
@@ -66,7 +67,7 @@ export const toCSV_PMD = async (parsedData: IPmdData): Promise<void> => {
   const metaNames = 'a,b,s,d,v(m3)\n';
   const metaLine = [
     data.metadata.a,
-    data.metadata.b,
+    90 - data.metadata.b, // convert plunge back to hade for PMD format
     data.metadata.s,
     data.metadata.d,
     data.metadata.v,
@@ -99,7 +100,7 @@ export const toXLSX_PMD = async (parsedData: IPmdData): Promise<void> => {
   const metaNames = 'a,b,s,d,v (m3)'.split(',');
   const metaLine = [
     data.metadata.a,
-    data.metadata.b,
+    90 - data.metadata.b, // convert plunge back to hade for PMD format
     data.metadata.s,
     data.metadata.d,
     data.metadata.v,
