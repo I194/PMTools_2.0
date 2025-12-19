@@ -6,8 +6,16 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '2.6.1',
+    date: 'December 19, 2025',
+    items: [
+      'PCA DataTable: fixed metadata change handling — steps are now recalculated to keep geographic/stratigraphic directions in sync.',
+      'PCA export: fixed Hade/Plunge conversion (hade → plunge → hade) for PMD/CSV/XLSX exports.',
+    ],
+  },
+  {
     version: '2.6.0',
-    date: 'October 8, 2025',
+    date: 'November 8, 2025',
     items: [
       'Improved stability for long sessions; fixed several memory leaks.',
       'Empty files are skipped on import to prevent crashes.',

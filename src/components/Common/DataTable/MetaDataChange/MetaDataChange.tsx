@@ -7,6 +7,8 @@ import { useAppDispatch, useAppSelector } from '../../../../services/store/hooks
 import equal from "deep-equal"
 import { setTreatmentData } from '../../../../services/reducers/parsedData';
 import { useTranslation } from 'react-i18next';
+import Coordinates from '../../../../utils/graphs/classes/Coordinates';
+import toReferenceCoordinates from '../../../../utils/graphs/formatters/toReferenceCoordinates';
 
 interface IMetaDataChange {
   oldMetadata: IPmdData['metadata'];
@@ -24,10 +26,34 @@ const MetaDataChange: FC<IMetaDataChange> = ({ oldMetadata, onApply }) => {
 
   const handleApply = () => {
     const newTreatmentData = treatmentData.map(pmdData => {
-      if (equal(pmdData.metadata, oldMetadata)) {
+      if (pmdData.metadata.name === oldMetadata.name) {
+        const updatedSteps = pmdData.steps.map((step) => {
+          const coords = new Coordinates(step.x, step.y, step.z);
+          if (coords.isNull) {
+            return { ...step, Dgeo: 0, Igeo: 0, Dstrat: 0, Istrat: 0 };
+          }
+
+          const [Dgeo, Igeo] = toReferenceCoordinates('geographic', newMetadata, coords)
+            .toDirection()
+            .toArray();
+
+          const [Dstrat, Istrat] = toReferenceCoordinates('stratigraphic', newMetadata, coords)
+            .toDirection()
+            .toArray();
+
+          return {
+            ...step,
+            Dgeo: +Dgeo.toFixed(1),
+            Igeo: +Igeo.toFixed(1),
+            Dstrat: +Dstrat.toFixed(1),
+            Istrat: +Istrat.toFixed(1),
+          };
+        });
+
         return {
           ...pmdData,
-          metadata: newMetadata
+          metadata: newMetadata,
+          steps: updatedSteps,
         };
       };
       return pmdData;
