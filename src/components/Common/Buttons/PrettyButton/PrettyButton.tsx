@@ -1,18 +1,18 @@
-import { Button } from "@mui/material";
-import React from "react";
-import styles from "./PrettyButton.module.scss";
-import { ButtonProps } from "@mui/material";
-import { useMediaQuery } from "react-responsive";
+import { Button } from '@mui/material';
+import React from 'react';
+import styles from './PrettyButton.module.scss';
+import { ButtonProps } from '@mui/material';
+import { useMediaQuery } from 'react-responsive';
 
 const PrettyButton = <C extends React.ElementType>(
-  props: ButtonProps<C, { component?: C; buttonRef?: React.Ref<HTMLButtonElement> }>
+  props: ButtonProps<C, { component?: C; buttonRef?: React.Ref<HTMLButtonElement> }>,
 ) => {
   const { children, buttonRef, ...rest } = props;
   const widthLessThan720 = useMediaQuery({ maxWidth: 720 });
 
   return (
     <Button
-      variant="text" 
+      variant="text"
       color={'primary'}
       sx={{
         textTransform: 'none',
@@ -23,13 +23,12 @@ const PrettyButton = <C extends React.ElementType>(
         width: 'fit-content',
       }}
       component="span"
-      ref={buttonRef} 
+      ref={buttonRef}
       {...rest}
     >
-      { children }
+      {children}
     </Button>
   );
 };
 
 export default PrettyButton;
-

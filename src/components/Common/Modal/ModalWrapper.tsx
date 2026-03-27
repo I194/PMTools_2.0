@@ -6,9 +6,7 @@ import { IconButton } from '@mui/material';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import Draggable from 'react-draggable';
 import { useTheme } from '@mui/material/styles';
-import {
-  bgColorMain,
-} from '../../../utils/ThemeConstants';
+import { bgColorMain } from '../../../utils/ThemeConstants';
 import { useAppDispatch } from '../../../services/store/hooks';
 import { acitvateHotkeys, deactivateHotkeys } from '../../../services/reducers/appSettings';
 import { useTranslation } from 'react-i18next';
@@ -17,27 +15,26 @@ interface IModal {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onClose?: () => void;
-  size?: {width?: string, height?: string};
-  position?: {left?: string, top?: string};
+  size?: { width?: string; height?: string };
+  position?: { left?: string; top?: string };
   isDraggable?: boolean;
   showBottomClose?: boolean;
   bgColor?: string;
   borderStyle?: string;
-};
+}
 
-const ModalWrapper: FC<IModal> = ({ 
-  open, 
-  setOpen, 
-  onClose, 
-  size, 
-  position, 
+const ModalWrapper: FC<IModal> = ({
+  open,
+  setOpen,
+  onClose,
+  size,
+  position,
   isDraggable,
   showBottomClose,
   bgColor,
   borderStyle,
-  children
+  children,
 }) => {
-
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const { t, i18n } = useTranslation('translation');
@@ -51,7 +48,9 @@ const ModalWrapper: FC<IModal> = ({
   useEffect(() => {
     if (open) dispatch(deactivateHotkeys());
     else dispatch(acitvateHotkeys());
-    return () => {dispatch(acitvateHotkeys())}
+    return () => {
+      dispatch(acitvateHotkeys());
+    };
   }, [open]);
 
   const ModalInnerData = (
@@ -63,23 +62,26 @@ const ModalWrapper: FC<IModal> = ({
       aria-describedby="keep-mounted-modal-description"
       disablePortal={isDraggable}
       hideBackdrop={isDraggable}
-      sx={isDraggable ? {
-        ...size,
-        ...position,
-      }: {}}
-      
+      sx={
+        isDraggable
+          ? {
+              ...size,
+              ...position,
+            }
+          : {}
+      }
     >
-      <div 
-        style={{ 
+      <div
+        style={{
           ...size,
           ...position,
           backgroundColor: bgColor ? bgColor : bgColorMain(theme.palette.mode),
-          border: borderStyle ? borderStyle : 'none'
+          border: borderStyle ? borderStyle : 'none',
         }}
         className={styles.container}
       >
-        <IconButton 
-          color="error" 
+        <IconButton
+          color="error"
           sx={{
             position: 'absolute',
             right: '8px',
@@ -90,28 +92,23 @@ const ModalWrapper: FC<IModal> = ({
         >
           <CloseOutlinedIcon />
         </IconButton>
-        { children }
-        {
-          showBottomClose && 
-          <Button variant='outlined' onClick={handleClose} sx={{mt: 2}}>
+        {children}
+        {showBottomClose && (
+          <Button variant="outlined" onClick={handleClose} sx={{ mt: 2 }}>
             {t('importModal.close')}
           </Button>
-        }
+        )}
       </div>
     </Modal>
-  )
+  );
 
   return (
     <>
-      {
-      isDraggable 
-        ? (
-          <Draggable positionOffset={{x: '-50%', y: '-50%'}}>
-            { ModalInnerData }
-          </Draggable>
-        )
-        : ModalInnerData
-      }
+      {isDraggable ? (
+        <Draggable positionOffset={{ x: '-50%', y: '-50%' }}>{ModalInnerData}</Draggable>
+      ) : (
+        ModalInnerData
+      )}
     </>
   );
 };

@@ -1,10 +1,8 @@
-import React, { FC } from "react";
+import React, { FC } from 'react';
 import styles from './UploadButtom.module.scss';
 import { Input, Button } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import {
-  textColor
-} from '../../../../utils/ThemeConstants';
+import { textColor } from '../../../../utils/ThemeConstants';
 import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
 
 type Props = {
@@ -13,57 +11,62 @@ type Props = {
   dndInputProps?: any;
   label?: string;
   extraId?: string;
-}
+};
 
-const UploadButton: FC<Props> = ({ onUpload, accept, dndInputProps, label='Загрузить файл', extraId='1' }) => {
-
+const UploadButton: FC<Props> = ({
+  onUpload,
+  accept,
+  dndInputProps,
+  label = 'Загрузить файл',
+  extraId = '1',
+}) => {
   const theme = useTheme();
 
   const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const handleChange = (event: any, files?: Array<File>)  => {
+  const handleChange = (event: any, files?: Array<File>) => {
     // if (!!dndInputProps) return;
     onUpload(event, files);
     if (inputRef.current) {
       inputRef.current.value = '';
     }
-  }
+  };
 
   return (
-    <label 
-      htmlFor={`file-input-${extraId}`} 
+    <label
+      htmlFor={`file-input-${extraId}`}
       style={{
-        flex: 'auto'
+        flex: 'auto',
       }}
     >
-      <Input 
+      <Input
         // id="upload-site-latlon-top"
-        type={'file'}  
+        type={'file'}
         inputProps={{
           // ...dndInputProps,
           multiple: true,
           accept: accept.join(', '),
           id: `file-input-${extraId}`,
-          ref: inputRef
+          ref: inputRef,
         }}
         disableUnderline={true}
-        sx={{display: 'none'}}
+        sx={{ display: 'none' }}
         onChange={handleChange}
       />
-      <Button 
-        variant="outlined" 
+      <Button
+        variant="outlined"
         startIcon={<UploadFileOutlinedIcon />}
         sx={{
-          textTransform: 'none', 
+          textTransform: 'none',
           width: '100%',
           color: textColor(theme.palette.mode),
         }}
         component="span"
       >
-        { label }
+        {label}
       </Button>
     </label>
   );
-}
+};
 
 export default UploadButton;

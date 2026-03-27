@@ -1,33 +1,41 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from 'react';
 import styles from './DataTableDIR.module.scss';
-import { DataGridDIRFromDIRRow, IDirData } from "../../../../utils/GlobalTypes";
-import { DataGrid, GridActionsCellItem, GridValueFormatterParams, GridRowSelectionModel } from '@mui/x-data-grid';
+import { DataGridDIRFromDIRRow, IDirData } from '../../../../utils/GlobalTypes';
+import {
+  DataGrid,
+  GridActionsCellItem,
+  GridValueFormatterParams,
+  GridRowSelectionModel,
+} from '@mui/x-data-grid';
 import DataTablePMDSkeleton from './DataTableDIRSkeleton';
-import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
-import { setSelectedDirectionsIDs, setHiddenDirectionsIDs, setReversedDirectionsIDs } from "../../../../services/reducers/dirPage";
-import { GetDataTableBaseStyle } from "../styleConstants";
-import PMDInputDataTableToolbar from "../../../Common/DataTable/Toolbar/PMDInputDataTableToolbar";
+import { useAppDispatch, useAppSelector } from '../../../../services/store/hooks';
+import {
+  setSelectedDirectionsIDs,
+  setHiddenDirectionsIDs,
+  setReversedDirectionsIDs,
+} from '../../../../services/reducers/dirPage';
+import { GetDataTableBaseStyle } from '../styleConstants';
+import PMDInputDataTableToolbar from '../../../Common/DataTable/Toolbar/PMDInputDataTableToolbar';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { StatisticsModeDIR } from "../../../../utils/graphs/types";
-import DataTableDIRSkeleton from "./DataTableDIRSkeleton";
-import DIRInputDataTableToolbar from "../../../Common/DataTable/Toolbar/DIRInputDataTableToolbar";
+import { StatisticsModeDIR } from '../../../../utils/graphs/types';
+import DataTableDIRSkeleton from './DataTableDIRSkeleton';
+import DIRInputDataTableToolbar from '../../../Common/DataTable/Toolbar/DIRInputDataTableToolbar';
 import SwapVertRoundedIcon from '@mui/icons-material/SwapVertRounded';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 
 import { useTheme } from '@mui/material/styles';
-import {
-  primaryColor,
-} from '../../../../utils/ThemeConstants';
-import Direction from "../../../../utils/graphs/classes/Direction";
-import { DIRDataTableColumns, IDataTableDIR } from "../types";
+import { primaryColor } from '../../../../utils/ThemeConstants';
+import Direction from '../../../../utils/graphs/classes/Direction';
+import { DIRDataTableColumns, IDataTableDIR } from '../types';
 
 const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
-
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
-  const { selectedDirectionsIDs, hiddenDirectionsIDs, reversedDirectionsIDs } = useAppSelector(state => state.dirPageReducer);
+  const { selectedDirectionsIDs, hiddenDirectionsIDs, reversedDirectionsIDs } = useAppSelector(
+    (state) => state.dirPageReducer,
+  );
 
   // selectionModel is array of ID's of rows
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
@@ -35,15 +43,15 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
 
   useEffect(() => {
     if (selectedDirectionsIDs) setSelectionModel(selectedDirectionsIDs);
-    else setSelectionModel([]); 
+    else setSelectionModel([]);
   }, [selectedDirectionsIDs]);
 
   const toggleRowVisibility = (id: number) => (event: any) => {
     event.stopPropagation();
-    const newhiddenDirectionsIDs = hiddenDirectionsIDs.includes(id) 
-      ? hiddenDirectionsIDs.filter(hiddenId => hiddenId !== id) 
+    const newhiddenDirectionsIDs = hiddenDirectionsIDs.includes(id)
+      ? hiddenDirectionsIDs.filter((hiddenId) => hiddenId !== id)
       : [...hiddenDirectionsIDs, id];
-    dispatch(setHiddenDirectionsIDs(newhiddenDirectionsIDs))
+    dispatch(setHiddenDirectionsIDs(newhiddenDirectionsIDs));
   };
 
   const toggleAllRowsVisibility = (event: any) => {
@@ -53,15 +61,19 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
   const toggleRowPolarity = (id: number) => (event: any) => {
     event.stopPropagation();
     const newReversedDirectionsIDs = reversedDirectionsIDs.includes(id)
-      ? reversedDirectionsIDs.filter(reversedId => reversedId !== id)
+      ? reversedDirectionsIDs.filter((reversedId) => reversedId !== id)
       : [...reversedDirectionsIDs, id];
     dispatch(setReversedDirectionsIDs(newReversedDirectionsIDs));
   };
 
   const toggleAllRowsPolarity = (event: any) => {
-    reversedDirectionsIDs.length > 0 ? 
-      dispatch(setReversedDirectionsIDs([])) : 
-      dispatch(setReversedDirectionsIDs(data?.interpretations?.map(interpretation => interpretation.id) ?? []));
+    reversedDirectionsIDs.length > 0
+      ? dispatch(setReversedDirectionsIDs([]))
+      : dispatch(
+          setReversedDirectionsIDs(
+            data?.interpretations?.map((interpretation) => interpretation.id) ?? [],
+          ),
+        );
   };
 
   const columns: DIRDataTableColumns = [
@@ -72,7 +84,7 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
       renderHeader: () => (
         <GridActionsCellItem
           icon={<VisibilityIcon />}
-          label="Hide all directions" 
+          label="Hide all directions"
           onClick={toggleAllRowsVisibility}
           color="inherit"
         />
@@ -80,7 +92,13 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
       getActions: ({ id }) => {
         return [
           <GridActionsCellItem
-            icon={hiddenDirectionsIDs.includes(id as number) ? <VisibilityOffIcon /> : <VisibilityIcon />} 
+            icon={
+              hiddenDirectionsIDs.includes(id as number) ? (
+                <VisibilityOffIcon />
+              ) : (
+                <VisibilityIcon />
+              )
+            }
             label="Toggle direction visibility"
             onClick={toggleRowVisibility(id as number)}
             color="inherit"
@@ -104,10 +122,12 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
         return [
           <GridActionsCellItem
             icon={
-              reversedDirectionsIDs.includes(id as number) ?               
-              <SettingsBackupRestoreIcon sx={{fill: primaryColor(theme.palette.mode)}}/> :
-              <SwapVertRoundedIcon /> 
-            } 
+              reversedDirectionsIDs.includes(id as number) ? (
+                <SettingsBackupRestoreIcon sx={{ fill: primaryColor(theme.palette.mode) }} />
+              ) : (
+                <SwapVertRoundedIcon />
+              )
+            }
             label="Toggle direction polarity"
             onClick={toggleRowPolarity(id as number)}
             color="inherit"
@@ -121,33 +141,65 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
     { field: 'code', headerName: 'Code', type: 'string', width: 80 },
     { field: 'stepRange', headerName: 'StepRange', type: 'string', width: 120 },
     { field: 'stepCount', headerName: 'N', type: 'number', width: 40 },
-    { field: 'Dgeo', headerName: 'Dgeo', type: 'number', width: 70,
-      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    {
+      field: 'Dgeo',
+      headerName: 'Dgeo',
+      type: 'number',
+      width: 70,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1),
     },
-    { field: 'Igeo', headerName: 'Igeo', type: 'number', width: 70,
-      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    {
+      field: 'Igeo',
+      headerName: 'Igeo',
+      type: 'number',
+      width: 70,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1),
     },
-    { field: 'accuracyGeo', headerName: 'Kgeo', type: 'string', width: 70,
-      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    {
+      field: 'accuracyGeo',
+      headerName: 'Kgeo',
+      type: 'string',
+      width: 70,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1),
     },
-    { field: 'confidenceRadiusGeo', headerName: 'MADgeo', type: 'string', width: 80,
-      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    {
+      field: 'confidenceRadiusGeo',
+      headerName: 'MADgeo',
+      type: 'string',
+      width: 80,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1),
     },
-    { field: 'Dstrat', headerName: 'Dstrat', type: 'number', width: 70,
-      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    {
+      field: 'Dstrat',
+      headerName: 'Dstrat',
+      type: 'number',
+      width: 70,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1),
     },
-    { field: 'Istrat', headerName: 'Istrat', type: 'number', width: 70,
-      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    {
+      field: 'Istrat',
+      headerName: 'Istrat',
+      type: 'number',
+      width: 70,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1),
     },
-    { field: 'accuracyStrat', headerName: 'Kstrat', type: 'string', width: 70,
-      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    {
+      field: 'accuracyStrat',
+      headerName: 'Kstrat',
+      type: 'string',
+      width: 70,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1),
     },
-    { field: 'confidenceRadiusStrat', headerName: 'MADstrat', type: 'string', width: 80,
-      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    {
+      field: 'confidenceRadiusStrat',
+      headerName: 'MADstrat',
+      type: 'string',
+      width: 80,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1),
     },
     { field: 'comment', headerName: 'Comment', type: 'string', width: 200 },
-    { field: 'lat', headerName: 'Lat', type: 'number', width: 70, },
-    { field: 'lon', headerName: 'Lon', type: 'number', width: 70, },
+    { field: 'lat', headerName: 'Lat', type: 'number', width: 70 },
+    { field: 'lon', headerName: 'Lon', type: 'number', width: 70 },
   ];
 
   columns.forEach((col) => {
@@ -155,17 +207,32 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
     col.headerAlign = 'center';
     col.hideSortIcons = true;
   });
-  
+
   if (!data) return <DataTableDIRSkeleton />;
   let visibleIndex = 1;
   const rows: Array<DataGridDIRFromDIRRow> = data.interpretations.map((interpretation, index) => {
-    const { id, label, code, stepRange, stepCount, Dgeo, Igeo, Dstrat, Istrat, MADgeo, Kgeo, MADstrat, Kstrat, comment } = interpretation;
+    const {
+      id,
+      label,
+      code,
+      stepRange,
+      stepCount,
+      Dgeo,
+      Igeo,
+      Dstrat,
+      Istrat,
+      MADgeo,
+      Kgeo,
+      MADstrat,
+      Kstrat,
+      comment,
+    } = interpretation;
     let geoDirection = new Direction(Dgeo, Igeo, 1);
     let stratDirection = new Direction(Dstrat, Istrat, 1);
     if (reversedDirectionsIDs.includes(id)) {
       geoDirection = geoDirection.reversePolarity();
       stratDirection = stratDirection.reversePolarity();
-    };
+    }
     const DgeoFinal = +geoDirection.declination.toFixed(1);
     const IgeoFinal = +geoDirection.inclination.toFixed(1);
     const DstratFinal = +stratDirection.declination.toFixed(1);
@@ -174,7 +241,7 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
       id,
       index: hiddenDirectionsIDs.includes(id) ? '-' : visibleIndex++,
       label,
-      code: code as StatisticsModeDIR, 
+      code: code as StatisticsModeDIR,
       stepRange,
       stepCount,
       Dgeo: DgeoFinal,
@@ -185,15 +252,15 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
       accuracyGeo: +(Kgeo || 0).toFixed(1),
       confidenceRadiusStrat: +MADstrat.toFixed(1),
       accuracyStrat: +(Kstrat || 0).toFixed(1),
-      comment
+      comment,
     };
   });
 
   return (
     <DataTablePMDSkeleton>
-      <DataGrid 
-        rows={rows} 
-        columns={columns} 
+      <DataGrid
+        rows={rows}
+        columns={columns}
         checkboxSelection
         rowSelectionModel={selectionModel}
         onRowSelectionModelChange={(e) => {
@@ -205,7 +272,7 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
           setSelectedRows(selectedRows);
         }}
         components={{
-          Toolbar: DIRInputDataTableToolbar, 
+          Toolbar: DIRInputDataTableToolbar,
         }}
         sx={{
           ...GetDataTableBaseStyle(),
@@ -214,16 +281,16 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
           },
           '& .MuiDataGrid-columnHeader': {
             padding: '0px 0px',
-          }
+          },
         }}
         density={'compact'}
         hideFooter={rows.length < 100}
-        getRowClassName={
-          (params) =>  hiddenDirectionsIDs.includes(params.row.id) ? styles.hiddenRow : ''
+        getRowClassName={(params) =>
+          hiddenDirectionsIDs.includes(params.row.id) ? styles.hiddenRow : ''
         }
       />
     </DataTablePMDSkeleton>
   );
-}
+};
 
 export default DataTableDIR;

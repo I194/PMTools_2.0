@@ -1,10 +1,10 @@
-import React from "react";
-import { IconButton } from "@mui/material";
-import { IconButtonProps } from "@mui/material";
-import { useMediaQuery } from "react-responsive";
+import React from 'react';
+import { IconButton } from '@mui/material';
+import { IconButtonProps } from '@mui/material';
+import { useMediaQuery } from 'react-responsive';
 
 const DefaultIconButton = <C extends React.ElementType>(
-  props: IconButtonProps<C, { component?: C; buttonRef?: React.Ref<HTMLButtonElement> }>
+  props: IconButtonProps<C, { component?: C; buttonRef?: React.Ref<HTMLButtonElement> }>,
 ) => {
   const { children, buttonRef, ...rest } = props;
   const widthLessThan720 = useMediaQuery({ maxWidth: 720 });
@@ -12,17 +12,16 @@ const DefaultIconButton = <C extends React.ElementType>(
 
   return (
     <IconButton
-      ref={buttonRef} 
+      ref={buttonRef}
       {...rest}
       sx={{
         borderRadius: '8px',
-        ...rest.sx
+        ...rest.sx,
       }}
     >
-      { children }
+      {children}
     </IconButton>
   );
 };
 
 export default DefaultIconButton;
-

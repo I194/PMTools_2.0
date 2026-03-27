@@ -21,33 +21,48 @@ export const toPMD = async (parsedData: IPmdData): Promise<void> => {
     sName: '   s=',
     dName: '   d=',
     vName: '   v=',
-  }
+  };
 
   // 119_0     a=162.9   b= 62.0   s=270.0   d=  0.0   v= 1.0E-6m3 --- example
-  const metaLines = [
-    ' ',
-    Object.keys(dataModel_metaPMD).reduce((line, param) => {
-      if (param === 'v') return (
-        line + putParamToString(extraMeta[param].toExponential(1).toUpperCase(), dataModel_metaPMD[param], true)
-      );
-      if (typeof extraMeta[param] === 'number') return (
-        line + putParamToString(extraMeta[param].toFixed(1), dataModel_metaPMD[param], true)
-      );
-      return line + putParamToString(extraMeta[param], dataModel_metaPMD[param]);
-    }, '').trim() + 'm3',
-  ].join('\r\n') + '\r\n';
+  const metaLines =
+    [
+      ' ',
+      Object.keys(dataModel_metaPMD)
+        .reduce((line, param) => {
+          if (param === 'v')
+            return (
+              line +
+              putParamToString(
+                extraMeta[param].toExponential(1).toUpperCase(),
+                dataModel_metaPMD[param],
+                true,
+              )
+            );
+          if (typeof extraMeta[param] === 'number')
+            return (
+              line + putParamToString(extraMeta[param].toFixed(1), dataModel_metaPMD[param], true)
+            );
+          return line + putParamToString(extraMeta[param], dataModel_metaPMD[param]);
+        }, '')
+        .trim() + 'm3',
+    ].join('\r\n') + '\r\n';
 
-  const columnNames = ' PAL  Xc (Am2)  Yc (Am2)  Zc (Am2)  MAG(A/m)   Dg    Ig    Ds    Is   a95 \r\n';
+  const columnNames =
+    ' PAL  Xc (Am2)  Yc (Am2)  Zc (Am2)  MAG(A/m)   Dg    Ig    Ds    Is   a95 \r\n';
 
-  const lines = data.steps.map((step: any) => {
-    return Object.keys(dataModel_step).reduce((line, param) => {
-      const alignRight = !!(typeof(step[param]) === 'number');
-      if (dataModel_step[param] === 6 || dataModel_step[param] === 5) {
-        return line + putParamToString(step[param].toFixed(1), dataModel_step[param], alignRight);
-      };
-      return line + putParamToString(toExponential_PMD(step[param]), dataModel_step[param], alignRight);
-    }, '');
-  }).join('\r\n');
+  const lines = data.steps
+    .map((step: any) => {
+      return Object.keys(dataModel_step).reduce((line, param) => {
+        const alignRight = !!(typeof step[param] === 'number');
+        if (dataModel_step[param] === 6 || dataModel_step[param] === 5) {
+          return line + putParamToString(step[param].toFixed(1), dataModel_step[param], alignRight);
+        }
+        return (
+          line + putParamToString(toExponential_PMD(step[param]), dataModel_step[param], alignRight)
+        );
+      }, '');
+    })
+    .join('\r\n');
 
   const res = metaLines + columnNames + lines + '\r\n';
   const filename = getFileName(data.metadata.name);
@@ -65,22 +80,25 @@ export const toCSV_PMD = async (parsedData: IPmdData): Promise<void> => {
   const data = parsedData;
 
   const metaNames = 'a,b,s,d,v(m3)\n';
-  const metaLine = [
-    data.metadata.a,
-    90 - data.metadata.b, // convert plunge back to hade for PMD format
-    data.metadata.s,
-    data.metadata.d,
-    data.metadata.v,
-  ].join(',') + '\n';
+  const metaLine =
+    [
+      data.metadata.a,
+      90 - data.metadata.b, // convert plunge back to hade for PMD format
+      data.metadata.s,
+      data.metadata.d,
+      data.metadata.v,
+    ].join(',') + '\n';
 
   const columnNames = 'PAL,Xc(Am2),Yc(Am2),Zc(Am2),MAG(A/m),Dg,Ig,Ds,Is,a95\n';
 
-  const lines = data.steps.map((step: any) => {
-    const line = Object.keys(dataModel_step).reduce((line, param) => {
-      return line + `${step[param]},`
-    }, '')
-    return line.slice(0, -1);
-  }).join('\n');
+  const lines = data.steps
+    .map((step: any) => {
+      const line = Object.keys(dataModel_step).reduce((line, param) => {
+        return line + `${step[param]},`;
+      }, '');
+      return line.slice(0, -1);
+    })
+    .join('\n');
 
   const res = metaNames + metaLine + columnNames + lines;
   const filename = getFileName(data.metadata.name);
@@ -121,11 +139,10 @@ export const toXLSX_PMD = async (parsedData: IPmdData): Promise<void> => {
   lines.unshift(metaNames);
   const wsheet = XLSX.utils.aoa_to_sheet(lines);
   wbook.Sheets.data = wsheet;
-  const wbinary = XLSX.write(wbook, {bookType: 'xlsx', type: 'binary'});
+  const wbinary = XLSX.write(wbook, { bookType: 'xlsx', type: 'binary' });
 
   const res = s2ab(wbinary);
   const filename = getFileName(data.metadata.name);
 
-  download(res, `${filename}.xlsx`, "application/octet-stream");
+  download(res, `${filename}.xlsx`, 'application/octet-stream');
 };
-

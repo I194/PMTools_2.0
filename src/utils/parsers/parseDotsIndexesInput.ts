@@ -11,25 +11,22 @@ const parseSimplifiedInput = (enteredIDs: string, maxIndex: number) => {
     return;
   }
 
-  return Array.from({ length: maxIndex - startNumber + 1 }, (_, index) => startNumber + index);;
-}
+  return Array.from({ length: maxIndex - startNumber + 1 }, (_, index) => startNumber + index);
+};
 
-const parseDotsIndexesInput = (
-  enteredIDs: string,
-  maxIndex: number,
-) => {
+const parseDotsIndexesInput = (enteredIDs: string, maxIndex: number) => {
   const simplifiedResult = parseSimplifiedInput(enteredIDs, maxIndex);
   if (simplifiedResult?.length) {
     return simplifiedResult;
   }
 
   // parse id's input (like steps to select)
-  // example of valid enteredIDs: 
+  // example of valid enteredIDs:
   // 1-9 || 2,4,8,9 || 2-4;8,9 || 2-4;8,9;12-14
   const segments = enteredIDs.split(';');
 
-  const commaSegements = segments.filter(segment => segment.includes(','));
-  const dashSegments = segments.filter(segment => segment.includes('-'));
+  const commaSegements = segments.filter((segment) => segment.includes(','));
+  const dashSegments = segments.filter((segment) => segment.includes('-'));
 
   if (!commaSegements.length && !dashSegments.length) {
     return [+enteredIDs];
@@ -38,25 +35,22 @@ const parseDotsIndexesInput = (
   const commaIDs: Array<number> = [];
   const dashIDs: Array<number> = [];
 
-  commaSegements.forEach(segment => {
-    const IDs = segment.split(',').map(id => +id);
+  commaSegements.forEach((segment) => {
+    const IDs = segment.split(',').map((id) => +id);
     commaIDs.push(...IDs);
   });
 
-  dashSegments.forEach(segment => {
-    const edges = segment.split('-').map(id => +id);
+  dashSegments.forEach((segment) => {
+    const edges = segment.split('-').map((id) => +id);
     if (edges.length !== 2) return [];
     const IDs = [];
     for (let id = edges[0]; id <= edges[1]; id++) {
       IDs.push(id);
-    };
+    }
     dashIDs.push(...IDs);
   });
 
-  const uniqueIndexes = [...new Set([
-    ...commaIDs, 
-    ...dashIDs
-  ])];
+  const uniqueIndexes = [...new Set([...commaIDs, ...dashIDs])];
 
   return uniqueIndexes;
 };

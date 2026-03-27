@@ -1,17 +1,17 @@
-import React from "react";
-import { Divider, FormControlLabel, Switch, Typography } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../../../../../services/store/hooks";
-import { useTheme } from "@mui/material/styles";
-import { textColor,  } from "../../../../../../utils/ThemeConstants";
-import { useTranslation } from "react-i18next";
-import { toggleLabelMode as toggleLabelModePCA } from "../../../../../../services/reducers/pcaPage";
-import { toggleLabelMode as toggleLabelModeDIR } from "../../../../../../services/reducers/dirPage";
-import styles from "./styles.module.scss";
+import React from 'react';
+import { Divider, FormControlLabel, Switch, Typography } from '@mui/material';
+import { useAppDispatch, useAppSelector } from '../../../../../../services/store/hooks';
+import { useTheme } from '@mui/material/styles';
+import { textColor } from '../../../../../../utils/ThemeConstants';
+import { useTranslation } from 'react-i18next';
+import { toggleLabelMode as toggleLabelModePCA } from '../../../../../../services/reducers/pcaPage';
+import { toggleLabelMode as toggleLabelModeDIR } from '../../../../../../services/reducers/dirPage';
+import styles from './styles.module.scss';
 
 const DisplaySection = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
-  const { t } = useTranslation("translation");
+  const { t } = useTranslation('translation');
 
   const { labelModeIsNumeric: pcaNumeric } = useAppSelector((s) => s.pcaPageReducer);
   const { labelModeIsNumeric: dirNumeric } = useAppSelector((s) => s.dirPageReducer);
@@ -19,7 +19,7 @@ const DisplaySection = () => {
   return (
     <div className={styles.container}>
       <Typography variant="h6" color={textColor(theme.palette.mode)}>
-        {t("settings.display.title")}
+        {t('settings.display.title')}
       </Typography>
       <Divider />
       <div className={styles.content}>
@@ -32,7 +32,7 @@ const DisplaySection = () => {
               onChange={() => dispatch(toggleLabelModePCA())}
             />
           }
-          label={t("settings.display.numericLabel.pca")}
+          label={t('settings.display.numericLabel.pca')}
         />
 
         <FormControlLabel
@@ -44,7 +44,7 @@ const DisplaySection = () => {
               onChange={() => dispatch(toggleLabelModeDIR())}
             />
           }
-          label={t("settings.display.numericLabel.dir")}
+          label={t('settings.display.numericLabel.dir')}
         />
       </div>
     </div>
@@ -52,5 +52,3 @@ const DisplaySection = () => {
 };
 
 export default DisplaySection;
-
-

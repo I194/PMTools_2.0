@@ -1,13 +1,13 @@
-import Direction from "../../../classes/Direction";
-import createConfidenceEllipse from "./createConfidenceEllipse";
-import splitCircle from "./splitCircle";
+import Direction from '../../../classes/Direction';
+import createConfidenceEllipse from './createConfidenceEllipse';
+import splitCircle from './splitCircle';
 
 const createStereoPlaneData = (
-  direction: Direction, 
+  direction: Direction,
   graphSize: number,
-  angle?: number, 
-  angle2?: number, 
-  N?: number
+  angle?: number,
+  angle2?: number,
+  N?: number,
 ) => {
   // Function createStereoPlaneData
   // Returns plane data (small or big circle xyData)
@@ -30,9 +30,15 @@ const createStereoPlaneData = (
 
   const splittedEllipse = splitCircle(ellipse);
 
-  const xyData: Array<[number, number]> = ellipse.map(point => point.toCartesian2DForGraph(graphSize));
-  const xyDataNeg: Array<[number, number]> = splittedEllipse.negative.map(point => point.toCartesian2DForGraph(graphSize));
-  const xyDataPos: Array<[number, number]> = splittedEllipse.positive.map(point => point.toCartesian2DForGraph(graphSize));
+  const xyData: Array<[number, number]> = ellipse.map((point) =>
+    point.toCartesian2DForGraph(graphSize),
+  );
+  const xyDataNeg: Array<[number, number]> = splittedEllipse.negative.map((point) =>
+    point.toCartesian2DForGraph(graphSize),
+  );
+  const xyDataPos: Array<[number, number]> = splittedEllipse.positive.map((point) =>
+    point.toCartesian2DForGraph(graphSize),
+  );
 
   return {
     all: xyData,

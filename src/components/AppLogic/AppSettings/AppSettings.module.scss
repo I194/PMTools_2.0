@@ -1,5 +1,4 @@
 .buttons {
-
   height: 80%;
   width: 100%;
 
@@ -10,14 +9,14 @@
 
   padding: 4px 8px;
   gap: 8px;
-
 }
 
 @media screen and (max-width: 1400px) {
   .buttons {
     padding: 0 8px;
 
-    span, button {
+    span,
+    button {
       // padding: 8px 4px;
     }
   }

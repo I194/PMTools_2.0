@@ -13,11 +13,11 @@ const getCDF = (data: Array<number>) => {
   // Returns the cumulative distribution function of an array
 
   // Calculate the cumulative distribution function of the sorted input
-  return data.sort(numericSort).map(function(value, index) {
+  return data.sort(numericSort).map(function (value, index) {
     return {
       x: value,
-      y: index / (data.length - 1)
-    }
+      y: index / (data.length - 1),
+    };
   });
 };
 

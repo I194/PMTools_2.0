@@ -1,24 +1,19 @@
-import React, { FC } from "react";
+import React, { FC } from 'react';
 import styles from './DataTablePMD.module.scss';
 import { useTheme } from '@mui/material/styles';
-import {
-  bgColorMain,
-  bgColorBlocks,
-  boxShadowStyle
-} from '../../../../utils/ThemeConstants';
+import { bgColorMain, bgColorBlocks, boxShadowStyle } from '../../../../utils/ThemeConstants';
 
 const MetaDataTablePMDSkeleton: FC = ({ children }) => {
-
   const theme = useTheme();
 
   return (
-    <div 
+    <div
       className={styles.metadata}
       style={{
         backgroundColor: bgColorMain(theme.palette.mode),
       }}
     >
-      <div 
+      <div
         className={styles.table}
         style={{
           backgroundColor: bgColorBlocks(theme.palette.mode),
@@ -26,12 +21,11 @@ const MetaDataTablePMDSkeleton: FC = ({ children }) => {
           MozBoxShadow: boxShadowStyle(theme.palette.mode),
           boxShadow: boxShadowStyle(theme.palette.mode),
         }}
-      > 
-        { children }
+      >
+        {children}
       </div>
     </div>
-  )
-
-}
+  );
+};
 
 export default MetaDataTablePMDSkeleton;

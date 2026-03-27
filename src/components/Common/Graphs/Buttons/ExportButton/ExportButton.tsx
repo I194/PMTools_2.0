@@ -14,19 +14,19 @@ const ExportButton: FC<IExportButton> = ({ graphId, name }) => {
   const dir = useDIRGraphSettings();
   const pmd = usePMDGraphSettings();
 
-  const handleClick = useCallback(() => 
-    handleExportGraph(graphId, name),
-    [graphId, name, dir.settings, pmd.settings]
+  const handleClick = useCallback(
+    () => handleExportGraph(graphId, name),
+    [graphId, name, dir.settings, pmd.settings],
   );
 
   return (
     <div className={style.exportButton}>
-      <IconButton 
-        color="primary" 
+      <IconButton
+        color="primary"
         component="span"
         // onClick={() => handleExportGraph(graphId, name)}
         onClick={handleClick}
-        sx={{p: '4px'}}
+        sx={{ p: '4px' }}
       >
         <FileDownloadOutlinedIcon />
       </IconButton>

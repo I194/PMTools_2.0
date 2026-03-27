@@ -1,5 +1,5 @@
-import Coordinates from "../graphs/classes/Coordinates";
-import Direction from "../graphs/classes/Direction";
+import Coordinates from '../graphs/classes/Coordinates';
+import Direction from '../graphs/classes/Direction';
 
 export type Matrix3x3 = [
   [number, number, number],
@@ -7,7 +7,7 @@ export type Matrix3x3 = [
   [number, number, number],
 ];
 
-export const getRotationMatrix = (lambda: number, phi: number) => { 
+export const getRotationMatrix = (lambda: number, phi: number) => {
   // Function getRotationMatrix
   // Returns the rotation matrix (parameters are poorly named)
   // but this function is re-used througouth the application. It may be azimuth, plunge
@@ -18,7 +18,7 @@ export const getRotationMatrix = (lambda: number, phi: number) => {
   const rotationMatrix: Matrix3x3 = [
     [Math.cos(lambda) * Math.sin(phi), -Math.sin(lambda), Math.cos(phi) * Math.cos(lambda)],
     [Math.sin(phi) * Math.sin(lambda), Math.cos(lambda), Math.sin(lambda) * Math.cos(phi)],
-    [-Math.cos(phi), 0, Math.sin(phi)]
+    [-Math.cos(phi), 0, Math.sin(phi)],
   ];
 
   return rotationMatrix;
@@ -33,7 +33,7 @@ export const getRotationMatrixTransposed = (lambda: number, phi: number) => {
     [matrix[0][0], matrix[1][0], matrix[2][0]],
     [matrix[0][1], matrix[1][1], matrix[2][1]],
     [matrix[0][2], matrix[1][2], matrix[2][2]],
-  ]
+  ];
 
   // Return the transposed matrix (inversed rotation)
   return transposedMatrix;
@@ -60,28 +60,28 @@ export const TMatrix = (vectors: Array<[number, number, number]>) => {
   const orientationMatrix = nullMatrix();
 
   vectors.forEach((vector) => {
-    for(var k = 0; k < 3; k++) {
-      for(var l = 0; l < 3; l++) {
+    for (var k = 0; k < 3; k++) {
+      for (var l = 0; l < 3; l++) {
         orientationMatrix[k][l] += (vector[k] * vector[l]) / vectors.length;
-      };
-    };
+      }
+    }
   });
 
   return orientationMatrix;
 };
 
 export const rotate3x3AroundY = (angle: number) => {
-  const rotationAngle = angle / Coordinates.RADIANS; 
+  const rotationAngle = angle / Coordinates.RADIANS;
   const rotationMatrix: Matrix3x3 = [
     [Math.cos(rotationAngle), 0, -Math.sin(rotationAngle)],
     [0, 1, 0],
-    [Math.sin(rotationAngle), 0, Math.cos(rotationAngle)]
+    [Math.sin(rotationAngle), 0, Math.cos(rotationAngle)],
   ];
   return rotationMatrix;
 };
 
 export const rotate3x3AroundZ = (angle: number) => {
-  const rotationAngle = angle / Coordinates.RADIANS; 
+  const rotationAngle = angle / Coordinates.RADIANS;
   const rotationMatrix: Matrix3x3 = [
     [Math.cos(rotationAngle), -Math.sin(rotationAngle), 0],
     [Math.sin(rotationAngle), Math.cos(rotationAngle), 0],
@@ -98,10 +98,10 @@ export const matrixMultiply = (matrixFirst: number[][], matrixSecond: number[][]
       let sum = 0;
       for (let k = 0; k < matrixFirst[0].length; k++) {
         sum += matrixFirst[i][k] * matrixSecond[k][j];
-      };
+      }
       result[i][j] = sum;
-    };
-  };
+    }
+  }
   return result;
 };
 
@@ -111,7 +111,11 @@ export const strangeRotation = (directionStart: Direction, directionEnd: Directi
   const rot_z = rotate3x3AroundZ(directionEnd.declination); // матрица поворота вокруг оси Z
   const rot_yz = matrixMultiply(rot_z, rot_y); // поворот вокруг Y и затем вокруг Z
   const rotatedDataXYZ = matrixMultiply(dataXYZ, rot_yz); // поворот в нужное положение на сфере
-  const finalDataXYZ = new Coordinates(rotatedDataXYZ[0][0], rotatedDataXYZ[0][1], rotatedDataXYZ[0][2]);
+  const finalDataXYZ = new Coordinates(
+    rotatedDataXYZ[0][0],
+    rotatedDataXYZ[0][1],
+    rotatedDataXYZ[0][2],
+  );
   const finalDirection = finalDataXYZ.toDirection();
 
   return finalDirection;

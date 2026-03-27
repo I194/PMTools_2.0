@@ -1,13 +1,13 @@
-import { IDirData, RawStatisticsDIR } from "../../GlobalTypes";
-import { StatisitcsInterpretationFromDIR } from "../../GlobalTypes";
-import { StatisticsModeDIR } from "../../graphs/types";
-import { v4 as uuidv4 } from "uuid";
+import { IDirData, RawStatisticsDIR } from '../../GlobalTypes';
+import { StatisitcsInterpretationFromDIR } from '../../GlobalTypes';
+import { StatisticsModeDIR } from '../../graphs/types';
+import { v4 as uuidv4 } from 'uuid';
 
 const rawStatisticsDIRToInterpretation = (
   statistics: RawStatisticsDIR,
-  selectedDirections: IDirData["interpretations"],
-  filename: IDirData["name"],
-  code: StatisticsModeDIR
+  selectedDirections: IDirData['interpretations'],
+  filename: IDirData['name'],
+  code: StatisticsModeDIR,
 ) => {
   // ограничение по длине в 7 символов из-за специфики .dir файлов
   // здесь оставляется 4 первые символа имени файла, далее добавится id
@@ -16,7 +16,7 @@ const rawStatisticsDIRToInterpretation = (
   // const label: string = filenameWithoutExtension.slice(0, 6);
   const label = filename;
 
-  const stepRange: string = "avg";
+  const stepRange: string = 'avg';
   const stepCount: number = selectedDirections.length;
 
   const [Dgeo, Igeo] = statistics.mean.geographic.direction.toArray();
@@ -26,7 +26,7 @@ const rawStatisticsDIRToInterpretation = (
   const accuracyGeo = statistics.mean.geographic.k;
   const confidenceRadiusStrat = statistics.mean.stratigraphic.MAD;
   const accuracyStrat = statistics.mean.stratigraphic.k;
-  const comment = "";
+  const comment = '';
   const demagType = selectedDirections[0].demagType;
 
   const interpretation: StatisitcsInterpretationFromDIR = {

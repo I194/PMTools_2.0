@@ -13,14 +13,14 @@ const ZoomMode: FC<IResetZoomPan> = ({ onClick, isUseful }) => {
       <Button
         color={isUseful ? 'warning' : 'primary'}
         onClick={onClick}
-        variant='outlined'
-        sx={{m: '4px', height: '24px'}} 
-        size='small'
+        variant="outlined"
+        sx={{ m: '4px', height: '24px' }}
+        size="small"
       >
         Zoom&pan mode
       </Button>
     </div>
-  )
+  );
 };
 
 export default ZoomMode;

@@ -59,7 +59,7 @@
       },
       "exportData": {
         "title": "Work with data in any format",
-        "description": "The built-in PMTools paleomagnetic data converter allows you to import classic data formats and export them to any convenient format, including Excel (XLSX, CSV)."  
+        "description": "The built-in PMTools paleomagnetic data converter allows you to import classic data formats and export them to any convenient format, including Excel (XLSX, CSV)."
       },
       "exportGraphs": {
         "title": "Forget about any difficulties when working with graphics",
@@ -263,7 +263,7 @@
         "up": "Select previous result"
       },
       "titles": {
-        "Статистические методы": "Statistics methods", 
+        "Статистические методы": "Statistics methods",
         "PCA": "PCA",
         "PCA0": "PCA0",
         "GC": "GC",
@@ -444,4 +444,3 @@
     "clearLocalStorage": "❗❗❗Keep in mind that this will delete ALL entries in the localStorage, including automatically loaded file data and the results of their statistical processing, as well as your hotkey settings."
   }
 }
-

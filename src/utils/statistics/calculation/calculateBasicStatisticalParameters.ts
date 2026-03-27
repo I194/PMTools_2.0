@@ -1,10 +1,11 @@
-import Direction from "../../graphs/classes/Direction";
-import Distribution from "../../graphs/classes/Distribution";
-import calculateButlerParameters from "./calculateButlerParameters";
-import calculateVGP from "./calculateVGP";
+import Direction from '../../graphs/classes/Direction';
+import Distribution from '../../graphs/classes/Distribution';
+import calculateButlerParameters from './calculateButlerParameters';
+import calculateVGP from './calculateVGP';
 
-const calculateBasicStatisticalParameters = (directions: (Direction & {rejected?: boolean})[]) => {
-
+const calculateBasicStatisticalParameters = (
+  directions: (Direction & { rejected?: boolean })[],
+) => {
   /*
    * Function getStatisticalParameters
    * Returns statistical parameters based on on a directional distribution
@@ -13,8 +14,8 @@ const calculateBasicStatisticalParameters = (directions: (Direction & {rejected?
   // Create a fake site at 0, 0 since we only look at the distritbuion of VGPs and not the actual positions
 
   // Get the directions and pole for each vector
-  const filteredDirections = directions.filter(direction => !direction.rejected);
-  const poles = filteredDirections.map(direction => {
+  const filteredDirections = directions.filter((direction) => !direction.rejected);
+  const poles = filteredDirections.map((direction) => {
     const poleVGP = calculateVGP(direction.declination, direction.inclination, 0, 0);
     const pole = new Direction(poleVGP.poleLongitude, poleVGP.poleLatitude, 1);
     return pole;
@@ -31,9 +32,8 @@ const calculateBasicStatisticalParameters = (directions: (Direction & {rejected?
   return {
     directionDistribution,
     poleDistribution,
-    butlerDistribution
+    butlerDistribution,
   };
 };
 
 export default calculateBasicStatisticalParameters;
-

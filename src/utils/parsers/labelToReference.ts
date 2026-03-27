@@ -12,7 +12,4 @@ const referenceToLabel = (reference: Reference) => {
   return 'Geo';
 };
 
-export {
-  labelToReference,
-  referenceToLabel,
-};
+export { labelToReference, referenceToLabel };

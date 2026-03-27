@@ -1,13 +1,17 @@
 import React, { FC, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
 import { IDirData } from '../../../utils/GlobalTypes';
-import { deleteAllDirStatData, deleteDirStatData, setCurrentDIRid } from '../../../services/reducers/parsedData';
+import {
+  deleteAllDirStatData,
+  deleteDirStatData,
+  setCurrentDIRid,
+} from '../../../services/reducers/parsedData';
 import DropdownSelectWithButtons from '../../Common/DropdownSelect/DropdownSelectWithButtons';
 import {
-  setSelectedDirectionsIDs, 
-  setStatisticsMode, 
-  setLastInterpretationAsCurrent, 
-  updateCurrentFileInterpretations, 
+  setSelectedDirectionsIDs,
+  setStatisticsMode,
+  setLastInterpretationAsCurrent,
+  updateCurrentFileInterpretations,
   deleteInterepretationByParentFile,
   setHiddenDirectionsIDs,
   deleteAllInterpretations,
@@ -16,11 +20,10 @@ import {
 import { useTranslation } from 'react-i18next';
 
 const CurrentDIRFileSelector: FC = () => {
-
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation('translation');
 
-  const { dirStatData, currentDataDIRid } = useAppSelector(state => state.parsedDataReducer);
+  const { dirStatData, currentDataDIRid } = useAppSelector((state) => state.parsedDataReducer);
 
   const [allDirData, setAllDirData] = useState<Array<IDirData>>([]);
   const [currentFileName, setCurrentFileName] = useState<string>('');
@@ -28,7 +31,7 @@ const CurrentDIRFileSelector: FC = () => {
   useEffect(() => {
     if (dirStatData) {
       setAllDirData(dirStatData);
-    };
+    }
   }, [dirStatData]);
 
   useEffect(() => {
@@ -52,14 +55,14 @@ const CurrentDIRFileSelector: FC = () => {
       return;
     }
 
-    const dirIndex = allDirData.findIndex(dir => dir.name === fileName);
+    const dirIndex = allDirData.findIndex((dir) => dir.name === fileName);
     dispatch(setCurrentDIRid(dirIndex));
   };
 
   const handleFileDelete = (fileName: string) => {
     if (dirStatData) {
       // Надо переключиться на прошлый файл если удаляем файл на котором сейчас сидим, иначе currentDataPMDid будет ссылаться на некорректный индекс
-      let fileNameDirDataIndex = allDirData.findIndex(dir => dir.name === fileName);
+      let fileNameDirDataIndex = allDirData.findIndex((dir) => dir.name === fileName);
       if (fileNameDirDataIndex === currentDataDIRid) {
         dispatch(setCurrentDIRid(fileNameDirDataIndex - 1));
       }
@@ -71,7 +74,7 @@ const CurrentDIRFileSelector: FC = () => {
       dispatch(setHiddenDirectionsIDs([]));
       dispatch(setReversedDirectionsIDs([]));
       dispatch(setStatisticsMode(null));
-    };
+    }
   };
 
   const handleAllFilesDelete = () => {
@@ -85,9 +88,9 @@ const CurrentDIRFileSelector: FC = () => {
   };
 
   return (
-    <DropdownSelectWithButtons 
+    <DropdownSelectWithButtons
       label={t('dirPage.tools.currentFile.title')}
-      options={allDirData.map(dir => dir.name)}
+      options={allDirData.map((dir) => dir.name)}
       defaultValue={currentFileName}
       onOptionSelect={handleFileSelect}
       minWidth={'210px'}
@@ -97,7 +100,7 @@ const CurrentDIRFileSelector: FC = () => {
       onDelete={handleFileDelete}
       onDeleteAll={handleAllFilesDelete}
     />
-  )
-}
+  );
+};
 
 export default CurrentDIRFileSelector;

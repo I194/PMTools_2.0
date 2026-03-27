@@ -1,7 +1,7 @@
-import { IZijdGraph, IStereoGraph, IMagGraph } from "../components/AppGraphs/";
-import Coordinates from "./graphs/classes/Coordinates";
-import Direction from "./graphs/classes/Direction";
-import { StatisticsModeDIR, StatisticsModePCA } from "./graphs/types";
+import { IZijdGraph, IStereoGraph, IMagGraph } from '../components/AppGraphs/';
+import Coordinates from './graphs/classes/Coordinates';
+import Direction from './graphs/classes/Direction';
+import { StatisticsModeDIR, StatisticsModePCA } from './graphs/types';
 
 export interface IGraph {
   graphId: GraphType;
@@ -9,10 +9,7 @@ export interface IGraph {
   height: number;
 }
 
-export type PMDGraph =
-  | React.FC<IZijdGraph>
-  | React.FC<IStereoGraph>
-  | React.FC<IMagGraph>;
+export type PMDGraph = React.FC<IZijdGraph> | React.FC<IStereoGraph> | React.FC<IMagGraph>;
 
 interface IObjectKeys {
   [key: string | number | symbol]: any;
@@ -31,7 +28,7 @@ export type PMDStep = {
   Istrat: number;
   a95: number;
   comment: string;
-  demagType: "thermal" | "alternating field" | undefined;
+  demagType: 'thermal' | 'alternating field' | undefined;
 };
 
 export type SiteVGPData = {
@@ -79,7 +76,7 @@ export interface IDirData extends IObjectKeys {
     MADstrat: number;
     Kstrat: number;
     comment: string;
-    demagType: "thermal" | "alternating field" | undefined;
+    demagType: 'thermal' | 'alternating field' | undefined;
   }[];
   format: string;
   created: string;
@@ -124,7 +121,7 @@ export type StatisitcsInterpretationFromPCA = {
   confidenceRadius: number; // MAD for PCA
   accuracy?: number; // the same as K (kappa), but in most cases of PCA calculation accuracy is not defined
   comment: string;
-  demagType: "thermal" | "alternating field" | undefined;
+  demagType: 'thermal' | 'alternating field' | undefined;
   rawData: RawStatisticsPCA;
 };
 
@@ -133,7 +130,7 @@ export type StatisitcsInterpretationFromDIR = {
   parentFile: string;
   label: string;
   code: StatisticsModeDIR;
-  directions: IDirData["interpretations"];
+  directions: IDirData['interpretations'];
   stepRange: string;
   stepCount: number;
   Dgeo: number;
@@ -145,7 +142,7 @@ export type StatisitcsInterpretationFromDIR = {
   confidenceRadiusStrat: number; // MAD for PCA and a95 for Fisher
   Kstrat?: number; // not exist for MAD as a confidene value
   comment: string;
-  demagType: "thermal" | "alternating field" | undefined;
+  demagType: 'thermal' | 'alternating field' | undefined;
   rawData: RawStatisticsDIR;
 };
 
@@ -195,7 +192,7 @@ export type CommonMeanTestBootstrapResult = {
 export type ReversalTestClassicResult = {
   gamma: number;
   gammaCritical: number;
-  classification: "A" | "B" | "C" | "N/A" | "-";
+  classification: 'A' | 'B' | 'C' | 'N/A' | '-';
 };
 
 export type ReversalTestResultAll = {
@@ -229,14 +226,14 @@ export type DataGridPMDRow = {
 
 export type DataGridDIRFromPCARow = Omit<
   StatisitcsInterpretationFromPCA,
-  "demagType" | "parentFile" | "rawData" | "steps"
+  'demagType' | 'parentFile' | 'rawData' | 'steps'
 > & { readonly id: string };
 export type DataGridDIRFromDIRRow = Omit<
   StatisitcsInterpretationFromDIR,
-  "demagType" | "parentFile" | "rawData" | "directions" | "uuid"
+  'demagType' | 'parentFile' | 'rawData' | 'directions' | 'uuid'
 > & { readonly id: number };
 
-export type ThemeMode = "dark" | "light";
+export type ThemeMode = 'dark' | 'light';
 
 export type HotkeysType = Array<{
   id: number;
@@ -276,22 +273,14 @@ export interface Cutoff {
   };
 }
 
-export type GraphType =
-  | BasicGraphType
-  | BasicGraphExportType
-  | PMTestsGraphType;
-export type BasicGraphType =
-  | "zijd"
-  | "stereo"
-  | "mag"
-  | "stereoDir"
-  | "stereoVGP";
+export type GraphType = BasicGraphType | BasicGraphExportType | PMTestsGraphType;
+export type BasicGraphType = 'zijd' | 'stereo' | 'mag' | 'stereoDir' | 'stereoVGP';
 export type BasicGraphExportType =
-  | "export_zijd"
-  | "export_stereo"
-  | "export_mag"
-  | "export_stereoDir"
-  | "export_stereoVGP";
-export type PMTestsGraphType = "foldTest" | "reversalTest";
+  | 'export_zijd'
+  | 'export_stereo'
+  | 'export_mag'
+  | 'export_stereoDir'
+  | 'export_stereoVGP';
+export type PMTestsGraphType = 'foldTest' | 'reversalTest';
 
 export type ContentType = GraphType | 'statisticsDataTable';

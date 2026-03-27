@@ -1,25 +1,24 @@
-import { IDirData, MeanDir, RawStatisticsDIR } from "../../GlobalTypes";
-import Coordinates from "../../graphs/classes/Coordinates";
-import Direction from "../../graphs/classes/Direction";
+import { IDirData, MeanDir, RawStatisticsDIR } from '../../GlobalTypes';
+import Coordinates from '../../graphs/classes/Coordinates';
+import Direction from '../../graphs/classes/Direction';
 
-const calculateFisherMean = (
-  selectedDirections: IDirData['interpretations']
-) => {
-  const DirectionsGeo = selectedDirections.map(direction => new Direction(direction.Dgeo, direction.Igeo, 1));
-  const DirectionsStrat = selectedDirections.map(direction => new Direction(direction.Dstrat, direction.Istrat, 1))
+const calculateFisherMean = (selectedDirections: IDirData['interpretations']) => {
+  const DirectionsGeo = selectedDirections.map(
+    (direction) => new Direction(direction.Dgeo, direction.Igeo, 1),
+  );
+  const DirectionsStrat = selectedDirections.map(
+    (direction) => new Direction(direction.Dstrat, direction.Istrat, 1),
+  );
 
   const res: RawStatisticsDIR['mean'] = {
     geographic: fisherMean(DirectionsGeo),
     stratigraphic: fisherMean(DirectionsStrat),
   };
-  
+
   return res;
 };
 
-export const fisherMean = (
-  directions: Array<Direction>,
-): MeanDir => {
-
+export const fisherMean = (directions: Array<Direction>): MeanDir => {
   /*
   Calculates the Fisher mean and associated parameter from a di_block
   Parameters
@@ -39,32 +38,35 @@ export const fisherMean = (
   credit : PmagPY module for Python 3 [*Modified by I194]
   */
 
-  let R = 0, Xbar = [0, 0, 0], X = [];
+  let R = 0,
+    Xbar = [0, 0, 0],
+    X = [];
   const N = directions.length;
 
   for (let i = 0; i < directions.length; i++) {
     const xyz = directions[i].toCartesian();
     X.push([xyz.x, xyz.y, xyz.z]);
     for (let j = 0; j < 3; j++) Xbar[j] += X[i][j];
-  };
+  }
 
-  for (let j = 0; j  < 3; j++) R += Math.pow(Xbar[j], 2);
+  for (let j = 0; j < 3; j++) R += Math.pow(Xbar[j], 2);
   R = Math.sqrt(R);
 
-  for (let j = 0; j  < 3; j++) Xbar[j] /= R;
+  for (let j = 0; j < 3; j++) Xbar[j] /= R;
 
   const meanDirection = new Coordinates(Xbar[0], Xbar[1], Xbar[2]).toDirection();
-  let k = 0, csd = 0;
+  let k = 0,
+    csd = 0;
   if (N != R) {
     k = (N - 1) / (N - R);
     csd = 81 / Math.sqrt(k);
   } else {
     k = Infinity;
     csd = 0;
-  };
+  }
 
-  const b = Math.pow(20, (1./(N - 1.))) - 1;
-  let a = 1 - b * (N - R) / R;
+  const b = Math.pow(20, 1 / (N - 1)) - 1;
+  let a = 1 - (b * (N - R)) / R;
   if (a < -1) a = -1;
   let a95 = Math.acos(a) * Coordinates.RADIANS;
   if (a < 0) a95 = 180;
@@ -77,13 +79,13 @@ export const fisherMean = (
     R,
     csd,
   };
-  
+
   // const res = {
-  //   dec: dir.declination, 
-  //   inc: dir.inclination, 
-  //   n: N, 
-  //   r: R, 
-  //   k, 
+  //   dec: dir.declination,
+  //   inc: dir.inclination,
+  //   n: N,
+  //   r: R,
+  //   k,
   //   a95,
   //   csd
   // };

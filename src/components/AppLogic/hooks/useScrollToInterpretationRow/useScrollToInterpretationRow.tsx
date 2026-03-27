@@ -1,25 +1,29 @@
-import { GridApiCommunity } from "@mui/x-data-grid/internals";
-import { useEffect } from "react";
-import { useAppSelector } from "../../../../services/store/hooks";
+import { GridApiCommunity } from '@mui/x-data-grid/internals';
+import { useEffect } from 'react';
+import { useAppSelector } from '../../../../services/store/hooks';
 
 interface IUseScrollToInterpretationRowProps {
   apiRef: React.MutableRefObject<GridApiCommunity>;
   pageType: 'pca' | 'dir';
 }
 
-export const useScrollToInterpretationRow = ({apiRef, pageType}: IUseScrollToInterpretationRowProps) => {
-
+export const useScrollToInterpretationRow = ({
+  apiRef,
+  pageType,
+}: IUseScrollToInterpretationRowProps) => {
   const currentPageReducer = pageType === 'pca' ? 'pcaPageReducer' : 'dirPageReducer';
-  const { currentInterpretation } = useAppSelector(state => state[currentPageReducer]);
+  const { currentInterpretation } = useAppSelector((state) => state[currentPageReducer]);
 
   useEffect(() => {
     if (currentInterpretation && apiRef?.current?.getAllRowIds) {
       const allRowIDs = apiRef.current.getAllRowIds();
 
-      const currentInterpretationRowIndex = allRowIDs.findIndex(rowId => rowId === currentInterpretation.uuid);
+      const currentInterpretationRowIndex = allRowIDs.findIndex(
+        (rowId) => rowId === currentInterpretation.uuid,
+      );
       if (currentInterpretationRowIndex >= 0) {
-        apiRef.current.scrollToIndexes({rowIndex: currentInterpretationRowIndex});
+        apiRef.current.scrollToIndexes({ rowIndex: currentInterpretationRowIndex });
       }
     }
   }, [currentInterpretation, apiRef]);
-}
+};

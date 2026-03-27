@@ -1,4 +1,4 @@
-import { IPmdData } from "../../GlobalTypes";
+import { IPmdData } from '../../GlobalTypes';
 
 /**
  * Process parsing of data from imported .pmd file
@@ -7,21 +7,23 @@ import { IPmdData } from "../../GlobalTypes";
  * @returns {IPmdData} IPmdData
  */
 const parsePMD = (data: string, name: string): IPmdData => {
-  
   // eslint-disable-next-line no-control-regex
-  const eol = new RegExp("\r?\n");
+  const eol = new RegExp('\r?\n');
   // Get all lines except the last one (it's garbage) and the first one (it's empty)
-  const lines = data.split(eol).slice(1).filter(line => line.length > 1);
-  
+  const lines = data
+    .split(eol)
+    .slice(1)
+    .filter((line) => line.length > 1);
+
   const headLine = lines[0]; // line with specimen name and orientation params - metadata in other words
   const metadata = {
     name: name, // inner pmd name lay here: headLine.slice(0, 10).trim(),
     a: +headLine.slice(12, 20).trim(),
     b: +headLine.slice(22, 30).trim(),
     s: +headLine.slice(32, 40).trim(),
-    d: +headLine.slice(42, 50).trim(),  
+    d: +headLine.slice(42, 50).trim(),
     v: +headLine.slice(52, headLine.length).trim().toLowerCase().split('m')[0],
-  }
+  };
 
   // there is no standard for demagnetization symbol... and idk why
   const thermalTypes = ['T', 't'];
@@ -30,7 +32,6 @@ const parsePMD = (data: string, name: string): IPmdData => {
   let demagType: 'thermal' | 'alternating field' | undefined = undefined;
 
   const steps = lines.slice(2).map((line, index) => {
-
     // PAL | Xc (Am2) | Yc (Am2) | Zc (Am2) | MAG (A/m) | Dg | Ig | Ds | Is| a95
     // PAL === Step (mT or temp degrees)
     // it's old format and we can't just split by " " 'cause it can cause issues
@@ -48,7 +49,7 @@ const parsePMD = (data: string, name: string): IPmdData => {
 
     if (!demagType) {
       const demagSmbl = line.slice(0, 1);
-  
+
       if (thermalTypes.indexOf(demagSmbl) > -1) demagType = 'thermal';
       else if (alternatingTypes.indexOf(demagSmbl) > -1) demagType = 'alternating field';
     }
@@ -68,17 +69,14 @@ const parsePMD = (data: string, name: string): IPmdData => {
       comment,
       demagType,
     };
-
   });
-  
+
   return {
     metadata,
     steps,
-    format: "PMD",
+    format: 'PMD',
     created: new Date().toISOString(),
   };
-
-}
+};
 
 export default parsePMD;
-

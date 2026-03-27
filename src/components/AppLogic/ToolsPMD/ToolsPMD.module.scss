@@ -15,7 +15,7 @@
     justify-content: flex-start;
     gap: 16px;
 
-    &>:first-child {
+    & > :first-child {
       margin-left: 4px;
     }
 
@@ -26,5 +26,4 @@
     padding: 2px 0px;
     box-sizing: border-box;
   }
-
 }

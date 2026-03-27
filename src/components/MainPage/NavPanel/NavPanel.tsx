@@ -1,28 +1,27 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from 'react';
 import styles from './NavPanel.module.scss';
-import { useMediaQuery } from "react-responsive";
-import NavButton from "./NavButton";
+import { useMediaQuery } from 'react-responsive';
+import NavButton from './NavButton';
 import pmtoolsLogo from './pmtools_logo.png';
 // import { default as pmtoolsLogo } from './PMTools_logo.svg';
-import { NavLink } from "react-router-dom";
-import { IconButton, Menu, MenuItem } from "@mui/material";
+import { NavLink } from 'react-router-dom';
+import { IconButton, Menu, MenuItem } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { useSystemTheme } from "../../../utils/GlobalHooks";
+import { useSystemTheme } from '../../../utils/GlobalHooks';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import LanguageIcon from '@mui/icons-material/Language';
-import { useAppDispatch, useAppSelector } from "../../../services/store/hooks";
-import { setColorMode } from "../../../services/reducers/appSettings";
+import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
+import { setColorMode } from '../../../services/reducers/appSettings';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useTranslation } from 'react-i18next';
 
 const NavPanel = () => {
-
   const dispatch = useAppDispatch();
 
   const isMobileScreen = useMediaQuery({ query: '(max-width: 920px)' });
   const isTabletScreen = useMediaQuery({ query: '(min-width: 921px) and (max-width: 1464px)' });
-  const { colorMode } = useAppSelector(state => state.appSettingsReducer);
+  const { colorMode } = useAppSelector((state) => state.appSettingsReducer);
   const theme = useTheme();
   const { t, i18n } = useTranslation('translation');
 
@@ -57,62 +56,45 @@ const NavPanel = () => {
   };
 
   const navButtons = [
-    <NavButton 
-      label={t('mainLayout.navPanel.whyPMTools')}
-      to={'/why-pmtools'}
-    />,
-    <NavButton 
-      label={isTabletScreen ? 'PCA' : t('mainLayout.navPanel.PCA')}
-      to={'/app/pca'}
-    />,
-    <NavButton 
-      label={isTabletScreen ? 'DIR' : t('mainLayout.navPanel.DIR')}
-      to={'/app/dir'}
-    />,
-    <NavButton 
+    <NavButton label={t('mainLayout.navPanel.whyPMTools')} to={'/why-pmtools'} />,
+    <NavButton label={isTabletScreen ? 'PCA' : t('mainLayout.navPanel.PCA')} to={'/app/pca'} />,
+    <NavButton label={isTabletScreen ? 'DIR' : t('mainLayout.navPanel.DIR')} to={'/app/dir'} />,
+    <NavButton
       label={t('mainLayout.navPanel.projectRepo')}
       to={'https://github.com/I194/PMTools_2.0'}
       external={true}
     />,
-    <NavButton 
-      label={t('mainLayout.navPanel.authorsAndHistory')}
-      to={'/authors-and-history'}
-    />
+    <NavButton label={t('mainLayout.navPanel.authorsAndHistory')} to={'/authors-and-history'} />,
   ];
 
   return (
     <div className={styles.container}>
-      <NavLink to='/' style={{marginRight: '16px'}}>
-        <img src={pmtoolsLogo} alt='pmtools logo' width={248}/>
+      <NavLink to="/" style={{ marginRight: '16px' }}>
+        <img src={pmtoolsLogo} alt="pmtools logo" width={248} />
       </NavLink>
-      {
-        !isMobileScreen &&
+      {!isMobileScreen && (
         <>
-          <NavButton 
-            label={t('mainLayout.navPanel.whyPMTools')}
-            to={'/why-pmtools'}
-          />
-          <NavButton 
+          <NavButton label={t('mainLayout.navPanel.whyPMTools')} to={'/why-pmtools'} />
+          <NavButton
             label={isTabletScreen ? 'PCA' : t('mainLayout.navPanel.PCA')}
             to={'/app/pca'}
           />
-          <NavButton 
+          <NavButton
             label={isTabletScreen ? 'DIR' : t('mainLayout.navPanel.DIR')}
             to={'/app/dir'}
           />
-          <NavButton 
+          <NavButton
             label={t('mainLayout.navPanel.projectRepo')}
             to={'https://github.com/I194/PMTools_2.0'}
             external={true}
           />
-          <NavButton 
+          <NavButton
             label={t('mainLayout.navPanel.authorsAndHistory')}
             to={'/authors-and-history'}
           />
         </>
-      }
-      {
-        isMobileScreen &&
+      )}
+      {isMobileScreen && (
         <>
           <IconButton
             aria-label="more"
@@ -143,18 +125,22 @@ const NavPanel = () => {
           >
             {navButtons.map((button, index) => (
               <MenuItem key={index} onClick={handleCloseMenu} divider>
-                { button }
+                {button}
               </MenuItem>
             ))}
           </Menu>
         </>
-      }
-      <div className={styles.settings}>  
+      )}
+      <div className={styles.settings}>
         <IconButton onClick={onColorModeClick} color="inherit">
-          {theme.palette.mode === 'dark' ? <Brightness7Icon color="primary" /> : <Brightness4Icon color="primary" />}
+          {theme.palette.mode === 'dark' ? (
+            <Brightness7Icon color="primary" />
+          ) : (
+            <Brightness4Icon color="primary" />
+          )}
         </IconButton>
-        <IconButton 
-          onClick={handleClickLang} 
+        <IconButton
+          onClick={handleClickLang}
           color="inherit"
           id="lang-button"
           aria-controls={openLang ? 'lang-menu' : undefined}
@@ -164,29 +150,29 @@ const NavPanel = () => {
           <LanguageIcon color="primary" />
         </IconButton>
         <Menu
-            id="lang-menu"
-            MenuListProps={{
-              'aria-labelledby': 'lang-button',
-            }}
-            anchorEl={anchorElLang}
-            open={openLang}
-            onClose={handleCloseLang}
-            PaperProps={{
-              style: {
-                width: 'auto',
-              },
-            }}
-          >
-            <MenuItem onClick={() => handleSelectLang('en')} divider>
-              en
-            </MenuItem>
-            <MenuItem onClick={() => handleSelectLang('ru')} divider>
-              ru
-            </MenuItem>
-          </Menu>
+          id="lang-menu"
+          MenuListProps={{
+            'aria-labelledby': 'lang-button',
+          }}
+          anchorEl={anchorElLang}
+          open={openLang}
+          onClose={handleCloseLang}
+          PaperProps={{
+            style: {
+              width: 'auto',
+            },
+          }}
+        >
+          <MenuItem onClick={() => handleSelectLang('en')} divider>
+            en
+          </MenuItem>
+          <MenuItem onClick={() => handleSelectLang('ru')} divider>
+            ru
+          </MenuItem>
+        </Menu>
       </div>
     </div>
   );
-}
+};
 
 export default NavPanel;

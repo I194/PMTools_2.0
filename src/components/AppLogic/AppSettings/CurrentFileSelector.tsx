@@ -1,23 +1,21 @@
-import React, { FC } from "react";
-import CurrentPMDFileSelector from "../ToolsPMD/CurrentPMDFileSelector";
-import CurrentDIRFileSelector from "../ToolsDIR/CurrentDIRFileSelector";
+import React, { FC } from 'react';
+import CurrentPMDFileSelector from '../ToolsPMD/CurrentPMDFileSelector';
+import CurrentDIRFileSelector from '../ToolsDIR/CurrentDIRFileSelector';
 
 interface ICurrentFileSelector {
   currentPage: string;
-};
+}
 
-const CurrentFileSelector: FC<ICurrentFileSelector> = ({
-  currentPage,
-}) => {
+const CurrentFileSelector: FC<ICurrentFileSelector> = ({ currentPage }) => {
   if (currentPage === 'pca') {
-    return <CurrentPMDFileSelector />
+    return <CurrentPMDFileSelector />;
   }
 
   if (currentPage === 'dir') {
-    return <CurrentDIRFileSelector />
+    return <CurrentDIRFileSelector />;
   }
 
   return null;
-}
+};
 
 export default CurrentFileSelector;

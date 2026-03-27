@@ -1,6 +1,3 @@
-import ZijdIcon from "./ZijdIcon/ZijdIcon";
+import ZijdIcon from './ZijdIcon/ZijdIcon';
 
-export {
-  ZijdIcon,
-};
-
+export { ZijdIcon };

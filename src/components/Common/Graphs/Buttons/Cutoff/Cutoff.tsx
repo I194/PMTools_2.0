@@ -9,19 +9,20 @@ type Props = {
   isUseful?: boolean;
   isUsefulBorder?: boolean;
   isUsefulDots?: boolean;
-}
+};
 
-const Cutoff = ({ 
-  onToggle, onToggleBorderVisibility, onToggleOuterDotsVisibility, 
-  isUseful, isUsefulBorder, isUsefulDots 
+const Cutoff = ({
+  onToggle,
+  onToggleBorderVisibility,
+  onToggleOuterDotsVisibility,
+  isUseful,
+  isUsefulBorder,
+  isUsefulDots,
 }: Props) => {
   return (
     <div className={styles.cutoff}>
-      <ButtonGroup variant='outlined' size='small' sx={{height: 24, mt: '4px'}}>
-        <Button
-          color={isUseful ? 'warning' : 'primary'}
-          onClick={onToggle}
-        >
+      <ButtonGroup variant="outlined" size="small" sx={{ height: 24, mt: '4px' }}>
+        <Button color={isUseful ? 'warning' : 'primary'} onClick={onToggle}>
           Cutoff 45
         </Button>
         <Button
@@ -40,7 +41,7 @@ const Cutoff = ({
         </Button>
       </ButtonGroup>
     </div>
-  )
+  );
 };
 
 export default Cutoff;

@@ -1,18 +1,13 @@
-import React, { FC } from "react";
+import React, { FC } from 'react';
 import styles from './OutputDataTablePMD.module.scss';
 import { useTheme } from '@mui/material/styles';
-import {
-  bgColorMain,
-  bgColorBlocks,
-  boxShadowStyle
-} from '../../../../utils/ThemeConstants';
+import { bgColorMain, bgColorBlocks, boxShadowStyle } from '../../../../utils/ThemeConstants';
 
 const StatisticsDataTablePMDSkeleton: FC = ({ children }) => {
-
   const theme = useTheme();
 
   return (
-    <div 
+    <div
       className={styles.tableFull}
       style={{
         backgroundColor: bgColorBlocks(theme.palette.mode),
@@ -21,10 +16,9 @@ const StatisticsDataTablePMDSkeleton: FC = ({ children }) => {
         boxShadow: boxShadowStyle(theme.palette.mode),
       }}
     >
-      { children }
+      {children}
     </div>
-  )
-
-}
+  );
+};
 
 export default StatisticsDataTablePMDSkeleton;

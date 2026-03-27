@@ -10,7 +10,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-  
+
     border-radius: 12px;
     padding: 6px;
     background-color: #fff;
@@ -29,8 +29,7 @@
   gap: 96px;
   box-sizing: border-box;
 
-
-  @media (max-width: 920px) { 
+  @media (max-width: 920px) {
     padding: 0px;
     gap: 48px;
     flex-wrap: wrap;

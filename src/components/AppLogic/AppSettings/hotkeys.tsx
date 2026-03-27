@@ -1,7 +1,7 @@
-import React from "react";
-import { useTranslation } from "react-i18next";
-import { useDefaultHotkeys } from "../../../utils/GlobalHooks";
-import { HotkeysType } from "../../../utils/GlobalTypes";
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDefaultHotkeys } from '../../../utils/GlobalHooks';
+import { HotkeysType } from '../../../utils/GlobalTypes';
 
 // export const defaultHotkeys = (): HotkeysType => {
 //   const { t, i18n } = useTranslation('translation');

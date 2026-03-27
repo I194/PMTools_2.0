@@ -1,5 +1,5 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getDirectionalData, getSitesLatLonData } from "../../utils/files/fileManipulations";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { getDirectionalData, getSitesLatLonData } from '../../utils/files/fileManipulations';
 
 type TFilesToData = {
   files: File[];
@@ -7,11 +7,15 @@ type TFilesToData = {
 };
 
 export const filesToData = createAsyncThunk(
-  'filesAndData/filesToData', 
+  'filesAndData/filesToData',
   async function ({ files, format }: TFilesToData, { rejectWithValue }) {
     try {
-      const results = await Promise.allSettled(files.map((file) => getDirectionalData(file, format)));
-      const fulfilled = results.filter((r): r is PromiseFulfilledResult<any> => r.status === 'fulfilled').map(r => r.value);
+      const results = await Promise.allSettled(
+        files.map((file) => getDirectionalData(file, format)),
+      );
+      const fulfilled = results
+        .filter((r): r is PromiseFulfilledResult<any> => r.status === 'fulfilled')
+        .map((r) => r.value);
       const rejected = results.filter((r): r is PromiseRejectedResult => r.status === 'rejected');
 
       // Optionally, inform about skipped files without failing the whole batch
@@ -36,7 +40,7 @@ export const filesToData = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error);
     }
-  }
+  },
 );
 
 export const sitesFileToLatLon = createAsyncThunk(
@@ -48,5 +52,5 @@ export const sitesFileToLatLon = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error);
     }
-  }
+  },
 );

@@ -1,8 +1,4 @@
-import HotkeysSection from "./HotkeysSection/HotkeysSection";
-import DisplaySection from "./DisplaySection/DisplaySection";
+import HotkeysSection from './HotkeysSection/HotkeysSection';
+import DisplaySection from './DisplaySection/DisplaySection';
 
-export {
-  HotkeysSection,
-  DisplaySection,
-};
-
+export { HotkeysSection, DisplaySection };

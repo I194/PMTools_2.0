@@ -1,5 +1,5 @@
-import { GridCellModesModel } from "@mui/x-data-grid";
-import { useCallback, useState } from "react";
+import { GridCellModesModel } from '@mui/x-data-grid';
+import { useCallback, useState } from 'react';
 
 export const useCellModesModel = () => {
   const [cellModesModel, setCellModesModel] = useState<GridCellModesModel>({});
@@ -8,5 +8,5 @@ export const useCellModesModel = () => {
     setCellModesModel(model);
   }, []);
 
-  return {cellModesModel, handleCellModesModelChange, setCellModesModel};
-}
+  return { cellModesModel, handleCellModesModelChange, setCellModesModel };
+};

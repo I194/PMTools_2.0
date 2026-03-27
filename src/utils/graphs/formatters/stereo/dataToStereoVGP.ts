@@ -11,23 +11,19 @@
 
 // dataSeriesVGPs.push(vgp_data)
 
-import Coordinates from "../../classes/Coordinates";
-import { DotsData, MeanDirection, Reference, TooltipDot } from "../../types";
-import toReferenceCoordinates from "../toReferenceCoordinates";
-import { dirToCartesian2D } from "../../dirToCartesian";
-import { graphSelectedDotColor } from "../../../ThemeConstants";
-import createStereoPlaneData from "./createPlaneData/createStereoPlaneData";
-import { VGPData } from "../../../GlobalTypes";
-import { fisherMean } from "../../../statistics/calculation/calculateFisherMean";
-import Direction from "../../classes/Direction";
- 
-const dataToStereoVGP = (
-  data: VGPData, 
-  graphSize: number, 
-  hiddenDirectionsIDs: Array<number>,
-) => {
+import Coordinates from '../../classes/Coordinates';
+import { DotsData, MeanDirection, Reference, TooltipDot } from '../../types';
+import toReferenceCoordinates from '../toReferenceCoordinates';
+import { dirToCartesian2D } from '../../dirToCartesian';
+import { graphSelectedDotColor } from '../../../ThemeConstants';
+import createStereoPlaneData from './createPlaneData/createStereoPlaneData';
+import { VGPData } from '../../../GlobalTypes';
+import { fisherMean } from '../../../statistics/calculation/calculateFisherMean';
+import Direction from '../../classes/Direction';
+
+const dataToStereoVGP = (data: VGPData, graphSize: number, hiddenDirectionsIDs: Array<number>) => {
   // filtering already done before vgpData creation in SitesDataTable component in calculateVGPs function
-  const directions = data;//.filter((direction, index) => !hiddenDirectionsIDs.includes(index + 1));
+  const directions = data; //.filter((direction, index) => !hiddenDirectionsIDs.includes(index + 1));
 
   // annotations for dots ('id' field added right in the Data.tsx as dot index)
   const labels = directions.map((direction) => direction.label);
@@ -35,7 +31,7 @@ const dataToStereoVGP = (
   // 1) get inReference directional data
   const directionalData: Array<[number, number]> = directions.map((direction) => {
     const { poleLatitude, poleLongitude } = direction;
-    const inReferenceCoords: [number, number]  = [poleLongitude, poleLatitude];
+    const inReferenceCoords: [number, number] = [poleLongitude, poleLatitude];
     return inReferenceCoords;
   });
 
@@ -45,21 +41,21 @@ const dataToStereoVGP = (
     const a95 = directions[index] ? directions[index].a95 : 0;
     const confidenceCircle = createStereoPlaneData(direction, graphSize, a95);
     return {
-      id: directions[index].id, 
+      id: directions[index].id,
       xyData: coords,
       dirData: di,
       confidenceCircle: {
-        xyData: confidenceCircle.all, 
-        xyDataSplitted: confidenceCircle, 
-        color: '#000'
+        xyData: confidenceCircle.all,
+        xyDataSplitted: confidenceCircle,
+        color: '#000',
       },
     };
   });
 
   const mean = fisherMean(
     directions.map(
-      (direction) => new Direction(direction.poleLongitude, direction.poleLatitude, 1)
-    )
+      (direction) => new Direction(direction.poleLongitude, direction.poleLatitude, 1),
+    ),
   );
   const { direction, MAD, k } = mean;
 
@@ -80,9 +76,9 @@ const dataToStereoVGP = (
     dirData: direction.toArray(),
     xyData: [meanXYData.x, meanXYData.y],
     confidenceCircle: {
-      xyData: confidenceCircle.all, 
-      xyDataSplitted: confidenceCircle, 
-      color: graphSelectedDotColor('mean')
+      xyData: confidenceCircle.all,
+      xyDataSplitted: confidenceCircle,
+      color: graphSelectedDotColor('mean'),
     },
     tooltip,
   };
@@ -94,17 +90,17 @@ const dataToStereoVGP = (
       label: direction.label,
       dec: +directionalData[index][0].toFixed(1),
       inc: +directionalData[index][1].toFixed(1),
-      a95: directions[index].a95
+      a95: directions[index].a95,
     };
   });
 
   return {
-    directionalData, 
+    directionalData,
     dotsData,
     tooltipData,
     labels,
     meanDirection: meanDirection as MeanDirection,
   };
-}
+};
 
 export default dataToStereoVGP;

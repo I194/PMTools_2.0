@@ -12,7 +12,6 @@ interface IDropdownMenu {
 }
 
 const DropdownMenu: FC<IDropdownMenu> = ({ label, options, onOptionSelect }) => {
-
   const [menuOpen, setMenuOpen] = useState(false);
 
   const anchorRef = useRef<HTMLButtonElement>(null);
@@ -22,10 +21,7 @@ const DropdownMenu: FC<IDropdownMenu> = ({ label, options, onOptionSelect }) => 
   };
 
   const handleMenuClose = (event: Event | React.SyntheticEvent) => {
-    if (
-      anchorRef.current &&
-      anchorRef.current.contains(event.target as HTMLElement)
-    ) {
+    if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
       return;
     }
     setMenuOpen(false);
@@ -34,7 +30,7 @@ const DropdownMenu: FC<IDropdownMenu> = ({ label, options, onOptionSelect }) => 
   const handleSelect = (event: Event | React.SyntheticEvent) => {
     onOptionSelect();
     handleMenuClose(event);
-  }
+  };
 
   function handleListKeyDown(event: React.KeyboardEvent) {
     if (event.key === 'Tab') {
@@ -56,9 +52,7 @@ const DropdownMenu: FC<IDropdownMenu> = ({ label, options, onOptionSelect }) => 
   }, [menuOpen]);
 
   const createMenuItem = (option: string) => {
-    return (
-      <MenuItem onClick={handleSelect}>{ option }</MenuItem>
-    );
+    return <MenuItem onClick={handleSelect}>{option}</MenuItem>;
   };
 
   return (
@@ -70,13 +64,13 @@ const DropdownMenu: FC<IDropdownMenu> = ({ label, options, onOptionSelect }) => 
         aria-expanded={menuOpen ? 'true' : undefined}
         aria-haspopup="true"
         onClick={handleMenuToggle}
-        variant="outlined" 
+        variant="outlined"
         sx={{
           textTransform: 'none',
-          marginLeft: '8px'
+          marginLeft: '8px',
         }}
       >
-        { label }
+        {label}
       </Button>
       <Popper
         open={menuOpen}
@@ -90,8 +84,7 @@ const DropdownMenu: FC<IDropdownMenu> = ({ label, options, onOptionSelect }) => 
           <Grow
             {...TransitionProps}
             style={{
-              transformOrigin:
-                placement === 'bottom-start' ? 'right top' : 'left bottom',
+              transformOrigin: placement === 'bottom-start' ? 'right top' : 'left bottom',
             }}
           >
             <Paper>
@@ -102,9 +95,7 @@ const DropdownMenu: FC<IDropdownMenu> = ({ label, options, onOptionSelect }) => 
                   aria-labelledby="composition-button"
                   onKeyDown={handleListKeyDown}
                 >
-                  {
-                    options.map((option) => createMenuItem(option))
-                  }
+                  {options.map((option) => createMenuItem(option))}
                 </MenuList>
               </ClickAwayListener>
             </Paper>
@@ -112,7 +103,7 @@ const DropdownMenu: FC<IDropdownMenu> = ({ label, options, onOptionSelect }) => 
         )}
       </Popper>
     </>
-  )
-}
+  );
+};
 
 export default DropdownMenu;

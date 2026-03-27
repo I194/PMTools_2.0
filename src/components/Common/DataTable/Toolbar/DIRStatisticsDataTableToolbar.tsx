@@ -1,16 +1,17 @@
-import { 
-  GridToolbarContainer, 
-  GridToolbarColumnsButton, 
+import {
+  GridToolbarContainer,
+  GridToolbarColumnsButton,
   GridToolbarDensitySelector,
   GridToolbarFilterButton,
-} from "@mui/x-data-grid";
-import { useAppSelector } from "../../../../services/store/hooks";
-import { IDirData } from "../../../../utils/GlobalTypes"; 
-import ExportDIRFromDIR from "./Buttons/ExportButton/ExportDIRFromDIR";
+} from '@mui/x-data-grid';
+import { useAppSelector } from '../../../../services/store/hooks';
+import { IDirData } from '../../../../utils/GlobalTypes';
+import ExportDIRFromDIR from './Buttons/ExportButton/ExportDIRFromDIR';
 
 const DIRStatisticsDataTableToolbar = () => {
-
-  const { currentFileInterpretations, outputFilename } = useAppSelector(state => state.dirPageReducer);
+  const { currentFileInterpretations, outputFilename } = useAppSelector(
+    (state) => state.dirPageReducer,
+  );
 
   if (!currentFileInterpretations) return null;
   const data: IDirData = {
@@ -31,11 +32,11 @@ const DIRStatisticsDataTableToolbar = () => {
         MADstrat: interpretation.confidenceRadiusStrat,
         Kstrat: interpretation.Kstrat || 0,
         comment: interpretation.comment,
-        demagType: interpretation.demagType
+        demagType: interpretation.demagType,
       };
     }),
     format: '',
-    created: ''
+    created: '',
   };
 
   return (
@@ -43,7 +44,7 @@ const DIRStatisticsDataTableToolbar = () => {
       <GridToolbarFilterButton />
       <GridToolbarColumnsButton />
       <GridToolbarDensitySelector />
-      <ExportDIRFromDIR data={data}/>
+      <ExportDIRFromDIR data={data} />
     </GridToolbarContainer>
   );
 };

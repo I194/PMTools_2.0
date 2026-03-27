@@ -1,37 +1,36 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from 'react';
 import styles from './DataTablePMD.module.scss';
-import { IPmdData } from "../../../../utils/GlobalTypes";
+import { IPmdData } from '../../../../utils/GlobalTypes';
 import { DataGrid, GridActionsCellItem, GridRowSelectionModel } from '@mui/x-data-grid';
 import DataTablePMDSkeleton from './DataTablePMDSkeleton';
-import { DataGridPMDRow } from "../../../../utils/GlobalTypes";
-import { useAppDispatch, useAppSelector } from "../../../../services/store/hooks";
-import { setSelectedStepsIDs, setHiddenStepsIDs } from "../../../../services/reducers/pcaPage";
-import { GetDataTableBaseStyle } from "../styleConstants";
-import PMDInputDataTableToolbar from "../../../Common/DataTable/Toolbar/PMDInputDataTableToolbar";
+import { DataGridPMDRow } from '../../../../utils/GlobalTypes';
+import { useAppDispatch, useAppSelector } from '../../../../services/store/hooks';
+import { setSelectedStepsIDs, setHiddenStepsIDs } from '../../../../services/reducers/pcaPage';
+import { GetDataTableBaseStyle } from '../styleConstants';
+import PMDInputDataTableToolbar from '../../../Common/DataTable/Toolbar/PMDInputDataTableToolbar';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { IDataTablePMD, PMDDataTableColumns } from "../types";
+import { IDataTablePMD, PMDDataTableColumns } from '../types';
 
 const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
-
   const dispatch = useAppDispatch();
 
-  const { selectedStepsIDs, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer);
+  const { selectedStepsIDs, hiddenStepsIDs } = useAppSelector((state) => state.pcaPageReducer);
   // selectionModel is array of ID's of rows
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
   const [selectedRows, setSelectedRows] = useState<Array<DataGridPMDRow>>([]);
 
   useEffect(() => {
     if (selectedStepsIDs) setSelectionModel(selectedStepsIDs);
-    else setSelectionModel([]); 
+    else setSelectionModel([]);
   }, [selectedStepsIDs]);
 
   const toggleRowVisibility = (id: number) => (event: any) => {
     event.stopPropagation();
-    const newHiddenStepsIDs = hiddenStepsIDs.includes(id) 
-      ? hiddenStepsIDs.filter(hiddenId => hiddenId !== id) 
+    const newHiddenStepsIDs = hiddenStepsIDs.includes(id)
+      ? hiddenStepsIDs.filter((hiddenId) => hiddenId !== id)
       : [...hiddenStepsIDs, id];
-    dispatch(setHiddenStepsIDs(newHiddenStepsIDs))
+    dispatch(setHiddenStepsIDs(newHiddenStepsIDs));
   };
 
   const toggleAllRowsVisibility = (event: any) => {
@@ -54,7 +53,9 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
       getActions: ({ id }) => {
         return [
           <GridActionsCellItem
-            icon={hiddenStepsIDs.includes(id as number) ? <VisibilityOffIcon /> : <VisibilityIcon />} 
+            icon={
+              hiddenStepsIDs.includes(id as number) ? <VisibilityOffIcon /> : <VisibilityIcon />
+            }
             label="Toggle step visibility"
             onClick={toggleRowVisibility(id as number)}
             color="inherit"
@@ -69,9 +70,9 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
     { field: 'Igeo', headerName: 'Igeo', type: 'number', width: 70 },
     { field: 'Dstrat', headerName: 'Dstrat', type: 'number', width: 70 },
     { field: 'Istrat', headerName: 'Istrat', type: 'number', width: 70 },
-    { field: 'mag', headerName: 'MAG', type: 'string', width: 90},
+    { field: 'mag', headerName: 'MAG', type: 'string', width: 90 },
     { field: 'a95', headerName: 'a95', type: 'number', width: 50 },
-    { field: 'comment', headerName: 'Comment', type: 'string', width: 200 }
+    { field: 'comment', headerName: 'Comment', type: 'string', width: 200 },
   ];
 
   columns.forEach((col) => {
@@ -79,7 +80,7 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
     col.headerAlign = 'center';
     col.hideSortIcons = true;
   });
-  
+
   if (!data) return <DataTablePMDSkeleton />;
   let visibleIndex = 1;
   const rows: DataGridPMDRow[] = data.steps.map((stepData, index) => {
@@ -94,15 +95,15 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
       Istrat: Istrat.toFixed(1),
       mag: mag.toExponential(2).toUpperCase(),
       a95: a95.toFixed(1),
-      comment
+      comment,
     };
   });
 
   return (
     <DataTablePMDSkeleton>
-      <DataGrid 
-        rows={rows} 
-        columns={columns} 
+      <DataGrid
+        rows={rows}
+        columns={columns}
         checkboxSelection
         rowSelectionModel={selectionModel}
         onRowSelectionModelChange={(e) => {
@@ -114,7 +115,7 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
           setSelectedRows(selectedRows);
         }}
         components={{
-          Toolbar: PMDInputDataTableToolbar, 
+          Toolbar: PMDInputDataTableToolbar,
         }}
         sx={{
           ...GetDataTableBaseStyle(),
@@ -131,16 +132,16 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
           },
           '& .MuiDataGrid-columnHeader': {
             padding: '0px 0px',
-          }
+          },
         }}
         density={'compact'}
         hideFooter={rows.length < 100}
-        getRowClassName={
-          (params) =>  hiddenStepsIDs.includes(params.row.id) ? styles.hiddenRow : ''
+        getRowClassName={(params) =>
+          hiddenStepsIDs.includes(params.row.id) ? styles.hiddenRow : ''
         }
       />
     </DataTablePMDSkeleton>
   );
-}
+};
 
 export default DataTablePMD;

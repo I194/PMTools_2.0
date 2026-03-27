@@ -1,4 +1,4 @@
-import { IDirData } from "../../GlobalTypes";
+import { IDirData } from '../../GlobalTypes';
 
 /**
  * Process parsing of data from imported .pmm file
@@ -7,21 +7,22 @@ import { IDirData } from "../../GlobalTypes";
  * @returns {IDirData} IDirData
  */
 const parsePMM = (data: string, name: string): IDirData => {
-  
   // eslint-disable-next-line no-control-regex
-  const eol = new RegExp("\r?\n");
+  const eol = new RegExp('\r?\n');
   // Get all lines except first and the last one (they're garbage)
-  const lines = data.split(eol).slice(1).filter(line => line.length > 1);
+  const lines = data
+    .split(eol)
+    .slice(1)
+    .filter((line) => line.length > 1);
 
   const header = lines[0].replace(/"/g, '').split(',');
   // name = header[0] || name;
 
-  // Skip 1 and 2 lines 'cause they're in the header 
+  // Skip 1 and 2 lines 'cause they're in the header
   const interpretations: IDirData['interpretations'] = lines.slice(2).map((line, index) => {
-    
     const params = line.replace(/\s+/g, '').split(',');
 
-    // ID | CODE | STEPRANGE | N | Dg | Ig | kg | a95g | Ds | Is | ks | a95s | comment 
+    // ID | CODE | STEPRANGE | N | Dg | Ig | kg | a95g | Ds | Is | ks | a95s | comment
     const label = params[0];
     const code = params[1];
     const stepRange = params[2];
@@ -65,19 +66,16 @@ const parsePMM = (data: string, name: string): IDirData => {
       MADstrat,
       Kgeo,
       Kstrat,
-      comment
+      comment,
     };
-
   });
-  
+
   return {
     name,
     interpretations,
-    format: "PMM",
+    format: 'PMM',
     created: new Date().toISOString(),
   };
-
-}
+};
 
 export default parsePMM;
-

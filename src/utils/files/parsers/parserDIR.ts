@@ -1,4 +1,4 @@
-import { IDirData } from "../../GlobalTypes";
+import { IDirData } from '../../GlobalTypes';
 
 /**
  * Process parsing of data from imported .dir file
@@ -8,11 +8,11 @@ import { IDirData } from "../../GlobalTypes";
  */
 const parseDIR = (data: string, name: string): IDirData => {
   // eslint-disable-next-line no-control-regex
-  const eol = new RegExp("\r?\n");
+  const eol = new RegExp('\r?\n');
   // Get all lines except the last one (it's garbage)
   const lines = data.split(eol).filter((line) => line.length > 1);
 
-  const interpretations: IDirData["interpretations"] = [];
+  const interpretations: IDirData['interpretations'] = [];
   let index = 0;
   let id = 1;
 
@@ -35,7 +35,7 @@ const parseDIR = (data: string, name: string): IDirData => {
 
     let skipNextLine = false;
 
-    if (code === "rep G") {
+    if (code === 'rep G') {
       // .dir files can consist of rows which can be grouped by pairs:
       // first row described the parameters of direction in the geographic coordinates
       // and the second row described them in the stratigraphic coordinates
@@ -62,23 +62,20 @@ const parseDIR = (data: string, name: string): IDirData => {
 
     // there is no standard for demagnetization symbol... and idk why
     // normally it's T20-T570, but sometimes it's NRM-T570, so... split by '-'
-    const demagSmbl = stepRange.split("").includes("-")
-      ? stepRange.split("-")[1].split("")[0]
-      : "";
-    const thermalTypes = ["T", "t"];
-    const alternatingTypes = ["M", "m"];
+    const demagSmbl = stepRange.split('').includes('-') ? stepRange.split('-')[1].split('')[0] : '';
+    const thermalTypes = ['T', 't'];
+    const alternatingTypes = ['M', 'm'];
 
-    let demagType: "thermal" | "alternating field" | undefined = undefined;
+    let demagType: 'thermal' | 'alternating field' | undefined = undefined;
 
-    if (thermalTypes.indexOf(demagSmbl) > -1) demagType = "thermal";
-    else if (alternatingTypes.indexOf(demagSmbl) > -1)
-      demagType = "alternating field";
+    if (thermalTypes.indexOf(demagSmbl) > -1) demagType = 'thermal';
+    else if (alternatingTypes.indexOf(demagSmbl) > -1) demagType = 'alternating field';
 
     const interpretation = {
       id,
       label,
       code,
-      gcNormal: code.slice(0, 2) === "GC",
+      gcNormal: code.slice(0, 2) === 'GC',
       stepRange,
       stepCount,
       Dgeo,
@@ -101,7 +98,7 @@ const parseDIR = (data: string, name: string): IDirData => {
   return {
     name,
     interpretations,
-    format: "DIR",
+    format: 'DIR',
     created: new Date().toISOString(),
   };
 };

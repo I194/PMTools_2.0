@@ -1,7 +1,7 @@
-import React, { FC } from "react";
+import React, { FC } from 'react';
 import styles from './AppNavigation.module.scss';
 import { NavLink } from 'react-router-dom';
-import { DefaultResponsiveButton } from "../../Common/Buttons";
+import { DefaultResponsiveButton } from '../../Common/Buttons';
 
 interface INavButton {
   label: string;
@@ -12,11 +12,10 @@ interface INavButton {
 }
 
 const NavButton: FC<INavButton> = ({ label, icon, to, external, forceSmall }) => {
-
   const onClickExternal = () => {
     window.location.href = to;
   };
-  
+
   if (external) {
     return (
       <DefaultResponsiveButton
@@ -25,25 +24,23 @@ const NavButton: FC<INavButton> = ({ label, icon, to, external, forceSmall }) =>
         onClick={onClickExternal}
         forceSmall={forceSmall}
       />
-    )
-  };
+    );
+  }
 
   return (
     <NavLink to={to}>
-      {
-        ({ isActive }) => {
-          return (
-            <DefaultResponsiveButton
-              text={label}
-              icon={icon}
-              color={ isActive ? 'secondary' : 'primary' }
-              forceSmall={forceSmall}
-            />
-          );
-        }
-      }
+      {({ isActive }) => {
+        return (
+          <DefaultResponsiveButton
+            text={label}
+            icon={icon}
+            color={isActive ? 'secondary' : 'primary'}
+            forceSmall={forceSmall}
+          />
+        );
+      }}
     </NavLink>
-  )
-}
+  );
+};
 
 export default NavButton;

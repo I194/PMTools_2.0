@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import styles from './Description.module.scss';
 import { Typography, Button, IconButton } from '@mui/material';
@@ -14,12 +13,11 @@ import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
 import { useTranslation } from 'react-i18next';
 
 type Content = Array<{
-  text: string,
-  icon: string,
+  text: string;
+  icon: string;
 }>;
 
-const PrettyTabs = ({content}: {content: Content}) => {
-  
+const PrettyTabs = ({ content }: { content: Content }) => {
   const theme = useTheme();
 
   const [tabIndex, setTabIndex] = useState<number>(0);
@@ -51,18 +49,18 @@ const PrettyTabs = ({content}: {content: Content}) => {
   const [touchEnd, setTouchEnd] = React.useState(0);
 
   function handleTouchStart(e: React.TouchEvent<HTMLDivElement>) {
-      setTouchStart(e.targetTouches[0].clientX);
+    setTouchStart(e.targetTouches[0].clientX);
   }
 
   function handleTouchMove(e: React.TouchEvent<HTMLDivElement>) {
-      setTouchEnd(e.targetTouches[0].clientX);
+    setTouchEnd(e.targetTouches[0].clientX);
   }
 
   function handleTouchEnd() {
     if (touchStart - touchEnd > 150) {
       // do your stuff here for left swipe
       setTabIndex((prevIndex) => nextTabIndex(prevIndex));
-    } 
+    }
 
     if (touchStart - touchEnd < -150) {
       // do your stuff here for right swipe
@@ -71,36 +69,40 @@ const PrettyTabs = ({content}: {content: Content}) => {
   }
 
   return (
-    <div 
+    <div
       className={styles.tabs}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
       <div className={styles.icon}>
-        <img src={content[tabIndex].icon} alt="icon" width='64px' height='64px'/>
+        <img src={content[tabIndex].icon} alt="icon" width="64px" height="64px" />
       </div>
-      <Typography variant='h5' color={textColor(theme.palette.mode)} textAlign='center'>
-        { content[tabIndex].text }
+      <Typography variant="h5" color={textColor(theme.palette.mode)} textAlign="center">
+        {content[tabIndex].text}
       </Typography>
       <div className={styles.indicator}>
-        {
-          content.map((tabContent, index) => (
-            <div 
-              className={`${styles.indicatorItem} ${tabIndex === index ? styles.active : ''}`}
-              onClick={() => setTabIndex(index)}
-              style={{
-                width: `calc(72% / ${content.length})`,
-                backgroundColor: theme.palette.mode === 'dark' ? '#fff' : '#474c50',
-              }}
-            />
-          ))
-        }
+        {content.map((tabContent, index) => (
+          <div
+            className={`${styles.indicatorItem} ${tabIndex === index ? styles.active : ''}`}
+            onClick={() => setTabIndex(index)}
+            style={{
+              width: `calc(72% / ${content.length})`,
+              backgroundColor: theme.palette.mode === 'dark' ? '#fff' : '#474c50',
+            }}
+          />
+        ))}
       </div>
-      <IconButton className={styles.controlRight} onClick={() => setTabIndex(nextTabIndex(tabIndex))}>
+      <IconButton
+        className={styles.controlRight}
+        onClick={() => setTabIndex(nextTabIndex(tabIndex))}
+      >
         <ArrowForwardIosRoundedIcon />
       </IconButton>
-      <IconButton className={styles.controlLeft} onClick={() => setTabIndex(prevTabIndex(tabIndex))}>
+      <IconButton
+        className={styles.controlLeft}
+        onClick={() => setTabIndex(prevTabIndex(tabIndex))}
+      >
         <ArrowBackIosRoundedIcon />
       </IconButton>
     </div>
@@ -108,7 +110,6 @@ const PrettyTabs = ({content}: {content: Content}) => {
 };
 
 const Description = () => {
-
   const theme = useTheme();
   const { t, i18n } = useTranslation('translation');
 
@@ -132,11 +133,11 @@ const Description = () => {
     {
       text: t('mainPage.description.graph'),
       icon: graph,
-    }
+    },
   ];
 
   return (
-    <div 
+    <div
       className={styles.container}
       style={{
         backgroundColor: bgColorBlocks(theme.palette.mode),

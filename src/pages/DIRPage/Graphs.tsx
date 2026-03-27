@@ -3,7 +3,7 @@ import styles from './DIRPage.module.scss';
 import { useDIRGraphSettings, useWindowSize } from '../../utils/GlobalHooks';
 import { IDirData } from '../../utils/GlobalTypes';
 import GraphsSkeleton from './GraphsSkeleton';
-import { StereoGraphDIR }from '../../components/AppGraphs';
+import { StereoGraphDIR } from '../../components/AppGraphs';
 import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
 import { addHiddenDirectionsIDs, removeHiddenDirectionsIDs } from '../../services/reducers/dirPage';
 import Direction from '../../utils/graphs/classes/Direction';
@@ -11,17 +11,16 @@ import { strangeRotation } from '../../utils/statistics/matrix';
 
 interface IGraphs {
   dataToShow: IDirData | null;
-};
+}
 
 const Graphs: FC<IGraphs> = ({ dataToShow }) => {
-
   const dispatch = useAppDispatch();
   const [wv, wh] = useWindowSize();
 
   const graphRef = useRef<HTMLDivElement>(null);
   const graphToExportRef = useRef<HTMLDivElement>(null);
   const { menuItems, settings } = useDIRGraphSettings();
-  const { reference, currentInterpretation  } = useAppSelector(state => state.dirPageReducer);
+  const { reference, currentInterpretation } = useAppSelector((state) => state.dirPageReducer);
 
   const [graphSize, setGraphSize] = useState<number>(300);
   const [centeredByMean, setCenteredByMean] = useState<boolean>(false);
@@ -36,25 +35,31 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
     if (graphWidth && graphHeight) {
       const minBoxSize = Math.min(graphWidth, graphHeight);
       setGraphSize(minBoxSize - 112);
-    };
+    }
   }, [graphRef, wv, wh]);
 
   const cutoffOuterDotsIDs: number[] = useMemo(() => {
     if (!currentInterpretation?.rawData || !dataToShow) return [];
     // сначала берём среднее направление, относительно него будем строить cutoff
-    let { direction: meanDirection } = currentInterpretation.rawData.mean[reference as 'geographic' | 'stratigraphic']; 
-    meanDirection = new Direction(meanDirection.declination, meanDirection.inclination, meanDirection.length);
+    let { direction: meanDirection } =
+      currentInterpretation.rawData.mean[reference as 'geographic' | 'stratigraphic'];
+    meanDirection = new Direction(
+      meanDirection.declination,
+      meanDirection.inclination,
+      meanDirection.length,
+    );
     // затем берём все имеющиеся векторы и фильтруем их по их удалённости от среднего направления
-    const newDirsToHideIDs = dataToShow.interpretations.filter(
-      direction => {
+    const newDirsToHideIDs = dataToShow.interpretations
+      .filter((direction) => {
         const { Dgeo, Igeo, Dstrat, Istrat } = direction;
-        const inReferenceCoords: [number, number]  = reference === 'stratigraphic' ? [Dstrat, Istrat] : [Dgeo, Igeo];
+        const inReferenceCoords: [number, number] =
+          reference === 'stratigraphic' ? [Dstrat, Istrat] : [Dgeo, Igeo];
         const directionVector = new Direction(inReferenceCoords[0], inReferenceCoords[1], 1);
-        return (meanDirection.angle(directionVector) > cutoffAngle);
-      }
-    ).map(dir => dir.id);
+        return meanDirection.angle(directionVector) > cutoffAngle;
+      })
+      .map((dir) => dir.id);
     return newDirsToHideIDs;
-  }, [currentInterpretation, dataToShow])
+  }, [currentInterpretation, dataToShow]);
 
   useEffect(() => {
     if (dataToShow && enableCutoff && !showCutoffOuterDots) {
@@ -64,67 +69,72 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
     }
   }, [enableCutoff, showCutoffOuterDots, dataToShow]);
 
-  if (!dataToShow) return (
-    <GraphsSkeleton 
-      graph={{node: null, ref: graphRef}} 
-      graphToExport={{node: null, ref: graphToExportRef}}
-    />
-  );
+  if (!dataToShow)
+    return (
+      <GraphsSkeleton
+        graph={{ node: null, ref: graphRef }}
+        graphToExport={{ node: null, ref: graphToExportRef }}
+      />
+    );
 
   return (
-    <GraphsSkeleton 
+    <GraphsSkeleton
       graph={{
-        node: <StereoGraphDIR 
-          graphId={`stereoDir`} 
-          width={graphSize}
-          height={graphSize}
-          data={dataToShow}
-          centeredByMean={centeredByMean}
-          setCenteredByMean={setCenteredByMean}
-          menuSettings={{menuItems, settings}}
-          cutoff={{
-            enabled: enableCutoff,
-            setEnableCutoff,
-            borderCircle: {
-              show: showCutoffCircle,
-              setShow: setShowCutoffCircle,
-              angle: cutoffAngle // 45 is the most common angle in paleomagnetism
-            },
-            outerDots: {
-              show: showCutoffOuterDots,
-              setShow: setShowCutoffOuterDots
-            }
-          }}
-        />,
-        ref: graphRef
+        node: (
+          <StereoGraphDIR
+            graphId={`stereoDir`}
+            width={graphSize}
+            height={graphSize}
+            data={dataToShow}
+            centeredByMean={centeredByMean}
+            setCenteredByMean={setCenteredByMean}
+            menuSettings={{ menuItems, settings }}
+            cutoff={{
+              enabled: enableCutoff,
+              setEnableCutoff,
+              borderCircle: {
+                show: showCutoffCircle,
+                setShow: setShowCutoffCircle,
+                angle: cutoffAngle, // 45 is the most common angle in paleomagnetism
+              },
+              outerDots: {
+                show: showCutoffOuterDots,
+                setShow: setShowCutoffOuterDots,
+              },
+            }}
+          />
+        ),
+        ref: graphRef,
       }}
       graphToExport={{
-        node: <StereoGraphDIR
-          graphId={`export_stereoDir`}
-          width={500}
-          height={500}
-          data={dataToShow}
-          centeredByMean={centeredByMean}
-          setCenteredByMean={setCenteredByMean}
-          cutoff={{
-            enabled: enableCutoff,
-            setEnableCutoff,
-            borderCircle: {
-              show: showCutoffCircle,
-              setShow: setShowCutoffCircle,
-              angle: 45 // most common in paleomagnetism
-            },
-            outerDots: {
-              show: showCutoffOuterDots,
-              setShow: setShowCutoffOuterDots
-            }
-          }}
-          menuSettings={{menuItems, settings}}
-        />,
-        ref: graphToExportRef
+        node: (
+          <StereoGraphDIR
+            graphId={`export_stereoDir`}
+            width={500}
+            height={500}
+            data={dataToShow}
+            centeredByMean={centeredByMean}
+            setCenteredByMean={setCenteredByMean}
+            cutoff={{
+              enabled: enableCutoff,
+              setEnableCutoff,
+              borderCircle: {
+                show: showCutoffCircle,
+                setShow: setShowCutoffCircle,
+                angle: 45, // most common in paleomagnetism
+              },
+              outerDots: {
+                show: showCutoffOuterDots,
+                setShow: setShowCutoffOuterDots,
+              },
+            }}
+            menuSettings={{ menuItems, settings }}
+          />
+        ),
+        ref: graphToExportRef,
       }}
     />
-  )
+  );
 };
 
 export default Graphs;

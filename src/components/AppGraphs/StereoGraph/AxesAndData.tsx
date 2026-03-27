@@ -1,13 +1,19 @@
-import React, { FC, useMemo } from "react";
-import { DotsData, GraphSettings, MeanDirection, TooltipDot, Reference } from "../../../utils/graphs/types";
-import { graphSelectedDotColor } from "../../../utils/ThemeConstants";
-import { Axis, Data, Dot } from "../../Common/Graphs";
-import axesNamesByReference from "../../../utils/graphs/formatters/stereo/axesNamesByReference";
-import { useAppSelector } from "../../../services/store/hooks";
-import { IPmdData } from "../../../utils/GlobalTypes";
-import { createStraightPath } from "../../../utils/graphs/createPath";
-import { generateArc2DForPair, makePairKey } from "../../../utils/graphs/stereoGreatCircle";
-import { getOrComputePairPolyline } from "../../../utils/graphs/greatCircleCache";
+import React, { FC, useMemo } from 'react';
+import {
+  DotsData,
+  GraphSettings,
+  MeanDirection,
+  TooltipDot,
+  Reference,
+} from '../../../utils/graphs/types';
+import { graphSelectedDotColor } from '../../../utils/ThemeConstants';
+import { Axis, Data, Dot } from '../../Common/Graphs';
+import axesNamesByReference from '../../../utils/graphs/formatters/stereo/axesNamesByReference';
+import { useAppSelector } from '../../../services/store/hooks';
+import { IPmdData } from '../../../utils/GlobalTypes';
+import { createStraightPath } from '../../../utils/graphs/createPath';
+import { generateArc2DForPair, makePairKey } from '../../../utils/graphs/stereoGreatCircle';
+import { getOrComputePairPolyline } from '../../../utils/graphs/greatCircleCache';
 
 interface IAxesAndData {
   graphId: string;
@@ -31,10 +37,12 @@ interface IAxesAndData {
   selectedIDs: Array<number>;
   inInterpretationIDs: Array<number>;
   settings: GraphSettings;
-};
+}
 
-const AxesAndData: FC<IAxesAndData> = ({ 
-  graphId, width, height,
+const AxesAndData: FC<IAxesAndData> = ({
+  graphId,
+  width,
+  height,
   areaConstants,
   dataConstants,
   rawData,
@@ -42,31 +50,18 @@ const AxesAndData: FC<IAxesAndData> = ({
   inInterpretationIDs,
   settings,
 }) => {
+  const { graphAreaMargin, unit, unitCount, zeroX, zeroY } = areaConstants;
 
-  const {
-    graphAreaMargin,
-    unit,
-    unitCount,
-    zeroX,
-    zeroY,
-  } = areaConstants;
+  const { directionalData, tooltipData, labels, dotsData, meanDirection } = dataConstants;
 
-  const {
-    directionalData,
-    tooltipData,
-    labels,
-    dotsData,
-    meanDirection,
-  } = dataConstants;
-
-  const { reference } = useAppSelector(state => state.pcaPageReducer);
+  const { reference } = useAppSelector((state) => state.pcaPageReducer);
   const axesNames = axesNamesByReference(reference);
 
   // Build GC polyline path (per current reference, but cache per all refs)
   const gcPathD = useMemo(() => {
     if (!settings.dots.connectByGC) return '';
     const graphSize = width / 2;
-    const visibleIds = dataConstants.dotsData.map(d => d.id);
+    const visibleIds = dataConstants.dotsData.map((d) => d.id);
     if (visibleIds.length < 2) return '';
 
     const refs: Reference[] = ['specimen', 'geographic', 'stratigraphic'];
@@ -79,21 +74,13 @@ const AxesAndData: FC<IAxesAndData> = ({
 
       // Precompute for all refs to ensure instant switching later
       refs.forEach((r) => {
-        getOrComputePairPolyline(
-          rawData,
-          graphSize,
-          r,
-          key,
-          () => generateArc2DForPair(rawData, r, graphSize, a, b),
+        getOrComputePairPolyline(rawData, graphSize, r, key, () =>
+          generateArc2DForPair(rawData, r, graphSize, a, b),
         );
       });
 
-      const seg = getOrComputePairPolyline(
-        rawData,
-        graphSize,
-        reference,
-        key,
-        () => generateArc2DForPair(rawData, reference, graphSize, a, b),
+      const seg = getOrComputePairPolyline(rawData, graphSize, reference, key, () =>
+        generateArc2DForPair(rawData, reference, graphSize, a, b),
       );
 
       if (seg.length === 0) continue;
@@ -106,23 +93,23 @@ const AxesAndData: FC<IAxesAndData> = ({
   }, [settings.dots.connectByGC, width, dataConstants.dotsData, rawData, reference]);
 
   return (
-    <g 
+    <g
       id={`${graphId}-axes-and-data`}
       transform={`translate(${graphAreaMargin}, ${graphAreaMargin})`}
     >
       <g id={`${graphId}-axes`}>
-        <circle 
-          id='stereo-circle-axis'
-          cx={zeroX} 
-          cy={zeroY} 
-          r={width/2}
+        <circle
+          id="stereo-circle-axis"
+          cx={zeroX}
+          cy={zeroY}
+          r={width / 2}
           fill="none"
           stroke="black"
           strokeWidth={1}
         />
-        <Axis 
+        <Axis
           graphId={graphId}
-          type='x'
+          type="x"
           name={axesNames.E}
           mirrorName={axesNames.W}
           zero={zeroY}
@@ -133,12 +120,12 @@ const AxesAndData: FC<IAxesAndData> = ({
           hideTicks={!settings.area.ticks}
           tickPosition="both"
         />
-        <Axis 
+        <Axis
           graphId={graphId}
-          type='y'
+          type="y"
           name={axesNames.N}
           mirrorName={axesNames.S}
-          mirrorNamePosition={{x: zeroX, y: height + 15}}
+          mirrorNamePosition={{ x: zeroX, y: height + 15 }}
           zero={zeroX}
           length={height}
           unit={unit}
@@ -155,28 +142,24 @@ const AxesAndData: FC<IAxesAndData> = ({
           Однако hover всё равно работать не будет и потому лучше использовать onMouseOver
           Как раз при этом достигается условие zero-css (я его только что сам придумал, а может и раньше было оно)
       */}
-      <g 
+      <g
         id={`${graphId}-data`}
-        transform={
-          `
+        transform={`
             translate(${width / 2}, ${width / 2})
-          `
-        }
+          `}
       >
-        {
-          settings.dots.connectByGC && gcPathD && (
-            <path 
-              id={`${graphId}-gc-connections`}
-              d={gcPathD}
-              fill={'none'}
-              stroke={'black'}
-              strokeWidth={1}
-            />
-          )
-        }
-        <Data 
+        {settings.dots.connectByGC && gcPathD && (
+          <path
+            id={`${graphId}-gc-connections`}
+            d={gcPathD}
+            fill={'none'}
+            stroke={'black'}
+            strokeWidth={1}
+          />
+        )}
+        <Data
           graphId={graphId}
-          type='all'
+          type="all"
           labels={labels}
           data={dotsData}
           connectDots={!settings.dots.connectByGC}
@@ -184,19 +167,18 @@ const AxesAndData: FC<IAxesAndData> = ({
           tooltipData={tooltipData}
           selectedIDs={selectedIDs}
           inInterpretationIDs={inInterpretationIDs}
-          dotFillColor='black'
+          dotFillColor="black"
           differentColors={true}
           colorsType="light"
           settings={settings.dots}
         />
-        {
-          meanDirection &&
-          <Dot 
-            x={meanDirection.xyData[0]} 
-            y={meanDirection.xyData[1]} 
-            id={`${graphId}-mean-dot`} 
+        {meanDirection && (
+          <Dot
+            x={meanDirection.xyData[0]}
+            y={meanDirection.xyData[1]}
+            id={`${graphId}-mean-dot`}
             type={'mean'}
-            annotation={{id: '', label: '', comment: ''}}
+            annotation={{ id: '', label: '', comment: '' }}
             tooltip={meanDirection.tooltip}
             fillColor={meanDirection.dirData[1] > 0 ? graphSelectedDotColor('mean') : 'white'}
             strokeColor={meanDirection.confidenceCircle?.color || 'black'}
@@ -204,10 +186,10 @@ const AxesAndData: FC<IAxesAndData> = ({
             greatCircle={meanDirection.greatCircle}
             settings={settings.dots}
           />
-        }
+        )}
       </g>
     </g>
-  )
-}
+  );
+};
 
-export default AxesAndData
+export default AxesAndData;

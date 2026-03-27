@@ -1,13 +1,8 @@
-import Coordinates from "../../graphs/classes/Coordinates";
-import Direction from "../../graphs/classes/Direction";
+import Coordinates from '../../graphs/classes/Coordinates';
+import Direction from '../../graphs/classes/Direction';
 import createConfidenceEllipse from '../../graphs/formatters/stereo/createPlaneData/createConfidenceEllipse';
 
-const getRawPlaneData = (
-  direction: Direction, 
-  angle?: number, 
-  angle2?: number, 
-  N?: number
-) => {
+const getRawPlaneData = (direction: Direction, angle?: number, angle2?: number, N?: number) => {
   // Function createStereoPlaneData
   // Returns plane data (small or big circle xyData)
 

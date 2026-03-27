@@ -4,33 +4,43 @@ import { Route, Routes } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../services/store/hooks';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { MainPageLayout, AppLayout } from '../components/Layouts';
-import { MainPage, DIRPage, PCAPage, NotFoundPage, WhyPMToolsPage, AuthorsAndHistory } from '../pages';
+import {
+  MainPage,
+  DIRPage,
+  PCAPage,
+  NotFoundPage,
+  WhyPMToolsPage,
+  AuthorsAndHistory,
+} from '../pages';
 import { useSystemTheme } from '../utils/GlobalHooks';
 import { acitvateHotkeys, deactivateHotkeys, setColorMode } from '../services/reducers/appSettings';
-import { setCurrentDIRid, setCurrentPMDid, setDirStatData, setTreatmentData } from '../services/reducers/parsedData';
+import {
+  setCurrentDIRid,
+  setCurrentPMDid,
+  setDirStatData,
+  setTreatmentData,
+} from '../services/reducers/parsedData';
 import * as pcaPageReducer from '../services/reducers/pcaPage';
 import * as dirPageReducer from '../services/reducers/dirPage';
 
 function App() {
-
   const dispatch = useAppDispatch();
-  
-  const { colorMode, rememberColorMode } = useAppSelector(state => state.appSettingsReducer);
+
+  const { colorMode, rememberColorMode } = useAppSelector((state) => state.appSettingsReducer);
   const systemTheme = useSystemTheme();
 
   // useEffect(() => {
   //   if (!rememberColorMode) dispatch(setColorMode(systemTheme));
   // }, [systemTheme, rememberColorMode]);
-  
+
   useEffect(() => {
-    console.log('color', localStorage)
     const previousColorMode = localStorage.getItem('colorMode') || systemTheme;
     dispatch(setColorMode(previousColorMode));
   }, []);
 
   const theme = createTheme({
     palette: {
-      mode: colorMode
+      mode: colorMode,
     },
   });
 
@@ -56,7 +66,6 @@ function App() {
       dispatch(setCurrentDIRid(JSON.parse(currentDataDIRid)));
     }
 
-
     const pcaPage_reference = localStorage.getItem('pcaPage_reference');
     const pcaPage_projection = localStorage.getItem('pcaPage_projection');
     const pcaPage_commentsInput = localStorage.getItem('pcaPage_isCommentsInputVisible');
@@ -77,7 +86,11 @@ function App() {
       dispatch(pcaPageReducer.setAllInterpretations(JSON.parse(pcaPage_allInterpretations)));
     }
     if (pcaPage_currentInterpretationUUID) {
-      dispatch(pcaPageReducer.setCurrentInterpretationByUUID({uuid: JSON.parse(pcaPage_currentInterpretationUUID)}));
+      dispatch(
+        pcaPageReducer.setCurrentInterpretationByUUID({
+          uuid: JSON.parse(pcaPage_currentInterpretationUUID),
+        }),
+      );
     }
     if (pcaPage_isNumericLabel) {
       dispatch(pcaPageReducer.setLabelMode(JSON.parse(pcaPage_isNumericLabel)));
@@ -103,11 +116,15 @@ function App() {
     }
     if (dirPage_currentInterpretationRaw) {
       const parsed = JSON.parse(dirPage_currentInterpretationRaw);
-      const isUuid = typeof parsed === 'string' && /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(parsed);
+      const isUuid =
+        typeof parsed === 'string' &&
+        /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(
+          parsed,
+        );
       if (isUuid) {
-        dispatch(dirPageReducer.setCurrentInterpretationByUUID({uuid: parsed}));
+        dispatch(dirPageReducer.setCurrentInterpretationByUUID({ uuid: parsed }));
       } else {
-        dispatch(dirPageReducer.setCurrentInterpretationByLabel({label: parsed}));
+        dispatch(dirPageReducer.setCurrentInterpretationByLabel({ label: parsed }));
       }
     }
   }, []);
@@ -119,34 +136,34 @@ function App() {
     return () => {
       window.removeEventListener('focusin', handleFocusIn);
       window.removeEventListener('focusout', handleFocusOut);
-    }
-  }, [])
-  
+    };
+  }, []);
+
   const handleFocusIn = (event: FocusEvent) => {
     const target = event.target as HTMLElement;
     if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
-      dispatch(deactivateHotkeys());  
+      dispatch(deactivateHotkeys());
     }
-  }
-  
+  };
+
   const handleFocusOut = () => {
     dispatch(acitvateHotkeys());
-  }
+  };
 
   return (
     <Suspense fallback="loading">
       <ThemeProvider theme={theme}>
         <Routes>
-          <Route path='/' element={<MainPageLayout />}>
-            <Route index element={<MainPage />}/>
-            <Route path='/why-pmtools' element={<WhyPMToolsPage />}/>
-            <Route path='/authors-and-history' element={<AuthorsAndHistory />}/>
+          <Route path="/" element={<MainPageLayout />}>
+            <Route index element={<MainPage />} />
+            <Route path="/why-pmtools" element={<WhyPMToolsPage />} />
+            <Route path="/authors-and-history" element={<AuthorsAndHistory />} />
           </Route>
-          <Route path='/app' element={<AppLayout />}>
-            <Route path='pca' element={<PCAPage />}/>
-            <Route path='dir' element={<DIRPage />}/>
+          <Route path="/app" element={<AppLayout />}>
+            <Route path="pca" element={<PCAPage />} />
+            <Route path="dir" element={<DIRPage />} />
           </Route>
-          <Route path='*' element={<NotFoundPage />}/>
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </ThemeProvider>
     </Suspense>

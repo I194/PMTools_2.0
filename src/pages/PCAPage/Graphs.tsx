@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import styles from './PCAPage.module.scss';
 import { usePMDGraphSettings, useWindowSize } from '../../utils/GlobalHooks';
-import { ZijdGraph, StereoGraph, MagGraph} from '../../components/AppGraphs';
+import { ZijdGraph, StereoGraph, MagGraph } from '../../components/AppGraphs';
 import { IPmdData } from '../../utils/GlobalTypes';
 import GraphsSkeleton from './GraphsSkeleton';
 import { useAppSelector } from '../../services/store/hooks';
@@ -9,13 +9,12 @@ import { useMediaQuery } from 'react-responsive';
 
 interface IGraphs {
   dataToShow: IPmdData | null;
-};
+}
 
 const Graphs: FC<IGraphs> = ({ dataToShow }) => {
-
   const [wv, wh] = useWindowSize();
   const widthLessThan1400 = useMediaQuery({ query: '(max-width: 1400px)' });
-  const largeGraphToShow = useAppSelector(state => state.pcaPageReducer.largeGraph);
+  const largeGraphToShow = useAppSelector((state) => state.pcaPageReducer.largeGraph);
   const zjdMenuSettings = usePMDGraphSettings();
   const strMenuSettings = usePMDGraphSettings({ isStereo: true });
   const dmgMenuSettings = usePMDGraphSettings();
@@ -36,152 +35,185 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
     if (largeGraphWidth && largeGraphHeight) {
       const minBoxSize = Math.min(largeGraphWidth, largeGraphHeight);
       setLargeGraphSize(minBoxSize - 112);
-    };
+    }
     const smallGraphWidth = graphSmallTopRef.current?.offsetWidth;
     const smallGraphHeight = graphSmallTopRef.current?.offsetHeight;
     if (smallGraphWidth && smallGraphHeight) {
       const minBoxSize = Math.min(smallGraphWidth, smallGraphHeight);
       setSmallGraphSize(minBoxSize - 80);
-    };
+    }
   }, [graphLargeRef, graphSmallTopRef, graphSmallBotRef, wv, wh]);
 
-  if (!dataToShow) return (
-    <GraphsSkeleton 
-      graphLarge={{node: null, ref: graphLargeRef}} 
-      graphLargeToExport={{node: null, ref: graphLargeToExportRef}}
-      graphSmallTop={{node: null, ref: graphSmallTopRef}}
-      graphSmallTopToExport={{node: null, ref: graphSmallTopToExportRef}}
-      graphSmallBot={{node: null, ref: graphSmallBotRef}}
-      graphSmallBotToExport={{node: null, ref: graphSmallBotToExportRef}}
-    />
-  );
+  if (!dataToShow)
+    return (
+      <GraphsSkeleton
+        graphLarge={{ node: null, ref: graphLargeRef }}
+        graphLargeToExport={{ node: null, ref: graphLargeToExportRef }}
+        graphSmallTop={{ node: null, ref: graphSmallTopRef }}
+        graphSmallTopToExport={{ node: null, ref: graphSmallTopToExportRef }}
+        graphSmallBot={{ node: null, ref: graphSmallBotRef }}
+        graphSmallBotToExport={{ node: null, ref: graphSmallBotToExportRef }}
+      />
+    );
 
-  if (widthLessThan1400) return (
-    <GraphsSkeleton 
-      graphLarge={{
-        node: (
-          largeGraphToShow === 0 
-            ? 
-              <ZijdGraph 
+  if (widthLessThan1400)
+    return (
+      <GraphsSkeleton
+        graphLarge={{
+          node:
+            largeGraphToShow === 0 ? (
+              <ZijdGraph
                 graphId={`zijd`}
                 width={largeGraphSize}
-                height={largeGraphSize} 
+                height={largeGraphSize}
                 data={dataToShow}
-                rightClickMenu={{items: zjdMenuSettings.menuItems, settings: zjdMenuSettings.settings}}
+                rightClickMenu={{
+                  items: zjdMenuSettings.menuItems,
+                  settings: zjdMenuSettings.settings,
+                }}
               />
-            :
-              largeGraphToShow === 1
-              ?
-                <StereoGraph 
-                  graphId={`stereo`} 
-                  width={largeGraphSize}
-                  height={largeGraphSize}
-                  data={dataToShow}
-                  menuSettings={{menuItems: strMenuSettings.menuItems, settings: strMenuSettings.settings}}
-                />
-              :
-                <MagGraph 
-                  graphId={`mag`}
-                  width={largeGraphSize}
-                  height={largeGraphSize}
-                  data={dataToShow}
-                  menuSettings={{menuItems: dmgMenuSettings.menuItems, settings: dmgMenuSettings.settings}}
-                />
-        ),
-        ref: graphLargeRef
-      }}
-      graphLargeToExport={{
-        node: (
-          largeGraphToShow === 0 
-            ?
-              <ZijdGraph 
+            ) : largeGraphToShow === 1 ? (
+              <StereoGraph
+                graphId={`stereo`}
+                width={largeGraphSize}
+                height={largeGraphSize}
+                data={dataToShow}
+                menuSettings={{
+                  menuItems: strMenuSettings.menuItems,
+                  settings: strMenuSettings.settings,
+                }}
+              />
+            ) : (
+              <MagGraph
+                graphId={`mag`}
+                width={largeGraphSize}
+                height={largeGraphSize}
+                data={dataToShow}
+                menuSettings={{
+                  menuItems: dmgMenuSettings.menuItems,
+                  settings: dmgMenuSettings.settings,
+                }}
+              />
+            ),
+          ref: graphLargeRef,
+        }}
+        graphLargeToExport={{
+          node:
+            largeGraphToShow === 0 ? (
+              <ZijdGraph
                 graphId={`export_zijd`}
                 width={500}
-                height={500} 
+                height={500}
                 data={dataToShow}
-                rightClickMenu={{items: zjdMenuSettings.menuItems, settings: zjdMenuSettings.settings}}
+                rightClickMenu={{
+                  items: zjdMenuSettings.menuItems,
+                  settings: zjdMenuSettings.settings,
+                }}
               />
-            :
-              largeGraphToShow === 1
-              ?
-                <StereoGraph 
-                  graphId={`export_stereo`}
-                  width={500}
-                  height={500} 
-                  data={dataToShow}
-                  menuSettings={{menuItems: strMenuSettings.menuItems, settings: strMenuSettings.settings}}
-                />
-              :
-                <MagGraph
-                  graphId={`export_mag`}
-                  width={500}
-                  height={500}
-                  data={dataToShow}
-                  menuSettings={{menuItems: dmgMenuSettings.menuItems, settings: dmgMenuSettings.settings}}
-                />
-        ),
-        ref: graphLargeToExportRef
-      }}
-    />
-  )
+            ) : largeGraphToShow === 1 ? (
+              <StereoGraph
+                graphId={`export_stereo`}
+                width={500}
+                height={500}
+                data={dataToShow}
+                menuSettings={{
+                  menuItems: strMenuSettings.menuItems,
+                  settings: strMenuSettings.settings,
+                }}
+              />
+            ) : (
+              <MagGraph
+                graphId={`export_mag`}
+                width={500}
+                height={500}
+                data={dataToShow}
+                menuSettings={{
+                  menuItems: dmgMenuSettings.menuItems,
+                  settings: dmgMenuSettings.settings,
+                }}
+              />
+            ),
+          ref: graphLargeToExportRef,
+        }}
+      />
+    );
 
   return (
-    <GraphsSkeleton 
+    <GraphsSkeleton
       graphLarge={{
         node: (
-          <ZijdGraph 
+          <ZijdGraph
             graphId={`zijd`}
             width={largeGraphSize}
-            height={largeGraphSize} 
+            height={largeGraphSize}
             data={dataToShow}
-            rightClickMenu={{items: zjdMenuSettings.menuItems, settings: zjdMenuSettings.settings}}
+            rightClickMenu={{
+              items: zjdMenuSettings.menuItems,
+              settings: zjdMenuSettings.settings,
+            }}
           />
         ),
-        ref: graphLargeRef
+        ref: graphLargeRef,
       }}
       graphLargeToExport={{
-        node: <ZijdGraph 
-          graphId={`export_zijd`}
-          width={500}
-          height={500} 
-          data={dataToShow}
-          rightClickMenu={{items: zjdMenuSettings.menuItems, settings: zjdMenuSettings.settings}}
-        />,
-        ref: graphLargeToExportRef
+        node: (
+          <ZijdGraph
+            graphId={`export_zijd`}
+            width={500}
+            height={500}
+            data={dataToShow}
+            rightClickMenu={{
+              items: zjdMenuSettings.menuItems,
+              settings: zjdMenuSettings.settings,
+            }}
+          />
+        ),
+        ref: graphLargeToExportRef,
       }}
       graphSmallTop={{
         node: (
-          <StereoGraph 
-            graphId={`stereo`} 
+          <StereoGraph
+            graphId={`stereo`}
             width={smallGraphSize}
             height={smallGraphSize}
             data={dataToShow}
-            menuSettings={{menuItems: strMenuSettings.menuItems, settings: strMenuSettings.settings}}
+            menuSettings={{
+              menuItems: strMenuSettings.menuItems,
+              settings: strMenuSettings.settings,
+            }}
           />
         ),
-        ref: graphSmallTopRef
+        ref: graphSmallTopRef,
       }}
       graphSmallTopToExport={{
-        node: <StereoGraph 
-          graphId={`export_stereo`}
-          width={500}
-          height={500} 
-          data={dataToShow}
-          menuSettings={{menuItems: strMenuSettings.menuItems, settings: strMenuSettings.settings}}
-        />,
-        ref: graphSmallTopToExportRef
+        node: (
+          <StereoGraph
+            graphId={`export_stereo`}
+            width={500}
+            height={500}
+            data={dataToShow}
+            menuSettings={{
+              menuItems: strMenuSettings.menuItems,
+              settings: strMenuSettings.settings,
+            }}
+          />
+        ),
+        ref: graphSmallTopToExportRef,
       }}
       graphSmallBot={{
         node: (
-          <MagGraph 
+          <MagGraph
             graphId={`mag`}
             width={smallGraphSize}
             height={smallGraphSize}
             data={dataToShow}
-            menuSettings={{menuItems: dmgMenuSettings.menuItems, settings: dmgMenuSettings.settings}}
+            menuSettings={{
+              menuItems: dmgMenuSettings.menuItems,
+              settings: dmgMenuSettings.settings,
+            }}
           />
         ),
-        ref: graphSmallBotRef
+        ref: graphSmallBotRef,
       }}
       graphSmallBotToExport={{
         node: (
@@ -190,13 +222,16 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
             width={500}
             height={500}
             data={dataToShow}
-            menuSettings={{menuItems: dmgMenuSettings.menuItems, settings: dmgMenuSettings.settings}}
+            menuSettings={{
+              menuItems: dmgMenuSettings.menuItems,
+              settings: dmgMenuSettings.settings,
+            }}
           />
         ),
-        ref: graphSmallBotToExportRef
+        ref: graphSmallBotToExportRef,
       }}
     />
-  )
+  );
 };
 
 export default Graphs;

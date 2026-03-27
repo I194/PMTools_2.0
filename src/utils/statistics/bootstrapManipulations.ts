@@ -1,5 +1,5 @@
-import Direction from "../graphs/classes/Direction";
-import { fisherMean } from "./calculation/calculateFisherMean";
+import Direction from '../graphs/classes/Direction';
+import { fisherMean } from './calculation/calculateFisherMean';
 
 export const drawBootstrap = (data: Array<any>) => {
   // Function drawBootstrap
@@ -25,7 +25,7 @@ export const generateDirectionsBootstrap = (
     const pseudoDirections: Array<Direction> = drawBootstrap(directions);
     const pseudoMean = fisherMean(pseudoDirections); // get bootstrap mean bootstrap sample
     bootstrappedDirections.push(pseudoMean.direction);
-  };
+  }
 
   return bootstrappedDirections;
 };

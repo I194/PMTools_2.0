@@ -1,5 +1,3 @@
-import PMFile from ".";
+import PMFile from '.';
 
-export default class Sample extends PMFile {
-
-} 
+export default class Sample extends PMFile {}
