@@ -1,0 +1,12 @@
+# PMTools 2.0 — Agent Progress Log
+# Each session appends entries below.
+# Format: [DATE] — summary of changes
+#
+# Read this file at the start of every session to understand current state.
+# Update it at the end of every session with what was accomplished.
+
+## Active Tasks
+- (none yet)
+
+## Completed
+- (none yet)
