@@ -21,7 +21,7 @@ const parseDIR = (data: string, name: string): IDirData => {
     const label = line.slice(0, 7).trim();
     const code = line.slice(7, 14).trim();
     const stepRange = line.slice(14, 24).trim();
-    const stepCount = Number(line.slice(24, 27).trim());
+    let stepCount = Number(line.slice(24, 27).trim());
     const comment = line.slice(64, line.length).trim();
 
     let Dgeo = Number(line.slice(27, 33).trim());
@@ -70,6 +70,21 @@ const parseDIR = (data: string, name: string): IDirData => {
 
     if (thermalTypes.indexOf(demagSmbl) > -1) demagType = 'thermal';
     else if (alternatingTypes.indexOf(demagSmbl) > -1) demagType = 'alternating field';
+
+    // Skip rows where critical numeric fields parsed as NaN
+    if (isNaN(Dgeo) || isNaN(Igeo)) {
+      index += skipNextLine ? 2 : 1;
+      continue;
+    }
+
+    // Default non-critical NaN fields to 0
+    if (isNaN(Dstrat)) Dstrat = 0;
+    if (isNaN(Istrat)) Istrat = 0;
+    if (isNaN(MADgeo)) MADgeo = 0;
+    if (isNaN(MADstrat)) MADstrat = 0;
+    if (isNaN(Kgeo)) Kgeo = 0;
+    if (isNaN(Kstrat)) Kstrat = 0;
+    if (isNaN(stepCount)) stepCount = 0;
 
     const interpretation = {
       id,

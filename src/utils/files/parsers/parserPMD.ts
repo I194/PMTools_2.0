@@ -31,45 +31,54 @@ const parsePMD = (data: string, name: string): IPmdData => {
 
   let demagType: 'thermal' | 'alternating field' | undefined = undefined;
 
-  const steps = lines.slice(2).map((line, index) => {
-    // PAL | Xc (Am2) | Yc (Am2) | Zc (Am2) | MAG (A/m) | Dg | Ig | Ds | Is| a95
-    // PAL === Step (mT or temp degrees)
-    // it's old format and we can't just split by " " 'cause it can cause issues
-    const step = line.slice(0, 4).trim();
-    const x = +line.slice(4, 14).trim();
-    const y = +line.slice(14, 24).trim();
-    const z = +line.slice(24, 34).trim();
-    const mag = +line.slice(34, 44).trim();
-    const Dgeo = +line.slice(44, 50).trim();
-    const Igeo = +line.slice(50, 56).trim();
-    const Dstrat = +line.slice(56, 62).trim();
-    const Istrat = +line.slice(62, 68).trim();
-    const a95 = +line.slice(68, 74).trim();
-    const comment = line.slice(74, line.length).trim();
+  let stepId = 1;
+  const steps = lines
+    .slice(2)
+    .map((line) => {
+      // PAL | Xc (Am2) | Yc (Am2) | Zc (Am2) | MAG (A/m) | Dg | Ig | Ds | Is| a95
+      // PAL === Step (mT or temp degrees)
+      // it's old format and we can't just split by " " 'cause it can cause issues
+      const step = line.slice(0, 4).trim();
+      const x = +line.slice(4, 14).trim();
+      const y = +line.slice(14, 24).trim();
+      const z = +line.slice(24, 34).trim();
+      const mag = +line.slice(34, 44).trim();
+      const Dgeo = +line.slice(44, 50).trim();
+      const Igeo = +line.slice(50, 56).trim();
+      const Dstrat = +line.slice(56, 62).trim();
+      const Istrat = +line.slice(62, 68).trim();
+      const a95 = +line.slice(68, 74).trim();
+      const comment = line.slice(74, line.length).trim();
 
-    if (!demagType) {
-      const demagSmbl = line.slice(0, 1);
+      if (!demagType) {
+        const demagSmbl = line.slice(0, 1);
 
-      if (thermalTypes.indexOf(demagSmbl) > -1) demagType = 'thermal';
-      else if (alternatingTypes.indexOf(demagSmbl) > -1) demagType = 'alternating field';
-    }
+        if (thermalTypes.indexOf(demagSmbl) > -1) demagType = 'thermal';
+        else if (alternatingTypes.indexOf(demagSmbl) > -1) demagType = 'alternating field';
+      }
 
-    return {
-      id: index + 1,
-      step,
-      x,
-      y,
-      z,
-      mag,
-      Dgeo,
-      Igeo,
-      Dstrat,
-      Istrat,
-      a95,
-      comment,
-      demagType,
-    };
-  });
+      // Skip rows where critical numeric fields parsed as NaN
+      if (isNaN(x) || isNaN(y) || isNaN(z) || isNaN(mag) || isNaN(Dgeo) || isNaN(Igeo)) {
+        return null;
+      }
+
+      return {
+        id: stepId++,
+        step,
+        x,
+        y,
+        z,
+        mag,
+        Dgeo,
+        Igeo,
+        Dstrat: isNaN(Dstrat) ? 0 : Dstrat,
+        Istrat: isNaN(Istrat) ? 0 : Istrat,
+        a95: isNaN(a95) ? 0 : a95,
+        comment,
+        demagType,
+      };
+    })
+    .filter((step): step is NonNullable<typeof step> => step !== null);
 
   return {
     metadata,
