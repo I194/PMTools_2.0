@@ -81,65 +81,60 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
     col.hideSortIcons = true;
   });
 
-  if (!data) return <DataTablePMDSkeleton />;
   let visibleIndex = 1;
-  const rows: DataGridPMDRow[] = data.steps.map((stepData, index) => {
-    const { id, step, Dgeo, Igeo, Dstrat, Istrat, mag, a95, comment } = stepData;
-    return {
-      id,
-      index: hiddenStepsIDs.includes(id) ? '-' : visibleIndex++,
-      step,
-      Dgeo: Dgeo.toFixed(1),
-      Igeo: Igeo.toFixed(1),
-      Dstrat: Dstrat.toFixed(1),
-      Istrat: Istrat.toFixed(1),
-      mag: mag.toExponential(2).toUpperCase(),
-      a95: a95.toFixed(1),
-      comment,
-    };
-  });
+  const rows: DataGridPMDRow[] = data
+    ? data.steps.map((stepData, index) => {
+        const { id, step, Dgeo, Igeo, Dstrat, Istrat, mag, a95, comment } = stepData;
+        return {
+          id,
+          index: hiddenStepsIDs.includes(id) ? '-' : visibleIndex++,
+          step,
+          Dgeo: Dgeo.toFixed(1),
+          Igeo: Igeo.toFixed(1),
+          Dstrat: Dstrat.toFixed(1),
+          Istrat: Istrat.toFixed(1),
+          mag: mag.toExponential(2).toUpperCase(),
+          a95: a95.toFixed(1),
+          comment,
+        };
+      })
+    : [];
 
   return (
     <DataTablePMDSkeleton>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(e) => {
-          setSelectionModel(e);
-          const selectedIDs = new Set(e);
-          if ([...selectedIDs].length > 0) dispatch(setSelectedStepsIDs([...selectedIDs]));
-          else dispatch(setSelectedStepsIDs(null));
-          const selectedRows = rows.filter((r) => selectedIDs.has(r.id));
-          setSelectedRows(selectedRows);
-        }}
-        components={{
-          Toolbar: PMDInputDataTableToolbar,
-        }}
-        sx={{
-          ...GetDataTableBaseStyle(),
-          // '& .MuiDataGrid-columnHeaders': {
-          //   minHeight: '24px!important',
-          //   maxHeight: '24px!important',
-          //   lineHeight: '24px!important',
-          // },
-          // '& .MuiDataGrid-virtualScroller': {
-          //   marginTop: '24px!important',
-          // },
-          '& .MuiDataGrid-cell': {
-            padding: '0px 0px',
-          },
-          '& .MuiDataGrid-columnHeader': {
-            padding: '0px 0px',
-          },
-        }}
-        density={'compact'}
-        hideFooter={rows.length < 100}
-        getRowClassName={(params) =>
-          hiddenStepsIDs.includes(params.row.id) ? styles.hiddenRow : ''
-        }
-      />
+      {data && (
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          checkboxSelection
+          rowSelectionModel={selectionModel}
+          onRowSelectionModelChange={(e) => {
+            setSelectionModel(e);
+            const selectedIDs = new Set(e);
+            if ([...selectedIDs].length > 0) dispatch(setSelectedStepsIDs([...selectedIDs]));
+            else dispatch(setSelectedStepsIDs(null));
+            const selectedRows = rows.filter((r) => selectedIDs.has(r.id));
+            setSelectedRows(selectedRows);
+          }}
+          components={{
+            Toolbar: PMDInputDataTableToolbar,
+          }}
+          sx={{
+            ...GetDataTableBaseStyle(),
+            '& .MuiDataGrid-cell': {
+              padding: '0px 0px',
+            },
+            '& .MuiDataGrid-columnHeader': {
+              padding: '0px 0px',
+            },
+          }}
+          density={'compact'}
+          hideFooter={rows.length < 100}
+          getRowClassName={(params) =>
+            hiddenStepsIDs.includes(params.row.id) ? styles.hiddenRow : ''
+          }
+        />
+      )}
     </DataTablePMDSkeleton>
   );
 };

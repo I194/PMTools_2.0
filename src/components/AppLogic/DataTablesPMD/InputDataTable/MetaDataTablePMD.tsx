@@ -78,41 +78,41 @@ const MetaDataTablePMD: FC<IMetaDataTablePMD> = ({ data }) => {
     col.disableColumnMenu = true;
   });
 
-  const rows = [{ ...data, id: 0, isRowSelectable: false }];
-
-  if (!data) return <MetaDataTablePMDSkeleton />;
+  const rows = data ? [{ ...data, id: 0, isRowSelectable: false }] : [];
 
   return (
     <>
       <MetaDataTablePMDSkeleton>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          hideFooter={rows.length < 100}
-          autoHeight={true}
-          getRowHeight={() => 30}
-          density={'compact'}
-          disableRowSelectionOnClick={true}
-          sx={{
-            ...GetDataTableBaseStyle(),
-            '& .MuiDataGrid-columnHeaders': {
-              minHeight: '24px!important',
-              maxHeight: '24px!important',
-              lineHeight: '24px!important',
-            },
-            '& .MuiDataGrid-virtualScroller': {
-              marginTop: '24px!important',
-            },
-            '& .MuiDataGrid-cell': {
-              padding: '0px 0px',
-            },
-            '& .MuiDataGrid-columnHeader': {
-              padding: '0px 0px',
-            },
-          }}
-        />
+        {data && (
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            hideFooter={rows.length < 100}
+            autoHeight={true}
+            getRowHeight={() => 30}
+            density={'compact'}
+            disableRowSelectionOnClick={true}
+            sx={{
+              ...GetDataTableBaseStyle(),
+              '& .MuiDataGrid-columnHeaders': {
+                minHeight: '24px!important',
+                maxHeight: '24px!important',
+                lineHeight: '24px!important',
+              },
+              '& .MuiDataGrid-virtualScroller': {
+                marginTop: '24px!important',
+              },
+              '& .MuiDataGrid-cell': {
+                padding: '0px 0px',
+              },
+              '& .MuiDataGrid-columnHeader': {
+                padding: '0px 0px',
+              },
+            }}
+          />
+        )}
       </MetaDataTablePMDSkeleton>
-      {showEditModal && (
+      {showEditModal && data && (
         <ModalWrapper
           open={showEditModal}
           setOpen={setShowEditModal}
