@@ -15,7 +15,7 @@ import {
   exportGraphs,
   exportGraphsDark,
 } from '../../components/MainPage/FeaturesCards/assets';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 const WhyPMToolsPage: FC = ({}) => {
   const theme = useTheme();
@@ -62,7 +62,10 @@ const WhyPMToolsPage: FC = ({}) => {
             <li>.dir</li>
             <li>.pmm</li>
           </ul>
-          {t('whyPMToolsPage.importAndExport.lines.second')}
+          <Trans
+            i18nKey="whyPMToolsPage.importAndExport.lines.second"
+            components={{ strong: <strong /> }}
+          />
         </Typography>
         <img src={formatsImage} alt={'Форматы данных'} loading="lazy" width="100%" />
         <Typography
@@ -70,7 +73,10 @@ const WhyPMToolsPage: FC = ({}) => {
           color={textColor(theme.palette.mode)}
           fontWeight={isSmallScreen ? '400' : '500'}
         >
-          {t('whyPMToolsPage.importAndExport.lines.third')}
+          <Trans
+            i18nKey="whyPMToolsPage.importAndExport.lines.third"
+            components={{ strong: <strong /> }}
+          />
         </Typography>
         <Typography
           variant="h5"
