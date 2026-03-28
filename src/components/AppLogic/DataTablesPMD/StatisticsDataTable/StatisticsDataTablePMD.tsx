@@ -203,86 +203,87 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ currentFileInterp
     col.disableColumnMenu = true;
   });
 
-  if (!currentFileInterpretations || !currentFileInterpretations.length)
-    return <StatisticsDataTablePMDSkeleton />;
-
   const rows: StatisticsDataTableRow[] = currentFileInterpretations
-    .map((statistics, index) => {
-      const {
-        uuid,
-        label,
-        code,
-        stepRange,
-        stepCount,
-        Dgeo,
-        Igeo,
-        Dstrat,
-        Istrat,
-        confidenceRadius,
-        comment,
-      } = statistics;
-      return {
-        id: uuid,
-        label,
-        code,
-        stepRange,
-        stepCount,
-        Dgeo: +Dgeo.toFixed(1),
-        Igeo: +Igeo.toFixed(1),
-        Dstrat: +Dstrat.toFixed(1),
-        Istrat: +Istrat.toFixed(1),
-        confidenceRadius: +confidenceRadius.toFixed(1),
-        comment,
-      };
-    })
-    .reverse();
+    ? currentFileInterpretations
+        .map((statistics, index) => {
+          const {
+            uuid,
+            label,
+            code,
+            stepRange,
+            stepCount,
+            Dgeo,
+            Igeo,
+            Dstrat,
+            Istrat,
+            confidenceRadius,
+            comment,
+          } = statistics;
+          return {
+            id: uuid,
+            label,
+            code,
+            stepRange,
+            stepCount,
+            Dgeo: +Dgeo.toFixed(1),
+            Igeo: +Igeo.toFixed(1),
+            Dstrat: +Dstrat.toFixed(1),
+            Istrat: +Istrat.toFixed(1),
+            confidenceRadius: +confidenceRadius.toFixed(1),
+            comment,
+          };
+        })
+        .reverse()
+    : [];
 
   return (
     <StatisticsDataTablePMDSkeleton>
-      <DataGrid
-        apiRef={apiRef}
-        rows={rows}
-        columns={columns}
-        cellModesModel={cellModesModel}
-        onCellModesModelChange={handleCellModesModelChange}
-        initialState={{
-          columns: {
-            columnVisibilityModel: {
-              id: false,
+      {currentFileInterpretations && currentFileInterpretations.length > 0 && (
+        <DataGrid
+          apiRef={apiRef}
+          rows={rows}
+          columns={columns}
+          cellModesModel={cellModesModel}
+          onCellModesModelChange={handleCellModesModelChange}
+          initialState={{
+            columns: {
+              columnVisibilityModel: {
+                id: false,
+              },
             },
-          },
-        }}
-        onCellEditStart={(params: GridCellParams, event: MuiEvent) => {
-          dispatch(deactivateHotkeys());
-        }}
-        onCellEditStop={(params: GridCellParams, event: MuiEvent) => {
-          dispatch(acitvateHotkeys());
-        }}
-        sx={{
-          ...GetDataTableBaseStyle(),
-          '& .MuiDataGrid-cell': {
-            padding: '0px 0px',
-          },
-          '& .MuiDataGrid-columnHeader': {
-            padding: '0px 0px',
-          },
-          p: '0 4px 0 0',
-        }}
-        hideFooter={rows.length < 100}
-        density={'compact'}
-        disableRowSelectionOnClick={true}
-        getRowClassName={(params) =>
-          params.row.id === currentInterpretation?.uuid ? currentClass : ''
-        }
-        components={{
-          Toolbar: PMDStatisticsDataTableToolbar,
-        }}
-        onRowClick={(params) => setRowAsCurrentInterpretation(params.row.id)}
-        processRowUpdate={(newRow, oldRow) => {
-          handleRowUpdate(newRow);
-          return newRow;
-        }}
-      />
+          }}
+          onCellEditStart={(params: GridCellParams, event: MuiEvent) => {
+            dispatch(deactivateHotkeys());
+          }}
+          onCellEditStop={(params: GridCellParams, event: MuiEvent) => {
+            dispatch(acitvateHotkeys());
+          }}
+          sx={{
+            ...GetDataTableBaseStyle(),
+            '& .MuiDataGrid-cell': {
+              padding: '0px 0px',
+            },
+            '& .MuiDataGrid-columnHeader': {
+              padding: '0px 0px',
+            },
+            p: '0 4px 0 0',
+          }}
+          hideFooter={rows.length < 100}
+          density={'compact'}
+          disableRowSelectionOnClick={true}
+          getRowClassName={(params) =>
+            params.row.id === currentInterpretation?.uuid ? currentClass : ''
+          }
+          components={{
+            Toolbar: PMDStatisticsDataTableToolbar,
+          }}
+          onRowClick={(params) => setRowAsCurrentInterpretation(params.row.id)}
+          processRowUpdate={(newRow, oldRow) => {
+            handleRowUpdate(newRow);
+            return newRow;
+          }}
+        />
+      )}
     </StatisticsDataTablePMDSkeleton>
   );
 };

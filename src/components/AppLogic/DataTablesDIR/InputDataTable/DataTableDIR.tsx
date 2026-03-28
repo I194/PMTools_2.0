@@ -208,87 +208,90 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
     col.hideSortIcons = true;
   });
 
-  if (!data) return <DataTableDIRSkeleton />;
   let visibleIndex = 1;
-  const rows: Array<DataGridDIRFromDIRRow> = data.interpretations.map((interpretation, index) => {
-    const {
-      id,
-      label,
-      code,
-      stepRange,
-      stepCount,
-      Dgeo,
-      Igeo,
-      Dstrat,
-      Istrat,
-      MADgeo,
-      Kgeo,
-      MADstrat,
-      Kstrat,
-      comment,
-    } = interpretation;
-    let geoDirection = new Direction(Dgeo, Igeo, 1);
-    let stratDirection = new Direction(Dstrat, Istrat, 1);
-    if (reversedDirectionsIDs.includes(id)) {
-      geoDirection = geoDirection.reversePolarity();
-      stratDirection = stratDirection.reversePolarity();
-    }
-    const DgeoFinal = +geoDirection.declination.toFixed(1);
-    const IgeoFinal = +geoDirection.inclination.toFixed(1);
-    const DstratFinal = +stratDirection.declination.toFixed(1);
-    const IstratFinal = +stratDirection.inclination.toFixed(1);
-    return {
-      id,
-      index: hiddenDirectionsIDs.includes(id) ? '-' : visibleIndex++,
-      label,
-      code: code as StatisticsModeDIR,
-      stepRange,
-      stepCount,
-      Dgeo: DgeoFinal,
-      Igeo: IgeoFinal,
-      Dstrat: DstratFinal,
-      Istrat: IstratFinal,
-      confidenceRadiusGeo: +MADgeo.toFixed(1),
-      accuracyGeo: +(Kgeo || 0).toFixed(1),
-      confidenceRadiusStrat: +MADstrat.toFixed(1),
-      accuracyStrat: +(Kstrat || 0).toFixed(1),
-      comment,
-    };
-  });
+  const rows: Array<DataGridDIRFromDIRRow> = data
+    ? data.interpretations.map((interpretation, index) => {
+        const {
+          id,
+          label,
+          code,
+          stepRange,
+          stepCount,
+          Dgeo,
+          Igeo,
+          Dstrat,
+          Istrat,
+          MADgeo,
+          Kgeo,
+          MADstrat,
+          Kstrat,
+          comment,
+        } = interpretation;
+        let geoDirection = new Direction(Dgeo, Igeo, 1);
+        let stratDirection = new Direction(Dstrat, Istrat, 1);
+        if (reversedDirectionsIDs.includes(id)) {
+          geoDirection = geoDirection.reversePolarity();
+          stratDirection = stratDirection.reversePolarity();
+        }
+        const DgeoFinal = +geoDirection.declination.toFixed(1);
+        const IgeoFinal = +geoDirection.inclination.toFixed(1);
+        const DstratFinal = +stratDirection.declination.toFixed(1);
+        const IstratFinal = +stratDirection.inclination.toFixed(1);
+        return {
+          id,
+          index: hiddenDirectionsIDs.includes(id) ? '-' : visibleIndex++,
+          label,
+          code: code as StatisticsModeDIR,
+          stepRange,
+          stepCount,
+          Dgeo: DgeoFinal,
+          Igeo: IgeoFinal,
+          Dstrat: DstratFinal,
+          Istrat: IstratFinal,
+          confidenceRadiusGeo: +MADgeo.toFixed(1),
+          accuracyGeo: +(Kgeo || 0).toFixed(1),
+          confidenceRadiusStrat: +MADstrat.toFixed(1),
+          accuracyStrat: +(Kstrat || 0).toFixed(1),
+          comment,
+        };
+      })
+    : [];
 
   return (
     <DataTablePMDSkeleton>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        checkboxSelection
-        rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(e) => {
-          setSelectionModel(e);
-          const selectedIDs = new Set(e);
-          if ([...selectedIDs].length > 0) dispatch(setSelectedDirectionsIDs([...selectedIDs]));
-          else dispatch(setSelectedDirectionsIDs(null));
-          const selectedRows = rows.filter((r) => selectedIDs.has(r.id));
-          setSelectedRows(selectedRows);
-        }}
-        components={{
-          Toolbar: DIRInputDataTableToolbar,
-        }}
-        sx={{
-          ...GetDataTableBaseStyle(),
-          '& .MuiDataGrid-cell': {
-            padding: '0px 0px',
-          },
-          '& .MuiDataGrid-columnHeader': {
-            padding: '0px 0px',
-          },
-        }}
-        density={'compact'}
-        hideFooter={rows.length < 100}
-        getRowClassName={(params) =>
-          hiddenDirectionsIDs.includes(params.row.id) ? styles.hiddenRow : ''
-        }
-      />
+      {data && (
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          checkboxSelection
+          rowSelectionModel={selectionModel}
+          onRowSelectionModelChange={(e) => {
+            setSelectionModel(e);
+            const selectedIDs = new Set(e);
+            if ([...selectedIDs].length > 0) dispatch(setSelectedDirectionsIDs([...selectedIDs]));
+            else dispatch(setSelectedDirectionsIDs(null));
+            const selectedRows = rows.filter((r) => selectedIDs.has(r.id));
+            setSelectedRows(selectedRows);
+          }}
+          components={{
+            Toolbar: DIRInputDataTableToolbar,
+          }}
+          sx={{
+            ...GetDataTableBaseStyle(),
+            '& .MuiDataGrid-cell': {
+              padding: '0px 0px',
+            },
+            '& .MuiDataGrid-columnHeader': {
+              padding: '0px 0px',
+            },
+          }}
+          density={'compact'}
+          hideFooter={rows.length < 100}
+          getRowClassName={(params) =>
+            hiddenDirectionsIDs.includes(params.row.id) ? styles.hiddenRow : ''
+          }
+        />
+      )}
     </DataTablePMDSkeleton>
   );
 };

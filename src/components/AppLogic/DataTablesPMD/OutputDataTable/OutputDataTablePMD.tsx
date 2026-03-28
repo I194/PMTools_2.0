@@ -161,36 +161,36 @@ const OutputDataTablePMD: FC = () => {
     }
   }, [debouncedFilename]);
 
-  if (!data || !data.length) return <StatisticsDataTablePMDSkeleton />;
-
-  const rows: StatisticsDataTableRow[] = data.map((statistics, index) => {
-    const {
-      uuid,
-      label,
-      code,
-      stepRange,
-      stepCount,
-      Dgeo,
-      Igeo,
-      Dstrat,
-      Istrat,
-      confidenceRadius,
-      comment,
-    } = statistics;
-    return {
-      id: uuid,
-      label,
-      code,
-      stepRange,
-      stepCount,
-      Dgeo: +Dgeo.toFixed(1),
-      Igeo: +Igeo.toFixed(1),
-      Dstrat: +Dstrat.toFixed(1),
-      Istrat: +Istrat.toFixed(1),
-      confidenceRadius: +confidenceRadius.toFixed(1),
-      comment,
-    };
-  });
+  const rows: StatisticsDataTableRow[] = data
+    ? data.map((statistics, index) => {
+        const {
+          uuid,
+          label,
+          code,
+          stepRange,
+          stepCount,
+          Dgeo,
+          Igeo,
+          Dstrat,
+          Istrat,
+          confidenceRadius,
+          comment,
+        } = statistics;
+        return {
+          id: uuid,
+          label,
+          code,
+          stepRange,
+          stepCount,
+          Dgeo: +Dgeo.toFixed(1),
+          Igeo: +Igeo.toFixed(1),
+          Dstrat: +Dstrat.toFixed(1),
+          Istrat: +Istrat.toFixed(1),
+          confidenceRadius: +confidenceRadius.toFixed(1),
+          comment,
+        };
+      })
+    : [];
 
   const handleFilenameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilename(event.target.value);
@@ -198,40 +198,44 @@ const OutputDataTablePMD: FC = () => {
 
   return (
     <>
-      <div className={styles.toolbar}>
-        <TextField
-          id="allInterpretationsPCA_filename"
-          label="File name"
-          value={filename}
-          onChange={handleFilenameChange}
-          variant="standard"
-        />
-      </div>
+      {data && data.length > 0 && (
+        <div className={styles.toolbar}>
+          <TextField
+            id="allInterpretationsPCA_filename"
+            label="File name"
+            value={filename}
+            onChange={handleFilenameChange}
+            variant="standard"
+          />
+        </div>
+      )}
       <StatisticsDataTablePMDSkeleton>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          cellModesModel={cellModesModel}
-          onCellModesModelChange={handleCellModesModelChange}
-          initialState={{
-            columns: {
-              columnVisibilityModel: {
-                id: false,
+        {data && data.length > 0 && (
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            cellModesModel={cellModesModel}
+            onCellModesModelChange={handleCellModesModelChange}
+            initialState={{
+              columns: {
+                columnVisibilityModel: {
+                  id: false,
+                },
               },
-            },
-          }}
-          sx={GetDataTableBaseStyle()}
-          hideFooter={rows.length < 100}
-          density={'compact'}
-          components={{
-            Toolbar: PMDOutputDataTableToolbar,
-          }}
-          disableRowSelectionOnClick={true}
-          processRowUpdate={(newRow, oldRow) => {
-            handleRowUpdate(newRow);
-            return newRow;
-          }}
-        />
+            }}
+            sx={GetDataTableBaseStyle()}
+            hideFooter={rows.length < 100}
+            density={'compact'}
+            components={{
+              Toolbar: PMDOutputDataTableToolbar,
+            }}
+            disableRowSelectionOnClick={true}
+            processRowUpdate={(newRow, oldRow) => {
+              handleRowUpdate(newRow);
+              return newRow;
+            }}
+          />
+        )}
       </StatisticsDataTablePMDSkeleton>
     </>
   );
