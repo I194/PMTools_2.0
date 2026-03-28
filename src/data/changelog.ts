@@ -6,6 +6,27 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '2.6.2',
+    date: 'March 29, 2026',
+    items: [
+      'PCA: fixed MAD calculation returning 0.0 for highly collinear data — now uses isFinite guard instead of || 0 fallback.',
+      'Magnetization graph: fixed x-axis showing "mT" instead of "°C" for thermal demagnetization (read demagType from first non-NRM step).',
+      'Metadata editor: fixed IEEE 754 floating-point artifacts (e.g., 22.599999999999994 instead of 22.6) by using string-based state.',
+      'Metadata editor: fixed NaN when typing decimal separator ("." or ",") as first character — field no longer gets stuck.',
+      'Interpretation labels: stripped file extension from component names (e.g., "300b" instead of "300b.pmd").',
+      'SQUID parser: files with header but no measurement data are now rejected with a clear error message instead of crashing the app.',
+      'Magnetization graph: guarded against -Infinity display when data is empty.',
+      'File import: added validation modal that detects and reports invalid data rows on upload.',
+      'Error boundary: added crash recovery UI so the app no longer shows a permanent white screen on unexpected errors.',
+      'Parsers: added numeric field validation in DIR/PMD parsers to prevent NaN propagation.',
+      'Zijderveld plot: guarded unit label against -INFINITY for empty datasets.',
+      'localStorage: added safe JSON parsing to prevent blank screen on corrupted storage.',
+      'Fixed React hooks order violations in DataTable components.',
+      'Added ESLint, Prettier, Husky pre-commit hook, and CI typecheck/lint steps.',
+      'Formatted entire codebase with Prettier; removed all console.log statements.',
+    ],
+  },
+  {
     version: '2.6.1',
     date: 'December 19, 2025',
     items: [
