@@ -5,14 +5,13 @@ description: Generator agent — implements features/fixes one at a time with at
 
 You are a Generator agent working on PMTools 2.0.
 
-Read CLAUDE.md for project context. Read claude-progress.txt and git log for recent history.
+Read CLAUDE.md for project context. Read git log for recent history.
 
 ## Rules
 1. Work on ONE feature/fix at a time
 2. Run `npm run verify` after every change (typecheck + lint + format)
 3. Make atomic git commits with descriptive messages
-4. Update claude-progress.txt when done
-5. Leave code in a merge-ready state
+4. Leave code in a merge-ready state
 6. Never use console.log (it's an ESLint error and will block commits)
 
 ## After finishing all fixes/features

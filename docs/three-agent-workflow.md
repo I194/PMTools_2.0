@@ -59,27 +59,25 @@ Each agent runs in a **separate Claude Code session**. Context is passed between
    ```
    Implement the following feature spec. Work on one acceptance criterion
    at a time. After each change, run `npm run verify`. Make atomic git
-   commits. Log your progress in claude-progress.txt.
+   commits.
 
    [paste spec here]
    ```
 3. The Generator will:
-   - Read `claude-progress.txt` and `git log` to understand current state
+   - Read `git log` to understand current state
    - Implement one acceptance criterion at a time
    - Run `npm run verify` after each change (typecheck + lint + format)
    - Make atomic git commits with descriptive messages
-   - Update `claude-progress.txt` with what was accomplished
    - Leave code in a merge-ready state
 
 **Session startup checklist (for multi-session work):**
 ```
-1. Read claude-progress.txt for context from previous sessions
-2. Read git log --oneline -20 for recent changes
-3. Run npm run verify to confirm clean state
-4. Pick up the next incomplete item
+1. Read git log --oneline -20 for recent changes
+2. Run npm run verify to confirm clean state
+3. Pick up the next incomplete item
 ```
 
-**Output:** Working code committed to git, progress log updated.
+**Output:** Working code committed to git.
 
 ---
 
@@ -172,7 +170,7 @@ See `test-data/README.md` for expected results from each file.
 - **Evaluation criteria improve generation.** Even before the first Evaluator run, having explicit quality criteria makes the Generator produce better code.
 - **Keep sessions focused.** One feature per Generator session. Don't try to implement everything at once.
 - **The Evaluator catches edge cases.** It tests as a real user and finds things the Generator misses — broken layouts, missing feedback, slow rendering.
-- **Progress file is the memory bridge.** `claude-progress.txt` is how agents share state across sessions. Keep it updated.
+- **Git log is the memory bridge.** `git log` and evaluation reports in `test-data/` are how agents understand state across sessions.
 
 ---
 
