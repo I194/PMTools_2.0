@@ -85,6 +85,13 @@ const WhyPMToolsPage: FC = ({}) => {
           color={textColor(theme.palette.mode)}
           fontWeight={isSmallScreen ? '400' : '500'}
         >
+          {t('whyPMToolsPage.graphics.lines.first')}
+        </Typography>
+        <Typography
+          variant="h6"
+          color={textColor(theme.palette.mode)}
+          fontWeight={isSmallScreen ? '400' : '500'}
+        >
           {t('whyPMToolsPage.graphics.lines.third')}
         </Typography>
         <img src={exportGraphsImage} alt={'Графики'} loading="lazy" width="100%" />
