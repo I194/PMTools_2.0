@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import styles from './VGPDataTable.module.scss';
 import { useAppDispatch, useAppSelector } from '../../../../services/store/hooks';
-import { GetDataTableBaseStyle } from '../styleConstants';
+import { getDataTableBaseStyle } from '../styleConstants';
 import SitesDataTableSkeleton from './VGPDataTableSkeleton';
 import { VGPData } from '../../../../utils/GlobalTypes';
 import { DataGrid, GridValueFormatterParams } from '@mui/x-data-grid';
@@ -17,6 +17,7 @@ import { useCellModesModel } from '../../hooks';
 import { VGPDataTableColumns, VGPRow } from '../types';
 
 const VGPDataTable: FC = () => {
+  const theme = useTheme();
   const { cellModesModel, handleCellModesModelChange } = useCellModesModel();
 
   const { hiddenDirectionsIDs, vgpData } = useAppSelector((state) => state.dirPageReducer);
@@ -135,7 +136,7 @@ const VGPDataTable: FC = () => {
           cellModesModel={cellModesModel}
           onCellModesModelChange={handleCellModesModelChange}
           sx={{
-            ...GetDataTableBaseStyle(),
+            ...getDataTableBaseStyle(theme.palette.mode),
             '& .MuiDataGrid-cell': {
               padding: '0px 0px',
             },

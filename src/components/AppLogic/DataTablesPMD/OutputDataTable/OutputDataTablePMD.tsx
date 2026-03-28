@@ -3,7 +3,7 @@ import styles from './OutputDataTablePMD.module.scss';
 import { useAppDispatch, useAppSelector } from '../../../../services/store/hooks';
 import { useDebounce } from '../../../../utils/GlobalHooks';
 import equal from 'deep-equal';
-import { GetDataTableBaseStyle } from '../styleConstants';
+import { getDataTableBaseStyle } from '../styleConstants';
 import StatisticsDataTablePMDSkeleton from './OutputDataTablePMDSkeleton';
 import PMDOutputDataTableToolbar from '../../../Common/DataTable/Toolbar/PMDOutputDataTableToolbar';
 import { DataGridDIRFromPCARow } from '../../../../utils/GlobalTypes';
@@ -223,7 +223,7 @@ const OutputDataTablePMD: FC = () => {
                 },
               },
             }}
-            sx={GetDataTableBaseStyle()}
+            sx={getDataTableBaseStyle(theme.palette.mode)}
             hideFooter={rows.length < 100}
             density={'compact'}
             components={{

@@ -69,6 +69,7 @@ const Carousel = ({ content }: { content: Content }) => {
       <div className={styles.indicator}>
         {content.map((tabContent, index) => (
           <div
+            key={index}
             className={`${styles.indicatorItem} ${tabIndex === index ? styles.active : ''}`}
             onClick={() => setTabIndex(index)}
             style={{

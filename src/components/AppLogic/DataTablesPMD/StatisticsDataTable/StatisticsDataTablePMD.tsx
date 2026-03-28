@@ -13,7 +13,7 @@ import {
   useGridApiRef,
 } from '@mui/x-data-grid';
 import StatisticsDataTablePMDSkeleton from './StatisticsDataTablePMDSkeleton';
-import { GetDataTableBaseStyle } from '../styleConstants';
+import { getDataTableBaseStyle } from '../styleConstants';
 import {
   DataGridDIRFromPCARow,
   StatisitcsInterpretationFromPCA,
@@ -259,7 +259,7 @@ const StatisticsDataTablePMD: FC<IStatisticsDataTablePMD> = ({ currentFileInterp
             dispatch(acitvateHotkeys());
           }}
           sx={{
-            ...GetDataTableBaseStyle(),
+            ...getDataTableBaseStyle(theme.palette.mode),
             '& .MuiDataGrid-cell': {
               padding: '0px 0px',
             },

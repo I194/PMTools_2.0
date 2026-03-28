@@ -14,7 +14,7 @@ import {
   setHiddenDirectionsIDs,
   setReversedDirectionsIDs,
 } from '../../../../services/reducers/dirPage';
-import { GetDataTableBaseStyle } from '../styleConstants';
+import { getDataTableBaseStyle } from '../styleConstants';
 import PMDInputDataTableToolbar from '../../../Common/DataTable/Toolbar/PMDInputDataTableToolbar';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -277,7 +277,7 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
             Toolbar: DIRInputDataTableToolbar,
           }}
           sx={{
-            ...GetDataTableBaseStyle(),
+            ...getDataTableBaseStyle(theme.palette.mode),
             '& .MuiDataGrid-cell': {
               padding: '0px 0px',
             },

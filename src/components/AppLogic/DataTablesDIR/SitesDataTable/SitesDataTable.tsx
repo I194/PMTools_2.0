@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
 import styles from './SitesDataTable.module.scss';
 import { useAppDispatch, useAppSelector } from '../../../../services/store/hooks';
-import { GetDataTableBaseStyle } from '../styleConstants';
+import { getDataTableBaseStyle } from '../styleConstants';
 import SitesDataTableSkeleton from './SitesDataTableSkeleton';
 import { IDirData, ISitesData, VGPData } from '../../../../utils/GlobalTypes';
 import { DataGrid, GridValueFormatterParams } from '@mui/x-data-grid';
@@ -163,7 +163,7 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
           rows={rows}
           columns={enhancedColumns}
           sx={{
-            ...GetDataTableBaseStyle(),
+            ...getDataTableBaseStyle(theme.palette.mode),
             '& .MuiDataGrid-cell': {
               padding: '0px 0px',
             },

@@ -3,7 +3,7 @@ import styles from './OutputDataTableDIR.module.scss';
 import { useAppDispatch, useAppSelector } from '../../../../services/store/hooks';
 import { useDebounce } from '../../../../utils/GlobalHooks';
 import equal from 'deep-equal';
-import { GetDataTableBaseStyle } from '../styleConstants';
+import { getDataTableBaseStyle } from '../styleConstants';
 import StatisticsDataTablePMDSkeleton from './OutputDataTableDIRSkeleton';
 import { DataGridDIRFromDIRRow } from '../../../../utils/GlobalTypes';
 import {
@@ -241,7 +241,7 @@ const OutputDataTableDIR: FC = () => {
           cellModesModel={cellModesModel}
           onCellModesModelChange={handleCellModesModelChange}
           sx={{
-            ...GetDataTableBaseStyle(),
+            ...getDataTableBaseStyle(theme.palette.mode),
             '& .MuiDataGrid-cell': {
               padding: '0px 0px',
             },

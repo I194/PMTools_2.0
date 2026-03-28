@@ -6,13 +6,15 @@ import DataTablePMDSkeleton from './DataTablePMDSkeleton';
 import { DataGridPMDRow } from '../../../../utils/GlobalTypes';
 import { useAppDispatch, useAppSelector } from '../../../../services/store/hooks';
 import { setSelectedStepsIDs, setHiddenStepsIDs } from '../../../../services/reducers/pcaPage';
-import { GetDataTableBaseStyle } from '../styleConstants';
+import { getDataTableBaseStyle } from '../styleConstants';
+import { useTheme } from '@mui/material/styles';
 import PMDInputDataTableToolbar from '../../../Common/DataTable/Toolbar/PMDInputDataTableToolbar';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { IDataTablePMD, PMDDataTableColumns } from '../types';
 
 const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
+  const theme = useTheme();
   const dispatch = useAppDispatch();
 
   const { selectedStepsIDs, hiddenStepsIDs } = useAppSelector((state) => state.pcaPageReducer);
@@ -120,7 +122,7 @@ const DataTablePMD: FC<IDataTablePMD> = ({ data }) => {
             Toolbar: PMDInputDataTableToolbar,
           }}
           sx={{
-            ...GetDataTableBaseStyle(),
+            ...getDataTableBaseStyle(theme.palette.mode),
             '& .MuiDataGrid-cell': {
               padding: '0px 0px',
             },

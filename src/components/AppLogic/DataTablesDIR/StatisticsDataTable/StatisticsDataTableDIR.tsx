@@ -10,7 +10,7 @@ import {
   useGridApiRef,
 } from '@mui/x-data-grid';
 import StatisticsDataTablePMDSkeleton from './StatisticsDataTableDIRSkeleton';
-import { GetDataTableBaseStyle } from '../styleConstants';
+import { getDataTableBaseStyle } from '../styleConstants';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { useAppDispatch, useAppSelector } from '../../../../services/store/hooks';
 import {
@@ -270,7 +270,7 @@ const StatisticsDataTableDIR: FC<IStatisticsDataTableDIR> = ({ currentFileInterp
           dispatch(acitvateHotkeys());
         }}
         sx={{
-          ...GetDataTableBaseStyle(),
+          ...getDataTableBaseStyle(theme.palette.mode),
           '& .MuiDataGrid-cell': {
             padding: '0px 0px',
           },

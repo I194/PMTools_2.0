@@ -1,7 +1,8 @@
 import React, { FC, useState } from 'react';
 import { DataGrid, GridActionsCellItem, GridValueFormatterParams } from '@mui/x-data-grid';
 import MetaDataTablePMDSkeleton from './MetaDataTablePMDSkeleton';
-import { GetDataTableBaseStyle } from '../styleConstants';
+import { getDataTableBaseStyle } from '../styleConstants';
+import { useTheme } from '@mui/material/styles';
 import EditIcon from '@mui/icons-material/Edit';
 import MetaDataChange from '../../../Common/DataTable/MetaDataChange/MetaDataChange';
 import ModalWrapper from '../../../Common/Modal/ModalWrapper';
@@ -9,6 +10,7 @@ import { useMediaQuery } from 'react-responsive';
 import { IMetaDataTablePMD, MetaDataTableColumns } from '../types';
 
 const MetaDataTablePMD: FC<IMetaDataTablePMD> = ({ data }) => {
+  const theme = useTheme();
   const widthLessThan1400 = useMediaQuery({ query: '(max-width: 1400px)' });
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
 
@@ -93,7 +95,7 @@ const MetaDataTablePMD: FC<IMetaDataTablePMD> = ({ data }) => {
             density={'compact'}
             disableRowSelectionOnClick={true}
             sx={{
-              ...GetDataTableBaseStyle(),
+              ...getDataTableBaseStyle(theme.palette.mode),
               '& .MuiDataGrid-columnHeaders': {
                 minHeight: '24px!important',
                 maxHeight: '24px!important',
