@@ -9,7 +9,6 @@ export const CHANGELOG: ChangelogEntry[] = [
     version: '2.6.2',
     date: 'March 29, 2026',
     items: [
-      'PCA: fixed MAD calculation returning 0.0 for highly collinear data — now uses isFinite guard instead of || 0 fallback.',
       'Magnetization graph: fixed x-axis showing "mT" instead of "°C" for thermal demagnetization (read demagType from first non-NRM step).',
       'Metadata editor: fixed IEEE 754 floating-point artifacts (e.g., 22.599999999999994 instead of 22.6) by using string-based state.',
       'Metadata editor: fixed NaN when typing decimal separator ("." or ",") as first character — field no longer gets stuck.',
