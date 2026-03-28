@@ -24,3 +24,6 @@ yarn-error.log*
 
 .vercel
 .playwright-mcp/
+
+# user bug reports (private)
+.claude/issues/
