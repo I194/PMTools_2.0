@@ -1,8 +1,8 @@
-import { IDirData, IPmdData } from "../GlobalTypes";
+import { IDirData, IPmdData } from '../GlobalTypes';
 
 export const examplePMD: IPmdData = {
   metadata: {
-    name: "string",
+    name: 'string',
     a: 0,
     b: 0,
     s: 0,
@@ -12,7 +12,7 @@ export const examplePMD: IPmdData = {
   steps: [
     {
       id: 0,
-      step: "string",
+      step: 'string',
       x: 0,
       y: 0,
       z: 0,
@@ -22,22 +22,22 @@ export const examplePMD: IPmdData = {
       Dstrat: 0,
       Istrat: 0,
       a95: 0,
-      comment: "string",
+      comment: 'string',
       demagType: undefined,
     },
   ],
-  format: "string",
-  created: "string",
+  format: 'string',
+  created: 'string',
 };
 
 export const exampleDir: IDirData = {
-  name: "string",
+  name: 'string',
   interpretations: [
     {
       id: 0,
-      label: "string",
-      code: "string",
-      stepRange: "string",
+      label: 'string',
+      code: 'string',
+      stepRange: 'string',
       stepCount: 0,
       Dgeo: 0,
       Igeo: 0,
@@ -47,18 +47,18 @@ export const exampleDir: IDirData = {
       Kgeo: 0,
       MADstrat: 0,
       Kstrat: 0,
-      comment: "string",
+      comment: 'string',
       demagType: undefined,
     },
   ],
-  format: "string",
-  created: "string",
+  format: 'string',
+  created: 'string',
 };
 
 export const exampleSitesLatLon = {
   data: [{ lat: 0, lon: 0, age: 0, plateId: 0 }],
-  format: "CSV_SitesLatLon",
-  created: "string",
+  format: 'CSV_SitesLatLon',
+  created: 'string',
 };
 
 export const dataModel_step: any = {

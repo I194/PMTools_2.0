@@ -14,15 +14,14 @@ import { setCurrentDIRid } from '../../services/reducers/parsedData';
 import InterpretationSetter from './InterpretationSetter';
 
 const DIRPage: FC = ({}) => {
-
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const widthLessThan720 = useMediaQuery({ maxWidth: 719 });
   const heightLessThan560 = useMediaQuery({ maxHeight: 559 });
   const unsupportedResolution = widthLessThan720 || heightLessThan560;
 
-  const { dirStatData, currentDataDIRid } = useAppSelector(state => state.parsedDataReducer);
-  const { hiddenDirectionsIDs } = useAppSelector(state => state.dirPageReducer);
+  const { dirStatData, currentDataDIRid } = useAppSelector((state) => state.parsedDataReducer);
+  const { hiddenDirectionsIDs } = useAppSelector((state) => state.dirPageReducer);
 
   const [dataToShow, setDataToShow] = useState<IDirData | null>(null);
   const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
@@ -52,34 +51,31 @@ const DIRPage: FC = ({}) => {
     else setShowUploadModal(false);
   }, [dataToShow]);
 
-  if (unsupportedResolution) return <>Размер окна должен быть не меньше чем 720x560</>
+  if (unsupportedResolution) return <>Размер окна должен быть не меньше чем 720x560</>;
 
   return (
     <>
-      <div 
+      <div
         className={styles.controlPanel}
-        style={{backgroundColor: bgColorMain(theme.palette.mode)}}
+        style={{ backgroundColor: bgColorMain(theme.palette.mode) }}
       >
-        <ToolsDIR data={dataToShow}/>
+        <ToolsDIR data={dataToShow} />
       </div>
-      <div 
-        className={styles.data}
-        style={{backgroundColor: bgColorMain(theme.palette.mode)}}
-      > 
-        <Tables dataToShow={dataToShow}/>
-        <Graphs dataToShow={dataToShow}/>
+      <div className={styles.data} style={{ backgroundColor: bgColorMain(theme.palette.mode) }}>
+        <Tables dataToShow={dataToShow} />
+        <Graphs dataToShow={dataToShow} />
       </div>
       <ModalWrapper
         open={showUploadModal}
         setOpen={setShowUploadModal}
-        size={{width: '60vw', height: widthLessThan720 ? 'fit-content' : '60vh'}}
+        size={{ width: '60vw', height: widthLessThan720 ? 'fit-content' : '60vh' }}
         showBottomClose
       >
-        <UploadModal page='dir' />
+        <UploadModal page="dir" />
       </ModalWrapper>
       <InterpretationSetter dataToShow={dataToShow} />
     </>
-  )
-}
+  );
+};
 
 export default DIRPage;

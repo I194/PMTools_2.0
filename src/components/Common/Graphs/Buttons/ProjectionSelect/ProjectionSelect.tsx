@@ -9,37 +9,48 @@ import { setProjection } from '../../../../../services/reducers/pcaPage';
 import { Tooltip, Typography } from '@mui/material';
 
 interface IProjectionButton {
-  label: Projection
-};
+  label: Projection;
+}
 
 const ProjectionButton: FC<IProjectionButton> = ({ label }) => {
   const dispatch = useAppDispatch();
 
-  const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
-  const { projection, reference } = useAppSelector(state => state.pcaPageReducer); 
+  const { hotkeys, hotkeysActive } = useAppSelector((state) => state.appSettingsReducer);
+  const { projection, reference } = useAppSelector((state) => state.pcaPageReducer);
 
-  const availableProjections: Projection[] = [{y: 'W, UP', x: 'N, N'}, {y: 'N, UP', x: 'E, E'}, {y: 'N, N', x: 'E, UP'}];
+  const availableProjections: Projection[] = [
+    { y: 'W, UP', x: 'N, N' },
+    { y: 'N, UP', x: 'E, E' },
+    { y: 'N, N', x: 'E, UP' },
+  ];
 
-  const [projectionHotkey, setProjectionHotkey] = useState<{key: string, code: string}>({key: 'P', code: 'KeyP'});
+  const [projectionHotkey, setProjectionHotkey] = useState<{ key: string; code: string }>({
+    key: 'P',
+    code: 'KeyP',
+  });
 
   useEffect(() => {
-    const zijdHotkeys = hotkeys.find(block => block.titleKey === 'zijd' || block.title === 'Управление диграммой Зийдервельда' || block.title === 'Zijd diagram manipulation')?.hotkeys;
+    const zijdHotkeys = hotkeys.find(
+      (block) =>
+        block.titleKey === 'zijd' ||
+        block.title === 'Управление диграммой Зийдервельда' ||
+        block.title === 'Zijd diagram manipulation',
+    )?.hotkeys;
 
     if (zijdHotkeys) {
       setProjectionHotkey(
-        (zijdHotkeys.find(h => h.labelKey === 'zijd.projection.scroll') ||
-         zijdHotkeys.find(h => h.label === 'Прокручивание проекций') ||
-         zijdHotkeys.find(h => h.label === 'Projection scroll')
-        )!.hotkey
+        (zijdHotkeys.find((h) => h.labelKey === 'zijd.projection.scroll') ||
+          zijdHotkeys.find((h) => h.label === 'Прокручивание проекций') ||
+          zijdHotkeys.find((h) => h.label === 'Projection scroll'))!.hotkey,
       );
     }
   }, [hotkeys]);
 
   useEffect(() => {
-    if (hotkeysActive) window.addEventListener("keydown", handleHotkeys);
-    else window.removeEventListener("keydown", handleHotkeys);
+    if (hotkeysActive) window.addEventListener('keydown', handleHotkeys);
+    else window.removeEventListener('keydown', handleHotkeys);
     return () => {
-      window.removeEventListener("keydown", handleHotkeys);
+      window.removeEventListener('keydown', handleHotkeys);
     };
   }, [hotkeysActive, hotkeys, projection]);
 
@@ -52,15 +63,15 @@ const ProjectionButton: FC<IProjectionButton> = ({ label }) => {
 
     if (keyCode === projectionHotkey.code) {
       event.preventDefault();
-      const currProjectionIndex = availableProjections.findIndex(proj => proj.y === projection.y);
+      const currProjectionIndex = availableProjections.findIndex((proj) => proj.y === projection.y);
       const nextProjectionIndex = (currProjectionIndex + 1) % 3;
       dispatch(setProjection(availableProjections[nextProjectionIndex]));
     }
-  }
+  };
 
   return (
     <Tooltip
-      title={<Typography variant='body1'>{projectionHotkey.key}</Typography>}
+      title={<Typography variant="body1">{projectionHotkey.key}</Typography>}
       enterDelay={250}
       arrow
     >
@@ -68,11 +79,11 @@ const ProjectionButton: FC<IProjectionButton> = ({ label }) => {
         color={label.y === projection.y ? 'secondary' : 'primary'}
         sx={{
           fontWeight: label.y === projection.y ? 600 : 400,
-          borderRadius: '16px'
+          borderRadius: '16px',
         }}
         onClick={handleProjectionSelect}
       >
-        { projectionByReference(label, reference).y }
+        {projectionByReference(label, reference).y}
       </Button>
     </Tooltip>
   );
@@ -81,13 +92,13 @@ const ProjectionButton: FC<IProjectionButton> = ({ label }) => {
 const ProjectionSelect = () => {
   return (
     <div className={styles.projectionSelect}>
-      <ButtonGroup sx={{m: '4px', height: '24px'}} size='small'>
-        <ProjectionButton label={{y: 'W, UP', x: 'N, N'}}/>
-        <ProjectionButton label={{y: 'N, UP', x: 'E, E'}}/>
-        <ProjectionButton label={{y: 'N, N', x: 'E, UP'}}/>
+      <ButtonGroup sx={{ m: '4px', height: '24px' }} size="small">
+        <ProjectionButton label={{ y: 'W, UP', x: 'N, N' }} />
+        <ProjectionButton label={{ y: 'N, UP', x: 'E, E' }} />
+        <ProjectionButton label={{ y: 'N, N', x: 'E, UP' }} />
       </ButtonGroup>
     </div>
-  )
+  );
 };
 
 export default ProjectionSelect;

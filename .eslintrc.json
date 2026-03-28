@@ -1,0 +1,15 @@
+{
+  "extends": ["react-app", "react-app/jest", "prettier"],
+  "rules": {
+    "no-console": "error",
+    "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }]
+  },
+  "overrides": [
+    {
+      "files": ["src/serviceWorkerRegistration.js"],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ]
+}

@@ -1,11 +1,11 @@
-import { PCALines, Projection } from "../../types";
-import Coordinates from "../../classes/Coordinates";
-import axesLabelsByProjection from "./stepByProjection";
+import { PCALines, Projection } from '../../types';
+import Coordinates from '../../classes/Coordinates';
+import axesLabelsByProjection from './stepByProjection';
 
 const createPCALines = (
   centerMass: Coordinates | null,
   coordinates: Coordinates | null,
-  projection: Projection, 
+  projection: Projection,
   graphSize: number,
 ) => {
   if (!centerMass || !coordinates) return null;
@@ -22,9 +22,9 @@ const createPCALines = (
 
   const coords = {
     hor: {
-      x1: horX.sign * centerMass[horX.axisName] + coordinates[horX.axisName], 
+      x1: horX.sign * centerMass[horX.axisName] + coordinates[horX.axisName],
       y1: -horY.sign * centerMass[horY.axisName] + coordinates[horY.axisName],
-      x2: horX.sign * centerMass[horX.axisName] - coordinates[horX.axisName], 
+      x2: horX.sign * centerMass[horX.axisName] - coordinates[horX.axisName],
       y2: -horY.sign * centerMass[horY.axisName] - coordinates[horY.axisName],
     },
     ver: {
@@ -32,9 +32,9 @@ const createPCALines = (
       y1: -verY.sign * centerMass[verY.axisName] + coordinates[verY.axisName],
       x2: verX.sign * centerMass[verX.axisName] - coordinates[verX.axisName],
       y2: -verY.sign * centerMass[verY.axisName] - coordinates[verY.axisName],
-    }
+    },
   };
-  
+
   let pcaLines: PCALines = {
     horX: [coords.hor.x1 + graphSize, coords.hor.x2 + graphSize],
     horY: [coords.hor.y1 + graphSize, coords.hor.y2 + graphSize],
@@ -45,7 +45,7 @@ const createPCALines = (
   // это костыль, не знаю почему без него неправильно. Но без него правда неправильно. Пока что.
   if (projection.y !== 'W, UP') {
     pcaLines.horX = [coords.hor.x2 + graphSize, coords.hor.x1 + graphSize];
-  };
+  }
 
   // pcaLines.horX = pcaLines.horX.map(edges => edges / 10 ) as [number, number];
   // pcaLines.horY = pcaLines.horY.map(edges => edges / 10 ) as [number, number];

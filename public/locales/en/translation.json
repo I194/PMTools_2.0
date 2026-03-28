@@ -1,4 +1,10 @@
 {
+  "errorBoundary": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred while processing data. You can clear this page's data and try again.",
+    "clearAndRetry": "Clear data and try again",
+    "goHome": "Go to home page"
+  },
   "pmtoolsPaper": {
     "citeRu": "Ефремов И.В., Веселовский Р.В. PMTools: новое программное обеспечение для анализа палеомагнитных данных // Физика Земли. №5. 2023. С. 150-158. DOI:10.31857/S0002333723050022",
     "citeEn": "Efremov I.V., Veselovskiy R.V. PMTools: New Application for Paleomagnetic Data Analysis // Izvestiya, Physics of the Solid Earth. 2023. Vol. 59. No. 5. pp. 798–805. DOI:10.1134/S1069351323050026.",
@@ -84,7 +90,8 @@
     "graphics": {
       "title": "Graphs and diagrams",
       "lines": {
-        "first": "All graphs and diagrams obtained while working with data in PMTools are maximally prepared for direct use in articles and presentations. In addition, they are vector and can be easily opened and edited in any vector graphics editor."
+        "first": "All graphs and diagrams obtained while working with data in PMTools are maximally prepared for direct use in articles and presentations. In addition, they are vector and can be easily opened and edited in any vector graphics editor.",
+        "third": "PMTools provides a wide range of graph types including Zijderveld diagrams, stereonets (equal-area projections), and magnetization decay plots. All graphs support both dark and light themes and can be exported as SVG files."
       }
     },
     "dataManipulation": {
@@ -442,6 +449,27 @@
     "issues": "If you encounter an error while using PMTools, please create an issue about it in the PMTools repository on GitHub.",
     "blankScreen": "If you see empty white screens on the PCA/DIR pages (pmtools.ru/app/pca and https://pmtools.ru/app/dir respectively), try clicking the button below – it will clear the content of your localStorage for the PMTools site.",
     "clearLocalStorage": "❗❗❗Keep in mind that this will delete ALL entries in the localStorage, including automatically loaded file data and the results of their statistical processing, as well as your hotkey settings."
+  },
+  "validationModal": {
+    "title": "Invalid data detected in file",
+    "someRowsInvalid": "Some rows contain invalid data",
+    "allRowsInvalid": "All rows contain invalid data",
+    "summary": "Found {{invalid}} invalid row(s) out of {{total}} total. {{valid}} valid row(s) can be loaded.",
+    "cancel": "Cancel import",
+    "loadAnyway": "Load {{count}} valid row(s)",
+    "noValidRows": "No valid rows to load",
+    "table": {
+      "row": "Row #",
+      "field": "Field",
+      "value": "Raw value",
+      "empty": "empty"
+    },
+    "rules": {
+      "title": "Validation rules",
+      "pmdFields": "PMD files: X, Y, Z, MAG, Dgeo, Igeo must be valid numbers",
+      "dirFields": "DIR files: Dgeo, Igeo must be valid numbers",
+      "numericOnly": "These fields must contain numeric values only (e.g. 125.3, -0.5, 1.2E-6)"
+    }
   }
 }
 

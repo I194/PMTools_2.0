@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC } from 'react';
 import styles from './AppNavigation.module.scss';
 import { Button } from '@mui/material';
 import { NavLink } from 'react-router-dom';
@@ -10,15 +10,14 @@ interface INavButton {
 }
 
 const NavButton: FC<INavButton> = ({ label, to, external }) => {
-
   const onClickExternal = () => {
     window.location.href = to;
   };
-  
+
   if (external) {
     return (
       <Button
-        variant="text" 
+        variant="text"
         sx={{
           textTransform: 'none',
           marginRight: '16px',
@@ -28,19 +27,18 @@ const NavButton: FC<INavButton> = ({ label, to, external }) => {
         component="span"
         onClick={onClickExternal}
       >
-        { label }
+        {label}
       </Button>
-    )
-  };
+    );
+  }
 
   return (
-    <NavLink to={to} style={{textDecoration: 'none'}}>
-      {
-        ({ isActive }) => {
-          return (
-            <Button
-            variant="text" 
-            color={ isActive ? 'secondary' : 'primary' }
+    <NavLink to={to} style={{ textDecoration: 'none' }}>
+      {({ isActive }) => {
+        return (
+          <Button
+            variant="text"
+            color={isActive ? 'secondary' : 'primary'}
             sx={{
               textTransform: 'none',
               marginRight: '16px',
@@ -49,14 +47,13 @@ const NavButton: FC<INavButton> = ({ label, to, external }) => {
               fontSize: '16px',
             }}
             component="span"
-            >
-              { label }
-            </Button>
-          );
-        }
-      }
+          >
+            {label}
+          </Button>
+        );
+      }}
     </NavLink>
-  )
-}
+  );
+};
 
 export default NavButton;

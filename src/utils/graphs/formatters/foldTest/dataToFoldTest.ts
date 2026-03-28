@@ -1,15 +1,10 @@
-import { FoldTestResult, IPmdData } from "../../../GlobalTypes";
-import Coordinates from "../../classes/Coordinates";
-import { DotsData, Reference, TooltipDot } from "../../types";
-import getCDF from "../getCDF";
-import toReferenceCoordinates from "../toReferenceCoordinates";
+import { FoldTestResult, IPmdData } from '../../../GlobalTypes';
+import Coordinates from '../../classes/Coordinates';
+import { DotsData, Reference, TooltipDot } from '../../types';
+import getCDF from '../getCDF';
+import toReferenceCoordinates from '../toReferenceCoordinates';
 
-const dataToFoldTest = (
-  data: FoldTestResult, 
-  graphWidth: number,
-  graphHeight: number,
-) => {
-
+const dataToFoldTest = (data: FoldTestResult, graphWidth: number, graphHeight: number) => {
   const { untilts, savedBootstraps } = data;
 
   const untiltsCDF = getCDF(untilts);
@@ -21,7 +16,7 @@ const dataToFoldTest = (
     const x = (cdf.x + 50) * (graphWidth / 200);
     const y = (1 - cdf.y) * graphHeight;
     const xyData: [number, number] = [x, y];
-    return {id: index, xyData};
+    return { id: index, xyData };
   });
 
   const bootstrapDotsData: Array<DotsData> = savedBootstraps.map((bootstrap, index) => {
@@ -29,32 +24,33 @@ const dataToFoldTest = (
       const x = (value.x + 50) * (graphWidth / 200);
       const y = (1 - value.y) * graphHeight;
       const xyData: [number, number] = [x, y];
-      return {id: index, xyData};
+      return { id: index, xyData };
     });
     return dotsData;
   });
 
   const lowerDotsData: DotsData = [
-    {id: 0, xyData: [(unfoldingMinimun + 50) * (graphWidth / 200), 0]},
-    {id: 1, xyData: [(unfoldingMinimun + 50) * (graphWidth / 200), graphHeight]},
+    { id: 0, xyData: [(unfoldingMinimun + 50) * (graphWidth / 200), 0] },
+    { id: 1, xyData: [(unfoldingMinimun + 50) * (graphWidth / 200), graphHeight] },
   ];
 
   const upperDotsData: DotsData = [
-    {id: 0, xyData: [(unfoldingMaximum + 50) * (graphWidth / 200), 0]},
-    {id: 1, xyData: [(unfoldingMaximum + 50) * (graphWidth / 200), graphHeight]},
+    { id: 0, xyData: [(unfoldingMaximum + 50) * (graphWidth / 200), 0] },
+    { id: 1, xyData: [(unfoldingMaximum + 50) * (graphWidth / 200), graphHeight] },
   ];
 
   const untitlingStartDotsData: DotsData = [
-    {id: 0, xyData: [(untiltsCDF[0].x + 50) * (graphWidth / 200), 0]},
-    {id: 1, xyData: [(untiltsCDF[0].x + 50) * (graphWidth / 200), graphHeight]},
+    { id: 0, xyData: [(untiltsCDF[0].x + 50) * (graphWidth / 200), 0] },
+    { id: 1, xyData: [(untiltsCDF[0].x + 50) * (graphWidth / 200), graphHeight] },
   ];
 
   const untitlingEndDotsData: DotsData = [
-    {id: 0, xyData: [(untiltsCDF[untiltsCDF.length - 1].x + 50) * (graphWidth / 200), 0]},
-    {id: 1, xyData: [(untiltsCDF[untiltsCDF.length - 1].x + 50) * (graphWidth / 200), graphHeight]},
+    { id: 0, xyData: [(untiltsCDF[untiltsCDF.length - 1].x + 50) * (graphWidth / 200), 0] },
+    {
+      id: 1,
+      xyData: [(untiltsCDF[untiltsCDF.length - 1].x + 50) * (graphWidth / 200), graphHeight],
+    },
   ];
-
-  console.log(untilts, untiltsCDF, bootstrapDotsData, graphWidth, graphHeight);
 
   // const labels = steps.map((step) => step.step);
 
@@ -85,7 +81,7 @@ const dataToFoldTest = (
   // const maxStep = Math.max(...stepValues);
   // const maxStepOrder = maxStep.toFixed(0).length - 1;
   // const stepsCeil = Math.ceil(maxStep / Math.pow(10, maxStepOrder)) * Math.pow(10, maxStepOrder);
-  
+
   // const dotsData: DotsData = stepValues.map((value, index) => {
   //   const normalizedMAG = mag[index] / maxMAG;
   //   const x = value * (graphSize / stepsCeil);
@@ -99,8 +95,8 @@ const dataToFoldTest = (
   // };
 
   // const demagnetizationType = data.steps[0].demagType;
-  
-  return { 
+
+  return {
     cdfDotsData,
     bootstrapDotsData,
     lowerDotsData,

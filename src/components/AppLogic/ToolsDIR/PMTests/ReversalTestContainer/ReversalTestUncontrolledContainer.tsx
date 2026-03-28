@@ -2,16 +2,22 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import styles from './ReversalTestContainer.module.scss';
 import { useWindowSize } from '../../../../../utils/GlobalHooks';
 import GraphsSkeleton from '../GraphsSkeleton';
-import { FoldTestResult, IDirData, ReversalTestClassicResult, ReversalTestResultAll } from '../../../../../utils/GlobalTypes';
-import { foldTestBootstrap, reversalTestBootstrap, reversalTestClassic, reversalTestOldFashioned } from '../../../../../utils/statistics/PMTests';
+import {
+  FoldTestResult,
+  IDirData,
+  ReversalTestClassicResult,
+  ReversalTestResultAll,
+} from '../../../../../utils/GlobalTypes';
+import {
+  foldTestBootstrap,
+  reversalTestBootstrap,
+  reversalTestClassic,
+  reversalTestOldFashioned,
+} from '../../../../../utils/statistics/PMTests';
 import FoldTestGraph from '../../../../AppGraphs/FoldTestGraph/FoldTestGraph';
 import { Button, Divider, TextField, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import {
-  textColor,
-  primaryColor,
-  successColor,
-} from '../../../../../utils/ThemeConstants';
+import { textColor, primaryColor, successColor } from '../../../../../utils/ThemeConstants';
 
 import getCDF from '../../../../../utils/graphs/formatters/getCDF';
 import TestControls from '../TestControls';
@@ -23,10 +29,9 @@ import { useTranslation } from 'react-i18next';
 
 type Props = {
   dataToAnalyze: IDirData | null;
-}
+};
 
 const ReversalTestUncontrolledContainer = ({ dataToAnalyze }: Props) => {
-
   const theme = useTheme();
   const { t, i18n } = useTranslation('translation');
   const [dataToShow, setDataToShow] = useState<ReversalTestResultAll>();
@@ -55,49 +60,45 @@ const ReversalTestUncontrolledContainer = ({ dataToAnalyze }: Props) => {
     if (graphWidth && graphHeight) {
       const minBoxSize = Math.min(graphWidth, graphHeight);
       setGraphSize(minBoxSize - 112);
-    };
+    }
   }, [graphRef, wv, wh]);
 
   return (
     <>
-      <TestControls isRunning={isRunning} setIsRunning={setIsRunning}/>
+      <TestControls isRunning={isRunning} setIsRunning={setIsRunning} />
       <div className={styles.classicResults}>
         <div className={styles.uncontrolled}>
-          {
-            dataToShow?.classic &&
-            <ClassicResult result={dataToShow.classic}/>
-          }
-          {
-            dataToShow?.bootstrap && (
-              <>
-                <Divider />
-                <Typography textAlign='center' color={textColor(theme.palette.mode)}>
-                  {t("pmtests.reverseAutoTest.first")}
-                </Typography>
-                <Typography textAlign='center' color={textColor(theme.palette.mode)}>
-                  {t("pmtests.reverseAutoTest.second")}
-                </Typography>
-              </>
-            )
-          } 
+          {dataToShow?.classic && <ClassicResult result={dataToShow.classic} />}
+          {dataToShow?.bootstrap && (
+            <>
+              <Divider />
+              <Typography textAlign="center" color={textColor(theme.palette.mode)}>
+                {t('pmtests.reverseAutoTest.first')}
+              </Typography>
+              <Typography textAlign="center" color={textColor(theme.palette.mode)}>
+                {t('pmtests.reverseAutoTest.second')}
+              </Typography>
+            </>
+          )}
         </div>
       </div>
-      {
-        dataToShow?.bootstrap &&
-        <GraphsSkeleton 
+      {dataToShow?.bootstrap && (
+        <GraphsSkeleton
           graph={{
-            node: <ReversalTestGraph 
-              graphId={`reversalTest`} 
-              width={graphSize}
-              height={graphSize}
-              data={dataToShow.bootstrap}
-            />,
-            ref: graphRef
+            node: (
+              <ReversalTestGraph
+                graphId={`reversalTest`}
+                width={graphSize}
+                height={graphSize}
+                data={dataToShow.bootstrap}
+              />
+            ),
+            ref: graphRef,
           }}
         />
-      }
+      )}
     </>
-  )
+  );
 };
 
 export default ReversalTestUncontrolledContainer;

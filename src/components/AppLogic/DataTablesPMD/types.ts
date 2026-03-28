@@ -1,19 +1,24 @@
-import { GridColDef } from "@mui/x-data-grid";
-import { DataGridDIRFromPCARow, DataGridPMDRow, IPmdData, StatisitcsInterpretationFromPCA } from "../../../utils/GlobalTypes";
+import { GridColDef } from '@mui/x-data-grid';
+import {
+  DataGridDIRFromPCARow,
+  DataGridPMDRow,
+  IPmdData,
+  StatisitcsInterpretationFromPCA,
+} from '../../../utils/GlobalTypes';
 
 export interface IDataTablePMD {
   data: IPmdData | null;
-};
+}
 
 export interface IMetaDataTablePMD {
   data: IPmdData['metadata'] | null | undefined;
-};
+}
 
 export interface IStatisticsDataTablePMD {
   currentFileInterpretations: Array<StatisitcsInterpretationFromPCA> | null;
-};
+}
 
-export type PMDDataTableColumns = readonly GridColDef<DataGridPMDRow>[]
+export type PMDDataTableColumns = readonly GridColDef<DataGridPMDRow>[];
 
 export type MetaDataTableColumns = readonly GridColDef<{
   id: number;
@@ -24,7 +29,7 @@ export type MetaDataTableColumns = readonly GridColDef<{
   s?: number | undefined;
   d?: number | undefined;
   v?: number | undefined;
-}>[]
+}>[];
 
 export type StatisticsDataTableRow = Omit<DataGridDIRFromPCARow, 'uuid'>;
 

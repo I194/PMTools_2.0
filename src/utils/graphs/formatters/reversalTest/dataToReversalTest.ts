@@ -1,7 +1,12 @@
-import { CommonMeanTestBootstrapResult, CoordsComparison, FoldTestResult, IPmdData } from "../../../GlobalTypes";
-import Coordinates from "../../classes/Coordinates";
-import { DotsData, Reference, TooltipDot } from "../../types";
-import getCDF from "../getCDF";
+import {
+  CommonMeanTestBootstrapResult,
+  CoordsComparison,
+  FoldTestResult,
+  IPmdData,
+} from '../../../GlobalTypes';
+import Coordinates from '../../classes/Coordinates';
+import { DotsData, Reference, TooltipDot } from '../../types';
+import getCDF from '../getCDF';
 
 const dataToReversalTest = (
   data: CommonMeanTestBootstrapResult,
@@ -15,12 +20,7 @@ const dataToReversalTest = (
   return { graphX, graphY, graphZ };
 };
 
-const reversalTestGraph = (
-  data: CoordsComparison, 
-  graphWidth: number,
-  graphHeight: number,
-) => {
-
+const reversalTestGraph = (data: CoordsComparison, graphWidth: number, graphHeight: number) => {
   const firstCDF = getCDF(data.first);
   const secondCDF = getCDF(data.second);
 
@@ -33,25 +33,30 @@ const reversalTestGraph = (
     const x = (cdf.x + 1) * (graphWidth / 2);
     const y = (1 - cdf.y) * graphHeight;
     const xyData: [number, number] = [x, y];
-    return {id: index, xyData};
+    return { id: index, xyData };
   });
 
   const secondCDFDotsData: DotsData = secondCDF.map((cdf, index) => {
     const x = (cdf.x + 1) * (graphWidth / 2);
     const y = (1 - cdf.y) * graphHeight;
     const xyData: [number, number] = [x, y];
-    return {id: index, xyData};
+    return { id: index, xyData };
   });
-  
-  const [firstLowerDotsData, firstUpperDotsData, secondLowerDotsData, secondUpperDotsData]: DotsData[] = [firstMinimum, firstMaximum, secondMinimum, secondMaximum].map((value, index) => {
+
+  const [
+    firstLowerDotsData,
+    firstUpperDotsData,
+    secondLowerDotsData,
+    secondUpperDotsData,
+  ]: DotsData[] = [firstMinimum, firstMaximum, secondMinimum, secondMaximum].map((value, index) => {
     const x = (value + 1) * (graphWidth / 2);
     return [
-      {id: 0, xyData: [x, 0]},
-      {id: 1, xyData: [x, graphHeight]},
+      { id: 0, xyData: [x, 0] },
+      { id: 1, xyData: [x, graphHeight] },
     ];
   });
 
-  return { 
+  return {
     firstCDFDotsData,
     secondCDFDotsData,
     firstLowerDotsData,

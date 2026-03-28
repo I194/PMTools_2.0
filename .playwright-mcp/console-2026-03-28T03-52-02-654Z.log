@@ -1,0 +1,319 @@
+[    9309ms] [ERROR] A non-serializable value was detected in an action, in the path: `meta.arg.files.0`. Value: File 
+Take a look at the logic that dispatched this action:  {type: filesAndData/filesToData/pending, payload: undefined, meta: Object} 
+(See https://redux.js.org/faq/actions#why-should-type-be-a-string-or-at-least-serializable-why-should-my-action-types-be-constants) 
+(To allow non-serializable values see: https://redux-toolkit.js.org/usage/usage-guide#working-with-non-serializable-data) @ http://localhost:3000/static/js/bundle.js:108697
+[    9322ms] [ERROR] A non-serializable value was detected in an action, in the path: `meta.arg.files.0`. Value: File 
+Take a look at the logic that dispatched this action:  {type: filesAndData/filesToData/fulfilled, payload: Object, meta: Object} 
+(See https://redux.js.org/faq/actions#why-should-type-be-a-string-or-at-least-serializable-why-should-my-action-types-be-constants) 
+(To allow non-serializable values see: https://redux-toolkit.js.org/usage/usage-guide#working-with-non-serializable-data) @ http://localhost:3000/static/js/bundle.js:108697
+[    9339ms] [ERROR] Warning: React has detected a change in the order of Hooks called by %s. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://reactjs.org/link/rules-of-hooks
+
+   Previous render            Next render
+   ------------------------------------------------------
+%s   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+%s MetaDataTablePMD 1. useContext                 useContext
+2. useState                   useState
+3. useEffect                  useEffect
+4. useState                   useState
+5. useEffect                  useEffect
+6. useState                   useState
+7. useRef                     useRef
+8. useEffect                  useEffect
+9. useEffect                  useEffect
+10. useState                  useState
+11. useEffect                 useEffect
+12. useRef                    useRef
+13. useEffect                 useEffect
+14. useEffect                 useEffect
+15. useEffect                 useEffect
+16. useState                  useState
+17. undefined                 useContext
+ 
+    at MetaDataTablePMD (http://localhost:3000/static/js/bundle.js:7697:5)
+    at div
+    at PCAPage (http://localhost:3000/static/js/bundle.js:28620:7)
+    at ErrorBoundary (http://localhost:3000/static/js/bundle.js:18758:5)
+    at Outlet (http://localhost:3000/static/js/bundle.js:169043:26)
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23368:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:169135:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71657:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:72078:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:52:89)
+    at Router (http://localhost:3000/static/js/bundle.js:169068:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168548:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164828:20) @ http://localhost:3000/static/js/bundle.js:134200
+[    9351ms] [ERROR] Warning: Each child in a list should have a unique "key" prop.%s%s See https://reactjs.org/link/warning-keys for more information.%s 
+
+Check the render method of `ToolsPMD`.  
+    at Tooltip (http://localhost:3000/static/js/bundle.js:64701:83)
+    at ToolsPMD (http://localhost:3000/static/js/bundle.js:12836:5)
+    at div
+    at PCAPage (http://localhost:3000/static/js/bundle.js:28620:7)
+    at ErrorBoundary (http://localhost:3000/static/js/bundle.js:18758:5)
+    at Outlet (http://localhost:3000/static/js/bundle.js:169043:26)
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23368:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:169135:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71657:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:72078:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:52:89)
+    at Router (http://localhost:3000/static/js/bundle.js:169068:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168548:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164828:20) @ http://localhost:3000/static/js/bundle.js:173325
+[    9360ms] [ERROR] Warning: React has detected a change in the order of Hooks called by %s. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://reactjs.org/link/rules-of-hooks
+
+   Previous render            Next render
+   ------------------------------------------------------
+%s   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+%s DataTablePMD 1. useContext                 useContext
+2. useContext                 useContext
+3. useReducer                 useReducer
+4. useMemo                    useMemo
+5. useRef                     useRef
+6. useRef                     useRef
+7. useRef                     useRef
+8. useRef                     useRef
+9. useLayoutEffect            useLayoutEffect
+10. useLayoutEffect           useLayoutEffect
+11. useDebugValue             useDebugValue
+12. useState                  useState
+13. useState                  useState
+14. useEffect                 useEffect
+15. undefined                 useContext
+ 
+    at DataTablePMD (http://localhost:3000/static/js/bundle.js:7309:5)
+    at div
+    at Tables (http://localhost:3000/static/js/bundle.js:28813:5)
+    at div
+    at PCAPage (http://localhost:3000/static/js/bundle.js:28620:7)
+    at ErrorBoundary (http://localhost:3000/static/js/bundle.js:18758:5)
+    at Outlet (http://localhost:3000/static/js/bundle.js:169043:26)
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23368:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:169135:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71657:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:72078:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:52:89)
+    at Router (http://localhost:3000/static/js/bundle.js:169068:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168548:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164828:20) @ http://localhost:3000/static/js/bundle.js:134200
+[    9373ms] [ERROR] Warning: Each child in a list should have a unique "key" prop.%s%s See https://reactjs.org/link/warning-keys for more information.%s 
+
+Check the render method of `Dot`.  
+    at text
+    at Dot (http://localhost:3000/static/js/bundle.js:20286:5)
+    at g
+    at g
+    at Data (http://localhost:3000/static/js/bundle.js:20112:5)
+    at g
+    at g
+    at AxesAndData (http://localhost:3000/static/js/bundle.js:3214:5)
+    at g
+    at svg
+    at div
+    at div
+    at TransformComponent (http://localhost:3000/static/js/bundle.js:173159:21)
+    at TransformContext (http://localhost:3000/static/js/bundle.js:172733:43)
+    at http://localhost:3000/static/js/bundle.js:173110:59
+    at div
+    at ContextMenu (http://localhost:3000/static/js/bundle.js:19866:5)
+    at SelectableGraph (http://localhost:3000/static/js/bundle.js:20808:5)
+    at ZijdGraph (http://localhost:3000/static/js/bundle.js:3517:5)
+    at div
+    at div
+    at GraphsSkeleton (http://localhost:3000/static/js/bundle.js:28235:5)
+    at Graphs (http://localhost:3000/static/js/bundle.js:27887:5)
+    at div
+    at PCAPage (http://localhost:3000/static/js/bundle.js:28620:7)
+    at ErrorBoundary (http://localhost:3000/static/js/bundle.js:18758:5)
+    at Outlet (http://localhost:3000/static/js/bundle.js:169043:26)
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23368:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:169135:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71657:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:72078:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:52:89)
+    at Router (http://localhost:3000/static/js/bundle.js:169068:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168548:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164828:20) @ http://localhost:3000/static/js/bundle.js:173325
+[    9535ms] [WARNING] Blocked aria-hidden on an element because its descendant retained focus. The focus must not be hidden from assistive technology users. Avoid using aria-hidden on a focused element or its ancestor. Consider using the inert attribute instead, which will also prevent focus. For more details, see the aria-hidden section of the WAI-ARIA specification at https://w3c.github.io/aria/#aria-hidden.
+Element with focus: <span.MuiButton-root MuiButton-outlined MuiButton-outlinedPrimary MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButtonBase-root  css-1drouje-MuiButtonBase-root-MuiButton-root>
+Ancestor with aria-hidden: <div.MuiModal-root MuiModal-hidden css-1t7fjoj-MuiModal-root> @ http://localhost:3000/app/pca:0
+[   88600ms] [ERROR] Warning: %s is deprecated in StrictMode. %s was passed an instance of %s which is inside StrictMode. Instead, add a ref directly to the element you want to reference. Learn more about using refs safely here: https://reactjs.org/link/strict-mode-find-node%s findDOMNode findDOMNode DraggableCore 
+    at div
+    at http://localhost:3000/static/js/bundle.js:42350:66
+    at Portal (http://localhost:3000/static/js/bundle.js:69205:5)
+    at ModalUnstyled (http://localhost:3000/static/js/bundle.js:68389:5)
+    at Modal (http://localhost:3000/static/js/bundle.js:57127:82)
+    at DraggableCore (http://localhost:3000/static/js/bundle.js:161301:5)
+    at Draggable (http://localhost:3000/static/js/bundle.js:160591:5)
+    at ModalWrapper (http://localhost:3000/static/js/bundle.js:22035:5)
+    at InterpretationSetter (http://localhost:3000/static/js/bundle.js:28427:5)
+    at PCAPage (http://localhost:3000/static/js/bundle.js:28620:7)
+    at ErrorBoundary (http://localhost:3000/static/js/bundle.js:18758:5)
+    at Outlet (http://localhost:3000/static/js/bundle.js:169043:26)
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23368:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:169135:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71657:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:72078:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:52:89)
+    at Router (http://localhost:3000/static/js/bundle.js:169068:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168548:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164828:20) @ http://localhost:3000/static/js/bundle.js:134200
+[   88600ms] [ERROR] Warning: %s is deprecated in StrictMode. %s was passed an instance of %s which is inside StrictMode. Instead, add a ref directly to the element you want to reference. Learn more about using refs safely here: https://reactjs.org/link/strict-mode-find-node%s findDOMNode findDOMNode Draggable 
+    at div
+    at http://localhost:3000/static/js/bundle.js:42350:66
+    at Portal (http://localhost:3000/static/js/bundle.js:69205:5)
+    at ModalUnstyled (http://localhost:3000/static/js/bundle.js:68389:5)
+    at Modal (http://localhost:3000/static/js/bundle.js:57127:82)
+    at DraggableCore (http://localhost:3000/static/js/bundle.js:161301:5)
+    at Draggable (http://localhost:3000/static/js/bundle.js:160591:5)
+    at ModalWrapper (http://localhost:3000/static/js/bundle.js:22035:5)
+    at InterpretationSetter (http://localhost:3000/static/js/bundle.js:28427:5)
+    at PCAPage (http://localhost:3000/static/js/bundle.js:28620:7)
+    at ErrorBoundary (http://localhost:3000/static/js/bundle.js:18758:5)
+    at Outlet (http://localhost:3000/static/js/bundle.js:169043:26)
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23368:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:169135:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71657:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:72078:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:52:89)
+    at Router (http://localhost:3000/static/js/bundle.js:169068:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168548:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164828:20) @ http://localhost:3000/static/js/bundle.js:134200
+[   88694ms] [WARNING] Blocked aria-hidden on an element because its descendant retained focus. The focus must not be hidden from assistive technology users. Avoid using aria-hidden on a focused element or its ancestor. Consider using the inert attribute instead, which will also prevent focus. For more details, see the aria-hidden section of the WAI-ARIA specification at https://w3c.github.io/aria/#aria-hidden.
+Element with focus: <input.MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input#mui-145>
+Ancestor with aria-hidden: <div#root> @ http://localhost:3000/app/pca:0
+[  106677ms] [ERROR] Warning: React has detected a change in the order of Hooks called by %s. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://reactjs.org/link/rules-of-hooks
+
+   Previous render            Next render
+   ------------------------------------------------------
+%s   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+%s OutputDataTablePMD 1. useContext                 useContext
+2. useContext                 useContext
+3. useDebugValue              useDebugValue
+4. useState                   useState
+5. useCallback                useCallback
+6. useContext                 useContext
+7. useReducer                 useReducer
+8. useMemo                    useMemo
+9. useRef                     useRef
+10. useRef                    useRef
+11. useRef                    useRef
+12. useRef                    useRef
+13. useLayoutEffect           useLayoutEffect
+14. useLayoutEffect           useLayoutEffect
+15. useDebugValue             useDebugValue
+16. useContext                useContext
+17. useReducer                useReducer
+18. useMemo                   useMemo
+19. useRef                    useRef
+20. useRef                    useRef
+21. useRef                    useRef
+22. useRef                    useRef
+23. useLayoutEffect           useLayoutEffect
+24. useLayoutEffect           useLayoutEffect
+25. useDebugValue             useDebugValue
+26. useState                  useState
+27. useState                  useState
+28. useEffect                 useEffect
+29. useCallback               useCallback
+30. useEffect                 useEffect
+31. undefined                 useContext
+ 
+    at OutputDataTablePMD (http://localhost:3000/static/js/bundle.js:8055:89)
+    at div
+    at TrapFocus (http://localhost:3000/static/js/bundle.js:69633:5)
+    at div
+    at http://localhost:3000/static/js/bundle.js:42350:66
+    at Portal (http://localhost:3000/static/js/bundle.js:69205:5)
+    at ModalUnstyled (http://localhost:3000/static/js/bundle.js:68389:5)
+    at Modal (http://localhost:3000/static/js/bundle.js:57127:82)
+    at ModalWrapper (http://localhost:3000/static/js/bundle.js:22035:5)
+    at AppSettings (http://localhost:3000/static/js/bundle.js:4258:5)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23368:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:169135:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71657:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:72078:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:52:89)
+    at Router (http://localhost:3000/static/js/bundle.js:169068:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168548:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164828:20) @ http://localhost:3000/static/js/bundle.js:134200
+[  106778ms] [ERROR] Warning: React has detected a change in the order of Hooks called by %s. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://reactjs.org/link/rules-of-hooks
+
+   Previous render            Next render
+   ------------------------------------------------------
+%s   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+%s StatisticsDataTablePMD 1. useContext                 useContext
+2. useContext                 useContext
+3. useDebugValue              useDebugValue
+4. useRef                     useRef
+5. useState                   useState
+6. useCallback                useCallback
+7. useContext                 useContext
+8. useReducer                 useReducer
+9. useMemo                    useMemo
+10. useRef                    useRef
+11. useRef                    useRef
+12. useRef                    useRef
+13. useRef                    useRef
+14. useLayoutEffect           useLayoutEffect
+15. useLayoutEffect           useLayoutEffect
+16. useDebugValue             useDebugValue
+17. useState                  useState
+18. useContext                useContext
+19. useReducer                useReducer
+20. useMemo                   useMemo
+21. useRef                    useRef
+22. useRef                    useRef
+23. useRef                    useRef
+24. useRef                    useRef
+25. useLayoutEffect           useLayoutEffect
+26. useLayoutEffect           useLayoutEffect
+27. useDebugValue             useDebugValue
+28. useEffect                 useEffect
+29. useEffect                 useEffect
+30. useCallback               useCallback
+31. useEffect                 useEffect
+32. useCallback               useCallback
+33. undefined                 useContext
+ 
+    at StatisticsDataTablePMD (http://localhost:3000/static/js/bundle.js:8521:5)
+    at div
+    at Tables (http://localhost:3000/static/js/bundle.js:28813:5)
+    at div
+    at PCAPage (http://localhost:3000/static/js/bundle.js:28620:7)
+    at ErrorBoundary (http://localhost:3000/static/js/bundle.js:18758:5)
+    at Outlet (http://localhost:3000/static/js/bundle.js:169043:26)
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23368:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:169135:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71657:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:72078:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:52:89)
+    at Router (http://localhost:3000/static/js/bundle.js:169068:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168548:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164828:20) @ http://localhost:3000/static/js/bundle.js:134200

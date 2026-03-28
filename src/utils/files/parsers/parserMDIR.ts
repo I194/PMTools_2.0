@@ -1,4 +1,4 @@
-import { IDirData } from "../../GlobalTypes";
+import { IDirData } from '../../GlobalTypes';
 
 /**
  * Process parsing of data from imported .csv dir-like file
@@ -11,22 +11,22 @@ const parseMDIR = (data: string, name: string): IDirData => {
   // !!! DEPRECATED
   // .mdir data format combined with .dir data format
   // !!! DEPRECATED
-  
+
   // eslint-disable-next-line no-control-regex
-  const eol = new RegExp("\r?\n");
+  const eol = new RegExp('\r?\n');
   // Get all lines except the last one (it's garbage)
-  const lines = data.split(eol).filter(line => line.length > 1);
-  // it's must an odd number of lines in .mdir file, 
-  // otherwise the structure of the future IDirData will be broken 
+  const lines = data.split(eol).filter((line) => line.length > 1);
+  // it's must an odd number of lines in .mdir file,
+  // otherwise the structure of the future IDirData will be broken
   if (lines.length % 2 !== 0) lines.pop();
 
-  const interpretations: IDirData['interpretations'] = [];  
+  const interpretations: IDirData['interpretations'] = [];
   for (let i = 0; i < lines.length; i += 2) {
     // .mdir files consits of rows which can be grouped by pairs:
     // first row described the parameters of direction in the geographic coordinates
     // and the second row described them in the stratigraphic coordinates
     // so it looks like this:
-    // ID | CODE-G | STEPRANGE | N | Dg | Ig | 90 | 0  | Kg | MADg | Comment 
+    // ID | CODE-G | STEPRANGE | N | Dg | Ig | 90 | 0  | Kg | MADg | Comment
     // ID | CODE-S | STEPRANGE | N | 90 | 0  | Ds | Is | Ks | MADs | Comment
     // 90 and 0 here are like a placeholders
     // and also it's an old format and so we can't just split by " " because it can cause issues
@@ -77,16 +77,14 @@ const parseMDIR = (data: string, name: string): IDirData => {
     };
 
     interpretations.push(interpretation);
-  };
-  
+  }
+
   return {
     name,
     interpretations,
-    format: "MDIR",
+    format: 'MDIR',
     created: new Date().toISOString(),
   };
-
-}
+};
 
 export default parseMDIR;
-

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import styles from './Carousel.module.scss';
 import { Typography, Button, IconButton } from '@mui/material';
@@ -8,8 +7,7 @@ import ArrowBackIosRoundedIcon from '@mui/icons-material/ArrowBackIosRounded';
 
 type Content = Array<React.ReactNode>;
 
-const Carousel = ({content}: {content: Content}) => {
-  
+const Carousel = ({ content }: { content: Content }) => {
   const theme = useTheme();
 
   const [tabIndex, setTabIndex] = useState<number>(0);
@@ -41,18 +39,18 @@ const Carousel = ({content}: {content: Content}) => {
   const [touchEnd, setTouchEnd] = React.useState(0);
 
   function handleTouchStart(e: React.TouchEvent<HTMLDivElement>) {
-      setTouchStart(e.targetTouches[0].clientX);
+    setTouchStart(e.targetTouches[0].clientX);
   }
 
   function handleTouchMove(e: React.TouchEvent<HTMLDivElement>) {
-      setTouchEnd(e.targetTouches[0].clientX);
+    setTouchEnd(e.targetTouches[0].clientX);
   }
 
   function handleTouchEnd() {
     if (touchStart - touchEnd > 150) {
       // do your stuff here for left swipe
       setTabIndex((prevIndex) => nextTabIndex(prevIndex));
-    } 
+    }
 
     if (touchStart - touchEnd < -150) {
       // do your stuff here for right swipe
@@ -61,31 +59,36 @@ const Carousel = ({content}: {content: Content}) => {
   }
 
   return (
-    <div 
+    <div
       className={styles.tabs}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      { content[tabIndex] }
+      {content[tabIndex]}
       <div className={styles.indicator}>
-        {
-          content.map((tabContent, index) => (
-            <div 
-              className={`${styles.indicatorItem} ${tabIndex === index ? styles.active : ''}`}
-              onClick={() => setTabIndex(index)}
-              style={{
-                width: `calc(72% / ${content.length})`,
-                backgroundColor: theme.palette.mode === 'dark' ? '#fff' : '#474c50',
-              }}
-            />
-          ))
-        }
+        {content.map((tabContent, index) => (
+          <div
+            key={index}
+            className={`${styles.indicatorItem} ${tabIndex === index ? styles.active : ''}`}
+            onClick={() => setTabIndex(index)}
+            style={{
+              width: `calc(72% / ${content.length})`,
+              backgroundColor: theme.palette.mode === 'dark' ? '#fff' : '#474c50',
+            }}
+          />
+        ))}
       </div>
-      <IconButton className={styles.controlRight} onClick={() => setTabIndex(nextTabIndex(tabIndex))}>
+      <IconButton
+        className={styles.controlRight}
+        onClick={() => setTabIndex(nextTabIndex(tabIndex))}
+      >
         <ArrowForwardIosRoundedIcon />
       </IconButton>
-      <IconButton className={styles.controlLeft} onClick={() => setTabIndex(prevTabIndex(tabIndex))}>
+      <IconButton
+        className={styles.controlLeft}
+        onClick={() => setTabIndex(prevTabIndex(tabIndex))}
+      >
         <ArrowBackIosRoundedIcon />
       </IconButton>
     </div>

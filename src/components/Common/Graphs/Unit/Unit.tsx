@@ -1,5 +1,5 @@
-import React, { FC } from "react";
-import styles from "./Unit.module.scss";
+import React, { FC } from 'react';
+import styles from './Unit.module.scss';
 
 interface IUnit {
   label: string;
@@ -9,16 +9,16 @@ interface IUnit {
 
 const Unit: FC<IUnit> = ({ label, viewHeight, viewWidth }) => {
   return (
-    <text 
-      id='graph-unit' 
-      x={`70%`} 
-      y={viewHeight - 4} 
+    <text
+      id="graph-unit"
+      x={`70%`}
+      y={viewHeight - 4}
       className={styles.unitText}
-      fontSize={ '18px' }
+      fontSize={'18px'}
     >
       Unit={label}
     </text>
-  )
-}
+  );
+};
 
 export default Unit;

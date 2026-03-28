@@ -35,7 +35,4 @@ export const CHANGELOG: ChangelogEntry[] = [
   { version: '2.5.6', date: 'January 30, 2024' },
   { version: '2.5.5 – 2.1.0', date: '...' },
   { version: '2.0.0', date: 'January 29, 2022' },
-
 ];
-
-

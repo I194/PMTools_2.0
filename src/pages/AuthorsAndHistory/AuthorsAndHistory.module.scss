@@ -8,7 +8,8 @@
   align-items: center;
 }
 
-.authors, .history {
+.authors,
+.history {
   width: 100%;
   padding: 24px 164px;
   margin-top: 32px;
@@ -23,23 +24,24 @@
     margin-bottom: 0;
   }
 
-  @media (max-width: 920px) { 
+  @media (max-width: 920px) {
     padding: 0 8px;
   }
 }
 
 .history {
   margin-top: 0;
-  p, h6 { 
-    text-indent: 52px; 
+  p,
+  h6 {
+    text-indent: 52px;
     width: 100%;
 
-    @media (max-width: 920px) { 
+    @media (max-width: 920px) {
       text-indent: 26px;
     }
   }
   h6 {
-    @media (max-width: 920px) { 
+    @media (max-width: 920px) {
       font-size: 18px;
     }
   }
@@ -54,7 +56,7 @@
   align-items: center;
   margin-bottom: 24px;
 
-  @media (max-width: 920px) { 
+  @media (max-width: 920px) {
     flex-direction: column;
   }
 }
@@ -69,27 +71,25 @@
 
   margin-left: 24px;
 
-  @media (max-width: 920px) { 
+  @media (max-width: 920px) {
     margin-left: 0;
   }
 }
 
-
 .authorImage {
   width: 20%;
 
-  @media (max-width: 920px) { 
+  @media (max-width: 920px) {
     width: 60%;
     margin-bottom: 8px;
   }
 }
 
-
 .historyImage {
   width: 100%;
   margin: 24px 0px;
 
-  @media (max-width: 920px) { 
+  @media (max-width: 920px) {
     margin: 8px 0px;
   }
 }
@@ -98,7 +98,7 @@
   width: 80%;
   padding: 48px 0;
 
-  @media (max-width: 920px) { 
+  @media (max-width: 920px) {
     width: 100%;
   }
 }

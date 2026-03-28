@@ -3,8 +3,8 @@ import styles from './VerticalTabs.module.scss';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
-import { useTheme } from "@mui/material/styles";
-import { textColor } from "../../../../utils/ThemeConstants";
+import { useTheme } from '@mui/material/styles';
+import { textColor } from '../../../../utils/ThemeConstants';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -14,7 +14,6 @@ interface TabPanelProps {
 }
 
 const TabPanel = (props: TabPanelProps) => {
-
   const { children, value, index, label, ...other } = props;
 
   const theme = useTheme();
@@ -33,16 +32,21 @@ const TabPanel = (props: TabPanelProps) => {
       {value === index && (
         <div className={styles.wrapper}>
           <div className={styles.content}>
-            <Typography variant='h5' color={textColor(theme.palette.mode)} textAlign='center' mb='16px'>
-              { label }
+            <Typography
+              variant="h5"
+              color={textColor(theme.palette.mode)}
+              textAlign="center"
+              mb="16px"
+            >
+              {label}
             </Typography>
-            { children }
+            {children}
           </div>
         </div>
       )}
     </div>
   );
-}
+};
 
 const a11yProps = (index: number) => ({
   id: `vertical-tab-${index}`,
@@ -54,7 +58,7 @@ type TabsProps = {
     label: string;
     content: React.ReactNode;
   }>;
-}
+};
 
 const VerticalTabs = ({ content }: TabsProps) => {
   const [value, setValue] = React.useState(0);
@@ -71,38 +75,29 @@ const VerticalTabs = ({ content }: TabsProps) => {
         value={value}
         onChange={handleChange}
         aria-label="Vertical tabs example"
-        sx={{ 
-          borderRight: 1, 
+        sx={{
+          borderRight: 1,
           borderColor: 'divider',
-          // minWidth: 'fit-content', 
+          // minWidth: 'fit-content',
           maxWidth: '20vw',
         }}
       >
-        {
-          content.map((tab, index) => (
-            <Tab
-              key={index}
-              label={tab.label}
-              {...a11yProps(index)}
-              sx={{
-                textTransform: 'none',
-              }}
-            /> 
-          ))
-        }
-      </Tabs>
-      {
-        content.map((tab, index) => (
-          <TabPanel
+        {content.map((tab, index) => (
+          <Tab
             key={index}
-            value={value}
-            index={index}
             label={tab.label}
-          >
-            {tab.content}
-          </TabPanel>
-        ))
-      }
+            {...a11yProps(index)}
+            sx={{
+              textTransform: 'none',
+            }}
+          />
+        ))}
+      </Tabs>
+      {content.map((tab, index) => (
+        <TabPanel key={index} value={value} index={index} label={tab.label}>
+          {tab.content}
+        </TabPanel>
+      ))}
     </>
   );
 };

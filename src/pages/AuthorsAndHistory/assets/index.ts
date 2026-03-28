@@ -21,4 +21,3 @@ export {
   uralImage3,
   uralImage4,
 };
-

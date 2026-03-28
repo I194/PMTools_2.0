@@ -2,30 +2,38 @@
 
 // Function to download data to a file
 export const download = (data: string | ArrayBuffer, filename: string, type: string) => {
-  const file = new Blob([data], {type: type});
-  const a = document.createElement("a");
+  const file = new Blob([data], { type: type });
+  const a = document.createElement('a');
   const url = URL.createObjectURL(file);
   a.href = url;
   a.download = filename;
   document.body.appendChild(a);
   a.click();
-  setTimeout(function() {
+  setTimeout(function () {
     document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);  
-  }, 0); 
-}
+    window.URL.revokeObjectURL(url);
+  }, 0);
+};
 
-var exportSVG = function(svg: any, name?: string) {
+var exportSVG = function (svg: any, name?: string) {
   // first create a clone of our svg node so we don't mess the original one
   var clone = svg.cloneNode(true);
   // create a doctype
-  var svgDocType = document.implementation.createDocumentType('svg', "-//W3C//DTD SVG 1.1//EN", "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd");
+  var svgDocType = document.implementation.createDocumentType(
+    'svg',
+    '-//W3C//DTD SVG 1.1//EN',
+    'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd',
+  );
   // a fresh svg document
-  var svgDoc = document.implementation.createDocument('http://www.w3.org/2000/svg', 'svg', svgDocType);
-  // replace the documentElement with our clone 
+  var svgDoc = document.implementation.createDocument(
+    'http://www.w3.org/2000/svg',
+    'svg',
+    svgDocType,
+  );
+  // replace the documentElement with our clone
   svgDoc.replaceChild(clone, svgDoc.documentElement);
   // get the data
-  var svgData = (new XMLSerializer()).serializeToString(svgDoc);
+  var svgData = new XMLSerializer().serializeToString(svgDoc);
 
   // now you've got your svg data, the following will depend on how you want to download it
   // e.g yo could make a Blob of it for FileSaver.js
@@ -42,7 +50,6 @@ var exportSVG = function(svg: any, name?: string) {
   // document.body.appendChild(a);
 
   download(svgData, `${name || 'graph'}.svg`, '.svg');
-
 };
 
 // Compose three Reversal Test component SVGs into a single SVG laid out in a row
@@ -63,13 +70,13 @@ const exportReversalTestCombined = (id: string, name?: string) => {
 
   // Sort by horizontal position to keep X, Y, Z left-to-right
   const positioned = svgNodes
-    .map(el => ({ el, rect: el.getBoundingClientRect() }))
+    .map((el) => ({ el, rect: el.getBoundingClientRect() }))
     .sort((a, b) => a.rect.left - b.rect.left);
 
-  const minLeft = Math.min(...positioned.map(p => p.rect.left));
-  const minTop = Math.min(...positioned.map(p => p.rect.top));
-  const maxRight = Math.max(...positioned.map(p => p.rect.right));
-  const maxBottom = Math.max(...positioned.map(p => p.rect.bottom));
+  const minLeft = Math.min(...positioned.map((p) => p.rect.left));
+  const minTop = Math.min(...positioned.map((p) => p.rect.top));
+  const maxRight = Math.max(...positioned.map((p) => p.rect.right));
+  const maxBottom = Math.max(...positioned.map((p) => p.rect.bottom));
 
   const totalWidth = maxRight - minLeft;
   const totalHeight = maxBottom - minTop;

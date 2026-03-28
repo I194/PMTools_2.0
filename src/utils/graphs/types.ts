@@ -1,22 +1,27 @@
 export type Reference = 'specimen' | 'geographic' | 'stratigraphic';
 
-export type Projection = {y: 'W, UP', x: 'N, N'} | {y: 'N, UP', x: 'E, E'} | {y: 'N, N', x: 'E, UP'};
+export type Projection =
+  | { y: 'W, UP'; x: 'N, N' }
+  | { y: 'N, UP'; x: 'E, E' }
+  | { y: 'N, N'; x: 'E, UP' };
 
 export type StatisticsModePCA = 'pca' | 'pca0' | 'gc' | 'gcn' | null;
 
 export type StatisticsModeDIR = 'fisher' | 'mcFad' | 'gc' | null;
 
 export type PCALines = {
-  horX: [number, number], horY: [number, number],
-  verX: [number, number], verY: [number, number]
+  horX: [number, number];
+  horY: [number, number];
+  verX: [number, number];
+  verY: [number, number];
 } | null;
 
 export type PlaneData = {
   xyData: Array<[number, number]>;
-  xyDataSplitted: {neg: Array<[number, number]>, pos: Array<[number, number]>};
+  xyDataSplitted: { neg: Array<[number, number]>; pos: Array<[number, number]> };
   color: string;
 };
- 
+
 export type MeanDirection = {
   dirData: [number, number];
   xyData: [number, number];
@@ -56,7 +61,7 @@ export type TooltipDot = {
   comment?: string;
 };
 
-export type DotType = 'h' | 'v'| 'all' | 'mean' | string;
+export type DotType = 'h' | 'v' | 'all' | 'mean' | string;
 
 export type TMenuItem = {
   label: string;
@@ -98,6 +103,6 @@ export type DirectionDot = {
   confidenceCircle?: PlaneData;
   tooltip?: TooltipDot;
   greatCircle?: PlaneData;
-}
+};
 
 export type DotsData = DirectionDot[];

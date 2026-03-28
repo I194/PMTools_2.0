@@ -1,0 +1,48 @@
+[   13362ms] [ERROR] Warning: %s is deprecated in StrictMode. %s was passed an instance of %s which is inside StrictMode. Instead, add a ref directly to the element you want to reference. Learn more about using refs safely here: https://reactjs.org/link/strict-mode-find-node%s findDOMNode findDOMNode DraggableCore 
+    at div
+    at http://localhost:3000/static/js/bundle.js:42344:66
+    at Portal (http://localhost:3000/static/js/bundle.js:69199:5)
+    at ModalUnstyled (http://localhost:3000/static/js/bundle.js:68383:5)
+    at Modal (http://localhost:3000/static/js/bundle.js:57121:82)
+    at DraggableCore (http://localhost:3000/static/js/bundle.js:161295:5)
+    at Draggable (http://localhost:3000/static/js/bundle.js:160585:5)
+    at ModalWrapper (http://localhost:3000/static/js/bundle.js:21999:5)
+    at InterpretationSetter (http://localhost:3000/static/js/bundle.js:27354:5)
+    at DIRPage (http://localhost:3000/static/js/bundle.js:26817:7)
+    at ErrorBoundary (http://localhost:3000/static/js/bundle.js:18706:5)
+    at Outlet (http://localhost:3000/static/js/bundle.js:169037:26)
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23332:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:169129:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71651:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:72072:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:52:89)
+    at Router (http://localhost:3000/static/js/bundle.js:169062:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168542:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164822:20) @ http://localhost:3000/static/js/bundle.js:134194
+[   13362ms] [ERROR] Warning: %s is deprecated in StrictMode. %s was passed an instance of %s which is inside StrictMode. Instead, add a ref directly to the element you want to reference. Learn more about using refs safely here: https://reactjs.org/link/strict-mode-find-node%s findDOMNode findDOMNode Draggable 
+    at div
+    at http://localhost:3000/static/js/bundle.js:42344:66
+    at Portal (http://localhost:3000/static/js/bundle.js:69199:5)
+    at ModalUnstyled (http://localhost:3000/static/js/bundle.js:68383:5)
+    at Modal (http://localhost:3000/static/js/bundle.js:57121:82)
+    at DraggableCore (http://localhost:3000/static/js/bundle.js:161295:5)
+    at Draggable (http://localhost:3000/static/js/bundle.js:160585:5)
+    at ModalWrapper (http://localhost:3000/static/js/bundle.js:21999:5)
+    at InterpretationSetter (http://localhost:3000/static/js/bundle.js:27354:5)
+    at DIRPage (http://localhost:3000/static/js/bundle.js:26817:7)
+    at ErrorBoundary (http://localhost:3000/static/js/bundle.js:18706:5)
+    at Outlet (http://localhost:3000/static/js/bundle.js:169037:26)
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23332:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:169129:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71651:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:72072:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:52:89)
+    at Router (http://localhost:3000/static/js/bundle.js:169062:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168542:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164822:20) @ http://localhost:3000/static/js/bundle.js:134194

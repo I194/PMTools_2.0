@@ -16,22 +16,20 @@ const AuthorsAndHistory: FC = ({}) => {
   return (
     <div className={styles.container}>
       <Authors />
-      <PrettyButton 
+      <PrettyButton
         onClick={() => setShowHistory(!showHistory)}
         sx={{
           fontSize: isSmallScreen ? '18px' : '20px',
           textTransform: 'none',
         }}
       >
-        {
-          !showHistory 
-            ? t('authorsAndHistoryPage.historybutton.show')
-            : t('authorsAndHistoryPage.historybutton.hide')
-        }
+        {!showHistory
+          ? t('authorsAndHistoryPage.historybutton.show')
+          : t('authorsAndHistoryPage.historybutton.hide')}
       </PrettyButton>
       <History show={showHistory} />
     </div>
-  )
-}
+  );
+};
 
 export default AuthorsAndHistory;

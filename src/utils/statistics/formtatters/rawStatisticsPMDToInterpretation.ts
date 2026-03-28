@@ -1,17 +1,14 @@
-import { IPmdData } from "../../GlobalTypes";
-import {
-  RawStatisticsPCA,
-  StatisitcsInterpretationFromPCA,
-} from "../../GlobalTypes";
-import toReferenceCoordinates from "../../graphs/formatters/toReferenceCoordinates";
-import { StatisticsModePCA } from "../../graphs/types";
-import { v4 as uuidv4 } from "uuid";
+import { IPmdData } from '../../GlobalTypes';
+import { RawStatisticsPCA, StatisitcsInterpretationFromPCA } from '../../GlobalTypes';
+import toReferenceCoordinates from '../../graphs/formatters/toReferenceCoordinates';
+import { StatisticsModePCA } from '../../graphs/types';
+import { v4 as uuidv4 } from 'uuid';
 
 const rawStatisticsPMDToInterpretation = (
   statistics: RawStatisticsPCA,
-  selectedSteps: IPmdData["steps"],
-  metadata: IPmdData["metadata"],
-  code: StatisticsModePCA
+  selectedSteps: IPmdData['steps'],
+  metadata: IPmdData['metadata'],
+  code: StatisticsModePCA,
 ) => {
   // ограничение по длине в 7 символов из-за специфики .dir файлов
   // здесь оставляется 4 первые символа имени файла, далее добавится id
@@ -25,24 +22,20 @@ const rawStatisticsPMDToInterpretation = (
   }`;
   const stepCount: number = selectedSteps.length;
 
-  const [Dgeo, Igeo] = toReferenceCoordinates(
-    "geographic",
-    metadata,
-    statistics.component.edges
-  )
+  const [Dgeo, Igeo] = toReferenceCoordinates('geographic', metadata, statistics.component.edges)
     .toDirection()
     .toArray();
 
   const [Dstrat, Istrat] = toReferenceCoordinates(
-    "stratigraphic",
+    'stratigraphic',
     metadata,
-    statistics.component.edges
+    statistics.component.edges,
   )
     .toDirection()
     .toArray();
 
   const confidenceRadius = statistics.MAD;
-  const comment = "";
+  const comment = '';
   const demagType = selectedSteps[0].demagType;
 
   const interpretation: StatisitcsInterpretationFromPCA = {

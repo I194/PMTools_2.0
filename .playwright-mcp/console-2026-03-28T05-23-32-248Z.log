@@ -1,0 +1,207 @@
+[     492ms] [ERROR] Warning: React has detected a change in the order of Hooks called by %s. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://reactjs.org/link/rules-of-hooks
+
+   Previous render            Next render
+   ------------------------------------------------------
+%s   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+%s DataTableDIR 1. useContext                 useContext
+2. useDebugValue              useDebugValue
+3. useContext                 useContext
+4. useContext                 useContext
+5. useReducer                 useReducer
+6. useMemo                    useMemo
+7. useRef                     useRef
+8. useRef                     useRef
+9. useRef                     useRef
+10. useRef                    useRef
+11. useLayoutEffect           useLayoutEffect
+12. useLayoutEffect           useLayoutEffect
+13. useDebugValue             useDebugValue
+14. useState                  useState
+15. useState                  useState
+16. useEffect                 useEffect
+17. undefined                 useContext
+ 
+    at DataTableDIR (http://localhost:3000/static/js/bundle.js:4761:5)
+    at div
+    at Tables (http://localhost:3000/static/js/bundle.js:27561:5)
+    at div
+    at DIRPage (http://localhost:3000/static/js/bundle.js:26846:7)
+    at ErrorBoundary (http://localhost:3000/static/js/bundle.js:18735:5)
+    at Outlet (http://localhost:3000/static/js/bundle.js:169066:26)
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23361:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:169158:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71680:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:72101:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:52:89)
+    at Router (http://localhost:3000/static/js/bundle.js:169091:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168571:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164851:20) @ http://localhost:3000/static/js/bundle.js:134223
+[   27690ms] [ERROR] Warning: %s is deprecated in StrictMode. %s was passed an instance of %s which is inside StrictMode. Instead, add a ref directly to the element you want to reference. Learn more about using refs safely here: https://reactjs.org/link/strict-mode-find-node%s findDOMNode findDOMNode DraggableCore 
+    at div
+    at http://localhost:3000/static/js/bundle.js:42373:66
+    at Portal (http://localhost:3000/static/js/bundle.js:69228:5)
+    at ModalUnstyled (http://localhost:3000/static/js/bundle.js:68412:5)
+    at Modal (http://localhost:3000/static/js/bundle.js:57150:82)
+    at DraggableCore (http://localhost:3000/static/js/bundle.js:161324:5)
+    at Draggable (http://localhost:3000/static/js/bundle.js:160614:5)
+    at ModalWrapper (http://localhost:3000/static/js/bundle.js:22028:5)
+    at InterpretationSetter (http://localhost:3000/static/js/bundle.js:27383:5)
+    at DIRPage (http://localhost:3000/static/js/bundle.js:26846:7)
+    at ErrorBoundary (http://localhost:3000/static/js/bundle.js:18735:5)
+    at Outlet (http://localhost:3000/static/js/bundle.js:169066:26)
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23361:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:169158:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71680:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:72101:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:52:89)
+    at Router (http://localhost:3000/static/js/bundle.js:169091:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168571:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164851:20) @ http://localhost:3000/static/js/bundle.js:134223
+[   27690ms] [ERROR] Warning: %s is deprecated in StrictMode. %s was passed an instance of %s which is inside StrictMode. Instead, add a ref directly to the element you want to reference. Learn more about using refs safely here: https://reactjs.org/link/strict-mode-find-node%s findDOMNode findDOMNode Draggable 
+    at div
+    at http://localhost:3000/static/js/bundle.js:42373:66
+    at Portal (http://localhost:3000/static/js/bundle.js:69228:5)
+    at ModalUnstyled (http://localhost:3000/static/js/bundle.js:68412:5)
+    at Modal (http://localhost:3000/static/js/bundle.js:57150:82)
+    at DraggableCore (http://localhost:3000/static/js/bundle.js:161324:5)
+    at Draggable (http://localhost:3000/static/js/bundle.js:160614:5)
+    at ModalWrapper (http://localhost:3000/static/js/bundle.js:22028:5)
+    at InterpretationSetter (http://localhost:3000/static/js/bundle.js:27383:5)
+    at DIRPage (http://localhost:3000/static/js/bundle.js:26846:7)
+    at ErrorBoundary (http://localhost:3000/static/js/bundle.js:18735:5)
+    at Outlet (http://localhost:3000/static/js/bundle.js:169066:26)
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23361:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:169158:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71680:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:72101:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:52:89)
+    at Router (http://localhost:3000/static/js/bundle.js:169091:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168571:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164851:20) @ http://localhost:3000/static/js/bundle.js:134223
+[   35099ms] [ERROR] Warning: React has detected a change in the order of Hooks called by %s. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://reactjs.org/link/rules-of-hooks
+
+   Previous render            Next render
+   ------------------------------------------------------
+%s   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+%s OutputDataTableDIR 1. useContext                 useContext
+2. useContext                 useContext
+3. useDebugValue              useDebugValue
+4. useState                   useState
+5. useCallback                useCallback
+6. useContext                 useContext
+7. useReducer                 useReducer
+8. useMemo                    useMemo
+9. useRef                     useRef
+10. useRef                    useRef
+11. useRef                    useRef
+12. useRef                    useRef
+13. useLayoutEffect           useLayoutEffect
+14. useLayoutEffect           useLayoutEffect
+15. useDebugValue             useDebugValue
+16. useContext                useContext
+17. useReducer                useReducer
+18. useMemo                   useMemo
+19. useRef                    useRef
+20. useRef                    useRef
+21. useRef                    useRef
+22. useRef                    useRef
+23. useLayoutEffect           useLayoutEffect
+24. useLayoutEffect           useLayoutEffect
+25. useDebugValue             useDebugValue
+26. useState                  useState
+27. useState                  useState
+28. useEffect                 useEffect
+29. useCallback               useCallback
+30. useEffect                 useEffect
+31. undefined                 useContext
+ 
+    at OutputDataTableDIR (http://localhost:3000/static/js/bundle.js:5300:89)
+    at div
+    at TrapFocus (http://localhost:3000/static/js/bundle.js:69656:5)
+    at div
+    at http://localhost:3000/static/js/bundle.js:42373:66
+    at Portal (http://localhost:3000/static/js/bundle.js:69228:5)
+    at ModalUnstyled (http://localhost:3000/static/js/bundle.js:68412:5)
+    at Modal (http://localhost:3000/static/js/bundle.js:57150:82)
+    at ModalWrapper (http://localhost:3000/static/js/bundle.js:22028:5)
+    at AppSettings (http://localhost:3000/static/js/bundle.js:4269:5)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23361:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:169158:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71680:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:72101:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:52:89)
+    at Router (http://localhost:3000/static/js/bundle.js:169091:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168571:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164851:20) @ http://localhost:3000/static/js/bundle.js:134223
+[   35320ms] [ERROR] Warning: React has detected a change in the order of Hooks called by %s. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://reactjs.org/link/rules-of-hooks
+
+   Previous render            Next render
+   ------------------------------------------------------
+%s   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+%s StatisticsDataTableDIR 1. useContext                 useContext
+2. useContext                 useContext
+3. useDebugValue              useDebugValue
+4. useRef                     useRef
+5. useState                   useState
+6. useCallback                useCallback
+7. useContext                 useContext
+8. useReducer                 useReducer
+9. useMemo                    useMemo
+10. useRef                    useRef
+11. useRef                    useRef
+12. useRef                    useRef
+13. useRef                    useRef
+14. useLayoutEffect           useLayoutEffect
+15. useLayoutEffect           useLayoutEffect
+16. useDebugValue             useDebugValue
+17. useState                  useState
+18. useEffect                 useEffect
+19. useContext                useContext
+20. useReducer                useReducer
+21. useMemo                   useMemo
+22. useRef                    useRef
+23. useRef                    useRef
+24. useRef                    useRef
+25. useRef                    useRef
+26. useLayoutEffect           useLayoutEffect
+27. useLayoutEffect           useLayoutEffect
+28. useDebugValue             useDebugValue
+29. useEffect                 useEffect
+30. useCallback               useCallback
+31. useEffect                 useEffect
+32. useCallback               useCallback
+33. undefined                 useContext
+ 
+    at StatisticsDataTableDIR (http://localhost:3000/static/js/bundle.js:6255:5)
+    at div
+    at Tables (http://localhost:3000/static/js/bundle.js:27561:5)
+    at div
+    at DIRPage (http://localhost:3000/static/js/bundle.js:26846:7)
+    at ErrorBoundary (http://localhost:3000/static/js/bundle.js:18735:5)
+    at Outlet (http://localhost:3000/static/js/bundle.js:169066:26)
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23361:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:169158:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71680:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:72101:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:52:89)
+    at Router (http://localhost:3000/static/js/bundle.js:169091:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168571:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164851:20) @ http://localhost:3000/static/js/bundle.js:134223

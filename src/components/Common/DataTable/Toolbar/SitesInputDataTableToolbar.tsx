@@ -1,9 +1,9 @@
-import { 
-  GridToolbarContainer, 
-  GridToolbarColumnsButton, 
+import {
+  GridToolbarContainer,
+  GridToolbarColumnsButton,
   GridToolbarDensitySelector,
   GridToolbarFilterButton,
-} from "@mui/x-data-grid";
+} from '@mui/x-data-grid';
 
 const SitesInputDataTableToolbar = () => {
   return (

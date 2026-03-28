@@ -1,24 +1,23 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from 'react';
 import styles from './GraphsSelector.module.scss';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
-import { ZijdIcon } from "../../../assets/icons";
-import { useAppDispatch, useAppSelector } from "../../../services/store/hooks";
+import { ZijdIcon } from '../../../assets/icons';
+import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
 import { useTheme } from '@mui/material/styles';
-import { useMediaQuery } from "react-responsive";
+import { useMediaQuery } from 'react-responsive';
 
-import { DefaultResponsiveButton } from "../../Common/Buttons";
-import { GraphPMD } from "../../../utils/GlobalTypes";
-import { setLargeGraph } from "../../../services/reducers/pcaPage";
+import { DefaultResponsiveButton } from '../../Common/Buttons';
+import { GraphPMD } from '../../../utils/GlobalTypes';
+import { setLargeGraph } from '../../../services/reducers/pcaPage';
 
 const GraphSelector = () => {
-
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
   const onClick = (graphToShow: GraphPMD) => {
     dispatch(setLargeGraph(graphToShow));
-  }
+  };
 
   return (
     <>
@@ -43,7 +42,7 @@ const GraphSelector = () => {
         />
       </div>
     </>
-  )
-}
+  );
+};
 
 export default GraphSelector;

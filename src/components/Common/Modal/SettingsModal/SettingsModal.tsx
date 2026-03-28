@@ -1,13 +1,12 @@
-import React, { useCallback } from "react";
-import styles from "./SettingsModal.module.scss";
-import { useAppDispatch } from "../../../../services/store/hooks";
-import { useTheme } from "@mui/material/styles";
-import { VerticalTabs } from "../../Tabs";
-import { HotkeysSection, DisplaySection } from "./Sections";
-import { useTranslation } from "react-i18next";
+import React, { useCallback } from 'react';
+import styles from './SettingsModal.module.scss';
+import { useAppDispatch } from '../../../../services/store/hooks';
+import { useTheme } from '@mui/material/styles';
+import { VerticalTabs } from '../../Tabs';
+import { HotkeysSection, DisplaySection } from './Sections';
+import { useTranslation } from 'react-i18next';
 
 const SettingsModal = () => {
-
   const theme = useTheme();
   const { t, i18n } = useTranslation('translation');
   const dispatch = useAppDispatch();
@@ -15,11 +14,11 @@ const SettingsModal = () => {
   const content = [
     {
       label: t('settings.hotkeys.title'),
-      content: <HotkeysSection />
+      content: <HotkeysSection />,
     },
     {
       label: t('settings.display.title'),
-      content: <DisplaySection />
+      content: <DisplaySection />,
     },
     // {
     //   label: 'Выбор направлений',
@@ -37,13 +36,13 @@ const SettingsModal = () => {
     //     </>
     //   )
     // }
-  ]
+  ];
 
   return (
     <div className={styles.container}>
-      <VerticalTabs content={content}/>
+      <VerticalTabs content={content} />
     </div>
-  )
+  );
 };
 
 export default SettingsModal;

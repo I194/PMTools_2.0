@@ -1,13 +1,13 @@
-import Coordinates from "./classes/Coordinates";
-import { IPmdData } from "../GlobalTypes";
-import { Reference } from "./types";
-import toReferenceCoordinates from "./formatters/toReferenceCoordinates";
+import Coordinates from './classes/Coordinates';
+import { IPmdData } from '../GlobalTypes';
+import { Reference } from './types';
+import toReferenceCoordinates from './formatters/toReferenceCoordinates';
 
 const EPS = 1e-8;
 
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value));
 
-const toUnit = (v: Coordinates) => v.length === 0 ? v : v.toUnit();
+const toUnit = (v: Coordinates) => (v.length === 0 ? v : v.toUnit());
 
 const slerp = (u: Coordinates, v: Coordinates, t: number) => {
   const dot = clamp(u.toUnit().dot(v.toUnit()), -1, 1);
@@ -24,11 +24,7 @@ const slerp = (u: Coordinates, v: Coordinates, t: number) => {
   const sinTheta = Math.sin(theta);
   const a = Math.sin((1 - t) * theta) / sinTheta;
   const b = Math.sin(t * theta) / sinTheta;
-  const res = new Coordinates(
-    a * u.x + b * v.x,
-    a * u.y + b * v.y,
-    a * u.z + b * v.z,
-  );
+  const res = new Coordinates(a * u.x + b * v.x, a * u.y + b * v.y, a * u.z + b * v.z);
   return toUnit(res);
 };
 
@@ -44,12 +40,20 @@ export const generateArc2DForPair = (
   idB: number,
   maxStepDeg: number = 3,
 ): Array<[number, number]> => {
-  const stepA = data.steps.find(s => s.id === idA);
-  const stepB = data.steps.find(s => s.id === idB);
+  const stepA = data.steps.find((s) => s.id === idA);
+  const stepB = data.steps.find((s) => s.id === idB);
   if (!stepA || !stepB) return [];
 
-  const aRef = toReferenceCoordinates(ref, data.metadata, new Coordinates(stepA.x, stepA.y, stepA.z));
-  const bRef = toReferenceCoordinates(ref, data.metadata, new Coordinates(stepB.x, stepB.y, stepB.z));
+  const aRef = toReferenceCoordinates(
+    ref,
+    data.metadata,
+    new Coordinates(stepA.x, stepA.y, stepA.z),
+  );
+  const bRef = toReferenceCoordinates(
+    ref,
+    data.metadata,
+    new Coordinates(stepB.x, stepB.y, stepB.z),
+  );
 
   let u = toUnit(aRef);
   let v = toUnit(bRef);
@@ -75,5 +79,3 @@ export const generateArc2DForPair = (
 };
 
 export const makePairKey = (idA: number, idB: number) => `${idA}->${idB}`;
-
-

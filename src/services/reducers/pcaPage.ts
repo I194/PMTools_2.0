@@ -1,14 +1,7 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IPmdData, IDirData, GraphPMD } from "../../utils/GlobalTypes";
-import {
-  RawStatisticsPCA,
-  StatisitcsInterpretationFromPCA,
-} from "../../utils/GlobalTypes";
-import {
-  Projection,
-  Reference,
-  StatisticsModePCA,
-} from "../../utils/graphs/types";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { IPmdData, IDirData, GraphPMD } from '../../utils/GlobalTypes';
+import { RawStatisticsPCA, StatisitcsInterpretationFromPCA } from '../../utils/GlobalTypes';
+import { Projection, Reference, StatisticsModePCA } from '../../utils/graphs/types';
 
 interface IInitialState {
   reference: Reference;
@@ -27,8 +20,8 @@ interface IInitialState {
 }
 
 const initialState: IInitialState = {
-  reference: "geographic",
-  projection: { y: "W, UP", x: "N, N" },
+  reference: 'geographic',
+  projection: { y: 'W, UP', x: 'N, N' },
   selectedStepsIDs: null,
   hiddenStepsIDs: [],
   statisticsMode: null,
@@ -36,14 +29,14 @@ const initialState: IInitialState = {
   currentInterpretation: null,
   currentFileInterpretations: [],
   allInterpretations: [],
-  outputFilename: "",
+  outputFilename: '',
   showStepsInput: false,
   largeGraph: 0,
   labelModeIsNumeric: false,
 };
 
 const pcaPage = createSlice({
-  name: "pcaPage",
+  name: 'pcaPage',
   initialState,
   reducers: {
     // Главная панель управления
@@ -64,18 +57,22 @@ const pcaPage = createSlice({
       state.hiddenStepsIDs = action.payload;
     },
     addHiddenStepsIDs(state, action: { payload: Array<number> }) {
-      const updatedHiddenStepsIDs = [
-        ...new Set([...state.hiddenStepsIDs, ...action.payload]),
-      ];
+      const updatedHiddenStepsIDs = [...new Set([...state.hiddenStepsIDs, ...action.payload])];
       state.hiddenStepsIDs = updatedHiddenStepsIDs;
     },
     toggleCommentsInput(state) {
       state.isCommentsInputVisible = !state.isCommentsInputVisible;
-      localStorage.setItem('pcaPage_isCommentsInputVisible', JSON.stringify(state.isCommentsInputVisible));
+      localStorage.setItem(
+        'pcaPage_isCommentsInputVisible',
+        JSON.stringify(state.isCommentsInputVisible),
+      );
     },
     setCommentsInput(state, action: { payload: boolean }) {
       state.isCommentsInputVisible = action.payload;
-      localStorage.setItem('pcaPage_isCommentsInputVisible', JSON.stringify(state.isCommentsInputVisible));
+      localStorage.setItem(
+        'pcaPage_isCommentsInputVisible',
+        JSON.stringify(state.isCommentsInputVisible),
+      );
     },
     // Label mode (numeric vs filename)
     toggleLabelMode(state) {
@@ -102,12 +99,15 @@ const pcaPage = createSlice({
       state.allInterpretations.push(action.payload);
       state.selectedStepsIDs = null;
       localStorage.setItem('pcaPage_allInterpretations', JSON.stringify(state.allInterpretations));
-      localStorage.setItem('pcaPage_currentInterpretation', JSON.stringify(state.currentInterpretation.uuid));
+      localStorage.setItem(
+        'pcaPage_currentInterpretation',
+        JSON.stringify(state.currentInterpretation.uuid),
+      );
     },
     deleteInterpretation(state, action: PayloadAction<string>) {
       const interpretationUUID = action.payload;
       const updatedInterpretations = state.allInterpretations.filter(
-        (interpretation) => interpretation.uuid !== interpretationUUID
+        (interpretation) => interpretation.uuid !== interpretationUUID,
       );
       state.allInterpretations = updatedInterpretations;
       localStorage.setItem('pcaPage_allInterpretations', JSON.stringify(state.allInterpretations));
@@ -115,7 +115,7 @@ const pcaPage = createSlice({
     deleteInterepretationByParentFile(state, action: PayloadAction<string>) {
       const parentFileName = action.payload;
       const updatedInterpretations = state.allInterpretations.filter(
-        (interpretation) => interpretation.parentFile !== parentFileName
+        (interpretation) => interpretation.parentFile !== parentFileName,
       );
       state.allInterpretations = updatedInterpretations;
       localStorage.setItem('pcaPage_allInterpretations', JSON.stringify(state.allInterpretations));
@@ -134,7 +134,7 @@ const pcaPage = createSlice({
     updateCurrentFileInterpretations(state, action: PayloadAction<string>) {
       const fileName = action.payload;
       state.currentFileInterpretations = state.allInterpretations.filter(
-        (interpretation) => interpretation.parentFile === fileName
+        (interpretation) => interpretation.parentFile === fileName,
       );
     },
     setLastInterpretationAsCurrent(state) {
@@ -142,28 +142,38 @@ const pcaPage = createSlice({
         state.currentInterpretation = null;
         return;
       }
-      state.currentInterpretation = state.currentFileInterpretations[state.currentFileInterpretations.length - 1];
-      localStorage.setItem('pcaPage_currentInterpretation', JSON.stringify(state.currentInterpretation.uuid));
+      state.currentInterpretation =
+        state.currentFileInterpretations[state.currentFileInterpretations.length - 1];
+      localStorage.setItem(
+        'pcaPage_currentInterpretation',
+        JSON.stringify(state.currentInterpretation.uuid),
+      );
     },
-    setCurrentInterpretationByUUID(state, action: PayloadAction<{uuid: string}>) {
+    setCurrentInterpretationByUUID(state, action: PayloadAction<{ uuid: string }>) {
       const { uuid } = action.payload;
-      const interpretationToSet = state.allInterpretations.find(interpretation => interpretation.uuid === uuid);
+      const interpretationToSet = state.allInterpretations.find(
+        (interpretation) => interpretation.uuid === uuid,
+      );
       if (!interpretationToSet) {
         return;
       }
       state.currentInterpretation = interpretationToSet;
-      localStorage.setItem('pcaPage_currentInterpretation', JSON.stringify(state.currentInterpretation.uuid));
+      localStorage.setItem(
+        'pcaPage_currentInterpretation',
+        JSON.stringify(state.currentInterpretation.uuid),
+      );
     },
-    setNextOrPrevInterpretationAsCurrent(state, action: PayloadAction<{changeDirection: 'up' | 'down'}>) {
+    setNextOrPrevInterpretationAsCurrent(
+      state,
+      action: PayloadAction<{ changeDirection: 'up' | 'down' }>,
+    ) {
       if (!state.currentFileInterpretations.length || !state.currentInterpretation) {
         state.currentInterpretation = null;
         return;
       }
       const currentInterpretationIndex = state.currentFileInterpretations.findIndex(
-        (interpretation) => (
-          interpretation.uuid === state.currentInterpretation?.uuid
-        )
-      )
+        (interpretation) => interpretation.uuid === state.currentInterpretation?.uuid,
+      );
 
       const { changeDirection } = action.payload;
 
@@ -180,7 +190,10 @@ const pcaPage = createSlice({
 
       const nextInterpretation = state.currentFileInterpretations[nextInterpretationIndex];
       state.currentInterpretation = nextInterpretation;
-      localStorage.setItem('pcaPage_currentInterpretation', JSON.stringify(state.currentInterpretation.uuid));
+      localStorage.setItem(
+        'pcaPage_currentInterpretation',
+        JSON.stringify(state.currentInterpretation.uuid),
+      );
     },
     setOutputFilename(state, action: PayloadAction<string>) {
       state.outputFilename = action.payload;

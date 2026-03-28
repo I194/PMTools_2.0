@@ -4,110 +4,144 @@ import { Route, Routes } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../services/store/hooks';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { MainPageLayout, AppLayout } from '../components/Layouts';
-import { MainPage, DIRPage, PCAPage, NotFoundPage, WhyPMToolsPage, AuthorsAndHistory } from '../pages';
+import {
+  MainPage,
+  DIRPage,
+  PCAPage,
+  NotFoundPage,
+  WhyPMToolsPage,
+  AuthorsAndHistory,
+} from '../pages';
+import ErrorBoundary from '../components/Common/ErrorBoundary/ErrorBoundary';
 import { useSystemTheme } from '../utils/GlobalHooks';
 import { acitvateHotkeys, deactivateHotkeys, setColorMode } from '../services/reducers/appSettings';
-import { setCurrentDIRid, setCurrentPMDid, setDirStatData, setTreatmentData } from '../services/reducers/parsedData';
+import {
+  setCurrentDIRid,
+  setCurrentPMDid,
+  setDirStatData,
+  setTreatmentData,
+} from '../services/reducers/parsedData';
 import * as pcaPageReducer from '../services/reducers/pcaPage';
 import * as dirPageReducer from '../services/reducers/dirPage';
 
 function App() {
-
   const dispatch = useAppDispatch();
-  
-  const { colorMode, rememberColorMode } = useAppSelector(state => state.appSettingsReducer);
+
+  const { colorMode, rememberColorMode } = useAppSelector((state) => state.appSettingsReducer);
   const systemTheme = useSystemTheme();
 
   // useEffect(() => {
   //   if (!rememberColorMode) dispatch(setColorMode(systemTheme));
   // }, [systemTheme, rememberColorMode]);
-  
+
   useEffect(() => {
-    console.log('color', localStorage)
     const previousColorMode = localStorage.getItem('colorMode') || systemTheme;
     dispatch(setColorMode(previousColorMode));
   }, []);
 
   const theme = createTheme({
     palette: {
-      mode: colorMode
+      mode: colorMode,
     },
   });
 
   useEffect(() => {
-    const treatmentData = localStorage.getItem('treatmentData');
-    const dirStatData = localStorage.getItem('dirStatData');
-    const currentDataPMDid = localStorage.getItem('currentDataPMDid');
-    const currentDataDIRid = localStorage.getItem('currentDataDIRid');
+    const safeParse = (key: string): any => {
+      const raw = localStorage.getItem(key);
+      if (!raw) return null;
+      try {
+        return JSON.parse(raw);
+      } catch {
+        localStorage.removeItem(key);
+        return null;
+      }
+    };
+
+    const treatmentData = safeParse('treatmentData');
+    const dirStatData = safeParse('dirStatData');
+    const currentDataPMDid = safeParse('currentDataPMDid');
+    const currentDataDIRid = safeParse('currentDataDIRid');
 
     if (treatmentData) {
-      dispatch(setTreatmentData(JSON.parse(treatmentData)));
+      dispatch(setTreatmentData(treatmentData));
     }
 
     if (dirStatData) {
-      dispatch(setDirStatData(JSON.parse(dirStatData)));
+      dispatch(setDirStatData(dirStatData));
     }
 
     if (currentDataPMDid) {
-      dispatch(setCurrentPMDid(JSON.parse(currentDataPMDid)));
+      dispatch(setCurrentPMDid(currentDataPMDid));
     }
 
     if (currentDataDIRid) {
-      dispatch(setCurrentDIRid(JSON.parse(currentDataDIRid)));
+      dispatch(setCurrentDIRid(currentDataDIRid));
     }
 
-
-    const pcaPage_reference = localStorage.getItem('pcaPage_reference');
-    const pcaPage_projection = localStorage.getItem('pcaPage_projection');
-    const pcaPage_commentsInput = localStorage.getItem('pcaPage_isCommentsInputVisible');
-    const pcaPage_allInterpretations = localStorage.getItem('pcaPage_allInterpretations');
-    const pcaPage_currentInterpretationUUID = localStorage.getItem('pcaPage_currentInterpretation');
-    const pcaPage_isNumericLabel = localStorage.getItem('pcaPage_isNumericLabel');
+    const pcaPage_reference = safeParse('pcaPage_reference');
+    const pcaPage_projection = safeParse('pcaPage_projection');
+    const pcaPage_commentsInput = safeParse('pcaPage_isCommentsInputVisible');
+    const pcaPage_allInterpretations = safeParse('pcaPage_allInterpretations');
+    const pcaPage_currentInterpretationUUID = safeParse('pcaPage_currentInterpretation');
+    const pcaPage_isNumericLabel = safeParse('pcaPage_isNumericLabel');
 
     if (pcaPage_reference) {
-      dispatch(pcaPageReducer.setReference(JSON.parse(pcaPage_reference)));
+      dispatch(pcaPageReducer.setReference(pcaPage_reference));
     }
     if (pcaPage_commentsInput) {
-      dispatch(pcaPageReducer.setCommentsInput(JSON.parse(pcaPage_commentsInput)));
+      dispatch(pcaPageReducer.setCommentsInput(pcaPage_commentsInput));
     }
     if (pcaPage_projection) {
-      dispatch(pcaPageReducer.setProjection(JSON.parse(pcaPage_projection)));
+      dispatch(pcaPageReducer.setProjection(pcaPage_projection));
     }
     if (pcaPage_allInterpretations) {
-      dispatch(pcaPageReducer.setAllInterpretations(JSON.parse(pcaPage_allInterpretations)));
+      dispatch(pcaPageReducer.setAllInterpretations(pcaPage_allInterpretations));
     }
     if (pcaPage_currentInterpretationUUID) {
-      dispatch(pcaPageReducer.setCurrentInterpretationByUUID({uuid: JSON.parse(pcaPage_currentInterpretationUUID)}));
+      dispatch(
+        pcaPageReducer.setCurrentInterpretationByUUID({
+          uuid: pcaPage_currentInterpretationUUID,
+        }),
+      );
     }
     if (pcaPage_isNumericLabel) {
-      dispatch(pcaPageReducer.setLabelMode(JSON.parse(pcaPage_isNumericLabel)));
+      dispatch(pcaPageReducer.setLabelMode(pcaPage_isNumericLabel));
     }
 
-    const dirPage_reference = localStorage.getItem('dirPage_reference');
-    const dirPage_commentsInput = localStorage.getItem('dirPage_isCommentsInputVisible');
-    const dirPage_allInterpretations = localStorage.getItem('dirPage_allInterpretations');
-    const dirPage_currentInterpretationRaw = localStorage.getItem('dirPage_currentInterpretation');
-    const dirPage_isNumericLabel = localStorage.getItem('dirPage_isNumericLabel');
+    const dirPage_reference = safeParse('dirPage_reference');
+    const dirPage_commentsInput = safeParse('dirPage_isCommentsInputVisible');
+    const dirPage_allInterpretations = safeParse('dirPage_allInterpretations');
+    const dirPage_currentInterpretationRaw = safeParse('dirPage_currentInterpretation');
+    const dirPage_isNumericLabel = safeParse('dirPage_isNumericLabel');
 
     if (dirPage_reference) {
-      dispatch(dirPageReducer.setReference(JSON.parse(dirPage_reference)));
+      dispatch(dirPageReducer.setReference(dirPage_reference));
     }
     if (dirPage_commentsInput) {
-      dispatch(dirPageReducer.setCommentsInput(JSON.parse(dirPage_commentsInput)));
+      dispatch(dirPageReducer.setCommentsInput(dirPage_commentsInput));
     }
     if (dirPage_allInterpretations) {
-      dispatch(dirPageReducer.setAllInterpretations(JSON.parse(dirPage_allInterpretations)));
+      dispatch(dirPageReducer.setAllInterpretations(dirPage_allInterpretations));
     }
     if (dirPage_isNumericLabel) {
-      dispatch(dirPageReducer.setLabelMode(JSON.parse(dirPage_isNumericLabel)));
+      dispatch(dirPageReducer.setLabelMode(dirPage_isNumericLabel));
     }
     if (dirPage_currentInterpretationRaw) {
-      const parsed = JSON.parse(dirPage_currentInterpretationRaw);
-      const isUuid = typeof parsed === 'string' && /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(parsed);
+      const isUuid =
+        typeof dirPage_currentInterpretationRaw === 'string' &&
+        /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(
+          dirPage_currentInterpretationRaw,
+        );
       if (isUuid) {
-        dispatch(dirPageReducer.setCurrentInterpretationByUUID({uuid: parsed}));
+        dispatch(
+          dirPageReducer.setCurrentInterpretationByUUID({ uuid: dirPage_currentInterpretationRaw }),
+        );
       } else {
-        dispatch(dirPageReducer.setCurrentInterpretationByLabel({label: parsed}));
+        dispatch(
+          dirPageReducer.setCurrentInterpretationByLabel({
+            label: dirPage_currentInterpretationRaw,
+          }),
+        );
       }
     }
   }, []);
@@ -119,34 +153,48 @@ function App() {
     return () => {
       window.removeEventListener('focusin', handleFocusIn);
       window.removeEventListener('focusout', handleFocusOut);
-    }
-  }, [])
-  
+    };
+  }, []);
+
   const handleFocusIn = (event: FocusEvent) => {
     const target = event.target as HTMLElement;
     if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA') {
-      dispatch(deactivateHotkeys());  
+      dispatch(deactivateHotkeys());
     }
-  }
-  
+  };
+
   const handleFocusOut = () => {
     dispatch(acitvateHotkeys());
-  }
+  };
 
   return (
     <Suspense fallback="loading">
       <ThemeProvider theme={theme}>
         <Routes>
-          <Route path='/' element={<MainPageLayout />}>
-            <Route index element={<MainPage />}/>
-            <Route path='/why-pmtools' element={<WhyPMToolsPage />}/>
-            <Route path='/authors-and-history' element={<AuthorsAndHistory />}/>
+          <Route path="/" element={<MainPageLayout />}>
+            <Route index element={<MainPage />} />
+            <Route path="/why-pmtools" element={<WhyPMToolsPage />} />
+            <Route path="/authors-and-history" element={<AuthorsAndHistory />} />
           </Route>
-          <Route path='/app' element={<AppLayout />}>
-            <Route path='pca' element={<PCAPage />}/>
-            <Route path='dir' element={<DIRPage />}/>
+          <Route path="/app" element={<AppLayout />}>
+            <Route
+              path="pca"
+              element={
+                <ErrorBoundary pageName="pca">
+                  <PCAPage />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="dir"
+              element={
+                <ErrorBoundary pageName="dir">
+                  <DIRPage />
+                </ErrorBoundary>
+              }
+            />
           </Route>
-          <Route path='*' element={<NotFoundPage />}/>
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </ThemeProvider>
     </Suspense>

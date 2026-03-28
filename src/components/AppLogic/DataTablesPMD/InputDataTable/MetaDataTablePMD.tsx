@@ -1,35 +1,57 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState } from 'react';
 import { DataGrid, GridActionsCellItem, GridValueFormatterParams } from '@mui/x-data-grid';
 import MetaDataTablePMDSkeleton from './MetaDataTablePMDSkeleton';
-import { GetDataTableBaseStyle } from "../styleConstants";
+import { getDataTableBaseStyle } from '../styleConstants';
+import { useTheme } from '@mui/material/styles';
 import EditIcon from '@mui/icons-material/Edit';
-import MetaDataChange from "../../../Common/DataTable/MetaDataChange/MetaDataChange";
-import ModalWrapper from "../../../Common/Modal/ModalWrapper";
-import { useMediaQuery } from "react-responsive";
-import { IMetaDataTablePMD, MetaDataTableColumns } from "../types";
+import MetaDataChange from '../../../Common/DataTable/MetaDataChange/MetaDataChange';
+import ModalWrapper from '../../../Common/Modal/ModalWrapper';
+import { useMediaQuery } from 'react-responsive';
+import { IMetaDataTablePMD, MetaDataTableColumns } from '../types';
 
-const MetaDataTablePMD: FC<IMetaDataTablePMD> = ({ data}) => {
-
+const MetaDataTablePMD: FC<IMetaDataTablePMD> = ({ data }) => {
+  const theme = useTheme();
   const widthLessThan1400 = useMediaQuery({ query: '(max-width: 1400px)' });
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
 
   const columns: MetaDataTableColumns = [
     { field: 'name', headerName: 'Name', type: 'string', flex: 1 },
-    { field: 'a', headerName: 'Core Azimuth', type: 'number', flex: 1, 
-      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    {
+      field: 'a',
+      headerName: 'Core Azimuth',
+      type: 'number',
+      flex: 1,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1),
     },
-    { field: 'b', headerName: 'Core Dip', 
-      description: 'Core hade is measured, but here used the plunge (90 - hade)', type: 'number', flex: 1, 
-      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    {
+      field: 'b',
+      headerName: 'Core Dip',
+      description: 'Core hade is measured, but here used the plunge (90 - hade)',
+      type: 'number',
+      flex: 1,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1),
     },
-    { field: 's', headerName: 'Bedding Strike', type: 'number', flex: 1, 
-      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    {
+      field: 's',
+      headerName: 'Bedding Strike',
+      type: 'number',
+      flex: 1,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1),
     },
-    { field: 'd', headerName: 'Bedding Dip', type: 'number', flex: 1, 
-      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1)
+    {
+      field: 'd',
+      headerName: 'Bedding Dip',
+      type: 'number',
+      flex: 1,
+      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toFixed(1),
     },
-    { field: 'v', headerName: 'Volume', type: 'number', flex: 1, 
-      valueFormatter: (params: GridValueFormatterParams) => (params.value as number)?.toExponential(2).toUpperCase()
+    {
+      field: 'v',
+      headerName: 'Volume',
+      type: 'number',
+      flex: 1,
+      valueFormatter: (params: GridValueFormatterParams) =>
+        (params.value as number)?.toExponential(2).toUpperCase(),
     },
     {
       field: 'actions',
@@ -48,7 +70,7 @@ const MetaDataTablePMD: FC<IMetaDataTablePMD> = ({ data}) => {
           />,
         ];
       },
-    }
+    },
   ];
 
   columns.forEach((col) => {
@@ -58,52 +80,53 @@ const MetaDataTablePMD: FC<IMetaDataTablePMD> = ({ data}) => {
     col.disableColumnMenu = true;
   });
 
-  const rows = [{...data, id: 0, isRowSelectable: false}];
+  const rows = data ? [{ ...data, id: 0, isRowSelectable: false }] : [];
 
-  if (!data) return <MetaDataTablePMDSkeleton />;
-
-  return <>
-    <MetaDataTablePMDSkeleton>
-      <DataGrid 
-        rows={rows} 
-        columns={columns} 
-        hideFooter={rows.length < 100}
-        autoHeight={true}
-        getRowHeight={() => 30}
-        density={'compact'}
-        disableRowSelectionOnClick={true}
-        sx={{
-          ...GetDataTableBaseStyle(),
-          '& .MuiDataGrid-columnHeaders': {
-            minHeight: '24px!important',
-            maxHeight: '24px!important',
-            lineHeight: '24px!important',
-          },
-          '& .MuiDataGrid-virtualScroller': {
-            marginTop: '24px!important',
-          },
-          '& .MuiDataGrid-cell': {
-            padding: '0px 0px',
-          },
-          '& .MuiDataGrid-columnHeader': {
-            padding: '0px 0px',
-          }
-        }}
-      />
-    </MetaDataTablePMDSkeleton>
-    {
-      showEditModal && 
-      <ModalWrapper
-        open={showEditModal}
-        setOpen={setShowEditModal}
-        size={{
-          height: widthLessThan1400 ? '54vh' : '36vh'
-        }}
-      >
-        <MetaDataChange oldMetadata={data} onApply={() => setShowEditModal(false)}/>
-      </ModalWrapper>
-    }
-  </>;
+  return (
+    <>
+      <MetaDataTablePMDSkeleton>
+        {data && (
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            hideFooter={rows.length < 100}
+            autoHeight={true}
+            getRowHeight={() => 30}
+            density={'compact'}
+            disableRowSelectionOnClick={true}
+            sx={{
+              ...getDataTableBaseStyle(theme.palette.mode),
+              '& .MuiDataGrid-columnHeaders': {
+                minHeight: '24px!important',
+                maxHeight: '24px!important',
+                lineHeight: '24px!important',
+              },
+              '& .MuiDataGrid-virtualScroller': {
+                marginTop: '24px!important',
+              },
+              '& .MuiDataGrid-cell': {
+                padding: '0px 0px',
+              },
+              '& .MuiDataGrid-columnHeader': {
+                padding: '0px 0px',
+              },
+            }}
+          />
+        )}
+      </MetaDataTablePMDSkeleton>
+      {showEditModal && data && (
+        <ModalWrapper
+          open={showEditModal}
+          setOpen={setShowEditModal}
+          size={{
+            height: widthLessThan1400 ? '54vh' : '36vh',
+          }}
+        >
+          <MetaDataChange oldMetadata={data} onApply={() => setShowEditModal(false)} />
+        </ModalWrapper>
+      )}
+    </>
+  );
 };
 
 export default MetaDataTablePMD;

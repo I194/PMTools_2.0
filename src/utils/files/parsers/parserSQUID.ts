@@ -1,6 +1,6 @@
-import { IPmdData } from "../../GlobalTypes";
-import Direction from "../../graphs/classes/Direction";
-import toReferenceCoordinates from "../../graphs/formatters/toReferenceCoordinates";
+import { IPmdData } from '../../GlobalTypes';
+import Direction from '../../graphs/classes/Direction';
+import toReferenceCoordinates from '../../graphs/formatters/toReferenceCoordinates';
 
 /**
  * Process parsing of data from imported .squid file
@@ -9,20 +9,22 @@ import toReferenceCoordinates from "../../graphs/formatters/toReferenceCoordinat
  * @returns {IPmdData} IPmdData
  */
 const parseSQUID = (data: string, name: string): IPmdData => {
-  
   // Validate input to avoid crashes on empty or invalid files
   if (!data || typeof data !== 'string' || data.trim().length === 0) {
     throw new Error(`Empty .squid file: ${name}`);
   }
-  
+
   // eslint-disable-next-line no-control-regex
-  const eol = new RegExp("\r?\n");
+  const eol = new RegExp('\r?\n');
   // Get all lines except the first one (it's just copy of filename) and all too-short lines
-  const lines = data.split(eol).slice(1).filter(line => line.length > 1);
+  const lines = data
+    .split(eol)
+    .slice(1)
+    .filter((line) => line.length > 1);
   if (!lines.length) {
     throw new Error(`Invalid .squid file (no data lines): ${name}`);
   }
-  
+
   const headLine = lines[0].replace(/\s+/g, ' ').split(' '); // line with orientation params - metadata in other words
   const metadata = {
     name: name, // inner pmd name lay here: data.split(eol)[0].slice(0, 10).trim(),
@@ -30,13 +32,12 @@ const parseSQUID = (data: string, name: string): IPmdData => {
     b: +headLine[2],
     s: +headLine[3],
     d: +headLine[4],
-    v: +headLine[5] * 1E-6,
+    v: +headLine[5] * 1e-6,
   };
   // поправка параметров 'a' и 'b':
   metadata.a = metadata.a < 90 ? metadata.a + 270 : metadata.a - 90;
 
   const steps = lines.slice(1).map((line, index) => {
-
     // Описывать здесь формат .squid файла я не вижу смысла, формат относительно редкий и никто
     // не использует его как что-то, данные в себе хранящее - все данные из него в .pmd переводят
     const stepSymbol = line.slice(0, 1);
@@ -49,21 +50,25 @@ const parseSQUID = (data: string, name: string): IPmdData => {
       step = `M${stepValue}`;
     } else {
       step = stepSymbol + stepValue;
-    };
+    }
     // это все доступные данные, которые мы можем использовать для дальнейших построений, больше .squid ничего полезного не даёт
-    const mag = +line.slice(31, 39) * 1E3;
+    const mag = +line.slice(31, 39) * 1e3;
     const Dcore = +line.slice(46, 52);
     const Icore = +line.slice(52, 58);
     // все остальные данные - производные
     const coreDirection = new Direction(Dcore, Icore, mag * metadata.v);
     const coreCoordinates = coreDirection.toCartesian();
-    const correctedMetadata = {...metadata, b: 90 - metadata.b};
+    const correctedMetadata = { ...metadata, b: 90 - metadata.b };
     const geoCoordinates = toReferenceCoordinates('geographic', correctedMetadata, coreCoordinates);
-    const stratCoordinates = toReferenceCoordinates('stratigraphic', correctedMetadata, coreCoordinates);
+    const stratCoordinates = toReferenceCoordinates(
+      'stratigraphic',
+      correctedMetadata,
+      coreCoordinates,
+    );
     // это уже то, что пойдёт в отображение
-    const [ x, y, z ] = coreCoordinates.toArray().map(coord => +coord.toExponential(2));
-    const [ Dgeo, Igeo ] = geoCoordinates.toDirection().toArray();
-    const [ Dstrat, Istrat ] = stratCoordinates.toDirection().toArray();
+    const [x, y, z] = coreCoordinates.toArray().map((coord) => +coord.toExponential(2));
+    const [Dgeo, Igeo] = geoCoordinates.toDirection().toArray();
+    const [Dstrat, Istrat] = stratCoordinates.toDirection().toArray();
     const a95 = 0; // со squid-магнитометра не приходит параметр a95, что, конечно, очень неправильно, но что поделаешь?
     const comment = ''; // нет комментариев в squid-файле
 
@@ -92,17 +97,14 @@ const parseSQUID = (data: string, name: string): IPmdData => {
       comment,
       demagType,
     };
-
   });
-  
+
   return {
     metadata,
     steps,
-    format: "SQUID",
+    format: 'SQUID',
     created: new Date().toISOString(),
   };
-
-}
+};
 
 export default parseSQUID;
-

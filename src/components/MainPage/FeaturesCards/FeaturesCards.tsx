@@ -1,11 +1,10 @@
-
 import React, { useEffect, useState } from 'react';
 import styles from './FeaturesCards.module.scss';
 import { Typography, Button } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { textColor, bgColorBlocks } from '../../../utils/ThemeConstants';
 import FeatureCard, { Content } from './FeatureCard';
-import { 
+import {
   pca,
   pcaCompressed,
   pcaDark,
@@ -37,9 +36,7 @@ import {
 } from './assets';
 import { useTranslation } from 'react-i18next';
 
-
 const Description = () => {
-
   const theme = useTheme();
   const { t, i18n } = useTranslation('translation');
 
@@ -47,86 +44,90 @@ const Description = () => {
     {
       text: {
         title: t('mainPage.featuresCards.pca.title'),
-        description: t('mainPage.featuresCards.pca.description')
+        description: t('mainPage.featuresCards.pca.description'),
       },
       image: theme.palette.mode === 'light' ? pca : pcaDark,
       compressedImage: theme.palette.mode === 'light' ? pcaCompressed : pcaDarkCompressed,
-      align: 'left'
+      align: 'left',
     },
     {
       text: {
         title: t('mainPage.featuresCards.dir.title'),
-        description: t('mainPage.featuresCards.dir.description')
+        description: t('mainPage.featuresCards.dir.description'),
       },
       image: theme.palette.mode === 'light' ? dir : dirDark,
       compressedImage: theme.palette.mode === 'light' ? dirCompressed : dirDarkCompressed,
-      align: 'right'
+      align: 'right',
     },
     {
       text: {
         title: t('mainPage.featuresCards.vgp.title'),
-        description: t('mainPage.featuresCards.vgp.description')
+        description: t('mainPage.featuresCards.vgp.description'),
       },
       image: theme.palette.mode === 'light' ? vgp : vgpDark,
       compressedImage: theme.palette.mode === 'light' ? vgpCompressed : vgpDarkCompressed,
-      align: 'left'
+      align: 'left',
     },
     {
       text: {
         title: t('mainPage.featuresCards.selection.title'),
-        description: t('mainPage.featuresCards.selection.description')
+        description: t('mainPage.featuresCards.selection.description'),
       },
       image: theme.palette.mode === 'light' ? selection : selectionDark,
-      compressedImage: theme.palette.mode === 'light' ? selectionCompressed : selectionDarkCompressed,
-      align: 'right'
+      compressedImage:
+        theme.palette.mode === 'light' ? selectionCompressed : selectionDarkCompressed,
+      align: 'right',
     },
     {
       text: {
         title: t('mainPage.featuresCards.exportData.title'),
-        description: t('mainPage.featuresCards.exportData.description')
+        description: t('mainPage.featuresCards.exportData.description'),
       },
       image: theme.palette.mode === 'light' ? exportData : exportDataDark,
-      compressedImage: theme.palette.mode === 'light' ? exportDataCompressed : exportDataDarkCompressed,
-      align: 'left'
+      compressedImage:
+        theme.palette.mode === 'light' ? exportDataCompressed : exportDataDarkCompressed,
+      align: 'left',
     },
     {
       text: {
         title: t('mainPage.featuresCards.exportGraphs.title'),
-        description: t('mainPage.featuresCards.exportGraphs.description')
+        description: t('mainPage.featuresCards.exportGraphs.description'),
       },
       image: theme.palette.mode === 'light' ? exportGraphs : exportGraphsDark,
-      compressedImage: theme.palette.mode === 'light' ? exportGraphsCompressed : exportGraphsDarkCompressed,
-      align: 'right'
+      compressedImage:
+        theme.palette.mode === 'light' ? exportGraphsCompressed : exportGraphsDarkCompressed,
+      align: 'right',
     },
     {
       text: {
         title: t('mainPage.featuresCards.darkTheme.title'),
-        description: t('mainPage.featuresCards.darkTheme.description')
+        description: t('mainPage.featuresCards.darkTheme.description'),
       },
       image: theme.palette.mode === 'light' ? darkTheme : darkThemeDark,
-      compressedImage: theme.palette.mode === 'light' ? darkThemeCompressed : darkThemeDarkCompressed,
-      align: 'left'
+      compressedImage:
+        theme.palette.mode === 'light' ? darkThemeCompressed : darkThemeDarkCompressed,
+      align: 'left',
     },
   ];
 
   return (
-    <div 
+    <div
       className={styles.container}
-      style={{
-        // backgroundColor: bgColorBlocks(theme.palette.mode),
-      }}
-    >
-      {
-        content.map((card, index) => (
-          <FeatureCard
-            key={index}
-            image={card.image}
-            compressedImage={card.compressedImage}
-            align={card.align}
-            text={card.text}
-          />
-        ))
+      style={
+        {
+          // backgroundColor: bgColorBlocks(theme.palette.mode),
+        }
       }
+    >
+      {content.map((card, index) => (
+        <FeatureCard
+          key={index}
+          image={card.image}
+          compressedImage={card.compressedImage}
+          align={card.align}
+          text={card.text}
+        />
+      ))}
     </div>
   );
 };

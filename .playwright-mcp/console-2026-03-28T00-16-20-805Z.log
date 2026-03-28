@@ -1,0 +1,653 @@
+[     267ms] [ERROR] Warning: A component is `contentEditable` and contains `children` managed by React. It is now your responsibility to guarantee that none of those nodes are unexpectedly modified or duplicated. This is probably not intentional.%s 
+    at h6
+    at http://localhost:3000/static/js/bundle.js:42161:66
+    at Typography (http://localhost:3000/static/js/bundle.js:65175:87)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at HotkeysSection (http://localhost:3000/static/js/bundle.js:22210:89)
+    at div
+    at div
+    at div
+    at TabPanel (http://localhost:3000/static/js/bundle.js:22929:5)
+    at VerticalTabs (http://localhost:3000/static/js/bundle.js:22992:5)
+    at div
+    at SettingsModal (http://localhost:3000/static/js/bundle.js:22580:81)
+    at div
+    at TrapFocus (http://localhost:3000/static/js/bundle.js:69362:5)
+    at div
+    at http://localhost:3000/static/js/bundle.js:42161:66
+    at Portal (http://localhost:3000/static/js/bundle.js:68934:5)
+    at ModalUnstyled (http://localhost:3000/static/js/bundle.js:68118:5)
+    at Modal (http://localhost:3000/static/js/bundle.js:56856:82)
+    at ModalWrapper (http://localhost:3000/static/js/bundle.js:21852:5)
+    at AppSettings (http://localhost:3000/static/js/bundle.js:4242:5)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23184:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:168800:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71386:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71807:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:50:89)
+    at Router (http://localhost:3000/static/js/bundle.js:168733:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168213:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164493:20) @ http://localhost:3000/static/js/bundle.js:133865
+[     268ms] [ERROR] Warning: A component is `contentEditable` and contains `children` managed by React. It is now your responsibility to guarantee that none of those nodes are unexpectedly modified or duplicated. This is probably not intentional.%s 
+    at h6
+    at http://localhost:3000/static/js/bundle.js:42161:66
+    at Typography (http://localhost:3000/static/js/bundle.js:65175:87)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at HotkeysSection (http://localhost:3000/static/js/bundle.js:22210:89)
+    at div
+    at div
+    at div
+    at TabPanel (http://localhost:3000/static/js/bundle.js:22929:5)
+    at VerticalTabs (http://localhost:3000/static/js/bundle.js:22992:5)
+    at div
+    at SettingsModal (http://localhost:3000/static/js/bundle.js:22580:81)
+    at div
+    at TrapFocus (http://localhost:3000/static/js/bundle.js:69362:5)
+    at div
+    at http://localhost:3000/static/js/bundle.js:42161:66
+    at Portal (http://localhost:3000/static/js/bundle.js:68934:5)
+    at ModalUnstyled (http://localhost:3000/static/js/bundle.js:68118:5)
+    at Modal (http://localhost:3000/static/js/bundle.js:56856:82)
+    at ModalWrapper (http://localhost:3000/static/js/bundle.js:21852:5)
+    at AppSettings (http://localhost:3000/static/js/bundle.js:4242:5)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23184:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:168800:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71386:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71807:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:50:89)
+    at Router (http://localhost:3000/static/js/bundle.js:168733:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168213:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164493:20) @ http://localhost:3000/static/js/bundle.js:133865
+[     268ms] [ERROR] Warning: A component is `contentEditable` and contains `children` managed by React. It is now your responsibility to guarantee that none of those nodes are unexpectedly modified or duplicated. This is probably not intentional.%s 
+    at h6
+    at http://localhost:3000/static/js/bundle.js:42161:66
+    at Typography (http://localhost:3000/static/js/bundle.js:65175:87)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at HotkeysSection (http://localhost:3000/static/js/bundle.js:22210:89)
+    at div
+    at div
+    at div
+    at TabPanel (http://localhost:3000/static/js/bundle.js:22929:5)
+    at VerticalTabs (http://localhost:3000/static/js/bundle.js:22992:5)
+    at div
+    at SettingsModal (http://localhost:3000/static/js/bundle.js:22580:81)
+    at div
+    at TrapFocus (http://localhost:3000/static/js/bundle.js:69362:5)
+    at div
+    at http://localhost:3000/static/js/bundle.js:42161:66
+    at Portal (http://localhost:3000/static/js/bundle.js:68934:5)
+    at ModalUnstyled (http://localhost:3000/static/js/bundle.js:68118:5)
+    at Modal (http://localhost:3000/static/js/bundle.js:56856:82)
+    at ModalWrapper (http://localhost:3000/static/js/bundle.js:21852:5)
+    at AppSettings (http://localhost:3000/static/js/bundle.js:4242:5)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23184:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:168800:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71386:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71807:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:50:89)
+    at Router (http://localhost:3000/static/js/bundle.js:168733:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168213:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164493:20) @ http://localhost:3000/static/js/bundle.js:133865
+[     268ms] [ERROR] Warning: A component is `contentEditable` and contains `children` managed by React. It is now your responsibility to guarantee that none of those nodes are unexpectedly modified or duplicated. This is probably not intentional.%s 
+    at h6
+    at http://localhost:3000/static/js/bundle.js:42161:66
+    at Typography (http://localhost:3000/static/js/bundle.js:65175:87)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at HotkeysSection (http://localhost:3000/static/js/bundle.js:22210:89)
+    at div
+    at div
+    at div
+    at TabPanel (http://localhost:3000/static/js/bundle.js:22929:5)
+    at VerticalTabs (http://localhost:3000/static/js/bundle.js:22992:5)
+    at div
+    at SettingsModal (http://localhost:3000/static/js/bundle.js:22580:81)
+    at div
+    at TrapFocus (http://localhost:3000/static/js/bundle.js:69362:5)
+    at div
+    at http://localhost:3000/static/js/bundle.js:42161:66
+    at Portal (http://localhost:3000/static/js/bundle.js:68934:5)
+    at ModalUnstyled (http://localhost:3000/static/js/bundle.js:68118:5)
+    at Modal (http://localhost:3000/static/js/bundle.js:56856:82)
+    at ModalWrapper (http://localhost:3000/static/js/bundle.js:21852:5)
+    at AppSettings (http://localhost:3000/static/js/bundle.js:4242:5)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23184:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:168800:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71386:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71807:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:50:89)
+    at Router (http://localhost:3000/static/js/bundle.js:168733:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168213:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164493:20) @ http://localhost:3000/static/js/bundle.js:133865
+[     268ms] [ERROR] Warning: A component is `contentEditable` and contains `children` managed by React. It is now your responsibility to guarantee that none of those nodes are unexpectedly modified or duplicated. This is probably not intentional.%s 
+    at h6
+    at http://localhost:3000/static/js/bundle.js:42161:66
+    at Typography (http://localhost:3000/static/js/bundle.js:65175:87)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at HotkeysSection (http://localhost:3000/static/js/bundle.js:22210:89)
+    at div
+    at div
+    at div
+    at TabPanel (http://localhost:3000/static/js/bundle.js:22929:5)
+    at VerticalTabs (http://localhost:3000/static/js/bundle.js:22992:5)
+    at div
+    at SettingsModal (http://localhost:3000/static/js/bundle.js:22580:81)
+    at div
+    at TrapFocus (http://localhost:3000/static/js/bundle.js:69362:5)
+    at div
+    at http://localhost:3000/static/js/bundle.js:42161:66
+    at Portal (http://localhost:3000/static/js/bundle.js:68934:5)
+    at ModalUnstyled (http://localhost:3000/static/js/bundle.js:68118:5)
+    at Modal (http://localhost:3000/static/js/bundle.js:56856:82)
+    at ModalWrapper (http://localhost:3000/static/js/bundle.js:21852:5)
+    at AppSettings (http://localhost:3000/static/js/bundle.js:4242:5)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23184:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:168800:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71386:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71807:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:50:89)
+    at Router (http://localhost:3000/static/js/bundle.js:168733:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168213:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164493:20) @ http://localhost:3000/static/js/bundle.js:133865
+[     269ms] [ERROR] Warning: A component is `contentEditable` and contains `children` managed by React. It is now your responsibility to guarantee that none of those nodes are unexpectedly modified or duplicated. This is probably not intentional.%s 
+    at h6
+    at http://localhost:3000/static/js/bundle.js:42161:66
+    at Typography (http://localhost:3000/static/js/bundle.js:65175:87)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at HotkeysSection (http://localhost:3000/static/js/bundle.js:22210:89)
+    at div
+    at div
+    at div
+    at TabPanel (http://localhost:3000/static/js/bundle.js:22929:5)
+    at VerticalTabs (http://localhost:3000/static/js/bundle.js:22992:5)
+    at div
+    at SettingsModal (http://localhost:3000/static/js/bundle.js:22580:81)
+    at div
+    at TrapFocus (http://localhost:3000/static/js/bundle.js:69362:5)
+    at div
+    at http://localhost:3000/static/js/bundle.js:42161:66
+    at Portal (http://localhost:3000/static/js/bundle.js:68934:5)
+    at ModalUnstyled (http://localhost:3000/static/js/bundle.js:68118:5)
+    at Modal (http://localhost:3000/static/js/bundle.js:56856:82)
+    at ModalWrapper (http://localhost:3000/static/js/bundle.js:21852:5)
+    at AppSettings (http://localhost:3000/static/js/bundle.js:4242:5)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23184:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:168800:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71386:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71807:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:50:89)
+    at Router (http://localhost:3000/static/js/bundle.js:168733:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168213:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164493:20) @ http://localhost:3000/static/js/bundle.js:133865
+[     269ms] [ERROR] Warning: A component is `contentEditable` and contains `children` managed by React. It is now your responsibility to guarantee that none of those nodes are unexpectedly modified or duplicated. This is probably not intentional.%s 
+    at h6
+    at http://localhost:3000/static/js/bundle.js:42161:66
+    at Typography (http://localhost:3000/static/js/bundle.js:65175:87)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at HotkeysSection (http://localhost:3000/static/js/bundle.js:22210:89)
+    at div
+    at div
+    at div
+    at TabPanel (http://localhost:3000/static/js/bundle.js:22929:5)
+    at VerticalTabs (http://localhost:3000/static/js/bundle.js:22992:5)
+    at div
+    at SettingsModal (http://localhost:3000/static/js/bundle.js:22580:81)
+    at div
+    at TrapFocus (http://localhost:3000/static/js/bundle.js:69362:5)
+    at div
+    at http://localhost:3000/static/js/bundle.js:42161:66
+    at Portal (http://localhost:3000/static/js/bundle.js:68934:5)
+    at ModalUnstyled (http://localhost:3000/static/js/bundle.js:68118:5)
+    at Modal (http://localhost:3000/static/js/bundle.js:56856:82)
+    at ModalWrapper (http://localhost:3000/static/js/bundle.js:21852:5)
+    at AppSettings (http://localhost:3000/static/js/bundle.js:4242:5)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23184:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:168800:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71386:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71807:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:50:89)
+    at Router (http://localhost:3000/static/js/bundle.js:168733:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168213:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164493:20) @ http://localhost:3000/static/js/bundle.js:133865
+[     269ms] [ERROR] Warning: A component is `contentEditable` and contains `children` managed by React. It is now your responsibility to guarantee that none of those nodes are unexpectedly modified or duplicated. This is probably not intentional.%s 
+    at h6
+    at http://localhost:3000/static/js/bundle.js:42161:66
+    at Typography (http://localhost:3000/static/js/bundle.js:65175:87)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at HotkeysSection (http://localhost:3000/static/js/bundle.js:22210:89)
+    at div
+    at div
+    at div
+    at TabPanel (http://localhost:3000/static/js/bundle.js:22929:5)
+    at VerticalTabs (http://localhost:3000/static/js/bundle.js:22992:5)
+    at div
+    at SettingsModal (http://localhost:3000/static/js/bundle.js:22580:81)
+    at div
+    at TrapFocus (http://localhost:3000/static/js/bundle.js:69362:5)
+    at div
+    at http://localhost:3000/static/js/bundle.js:42161:66
+    at Portal (http://localhost:3000/static/js/bundle.js:68934:5)
+    at ModalUnstyled (http://localhost:3000/static/js/bundle.js:68118:5)
+    at Modal (http://localhost:3000/static/js/bundle.js:56856:82)
+    at ModalWrapper (http://localhost:3000/static/js/bundle.js:21852:5)
+    at AppSettings (http://localhost:3000/static/js/bundle.js:4242:5)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23184:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:168800:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71386:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71807:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:50:89)
+    at Router (http://localhost:3000/static/js/bundle.js:168733:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168213:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164493:20) @ http://localhost:3000/static/js/bundle.js:133865
+[     269ms] [ERROR] Warning: A component is `contentEditable` and contains `children` managed by React. It is now your responsibility to guarantee that none of those nodes are unexpectedly modified or duplicated. This is probably not intentional.%s 
+    at h6
+    at http://localhost:3000/static/js/bundle.js:42161:66
+    at Typography (http://localhost:3000/static/js/bundle.js:65175:87)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at HotkeysSection (http://localhost:3000/static/js/bundle.js:22210:89)
+    at div
+    at div
+    at div
+    at TabPanel (http://localhost:3000/static/js/bundle.js:22929:5)
+    at VerticalTabs (http://localhost:3000/static/js/bundle.js:22992:5)
+    at div
+    at SettingsModal (http://localhost:3000/static/js/bundle.js:22580:81)
+    at div
+    at TrapFocus (http://localhost:3000/static/js/bundle.js:69362:5)
+    at div
+    at http://localhost:3000/static/js/bundle.js:42161:66
+    at Portal (http://localhost:3000/static/js/bundle.js:68934:5)
+    at ModalUnstyled (http://localhost:3000/static/js/bundle.js:68118:5)
+    at Modal (http://localhost:3000/static/js/bundle.js:56856:82)
+    at ModalWrapper (http://localhost:3000/static/js/bundle.js:21852:5)
+    at AppSettings (http://localhost:3000/static/js/bundle.js:4242:5)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23184:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:168800:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71386:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71807:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:50:89)
+    at Router (http://localhost:3000/static/js/bundle.js:168733:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168213:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164493:20) @ http://localhost:3000/static/js/bundle.js:133865
+[     270ms] [ERROR] Warning: A component is `contentEditable` and contains `children` managed by React. It is now your responsibility to guarantee that none of those nodes are unexpectedly modified or duplicated. This is probably not intentional.%s 
+    at h6
+    at http://localhost:3000/static/js/bundle.js:42161:66
+    at Typography (http://localhost:3000/static/js/bundle.js:65175:87)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at HotkeysSection (http://localhost:3000/static/js/bundle.js:22210:89)
+    at div
+    at div
+    at div
+    at TabPanel (http://localhost:3000/static/js/bundle.js:22929:5)
+    at VerticalTabs (http://localhost:3000/static/js/bundle.js:22992:5)
+    at div
+    at SettingsModal (http://localhost:3000/static/js/bundle.js:22580:81)
+    at div
+    at TrapFocus (http://localhost:3000/static/js/bundle.js:69362:5)
+    at div
+    at http://localhost:3000/static/js/bundle.js:42161:66
+    at Portal (http://localhost:3000/static/js/bundle.js:68934:5)
+    at ModalUnstyled (http://localhost:3000/static/js/bundle.js:68118:5)
+    at Modal (http://localhost:3000/static/js/bundle.js:56856:82)
+    at ModalWrapper (http://localhost:3000/static/js/bundle.js:21852:5)
+    at AppSettings (http://localhost:3000/static/js/bundle.js:4242:5)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23184:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:168800:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71386:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71807:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:50:89)
+    at Router (http://localhost:3000/static/js/bundle.js:168733:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168213:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164493:20) @ http://localhost:3000/static/js/bundle.js:133865
+[     270ms] [ERROR] Warning: A component is `contentEditable` and contains `children` managed by React. It is now your responsibility to guarantee that none of those nodes are unexpectedly modified or duplicated. This is probably not intentional.%s 
+    at h6
+    at http://localhost:3000/static/js/bundle.js:42161:66
+    at Typography (http://localhost:3000/static/js/bundle.js:65175:87)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at HotkeysSection (http://localhost:3000/static/js/bundle.js:22210:89)
+    at div
+    at div
+    at div
+    at TabPanel (http://localhost:3000/static/js/bundle.js:22929:5)
+    at VerticalTabs (http://localhost:3000/static/js/bundle.js:22992:5)
+    at div
+    at SettingsModal (http://localhost:3000/static/js/bundle.js:22580:81)
+    at div
+    at TrapFocus (http://localhost:3000/static/js/bundle.js:69362:5)
+    at div
+    at http://localhost:3000/static/js/bundle.js:42161:66
+    at Portal (http://localhost:3000/static/js/bundle.js:68934:5)
+    at ModalUnstyled (http://localhost:3000/static/js/bundle.js:68118:5)
+    at Modal (http://localhost:3000/static/js/bundle.js:56856:82)
+    at ModalWrapper (http://localhost:3000/static/js/bundle.js:21852:5)
+    at AppSettings (http://localhost:3000/static/js/bundle.js:4242:5)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23184:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:168800:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71386:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71807:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:50:89)
+    at Router (http://localhost:3000/static/js/bundle.js:168733:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168213:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164493:20) @ http://localhost:3000/static/js/bundle.js:133865
+[     271ms] [ERROR] Warning: A component is `contentEditable` and contains `children` managed by React. It is now your responsibility to guarantee that none of those nodes are unexpectedly modified or duplicated. This is probably not intentional.%s 
+    at h6
+    at http://localhost:3000/static/js/bundle.js:42161:66
+    at Typography (http://localhost:3000/static/js/bundle.js:65175:87)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at HotkeysSection (http://localhost:3000/static/js/bundle.js:22210:89)
+    at div
+    at div
+    at div
+    at TabPanel (http://localhost:3000/static/js/bundle.js:22929:5)
+    at VerticalTabs (http://localhost:3000/static/js/bundle.js:22992:5)
+    at div
+    at SettingsModal (http://localhost:3000/static/js/bundle.js:22580:81)
+    at div
+    at TrapFocus (http://localhost:3000/static/js/bundle.js:69362:5)
+    at div
+    at http://localhost:3000/static/js/bundle.js:42161:66
+    at Portal (http://localhost:3000/static/js/bundle.js:68934:5)
+    at ModalUnstyled (http://localhost:3000/static/js/bundle.js:68118:5)
+    at Modal (http://localhost:3000/static/js/bundle.js:56856:82)
+    at ModalWrapper (http://localhost:3000/static/js/bundle.js:21852:5)
+    at AppSettings (http://localhost:3000/static/js/bundle.js:4242:5)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23184:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:168800:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71386:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71807:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:50:89)
+    at Router (http://localhost:3000/static/js/bundle.js:168733:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168213:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164493:20) @ http://localhost:3000/static/js/bundle.js:133865
+[     271ms] [ERROR] Warning: A component is `contentEditable` and contains `children` managed by React. It is now your responsibility to guarantee that none of those nodes are unexpectedly modified or duplicated. This is probably not intentional.%s 
+    at h6
+    at http://localhost:3000/static/js/bundle.js:42161:66
+    at Typography (http://localhost:3000/static/js/bundle.js:65175:87)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at HotkeysSection (http://localhost:3000/static/js/bundle.js:22210:89)
+    at div
+    at div
+    at div
+    at TabPanel (http://localhost:3000/static/js/bundle.js:22929:5)
+    at VerticalTabs (http://localhost:3000/static/js/bundle.js:22992:5)
+    at div
+    at SettingsModal (http://localhost:3000/static/js/bundle.js:22580:81)
+    at div
+    at TrapFocus (http://localhost:3000/static/js/bundle.js:69362:5)
+    at div
+    at http://localhost:3000/static/js/bundle.js:42161:66
+    at Portal (http://localhost:3000/static/js/bundle.js:68934:5)
+    at ModalUnstyled (http://localhost:3000/static/js/bundle.js:68118:5)
+    at Modal (http://localhost:3000/static/js/bundle.js:56856:82)
+    at ModalWrapper (http://localhost:3000/static/js/bundle.js:21852:5)
+    at AppSettings (http://localhost:3000/static/js/bundle.js:4242:5)
+    at div
+    at div
+    at div
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23184:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:168800:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71386:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71807:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:50:89)
+    at Router (http://localhost:3000/static/js/bundle.js:168733:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168213:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164493:20) @ http://localhost:3000/static/js/bundle.js:133865
+[     288ms] [ERROR] Warning: Each child in a list should have a unique "key" prop.%s%s See https://reactjs.org/link/warning-keys for more information.%s 
+
+Check the render method of `ToolsDIR`.  
+    at Tooltip (http://localhost:3000/static/js/bundle.js:64430:83)
+    at ToolsDIR (http://localhost:3000/static/js/bundle.js:11710:5)
+    at div
+    at DIRPage (http://localhost:3000/static/js/bundle.js:26669:7)
+    at Outlet (http://localhost:3000/static/js/bundle.js:168708:26)
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23184:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:168800:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71386:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71807:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:50:89)
+    at Router (http://localhost:3000/static/js/bundle.js:168733:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168213:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164493:20) @ http://localhost:3000/static/js/bundle.js:172990
+[     297ms] TypeError: Cannot read properties of null (reading 'toFixed')
+    at http://localhost:3000/static/js/bundle.js:5021:49
+    at Array.map (<anonymous>)
+    at DataTableDIR (http://localhost:3000/static/js/bundle.js:4996:37)
+    at renderWithHooks (http://localhost:3000/static/js/bundle.js:148767:22)
+    at updateFunctionComponent (http://localhost:3000/static/js/bundle.js:151089:24)
+    at beginWork (http://localhost:3000/static/js/bundle.js:152742:20)
+    at HTMLUnknownElement.callCallback (http://localhost:3000/static/js/bundle.js:137717:18)
+    at Object.invokeGuardedCallbackDev (http://localhost:3000/static/js/bundle.js:137766:20)
+    at invokeGuardedCallback (http://localhost:3000/static/js/bundle.js:137826:35)
+    at beginWork$1 (http://localhost:3000/static/js/bundle.js:157568:11)
+[     297ms] TypeError: Cannot read properties of null (reading 'toFixed')
+    at http://localhost:3000/static/js/bundle.js:35352:49
+    at Array.map (<anonymous>)
+    at dataToStereoDIR (http://localhost:3000/static/js/bundle.js:35336:27)
+    at http://localhost:3000/static/js/bundle.js:2597:169
+    at mountMemo (http://localhost:3000/static/js/bundle.js:149605:23)
+    at Object.useMemo (http://localhost:3000/static/js/bundle.js:149972:20)
+    at useMemo (http://localhost:3000/static/js/bundle.js:176773:25)
+    at StereoGraphDIR (http://localhost:3000/static/js/bundle.js:2597:71)
+    at renderWithHooks (http://localhost:3000/static/js/bundle.js:148767:22)
+    at mountIndeterminateComponent (http://localhost:3000/static/js/bundle.js:151529:17)
+[     297ms] TypeError: Cannot read properties of null (reading 'toFixed')
+    at http://localhost:3000/static/js/bundle.js:35352:49
+    at Array.map (<anonymous>)
+    at dataToStereoDIR (http://localhost:3000/static/js/bundle.js:35336:27)
+    at http://localhost:3000/static/js/bundle.js:2597:169
+    at mountMemo (http://localhost:3000/static/js/bundle.js:149605:23)
+    at Object.useMemo (http://localhost:3000/static/js/bundle.js:149972:20)
+    at useMemo (http://localhost:3000/static/js/bundle.js:176773:25)
+    at StereoGraphDIR (http://localhost:3000/static/js/bundle.js:2597:71)
+    at renderWithHooks (http://localhost:3000/static/js/bundle.js:148767:22)
+    at mountIndeterminateComponent (http://localhost:3000/static/js/bundle.js:151529:17)
+[     302ms] [ERROR] The above error occurred in the <DataTableDIR> component:
+
+    at DataTableDIR (http://localhost:3000/static/js/bundle.js:4735:5)
+    at div
+    at Tables (http://localhost:3000/static/js/bundle.js:27384:5)
+    at div
+    at DIRPage (http://localhost:3000/static/js/bundle.js:26669:7)
+    at Outlet (http://localhost:3000/static/js/bundle.js:168708:26)
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23184:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:168800:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71386:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71807:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:50:89)
+    at Router (http://localhost:3000/static/js/bundle.js:168733:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168213:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164493:20)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries. @ http://localhost:3000/static/js/bundle.js:153751
+[     302ms] [ERROR] The above error occurred in the <StereoGraphDIR> component:
+
+    at StereoGraphDIR (http://localhost:3000/static/js/bundle.js:2570:5)
+    at div
+    at div
+    at GraphsSkeleton (http://localhost:3000/static/js/bundle.js:27082:5)
+    at Graphs (http://localhost:3000/static/js/bundle.js:26858:5)
+    at div
+    at DIRPage (http://localhost:3000/static/js/bundle.js:26669:7)
+    at Outlet (http://localhost:3000/static/js/bundle.js:168708:26)
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23184:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:168800:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71386:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71807:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:50:89)
+    at Router (http://localhost:3000/static/js/bundle.js:168733:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168213:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164493:20)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries. @ http://localhost:3000/static/js/bundle.js:153751
+[     302ms] [ERROR] The above error occurred in the <StereoGraphDIR> component:
+
+    at StereoGraphDIR (http://localhost:3000/static/js/bundle.js:2570:5)
+    at div
+    at div
+    at GraphsSkeleton (http://localhost:3000/static/js/bundle.js:27082:5)
+    at Graphs (http://localhost:3000/static/js/bundle.js:26858:5)
+    at div
+    at DIRPage (http://localhost:3000/static/js/bundle.js:26669:7)
+    at Outlet (http://localhost:3000/static/js/bundle.js:168708:26)
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23184:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:168800:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71386:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71807:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:50:89)
+    at Router (http://localhost:3000/static/js/bundle.js:168733:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168213:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164493:20)
+
+Consider adding an error boundary to your tree to customize error handling behavior.
+Visit https://reactjs.org/link/error-boundaries to learn more about error boundaries. @ http://localhost:3000/static/js/bundle.js:153751
+[     303ms] TypeError: Cannot read properties of null (reading 'toFixed')
+    at http://localhost:3000/static/js/bundle.js:5021:49
+    at Array.map (<anonymous>)
+    at DataTableDIR (http://localhost:3000/static/js/bundle.js:4996:37)
+    at renderWithHooks (http://localhost:3000/static/js/bundle.js:148767:22)
+    at updateFunctionComponent (http://localhost:3000/static/js/bundle.js:151089:24)
+    at beginWork (http://localhost:3000/static/js/bundle.js:152742:20)
+    at HTMLUnknownElement.callCallback (http://localhost:3000/static/js/bundle.js:137717:18)
+    at Object.invokeGuardedCallbackDev (http://localhost:3000/static/js/bundle.js:137766:20)
+    at invokeGuardedCallback (http://localhost:3000/static/js/bundle.js:137826:35)
+    at beginWork$1 (http://localhost:3000/static/js/bundle.js:157568:11)

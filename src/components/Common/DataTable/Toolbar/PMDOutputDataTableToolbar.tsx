@@ -1,17 +1,16 @@
-import { 
-  GridToolbarContainer, 
-  GridToolbarColumnsButton, 
+import {
+  GridToolbarContainer,
+  GridToolbarColumnsButton,
   GridToolbarDensitySelector,
   GridToolbarFilterButton,
-} from "@mui/x-data-grid";
-import { useAppSelector } from "../../../../services/store/hooks";
-import { IDirData } from "../../../../utils/GlobalTypes"; 
-import ExportDIRFromPCA from "./Buttons/ExportButton/ExportDIRFromPca";
+} from '@mui/x-data-grid';
+import { useAppSelector } from '../../../../services/store/hooks';
+import { IDirData } from '../../../../utils/GlobalTypes';
+import ExportDIRFromPCA from './Buttons/ExportButton/ExportDIRFromPca';
 import ExportPMD from './Buttons/ExportButton/ExportPMD';
 
 const PMDOutputDataTableToolbar = () => {
-
-  const { allInterpretations, outputFilename } = useAppSelector(state => state.pcaPageReducer);
+  const { allInterpretations, outputFilename } = useAppSelector((state) => state.pcaPageReducer);
 
   if (!allInterpretations) return null;
   const data: IDirData = {
@@ -32,11 +31,11 @@ const PMDOutputDataTableToolbar = () => {
         MADstrat: interpretation.confidenceRadius,
         Kstrat: interpretation.accuracy || 0,
         comment: interpretation.comment,
-        demagType: interpretation.demagType
+        demagType: interpretation.demagType,
       };
     }),
     format: '',
-    created: ''
+    created: '',
   };
 
   return (
@@ -44,7 +43,7 @@ const PMDOutputDataTableToolbar = () => {
       <GridToolbarFilterButton />
       <GridToolbarColumnsButton />
       <GridToolbarDensitySelector />
-      <ExportDIRFromPCA data={data}/>
+      <ExportDIRFromPCA data={data} />
     </GridToolbarContainer>
   );
 };

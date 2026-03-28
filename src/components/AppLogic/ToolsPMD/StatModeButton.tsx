@@ -7,12 +7,11 @@ import { StatisticsModePCA } from '../../../utils/graphs/types';
 interface IStatModeButton {
   mode: StatisticsModePCA;
   hotkey: string;
-};
+}
 
 const StatModeButton: FC<IStatModeButton> = ({ mode, hotkey }) => {
-
   const dispatch = useAppDispatch();
-  const { statisticsMode } = useAppSelector(state => state.pcaPageReducer); 
+  const { statisticsMode } = useAppSelector((state) => state.pcaPageReducer);
 
   const onStatisticsModeClick = (mode: StatisticsModePCA) => {
     if (statisticsMode === mode) mode = null;
@@ -20,19 +19,15 @@ const StatModeButton: FC<IStatModeButton> = ({ mode, hotkey }) => {
   };
 
   return (
-    <Tooltip 
-      title={<Typography variant='body1'>{hotkey}</Typography>}
-      enterDelay={250}
-      arrow
-    >
+    <Tooltip title={<Typography variant="body1">{hotkey}</Typography>} enterDelay={250} arrow>
       <Button
         color={statisticsMode === mode ? 'secondary' : 'primary'}
         sx={{
-          fontWeight: statisticsMode === mode ? 600 : 400
+          fontWeight: statisticsMode === mode ? 600 : 400,
         }}
         onClick={() => onStatisticsModeClick(mode)}
       >
-        { mode?.toUpperCase() }
+        {mode?.toUpperCase()}
       </Button>
     </Tooltip>
   );

@@ -33,11 +33,7 @@ const ChangelogModal: FC = () => {
 
   return (
     <div className={styles.container}>
-      <Typography
-        variant="h6"
-        className={styles.title}
-        color={textColor(theme.palette.mode)}
-      >
+      <Typography variant="h6" className={styles.title} color={textColor(theme.palette.mode)}>
         Changelog
       </Typography>
       <div className={styles.list}>
@@ -69,10 +65,7 @@ const ChangelogModal: FC = () => {
                 <ul className={styles.items}>
                   {e.items.map((item, idx) => (
                     <li key={idx}>
-                      <Typography
-                        variant="body2"
-                        color={textColor(theme.palette.mode)}
-                      >
+                      <Typography variant="body2" color={textColor(theme.palette.mode)}>
                         {item}
                       </Typography>
                     </li>
@@ -88,5 +81,3 @@ const ChangelogModal: FC = () => {
 };
 
 export default ChangelogModal;
-
-

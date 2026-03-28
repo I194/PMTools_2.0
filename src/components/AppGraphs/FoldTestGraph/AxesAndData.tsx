@@ -1,6 +1,6 @@
-import React, { FC } from "react";
-import { DotsData, GraphSettings, TooltipDot } from "../../../utils/graphs/types";
-import { Axis, Data } from "../../Common/Graphs";
+import React, { FC } from 'react';
+import { DotsData, GraphSettings, TooltipDot } from '../../../utils/graphs/types';
+import { Axis, Data } from '../../Common/Graphs';
 
 interface IAxesAndData {
   graphId: string;
@@ -28,26 +28,19 @@ interface IAxesAndData {
   settings: GraphSettings;
 }
 
-const AxesAndData: FC<IAxesAndData> = ({ 
-  graphId, width, height,
+const AxesAndData: FC<IAxesAndData> = ({
+  graphId,
+  width,
+  height,
   areaConstants,
   dataConstants,
   selectedIDs,
   inInterpretationIDs,
   settings,
 }) => {
+  const { graphAreaMargin, zeroX, zeroY, unitX, unitY, unitCountX, unitCountY } = areaConstants;
 
   const {
-    graphAreaMargin,
-    zeroX,
-    zeroY,
-    unitX,
-    unitY,
-    unitCountX,
-    unitCountY,
-  } = areaConstants;
-
-  const { 
     cdfDotsData,
     bootstrapDotsData,
     lowerDotsData,
@@ -56,35 +49,35 @@ const AxesAndData: FC<IAxesAndData> = ({
     untitlingEndDotsData,
   } = dataConstants;
 
-  const labelsX = [-50, -25, 0, 25, 50, 75, 100, 125, 150].map(x => x.toString());
+  const labelsX = [-50, -25, 0, 25, 50, 75, 100, 125, 150].map((x) => x.toString());
   const labelsY = [];
-  
+
   for (let i = unitCountY; i >= 0; i--) labelsY.push((i / 10).toString());
 
   const axisNameX = '% Untilting';
   const axisNameY = 'tau_1 (red), unfolding CDF (green)';
 
   return (
-    <g 
+    <g
       id={`${graphId}-axes-and-data`}
       transform={`translate(${graphAreaMargin}, ${graphAreaMargin})`}
     >
       <g id={`${graphId}-axes`}>
-        <rect 
-          id='foldTest-rect-axis'
-          x={0} 
-          y={0} 
+        <rect
+          id="foldTest-rect-axis"
+          x={0}
+          y={0}
           width={width}
           height={height}
           fill="none"
           stroke="black"
           strokeWidth={1}
         />
-        <Axis 
+        <Axis
           graphId={graphId}
-          type='x'
+          type="x"
           name={axisNameX}
-          namePosition={{x: width / 2, y: zeroY + 36}}
+          namePosition={{ x: width / 2, y: zeroY + 36 }}
           zero={zeroY}
           length={width}
           unit={unitX}
@@ -94,11 +87,11 @@ const AxesAndData: FC<IAxesAndData> = ({
           tickPosition="outer"
           labels={labelsX}
         />
-        <Axis 
+        <Axis
           graphId={graphId}
-          type='y'
+          type="y"
           name={axisNameY}
-          namePosition={{x: zeroX + 100, y: -15}}
+          namePosition={{ x: zeroX + 100, y: -15 }}
           zero={zeroX}
           length={height}
           unit={unitY}
@@ -111,7 +104,7 @@ const AxesAndData: FC<IAxesAndData> = ({
             length: width,
             width: 1,
             color: 'black',
-            dashArray: [5, 4]
+            dashArray: [5, 4],
           }}
         />
       </g>
@@ -122,38 +115,34 @@ const AxesAndData: FC<IAxesAndData> = ({
           Однако hover всё равно работать не будет и потому лучше использовать onMouseOver
           Как раз при этом достигается условие zero-css (я его только что сам придумал)
       */}
-      <g 
-        id={`${graphId}-data`}
-      >
-        {
-          bootstrapDotsData.map((data, index) => (
-            <Data
-              key={index}
-              graphId={graphId}
-              type={`bootstrap_${index}`}
-              data={data}
-              selectedIDs={selectedIDs}
-              inInterpretationIDs={inInterpretationIDs}
-              dotFillColor='red'
-              differentColors={true}
-              settings={settings.dots}
-              pathStyle={{
-                stroke: 'red',
-                strokeWidth: 1,
-                fill: 'none',
-                strokeDasharray: '5, 4'
-              }}
-              showDots={false}
-            />
-          ))
-        }
-        <Data 
+      <g id={`${graphId}-data`}>
+        {bootstrapDotsData.map((data, index) => (
+          <Data
+            key={index}
+            graphId={graphId}
+            type={`bootstrap_${index}`}
+            data={data}
+            selectedIDs={selectedIDs}
+            inInterpretationIDs={inInterpretationIDs}
+            dotFillColor="red"
+            differentColors={true}
+            settings={settings.dots}
+            pathStyle={{
+              stroke: 'red',
+              strokeWidth: 1,
+              fill: 'none',
+              strokeDasharray: '5, 4',
+            }}
+            showDots={false}
+          />
+        ))}
+        <Data
           graphId={graphId}
-          type='cdf'
+          type="cdf"
           data={cdfDotsData}
           selectedIDs={selectedIDs}
           inInterpretationIDs={inInterpretationIDs}
-          dotFillColor='green'
+          dotFillColor="green"
           differentColors={true}
           settings={settings.dots}
           pathStyle={{
@@ -162,78 +151,78 @@ const AxesAndData: FC<IAxesAndData> = ({
           }}
           showDots={false}
         />
-        <Data 
+        <Data
           graphId={graphId}
-          type='untitlingStart'
+          type="untitlingStart"
           data={untitlingStartDotsData}
           selectedIDs={selectedIDs}
           inInterpretationIDs={inInterpretationIDs}
-          dotFillColor='green'
+          dotFillColor="green"
           differentColors={true}
           settings={settings.dots}
           pathStyle={{
             stroke: 'green',
             strokeWidth: 2,
             fill: 'none',
-            strokeDasharray: '5, 4'
+            strokeDasharray: '5, 4',
           }}
           showDots={false}
         />
-        
-        <Data 
+
+        <Data
           graphId={graphId}
-          type='untitlingEnd'
+          type="untitlingEnd"
           data={untitlingEndDotsData}
           selectedIDs={selectedIDs}
           inInterpretationIDs={inInterpretationIDs}
-          dotFillColor='green'
+          dotFillColor="green"
           differentColors={true}
           settings={settings.dots}
           pathStyle={{
             stroke: 'green',
             strokeWidth: 2,
             fill: 'none',
-            strokeDasharray: '5, 4'
+            strokeDasharray: '5, 4',
           }}
           showDots={false}
         />
-        <Data 
+        <Data
           graphId={graphId}
-          type='lowerBound'
+          type="lowerBound"
           data={lowerDotsData}
           selectedIDs={selectedIDs}
           inInterpretationIDs={inInterpretationIDs}
-          dotFillColor='blue'
+          dotFillColor="blue"
           differentColors={true}
           settings={settings.dots}
           pathStyle={{
             stroke: 'blue',
             strokeWidth: 2,
             fill: 'none',
-            strokeDasharray: '5, 4'
+            strokeDasharray: '5, 4',
           }}
           showDots={false}
         />
-        <Data 
+        <Data
           graphId={graphId}
-          type='upperBound'
+          type="upperBound"
           data={upperDotsData}
           selectedIDs={selectedIDs}
           inInterpretationIDs={inInterpretationIDs}
-          dotFillColor='blue'
+          dotFillColor="blue"
           differentColors={true}
           settings={settings.dots}
           pathStyle={{
             stroke: 'blue',
             strokeWidth: 2,
             fill: 'none',
-            strokeDasharray: '5, 4'
+            strokeDasharray: '5, 4',
           }}
           showDots={false}
         />
       </g>
     </g>
-  )
-}
+  );
+};
 
-export default AxesAndData
+export default AxesAndData;

@@ -1,31 +1,31 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState } from 'react';
 import styles from './Dot.module.scss';
-import { Tooltip } from "../index";
-import { ITooltip } from "../Tooltip/Tooltip";
-import { PlaneData, DotSettings, DotType, TooltipDot } from "../../../../utils/graphs/types";
+import { Tooltip } from '../index';
+import { ITooltip } from '../Tooltip/Tooltip';
+import { PlaneData, DotSettings, DotType, TooltipDot } from '../../../../utils/graphs/types';
 import { useTheme } from '@mui/material/styles';
-import { graphSelectedDotColor, primaryColor } from "../../../../utils/ThemeConstants";
-import { createStraightPath } from "../../../../utils/graphs/createPath";
+import { graphSelectedDotColor, primaryColor } from '../../../../utils/ThemeConstants';
+import { createStraightPath } from '../../../../utils/graphs/createPath';
 
 /**
  * Interface for the Dot component props.
- * 
+ *
  * Note: All positioning is relative to the top-left corner of the SVG element.
  *       All units are in pixels unless otherwise stated.
  */
 interface IDot {
   /** The x-coordinate of the dot */
   x: number;
-  
+
   /** The y-coordinate of the dot */
   y: number;
-  
+
   /** Optional radius of the dot */
   r?: number;
-  
+
   /** Unique identifier for the dot */
   id: string;
-  
+
   /**
    * The type of the dot. Can be one of:
    * - 'h': Horizontal
@@ -35,46 +35,46 @@ interface IDot {
    * - string: Any custom type
    */
   type: DotType;
-  
+
   /** Text annotation data for the dot */
-  annotation: {id: string, label: string, comment: string};
-  
+  annotation: { id: string; label: string; comment: string };
+
   /** Optional tooltip data */
   tooltip?: TooltipDot;
-  
+
   /** Whether the dot is selected or not */
   selected?: boolean;
-  
+
   /** Whether to show text annotations */
   showText?: boolean;
-  
+
   /** The fill color for the dot */
   fillColor: string;
-  
+
   /** The stroke color for the dot */
   strokeColor: string;
-  
+
   /** Optional stroke width (default is 1) */
   strokeWidth?: number;
-  
+
   /**
    * Optional data for rendering the confidence circle.
    * PlaneData contains xyData for the coordinates and color for the circle.
    */
   confidenceCircle?: PlaneData;
-  
+
   /**
    * Optional data for rendering the cutoff circle.
    * PlaneData contains xyData for the coordinates and color for the circle.
    */
   cutoffCircle?: PlaneData;
-  
+
   /**
    * Optional data for rendering the great circle.
    * PlaneData contains xyData for the coordinates and color for the circle.
    */
   greatCircle?: PlaneData;
-  
+
   /**
    * General settings for the Dot component.
    * @param annotations Whether to show annotations.
@@ -91,25 +91,25 @@ interface IDot {
 
 /**
  * A Dot component for rendering various types of graph dots.
- * 
+ *
  * Note: All positioning is relative to the top-left corner of the SVG element.
  *       All units are in pixels unless otherwise stated.
- * 
+ *
  * @param props - The properties of the Dot.
- * 
+ *
  * @returns The rendered Dot component.
  */
 const Dot: FC<IDot> = ({
-  x, 
-  y, 
-  r, 
+  x,
+  y,
+  r,
   id,
   type,
   annotation,
   tooltip,
-  selected, 
-  showText, 
-  fillColor, 
+  selected,
+  showText,
+  fillColor,
   strokeColor,
   strokeWidth = 1,
   confidenceCircle,
@@ -117,7 +117,6 @@ const Dot: FC<IDot> = ({
   greatCircle,
   settings,
 }) => {
-
   const [tooltipData, setTooltipData] = useState<ITooltip>();
 
   // можно хранить в сторе позиции мыши для каждого графика, доставить их здесь
@@ -136,10 +135,10 @@ const Dot: FC<IDot> = ({
         isVisible: true,
         position: {
           left: dot.getBoundingClientRect().left,
-          top: dot.getBoundingClientRect().top
+          top: dot.getBoundingClientRect().top,
         },
       });
-    };
+    }
   };
 
   const handleOut = (id: string) => {
@@ -147,117 +146,113 @@ const Dot: FC<IDot> = ({
     if (dot) {
       setTooltipData(undefined);
       dot.style.setProperty('fill', fillColor);
-    };
+    }
   };
-  
+
   return (
     <g>
-      {
-        [
-          (settings.annotations) &&
-          <text 
-            id={`${id}__annotation`}
-            x={x}
-            y={y - 8}
-            fontSize={'0.8vw'}
-          >
-            {
-              [
-                settings.id && annotation.id,
-                // Пишем ':' перед label если есть id
-                settings.id && settings.label && ': ',
-                settings.label && annotation.label,
-                // Переходим на следующую строку прежде чем написать comment, 
-                // если перед ним есть id и/или label
-                settings.id || settings.label && settings.showComment && '\n ',
-                settings.showComment && `${annotation.comment}`
-              ]
-            }
-          </text>,
+      {settings.annotations && (
+        <text key={`${id}__annotation`} id={`${id}__annotation`} x={x} y={y - 8} fontSize={'0.8vw'}>
+          {[
+            settings.id && annotation.id,
+            // Пишем ':' перед label если есть id
+            settings.id && settings.label && ': ',
+            settings.label && annotation.label,
+            // Переходим на следующую строку прежде чем написать comment,
+            // если перед ним есть id и/или label
+            settings.id || (settings.label && settings.showComment && '\n '),
+            settings.showComment && `${annotation.comment}`,
+          ]}
+        </text>
+      )}
 
-          selected && 
-          <circle
-            cx={x} 
-            cy={y} 
-            r={r ? r + 2 : 6}
-            id={`${id}__selection`}
-            style={{
-              fill: graphSelectedDotColor(type), 
-              stroke: graphSelectedDotColor(type),
-              opacity: 0.5,
-            }} 
-          />,
+      {selected && (
+        <circle
+          key={`${id}__selection`}
+          cx={x}
+          cy={y}
+          r={r ? r + 2 : 6}
+          id={`${id}__selection`}
+          style={{
+            fill: graphSelectedDotColor(type),
+            stroke: graphSelectedDotColor(type),
+            opacity: 0.5,
+          }}
+        />
+      )}
 
-          type === 'mean' &&
-          <g>
-            <line x1={x - 8} x2={x + 8} y1={y} y2={y} stroke={graphSelectedDotColor(type)}/>
-            <line x1={x} x2={x} y1={y - 8} y2={y + 8} stroke={graphSelectedDotColor(type)}/>
-          </g>,
+      {type === 'mean' && (
+        <g key={`${id}__mean`}>
+          <line x1={x - 8} x2={x + 8} y1={y} y2={y} stroke={graphSelectedDotColor(type)} />
+          <line x1={x} x2={x} y1={y - 8} y2={y + 8} stroke={graphSelectedDotColor(type)} />
+        </g>
+      )}
 
-          confidenceCircle && settings.confidenceCircle &&
-          [
-            <path 
-              d={createStraightPath(confidenceCircle.xyDataSplitted.neg)}
-              fill='transparent'
-              stroke={confidenceCircle.color}
-              strokeLinejoin="round"
-              strokeLinecap="round"
-              fillOpacity="0" // it is what makes shape transparent
-            />,
-            <path 
-              d={createStraightPath(confidenceCircle.xyDataSplitted.pos)}
-              fill='transparent'
-              stroke={confidenceCircle.color}
-              strokeDasharray="4"
-              strokeLinejoin="round"
-              strokeLinecap="round"
-              fillOpacity="0"
-            />,
-          ],
-          cutoffCircle && 
-          [
-            <path 
-              d={createStraightPath(cutoffCircle.xyDataSplitted.neg)}
-              fill='transparent'
-              stroke={cutoffCircle.color}
-              strokeWidth={1.42}
-              strokeLinejoin="round"
-              strokeLinecap="round"
-              fillOpacity="0" // it is what makes shape transparent
-            />,
-            <path 
-              d={createStraightPath(cutoffCircle.xyDataSplitted.pos)}
-              fill='transparent'
-              stroke={cutoffCircle.color}
-              strokeWidth={1.42}
-              strokeDasharray="4"
-              strokeLinejoin="round"
-              strokeLinecap="round"
-              fillOpacity="0"
-            />,
-          ],
-          greatCircle && 
-          [
-            <path 
-              d={createStraightPath(greatCircle.xyDataSplitted.neg)}
-              fill='transparent'
-              stroke={greatCircle.color}
-              strokeLinejoin="round"
-              strokeLinecap="round"
-              fillOpacity="0"
-            />,
-            <path 
-              d={createStraightPath(greatCircle.xyDataSplitted.pos)}
-              fill='transparent'
-              stroke={greatCircle.color}
-              strokeDasharray="4"
-              strokeLinejoin="round"
-              strokeLinecap="round"
-              fillOpacity="0"
-            />
-          ]
-        ]
-      }
+      {confidenceCircle && settings.confidenceCircle && (
+        <g key={`${id}__confidence`}>
+          <path
+            d={createStraightPath(confidenceCircle.xyDataSplitted.neg)}
+            fill="transparent"
+            stroke={confidenceCircle.color}
+            strokeLinejoin="round"
+            strokeLinecap="round"
+            fillOpacity="0"
+          />
+          <path
+            d={createStraightPath(confidenceCircle.xyDataSplitted.pos)}
+            fill="transparent"
+            stroke={confidenceCircle.color}
+            strokeDasharray="4"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+            fillOpacity="0"
+          />
+        </g>
+      )}
+      {cutoffCircle && (
+        <g key={`${id}__cutoff`}>
+          <path
+            d={createStraightPath(cutoffCircle.xyDataSplitted.neg)}
+            fill="transparent"
+            stroke={cutoffCircle.color}
+            strokeWidth={1.42}
+            strokeLinejoin="round"
+            strokeLinecap="round"
+            fillOpacity="0"
+          />
+          <path
+            d={createStraightPath(cutoffCircle.xyDataSplitted.pos)}
+            fill="transparent"
+            stroke={cutoffCircle.color}
+            strokeWidth={1.42}
+            strokeDasharray="4"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+            fillOpacity="0"
+          />
+        </g>
+      )}
+      {greatCircle && (
+        <g key={`${id}__greatCircle`}>
+          <path
+            d={createStraightPath(greatCircle.xyDataSplitted.neg)}
+            fill="transparent"
+            stroke={greatCircle.color}
+            strokeLinejoin="round"
+            strokeLinecap="round"
+            fillOpacity="0"
+          />
+          <path
+            d={createStraightPath(greatCircle.xyDataSplitted.pos)}
+            fill="transparent"
+            stroke={greatCircle.color}
+            strokeDasharray="4"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+            fillOpacity="0"
+          />
+        </g>
+      )}
       {/* <circle 
         cx={x} 
         cy={y} 
@@ -269,32 +264,31 @@ const Dot: FC<IDot> = ({
         onMouseOver={() => handleOver(id)}
         onMouseOut={() => handleOut(id)}
       /> */}
-      <circle 
-        cx={x} 
-        cy={y} 
+      <circle
+        cx={x}
+        cy={y}
         r={r ? r : 4}
         id={id}
         style={{
-          fill: fillColor, 
+          fill: fillColor,
           stroke: strokeColor,
           strokeWidth: strokeWidth,
-          cursor: 'pointer'
+          cursor: 'pointer',
         }}
         onMouseOver={() => handleOver(id)}
         onMouseOut={() => handleOut(id)}
       />
-      {
-        tooltipData && settings.tooltips && 
-          <Tooltip
-            position={tooltipData.position} 
-            isVisible={tooltipData.isVisible} 
-            data={tooltip}
-            bgColor={type === 'mean' ? graphSelectedDotColor(type) : undefined}
-            textColor={type === 'mean' ? '#fff' : undefined}
-          /> 
-      }
+      {tooltipData && settings.tooltips && (
+        <Tooltip
+          position={tooltipData.position}
+          isVisible={tooltipData.isVisible}
+          data={tooltip}
+          bgColor={type === 'mean' ? graphSelectedDotColor(type) : undefined}
+          textColor={type === 'mean' ? '#fff' : undefined}
+        />
+      )}
     </g>
-  )
-}
+  );
+};
 
 export default Dot;

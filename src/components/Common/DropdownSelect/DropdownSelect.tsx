@@ -17,13 +17,13 @@ export interface IDropdownSelect {
   m?: string;
   showDelete?: boolean;
   onDelete?: (option: string) => void;
-};
+}
 
-const DropdownSelect: FC<IDropdownSelect> = ({ 
-  label, 
-  options, 
-  onOptionSelect, 
-  defaultValue, 
+const DropdownSelect: FC<IDropdownSelect> = ({
+  label,
+  options,
+  onOptionSelect,
+  defaultValue,
   minWidth,
   width,
   maxWidth,
@@ -31,7 +31,6 @@ const DropdownSelect: FC<IDropdownSelect> = ({
   showDelete,
   onDelete,
 }) => {
-
   const [selectedOption, setSelectedOption] = useState(defaultValue || '');
   const [open, setOpen] = React.useState(false);
 
@@ -46,16 +45,16 @@ const DropdownSelect: FC<IDropdownSelect> = ({
   };
 
   return (
-    <FormControl 
-      variant="standard" 
-      sx={{ 
-        minWidth: minWidth || '200px', 
+    <FormControl
+      variant="standard"
+      sx={{
+        minWidth: minWidth || '200px',
         width,
         maxWidth,
-        m: m || '0 0 0 16px'
+        m: m || '0 0 0 16px',
       }}
     >
-      <InputLabel>{ label }</InputLabel>
+      <InputLabel>{label}</InputLabel>
       <Select
         value={selectedOption}
         onChange={handleSelect}
@@ -66,29 +65,27 @@ const DropdownSelect: FC<IDropdownSelect> = ({
           margin: 0,
           '& .MuiListItem-root': {
             display: 'none',
-          }
+          },
         }}
       >
-        {
-          options.map((option, index) => (
-            <MenuItem 
-              value={option} 
-              key={index}
-            >
-              <ListItemText primary={option} disableTypography/>
-              {
-                showDelete && 
-                <ListItem
-                  secondaryAction={
-                    <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteClick(option)}>
-                      <DeleteForeverIcon />
-                    </IconButton>
-                  }
-                />
-              }
-            </MenuItem>
-          ))
-        }
+        {options.map((option, index) => (
+          <MenuItem value={option} key={index}>
+            <ListItemText primary={option} disableTypography />
+            {showDelete && (
+              <ListItem
+                secondaryAction={
+                  <IconButton
+                    edge="end"
+                    aria-label="delete"
+                    onClick={() => handleDeleteClick(option)}
+                  >
+                    <DeleteForeverIcon />
+                  </IconButton>
+                }
+              />
+            )}
+          </MenuItem>
+        ))}
       </Select>
     </FormControl>
   );

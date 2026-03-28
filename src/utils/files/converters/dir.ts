@@ -1,5 +1,8 @@
 import * as XLSX from 'xlsx';
-import { dataModel_interpretation_from_pca, dataModel_interpretation_from_dir } from '../fileConstants';
+import {
+  dataModel_interpretation_from_pca,
+  dataModel_interpretation_from_dir,
+} from '../fileConstants';
 import { download, getDirectionalData, s2ab } from '../fileManipulations';
 import { IDirData } from '../../GlobalTypes';
 import { getFileName, putParamToString } from '../subFunctions';
@@ -12,17 +15,22 @@ import { getFileName, putParamToString } from '../subFunctions';
  */
 export const toDIR = async (parsedData: IDirData): Promise<void> => {
   const data = parsedData;
-  const interpretationsWithFixedLabel = data.interpretations.map(
-    interpretation => ({...interpretation, label: interpretation.label.slice(0, 6)})
-  );
-  const dataWithFixedLabel: IDirData = {...data, interpretations: interpretationsWithFixedLabel};
+  const interpretationsWithFixedLabel = data.interpretations.map((interpretation) => ({
+    ...interpretation,
+    label: interpretation.label.slice(0, 6),
+  }));
+  const dataWithFixedLabel: IDirData = { ...data, interpretations: interpretationsWithFixedLabel };
 
-  const lines = dataWithFixedLabel.interpretations.map((interpretation: any) => {
-    const line = Object.keys(dataModel_interpretation_from_pca).reduce((line, param) => {
-      return line + putParamToString(interpretation[param], dataModel_interpretation_from_pca[param])
-    }, '');
-    return line;
-  }).join('\r\n');
+  const lines = dataWithFixedLabel.interpretations
+    .map((interpretation: any) => {
+      const line = Object.keys(dataModel_interpretation_from_pca).reduce((line, param) => {
+        return (
+          line + putParamToString(interpretation[param], dataModel_interpretation_from_pca[param])
+        );
+      }, '');
+      return line;
+    })
+    .join('\r\n');
 
   const res = lines + '\r\n';
   const filename = getFileName(data.name);
@@ -42,13 +50,15 @@ export const toPMM = async (parsedData: IDirData): Promise<void> => {
   const metaLines = `"file_comment"\n${data.name},"author","2021-11-27"\n`;
   const columnNames = 'ID,CODE,STEPRANGE,N,Dg,Ig,kg,a95g,Ds,Is,ks,a95s,comment\n';
 
-  const lines = data.interpretations.map((interpretation: any) => {
-    const line = Object.keys(dataModel_interpretation_from_dir).reduce((line, param, i) => {
-      if (i > 13) return line;
-      return line + `${interpretation[param]},`;
-    }, '');
-    return line;
-  }).join('\n');
+  const lines = data.interpretations
+    .map((interpretation: any) => {
+      const line = Object.keys(dataModel_interpretation_from_dir).reduce((line, param, i) => {
+        if (i > 13) return line;
+        return line + `${interpretation[param]},`;
+      }, '');
+      return line;
+    })
+    .join('\n');
 
   const res = metaLines + columnNames + lines;
   const filename = getFileName(data.name);
@@ -64,15 +74,18 @@ export const toPMM = async (parsedData: IDirData): Promise<void> => {
  */
 export const toCSV_DIR = async (parsedData: IDirData): Promise<void> => {
   const data = parsedData;
-  
-  const columNames = 'id,Code,StepRange,N,Dgeo,Igeo,Kgeo,MADgeo,Dstrat,Istrat,Kstrat,MADstrat,Comment\n';
 
-  const lines = data.interpretations.map((interpretation: any) => {
-    const line = Object.keys(dataModel_interpretation_from_dir).reduce((line, param) => {
-      return line + `${interpretation[param]},`
-    }, '')
-    return line.slice(0, -1);
-  }).join('\n');
+  const columNames =
+    'id,Code,StepRange,N,Dgeo,Igeo,Kgeo,MADgeo,Dstrat,Istrat,Kstrat,MADstrat,Comment\n';
+
+  const lines = data.interpretations
+    .map((interpretation: any) => {
+      const line = Object.keys(dataModel_interpretation_from_dir).reduce((line, param) => {
+        return line + `${interpretation[param]},`;
+      }, '');
+      return line.slice(0, -1);
+    })
+    .join('\n');
 
   const res = columNames + lines;
   const filename = getFileName(data.name);
@@ -89,7 +102,8 @@ export const toCSV_DIR = async (parsedData: IDirData): Promise<void> => {
 export const toXLSX_DIR = async (parsedData: IDirData): Promise<void> => {
   const data = parsedData;
 
-  const columnNames = 'id,Code,StepRange,N,Dgeo,Igeo,Kgeo,MADgeo,Dstrat,Istrat,Kstrat,MADstrat,Comment'.split(',');
+  const columnNames =
+    'id,Code,StepRange,N,Dgeo,Igeo,Kgeo,MADgeo,Dstrat,Istrat,Kstrat,MADstrat,Comment'.split(',');
 
   const lines = data.interpretations.map((interpretation: any) => {
     return Object.keys(dataModel_interpretation_from_dir).map((param) => {
@@ -102,11 +116,10 @@ export const toXLSX_DIR = async (parsedData: IDirData): Promise<void> => {
   lines.unshift(columnNames);
   const wsheet = XLSX.utils.aoa_to_sheet(lines);
   wbook.Sheets.data = wsheet;
-  const wbinary = XLSX.write(wbook, {bookType: 'xlsx', type: 'binary'});
+  const wbinary = XLSX.write(wbook, { bookType: 'xlsx', type: 'binary' });
 
   const res = s2ab(wbinary);
   const filename = getFileName(data.name);
 
-  download(res, `${filename}.xlsx`, "application/octet-stream");
+  download(res, `${filename}.xlsx`, 'application/octet-stream');
 };
-
