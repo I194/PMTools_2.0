@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import styles from './MetaDataChange.module.scss';
-import { Button, IconButton, TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import DirectionsIcon from '@mui/icons-material/Directions';
 import { IPmdData } from '../../../../utils/GlobalTypes';
 import { useAppDispatch, useAppSelector } from '../../../../services/store/hooks';
@@ -15,15 +15,41 @@ interface IMetaDataChange {
   onApply: () => void;
 }
 
+const formatNumericValue = (value: number): string => {
+  return parseFloat(value.toPrecision(12)).toString();
+};
+
+type MetadataProperty = 'a' | 'b' | 's' | 'd' | 'v';
+
 const MetaDataChange: FC<IMetaDataChange> = ({ oldMetadata, onApply }) => {
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation('translation');
   const { treatmentData } = useAppSelector((state) => state.parsedDataReducer);
-  const [newMetadata, setNewMetadata] = useState<IPmdData['metadata']>(oldMetadata);
+  const [inputValues, setInputValues] = useState<Record<MetadataProperty, string>>({
+    a: formatNumericValue(oldMetadata.a),
+    b: formatNumericValue(oldMetadata.b),
+    s: formatNumericValue(oldMetadata.s),
+    d: formatNumericValue(oldMetadata.d),
+    v: formatNumericValue(oldMetadata.v),
+  });
 
   if (!treatmentData) return null;
 
+  const parseInputValues = (): IPmdData['metadata'] | null => {
+    const parsed = { ...oldMetadata };
+    for (const key of ['a', 'b', 's', 'd', 'v'] as const) {
+      const raw = inputValues[key].replace(',', '.');
+      const num = Number(raw);
+      if (raw !== '' && isNaN(num)) return null;
+      parsed[key] = raw === '' ? 0 : num;
+    }
+    return parsed;
+  };
+
   const handleApply = () => {
+    const newMetadata = parseInputValues();
+    if (!newMetadata) return;
+
     const newTreatmentData = treatmentData.map((pmdData) => {
       if (pmdData.metadata.name === oldMetadata.name) {
         const updatedSteps = pmdData.steps.map((step) => {
@@ -67,22 +93,19 @@ const MetaDataChange: FC<IMetaDataChange> = ({ oldMetadata, onApply }) => {
     }
   };
 
-  const handleMetadataPropertyChange = (
+  const handleInputChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    property: 'a' | 'b' | 's' | 'd' | 'v',
+    property: MetadataProperty,
   ) => {
-    setNewMetadata({
-      ...newMetadata,
-      [property]: +event.target.value,
-    });
+    setInputValues((prev) => ({ ...prev, [property]: event.target.value }));
   };
 
   return (
     <div className={styles.metadataInputs}>
       <TextField
         label="Core Azimuth"
-        value={newMetadata.a}
-        onChange={(event) => handleMetadataPropertyChange(event, 'a')}
+        value={inputValues.a}
+        onChange={(event) => handleInputChange(event, 'a')}
         onKeyPress={handleEnterPress}
         variant="standard"
         size="small"
@@ -90,8 +113,8 @@ const MetaDataChange: FC<IMetaDataChange> = ({ oldMetadata, onApply }) => {
       />
       <TextField
         label="Core Dip"
-        value={newMetadata.b}
-        onChange={(event) => handleMetadataPropertyChange(event, 'b')}
+        value={inputValues.b}
+        onChange={(event) => handleInputChange(event, 'b')}
         onKeyPress={handleEnterPress}
         variant="standard"
         size="small"
@@ -99,8 +122,8 @@ const MetaDataChange: FC<IMetaDataChange> = ({ oldMetadata, onApply }) => {
       />
       <TextField
         label="Bedding Strike"
-        value={newMetadata.s}
-        onChange={(event) => handleMetadataPropertyChange(event, 's')}
+        value={inputValues.s}
+        onChange={(event) => handleInputChange(event, 's')}
         onKeyPress={handleEnterPress}
         variant="standard"
         size="small"
@@ -108,8 +131,8 @@ const MetaDataChange: FC<IMetaDataChange> = ({ oldMetadata, onApply }) => {
       />
       <TextField
         label="Bedding Dip"
-        value={newMetadata.d}
-        onChange={(event) => handleMetadataPropertyChange(event, 'd')}
+        value={inputValues.d}
+        onChange={(event) => handleInputChange(event, 'd')}
         onKeyPress={handleEnterPress}
         variant="standard"
         size="small"
@@ -117,8 +140,8 @@ const MetaDataChange: FC<IMetaDataChange> = ({ oldMetadata, onApply }) => {
       />
       <TextField
         label="Volume"
-        value={newMetadata.v}
-        onChange={(event) => handleMetadataPropertyChange(event, 'v')}
+        value={inputValues.v}
+        onChange={(event) => handleInputChange(event, 'v')}
         onKeyPress={handleEnterPress}
         variant="standard"
         size="small"
