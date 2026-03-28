@@ -455,7 +455,7 @@
     "someRowsInvalid": "Some rows contain invalid data",
     "allRowsInvalid": "All rows contain invalid data",
     "summary": "Found {{invalid}} invalid row(s) out of {{total}} total. {{valid}} valid row(s) can be loaded.",
-    "cancel": "Cancel upload",
+    "cancel": "Cancel import",
     "loadAnyway": "Load {{count}} valid row(s)",
     "noValidRows": "No valid rows to load",
     "table": {

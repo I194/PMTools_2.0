@@ -15,6 +15,7 @@ import GraphSelector from '../../AppLogic/GraphsSelector/GraphsSelector';
 import { useMediaQuery } from 'react-responsive';
 import { useTranslation } from 'react-i18next';
 import { filesToData } from '../../../services/axios/filesAndData';
+import ValidationModal from '../../Common/Modal/ValidationModal/ValidationModal';
 
 const AppLayout: FC<RouteProps> = () => {
   const dispatch = useAppDispatch();
@@ -43,6 +44,7 @@ const AppLayout: FC<RouteProps> = () => {
 
   return (
     <>
+      <ValidationModal />
       <div {...rootProps}>
         {isDragActive && (
           <div className={styles.dropFiles} style={{ color: textColor(theme.palette.mode) }}>

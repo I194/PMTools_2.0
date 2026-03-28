@@ -1,13 +1,19 @@
 import PMFile from './pmFiles';
 import { exampleDir, exampleSitesLatLon } from './fileConstants';
 import { IDirData, IPmdData, ISitesData } from '../GlobalTypes';
+import { ParseResult } from './validation';
+
+const wrapPlain = <T>(data: T): ParseResult<T> => ({
+  data,
+  validation: { invalidRows: [] },
+});
 
 export const getDirectionalData = (file: File, as: string) => {
   const ext = /[.]/.exec(file.name)
     ? /[^.]+$/.exec(file.name)?.toString().toLowerCase()
     : undefined;
 
-  return new Promise<IPmdData | IDirData>((resolve, reject) => {
+  return new Promise<ParseResult<IPmdData | IDirData>>((resolve, reject) => {
     const reader = new FileReader();
 
     reader.onload = () => {
@@ -35,15 +41,15 @@ export const getDirectionalData = (file: File, as: string) => {
           case 'csv': {
             if (as === 'pmd') return pmFile.parseCSV_PMD();
             if (as === 'dir') return pmFile.parseCSV_DIR();
-            return exampleDir;
+            return wrapPlain(exampleDir);
           }
           case 'xlsx': {
             if (as === 'pmd') return pmFile.parseXLSX_PMD();
             if (as === 'dir') return pmFile.parseXLSX_DIR();
-            return exampleDir;
+            return wrapPlain(exampleDir);
           }
           default:
-            return exampleDir;
+            return wrapPlain(exampleDir);
         }
       };
 

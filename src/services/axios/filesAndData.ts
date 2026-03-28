@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getDirectionalData, getSitesLatLonData } from '../../utils/files/fileManipulations';
+import { FileValidationIssue } from '../../utils/files/validation';
 
 type TFilesToData = {
   files: File[];
@@ -36,7 +37,29 @@ export const filesToData = createAsyncThunk(
         }
       }
 
-      return { format, data: fulfilled };
+      // Separate data from validation info
+      const data = fulfilled.map((r) => r.data);
+      const validationIssues: FileValidationIssue[] = [];
+
+      for (const result of fulfilled) {
+        if (result.validation.invalidRows.length > 0) {
+          const fileName = result.validation.invalidRows[0].fileName;
+          const pmdData = result.data as any;
+          const totalRows =
+            (pmdData.steps?.length ?? pmdData.interpretations?.length ?? 0) +
+            result.validation.invalidRows.length;
+          const validRows = totalRows - result.validation.invalidRows.length;
+
+          validationIssues.push({
+            fileName,
+            invalidRows: result.validation.invalidRows,
+            totalRows,
+            validRows,
+          });
+        }
+      }
+
+      return { format, data, validationIssues };
     } catch (error: any) {
       return rejectWithValue(error);
     }
