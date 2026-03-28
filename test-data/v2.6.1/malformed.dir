@@ -1,0 +1,3 @@
+test01 GC     T100-T600   7 abc.d  ef.g 350.0  25.3   2.10 250.0 PCA line
+test02 GC     T200-T550   5 xyz.a -bc.d 157.2 -30.8   3.40 180.0 PCA line
+test03 GC     T100-T500   6 foo.b  ba.r 351.8  23.7   1.80 310.0 PCA line

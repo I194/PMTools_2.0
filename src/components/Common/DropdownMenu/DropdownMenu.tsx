@@ -52,7 +52,11 @@ const DropdownMenu: FC<IDropdownMenu> = ({ label, options, onOptionSelect }) => 
   }, [menuOpen]);
 
   const createMenuItem = (option: string) => {
-    return <MenuItem onClick={handleSelect}>{option}</MenuItem>;
+    return (
+      <MenuItem key={option} onClick={handleSelect}>
+        {option}
+      </MenuItem>
+    );
   };
 
   return (

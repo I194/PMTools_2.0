@@ -50,25 +50,17 @@ const ContextMenu: FC<IContextMenu> = ({ items, children }) => {
           contextMenu !== null ? { top: contextMenu.mouseY, left: contextMenu.mouseX } : undefined
         }
       >
-        {items.map((item) => {
-          return (
-            <>
-              <MenuItem
-                onClick={() => handleClick(item)}
-                sx={{ padding: '4px 8px' }}
-                key={item.label}
-              >
-                {item.state ? (
-                  <CheckOutlinedIcon sx={{ mr: '8px' }} />
-                ) : (
-                  <CloseOutlinedIcon sx={{ mr: '8px' }} />
-                )}
-                {item.label}
-              </MenuItem>
-              {item.divider && <Divider />}
-            </>
-          );
-        })}
+        {items.flatMap((item) => [
+          <MenuItem key={item.label} onClick={() => handleClick(item)} sx={{ padding: '4px 8px' }}>
+            {item.state ? (
+              <CheckOutlinedIcon sx={{ mr: '8px' }} />
+            ) : (
+              <CloseOutlinedIcon sx={{ mr: '8px' }} />
+            )}
+            {item.label}
+          </MenuItem>,
+          ...(item.divider ? [<Divider key={`${item.label}-divider`} />] : []),
+        ])}
       </Menu>
     </div>
   );

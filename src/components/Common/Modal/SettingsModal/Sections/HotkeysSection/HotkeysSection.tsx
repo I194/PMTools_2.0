@@ -147,6 +147,7 @@ const HotkeysSection = () => {
                       userSelect: 'none',
                     }}
                     contentEditable={!hotkey?.disabled}
+                    suppressContentEditableWarning
                     onKeyDown={(event) => handleHotkeyChange(event, hotkey.label)}
                     p="0 6px"
                   >

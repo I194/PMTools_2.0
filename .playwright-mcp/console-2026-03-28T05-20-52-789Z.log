@@ -1,0 +1,19 @@
+[     269ms] [ERROR] Warning: Each child in a list should have a unique "key" prop.%s%s See https://reactjs.org/link/warning-keys for more information.%s 
+
+Check the render method of `PrettyTabs`.  
+    at div
+    at PrettyTabs (http://localhost:3000/static/js/bundle.js:23947:5)
+    at div
+    at Description (http://localhost:3000/static/js/bundle.js:24086:81)
+    at MainPage (http://localhost:3000/static/js/bundle.js:27675:7)
+    at Outlet (http://localhost:3000/static/js/bundle.js:169066:26)
+    at div
+    at MainPageLayout (http://localhost:3000/static/js/bundle.js:23609:81)
+    at Routes (http://localhost:3000/static/js/bundle.js:169158:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71680:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:72101:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:52:89)
+    at Router (http://localhost:3000/static/js/bundle.js:169091:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168571:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164851:20) @ http://localhost:3000/static/js/bundle.js:173348

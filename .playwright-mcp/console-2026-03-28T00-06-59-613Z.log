@@ -1,0 +1,21 @@
+[     167ms] [ERROR] Warning: Each child in a list should have a unique "key" prop.%s%s See https://reactjs.org/link/warning-keys for more information.%s 
+
+Check the render method of `Carousel`.  
+    at div
+    at Carousel (http://localhost:3000/static/js/bundle.js:16256:5)
+    at div
+    at div
+    at History (http://localhost:3000/static/js/bundle.js:26282:5)
+    at div
+    at AuthorsAndHistory (http://localhost:3000/static/js/bundle.js:26152:7)
+    at Outlet (http://localhost:3000/static/js/bundle.js:168708:26)
+    at div
+    at MainPageLayout (http://localhost:3000/static/js/bundle.js:23432:81)
+    at Routes (http://localhost:3000/static/js/bundle.js:168800:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71386:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71807:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:50:89)
+    at Router (http://localhost:3000/static/js/bundle.js:168733:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168213:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164493:20) @ http://localhost:3000/static/js/bundle.js:172990

@@ -1,0 +1,526 @@
+[    8402ms] [ERROR] A non-serializable value was detected in an action, in the path: `meta.arg.files.0`. Value: File 
+Take a look at the logic that dispatched this action:  {type: filesAndData/filesToData/pending, payload: undefined, meta: Object} 
+(See https://redux.js.org/faq/actions#why-should-type-be-a-string-or-at-least-serializable-why-should-my-action-types-be-constants) 
+(To allow non-serializable values see: https://redux-toolkit.js.org/usage/usage-guide#working-with-non-serializable-data) @ http://localhost:3000/static/js/bundle.js:108697
+[    8415ms] [ERROR] A non-serializable value was detected in an action, in the path: `meta.arg.files.0`. Value: File 
+Take a look at the logic that dispatched this action:  {type: filesAndData/filesToData/fulfilled, payload: Object, meta: Object} 
+(See https://redux.js.org/faq/actions#why-should-type-be-a-string-or-at-least-serializable-why-should-my-action-types-be-constants) 
+(To allow non-serializable values see: https://redux-toolkit.js.org/usage/usage-guide#working-with-non-serializable-data) @ http://localhost:3000/static/js/bundle.js:108697
+[    8426ms] [ERROR] Warning: Each child in a list should have a unique "key" prop.%s%s See https://reactjs.org/link/warning-keys for more information.%s 
+
+Check the render method of `ToolsDIR`.  
+    at Tooltip (http://localhost:3000/static/js/bundle.js:64701:83)
+    at ToolsDIR (http://localhost:3000/static/js/bundle.js:11726:5)
+    at div
+    at DIRPage (http://localhost:3000/static/js/bundle.js:26853:7)
+    at ErrorBoundary (http://localhost:3000/static/js/bundle.js:18758:5)
+    at Outlet (http://localhost:3000/static/js/bundle.js:169043:26)
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23368:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:169135:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71657:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:72078:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:52:89)
+    at Router (http://localhost:3000/static/js/bundle.js:169068:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168548:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164828:20) @ http://localhost:3000/static/js/bundle.js:173325
+[    8436ms] [ERROR] Warning: React has detected a change in the order of Hooks called by %s. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://reactjs.org/link/rules-of-hooks
+
+   Previous render            Next render
+   ------------------------------------------------------
+%s   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+%s DataTableDIR 1. useContext                 useContext
+2. useDebugValue              useDebugValue
+3. useContext                 useContext
+4. useContext                 useContext
+5. useReducer                 useReducer
+6. useMemo                    useMemo
+7. useRef                     useRef
+8. useRef                     useRef
+9. useRef                     useRef
+10. useRef                    useRef
+11. useLayoutEffect           useLayoutEffect
+12. useLayoutEffect           useLayoutEffect
+13. useDebugValue             useDebugValue
+14. useState                  useState
+15. useState                  useState
+16. useEffect                 useEffect
+17. undefined                 useContext
+ 
+    at DataTableDIR (http://localhost:3000/static/js/bundle.js:4751:5)
+    at div
+    at Tables (http://localhost:3000/static/js/bundle.js:27568:5)
+    at div
+    at DIRPage (http://localhost:3000/static/js/bundle.js:26853:7)
+    at ErrorBoundary (http://localhost:3000/static/js/bundle.js:18758:5)
+    at Outlet (http://localhost:3000/static/js/bundle.js:169043:26)
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23368:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:169135:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71657:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:72078:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:52:89)
+    at Router (http://localhost:3000/static/js/bundle.js:169068:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168548:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164828:20) @ http://localhost:3000/static/js/bundle.js:134200
+[    8451ms] [ERROR] Warning: Each child in a list should have a unique "key" prop.%s%s See https://reactjs.org/link/warning-keys for more information.%s 
+
+Check the render method of `Dot`.  
+    at text
+    at Dot (http://localhost:3000/static/js/bundle.js:20286:5)
+    at g
+    at g
+    at Data (http://localhost:3000/static/js/bundle.js:20112:5)
+    at g
+    at g
+    at AxesAndData (http://localhost:3000/static/js/bundle.js:2293:5)
+    at g
+    at svg
+    at div
+    at div
+    at TransformComponent (http://localhost:3000/static/js/bundle.js:173159:21)
+    at TransformContext (http://localhost:3000/static/js/bundle.js:172733:43)
+    at http://localhost:3000/static/js/bundle.js:173110:59
+    at div
+    at ContextMenu (http://localhost:3000/static/js/bundle.js:19866:5)
+    at SelectableGraph (http://localhost:3000/static/js/bundle.js:20808:5)
+    at StereoGraphDIR (http://localhost:3000/static/js/bundle.js:2586:5)
+    at div
+    at div
+    at GraphsSkeleton (http://localhost:3000/static/js/bundle.js:27266:5)
+    at Graphs (http://localhost:3000/static/js/bundle.js:27042:5)
+    at div
+    at DIRPage (http://localhost:3000/static/js/bundle.js:26853:7)
+    at ErrorBoundary (http://localhost:3000/static/js/bundle.js:18758:5)
+    at Outlet (http://localhost:3000/static/js/bundle.js:169043:26)
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23368:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:169135:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71657:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:72078:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:52:89)
+    at Router (http://localhost:3000/static/js/bundle.js:169068:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168548:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164828:20) @ http://localhost:3000/static/js/bundle.js:173325
+[    8452ms] [ERROR] Warning: Received NaN for the `%s` attribute. If this is expected, cast the value to a string.%s x 
+    at text
+    at g
+    at Dot (http://localhost:3000/static/js/bundle.js:20286:5)
+    at g
+    at g
+    at Data (http://localhost:3000/static/js/bundle.js:20112:5)
+    at g
+    at g
+    at AxesAndData (http://localhost:3000/static/js/bundle.js:2293:5)
+    at g
+    at svg
+    at div
+    at div
+    at TransformComponent (http://localhost:3000/static/js/bundle.js:173159:21)
+    at TransformContext (http://localhost:3000/static/js/bundle.js:172733:43)
+    at http://localhost:3000/static/js/bundle.js:173110:59
+    at div
+    at ContextMenu (http://localhost:3000/static/js/bundle.js:19866:5)
+    at SelectableGraph (http://localhost:3000/static/js/bundle.js:20808:5)
+    at StereoGraphDIR (http://localhost:3000/static/js/bundle.js:2586:5)
+    at div
+    at div
+    at GraphsSkeleton (http://localhost:3000/static/js/bundle.js:27266:5)
+    at Graphs (http://localhost:3000/static/js/bundle.js:27042:5)
+    at div
+    at DIRPage (http://localhost:3000/static/js/bundle.js:26853:7)
+    at ErrorBoundary (http://localhost:3000/static/js/bundle.js:18758:5)
+    at Outlet (http://localhost:3000/static/js/bundle.js:169043:26)
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23368:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:169135:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71657:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:72078:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:52:89)
+    at Router (http://localhost:3000/static/js/bundle.js:169068:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168548:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164828:20) @ http://localhost:3000/static/js/bundle.js:134200
+[    8452ms] [ERROR] Warning: Received NaN for the `%s` attribute. If this is expected, cast the value to a string.%s y 
+    at text
+    at g
+    at Dot (http://localhost:3000/static/js/bundle.js:20286:5)
+    at g
+    at g
+    at Data (http://localhost:3000/static/js/bundle.js:20112:5)
+    at g
+    at g
+    at AxesAndData (http://localhost:3000/static/js/bundle.js:2293:5)
+    at g
+    at svg
+    at div
+    at div
+    at TransformComponent (http://localhost:3000/static/js/bundle.js:173159:21)
+    at TransformContext (http://localhost:3000/static/js/bundle.js:172733:43)
+    at http://localhost:3000/static/js/bundle.js:173110:59
+    at div
+    at ContextMenu (http://localhost:3000/static/js/bundle.js:19866:5)
+    at SelectableGraph (http://localhost:3000/static/js/bundle.js:20808:5)
+    at StereoGraphDIR (http://localhost:3000/static/js/bundle.js:2586:5)
+    at div
+    at div
+    at GraphsSkeleton (http://localhost:3000/static/js/bundle.js:27266:5)
+    at Graphs (http://localhost:3000/static/js/bundle.js:27042:5)
+    at div
+    at DIRPage (http://localhost:3000/static/js/bundle.js:26853:7)
+    at ErrorBoundary (http://localhost:3000/static/js/bundle.js:18758:5)
+    at Outlet (http://localhost:3000/static/js/bundle.js:169043:26)
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23368:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:169135:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71657:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:72078:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:52:89)
+    at Router (http://localhost:3000/static/js/bundle.js:169068:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168548:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164828:20) @ http://localhost:3000/static/js/bundle.js:134200
+[    8452ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8452ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8453ms] [ERROR] Warning: Received NaN for the `%s` attribute. If this is expected, cast the value to a string.%s cx 
+    at circle
+    at g
+    at Dot (http://localhost:3000/static/js/bundle.js:20286:5)
+    at g
+    at g
+    at Data (http://localhost:3000/static/js/bundle.js:20112:5)
+    at g
+    at g
+    at AxesAndData (http://localhost:3000/static/js/bundle.js:2293:5)
+    at g
+    at svg
+    at div
+    at div
+    at TransformComponent (http://localhost:3000/static/js/bundle.js:173159:21)
+    at TransformContext (http://localhost:3000/static/js/bundle.js:172733:43)
+    at http://localhost:3000/static/js/bundle.js:173110:59
+    at div
+    at ContextMenu (http://localhost:3000/static/js/bundle.js:19866:5)
+    at SelectableGraph (http://localhost:3000/static/js/bundle.js:20808:5)
+    at StereoGraphDIR (http://localhost:3000/static/js/bundle.js:2586:5)
+    at div
+    at div
+    at GraphsSkeleton (http://localhost:3000/static/js/bundle.js:27266:5)
+    at Graphs (http://localhost:3000/static/js/bundle.js:27042:5)
+    at div
+    at DIRPage (http://localhost:3000/static/js/bundle.js:26853:7)
+    at ErrorBoundary (http://localhost:3000/static/js/bundle.js:18758:5)
+    at Outlet (http://localhost:3000/static/js/bundle.js:169043:26)
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23368:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:169135:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71657:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:72078:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:52:89)
+    at Router (http://localhost:3000/static/js/bundle.js:169068:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168548:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164828:20) @ http://localhost:3000/static/js/bundle.js:134200
+[    8453ms] [ERROR] Warning: Received NaN for the `%s` attribute. If this is expected, cast the value to a string.%s cy 
+    at circle
+    at g
+    at Dot (http://localhost:3000/static/js/bundle.js:20286:5)
+    at g
+    at g
+    at Data (http://localhost:3000/static/js/bundle.js:20112:5)
+    at g
+    at g
+    at AxesAndData (http://localhost:3000/static/js/bundle.js:2293:5)
+    at g
+    at svg
+    at div
+    at div
+    at TransformComponent (http://localhost:3000/static/js/bundle.js:173159:21)
+    at TransformContext (http://localhost:3000/static/js/bundle.js:172733:43)
+    at http://localhost:3000/static/js/bundle.js:173110:59
+    at div
+    at ContextMenu (http://localhost:3000/static/js/bundle.js:19866:5)
+    at SelectableGraph (http://localhost:3000/static/js/bundle.js:20808:5)
+    at StereoGraphDIR (http://localhost:3000/static/js/bundle.js:2586:5)
+    at div
+    at div
+    at GraphsSkeleton (http://localhost:3000/static/js/bundle.js:27266:5)
+    at Graphs (http://localhost:3000/static/js/bundle.js:27042:5)
+    at div
+    at DIRPage (http://localhost:3000/static/js/bundle.js:26853:7)
+    at ErrorBoundary (http://localhost:3000/static/js/bundle.js:18758:5)
+    at Outlet (http://localhost:3000/static/js/bundle.js:169043:26)
+    at div
+    at div
+    at AppLayout (http://localhost:3000/static/js/bundle.js:23368:89)
+    at Routes (http://localhost:3000/static/js/bundle.js:169135:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:71657:5)
+    at ThemeProvider (http://localhost:3000/static/js/bundle.js:72078:5)
+    at Suspense
+    at App (http://localhost:3000/static/js/bundle.js:52:89)
+    at Router (http://localhost:3000/static/js/bundle.js:169068:15)
+    at BrowserRouter (http://localhost:3000/static/js/bundle.js:168548:5)
+    at Provider (http://localhost:3000/static/js/bundle.js:164828:20) @ http://localhost:3000/static/js/bundle.js:134200
+[    8453ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8453ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8453ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8453ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8453ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8453ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8453ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8453ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8453ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8453ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8453ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8453ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8453ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8453ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8453ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8453ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8454ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8454ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8454ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8454ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8454ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8454ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8454ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8454ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8454ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8454ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8454ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8454ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8454ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8454ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8460ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8460ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8460ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8461ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8461ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8461ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8461ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8461ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8461ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8461ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8461ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8461ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8461ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8461ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8461ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8461ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8461ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8461ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8461ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8461ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8461ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8461ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8461ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8462ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8462ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8462ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8462ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8462ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8462ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8462ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8462ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8462ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8509ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8509ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8509ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8509ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8509ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8509ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8509ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8509ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8509ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8509ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8509ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8510ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8510ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8510ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8510ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8510ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8510ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8510ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8510ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8510ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8510ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8510ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8510ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8510ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8510ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8510ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8510ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8510ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8510ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8510ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8510ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8510ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8510ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8510ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8511ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8511ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8511ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8511ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8511ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8511ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8511ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8511ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8511ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8511ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8511ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8511ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8511ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8511ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8511ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8511ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8511ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8511ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8511ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8511ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8511ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8511ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8511ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8511ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8511ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8512ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8512ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8512ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8512ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8512ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8539ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8539ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8539ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8539ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8539ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8539ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8539ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8539ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8539ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8539ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8539ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8539ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8539ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8539ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8539ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8539ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8539ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8539ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8539ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8539ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8540ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8540ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8540ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8540ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8540ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8540ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8540ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8540ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8540ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8540ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8540ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8540ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8540ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8540ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8540ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8540ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8540ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8540ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8540ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8540ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8540ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8540ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8540ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8540ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8541ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8541ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8541ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8541ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8541ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8541ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8541ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8541ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8541ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8541ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8541ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8541ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8541ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8541ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8541ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8541ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8541ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8541ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8541ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8541ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8556ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8556ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8557ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8557ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8557ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8557ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8557ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8557ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8557ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8557ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8557ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8557ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8557ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8557ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8557ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8557ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8557ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8557ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8557ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8557ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8557ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8557ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8557ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8557ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8557ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8557ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8558ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8558ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8558ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8558ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8558ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8558ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8558ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8558ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8558ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8558ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8558ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8558ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8558ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8558ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8558ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8558ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8558ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8558ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8558ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8558ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8558ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8558ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8558ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8558ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8559ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8559ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8559ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8559ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8559ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8559ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8559ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8559ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8559ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8559ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8559ms] [ERROR] Error: <text> attribute x: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8559ms] [ERROR] Error: <text> attribute y: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8559ms] [ERROR] Error: <circle> attribute cx: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761
+[    8559ms] [ERROR] Error: <circle> attribute cy: Expected length, "NaN". @ http://localhost:3000/static/js/bundle.js:134761

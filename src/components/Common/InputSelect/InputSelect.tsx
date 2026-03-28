@@ -29,12 +29,12 @@ const InputSelect: FC<IInputSelect> = ({
     disabled: boolean,
     index: number,
   ) => (
-    <>
+    <React.Fragment key={index}>
       <Divider sx={{ height: '80%', mr: 0.5, ml: 0.5 }} orientation="vertical" />
       <IconButton onClick={onClick} color="primary" disabled={disabled} sx={{ p: '10px' }}>
         {icon}
       </IconButton>
-    </>
+    </React.Fragment>
   );
 
   return (
