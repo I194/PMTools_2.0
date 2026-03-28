@@ -19,18 +19,20 @@ export const filesToData = createAsyncThunk(
         .map((r) => r.value);
       const rejected = results.filter((r): r is PromiseRejectedResult => r.status === 'rejected');
 
-      // Optionally, inform about skipped files without failing the whole batch
       if (rejected.length > 0) {
         try {
-          const skippedNames = results
+          const skippedInfo = results
             .map((r, i) => ({ r, i }))
             .filter(({ r }) => r.status === 'rejected')
-            .map(({ i }) => files[i]?.name)
-            .filter(Boolean) as string[];
-          if (skippedNames.length) {
-            // Non-blocking user notification; keep minimal to avoid UI dependency
+            .map(({ r, i }) => {
+              const name = files[i]?.name ?? 'unknown';
+              const reason = (r as PromiseRejectedResult).reason;
+              const message = reason instanceof Error ? reason.message : String(reason);
+              return `${name}: ${message}`;
+            });
+          if (skippedInfo.length) {
             // eslint-disable-next-line no-alert
-            alert(`Some files were skipped:\n${skippedNames.join('\n')}`);
+            alert(`Some files were skipped:\n\n${skippedInfo.join('\n')}`);
           }
         } catch (_) {
           // ignore any alert errors (e.g., server-side)
