@@ -151,64 +151,66 @@ const Dot: FC<IDot> = ({
 
   return (
     <g>
-      {[
-        settings.annotations && (
-          <text id={`${id}__annotation`} x={x} y={y - 8} fontSize={'0.8vw'}>
-            {[
-              settings.id && annotation.id,
-              // Пишем ':' перед label если есть id
-              settings.id && settings.label && ': ',
-              settings.label && annotation.label,
-              // Переходим на следующую строку прежде чем написать comment,
-              // если перед ним есть id и/или label
-              settings.id || (settings.label && settings.showComment && '\n '),
-              settings.showComment && `${annotation.comment}`,
-            ]}
-          </text>
-        ),
+      {settings.annotations && (
+        <text key={`${id}__annotation`} id={`${id}__annotation`} x={x} y={y - 8} fontSize={'0.8vw'}>
+          {[
+            settings.id && annotation.id,
+            // Пишем ':' перед label если есть id
+            settings.id && settings.label && ': ',
+            settings.label && annotation.label,
+            // Переходим на следующую строку прежде чем написать comment,
+            // если перед ним есть id и/или label
+            settings.id || (settings.label && settings.showComment && '\n '),
+            settings.showComment && `${annotation.comment}`,
+          ]}
+        </text>
+      )}
 
-        selected && (
-          <circle
-            cx={x}
-            cy={y}
-            r={r ? r + 2 : 6}
-            id={`${id}__selection`}
-            style={{
-              fill: graphSelectedDotColor(type),
-              stroke: graphSelectedDotColor(type),
-              opacity: 0.5,
-            }}
+      {selected && (
+        <circle
+          key={`${id}__selection`}
+          cx={x}
+          cy={y}
+          r={r ? r + 2 : 6}
+          id={`${id}__selection`}
+          style={{
+            fill: graphSelectedDotColor(type),
+            stroke: graphSelectedDotColor(type),
+            opacity: 0.5,
+          }}
+        />
+      )}
+
+      {type === 'mean' && (
+        <g key={`${id}__mean`}>
+          <line x1={x - 8} x2={x + 8} y1={y} y2={y} stroke={graphSelectedDotColor(type)} />
+          <line x1={x} x2={x} y1={y - 8} y2={y + 8} stroke={graphSelectedDotColor(type)} />
+        </g>
+      )}
+
+      {confidenceCircle && settings.confidenceCircle && (
+        <g key={`${id}__confidence`}>
+          <path
+            d={createStraightPath(confidenceCircle.xyDataSplitted.neg)}
+            fill="transparent"
+            stroke={confidenceCircle.color}
+            strokeLinejoin="round"
+            strokeLinecap="round"
+            fillOpacity="0"
           />
-        ),
-
-        type === 'mean' && (
-          <g>
-            <line x1={x - 8} x2={x + 8} y1={y} y2={y} stroke={graphSelectedDotColor(type)} />
-            <line x1={x} x2={x} y1={y - 8} y2={y + 8} stroke={graphSelectedDotColor(type)} />
-          </g>
-        ),
-
-        confidenceCircle &&
-          settings.confidenceCircle && [
-            <path
-              d={createStraightPath(confidenceCircle.xyDataSplitted.neg)}
-              fill="transparent"
-              stroke={confidenceCircle.color}
-              strokeLinejoin="round"
-              strokeLinecap="round"
-              fillOpacity="0" // it is what makes shape transparent
-            />,
-            <path
-              d={createStraightPath(confidenceCircle.xyDataSplitted.pos)}
-              fill="transparent"
-              stroke={confidenceCircle.color}
-              strokeDasharray="4"
-              strokeLinejoin="round"
-              strokeLinecap="round"
-              fillOpacity="0"
-            />,
-          ],
-        cutoffCircle && [
+          <path
+            d={createStraightPath(confidenceCircle.xyDataSplitted.pos)}
+            fill="transparent"
+            stroke={confidenceCircle.color}
+            strokeDasharray="4"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+            fillOpacity="0"
+          />
+        </g>
+      )}
+      {cutoffCircle && (
+        <g key={`${id}__cutoff`}>
           <path
             d={createStraightPath(cutoffCircle.xyDataSplitted.neg)}
             fill="transparent"
@@ -216,8 +218,8 @@ const Dot: FC<IDot> = ({
             strokeWidth={1.42}
             strokeLinejoin="round"
             strokeLinecap="round"
-            fillOpacity="0" // it is what makes shape transparent
-          />,
+            fillOpacity="0"
+          />
           <path
             d={createStraightPath(cutoffCircle.xyDataSplitted.pos)}
             fill="transparent"
@@ -227,9 +229,11 @@ const Dot: FC<IDot> = ({
             strokeLinejoin="round"
             strokeLinecap="round"
             fillOpacity="0"
-          />,
-        ],
-        greatCircle && [
+          />
+        </g>
+      )}
+      {greatCircle && (
+        <g key={`${id}__greatCircle`}>
           <path
             d={createStraightPath(greatCircle.xyDataSplitted.neg)}
             fill="transparent"
@@ -237,7 +241,7 @@ const Dot: FC<IDot> = ({
             strokeLinejoin="round"
             strokeLinecap="round"
             fillOpacity="0"
-          />,
+          />
           <path
             d={createStraightPath(greatCircle.xyDataSplitted.pos)}
             fill="transparent"
@@ -246,9 +250,9 @@ const Dot: FC<IDot> = ({
             strokeLinejoin="round"
             strokeLinecap="round"
             fillOpacity="0"
-          />,
-        ],
-      ]}
+          />
+        </g>
+      )}
       {/* <circle 
         cx={x} 
         cy={y} 

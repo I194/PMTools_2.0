@@ -180,6 +180,7 @@ const ToolsPMD: FC<IToolsPMD> = ({ data }) => {
       <ButtonGroupWithLabel label={t('pcaPage.tools.coordinateSystem.title')}>
         {availableReferences.map((availRef) => (
           <Tooltip
+            key={availRef}
             title={<Typography variant="body1">{coordinateSystemHotkey.key}</Typography>}
             enterDelay={250}
             arrow
