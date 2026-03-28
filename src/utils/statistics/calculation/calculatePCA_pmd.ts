@@ -60,13 +60,15 @@ const calculatePCA_pmd = (
   if (type === 'directions') {
     // Calculation of maximum angle of deviation
     const s1 = Math.sqrt(eig.tau[0]);
-    MAD = Math.atan(Math.sqrt(eig.tau[1] + eig.tau[2]) / s1) * Coordinates.RADIANS || 0;
+    const madValue = Math.atan(Math.sqrt(eig.tau[1] + eig.tau[2]) / s1) * Coordinates.RADIANS;
+    MAD = isFinite(madValue) ? madValue : 0;
   }
 
   if (type === 'planes') {
     // Calculation of maximum angle of deviation
     const s1 = Math.sqrt(eig.tau[2] / eig.tau[1] + eig.tau[2] / eig.tau[0]);
-    MAD = Math.atan(s1) * Coordinates.RADIANS || 0;
+    const madValue = Math.atan(s1) * Coordinates.RADIANS;
+    MAD = isFinite(madValue) ? madValue : 0;
   }
 
   return {
