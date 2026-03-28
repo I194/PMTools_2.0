@@ -16,7 +16,28 @@ export const rootReducer = combineReducers({
 export const setupStore = () => {
   return configureStore({
     reducer: rootReducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk), //.concat(pcaMiddleware()),
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: {
+          ignoredPaths: [
+            'pcaPageReducer.currentInterpretation',
+            'pcaPageReducer.currentFileInterpretations',
+            'pcaPageReducer.allInterpretations',
+            'dirPageReducer.currentInterpretation',
+            'dirPageReducer.currentFileInterpretations',
+            'dirPageReducer.allInterpretations',
+          ],
+          ignoredActionPaths: ['payload.rawData', 'payload'],
+          ignoredActions: [
+            'filesAndData/filesToData/pending',
+            'filesAndData/filesToData/fulfilled',
+            'filesAndData/filesToData/rejected',
+            'filesAndData/sitesFileToLatLon/pending',
+            'filesAndData/sitesFileToLatLon/fulfilled',
+            'filesAndData/sitesFileToLatLon/rejected',
+          ],
+        },
+      }).concat(thunk), //.concat(pcaMiddleware()),
   });
 };
 
