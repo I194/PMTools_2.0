@@ -51,7 +51,7 @@ const dataToMag = (data: IPmdData, graphSize: number, hiddenStepsIDs: Array<numb
 
   // Demagnetization type determined by the first step of demagnetization,
   // switches in demagnetization types (methods) are NOT supported
-  const demagnetizationType = data.steps[0].demagType;
+  const demagnetizationType = data.steps.find((step) => step.demagType)?.demagType;
 
   return {
     dotsData,

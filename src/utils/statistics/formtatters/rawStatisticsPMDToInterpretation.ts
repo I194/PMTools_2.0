@@ -36,7 +36,7 @@ const rawStatisticsPMDToInterpretation = (
 
   const confidenceRadius = statistics.MAD;
   const comment = '';
-  const demagType = selectedSteps[0].demagType;
+  const demagType = selectedSteps.find((step) => step.demagType)?.demagType;
 
   const interpretation: StatisitcsInterpretationFromPCA = {
     uuid: uuidv4(),
