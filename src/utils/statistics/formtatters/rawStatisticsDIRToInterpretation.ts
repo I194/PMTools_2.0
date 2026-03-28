@@ -9,12 +9,7 @@ const rawStatisticsDIRToInterpretation = (
   filename: IDirData['name'],
   code: StatisticsModeDIR,
 ) => {
-  // ограничение по длине в 7 символов из-за специфики .dir файлов
-  // здесь оставляется 4 первые символа имени файла, далее добавится id
-  // получится по итогу такое: aBcD_1 или aBcD_12
-  // const filenameWithoutExtension = filename.replace(/\.[^/.]+$/, "");
-  // const label: string = filenameWithoutExtension.slice(0, 6);
-  const label = filename;
+  const label = filename.replace(/\.[^/.]+$/, '');
 
   const stepRange: string = 'avg';
   const stepCount: number = selectedDirections.length;
