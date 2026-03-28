@@ -38,12 +38,13 @@ const dataToZijd = (
     return inReferenceCoords;
   });
 
-  const maxCoord =
-    Math.max(
-      ...rotatedCoords.map((step) =>
-        Math.max(Math.abs(step.x), Math.abs(step.y), Math.abs(step.z)),
-      ),
-    ) / zoom;
+  const maxCoord = rotatedCoords.length
+    ? Math.max(
+        ...rotatedCoords.map((step) =>
+          Math.max(Math.abs(step.x), Math.abs(step.y), Math.abs(step.z)),
+        ),
+      ) / zoom
+    : 0;
   const adjustedCoords = rotatedCoords.map((coords) => coords.multiplyAll(graphSize / maxCoord));
 
   const horizontalProjectionData: DotsData = [];
@@ -66,7 +67,8 @@ const dataToZijd = (
   });
 
   // 'calculation' of unit label, using in Unit component
-  const unitLabel = (maxCoord / data.metadata.v / unitCount).toExponential(2).toUpperCase();
+  const unitLabel =
+    maxCoord > 0 ? (maxCoord / data.metadata.v / unitCount).toExponential(2).toUpperCase() : '';
 
   // pcaLines calculation
   let rotatedCenterMass: Coordinates | null = null;
