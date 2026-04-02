@@ -24,10 +24,9 @@ const calculatePCA_pmd = (
   const firstVector = new Coordinates(...vectors[0]);
   const lastVector = new Coordinates(...vectors[vectors.length - 1]);
 
-  // When anchoring we mirror the points and add them
-  // in opposite case need to transform to the center of mass
-  if (anchored) vectors.push(...vectors);
-  else {
+  // When not anchoring, transform to the center of mass
+  // For PCA0 (anchored), we use raw vectors — no mean subtraction needed
+  if (!anchored) {
     for (var i = 0; i < vectors.length; i++) {
       for (var j = 0; j < 3; j++) {
         centerMass[j] += vectors[i][j] / selectedSteps.length;
