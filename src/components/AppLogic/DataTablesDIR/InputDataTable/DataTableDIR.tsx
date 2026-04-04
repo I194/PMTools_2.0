@@ -287,6 +287,7 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
           }}
           density={'compact'}
           hideFooter={rows.length < 100}
+          disableVirtualization={rows.length < 100}
           getRowClassName={(params) =>
             hiddenDirectionsIDs.includes(params.row.id) ? styles.hiddenRow : ''
           }
