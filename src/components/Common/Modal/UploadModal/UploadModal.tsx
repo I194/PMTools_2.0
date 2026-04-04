@@ -1,5 +1,5 @@
 import { Typography, Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useAppDispatch } from '../../../../services/store/hooks';
 import { textColor } from '../../../../utils/ThemeConstants';
@@ -16,9 +16,10 @@ import { generateMergedName } from '../../../../utils/files/mergeUtils';
 
 type Props = {
   page: 'pca' | 'dir';
+  open?: boolean;
 };
 
-const UploadModal = ({ page }: Props) => {
+const UploadModal = ({ page, open }: Props) => {
   const theme = useTheme();
   const { t } = useTranslation('translation');
   const dispatch = useAppDispatch();
@@ -26,6 +27,13 @@ const UploadModal = ({ page }: Props) => {
 
   const [mergeEnabled, setMergeEnabled] = useState(false);
   const [mergeName, setMergeName] = useState('');
+
+  useEffect(() => {
+    if (open) {
+      setMergeEnabled(false);
+      setMergeName('');
+    }
+  }, [open]);
 
   const handleFileUpload = (event: any, files?: Array<File>) => {
     const acceptedFiles: File[] = files ? files : Array.from(event.currentTarget.files);

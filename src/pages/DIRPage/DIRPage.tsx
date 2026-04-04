@@ -71,7 +71,7 @@ const DIRPage: FC = ({}) => {
         size={{ width: '60vw', height: widthLessThan720 ? 'fit-content' : '60vh' }}
         showBottomClose
       >
-        <UploadModal page="dir" />
+        <UploadModal page="dir" open={showUploadModal} />
       </ModalWrapper>
       <InterpretationSetter dataToShow={dataToShow} />
     </>
