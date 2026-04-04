@@ -156,7 +156,10 @@
     "import": "Import files",
     "useExample": "Or use an example",
     "useDnD": "Or use drag and drop",
-    "close": "Close"
+    "close": "Close",
+    "mergeFiles": "Merge all files into one collection",
+    "mergedCollectionName": "Collection name",
+    "mergedCollectionPlaceholder": "Auto-generated from file names"
   },
   "pcaPage": {
     "metadataModal": {

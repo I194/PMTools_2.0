@@ -156,7 +156,10 @@
     "import": "Загрузите файлы",
     "useExample": "Или воспользуйтесь примером",
     "useDnD": "Или перетащите файлы поверх приложения",
-    "close": "Закрыть"
+    "close": "Закрыть",
+    "mergeFiles": "Объединить все файлы в одну коллекцию",
+    "mergedCollectionName": "Имя коллекции",
+    "mergedCollectionPlaceholder": "Сгенерируется из имён файлов"
   },
   "pcaPage": {
     "metadataModal": {

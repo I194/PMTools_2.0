@@ -2,14 +2,20 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getDirectionalData, getSitesLatLonData } from '../../utils/files/fileManipulations';
 import { FileValidationIssue } from '../../utils/files/validation';
 
+type MergeMode = {
+  enabled: true;
+  name: string;
+};
+
 type TFilesToData = {
   files: File[];
   format: 'pmd' | 'squid' | 'rs3' | 'dir' | 'pmm' | 'csv' | 'xlsx';
+  mergeMode?: MergeMode;
 };
 
 export const filesToData = createAsyncThunk(
   'filesAndData/filesToData',
-  async function ({ files, format }: TFilesToData, { rejectWithValue }) {
+  async function ({ files, format, mergeMode }: TFilesToData, { rejectWithValue }) {
     try {
       const results = await Promise.allSettled(
         files.map((file) => getDirectionalData(file, format)),
@@ -61,7 +67,7 @@ export const filesToData = createAsyncThunk(
         }
       }
 
-      return { format, data, validationIssues };
+      return { format, data, validationIssues, mergeMode };
     } catch (error: any) {
       return rejectWithValue(error);
     }

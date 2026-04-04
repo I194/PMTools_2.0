@@ -2,11 +2,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IPmdData, IDirData, ISitesData } from '../../utils/GlobalTypes';
 import { filesToData, sitesFileToLatLon } from '../axios/filesAndData';
 import { FileValidationIssue } from '../../utils/files/validation';
+import { createMergedDirData } from '../../utils/files/mergeUtils';
 
 interface PendingUpload {
   format: string;
   data: any[];
   validationIssues: FileValidationIssue[];
+  mergeMode?: { enabled: true; name: string };
 }
 
 interface IInitialState {
@@ -55,7 +57,7 @@ const storePMDData = (state: IInitialState, format: string, data: any[]) => {
 };
 
 const storeDIRData = (state: IInitialState, format: string, data: any[]) => {
-  if (format === 'dir' || format === 'pmm') {
+  if (format === 'dir' || format === 'pmm' || format === 'merged') {
     state.dirStatData.push(...(data as IDirData[]));
     localStorage.setItem('dirStatData', JSON.stringify(state.dirStatData));
 
@@ -142,7 +144,13 @@ const parsedDataSlice = createSlice({
     },
     confirmPendingUpload(state) {
       if (state.pendingUpload) {
-        storeData(state, state.pendingUpload.format, state.pendingUpload.data);
+        const { format, data, mergeMode } = state.pendingUpload;
+        if (mergeMode?.enabled && (format === 'dir' || format === 'pmm')) {
+          const merged = createMergedDirData(data as IDirData[], mergeMode.name);
+          storeData(state, 'merged', [merged]);
+        } else {
+          storeData(state, format, data);
+        }
         state.pendingUpload = null;
       }
     },
@@ -156,11 +164,15 @@ const parsedDataSlice = createSlice({
       state.errorInfo = null;
     });
     builder.addCase(filesToData.fulfilled, (state, action) => {
-      const { format, data, validationIssues } = action.payload;
+      const { format, data, validationIssues, mergeMode } = action.payload;
 
       if (validationIssues.length > 0) {
         // Store as pending — user must confirm via modal
-        state.pendingUpload = { format, data, validationIssues };
+        state.pendingUpload = { format, data, validationIssues, mergeMode };
+      } else if (mergeMode?.enabled && (format === 'dir' || format === 'pmm')) {
+        // Merge all parsed files into a single IDirData entry
+        const merged = createMergedDirData(data as IDirData[], mergeMode.name);
+        storeData(state, 'merged', [merged]);
       } else {
         // No issues — store directly
         storeData(state, format, data);
