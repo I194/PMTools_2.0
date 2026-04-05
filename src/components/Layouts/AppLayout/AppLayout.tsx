@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import styles from './AppLayout.module.scss';
 import { Outlet, RouteProps, useLocation } from 'react-router-dom';
 import { useAppDispatch } from '../../../services/store/hooks';
@@ -16,6 +16,7 @@ import { useMediaQuery } from 'react-responsive';
 import { useTranslation } from 'react-i18next';
 import { filesToData } from '../../../services/axios/filesAndData';
 import ValidationModal from '../../Common/Modal/ValidationModal/ValidationModal';
+import MergePromptModal from '../../Common/Modal/MergePromptModal/MergePromptModal';
 
 const AppLayout: FC<RouteProps> = () => {
   const dispatch = useAppDispatch();
@@ -25,10 +26,29 @@ const AppLayout: FC<RouteProps> = () => {
   const location = useLocation();
   const currentPage = location.pathname.split('/').pop() || location.pathname;
 
+  const [pendingFiles, setPendingFiles] = useState<File[] | null>(null);
+
   const handleFileUpload = (event: any, files?: Array<File>) => {
     const acceptedFiles: File[] = files ? files : Array.from(event.currentTarget.files);
     if (currentPage === 'pca') dispatch(filesToData({ files: acceptedFiles, format: 'pmd' }));
-    if (currentPage === 'dir') dispatch(filesToData({ files: acceptedFiles, format: 'dir' }));
+    if (currentPage === 'dir') {
+      if (acceptedFiles.length >= 2) {
+        setPendingFiles(acceptedFiles);
+      } else {
+        dispatch(filesToData({ files: acceptedFiles, format: 'dir' }));
+      }
+    }
+  };
+
+  const handleMergeConfirm = (mergeMode?: { enabled: true; name: string }) => {
+    if (pendingFiles) {
+      dispatch(filesToData({ files: pendingFiles, format: 'dir', mergeMode }));
+    }
+    setPendingFiles(null);
+  };
+
+  const handleMergeCancel = () => {
+    setPendingFiles(null);
   };
 
   const onDrop = useCallback(
@@ -45,6 +65,12 @@ const AppLayout: FC<RouteProps> = () => {
   return (
     <>
       <ValidationModal />
+      <MergePromptModal
+        open={pendingFiles !== null}
+        files={pendingFiles ?? []}
+        onConfirm={handleMergeConfirm}
+        onCancel={handleMergeCancel}
+      />
       <div {...rootProps}>
         {isDragActive && (
           <div className={styles.dropFiles} style={{ color: textColor(theme.palette.mode) }}>
