@@ -109,6 +109,7 @@ const UploadModal = ({ page, open }: Props) => {
               />
             }
             label={t('importModal.mergeFiles')}
+            sx={{ color: textColor(theme.palette.mode) }}
           />
           {mergeEnabled && (
             <TextField
@@ -117,7 +118,14 @@ const UploadModal = ({ page, open }: Props) => {
               value={mergeName}
               onChange={(e) => setMergeName(e.target.value)}
               placeholder={t('importModal.mergedCollectionPlaceholder')}
-              sx={{ minWidth: 280 }}
+              sx={{
+                minWidth: 280,
+                '& .MuiInputBase-input': { color: textColor(theme.palette.mode) },
+                '& .MuiInputLabel-root': { color: textColor(theme.palette.mode) },
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': { borderColor: textColor(theme.palette.mode) },
+                },
+              }}
             />
           )}
         </div>
