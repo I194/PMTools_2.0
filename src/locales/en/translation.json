@@ -161,6 +161,12 @@
     "mergedCollectionName": "Collection name",
     "mergedCollectionPlaceholder": "Auto-generated from file names"
   },
+  "mergePrompt": {
+    "title": "Import Options",
+    "subtitle": "You selected {{count}} files",
+    "import": "Import",
+    "cancel": "Cancel"
+  },
   "pcaPage": {
     "metadataModal": {
       "apply": "Apply"

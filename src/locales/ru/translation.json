@@ -161,6 +161,12 @@
     "mergedCollectionName": "Имя коллекции",
     "mergedCollectionPlaceholder": "Сгенерируется из имён файлов"
   },
+  "mergePrompt": {
+    "title": "Параметры импорта",
+    "subtitle": "Выбрано файлов: {{count}}",
+    "import": "Импортировать",
+    "cancel": "Отмена"
+  },
   "pcaPage": {
     "metadataModal": {
       "apply": "Применить"
