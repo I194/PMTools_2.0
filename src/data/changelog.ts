@@ -6,6 +6,18 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '2.6.3',
+    date: 'April 5, 2026',
+    items: [
+      'DIR page: added "Merge all files into one collection" option — upload multiple files and combine them into a single collection with sequential IDs.',
+      'DIR page: merge supports custom collection name or auto-generated name from file names.',
+      'DIR page: merge works across formats (PMM, DIR, CSV, XLSX).',
+      'PCA: fixed MAD=0 bug caused by incorrect eigenvalue sorting in PCA decomposition.',
+      'Upload modal: fixed dark theme contrast — checkbox and text field are now clearly visible.',
+      'File selector: fixed long merged names overflowing the dropdown — names are now truncated with ellipsis.',
+    ],
+  },
+  {
     version: '2.6.2',
     date: 'March 29, 2026',
     items: [
