@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { textColor } from '../../../../utils/ThemeConstants';
 import { generateMergedName } from '../../../../utils/files/mergeUtils';
 
-type MergeMode = { enabled: true; name: string };
+type MergeMode = { enabled: true; name: string; alsoLoadSeparately?: boolean };
 
 type Props = {
   open: boolean;
@@ -31,20 +31,27 @@ const MergePromptModal: React.FC<Props> = ({ open, files, onConfirm, onCancel })
 
   const [mergeEnabled, setMergeEnabled] = useState(false);
   const [mergeName, setMergeName] = useState('');
+  const [alsoLoadSeparately, setAlsoLoadSeparately] = useState(false);
 
   const handleConfirm = () => {
     const mergeMode = mergeEnabled
-      ? { enabled: true as const, name: mergeName || generateMergedName(files.map((f) => f.name)) }
+      ? {
+          enabled: true as const,
+          name: mergeName || generateMergedName(files.map((f) => f.name)),
+          alsoLoadSeparately,
+        }
       : undefined;
     onConfirm(mergeMode);
     setMergeEnabled(false);
     setMergeName('');
+    setAlsoLoadSeparately(false);
   };
 
   const handleCancel = () => {
     onCancel();
     setMergeEnabled(false);
     setMergeName('');
+    setAlsoLoadSeparately(false);
   };
 
   return (
@@ -66,22 +73,35 @@ const MergePromptModal: React.FC<Props> = ({ open, files, onConfirm, onCancel })
           sx={{ color }}
         />
         {mergeEnabled && (
-          <TextField
-            size="small"
-            fullWidth
-            label={t('importModal.mergedCollectionName')}
-            value={mergeName}
-            onChange={(e) => setMergeName(e.target.value)}
-            placeholder={t('importModal.mergedCollectionPlaceholder')}
-            sx={{
-              mt: 1,
-              '& .MuiInputBase-input': { color },
-              '& .MuiInputLabel-root': { color },
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': { borderColor: color },
-              },
-            }}
-          />
+          <>
+            <TextField
+              size="small"
+              fullWidth
+              label={t('importModal.mergedCollectionName')}
+              value={mergeName}
+              onChange={(e) => setMergeName(e.target.value)}
+              placeholder={t('importModal.mergedCollectionPlaceholder')}
+              sx={{
+                mt: 1,
+                '& .MuiInputBase-input': { color },
+                '& .MuiInputLabel-root': { color },
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': { borderColor: color },
+                },
+              }}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={alsoLoadSeparately}
+                  onChange={(e) => setAlsoLoadSeparately(e.target.checked)}
+                  size="small"
+                />
+              }
+              label={t('importModal.alsoLoadSeparately')}
+              sx={{ color, mt: 1, display: 'block' }}
+            />
+          </>
         )}
       </DialogContent>
       <DialogActions sx={{ px: 3, py: 2 }}>

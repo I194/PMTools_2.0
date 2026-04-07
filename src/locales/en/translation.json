@@ -159,7 +159,8 @@
     "close": "Close",
     "mergeFiles": "Merge all files into one collection",
     "mergedCollectionName": "Collection name",
-    "mergedCollectionPlaceholder": "Auto-generated from file names"
+    "mergedCollectionPlaceholder": "Auto-generated from file names",
+    "alsoLoadSeparately": "Also load each file separately"
   },
   "mergePrompt": {
     "title": "Import Options",

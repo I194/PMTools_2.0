@@ -5,6 +5,7 @@ import { FileValidationIssue } from '../../utils/files/validation';
 type MergeMode = {
   enabled: true;
   name: string;
+  alsoLoadSeparately?: boolean;
 };
 
 type TFilesToData = {

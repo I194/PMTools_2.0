@@ -40,7 +40,11 @@ const AppLayout: FC<RouteProps> = () => {
     }
   };
 
-  const handleMergeConfirm = (mergeMode?: { enabled: true; name: string }) => {
+  const handleMergeConfirm = (mergeMode?: {
+    enabled: true;
+    name: string;
+    alsoLoadSeparately?: boolean;
+  }) => {
     if (pendingFiles) {
       dispatch(filesToData({ files: pendingFiles, format: 'dir', mergeMode }));
     }

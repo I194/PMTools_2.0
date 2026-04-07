@@ -27,11 +27,13 @@ const UploadModal = ({ page, open }: Props) => {
 
   const [mergeEnabled, setMergeEnabled] = useState(false);
   const [mergeName, setMergeName] = useState('');
+  const [alsoLoadSeparately, setAlsoLoadSeparately] = useState(false);
 
   useEffect(() => {
     if (open) {
       setMergeEnabled(false);
       setMergeName('');
+      setAlsoLoadSeparately(false);
     }
   }, [open]);
 
@@ -43,6 +45,7 @@ const UploadModal = ({ page, open }: Props) => {
         ? {
             enabled: true as const,
             name: mergeName || generateMergedName(acceptedFiles.map((f) => f.name)),
+            alsoLoadSeparately,
           }
         : undefined;
 
@@ -54,7 +57,7 @@ const UploadModal = ({ page, open }: Props) => {
     (acceptedFiles) => {
       handleFileUpload(undefined, acceptedFiles);
     },
-    [page, mergeEnabled, mergeName],
+    [page, mergeEnabled, mergeName, alsoLoadSeparately],
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, noClick: true });
@@ -112,21 +115,34 @@ const UploadModal = ({ page, open }: Props) => {
             sx={{ color: textColor(theme.palette.mode) }}
           />
           {mergeEnabled && (
-            <TextField
-              size="small"
-              label={t('importModal.mergedCollectionName')}
-              value={mergeName}
-              onChange={(e) => setMergeName(e.target.value)}
-              placeholder={t('importModal.mergedCollectionPlaceholder')}
-              sx={{
-                minWidth: 280,
-                '& .MuiInputBase-input': { color: textColor(theme.palette.mode) },
-                '& .MuiInputLabel-root': { color: textColor(theme.palette.mode) },
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': { borderColor: textColor(theme.palette.mode) },
-                },
-              }}
-            />
+            <>
+              <TextField
+                size="small"
+                label={t('importModal.mergedCollectionName')}
+                value={mergeName}
+                onChange={(e) => setMergeName(e.target.value)}
+                placeholder={t('importModal.mergedCollectionPlaceholder')}
+                sx={{
+                  minWidth: 280,
+                  '& .MuiInputBase-input': { color: textColor(theme.palette.mode) },
+                  '& .MuiInputLabel-root': { color: textColor(theme.palette.mode) },
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': { borderColor: textColor(theme.palette.mode) },
+                  },
+                }}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={alsoLoadSeparately}
+                    onChange={(e) => setAlsoLoadSeparately(e.target.checked)}
+                    size="small"
+                  />
+                }
+                label={t('importModal.alsoLoadSeparately')}
+                sx={{ color: textColor(theme.palette.mode) }}
+              />
+            </>
           )}
         </div>
       )}

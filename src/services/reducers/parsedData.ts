@@ -8,7 +8,7 @@ interface PendingUpload {
   format: string;
   data: any[];
   validationIssues: FileValidationIssue[];
-  mergeMode?: { enabled: true; name: string };
+  mergeMode?: { enabled: true; name: string; alsoLoadSeparately?: boolean };
 }
 
 interface IInitialState {
@@ -148,6 +148,9 @@ const parsedDataSlice = createSlice({
         if (mergeMode?.enabled && (format === 'dir' || format === 'pmm')) {
           const merged = createMergedDirData(data as IDirData[], mergeMode.name);
           storeData(state, 'merged', [merged]);
+          if (mergeMode.alsoLoadSeparately) {
+            storeData(state, format, data);
+          }
         } else {
           storeData(state, format, data);
         }
@@ -173,6 +176,9 @@ const parsedDataSlice = createSlice({
         // Merge all parsed files into a single IDirData entry
         const merged = createMergedDirData(data as IDirData[], mergeMode.name);
         storeData(state, 'merged', [merged]);
+        if (mergeMode.alsoLoadSeparately) {
+          storeData(state, format, data);
+        }
       } else {
         // No issues — store directly
         storeData(state, format, data);

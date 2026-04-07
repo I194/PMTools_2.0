@@ -159,7 +159,8 @@
     "close": "Закрыть",
     "mergeFiles": "Объединить все файлы в одну коллекцию",
     "mergedCollectionName": "Имя коллекции",
-    "mergedCollectionPlaceholder": "Сгенерируется из имён файлов"
+    "mergedCollectionPlaceholder": "Сгенерируется из имён файлов",
+    "alsoLoadSeparately": "Также загрузить каждый файл отдельно"
   },
   "mergePrompt": {
     "title": "Параметры импорта",
