@@ -117,9 +117,20 @@ const VGPmodalContent: FC<Props> = ({ data }) => {
     dispatch(setSiteData(null));
   };
 
-  useEffect(() => {
+  const handleReferenceChange = (newRef: Reference) => {
     if (vgpCache) {
-      dispatch(setVGPData(vgpCache[reference === 'geographic' ? 'geo' : 'strat']));
+      dispatch(setVGPData(vgpCache[newRef === 'geographic' ? 'geo' : 'strat']));
+    }
+  };
+
+  // Sync VGP data when reference changes externally (e.g. DIR page hotkeys)
+  const prevReferenceRef = useRef(reference);
+  useEffect(() => {
+    if (prevReferenceRef.current !== reference) {
+      prevReferenceRef.current = reference;
+      if (vgpCache) {
+        dispatch(setVGPData(vgpCache[reference === 'geographic' ? 'geo' : 'strat']));
+      }
     }
   }, [reference, vgpCache, dispatch]);
 
@@ -178,7 +189,10 @@ const VGPmodalContent: FC<Props> = ({ data }) => {
         >
           {t('vgp.dataManipulation.calculate')}
         </Button>
-        <ReferenceSelector availableReferences={['geographic', 'stratigraphic']} />
+        <ReferenceSelector
+          availableReferences={['geographic', 'stratigraphic']}
+          onChange={handleReferenceChange}
+        />
         <VGPMean />
       </div>
       <div className={styles.data}>
