@@ -29,7 +29,7 @@ const StereoGraphVGP: FC<IStereoGraphVGP> = ({ graphId, width, height, data }) =
   const { viewHeight, viewWidth, ...areaConstants } = stereoAreaConstants(width, height);
   const dataConstants = useMemo(
     () => dataToStereoVGP(data, width / 2, hiddenDirectionsIDs),
-    [reference, width, currentInterpretation, data, hiddenDirectionsIDs],
+    [width, data, hiddenDirectionsIDs],
   );
 
   return (
