@@ -1,54 +1,47 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from 'react';
 import styles from './AppSettings.module.scss';
 import { IconButton, Button, Input } from '@mui/material';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
-import { useAppDispatch, useAppSelector } from "../../../services/store/hooks";
+import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
 import { useTheme } from '@mui/material/styles';
-import {
-  textColor
-} from '../../../utils/ThemeConstants';
-import { useMediaQuery } from "react-responsive";
-import ModalWrapper from "../../Common/Modal/ModalWrapper";
-import SettingsModal from "../../Common/Modal/SettingsModal/SettingsModal";
-import { setHotkeys } from "../../../services/reducers/appSettings";
+import { textColor } from '../../../utils/ThemeConstants';
+import { useMediaQuery } from 'react-responsive';
+import ModalWrapper from '../../Common/Modal/ModalWrapper';
+import SettingsModal from '../../Common/Modal/SettingsModal/SettingsModal';
+import { setHotkeys } from '../../../services/reducers/appSettings';
 
-import { DefaultButton, DefaultResponsiveButton } from "../../Common/Buttons";
-import { useTranslation } from "react-i18next";
-import { HotkeysType } from "../../../utils/GlobalTypes";
-import { useDefaultHotkeys } from "../../../utils/GlobalHooks";
-import HelpModal from "../../Common/Modal/HelpModal/HelpModal";
+import { DefaultButton, DefaultResponsiveButton } from '../../Common/Buttons';
+import { useTranslation } from 'react-i18next';
+import { HotkeysType } from '../../../utils/GlobalTypes';
+import { useDefaultHotkeys } from '../../../utils/GlobalHooks';
+import HelpModal from '../../Common/Modal/HelpModal/HelpModal';
 
 import * as dirPageReducer from '../../../services/reducers/dirPage';
-import OutputDataTablePMD from "../DataTablesPMD/OutputDataTable/OutputDataTablePMD";
-import OutputDataTableDIR from "../DataTablesDIR/OutputDataTable/OutputDataTableDIR";
-import CurrentFileSelector from "./CurrentFileSelector";
+import OutputDataTablePMD from '../DataTablesPMD/OutputDataTable/OutputDataTablePMD';
+import OutputDataTableDIR from '../DataTablesDIR/OutputDataTable/OutputDataTableDIR';
+import CurrentFileSelector from './CurrentFileSelector';
 
 interface IAppSettings {
   onFileUpload: (event: any, files?: Array<File>) => void;
   dndInputProps: any;
   currentPage: string;
-};
+}
 
-const AppSettings: FC<IAppSettings> = ({
-  onFileUpload,
-  dndInputProps,
-  currentPage,
-}) => {
-
+const AppSettings: FC<IAppSettings> = ({ onFileUpload, dndInputProps, currentPage }) => {
   const theme = useTheme();
   const { t, i18n } = useTranslation('translation');
   const dispatch = useAppDispatch();
   const widthLessThan1400 = useMediaQuery({ query: '(max-width: 1400px)' });
 
   const defaultHotkeys = useDefaultHotkeys();
-  const { hotkeys } = useAppSelector(state => state.appSettingsReducer);
+  const { hotkeys } = useAppSelector((state) => state.appSettingsReducer);
 
   const availableFormats = {
     pca: ['.pmd', '.squid', '.rs3', '.csv', '.xlsx'],
-    dir: ['.dir', '.pmm', '.csv', '.xlsx'], 
+    dir: ['.dir', '.pmm', '.csv', '.xlsx'],
   };
 
   const [showSettings, setShowSettings] = useState(false);
@@ -72,7 +65,7 @@ const AppSettings: FC<IAppSettings> = ({
     if (currentPage === 'dir') {
       setShowDIRTotalStatisticsOutput(true);
     }
-  }
+  };
 
   const loadHotkeys = () => {
     const hotkeysStored: HotkeysType = JSON.parse(localStorage.getItem('hotkeys')!);
@@ -116,8 +109,8 @@ const AppSettings: FC<IAppSettings> = ({
       reverse: {
         'Обратная полярность': 'reverse.reversed',
         'Прямая полярность': 'reverse.normal',
-        'Reversed': 'reverse.reversed',
-        'Normal': 'reverse.normal',
+        Reversed: 'reverse.reversed',
+        Normal: 'reverse.normal',
       },
       selection: {
         'Убрать выделение': 'selection.deleteSelection',
@@ -155,7 +148,7 @@ const AppSettings: FC<IAppSettings> = ({
         'Изменение масштаба': 'zoom.zoomInOut',
         'Перемещение области видимости': 'zoom.pan',
         'Zoom in/out': 'zoom.zoomInOut',
-        'Pan': 'zoom.pan',
+        Pan: 'zoom.pan',
       },
     };
 
@@ -183,36 +176,35 @@ const AppSettings: FC<IAppSettings> = ({
           icon={<SettingsOutlinedIcon />}
           text={t('appLayout.settings.settings')}
           onClick={onSettingsClick}
-          variant='outlined'
+          variant="outlined"
           forceSmall
         />
         <DefaultResponsiveButton
           icon={<HelpOutlineOutlinedIcon />}
           text={t('appLayout.settings.help')}
           onClick={onHelpClick}
-          variant='outlined'
+          variant="outlined"
           forceSmall
         />
-        <label 
-          htmlFor="upload-file" 
+        <label
+          htmlFor="upload-file"
           style={{
-            flex: 'auto'
+            flex: 'auto',
           }}
         >
-          {
-            (currentPage === 'pca' || currentPage === 'dir') &&
-            <Input 
+          {(currentPage === 'pca' || currentPage === 'dir') && (
+            <Input
               id="upload-file"
-              type={'file'}  
+              type={'file'}
               inputProps={{
                 ...dndInputProps,
                 multiple: true,
                 accept: availableFormats[currentPage].join(', '),
               }}
               disableUnderline={true}
-              sx={{display: 'none'}}
+              sx={{ display: 'none' }}
             />
-          }
+          )}
           <DefaultResponsiveButton
             icon={<UploadFileOutlinedIcon />}
             text={t('appLayout.settings.import')}
@@ -226,12 +218,12 @@ const AppSettings: FC<IAppSettings> = ({
           text={t('appLayout.settings.export')}
           onClick={onOpenExportModalClick}
         />
-        <CurrentFileSelector currentPage={currentPage} /> 
+        <CurrentFileSelector currentPage={currentPage} />
       </div>
       <ModalWrapper
         open={showSettings}
         setOpen={setShowSettings}
-        size={{width: '60vw', height: '60vh'}}
+        size={{ width: '60vw', height: '60vh' }}
       >
         <SettingsModal />
       </ModalWrapper>
@@ -245,19 +237,19 @@ const AppSettings: FC<IAppSettings> = ({
       <ModalWrapper
         open={showPMDTotalStatisticsOutput}
         setOpen={setShowPMDTotalStatisticsOutput}
-        size={{width: '80vw', height: '60vh'}}
+        size={{ width: '80vw', height: '60vh' }}
       >
         <OutputDataTablePMD />
       </ModalWrapper>
       <ModalWrapper
         open={showDIRTotalStatisticsOutput}
         setOpen={setShowDIRTotalStatisticsOutput}
-        size={{width: '80vw', height: '60vh'}}
+        size={{ width: '80vw', height: '60vh' }}
       >
         <OutputDataTableDIR />
       </ModalWrapper>
     </>
-  )
-}
+  );
+};
 
 export default AppSettings;

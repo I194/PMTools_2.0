@@ -9,13 +9,13 @@ import {
 import PMDExportMenuItem from './MenuItems/PMDExportMenuItem';
 import { IPmdData } from '../../../../../../utils/GlobalTypes';
 
-const ExportPMD = (props: ButtonProps & {data: IPmdData}) => {
+const ExportPMD = (props: ButtonProps & { data: IPmdData }) => {
   const { data } = props;
   return (
     <GridToolbarExportContainer {...props}>
-      <PMDExportMenuItem as={'pmd'} data={data}/>
-      <PMDExportMenuItem as={'csv'} data={data}/>
-      <PMDExportMenuItem as={'xlsx'} data={data}/>
+      <PMDExportMenuItem as={'pmd'} data={data} />
+      <PMDExportMenuItem as={'csv'} data={data} />
+      <PMDExportMenuItem as={'xlsx'} data={data} />
     </GridToolbarExportContainer>
   );
 };

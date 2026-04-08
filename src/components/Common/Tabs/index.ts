@@ -1,6 +1,3 @@
-import VerticalTabs from "./VerticalTabs/VerticalTabs";
+import VerticalTabs from './VerticalTabs/VerticalTabs';
 
-export {
-  VerticalTabs,
-};
-
+export { VerticalTabs };

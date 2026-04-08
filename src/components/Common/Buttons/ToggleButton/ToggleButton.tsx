@@ -36,14 +36,13 @@ const ToggleButton: FC<ToggleButtonProps> = ({
       {...rest}
     >
       {label ?? children}
-      {isActive ? 
-        <ToggleOnOutlined sx={{fontSize: '24px', marginLeft: '4px'}} /> : 
-        <ToggleOffOutlined sx={{fontSize: '24px', marginLeft: '4px'}} />
-      }
+      {isActive ? (
+        <ToggleOnOutlined sx={{ fontSize: '24px', marginLeft: '4px' }} />
+      ) : (
+        <ToggleOffOutlined sx={{ fontSize: '24px', marginLeft: '4px' }} />
+      )}
     </Button>
   );
 };
 
 export default ToggleButton;
-
-

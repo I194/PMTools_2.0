@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { HotkeysType } from "../../utils/GlobalTypes";
+import { createSlice } from '@reduxjs/toolkit';
+import { HotkeysType } from '../../utils/GlobalTypes';
 
 interface IInitialState {
   colorMode: 'dark' | 'light';
@@ -13,36 +13,34 @@ const initialState: IInitialState = {
   rememberColorMode: false,
   hotkeysActive: true,
   hotkeys: [],
-}
+};
 
 const appSettings = createSlice({
   name: 'appSettings',
   initialState,
   reducers: {
-    setColorMode (state, action) {
+    setColorMode(state, action) {
       state.colorMode = action.payload;
       localStorage.setItem('colorMode', action.payload);
-      console.log('color', action.payload, localStorage);
     },
-    setRememberColorMode (state, action) {
+    setRememberColorMode(state, action) {
       state.rememberColorMode = action.payload;
     },
-    acitvateHotkeys (state) {
+    acitvateHotkeys(state) {
       state.hotkeysActive = true;
     },
-    deactivateHotkeys (state) {
+    deactivateHotkeys(state) {
       state.hotkeysActive = false;
     },
-    setHotkeys (state, action: { payload: HotkeysType }) {
+    setHotkeys(state, action: { payload: HotkeysType }) {
       state.hotkeys = action.payload;
       localStorage.setItem('hotkeys', JSON.stringify(action.payload));
     },
   },
-  extraReducers: (builder) => {
-  }
+  extraReducers: (builder) => {},
 });
 
-export const { 
+export const {
   setColorMode,
   setRememberColorMode,
   acitvateHotkeys,

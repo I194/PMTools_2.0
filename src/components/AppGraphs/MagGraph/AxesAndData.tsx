@@ -1,6 +1,6 @@
-import React, { FC } from "react";
-import { DotsData, GraphSettings, TooltipDot } from "../../../utils/graphs/types";
-import { Axis, Data } from "../../Common/Graphs";
+import React, { FC } from 'react';
+import { DotsData, GraphSettings, TooltipDot } from '../../../utils/graphs/types';
+import { Axis, Data } from '../../Common/Graphs';
 
 interface IAxesAndData {
   graphId: string;
@@ -21,69 +21,55 @@ interface IAxesAndData {
     tooltipData: Array<TooltipDot>;
     maxMAG: number;
     stepLabels: Array<string>;
-    demagnetizationType: "thermal" | "alternating field" | undefined;
+    demagnetizationType: 'thermal' | 'alternating field' | undefined;
   };
   selectedIDs: Array<number>;
   inInterpretationIDs: Array<number>;
   settings: GraphSettings;
 }
 
-const AxesAndData: FC<IAxesAndData> = ({ 
-  graphId, width, height,
+const AxesAndData: FC<IAxesAndData> = ({
+  graphId,
+  width,
+  height,
   areaConstants,
   dataConstants,
   selectedIDs,
   inInterpretationIDs,
   settings,
 }) => {
+  const { graphAreaMargin, zeroX, zeroY, unitX, unitY, unitCountX, unitCountY } = areaConstants;
 
-  const {
-    graphAreaMargin,
-    zeroX,
-    zeroY,
-    unitX,
-    unitY,
-    unitCountX,
-    unitCountY,
-  } = areaConstants;
-
-  const { 
-    dotsData, 
-    stepLabels, 
-    maxMAG,
-    tooltipData,
-    labels,
-    demagnetizationType,
-  } = dataConstants;
+  const { dotsData, stepLabels, maxMAG, tooltipData, labels, demagnetizationType } = dataConstants;
 
   const labelsX = stepLabels;
   const labelsY = [];
-  
+
   for (let i = unitCountY; i >= 0; i--) labelsY.push((i / 10).toString());
 
   const axisNameX = demagnetizationType === 'thermal' ? `°C` : 'mT';
 
   return (
-    <g 
+    <g
       id={`${graphId}-axes-and-data`}
       transform={`translate(${graphAreaMargin}, ${graphAreaMargin})`}
     >
       <g id={`${graphId}-axes`}>
-        <rect 
-          id='mag-rect-axis'
-          x={0} 
-          y={0} 
+        <rect
+          id="mag-rect-axis"
+          x={0}
+          y={0}
           width={width}
           height={height}
           fill="none"
           stroke="black"
           strokeWidth={1}
         />
-        <Axis 
+        <Axis
           graphId={graphId}
-          type='x'
+          type="x"
           name={axisNameX}
-          namePosition={{x: width + 15, y: zeroY}}
+          namePosition={{ x: width + 15, y: zeroY }}
           zero={zeroY}
           length={width}
           unit={unitX}
@@ -93,13 +79,13 @@ const AxesAndData: FC<IAxesAndData> = ({
           tickPosition="outer"
           labels={labelsX}
         />
-        <Axis 
+        <Axis
           graphId={graphId}
-          type='y'
-          name='M/Mmax'
-          namePosition={{x: zeroX + 10, y: -10}}
+          type="y"
+          name="M/Mmax"
+          namePosition={{ x: zeroX + 10, y: -10 }}
           mirrorName={`Mmax = ${maxMAG.toExponential(2).toUpperCase()} A/m`}
-          mirrorNamePosition={{x: zeroX + width / 2, y: -10}} 
+          mirrorNamePosition={{ x: zeroX + width / 2, y: -10 }}
           zero={zeroX}
           length={height}
           unit={unitY}
@@ -112,7 +98,7 @@ const AxesAndData: FC<IAxesAndData> = ({
             length: width,
             width: 1,
             color: 'black',
-            dashArray: [5, 4]
+            dashArray: [5, 4],
           }}
         />
       </g>
@@ -123,25 +109,23 @@ const AxesAndData: FC<IAxesAndData> = ({
           Однако hover всё равно работать не будет и потому лучше использовать onMouseOver
           Как раз при этом достигается условие zero-css (я его только что сам придумал)
       */}
-      <g 
-        id={`${graphId}-data`}
-      >
-        <Data 
+      <g id={`${graphId}-data`}>
+        <Data
           graphId={graphId}
-          type='all'
+          type="all"
           labels={labels}
           data={dotsData}
           tooltipData={tooltipData}
           selectedIDs={selectedIDs}
           inInterpretationIDs={inInterpretationIDs}
-          dotFillColor='black'
+          dotFillColor="black"
           differentColors={true}
           colorsType="light"
           settings={settings.dots}
         />
       </g>
     </g>
-  )
-}
+  );
+};
 
-export default AxesAndData
+export default AxesAndData;

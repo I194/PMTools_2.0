@@ -1,23 +1,22 @@
-import numeric from "numeric";
-import { IPmdData } from "../../GlobalTypes";
-import Coordinates from "../../graphs/classes/Coordinates";
-import { TMatrix } from "../matrix";
-import { sortEigenvectors } from "../eigManipulations";
+import numeric from 'numeric';
+import { IPmdData } from '../../GlobalTypes';
+import Coordinates from '../../graphs/classes/Coordinates';
+import { TMatrix } from '../matrix';
+import { sortEigenvectors } from '../eigManipulations';
 
 const calculatePCA_pmd = (
-  selectedSteps: IPmdData['steps'], 
-  anchored: boolean, 
+  selectedSteps: IPmdData['steps'],
+  anchored: boolean,
   normalized: boolean,
   type: 'directions' | 'planes',
 ) => {
-  
   // Function calculatePCA
   // Does a PCA calculation on the selected steps
 
   const centerMass: [number, number, number] = [0, 0, 0];
 
-  const vectors: Array<[number, number, number]> = selectedSteps.map(step => {
-    const factor = normalized ? Math.sqrt((step.x * step.x) + (step.y * step.y) + (step.z * step.z)) : 1;
+  const vectors: Array<[number, number, number]> = selectedSteps.map((step) => {
+    const factor = normalized ? Math.sqrt(step.x * step.x + step.y * step.y + step.z * step.z) : 1;
     return [step.x / factor, step.y / factor, step.z / factor];
   });
 
@@ -25,22 +24,21 @@ const calculatePCA_pmd = (
   const firstVector = new Coordinates(...vectors[0]);
   const lastVector = new Coordinates(...vectors[vectors.length - 1]);
 
-  // When anchoring we mirror the points and add them
-  // in opposite case need to transform to the center of mass
-  if (anchored) vectors.push(...vectors);
-  else {
-    for(var i = 0; i < vectors.length; i++) {
-      for(var j = 0; j < 3; j++) {
+  // When not anchoring, transform to the center of mass
+  // For PCA0 (anchored), we use raw vectors — no mean subtraction needed
+  if (!anchored) {
+    for (var i = 0; i < vectors.length; i++) {
+      for (var j = 0; j < 3; j++) {
         centerMass[j] += vectors[i][j] / selectedSteps.length;
       }
     }
 
-    for(var i = 0; i < vectors.length; i++) {
-      for(var j = 0; j < 3; j++) {
+    for (var i = 0; i < vectors.length; i++) {
+      for (var j = 0; j < 3; j++) {
         vectors[i][j] = vectors[i][j] - centerMass[j];
       }
     }
-  };
+  }
 
   // Library call (numeric.js) to get the eigenvector / eigenvalues
   const eig = sortEigenvectors(numeric.eig(TMatrix(vectors)));
@@ -61,19 +59,21 @@ const calculatePCA_pmd = (
   if (type === 'directions') {
     // Calculation of maximum angle of deviation
     const s1 = Math.sqrt(eig.tau[0]);
-    MAD = (Math.atan(Math.sqrt(eig.tau[1] + eig.tau[2]) / s1)  * Coordinates.RADIANS) || 0;
-  };
+    const madValue = Math.atan(Math.sqrt(eig.tau[1] + eig.tau[2]) / s1) * Coordinates.RADIANS;
+    MAD = isFinite(madValue) ? madValue : 0;
+  }
 
   if (type === 'planes') {
     // Calculation of maximum angle of deviation
-    const s1 = Math.sqrt((eig.tau[2] / eig.tau[1]) + (eig.tau[2] / eig.tau[0]));
-    MAD = (Math.atan(s1) * Coordinates.RADIANS) || 0;
-  };
+    const s1 = Math.sqrt(eig.tau[2] / eig.tau[1] + eig.tau[2] / eig.tau[0]);
+    const madValue = Math.atan(s1) * Coordinates.RADIANS;
+    MAD = isFinite(madValue) ? madValue : 0;
+  }
 
   return {
     component: {
       edges: eigenVectorCoordinates,
-      centerMass: centerMassCoordinates
+      centerMass: centerMassCoordinates,
     },
     intensity,
     MAD,

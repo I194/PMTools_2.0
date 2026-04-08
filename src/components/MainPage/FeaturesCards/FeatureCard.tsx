@@ -5,53 +5,56 @@ import { useTheme } from '@mui/material/styles';
 import { textColor, bgColorBlocks } from '../../../utils/ThemeConstants';
 
 export type Content = {
-  text: {title: string, description: string};
-  image: string,
-  compressedImage: string,
-  align: 'left' | 'right',
+  text: { title: string; description: string };
+  image: string;
+  compressedImage: string;
+  align: 'left' | 'right';
 };
 
 const FeatureCard = ({ text, image, compressedImage, align }: Content) => {
-  
   const theme = useTheme();
   const [normalImageLoaded, setNormalImageLoaded] = useState<boolean>(false);
 
   return (
-    <div 
+    <div
       className={styles.card}
       style={{
         flexDirection: align === 'left' ? 'row' : 'row-reverse',
       }}
     >
-      <div 
+      <div
         className={styles.cardText}
         style={{
           marginLeft: align === 'left' ? 0 : '64px',
           marginRight: align === 'left' ? '64px' : 0,
         }}
       >
-        <Typography variant='h4' color={textColor(theme.palette.mode)}>
+        <Typography variant="h4" color={textColor(theme.palette.mode)}>
           {text.title}
         </Typography>
-        <Typography variant='h6' color={textColor(theme.palette.mode)} mt='16px'>
+        <Typography variant="h6" color={textColor(theme.palette.mode)} mt="16px">
           {text.description}
         </Typography>
       </div>
-      <div 
+      <div
         className={styles.cardImage}
-        style={{
-          // backgroundColor: bgColorBlocks(theme.palette.mode),
-        }}
+        style={
+          {
+            // backgroundColor: bgColorBlocks(theme.palette.mode),
+          }
+        }
       >
-        <img 
-          src={image} 
-          alt={text.title} 
+        <img
+          src={image}
+          alt={text.title}
           // onLoad={() => setNormalImageLoaded(true)}
-          style={{
-            // display: normalImageLoaded ? 'block' : 'none',
-          }}
-          loading='lazy'
-          width='100%'
+          style={
+            {
+              // display: normalImageLoaded ? 'block' : 'none',
+            }
+          }
+          loading="lazy"
+          width="100%"
         />
         {/* <img 
           src={compressedImage} 
@@ -68,4 +71,3 @@ const FeatureCard = ({ text, image, compressedImage, align }: Content) => {
 };
 
 export default FeatureCard;
-

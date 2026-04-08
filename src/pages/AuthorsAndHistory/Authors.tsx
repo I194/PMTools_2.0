@@ -22,25 +22,34 @@ const Authors = () => {
 
   return (
     <div className={styles.authors}>
-      <Typography variant='h4' color={textColor(theme.palette.mode)} textAlign='center' fontSize={isSmallScreen ? '30px' : '34px'} mb='16px'>
+      <Typography
+        variant="h4"
+        color={textColor(theme.palette.mode)}
+        textAlign="center"
+        fontSize={isSmallScreen ? '30px' : '34px'}
+        mb="16px"
+      >
         {t('authorsAndHistoryPage.headline')}
       </Typography>
       <div className={styles.authorBlock}>
-        <img 
-          src={myImage} 
-          alt={'Иван Ефремов'} 
-          loading='lazy'
-          className={styles.authorImage}
-        />
+        <img src={myImage} alt={'Иван Ефремов'} loading="lazy" className={styles.authorImage} />
         <div className={styles.infoBlock}>
-          <Typography variant='h6' color={textColor(theme.palette.mode)} fontWeight={isSmallScreen ? '400' : '500'} >
-            {t('authorsAndHistoryPage.ie.whois')} 
+          <Typography
+            variant="h6"
+            color={textColor(theme.palette.mode)}
+            fontWeight={isSmallScreen ? '400' : '500'}
+          >
+            {t('authorsAndHistoryPage.ie.whois')}
           </Typography>
-          <Typography variant='caption' color={textColor(theme.palette.mode)} fontWeight={isSmallScreen ? '400' : '500'}>
-            {t('authorsAndHistoryPage.ie.about')} 
+          <Typography
+            variant="caption"
+            color={textColor(theme.palette.mode)}
+            fontWeight={isSmallScreen ? '400' : '500'}
+          >
+            {t('authorsAndHistoryPage.ie.about')}
           </Typography>
           <Button
-            variant="text" 
+            variant="text"
             color={'primary'}
             sx={{
               textTransform: 'none',
@@ -54,10 +63,10 @@ const Authors = () => {
             endIcon={<LinkedInIcon />}
             onClick={() => onClickExternal('https://www.linkedin.com/in/i1948374/')}
           >
-              LinkedIn
+            LinkedIn
           </Button>
           <Button
-            variant="text" 
+            variant="text"
             color={'primary'}
             sx={{
               textTransform: 'none',
@@ -71,26 +80,34 @@ const Authors = () => {
             endIcon={<GitHubIcon />}
             onClick={() => onClickExternal('https://github.com/I194')}
           >
-              GitHub
+            GitHub
           </Button>
         </div>
       </div>
       <div className={styles.authorBlock}>
-        <img 
-          src={RVImage} 
-          alt={'Роман Веселовский'} 
-          loading='lazy'
+        <img
+          src={RVImage}
+          alt={'Роман Веселовский'}
+          loading="lazy"
           className={styles.authorImage}
         />
         <div className={styles.infoBlock}>
-          <Typography variant='h6' color={textColor(theme.palette.mode)} fontWeight={isSmallScreen ? '400' : '500'}>
-            {t('authorsAndHistoryPage.rv.whois')}   
+          <Typography
+            variant="h6"
+            color={textColor(theme.palette.mode)}
+            fontWeight={isSmallScreen ? '400' : '500'}
+          >
+            {t('authorsAndHistoryPage.rv.whois')}
           </Typography>
-          <Typography variant='caption' color={textColor(theme.palette.mode)} fontWeight={isSmallScreen ? '400' : '500'}>
-            {t('authorsAndHistoryPage.rv.about')}  
+          <Typography
+            variant="caption"
+            color={textColor(theme.palette.mode)}
+            fontWeight={isSmallScreen ? '400' : '500'}
+          >
+            {t('authorsAndHistoryPage.rv.about')}
           </Typography>
           <Button
-            variant="text" 
+            variant="text"
             color={'primary'}
             sx={{
               textTransform: 'none',
@@ -102,14 +119,16 @@ const Authors = () => {
             }}
             component="span"
             endIcon={<LanguageTwoToneIcon />}
-            onClick={() => onClickExternal('https://ifz.ru/institut/sotrudniki/veselovskij-roman-vitalevich')}
+            onClick={() =>
+              onClickExternal('https://ifz.ru/institut/sotrudniki/veselovskij-roman-vitalevich')
+            }
           >
-              ifz.ru
+            ifz.ru
           </Button>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Authors;

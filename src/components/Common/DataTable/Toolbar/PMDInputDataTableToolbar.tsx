@@ -1,22 +1,21 @@
-import { 
-  GridToolbarContainer, 
-  GridToolbarColumnsButton, 
+import {
+  GridToolbarContainer,
+  GridToolbarColumnsButton,
   GridToolbarDensitySelector,
   GridToolbarFilterButton,
-} from "@mui/x-data-grid";
-import { useAppSelector } from "../../../../services/store/hooks";
-import { IPmdData } from "../../../../utils/GlobalTypes";
+} from '@mui/x-data-grid';
+import { useAppSelector } from '../../../../services/store/hooks';
+import { IPmdData } from '../../../../utils/GlobalTypes';
 import ExportPMD from './Buttons/ExportButton/ExportPMD';
 
 const PMDInputDataTableToolbar = () => {
-
-  const { treatmentData, currentDataPMDid } = useAppSelector(state => state.parsedDataReducer);
-  const { hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer);
+  const { treatmentData, currentDataPMDid } = useAppSelector((state) => state.parsedDataReducer);
+  const { hiddenStepsIDs } = useAppSelector((state) => state.pcaPageReducer);
 
   if (!treatmentData) return null;
-  const data = {...treatmentData[currentDataPMDid || 0]};
+  const data = { ...treatmentData[currentDataPMDid || 0] };
   if (data && data.steps && hiddenStepsIDs.length) {
-    data.steps = data.steps.filter(step => !hiddenStepsIDs.includes(step.id));
+    data.steps = data.steps.filter((step) => !hiddenStepsIDs.includes(step.id));
   }
 
   return (
@@ -24,7 +23,7 @@ const PMDInputDataTableToolbar = () => {
       <GridToolbarFilterButton />
       <GridToolbarColumnsButton />
       <GridToolbarDensitySelector />
-      <ExportPMD data={data as IPmdData}/>
+      <ExportPMD data={data as IPmdData} />
     </GridToolbarContainer>
   );
 };

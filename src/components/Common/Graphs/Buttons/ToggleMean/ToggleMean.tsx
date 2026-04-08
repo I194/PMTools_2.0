@@ -5,10 +5,9 @@ import { useAppDispatch, useAppSelector } from '../../../../../services/store/ho
 import { toggleShowVGPMean } from '../../../../../services/reducers/dirPage';
 
 const ToggleMean: FC = () => {
-
   const dispatch = useAppDispatch();
 
-  const { showVGPMean } = useAppSelector(state => state.dirPageReducer);
+  const { showVGPMean } = useAppSelector((state) => state.dirPageReducer);
 
   const handleClick = () => {
     dispatch(toggleShowVGPMean());
@@ -19,14 +18,14 @@ const ToggleMean: FC = () => {
       <Button
         color={showVGPMean ? 'warning' : 'primary'}
         onClick={handleClick}
-        variant='outlined'
-        sx={{m: '4px', height: '24px'}} 
-        size='small'
+        variant="outlined"
+        sx={{ m: '4px', height: '24px' }}
+        size="small"
       >
         Toggle mean
       </Button>
     </div>
-  )
+  );
 };
 
 export default ToggleMean;

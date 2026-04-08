@@ -16,9 +16,9 @@
     justify-content: flex-start;
     gap: 16px;
 
-    &>:first-child {
+    & > :first-child {
       margin-left: 4px;
-    };
+    }
 
     overflow-x: auto;
     overflow-y: hidden;
@@ -26,9 +26,8 @@
     background-color: #212121;
     padding: 8px 0;
     box-sizing: border-box;
-  };
-
-};
+  }
+}
 
 .latLonInputs {
   height: 100%;

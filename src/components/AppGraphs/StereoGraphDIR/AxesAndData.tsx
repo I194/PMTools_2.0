@@ -1,9 +1,9 @@
-import React, { FC } from "react";
+import React, { FC } from 'react';
 import { useTheme } from '@mui/material/styles';
-import { Cutoff } from "../../../utils/GlobalTypes";
-import { DotsData, GraphSettings, MeanDirection, TooltipDot } from "../../../utils/graphs/types";
-import { graphSelectedDotColor } from "../../../utils/ThemeConstants";
-import { Axis, Data, Dot } from "../../Common/Graphs";
+import { Cutoff } from '../../../utils/GlobalTypes';
+import { DotsData, GraphSettings, MeanDirection, TooltipDot } from '../../../utils/graphs/types';
+import { graphSelectedDotColor } from '../../../utils/ThemeConstants';
+import { Axis, Data, Dot } from '../../Common/Graphs';
 
 interface IAxesAndData {
   graphId: string;
@@ -28,10 +28,12 @@ interface IAxesAndData {
   inInterpretationIDs: Array<number>;
   cutoff?: Cutoff;
   settings: GraphSettings;
-};
+}
 
-const AxesAndData: FC<IAxesAndData> = ({ 
-  graphId, width, height,
+const AxesAndData: FC<IAxesAndData> = ({
+  graphId,
+  width,
+  height,
   areaConstants,
   dataConstants,
   selectedIDs,
@@ -39,46 +41,32 @@ const AxesAndData: FC<IAxesAndData> = ({
   cutoff,
   settings,
 }) => {
-
   const theme = useTheme();
 
-  const {
-    graphAreaMargin,
-    unit,
-    unitCount,
-    zeroX,
-    zeroY,
-  } = areaConstants;
+  const { graphAreaMargin, unit, unitCount, zeroX, zeroY } = areaConstants;
 
-  const {
-    directionalData,
-    tooltipData,
-    labels,
-    comments,
-    dotsData,
-    meanDirection,
-  } = dataConstants;
+  const { directionalData, tooltipData, labels, comments, dotsData, meanDirection } = dataConstants;
 
   return (
-    <g 
+    <g
       id={`${graphId}-axes-and-data`}
       transform={`translate(${graphAreaMargin}, ${graphAreaMargin})`}
     >
       <g id={`${graphId}-axes`}>
-        <circle 
-          id='stereo-circle-axis'
-          cx={zeroX} 
-          cy={zeroY} 
-          r={width/2}
+        <circle
+          id="stereo-circle-axis"
+          cx={zeroX}
+          cy={zeroY}
+          r={width / 2}
           fill="none"
           stroke="black"
           strokeWidth={1}
         />
-        <Axis 
+        <Axis
           graphId={graphId}
-          type='x'
-          name='E'
-          mirrorName='W'
+          type="x"
+          name="E"
+          mirrorName="W"
           zero={zeroY}
           length={width}
           unit={unit}
@@ -87,12 +75,12 @@ const AxesAndData: FC<IAxesAndData> = ({
           hideTicks={!settings.area.ticks}
           tickPosition="both"
         />
-        <Axis 
+        <Axis
           graphId={graphId}
-          type='y'
-          name='N'
-          mirrorName='S'
-          mirrorNamePosition={{x: zeroX, y: height + 15}}
+          type="y"
+          name="N"
+          mirrorName="S"
+          mirrorNamePosition={{ x: zeroX, y: height + 15 }}
           zero={zeroX}
           length={height}
           unit={unit}
@@ -108,17 +96,15 @@ const AxesAndData: FC<IAxesAndData> = ({
           Потому лучше отрисовывать отдельно каждый <circle /> через map() массива координат
           Однако hover всё равно работать не будет и потому лучше использовать onMouseOver
       */}
-      <g 
+      <g
         id={`${graphId}-data`}
-        transform={
-          `
+        transform={`
             translate(${width / 2}, ${width / 2})
-          `
-        }
+          `}
       >
-        <Data 
+        <Data
           graphId={graphId}
-          type='all'
+          type="all"
           labels={labels}
           comments={comments}
           data={dotsData}
@@ -127,31 +113,32 @@ const AxesAndData: FC<IAxesAndData> = ({
           tooltipData={tooltipData}
           selectedIDs={selectedIDs}
           inInterpretationIDs={inInterpretationIDs}
-          dotFillColor='black'
+          dotFillColor="black"
           differentColors={true}
           colorsType={theme.palette.mode}
           settings={settings.dots}
         />
-        {
-          meanDirection &&
-          <Dot 
-            x={meanDirection.xyData[0]} 
-            y={meanDirection.xyData[1]} 
-            id={`${graphId}-mean-dot`} 
+        {meanDirection && (
+          <Dot
+            x={meanDirection.xyData[0]}
+            y={meanDirection.xyData[1]}
+            id={`${graphId}-mean-dot`}
             type={'mean'}
-            annotation={{id: '', label: '', comment: ''}}
+            annotation={{ id: '', label: '', comment: '' }}
             tooltip={meanDirection.tooltip}
             fillColor={meanDirection.dirData[1] > 0 ? graphSelectedDotColor('mean') : 'white'}
             strokeColor={meanDirection.confidenceCircle?.color || 'black'}
             confidenceCircle={meanDirection.confidenceCircle}
-            cutoffCircle={(cutoff?.enabled && cutoff?.borderCircle?.show) ? meanDirection.cutoffCircle : undefined}
+            cutoffCircle={
+              cutoff?.enabled && cutoff?.borderCircle?.show ? meanDirection.cutoffCircle : undefined
+            }
             greatCircle={meanDirection.greatCircle}
-            settings={{...settings.dots, confidenceCircle: true}}
+            settings={{ ...settings.dots, confidenceCircle: true }}
           />
-        }
+        )}
       </g>
     </g>
-  )
-}
+  );
+};
 
-export default AxesAndData
+export default AxesAndData;

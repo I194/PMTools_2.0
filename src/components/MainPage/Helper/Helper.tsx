@@ -1,4 +1,3 @@
-
 import React, { useCallback, useEffect, useState } from 'react';
 import styles from './Helper.module.scss';
 import { Divider, Typography } from '@mui/material';
@@ -8,7 +7,6 @@ import BugReportIcon from '@mui/icons-material/BugReport';
 import ModalWrapper from '../../Common/Modal/ModalWrapper';
 
 const Helper = () => {
-
   const theme = useTheme();
   const { t, i18n } = useTranslation('translation');
 
@@ -16,11 +14,11 @@ const Helper = () => {
 
   const handleClick = () => {
     setShowHelperModal(true);
-  }
+  };
 
   const handleCloseModal = () => {
     setShowHelperModal(false);
-  }
+  };
 
   const handleClearLocalStorage = useCallback(() => {
     localStorage.clear();
@@ -29,39 +27,36 @@ const Helper = () => {
 
   return (
     <>
-      <div 
-        className={styles.helper}
-        onClick={handleClick}
-      >
+      <div className={styles.helper} onClick={handleClick}>
         <BugReportIcon />
       </div>
 
-      {
-        showHelperModal && 
+      {showHelperModal && (
         <ModalWrapper
           open={showHelperModal}
           setOpen={setShowHelperModal}
-          size={{width: '56vw', height: '42vh'}}
-          position={{left: '50%', top: '42%'}}
+          size={{ width: '56vw', height: '42vh' }}
+          position={{ left: '50%', top: '42%' }}
           onClose={handleCloseModal}
           isDraggable={false}
-          bgColor='white'
-          borderStyle='2px solid lime'
+          bgColor="white"
+          borderStyle="2px solid lime"
         >
           <div className={styles.modalContent}>
-            <Typography textAlign='center' variant='h4'>
+            <Typography textAlign="center" variant="h4">
               PMTools v.{process.env.REACT_APP_VERSION}
             </Typography>
-            <Typography>
-              {t('helper.issues')}
-            </Typography>
-            <a href='https://github.com/I194/PMTools_2.0/issues' target='_blank' className={styles.link}>
+            <Typography>{t('helper.issues')}</Typography>
+            <a
+              href="https://github.com/I194/PMTools_2.0/issues"
+              target="_blank"
+              className={styles.link}
+              rel="noreferrer"
+            >
               PMTools GitHub Issues
             </a>
-            <Typography mt='8px'>
-              {t('helper.blankScreen')}
-            </Typography>
-            <Typography mt='16px' mb='8px' fontWeight={600}>
+            <Typography mt="8px">{t('helper.blankScreen')}</Typography>
+            <Typography mt="16px" mb="8px" fontWeight={600}>
               {t('helper.clearLocalStorage')}
             </Typography>
             <div className={styles.buttonWrapper}>
@@ -71,7 +66,7 @@ const Helper = () => {
             </div>
           </div>
         </ModalWrapper>
-      }
+      )}
     </>
   );
 };

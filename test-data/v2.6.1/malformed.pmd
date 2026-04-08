@@ -1,0 +1,6 @@
+
+test01    a=  0.0   b=  0.0   s=220.0   d= 30.0   v= 8.0E-6m3
+ PAL  Xc (Am2)  Yc (Am2)  Zc (Am2)  MAG(A/m)   Dg    Ig    Ds    Is   a95
+T000  abc.E-08 -xyz.E-08  foo.E-08  bar.E-03 aaa.b  bb.c 350.1  25.4  0.0
+T100  def.E-08 -ghi.E-08  jkl.E-08  mno.E-03 ccc.d  dd.e 350.3  25.6  0.0
+

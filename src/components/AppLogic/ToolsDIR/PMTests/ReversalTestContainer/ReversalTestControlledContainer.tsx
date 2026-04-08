@@ -2,16 +2,22 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import styles from './ReversalTestContainer.module.scss';
 import { useWindowSize } from '../../../../../utils/GlobalHooks';
 import GraphsSkeleton from '../GraphsSkeleton';
-import { FoldTestResult, IDirData, ReversalTestClassicResult, ReversalTestResultAll } from '../../../../../utils/GlobalTypes';
-import { foldTestBootstrap, reversalTestBootstrap, reversalTestClassic, reversalTestOldFashioned } from '../../../../../utils/statistics/PMTests';
+import {
+  FoldTestResult,
+  IDirData,
+  ReversalTestClassicResult,
+  ReversalTestResultAll,
+} from '../../../../../utils/GlobalTypes';
+import {
+  foldTestBootstrap,
+  reversalTestBootstrap,
+  reversalTestClassic,
+  reversalTestOldFashioned,
+} from '../../../../../utils/statistics/PMTests';
 import FoldTestGraph from '../../../../AppGraphs/FoldTestGraph/FoldTestGraph';
 import { Button, TextField, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import {
-  textColor,
-  primaryColor,
-  successColor,
-} from '../../../../../utils/ThemeConstants';
+import { textColor, primaryColor, successColor } from '../../../../../utils/ThemeConstants';
 
 import getCDF from '../../../../../utils/graphs/formatters/getCDF';
 import TestControls from '../TestControls';
@@ -21,22 +27,34 @@ import ClassicResult from './ClassicResult';
 import { useTranslation } from 'react-i18next';
 
 const ReversalTestControlledContainer = () => {
-
   const theme = useTheme();
   const { t, i18n } = useTranslation('translation');
   const [dataToShow, setDataToShow] = useState<ReversalTestResultAll>();
   const [isRunning, setIsRunning] = useState(false);
 
-  const { getValues, formState: { errors }, control, handleSubmit  } = useForm();
+  const {
+    getValues,
+    formState: { errors },
+    control,
+    handleSubmit,
+  } = useForm();
 
   const handleOldFashionedCompute = () => {
-    const { declination_1, inclination_1, N_1, K_1, declination_2, inclination_2, N_2, K_2 } = getValues();
+    const { declination_1, inclination_1, N_1, K_1, declination_2, inclination_2, N_2, K_2 } =
+      getValues();
     const direction_1 = new Direction(declination_1, inclination_1, 1);
     const direction_2 = new Direction(declination_2, inclination_2, 1);
-    const oldFashionedResult = reversalTestOldFashioned(direction_1, N_1, K_1, direction_2, N_2, K_2);
-    setDataToShow({...dataToShow, oldFashioned: oldFashionedResult});
+    const oldFashionedResult = reversalTestOldFashioned(
+      direction_1,
+      N_1,
+      K_1,
+      direction_2,
+      N_2,
+      K_2,
+    );
+    setDataToShow({ ...dataToShow, oldFashioned: oldFashionedResult });
   };
-  
+
   useEffect(() => {
     if (isRunning) {
       handleOldFashionedCompute();
@@ -58,8 +76,8 @@ const ReversalTestControlledContainer = () => {
             pl: '12px',
             pr: '12px',
           }}
-        > 
-          {t("pmtests.reverseTest.first")}
+        >
+          {t('pmtests.reverseTest.first')}
         </Button>
         <div className={styles.controlled}>
           <div className={styles.inputs}>
@@ -73,7 +91,7 @@ const ReversalTestControlledContainer = () => {
                     {...field}
                     label="Declination 1"
                     variant="standard"
-                    helperText={errors.declination_1 && t("pmtests.reverseTest.required")}
+                    helperText={errors.declination_1 && t('pmtests.reverseTest.required')}
                     FormHelperTextProps={{
                       error: errors.declination_1,
                     }}
@@ -89,7 +107,7 @@ const ReversalTestControlledContainer = () => {
                     {...field}
                     label="Inclination 1"
                     variant="standard"
-                    helperText={errors.inclination_1 && t("pmtests.reverseTest.required")}
+                    helperText={errors.inclination_1 && t('pmtests.reverseTest.required')}
                     FormHelperTextProps={{
                       error: errors.inclination_1,
                     }}
@@ -105,7 +123,7 @@ const ReversalTestControlledContainer = () => {
                     {...field}
                     label="N 1"
                     variant="standard"
-                    helperText={errors.N_1 && t("pmtests.reverseTest.required")}
+                    helperText={errors.N_1 && t('pmtests.reverseTest.required')}
                     FormHelperTextProps={{
                       error: errors.N_1,
                     }}
@@ -121,7 +139,7 @@ const ReversalTestControlledContainer = () => {
                     {...field}
                     label="k 1"
                     variant="standard"
-                    helperText={errors.K_1 && t("pmtests.reverseTest.required")}
+                    helperText={errors.K_1 && t('pmtests.reverseTest.required')}
                     FormHelperTextProps={{
                       error: errors.K_1,
                     }}
@@ -139,7 +157,7 @@ const ReversalTestControlledContainer = () => {
                     {...field}
                     label="Declination 2"
                     variant="standard"
-                    helperText={errors.declination_2 && t("pmtests.reverseTest.required")}
+                    helperText={errors.declination_2 && t('pmtests.reverseTest.required')}
                     FormHelperTextProps={{
                       error: errors.declination_2,
                     }}
@@ -155,7 +173,7 @@ const ReversalTestControlledContainer = () => {
                     {...field}
                     label="Inclination 2"
                     variant="standard"
-                    helperText={errors.inclination_2 && t("pmtests.reverseTest.required")}
+                    helperText={errors.inclination_2 && t('pmtests.reverseTest.required')}
                     FormHelperTextProps={{
                       error: errors.inclination_2,
                     }}
@@ -171,7 +189,7 @@ const ReversalTestControlledContainer = () => {
                     {...field}
                     label="N 2"
                     variant="standard"
-                    helperText={errors.N_2 && t("pmtests.reverseTest.required")}
+                    helperText={errors.N_2 && t('pmtests.reverseTest.required')}
                     FormHelperTextProps={{
                       error: errors.N_2,
                     }}
@@ -187,7 +205,7 @@ const ReversalTestControlledContainer = () => {
                     {...field}
                     label="k 2"
                     variant="standard"
-                    helperText={errors.K_2 && t("pmtests.reverseTest.required")}
+                    helperText={errors.K_2 && t('pmtests.reverseTest.required')}
                     FormHelperTextProps={{
                       error: errors.K_2,
                     }}
@@ -196,14 +214,11 @@ const ReversalTestControlledContainer = () => {
               />
             </div>
           </div>
-          {
-            dataToShow?.oldFashioned &&
-            <ClassicResult result={dataToShow.oldFashioned}/>
-          }
+          {dataToShow?.oldFashioned && <ClassicResult result={dataToShow.oldFashioned} />}
         </div>
       </form>
     </>
-  )
+  );
 };
 
 export default ReversalTestControlledContainer;

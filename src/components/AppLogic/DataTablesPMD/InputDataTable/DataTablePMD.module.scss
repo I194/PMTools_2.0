@@ -19,8 +19,7 @@
 }
 
 .tinyHeader {
-
-  &>div {
+  & > div {
     max-height: 24px;
     line-height: 24px;
   }
@@ -36,13 +35,11 @@
     flex-direction: column;
 
     height: 100%;
-  } 
+  }
 
   background-color: #212121;
-};
+}
 
 .hiddenRow {
   opacity: 0.5;
-};
-
-  
+}

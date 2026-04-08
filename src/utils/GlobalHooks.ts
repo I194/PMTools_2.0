@@ -6,14 +6,18 @@ import { GraphSettings, TMenuItem } from './graphs/types';
 
 export const useWindowSize = () => {
   // отслеживает изменения в размере окна (в том числе при его масштабировании, например, посредством ctrl+, ctrl-)
-  const [size, setSize] = useState([0, 0]);
+  const [size, setSize] = useState([window.innerWidth, window.innerHeight]);
   useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
     const updateSize = () => {
-      setSize([window.innerWidth, window.innerHeight]);
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setSize([window.innerWidth, window.innerHeight]);
+      }, 150);
     };
     window.addEventListener('resize', updateSize);
-    updateSize();
     return () => {
+      clearTimeout(timeoutId);
       window.removeEventListener('resize', updateSize);
     };
   }, []);
@@ -41,17 +45,29 @@ export const usePMDGraphSettings = (opts?: { isStereo?: boolean }) => {
   const [connectByGC, setConnectByGC] = useState<boolean>(true);
 
   const menuItems: Array<TMenuItem> = [
-    {label: 'Tooltips', onClick: () => setTooltips(!tooltips), state: tooltips},
-    {label: 'Ticks', onClick: () => setTicks(!ticks), state: ticks, divider: true},
-    {label: 'Annotations', onClick: () => setAnnotations(!annotations), state: annotations},
-    {label: 'Show №', onClick: () => setStepID(!stepID), state: stepID},
-    {label: 'Show label', onClick: () => setStepLabel(!stepLabel), state: stepLabel},
-    {label: 'Highlight statistics', onClick: () => setHighlightStatistics(!highlightStatistics), state: highlightStatistics},
-    ...(opts?.isStereo ? [{label: 'Great-circle connections', onClick: () => setConnectByGC(!connectByGC), state: connectByGC}] as Array<TMenuItem> : []),
+    { label: 'Tooltips', onClick: () => setTooltips(!tooltips), state: tooltips },
+    { label: 'Ticks', onClick: () => setTicks(!ticks), state: ticks, divider: true },
+    { label: 'Annotations', onClick: () => setAnnotations(!annotations), state: annotations },
+    { label: 'Show №', onClick: () => setStepID(!stepID), state: stepID },
+    { label: 'Show label', onClick: () => setStepLabel(!stepLabel), state: stepLabel },
+    {
+      label: 'Highlight statistics',
+      onClick: () => setHighlightStatistics(!highlightStatistics),
+      state: highlightStatistics,
+    },
+    ...(opts?.isStereo
+      ? ([
+          {
+            label: 'Great-circle connections',
+            onClick: () => setConnectByGC(!connectByGC),
+            state: connectByGC,
+          },
+        ] as Array<TMenuItem>)
+      : []),
   ];
 
   const settings: GraphSettings = {
-    area: {ticks},
+    area: { ticks },
     dots: {
       annotations,
       tooltips,
@@ -62,7 +78,7 @@ export const usePMDGraphSettings = (opts?: { isStereo?: boolean }) => {
     },
   };
 
-  return {menuItems, settings};
+  return { menuItems, settings };
 };
 
 export const useDIRGraphSettings = () => {
@@ -78,19 +94,36 @@ export const useDIRGraphSettings = () => {
   const [showGC, setShowGC] = useState<boolean>(true);
 
   const menuItems: Array<TMenuItem> = [
-    {label: 'Tooltips', onClick: () => setTooltips(!tooltips), state: tooltips},
-    {label: 'Ticks', onClick: () => setTicks(!ticks), state: ticks, divider: true},
-    {label: 'Annotations', onClick: () => setAnnotations(!annotations), state: annotations},
-    {label: 'Show №', onClick: () => setDirectionID(!directionID), state: directionID},
-    {label: 'Show label', onClick: () => setDirectionLabel(!directionLabel), state: directionLabel},
-    {label: 'Show comment', onClick: () => setDirectionComment(!directionComment), state: directionComment, divider: true},
-    {label: 'Show confidence circles', onClick: () => setConfidenceCircle(!confidenceCircle), state: confidenceCircle},
-    {label: 'Highlight statistics', onClick: () => setHighlightStatistics(!highlightStatistics), state: highlightStatistics},
-    {label: 'Show Great Circles (gc/gcn)', onClick: () => setShowGC(!showGC), state: showGC},
+    { label: 'Tooltips', onClick: () => setTooltips(!tooltips), state: tooltips },
+    { label: 'Ticks', onClick: () => setTicks(!ticks), state: ticks, divider: true },
+    { label: 'Annotations', onClick: () => setAnnotations(!annotations), state: annotations },
+    { label: 'Show №', onClick: () => setDirectionID(!directionID), state: directionID },
+    {
+      label: 'Show label',
+      onClick: () => setDirectionLabel(!directionLabel),
+      state: directionLabel,
+    },
+    {
+      label: 'Show comment',
+      onClick: () => setDirectionComment(!directionComment),
+      state: directionComment,
+      divider: true,
+    },
+    {
+      label: 'Show confidence circles',
+      onClick: () => setConfidenceCircle(!confidenceCircle),
+      state: confidenceCircle,
+    },
+    {
+      label: 'Highlight statistics',
+      onClick: () => setHighlightStatistics(!highlightStatistics),
+      state: highlightStatistics,
+    },
+    { label: 'Show Great Circles (gc/gcn)', onClick: () => setShowGC(!showGC), state: showGC },
   ];
 
   const settings: GraphSettings = {
-    area: {ticks},
+    area: { ticks },
     dots: {
       annotations,
       tooltips,
@@ -99,18 +132,17 @@ export const useDIRGraphSettings = () => {
       showComment: directionComment,
       confidenceCircle,
       highlightStatistics,
-      showGC
+      showGC,
     },
   };
 
-  return {menuItems, settings};
+  return { menuItems, settings };
 };
-
 
 export const useGraphSelectableNodesPCA = (graphId: string, isZijd?: boolean) => {
   // возвращает все точки на графике как NodeList преобразованный в массив Array<ChildNode>
   // необходимо для реализации react-drag-to-select
-  const { reference, hiddenStepsIDs } = useAppSelector(state => state.pcaPageReducer); 
+  const { reference, hiddenStepsIDs } = useAppSelector((state) => state.pcaPageReducer);
   const [selectableNodes, setSelectableNodes] = useState<Array<ChildNode>>([]);
 
   const graphElement = document.getElementById(`${graphId}-graph`);
@@ -126,23 +158,22 @@ export const useGraphSelectableNodesPCA = (graphId: string, isZijd?: boolean) =>
     if (isZijd) {
       if (elements.containerH && elements.containerV) {
         nodes.push(...elements.containerH.childNodes, ...elements.containerV.childNodes);
-      };
+      }
     } else {
       if (elements.containerAll) {
         nodes.push(...elements.containerAll.childNodes);
-      };
-    };
+      }
+    }
     setSelectableNodes(nodes);
   }, [graphElement, isZijd, reference, hiddenStepsIDs]);
 
   return selectableNodes;
 };
 
-
 export const useGraphSelectableNodesDIR = (graphId: string) => {
   // возвращает все точки на графике как NodeList преобразованный в массив Array<ChildNode>
   // необходимо для реализации react-drag-to-select
-  const { reference, hiddenDirectionsIDs } = useAppSelector(state => state.dirPageReducer); 
+  const { reference, hiddenDirectionsIDs } = useAppSelector((state) => state.dirPageReducer);
   const [selectableNodes, setSelectableNodes] = useState<Array<ChildNode>>([]);
 
   const graphElement = document.getElementById(`${graphId}-graph`);
@@ -157,7 +188,7 @@ export const useGraphSelectableNodesDIR = (graphId: string) => {
     const nodes: Array<ChildNode> = [];
     if (elements.containerAll) {
       nodes.push(...elements.containerAll.childNodes);
-    };
+    }
     setSelectableNodes(nodes);
   }, [graphElement, reference, hiddenDirectionsIDs]);
 
@@ -167,17 +198,17 @@ export const useGraphSelectableNodesDIR = (graphId: string) => {
 export const useGraphSelectedIDs = (page: 'pca' | 'dir' = 'pca') => {
   // возвращает список индексов выбранных точек на графике (каждый индекс равен id - 1)
   // необходимо для синхронизации выбора точек на всей странице:
-  // все графики, использующие этот хук, могут быть синхронизованы с другими элементами, 
+  // все графики, использующие этот хук, могут быть синхронизованы с другими элементами,
   // позволяющими выбирать точки - например, с таблицей точек (шагов)
-  const { selectedStepsIDs } = useAppSelector(state => state.pcaPageReducer);
-  const { selectedDirectionsIDs } = useAppSelector(state => state.dirPageReducer);
+  const { selectedStepsIDs } = useAppSelector((state) => state.pcaPageReducer);
+  const { selectedDirectionsIDs } = useAppSelector((state) => state.dirPageReducer);
   const selectedDataIDs = page === 'pca' ? selectedStepsIDs : selectedDirectionsIDs;
   const [selectedIDs, setSelectedIDs] = useState<Array<number>>([]);
 
   // проверка на наличие в сторе выбранных шагов (их ID хранятся в selectedStepsIDs)
   useEffect(() => {
-    if (selectedDataIDs) setSelectedIDs(selectedDataIDs.map(id => id));
-    else setSelectedIDs([]); 
+    if (selectedDataIDs) setSelectedIDs(selectedDataIDs.map((id) => id));
+    else setSelectedIDs([]);
   }, [selectedDataIDs]);
 
   return selectedIDs;
@@ -187,8 +218,8 @@ export const useDebounce = (value: any, delay: number) => {
   // The hook will only return the latest value (what we passed in) ...
   // ... if it's been more than 500ms since it was last called.
   // Otherwise, it will return the previous value of searchTerm.
-  // The goal (common example) is to only have the API call fire when user stops typing 
-  
+  // The goal (common example) is to only have the API call fire when user stops typing
+
   const [debouncedValue, setDebouncedValue] = useState(value);
 
   useEffect(
@@ -198,7 +229,7 @@ export const useDebounce = (value: any, delay: number) => {
         setDebouncedValue(value);
       }, delay);
 
-      // Return a cleanup function that will be called every time useEffect is re-called. 
+      // Return a cleanup function that will be called every time useEffect is re-called.
       return () => {
         clearTimeout(handler);
       };
@@ -206,11 +237,11 @@ export const useDebounce = (value: any, delay: number) => {
     // Only re-call effect if value changes
     // You could also add the "delay" var to inputs array if you ...
     // ... need to be able to change that dynamically.
-    [value] 
+    [value],
   );
 
   return debouncedValue;
-}
+};
 
 export const useDefaultHotkeys = (): HotkeysType => {
   const { t, i18n } = useTranslation('translation');
@@ -228,7 +259,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
           hotkey: {
             key: 'D',
             code: 'KeyD',
-          }
+          },
         },
         {
           id: 2,
@@ -237,7 +268,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
           hotkey: {
             key: 'O',
             code: 'KeyO',
-          }
+          },
         },
         {
           id: 3,
@@ -246,7 +277,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
           hotkey: {
             key: 'G',
             code: 'KeyG',
-          }
+          },
         },
         {
           id: 4,
@@ -255,7 +286,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
           hotkey: {
             key: 'I',
             code: 'KeyI',
-          }
+          },
         },
         {
           id: 5,
@@ -264,7 +295,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
           hotkey: {
             key: 'F',
             code: 'KeyF',
-          }
+          },
         },
         {
           id: 6,
@@ -273,9 +304,9 @@ export const useDefaultHotkeys = (): HotkeysType => {
           hotkey: {
             key: 'M',
             code: 'KeyM',
-          }
-        }
-      ]
+          },
+        },
+      ],
     },
     {
       id: 2,
@@ -289,7 +320,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
           hotkey: {
             key: 'H',
             code: 'KeyH',
-          }
+          },
         },
         {
           id: 2,
@@ -298,9 +329,9 @@ export const useDefaultHotkeys = (): HotkeysType => {
           hotkey: {
             key: 'S',
             code: 'KeyS',
-          }
-        }
-      ]
+          },
+        },
+      ],
     },
     {
       id: 3,
@@ -314,7 +345,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
           hotkey: {
             key: 'R',
             code: 'KeyR',
-          }
+          },
         },
         {
           id: 2,
@@ -323,9 +354,9 @@ export const useDefaultHotkeys = (): HotkeysType => {
           hotkey: {
             key: 'T',
             code: 'KeyT',
-          }
-        }
-      ]
+          },
+        },
+      ],
     },
     {
       id: 4,
@@ -339,9 +370,9 @@ export const useDefaultHotkeys = (): HotkeysType => {
           hotkey: {
             key: 'U',
             code: 'KeyU',
-          }
+          },
         },
-      ]
+      ],
     },
     {
       id: 4,
@@ -356,7 +387,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
           hotkey: {
             key: 'MouseWheel',
             code: 'MouseWheel',
-          }
+          },
         },
         {
           id: 2,
@@ -366,9 +397,9 @@ export const useDefaultHotkeys = (): HotkeysType => {
           hotkey: {
             key: 'Alt + MouseClick',
             code: 'Alt + MouseClick',
-          }
+          },
         },
-      ]
+      ],
     },
     {
       id: 6,
@@ -392,7 +423,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
           hotkey: {
             key: 'Alt + ArrowRight',
             code: 'ArrowRight',
-          }
+          },
         },
         {
           id: 3,
@@ -402,7 +433,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
           hotkey: {
             key: 'Alt + ArrowLeft',
             code: 'ArrowLeft',
-          }
+          },
         },
         {
           id: 4,
@@ -412,7 +443,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
           hotkey: {
             key: 'Alt + ArrowUp',
             code: 'ArrowUp',
-          }
+          },
         },
         {
           id: 5,
@@ -422,7 +453,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
           hotkey: {
             key: 'Alt + ArrowDown',
             code: 'ArrowDown',
-          }
+          },
         },
         {
           id: 6,
@@ -431,9 +462,9 @@ export const useDefaultHotkeys = (): HotkeysType => {
           hotkey: {
             key: 'P',
             code: 'KeyP',
-          }
-        }
-      ]
+          },
+        },
+      ],
     },
     {
       id: 7,
@@ -447,9 +478,9 @@ export const useDefaultHotkeys = (): HotkeysType => {
           hotkey: {
             key: 'Q',
             code: 'KeyQ',
-          }
+          },
         },
-      ]
+      ],
     },
     {
       id: 8,
@@ -464,7 +495,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
           hotkey: {
             key: 'Shift + ArrowLeft',
             code: 'Shift + ArrowLeft',
-          }
+          },
         },
         {
           id: 2,
@@ -474,9 +505,9 @@ export const useDefaultHotkeys = (): HotkeysType => {
           hotkey: {
             key: 'Shift + ArrowRight',
             code: 'Shift + ArrowRight',
-          }
+          },
         },
-      ]
+      ],
     },
     {
       id: 9,
@@ -491,7 +522,7 @@ export const useDefaultHotkeys = (): HotkeysType => {
           hotkey: {
             key: 'Shift + ArrowDown',
             code: 'Shift + ArrowDown',
-          }
+          },
         },
         {
           id: 2,
@@ -501,11 +532,11 @@ export const useDefaultHotkeys = (): HotkeysType => {
           hotkey: {
             key: 'Shift + ArrowUp',
             code: 'Shift + ArrowUp',
-          }
+          },
         },
-      ]
+      ],
     },
   ];
 
   return defaultHotkeys;
-}
+};

@@ -8,7 +8,7 @@
   justify-content: center;
   align-items: center;
 
-  @media (max-width: 920px) { 
+  @media (max-width: 920px) {
     margin: 0px 0px;
     padding: 16px 16px 16px 16px;
   }
@@ -35,13 +35,13 @@
     height: 100%;
   }
 
-  @media (max-width: 920px) { 
+  @media (max-width: 920px) {
     padding: 16px 0px;
-    flex-direction: column!important;
+    flex-direction: column !important;
 
     .cardText {
       width: 100%;
-      margin: 0px!important;
+      margin: 0px !important;
     }
   }
 }

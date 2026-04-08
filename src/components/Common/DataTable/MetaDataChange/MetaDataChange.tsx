@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react';
 import styles from './MetaDataChange.module.scss';
-import { Button, IconButton, TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import DirectionsIcon from '@mui/icons-material/Directions';
 import { IPmdData } from '../../../../utils/GlobalTypes';
 import { useAppDispatch, useAppSelector } from '../../../../services/store/hooks';
-import equal from "deep-equal"
+import equal from 'deep-equal';
 import { setTreatmentData } from '../../../../services/reducers/parsedData';
 import { useTranslation } from 'react-i18next';
 import Coordinates from '../../../../utils/graphs/classes/Coordinates';
@@ -13,19 +13,44 @@ import toReferenceCoordinates from '../../../../utils/graphs/formatters/toRefere
 interface IMetaDataChange {
   oldMetadata: IPmdData['metadata'];
   onApply: () => void;
+}
+
+const formatNumericValue = (value: number): string => {
+  return parseFloat(value.toPrecision(12)).toString();
 };
 
-const MetaDataChange: FC<IMetaDataChange> = ({ oldMetadata, onApply }) => {
+type MetadataProperty = 'a' | 'b' | 's' | 'd' | 'v';
 
+const MetaDataChange: FC<IMetaDataChange> = ({ oldMetadata, onApply }) => {
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation('translation');
-  const { treatmentData } = useAppSelector(state => state.parsedDataReducer);
-  const [newMetadata, setNewMetadata] = useState<IPmdData['metadata']>(oldMetadata);
+  const { treatmentData } = useAppSelector((state) => state.parsedDataReducer);
+  const [inputValues, setInputValues] = useState<Record<MetadataProperty, string>>({
+    a: formatNumericValue(oldMetadata.a),
+    b: formatNumericValue(oldMetadata.b),
+    s: formatNumericValue(oldMetadata.s),
+    d: formatNumericValue(oldMetadata.d),
+    v: formatNumericValue(oldMetadata.v),
+  });
 
   if (!treatmentData) return null;
 
+  const parseInputValues = (): IPmdData['metadata'] | null => {
+    const parsed = { ...oldMetadata };
+    for (const key of ['a', 'b', 's', 'd', 'v'] as const) {
+      const raw = inputValues[key].replace(',', '.');
+      const num = Number(raw);
+      if (raw !== '' && isNaN(num)) return null;
+      parsed[key] = raw === '' ? 0 : num;
+    }
+    return parsed;
+  };
+
   const handleApply = () => {
-    const newTreatmentData = treatmentData.map(pmdData => {
+    const newMetadata = parseInputValues();
+    if (!newMetadata) return;
+
+    const newTreatmentData = treatmentData.map((pmdData) => {
       if (pmdData.metadata.name === oldMetadata.name) {
         const updatedSteps = pmdData.steps.map((step) => {
           const coords = new Coordinates(step.x, step.y, step.z);
@@ -55,7 +80,7 @@ const MetaDataChange: FC<IMetaDataChange> = ({ oldMetadata, onApply }) => {
           metadata: newMetadata,
           steps: updatedSteps,
         };
-      };
+      }
       return pmdData;
     });
     if (!equal(newTreatmentData, treatmentData)) dispatch(setTreatmentData(newTreatmentData));
@@ -65,76 +90,73 @@ const MetaDataChange: FC<IMetaDataChange> = ({ oldMetadata, onApply }) => {
   const handleEnterPress = (event: any) => {
     if (event.key === 'Enter') {
       handleApply();
-    };
+    }
   };
 
-  const handleMetadataPropertyChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, 
-    property: 'a' | 'b' | 's' | 'd' | 'v'
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    property: MetadataProperty,
   ) => {
-    setNewMetadata({
-      ...newMetadata,
-      [property]: +event.target.value
-    });
+    setInputValues((prev) => ({ ...prev, [property]: event.target.value }));
   };
 
   return (
     <div className={styles.metadataInputs}>
       <TextField
-        label='Core Azimuth'
-        value={newMetadata.a}
-        onChange={(event) => handleMetadataPropertyChange(event, 'a')}
+        label="Core Azimuth"
+        value={inputValues.a}
+        onChange={(event) => handleInputChange(event, 'a')}
         onKeyPress={handleEnterPress}
         variant="standard"
-        size='small'
-        sx={{mb: '8px'}}
+        size="small"
+        sx={{ mb: '8px' }}
       />
       <TextField
-        label='Core Dip'
-        value={newMetadata.b}
-        onChange={(event) => handleMetadataPropertyChange(event, 'b')}
+        label="Core Dip"
+        value={inputValues.b}
+        onChange={(event) => handleInputChange(event, 'b')}
         onKeyPress={handleEnterPress}
         variant="standard"
-        size='small'
-        sx={{mb: '8px'}}
+        size="small"
+        sx={{ mb: '8px' }}
       />
       <TextField
-        label='Bedding Strike'
-        value={newMetadata.s}
-        onChange={(event) => handleMetadataPropertyChange(event, 's')}
+        label="Bedding Strike"
+        value={inputValues.s}
+        onChange={(event) => handleInputChange(event, 's')}
         onKeyPress={handleEnterPress}
         variant="standard"
-        size='small'
-        sx={{mb: '8px'}}
+        size="small"
+        sx={{ mb: '8px' }}
       />
       <TextField
-        label='Bedding Dip'
-        value={newMetadata.d}
-        onChange={(event) => handleMetadataPropertyChange(event, 'd')}
+        label="Bedding Dip"
+        value={inputValues.d}
+        onChange={(event) => handleInputChange(event, 'd')}
         onKeyPress={handleEnterPress}
         variant="standard"
-        size='small'
-        sx={{mb: '8px'}}
+        size="small"
+        sx={{ mb: '8px' }}
       />
       <TextField
-        label='Volume'
-        value={newMetadata.v}
-        onChange={(event) => handleMetadataPropertyChange(event, 'v')}
+        label="Volume"
+        value={inputValues.v}
+        onChange={(event) => handleInputChange(event, 'v')}
         onKeyPress={handleEnterPress}
         variant="standard"
-        size='small'
-        sx={{mb: '8px'}}
+        size="small"
+        sx={{ mb: '8px' }}
       />
       <Button
-        variant="outlined" 
+        variant="outlined"
         endIcon={<DirectionsIcon />}
         onClick={handleApply}
-        sx={{mt: '16px'}}
+        sx={{ mt: '16px' }}
       >
         {t('pcaPage.metadataModal.apply')}
       </Button>
     </div>
-  )
+  );
 };
 
 export default MetaDataChange;

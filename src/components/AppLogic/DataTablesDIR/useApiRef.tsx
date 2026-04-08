@@ -1,12 +1,12 @@
-import React, { useMemo, useRef } from "react";
-import { AnyColumns } from "./types";
+import React, { useMemo, useRef } from 'react';
+import { AnyColumns } from './types';
 
-const useApiRef = (columns: AnyColumns) =>{
+const useApiRef = (columns: AnyColumns) => {
   const apiRef = useRef<any>(null);
   const _columns = useMemo(
     () =>
       columns.concat({
-        field: "",
+        field: '',
         width: 0,
         minWidth: 0,
         maxWidth: 0,
@@ -15,12 +15,12 @@ const useApiRef = (columns: AnyColumns) =>{
         renderCell: (params) => {
           apiRef.current = params.api;
           return null;
-        }
+        },
       }),
-    [columns]
+    [columns],
   );
 
   return { apiRef, enhancedColumns: _columns };
-}
+};
 
 export default useApiRef;

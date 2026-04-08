@@ -5,11 +5,4 @@ import FeatureCards from './FeaturesCards/FeaturesCards';
 import Footer from './Footer/Footer';
 import Paper from './Paper/Paper';
 
-export {
-  NavPanel,
-  About,
-  Description,
-  FeatureCards,
-  Footer,
-  Paper,
-};
+export { NavPanel, About, Description, FeatureCards, Footer, Paper };

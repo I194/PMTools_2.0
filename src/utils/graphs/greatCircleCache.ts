@@ -1,5 +1,5 @@
-import { IPmdData } from "../GlobalTypes";
-import { Reference } from "./types";
+import { IPmdData } from '../GlobalTypes';
+import { Reference } from './types';
 
 type PairKey = string; // `${idA}->${idB}`
 
@@ -7,7 +7,11 @@ type RefCache = Map<Reference, Map<PairKey, Array<[number, number]>>>;
 type SizeCache = Map<number, RefCache>; // graphSize -> per-reference cache
 const fileCache = new WeakMap<IPmdData, SizeCache>();
 
-const ensureRefCache = (data: IPmdData, size: number, ref: Reference): Map<PairKey, Array<[number, number]>> => {
+const ensureRefCache = (
+  data: IPmdData,
+  size: number,
+  ref: Reference,
+): Map<PairKey, Array<[number, number]>> => {
   let sizes = fileCache.get(data);
   if (!sizes) {
     sizes = new Map();
@@ -55,5 +59,3 @@ export const setPairPolyline = (
 export const clearFileCache = (data: IPmdData) => {
   fileCache.delete(data);
 };
-
-

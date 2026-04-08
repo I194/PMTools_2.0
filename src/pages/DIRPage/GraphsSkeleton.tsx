@@ -5,28 +5,21 @@ import {
   bgColorMain,
   bgColorBlocks,
   boxShadowStyle,
-  bgColorCharts
+  bgColorCharts,
 } from '../../utils/ThemeConstants';
 
 interface IGraphsSkeleton {
-  graph: {node: ReactNode, ref: React.RefObject<HTMLDivElement>} | null ;
-  graphToExport: {node: ReactNode, ref: React.RefObject<HTMLDivElement>} | null ;
-};
+  graph: { node: ReactNode; ref: React.RefObject<HTMLDivElement> } | null;
+  graphToExport: { node: ReactNode; ref: React.RefObject<HTMLDivElement> } | null;
+}
 
-const GraphsSkeleton: FC<IGraphsSkeleton> = ({ 
-  graph,  
-  graphToExport,
-}) => {
-  
+const GraphsSkeleton: FC<IGraphsSkeleton> = ({ graph, graphToExport }) => {
   const theme = useTheme();
 
   return (
-    <div 
-      className={styles.graphs}
-      style={{backgroundColor: bgColorMain(theme.palette.mode)}}
-    >
-      <div 
-        className={styles.graphLarge} 
+    <div className={styles.graphs} style={{ backgroundColor: bgColorMain(theme.palette.mode) }}>
+      <div
+        className={styles.graphLarge}
         ref={graph?.ref}
         style={{
           backgroundColor: bgColorCharts(theme.palette.mode),
@@ -35,16 +28,13 @@ const GraphsSkeleton: FC<IGraphsSkeleton> = ({
           boxShadow: boxShadowStyle(theme.palette.mode),
         }}
       >
-        { graph?.node }
+        {graph?.node}
       </div>
-      <div
-        ref={graphToExport?.ref}
-        style={{display: 'none'}}
-      >
-        { graphToExport?.node }
+      <div ref={graphToExport?.ref} style={{ display: 'none' }}>
+        {graphToExport?.node}
       </div>
     </div>
-  )
+  );
 };
 
 export default GraphsSkeleton;

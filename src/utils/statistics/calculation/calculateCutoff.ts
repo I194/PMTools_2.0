@@ -1,6 +1,6 @@
-import Direction from "../../graphs/classes/Direction";
-import calculateBasicStatisticalParameters from "./calculateBasicStatisticalParameters";
-import calculateVGP from "./calculateVGP";
+import Direction from '../../graphs/classes/Direction';
+import calculateBasicStatisticalParameters from './calculateBasicStatisticalParameters';
+import calculateVGP from './calculateVGP';
 
 const calculateCutoff = (directions: Direction[], cutoffType: '45' | 'vandamme') => {
   /*
@@ -9,7 +9,7 @@ const calculateCutoff = (directions: Direction[], cutoffType: '45' | 'vandamme')
    */
 
   // Create a copy in memory
-  const iterateDirections: (Direction & {rejected?: boolean})[] = [...directions];
+  const iterateDirections: (Direction & { rejected?: boolean })[] = [...directions];
   let cutoffValue = cutoffType === '45' ? 45 : 0;
   let index: number | undefined;
   let iterationsCount = 0;
@@ -25,7 +25,6 @@ const calculateCutoff = (directions: Direction[], cutoffType: '45' | 'vandamme')
       // Skip direction if it was previously rejected
       if (direction.rejected) return;
       const poleVGP = calculateVGP(direction.declination, direction.inclination, 0, 0);
-      console.log('here', poleVGP)
       const pole = new Direction(poleVGP.poleLongitude, poleVGP.poleLatitude, 1);
       // const pole = site.poleFrom(literalToCoordinates(component.coordinates).toVector(Direction));
 
@@ -34,7 +33,6 @@ const calculateCutoff = (directions: Direction[], cutoffType: '45' | 'vandamme')
       const angleToMean = poleMean.toCartesian().angle(pole.toCartesian());
 
       // Capture the maximum angle from the mean and save its index
-      console.log('what', angleToMean, cutoffValue, jndex, index);
       if (angleToMean > cutoffValue) {
         cutoffValue = angleToMean;
         index = jndex;
@@ -47,12 +45,11 @@ const calculateCutoff = (directions: Direction[], cutoffType: '45' | 'vandamme')
     // Calculate ASD (scatter) and optimum cutoff angle (A) (Vandamme, 1994)
     var ASD = Math.sqrt(deltaSum / (poleDistribution.N - 1));
     var A = 1.8 * ASD + 5;
-    console.log('hey', cutoffValue, A, 45, index);
     // Vandamme cutoff
-    if (cutoffType === "vandamme" && cutoffValue < A) break;
+    if (cutoffType === 'vandamme' && cutoffValue < A) break;
 
     // 45 Cutoff
-    if (cutoffType === "45" && cutoffValue <= 45) break;
+    if (cutoffType === '45' && cutoffValue <= 45) break;
 
     // Set this direction to rejected
     if (index) iterateDirections[index].rejected = true;
@@ -60,7 +57,7 @@ const calculateCutoff = (directions: Direction[], cutoffType: '45' | 'vandamme')
     iterationsCount++;
 
     if (iterationsCount > 10) {
-      console.log('Warning: cutoff calculation did not converge');
+      // Cutoff calculation did not converge after 10 iterations
       break;
     }
   }
@@ -69,9 +66,8 @@ const calculateCutoff = (directions: Direction[], cutoffType: '45' | 'vandamme')
     directions: iterateDirections,
     cutoffValue,
     scatter: ASD,
-    optimum: A
+    optimum: A,
   };
 };
 
 export default calculateCutoff;
-

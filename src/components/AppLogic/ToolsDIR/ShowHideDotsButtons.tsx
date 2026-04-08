@@ -1,34 +1,35 @@
-import React, { FC, useCallback, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import styles from './ToolsDIR.module.scss';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
-import { Button, Tooltip, Typography } from "@mui/material";
-import ButtonGroupWithLabel from "../../Common/Buttons/ButtonGroupWithLabel/ButtonGroupWithLabel";
+import { Button, Tooltip, Typography } from '@mui/material';
+import ButtonGroupWithLabel from '../../Common/Buttons/ButtonGroupWithLabel/ButtonGroupWithLabel';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { 
-  addHiddenDirectionsIDs, 
-  setHiddenDirectionsIDs, 
-  setSelectedDirectionsIDs, 
-  setStatisticsMode 
-} from "../../../services/reducers/dirPage";
+import {
+  addHiddenDirectionsIDs,
+  setHiddenDirectionsIDs,
+  setSelectedDirectionsIDs,
+  setStatisticsMode,
+} from '../../../services/reducers/dirPage';
 import { IDirData } from '../../../utils/GlobalTypes';
-import ModalWrapper from "../../Common/Modal/ModalWrapper";
-import InputApply from "../../Common/InputApply/InputApply";
-import parseDotsIndexesInput from "../../../utils/parsers/parseDotsIndexesInput";
-import { enteredIndexesToIDsDIR } from "../../../utils/parsers/enteredIndexesToIDs";
-import { useTranslation } from "react-i18next";
+import ModalWrapper from '../../Common/Modal/ModalWrapper';
+import InputApply from '../../Common/InputApply/InputApply';
+import parseDotsIndexesInput from '../../../utils/parsers/parseDotsIndexesInput';
+import { enteredIndexesToIDsDIR } from '../../../utils/parsers/enteredIndexesToIDs';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   data: IDirData;
-}
+};
 
 const ShowHideDotsButtons = ({ data }: Props) => {
-
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation('translation');
-  
-  const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
-  const { selectedDirectionsIDs, hiddenDirectionsIDs } = useAppSelector(state => state.dirPageReducer); 
+
+  const { hotkeys, hotkeysActive } = useAppSelector((state) => state.appSettingsReducer);
+  const { selectedDirectionsIDs, hiddenDirectionsIDs } = useAppSelector(
+    (state) => state.dirPageReducer,
+  );
 
   const [hideDirs, setHideDirs] = useState<boolean>(false);
   const [showIndexesInput, setShowIndexesInput] = useState<boolean>(false);
@@ -41,21 +42,34 @@ const ShowHideDotsButtons = ({ data }: Props) => {
     setHideDirs(true);
   };
 
-  const [showHotkey, setShowHotkey] = useState<{key: string, code: string}>({key: 'S', code: 'KeyS'});
-  const [hideHotkey, setHideHotkey] = useState<{key: string, code: string}>({key: 'H', code: 'KeyH'});
+  const [showHotkey, setShowHotkey] = useState<{ key: string; code: string }>({
+    key: 'S',
+    code: 'KeyS',
+  });
+  const [hideHotkey, setHideHotkey] = useState<{ key: string; code: string }>({
+    key: 'H',
+    code: 'KeyH',
+  });
 
   useEffect(() => {
-    const visibilityHotkeys = hotkeys.find(block => block.titleKey === 'visibility' || block.title === 'Видимость точек' || block.title === 'Dots visibility')?.hotkeys;
+    const visibilityHotkeys = hotkeys.find(
+      (block) =>
+        block.titleKey === 'visibility' ||
+        block.title === 'Видимость точек' ||
+        block.title === 'Dots visibility',
+    )?.hotkeys;
     if (visibilityHotkeys) {
-      const show = visibilityHotkeys.find(h => h.labelKey === 'visibility.show')
-        || visibilityHotkeys.find(h => h.label === 'Показать точки')
-        || visibilityHotkeys.find(h => h.label === 'Show dots');
-      const hide = visibilityHotkeys.find(h => h.labelKey === 'visibility.hide')
-        || visibilityHotkeys.find(h => h.label === 'Скрыть точки')
-        || visibilityHotkeys.find(h => h.label === 'Hide dots');
+      const show =
+        visibilityHotkeys.find((h) => h.labelKey === 'visibility.show') ||
+        visibilityHotkeys.find((h) => h.label === 'Показать точки') ||
+        visibilityHotkeys.find((h) => h.label === 'Show dots');
+      const hide =
+        visibilityHotkeys.find((h) => h.labelKey === 'visibility.hide') ||
+        visibilityHotkeys.find((h) => h.label === 'Скрыть точки') ||
+        visibilityHotkeys.find((h) => h.label === 'Hide dots');
       if (show) setShowHotkey(show.hotkey);
       if (hide) setHideHotkey(hide.hotkey);
-    };
+    }
   }, [hotkeys]);
 
   useEffect(() => {
@@ -67,14 +81,14 @@ const ShowHideDotsButtons = ({ data }: Props) => {
       setHideDirs(false);
       dispatch(setSelectedDirectionsIDs(null));
       dispatch(setStatisticsMode(null));
-    };
+    }
   }, [hideDirs, selectedDirectionsIDs]);
 
   useEffect(() => {
-    if (hotkeysActive) window.addEventListener("keydown", handleHotkeys);
-    else window.removeEventListener("keydown", handleHotkeys);
+    if (hotkeysActive) window.addEventListener('keydown', handleHotkeys);
+    else window.removeEventListener('keydown', handleHotkeys);
     return () => {
-      window.removeEventListener("keydown", handleHotkeys);
+      window.removeEventListener('keydown', handleHotkeys);
     };
   }, [hotkeysActive, hotkeys]);
 
@@ -84,11 +98,11 @@ const ShowHideDotsButtons = ({ data }: Props) => {
     if (keyCode === showHotkey.code) {
       event.preventDefault();
       onShowClick();
-    };
+    }
     if (keyCode === hideHotkey.code) {
       event.preventDefault();
       onHideClick();
-    };
+    }
   };
 
   const handleEnteredDotsIndexesApply = (steps: string) => {
@@ -103,48 +117,43 @@ const ShowHideDotsButtons = ({ data }: Props) => {
     <>
       <ButtonGroupWithLabel label={t('dirPage.tools.visibility.title')}>
         <Tooltip
-          title={<Typography variant='body1'>{hideHotkey.key}</Typography>}
+          title={<Typography variant="body1">{hideHotkey.key}</Typography>}
           enterDelay={1000}
           arrow
         >
-          <Button
-            color={'primary'}
-            onClick={onHideClick}
-          >
+          <Button color={'primary'} onClick={onHideClick}>
             <VisibilityOffIcon />
           </Button>
         </Tooltip>
         <Tooltip
-          title={<Typography variant='body1'>{showHotkey.key}</Typography>}
+          title={<Typography variant="body1">{showHotkey.key}</Typography>}
           enterDelay={1000}
           arrow
         >
-          <Button
-            color={hiddenDirectionsIDs.length ? 'warning' : 'primary'}
-            onClick={onShowClick}
-          >
-            <VisibilityIcon /> 
+          <Button color={hiddenDirectionsIDs.length ? 'warning' : 'primary'} onClick={onShowClick}>
+            <VisibilityIcon />
           </Button>
         </Tooltip>
       </ButtonGroupWithLabel>
-      {
-        showIndexesInput && 
+      {showIndexesInput && (
         <ModalWrapper
           open={showIndexesInput}
           setOpen={setShowIndexesInput}
-          size={{width: '26vw', height: '14vh'}}
-          position={{left: '50%', top: '20%'}}
-          onClose={() => {setHideDirs(false)}}
+          size={{ width: '26vw', height: '14vh' }}
+          position={{ left: '50%', top: '20%' }}
+          onClose={() => {
+            setHideDirs(false);
+          }}
           isDraggable={true}
         >
-          <InputApply 
+          <InputApply
             label={`${t('inputDirs.label')} (hide dirs)`}
             helperText={`${t('inputDirs.helper')} 1-9 || 2,4,8,9 || 2-4;8,9 || 2-4;8,9;12-14`}
             onApply={handleEnteredDotsIndexesApply}
             placeholder={`1-${data.interpretations.length}`}
           />
         </ModalWrapper>
-      }
+      )}
     </>
   );
 };

@@ -1,9 +1,9 @@
-import { IPmdData, StatisitcsInterpretationFromPCA } from "../../GlobalTypes";
-import equal from "deep-equal"
+import { IPmdData, StatisitcsInterpretationFromPCA } from '../../GlobalTypes';
+import equal from 'deep-equal';
 
 const getInterpretationIDs = (
-  interpretation: StatisitcsInterpretationFromPCA | null, 
-  allData: IPmdData, 
+  interpretation: StatisitcsInterpretationFromPCA | null,
+  allData: IPmdData,
 ) => {
   const inInterpretationIDs: Array<number> = [];
 
@@ -13,14 +13,14 @@ const getInterpretationIDs = (
         if (equal(step, interpretaionStep)) inInterpretationIDs.push(step.id);
       });
     });
-  };
+  }
 
   return inInterpretationIDs;
 };
 
 // const getInterpretationIDsDIR = (
-//   interpretation: StatisitcsInterpretation | null, 
-//   allData: IDirData, 
+//   interpretation: StatisitcsInterpretation | null,
+//   allData: IDirData,
 // ) => {
 //   const inInterpretationIDs: Array<number> = [];
 
@@ -34,6 +34,5 @@ const getInterpretationIDs = (
 
 //   return inInterpretationIDs;
 // };
-
 
 export default getInterpretationIDs;

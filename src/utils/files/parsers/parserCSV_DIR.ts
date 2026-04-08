@@ -1,4 +1,4 @@
-import { IDirData } from "../../GlobalTypes";
+import { IDirData } from '../../GlobalTypes';
 
 /**
  * Process parsing of data from imported .csv dir-like file
@@ -7,17 +7,15 @@ import { IDirData } from "../../GlobalTypes";
  * @returns {IDirData} IDirData
  */
 const parseCSV_DIR = (data: string, name: string): IDirData => {
-  
   // eslint-disable-next-line no-control-regex
-  const eol = new RegExp("\r?\n");
+  const eol = new RegExp('\r?\n');
   // Get all lines except the last one (it's garbage)
-  let lines = data.split(eol).filter(line => line.length > 1);
+  let lines = data.split(eol).filter((line) => line.length > 1);
 
   const interpretations: IDirData['interpretations'] = lines.slice(1).map((line, index) => {
-    
     const params = line.replace(/\s+/g, ' ').split(',');
 
-    // id | Code | StepRange | N | Dgeo | Igeo | Kgeo | MADgeo | Dstrat | Istrat | Kstrat | MADstrat | Comment 
+    // id | Code | StepRange | N | Dgeo | Igeo | Kgeo | MADgeo | Dstrat | Istrat | Kstrat | MADstrat | Comment
     const label = params[0];
     const code = params[1];
     const stepRange = params[2];
@@ -61,19 +59,16 @@ const parseCSV_DIR = (data: string, name: string): IDirData => {
       MADstrat,
       Kgeo,
       Kstrat,
-      comment
+      comment,
     };
-
   });
-  
+
   return {
     name,
     interpretations,
-    format: "CSV_DIR",
+    format: 'CSV_DIR',
     created: new Date().toISOString(),
   };
-
-}
+};
 
 export default parseCSV_DIR;
-

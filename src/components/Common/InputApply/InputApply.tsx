@@ -9,16 +9,9 @@ interface IInputApply {
   onApply: (value: string) => void;
   disabled?: boolean;
   placeholder?: string;
-};
+}
 
-const InputApply: FC<IInputApply> = ({
-  label,
-  helperText,
-  onApply,
-  disabled,
-  placeholder
-}) => {
-
+const InputApply: FC<IInputApply> = ({ label, helperText, onApply, disabled, placeholder }) => {
   const [value, setValue] = useState<string>('');
 
   const handleApply = () => {
@@ -30,7 +23,7 @@ const InputApply: FC<IInputApply> = ({
   const handleEnterPress = (event: any) => {
     if (event.key === 'Enter') {
       handleApply();
-    };
+    }
   };
 
   return (
@@ -45,15 +38,11 @@ const InputApply: FC<IInputApply> = ({
         autoFocus={true}
         disabled={disabled}
         placeholder={placeholder || ''}
-        sx={{width: '100%'}}
+        sx={{ width: '100%' }}
       />
-      <IconButton
-        onClick={handleApply}
-      >
-        {<DirectionsIcon />}
-      </IconButton>
+      <IconButton onClick={handleApply}>{<DirectionsIcon />}</IconButton>
     </div>
-  )
+  );
 };
 
 export default InputApply;

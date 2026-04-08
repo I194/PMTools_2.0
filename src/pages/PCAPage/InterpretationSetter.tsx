@@ -1,10 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
 import styles from './PCAPage.module.scss';
 import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
-import { 
-  addInterpretation, 
-  setStatisticsMode, 
-  setShowStepsInput, 
+import {
+  addInterpretation,
+  setStatisticsMode,
+  setShowStepsInput,
 } from '../../services/reducers/pcaPage';
 import { IPmdData, StatisitcsInterpretationFromPCA } from '../../utils/GlobalTypes';
 import calculateStatisticsPMD from '../../utils/statistics/calculateStatisticsPMD';
@@ -12,9 +12,7 @@ import { MetaDataTablePMD, ToolsPMD } from '../../components/AppLogic';
 import Graphs from './Graphs';
 import Tables from './Tables';
 import { useTheme } from '@mui/material/styles';
-import {
-  bgColorMain,
-} from '../../utils/ThemeConstants';
+import { bgColorMain } from '../../utils/ThemeConstants';
 import ModalWrapper from '../../components/Common/Modal/ModalWrapper';
 import UploadModal from '../../components/Common/Modal/UploadModal/UploadModal';
 import { useMediaQuery } from 'react-responsive';
@@ -27,15 +25,22 @@ interface IInterpretationSetter {
 }
 
 const InterpretationSetter: FC<IInterpretationSetter> = ({ dataToShow }) => {
-
   const dispatch = useAppDispatch();
 
   const { t, i18n } = useTranslation('translation');
 
-  const { statisticsMode, selectedStepsIDs, isCommentsInputVisible, labelModeIsNumeric, currentFileInterpretations, allInterpretations } = useAppSelector(state => state.pcaPageReducer);
+  const {
+    statisticsMode,
+    selectedStepsIDs,
+    isCommentsInputVisible,
+    labelModeIsNumeric,
+    currentFileInterpretations,
+    allInterpretations,
+  } = useAppSelector((state) => state.pcaPageReducer);
 
   const [showCommentModal, setShowCommentModal] = useState<boolean>(false);
-  const [interpretationOnHold, setInterpretationOnHold] = useState<StatisitcsInterpretationFromPCA | null>(null);
+  const [interpretationOnHold, setInterpretationOnHold] =
+    useState<StatisitcsInterpretationFromPCA | null>(null);
 
   useEffect(() => {
     if (statisticsMode && !selectedStepsIDs) dispatch(setShowStepsInput(true));
@@ -63,15 +68,15 @@ const InterpretationSetter: FC<IInterpretationSetter> = ({ dataToShow }) => {
     }
 
     const interpretationWithComment: StatisitcsInterpretationFromPCA = {
-      ...interpretationOnHold as StatisitcsInterpretationFromPCA,
-      comment
+      ...(interpretationOnHold as StatisitcsInterpretationFromPCA),
+      comment,
     };
 
     dispatch(addInterpretation(interpretationWithComment));
     dispatch(setStatisticsMode(null));
     setInterpretationOnHold(null);
     setShowCommentModal(false);
-  }
+  };
 
   const handleDeclineAddComment = () => {
     if (!interpretationOnHold) {
@@ -81,29 +86,28 @@ const InterpretationSetter: FC<IInterpretationSetter> = ({ dataToShow }) => {
     dispatch(setStatisticsMode(null));
     setInterpretationOnHold(null);
     setShowCommentModal(false);
-  }
+  };
 
   return (
     <>
-      {
-        showCommentModal && isCommentsInputVisible && 
+      {showCommentModal && isCommentsInputVisible && (
         <ModalWrapper
           open={showCommentModal}
           setOpen={setShowCommentModal}
-          size={{width: '26vw', height: '14vh'}}
-          position={{left: '50%', top: '20%'}}
+          size={{ width: '26vw', height: '14vh' }}
+          position={{ left: '50%', top: '20%' }}
           onClose={handleDeclineAddComment}
           isDraggable={true}
         >
-          <InputApply 
+          <InputApply
             label={`${t('inputComment.label')}`}
             onApply={handleAddComment}
             placeholder={`${t('inputComment.placeholder')}`}
           />
         </ModalWrapper>
-      }
+      )}
     </>
-  )
+  );
 };
 
 export default InterpretationSetter;

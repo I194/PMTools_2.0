@@ -1,5 +1,5 @@
-import { dirToCartesian2D } from "../dirToCartesian";
-import Coordinates from "./Coordinates";
+import { dirToCartesian2D } from '../dirToCartesian';
+import Coordinates from './Coordinates';
 
 class Direction {
   // Class Direction
@@ -13,15 +13,11 @@ class Direction {
     this.declination = declination;
     this.inclination = inclination;
     this.length = length;
-  };
+  }
 
   get paleoLatitude() {
-    return (
-      Math.atan(
-        0.5 * Math.tan(this.inclination / Direction.RADIANS)
-      ) * Direction.RADIANS
-    );
-  };
+    return Math.atan(0.5 * Math.tan(this.inclination / Direction.RADIANS)) * Direction.RADIANS;
+  }
 
   /** Creates and returns array of dec and inc: [declination, inclination] from this Direction. */
   toArray = () => {
@@ -59,7 +55,7 @@ class Direction {
     if (inc < 0) {
       inc = -inc;
       dec = (dec + 180) % 360;
-    };
+    }
     return new Direction(dec, inc, this.length);
   };
 
@@ -69,7 +65,7 @@ class Direction {
     inc = -inc;
     dec = (dec + 180) % 360;
     return new Direction(dec, inc, this.length);
-  }
+  };
 }
 
 export default Direction;

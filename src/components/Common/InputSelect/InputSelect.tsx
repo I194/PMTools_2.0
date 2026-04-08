@@ -6,75 +6,82 @@ import IconButton from '@mui/material/IconButton';
 
 interface IInputSelect {
   placeholder: string;
-  leftIconButton?: {icon: ReactNode, onClick: () => void, disabled?: boolean};
-  rightIconButtons: Array<{icon: ReactNode, onClick: () => void, disabled?: boolean}>;
+  leftIconButton?: { icon: ReactNode; onClick: () => void; disabled?: boolean };
+  rightIconButtons: Array<{ icon: ReactNode; onClick: () => void; disabled?: boolean }>;
   inputText: string;
   setInputText: React.Dispatch<React.SetStateAction<string>>;
-};
+}
 
-const InputSelect: FC<IInputSelect> = ({ placeholder, leftIconButton, rightIconButtons, inputText, setInputText }) => {
-
+const InputSelect: FC<IInputSelect> = ({
+  placeholder,
+  leftIconButton,
+  rightIconButtons,
+  inputText,
+  setInputText,
+}) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputText(event.target.value);
   };
-  
-  const createRightIconButton = (icon: ReactNode, onClick: () => void, disabled: boolean, index: number) => (
-    <>
-      <Divider sx={{ height: '80%', mr: 0.5, ml: 0.5 }} orientation="vertical"/>
-      <IconButton 
-        onClick={onClick}
-        color="primary" 
-        disabled={disabled}
-        sx={{ p: '10px' }} 
-      >
-        { icon }
+
+  const createRightIconButton = (
+    icon: ReactNode,
+    onClick: () => void,
+    disabled: boolean,
+    index: number,
+  ) => (
+    <React.Fragment key={index}>
+      <Divider sx={{ height: '80%', mr: 0.5, ml: 0.5 }} orientation="vertical" />
+      <IconButton onClick={onClick} color="primary" disabled={disabled} sx={{ p: '10px' }}>
+        {icon}
       </IconButton>
-    </>
+    </React.Fragment>
   );
 
   return (
     <Paper
       component="form"
-      sx={{ 
-        p: '2px 4px', 
-        display: 'flex', 
-        alignItems: 'center', 
+      sx={{
+        p: '2px 4px',
+        display: 'flex',
+        alignItems: 'center',
         minWidth: 400,
         height: '56px',
-        boxSizing: 'border-box'
+        boxSizing: 'border-box',
       }}
-    > 
-      {
-        leftIconButton && 
-        <IconButton 
+    >
+      {leftIconButton && (
+        <IconButton
           onClick={leftIconButton.onClick}
-          color='primary'
+          color="primary"
           disabled={leftIconButton.disabled}
-          sx={{ p: '10px' }} 
+          sx={{ p: '10px' }}
           aria-label="menu"
         >
-          { leftIconButton.icon }
+          {leftIconButton.icon}
         </IconButton>
-      }
+      )}
       <InputBase
-        sx={{ 
+        sx={{
           ml: 1,
           flex: 1,
           '.MuiInputBase-input': {
             padding: '0px',
-          }
+          },
         }}
-        placeholder={ placeholder }
+        placeholder={placeholder}
         inputProps={{ 'aria-label': placeholder }}
         value={inputText}
         onChange={handleChange}
       />
-      {
-        rightIconButtons && 
+      {rightIconButtons &&
         rightIconButtons.map((iconButton, index) => {
-          return createRightIconButton(iconButton.icon, iconButton.onClick, !!iconButton.disabled, index);
-        })
-      }
+          return createRightIconButton(
+            iconButton.icon,
+            iconButton.onClick,
+            !!iconButton.disabled,
+            index,
+          );
+        })}
     </Paper>
   );
 };

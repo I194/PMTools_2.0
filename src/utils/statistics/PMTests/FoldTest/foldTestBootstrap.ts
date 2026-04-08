@@ -1,10 +1,10 @@
-import { FoldTestResult, IDirData } from "../../../GlobalTypes";
-import Coordinates from "../../../graphs/classes/Coordinates";
-import Direction from "../../../graphs/classes/Direction";
-import { Reference } from "../../../graphs/types";
-import { drawBootstrap } from "../../bootstrapManipulations";
-import { getEigenvaluesFast } from "../../eigManipulations";
-import { TMatrix } from "../../matrix";
+import { FoldTestResult, IDirData } from '../../../GlobalTypes';
+import Coordinates from '../../../graphs/classes/Coordinates';
+import Direction from '../../../graphs/classes/Direction';
+import { Reference } from '../../../graphs/types';
+import { drawBootstrap } from '../../bootstrapManipulations';
+import { getEigenvaluesFast } from '../../eigManipulations';
+import { TMatrix } from '../../matrix';
 
 type CoordsWithBeddingPars = {
   coordinates: Coordinates;
@@ -16,13 +16,13 @@ const foldTestBootstrap = (
   dataToAnalyze: IDirData,
   numberOfSimulations = 1000,
   setResult?: React.Dispatch<React.SetStateAction<FoldTestResult>>,
-  setIsRunning?: React.Dispatch<React.SetStateAction<boolean>>
+  setIsRunning?: React.Dispatch<React.SetStateAction<boolean>>,
 ) => {
   // Fold Test by L. Tauxe* and G.S. Watson, 1994
   // "We combine eigen analysis and parameter estimation techniques
   // for a newly constituted, more versatile fold test.
   // The method is automatic, requiring no assumptions about the polarity or distribution of data, and gives confidence
-  // limits on the degree of unfolding required to produce the tightest grouping of data." (c) 
+  // limits on the degree of unfolding required to produce the tightest grouping of data." (c)
   // DOI: https://doi.org/10.1016/0012-821X(94)90006-X
 
   // Completes the classical foldtest but does a bootstrap on N randomly sampled data sets
@@ -42,15 +42,23 @@ const foldTestBootstrap = (
     const cartesianStrat = directionStrat.toCartesian();
 
     const bedPars = findBed(cartesianGeo, cartesianStrat);
-    cutoffDataGeo.push({coordinates: cartesianGeo, beddingAzimuth: bedPars.azimuth, beddingDip: bedPars.dip});
-    cutoffDataStrat.push({coordinates: cartesianStrat, beddingAzimuth: bedPars.azimuth, beddingDip: bedPars.dip});
+    cutoffDataGeo.push({
+      coordinates: cartesianGeo,
+      beddingAzimuth: bedPars.azimuth,
+      beddingDip: bedPars.dip,
+    });
+    cutoffDataStrat.push({
+      coordinates: cartesianStrat,
+      beddingAzimuth: bedPars.azimuth,
+      beddingDip: bedPars.dip,
+    });
   });
 
   // Combine all geographic components to a single array
   const vectors = [...cutoffDataGeo];
 
   const untilts: Array<number> = [];
-  const savedBootstraps: Array<Array<{x: number, y: number}>> = [];
+  const savedBootstraps: Array<Array<{ x: number; y: number }>> = [];
 
   // Save the unfolding of actual data
   savedBootstraps.push(unfold(vectors, 0).taus);
@@ -58,14 +66,19 @@ const foldTestBootstrap = (
   // No bootstrap, only unfold the data
 
   let next: {
-    (): { 
-      untilts: number[]; 
-      savedBootstraps: { x: number; y: number; }[][]; 
-    } | undefined; 
-    (): void; 
+    ():
+      | {
+          untilts: number[];
+          savedBootstraps: { x: number; y: number }[][];
+        }
+      | undefined;
+    (): void;
   };
 
-  let iterationResult: {index: number, taus: Array<{x: number, y: number}>} = {index: 0, taus: []};
+  let iterationResult: { index: number; taus: Array<{ x: number; y: number }> } = {
+    index: 0,
+    taus: [],
+  };
   let iteration: number = 0;
 
   let cancelled = false;
@@ -85,11 +98,15 @@ const foldTestBootstrap = (
     if (cancelled) return;
     // Number of bootstraps were completed
     if (++iteration > numberOfSimulations) {
-      if (setResult) setResult({untilts, savedBootstraps});
-      else localStorage.setItem("foldTestBootstrap", JSON.stringify({untilts: untilts, bootstrap: savedBootstraps}))
+      if (setResult) setResult({ untilts, savedBootstraps });
+      else
+        localStorage.setItem(
+          'foldTestBootstrap',
+          JSON.stringify({ untilts: untilts, bootstrap: savedBootstraps }),
+        );
       setIsRunning?.(false);
-      return {untilts, savedBootstraps};
-    };
+      return { untilts, savedBootstraps };
+    }
 
     iterationResult = unfold(drawBootstrap(vectors), iteration);
 
@@ -102,15 +119,13 @@ const foldTestBootstrap = (
     // Queue for next bootstrap iteration
     timeoutId = setTimeout(next) as unknown as number;
   })();
-  
+
   return cancel;
 };
 
 export default foldTestBootstrap;
 
-
 function findBed(cartesianCoordsGeo: Coordinates, cartesianCoordsStrat: Coordinates) {
-
   const degrad = 180 / Math.PI;
   let strike, striker, dip;
 
@@ -127,10 +142,10 @@ function findBed(cartesianCoordsGeo: Coordinates, cartesianCoordsStrat: Coordina
     strike = 90;
     striker = strike / degrad;
   } else {
-    const tanstrike = -(xs - xg) / (ys - yg)
+    const tanstrike = -(xs - xg) / (ys - yg);
     striker = Math.atan(tanstrike);
     strike = striker * degrad;
-  };
+  }
 
   // Step 2: Rotate around z by -s
   const cosstrike = Math.cos(striker);
@@ -138,21 +153,21 @@ function findBed(cartesianCoordsGeo: Coordinates, cartesianCoordsStrat: Coordina
   const ysp = -sinstrike * xs + cosstrike * ys;
   const ygp = -sinstrike * xg + cosstrike * yg;
   let sindip, cosdip;
-  
+
   // Step 3: Find rotation d around x which brings G to S
-  if ((ygp == 0) && (zg == 0)) {
+  if (ygp == 0 && zg == 0) {
     sindip = 0;
     cosdip = 1;
   } else if (zg == 0) {
     sindip = -zs / ygp;
     cosdip = ysp / ygp;
   } else if (ygp == 0) {
-    sindip = ysp/zg;
-    cosdip = zs/zg;
+    sindip = ysp / zg;
+    cosdip = zs / zg;
   } else {
     sindip = (ysp / ygp - zs / zg) / (ygp / zg + zg / ygp);
     cosdip = (ysp - sindip * zg) / ygp;
-  };
+  }
 
   dip = FNarcsin(sindip);
 
@@ -160,19 +175,19 @@ function findBed(cartesianCoordsGeo: Coordinates, cartesianCoordsStrat: Coordina
   if (dip < 0) {
     dip = -dip;
     strike += 180;
-  };
+  }
   let azimuth = strike + 90; // here we changing from strike to azimuth
   if (azimuth < 0) azimuth += 360;
   if (azimuth > 360) azimuth -= 360;
 
-  return {azimuth, dip};
-};
+  return { azimuth, dip };
+}
 
 export const FNarccos = (x: number) => {
   let arccos;
   if (x >= 1) arccos = 0;
   else if (x <= -1) arccos = 180;
-  else arccos = -Math.atan(x / Math.sqrt(1 - x*x)) * (180 / Math.PI) + 90;
+  else arccos = -Math.atan(x / Math.sqrt(1 - x * x)) * (180 / Math.PI) + 90;
   return arccos;
 };
 
@@ -180,27 +195,27 @@ export const FNarcsin = (x: number) => {
   return 90 - FNarccos(x);
 };
 
-const unfold = (
-  vectors: Array<CoordsWithBeddingPars>,
-  iteration: number
-) => {
+const unfold = (vectors: Array<CoordsWithBeddingPars>, iteration: number) => {
   // Function unfold
   // Unfolds a bunch of vectors following their bedding
 
   const eigenvaluesOfUnfoldedDirections = (
-    vectors: Array<CoordsWithBeddingPars>, 
-    unfoldingPercentage: number
+    vectors: Array<CoordsWithBeddingPars>,
+    unfoldingPercentage: number,
   ) => {
     // Function eigenvaluesOfUnfoldedDirections
     // Returns the three eigenvalues of a cloud of vectors at a percentage of unfolding
 
     // Do the tilt correction on all points in pseudoDirections
-    const tilts: Array<Coordinates> = vectors.map((vector) => (
-      vector.coordinates.correctBedding(vector.beddingAzimuth, 1E-2 * unfoldingPercentage * vector.beddingDip)
-    ));
+    const tilts: Array<Coordinates> = vectors.map((vector) =>
+      vector.coordinates.correctBedding(
+        vector.beddingAzimuth,
+        1e-2 * unfoldingPercentage * vector.beddingDip,
+      ),
+    );
 
     // Return the eigen values of a real, symmetrical matrix
-    return getEigenvaluesFast(TMatrix(tilts.map(coords => coords.toArray())));
+    return getEigenvaluesFast(TMatrix(tilts.map((coords) => coords.toArray())));
   };
 
   const unfoldingMin = -50;
@@ -210,13 +225,17 @@ const unfold = (
   // Variable max to keep track of the maximum eigenvalue and its unfolding % index
   let max = 0;
   let index = 0;
-  
+
   // Array to capture all maximum eigenvalues for one bootstrap over the unfolding range
-  let taus: Array<{x: number, y: number}> = [];
+  let taus: Array<{ x: number; y: number }> = [];
 
   // For this particular random set of directions unfold from the specified min to max percentages
   // With increments of 10 degrees
-  for (let unfoldingPercent = unfoldingMin; unfoldingPercent <= unfoldingMax; unfoldingPercent += 10) {
+  for (
+    let unfoldingPercent = unfoldingMin;
+    unfoldingPercent <= unfoldingMax;
+    unfoldingPercent += 10
+  ) {
     // Calculate the eigenvalues
     const tau = eigenvaluesOfUnfoldedDirections(vectors, unfoldingPercent);
 
@@ -224,15 +243,15 @@ const unfold = (
     if (iteration < numberOfSavedSimulations) {
       taus.push({
         x: unfoldingPercent,
-        y: tau.t1
+        y: tau.t1,
       });
-    };
+    }
 
     if (tau.t1 > max) {
       max = tau.t1;
       index = unfoldingPercent;
-    };
-  };
+    }
+  }
 
   // Hone in with a granularity of a single degree
   for (let unfoldingPercent = index - 9; unfoldingPercent <= index + 9; unfoldingPercent++) {
@@ -246,11 +265,11 @@ const unfold = (
     if (tau.t1 > max) {
       max = tau.t1;
       index = unfoldingPercent;
-    };
-  };
+    }
+  }
 
   return {
     index,
-    taus
+    taus,
   };
-}
+};

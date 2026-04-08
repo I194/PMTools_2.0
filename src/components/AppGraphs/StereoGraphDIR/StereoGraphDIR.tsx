@@ -1,15 +1,19 @@
-import React, { FC, useMemo, useState } from "react";
-import styles from "./ZijdGraph.module.scss";
-import { useAppSelector } from "../../../services/store/hooks";
-import { useGraphSelectableNodesDIR, useGraphSelectedIDs, useDIRGraphSettings } from "../../../utils/GlobalHooks";
-import { Cutoff, IDirData, IGraph, RawStatisticsDIR, VGPData } from "../../../utils/GlobalTypes";
-import { SelectableGraph, GraphSymbols } from "../../Common/Graphs";
-import { stereoAreaConstants } from "./StereoConstants";
-import AxesAndData from "./AxesAndData";
-import CoordinateSystem from "../../Common/Graphs/CoordinateSystem/CoordinateSystem";
-import dataToStereoDIR from "../../../utils/graphs/formatters/stereo/dataToStereoDIR";
-import { GraphSettings, TMenuItem } from "../../../utils/graphs/types";
-import getInterpretationIDsDIR from "../../../utils/graphs/formatters/getInterpretationIDsDIR";
+import React, { FC, useMemo, useState } from 'react';
+import styles from './ZijdGraph.module.scss';
+import { useAppSelector } from '../../../services/store/hooks';
+import {
+  useGraphSelectableNodesDIR,
+  useGraphSelectedIDs,
+  useDIRGraphSettings,
+} from '../../../utils/GlobalHooks';
+import { Cutoff, IDirData, IGraph, RawStatisticsDIR, VGPData } from '../../../utils/GlobalTypes';
+import { SelectableGraph, GraphSymbols } from '../../Common/Graphs';
+import { stereoAreaConstants } from './StereoConstants';
+import AxesAndData from './AxesAndData';
+import CoordinateSystem from '../../Common/Graphs/CoordinateSystem/CoordinateSystem';
+import dataToStereoDIR from '../../../utils/graphs/formatters/stereo/dataToStereoDIR';
+import { GraphSettings, TMenuItem } from '../../../utils/graphs/types';
+import getInterpretationIDsDIR from '../../../utils/graphs/formatters/getInterpretationIDsDIR';
 
 export interface IStereoGraphDIR extends IGraph {
   data: IDirData;
@@ -19,42 +23,53 @@ export interface IStereoGraphDIR extends IGraph {
   menuSettings: {
     menuItems: TMenuItem[];
     settings: GraphSettings;
-  }
-};
+  };
+}
 
-const StereoGraphDIR: FC<IStereoGraphDIR> = ({ 
-  graphId, 
-  width, 
-  height, 
+const StereoGraphDIR: FC<IStereoGraphDIR> = ({
+  graphId,
+  width,
+  height,
   data,
   centeredByMean,
   setCenteredByMean,
   cutoff,
   menuSettings,
 }) => {
-
   const { menuItems, settings } = menuSettings;
-  const { reference, currentInterpretation, hiddenDirectionsIDs, reversedDirectionsIDs } = useAppSelector(state => state.dirPageReducer);
-  const selectableNodes = useGraphSelectableNodesDIR(graphId); 
+  const { reference, currentInterpretation, hiddenDirectionsIDs, reversedDirectionsIDs } =
+    useAppSelector((state) => state.dirPageReducer);
+  const selectableNodes = useGraphSelectableNodesDIR(graphId);
 
-  const inInterpretationIDs = useMemo(() => getInterpretationIDsDIR(currentInterpretation, data), [currentInterpretation, data]);
+  const inInterpretationIDs = useMemo(
+    () => getInterpretationIDsDIR(currentInterpretation, data),
+    [currentInterpretation, data],
+  );
 
   const selectedIDs = useGraphSelectedIDs('dir');
-  const {viewHeight, viewWidth, ...areaConstants} = stereoAreaConstants(width, height);
-  const dataConstants = useMemo(() => 
-    dataToStereoDIR(
-      data, width / 2, reference, 
-      hiddenDirectionsIDs, reversedDirectionsIDs, 
-      centeredByMean, currentInterpretation?.rawData as RawStatisticsDIR,
-      cutoff.enabled
-    ),
+  const { viewHeight, viewWidth, ...areaConstants } = stereoAreaConstants(width, height);
+  const dataConstants = useMemo(
+    () =>
+      dataToStereoDIR(
+        data,
+        width / 2,
+        reference,
+        hiddenDirectionsIDs,
+        reversedDirectionsIDs,
+        centeredByMean,
+        currentInterpretation?.rawData as RawStatisticsDIR,
+        cutoff.enabled,
+      ),
     [
-      reference, width, 
-      currentInterpretation, data, 
-      hiddenDirectionsIDs, 
-      reversedDirectionsIDs, 
-      centeredByMean, cutoff
-    ]
+      reference,
+      width,
+      currentInterpretation,
+      data,
+      hiddenDirectionsIDs,
+      reversedDirectionsIDs,
+      centeredByMean,
+      cutoff,
+    ],
   );
 
   return (
@@ -76,11 +91,11 @@ const StereoGraphDIR: FC<IStereoGraphDIR> = ({
           toggleBorderVisibility: () => cutoff.borderCircle?.setShow(!cutoff.borderCircle?.show),
           isBorderVisible: cutoff.borderCircle?.show || false,
           toggleOuterDotsVisibility: () => cutoff.outerDots?.setShow(!cutoff.outerDots?.show),
-          isDotsHidden: !cutoff.outerDots?.show || false
+          isDotsHidden: !cutoff.outerDots?.show || false,
         }}
       >
         <g>
-          <AxesAndData 
+          <AxesAndData
             graphId={graphId}
             width={width}
             height={height}
@@ -91,17 +106,20 @@ const StereoGraphDIR: FC<IStereoGraphDIR> = ({
             cutoff={cutoff}
             settings={settings}
           />
-          <CoordinateSystem reference={reference} top={-15}/>  
-          <GraphSymbols 
-            title1="Down" id1={`${graphId}-d-data`} 
-            title2="Up" id2={`${graphId}-u-data`}
-            viewHeight={viewHeight} viewWidth={viewWidth}
+          <CoordinateSystem reference={reference} top={-15} />
+          <GraphSymbols
+            title1="Down"
+            id1={`${graphId}-d-data`}
+            title2="Up"
+            id2={`${graphId}-u-data`}
+            viewHeight={viewHeight}
+            viewWidth={viewWidth}
             disabled={true}
           />
         </g>
       </SelectableGraph>
     </>
-  )
-}
+  );
+};
 
 export default StereoGraphDIR;

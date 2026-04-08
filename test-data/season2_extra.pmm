@@ -1,0 +1,8 @@
+""
+"season2_extra","","2025-09-10"
+ID,       CODE,     STEPRANGE,  N,     Dg,    Ig,     kg,   a95g,  Ds,    Is,     ks,   a95s,  comment,
+S2E-01,   DirOPCA,  M10-M80,    8,     14.2,  51.8,  125.3, 4.7,   11.8,  48.3,  120.1, 4.9,   "AF normal"
+S2E-02,   DirOPCA,  M15-M90,    7,     7.5,   48.6,  98.7,  6.1,   5.1,   45.1,  94.3,  6.3,   "AF normal"
+S2E-03,   DirOPCA,  M10-M70,    6,     191.3, -49.5, 110.4, 6.4,   188.9, -46.1, 105.9, 6.7,   "AF reversed"
+S2E-04,   DirOPCA,  M20-M80,    9,     185.8, -52.7, 142.6, 4.1,   183.4, -49.3, 137.8, 4.3,   "AF reversed"
+S2E-05,   DirOPCA,  M10-M90,    8,     19.7,  54.1,  136.9, 4.5,   17.3,  50.6,  131.7, 4.7,   "AF normal"

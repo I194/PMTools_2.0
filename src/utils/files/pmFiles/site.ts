@@ -1,7 +1,3 @@
-import PMFile from ".";
+import PMFile from '.';
 
-export default class Site extends PMFile {
-
-  
-
-}
+export default class Site extends PMFile {}

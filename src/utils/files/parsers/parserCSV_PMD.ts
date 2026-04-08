@@ -1,4 +1,4 @@
-import { IPmdData } from "../../GlobalTypes";
+import { IPmdData } from '../../GlobalTypes';
 
 /**
  * Process parsing of data from imported .csv pmd-like file
@@ -7,12 +7,11 @@ import { IPmdData } from "../../GlobalTypes";
  * @returns {IPmdData} IPmdData
  */
 const parseCSV_PMD = (data: string, name: string): IPmdData => {
-  
   // eslint-disable-next-line no-control-regex
-  const eol = new RegExp("\r?\n");
+  const eol = new RegExp('\r?\n');
   // Get all lines except the last one (it's garbage)
-  let lines = data.split(eol).filter(line => line.length > 1);
-  
+  let lines = data.split(eol).filter((line) => line.length > 1);
+
   const headLine = lines[1].split(',');
 
   const metadata = {
@@ -20,12 +19,11 @@ const parseCSV_PMD = (data: string, name: string): IPmdData => {
     a: +headLine[0],
     b: +headLine[1],
     s: +headLine[2],
-    d: +headLine[3],  
+    d: +headLine[3],
     v: +headLine[4],
-  }
+  };
 
   const steps = lines.slice(3).map((line, index) => {
-    
     const params = line.replace(/\s+/g, ' ').split(',');
 
     // PAL | Xc (Am2) | Yc (Am2) | Zc (Am2) | MAG (A/m) | Dg | Ig | Ds | Is| a95
@@ -72,17 +70,14 @@ const parseCSV_PMD = (data: string, name: string): IPmdData => {
       comment,
       demagType,
     };
-
   });
-  
+
   return {
     metadata,
     steps,
-    format: "CSV_PMD",
+    format: 'CSV_PMD',
     created: new Date().toISOString(),
   };
-
-}
+};
 
 export default parseCSV_PMD;
-

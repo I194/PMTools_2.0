@@ -11,9 +11,9 @@ import parseDotsIndexesInput from '../../../utils/parsers/parseDotsIndexesInput'
 import ShowHideDotsButtons from './ShowHideDotsButtons';
 import { referenceToLabel } from '../../../utils/parsers/labelToReference';
 import { enteredIndexesToIDsDIR } from '../../../utils/parsers/enteredIndexesToIDs';
-import { 
-  setReference, 
-  setSelectedDirectionsIDs, 
+import {
+  setReference,
+  setSelectedDirectionsIDs,
   setStatisticsMode,
   toggleCommentsInput,
 } from '../../../services/reducers/dirPage';
@@ -29,16 +29,21 @@ import { ToggleButton } from '../../Common/Buttons';
 
 interface IToolsDIR {
   data: IDirData | null;
-};
+}
 
 const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
-
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation('translation');
   const widthLessThan1400 = useMediaQuery({ query: '(max-width: 1400px)' });
-  
-  const { hotkeys, hotkeysActive } = useAppSelector(state => state.appSettingsReducer);
-  const { selectedDirectionsIDs, hiddenDirectionsIDs, statisticsMode, reference, isCommentsInputVisible } = useAppSelector(state => state.dirPageReducer); 
+
+  const { hotkeys, hotkeysActive } = useAppSelector((state) => state.appSettingsReducer);
+  const {
+    selectedDirectionsIDs,
+    hiddenDirectionsIDs,
+    statisticsMode,
+    reference,
+    isCommentsInputVisible,
+  } = useAppSelector((state) => state.dirPageReducer);
 
   const [showIndexesInput, setShowIndexesInput] = useState<boolean>(false);
   const [showVGP, setShowVGP] = useState<boolean>(false);
@@ -46,37 +51,59 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
 
   const availableReferences: Array<Reference> = ['geographic', 'stratigraphic'];
 
-  const [coordinateSystemHotkey, setCoordinateSystemHotkey] = useState<{key: string, code: string}>({key: 'Q', code: 'KeyQ'});
-  const [fisherHotkey, setFisherHotkey] = useState<{key: string, code: string}>({key: 'F', code: 'KeyF'});
-  const [mcFaddenHotkey, setMcFaddenHotkey] = useState<{key: string, code: string}>({key: 'M', code: 'KeyM'});
-  const [gcHotkey, setGcHotkey] = useState<{key: string, code: string}>({key: 'G', code: 'KeyG'});
-  const [gcnHotkey, setGcnHotkey] = useState<{key: string, code: string}>({key: 'I', code: 'KeyI'});
-  const [unselectHotkey, setUnselectHotkey] = useState<{key: string, code: string}>({key: 'U', code: 'KeyU'});
+  const [coordinateSystemHotkey, setCoordinateSystemHotkey] = useState<{
+    key: string;
+    code: string;
+  }>({ key: 'Q', code: 'KeyQ' });
+  const [fisherHotkey, setFisherHotkey] = useState<{ key: string; code: string }>({
+    key: 'F',
+    code: 'KeyF',
+  });
+  const [mcFaddenHotkey, setMcFaddenHotkey] = useState<{ key: string; code: string }>({
+    key: 'M',
+    code: 'KeyM',
+  });
+  const [gcHotkey, setGcHotkey] = useState<{ key: string; code: string }>({
+    key: 'G',
+    code: 'KeyG',
+  });
+  const [gcnHotkey, setGcnHotkey] = useState<{ key: string; code: string }>({
+    key: 'I',
+    code: 'KeyI',
+  });
+  const [unselectHotkey, setUnselectHotkey] = useState<{ key: string; code: string }>({
+    key: 'U',
+    code: 'KeyU',
+  });
 
   useEffect(() => {
     const getGroup = (titleKey: string, ru: string, en: string) =>
-      hotkeys.find(block => block.titleKey === titleKey || block.title === ru || block.title === en)?.hotkeys;
+      hotkeys.find(
+        (block) => block.titleKey === titleKey || block.title === ru || block.title === en,
+      )?.hotkeys;
 
-    const coordinateSystemHotkeys = getGroup('coordinates', 'Система координат', 'Coordinate system');
+    const coordinateSystemHotkeys = getGroup(
+      'coordinates',
+      'Система координат',
+      'Coordinate system',
+    );
     const statHotkeys = getGroup('statMethods', 'Статистические методы', 'Statistics methods');
     const selectionHotkeys = getGroup('selection', 'Выделение точек', 'Dots selection');
 
     if (coordinateSystemHotkeys && statHotkeys && selectionHotkeys) {
       setCoordinateSystemHotkey(
-        (coordinateSystemHotkeys.find(h => h.labelKey === 'coordinates.scroll') ||
-         coordinateSystemHotkeys.find(h => h.label === 'Прокручивание систем координат') ||
-         coordinateSystemHotkeys.find(h => h.label === 'Coordinate system scroll')
-        )!.hotkey
+        (coordinateSystemHotkeys.find((h) => h.labelKey === 'coordinates.scroll') ||
+          coordinateSystemHotkeys.find((h) => h.label === 'Прокручивание систем координат') ||
+          coordinateSystemHotkeys.find((h) => h.label === 'Coordinate system scroll'))!.hotkey,
       );
-      setFisherHotkey((statHotkeys.find(h => h.label === 'Fisher'))!.hotkey);
-      setMcFaddenHotkey((statHotkeys.find(h => h.label === 'McFadden'))!.hotkey);
-      setGcHotkey((statHotkeys.find(h => h.label === 'GC'))!.hotkey);
-      setGcnHotkey((statHotkeys.find(h => h.label === 'GCN'))!.hotkey);
+      setFisherHotkey(statHotkeys.find((h) => h.label === 'Fisher')!.hotkey);
+      setMcFaddenHotkey(statHotkeys.find((h) => h.label === 'McFadden')!.hotkey);
+      setGcHotkey(statHotkeys.find((h) => h.label === 'GC')!.hotkey);
+      setGcnHotkey(statHotkeys.find((h) => h.label === 'GCN')!.hotkey);
       setUnselectHotkey(
-        (selectionHotkeys.find(h => h.labelKey === 'selection.deleteSelection') ||
-         selectionHotkeys.find(h => h.label === 'Убрать выделение') ||
-         selectionHotkeys.find(h => h.label === 'Remove selection')
-        )!.hotkey
+        (selectionHotkeys.find((h) => h.labelKey === 'selection.deleteSelection') ||
+          selectionHotkeys.find((h) => h.label === 'Убрать выделение') ||
+          selectionHotkeys.find((h) => h.label === 'Remove selection'))!.hotkey,
       );
     }
   }, [hotkeys]);
@@ -91,49 +118,63 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
   }, [selectedDirectionsIDs, statisticsMode]);
 
   // добавляет слушатель нажатий на клавиатуру (для использования сочетаний клавиш)
-  const handleHotkeys = useCallback((event: KeyboardEvent) => {
-    const keyCode = event.code;
+  const handleHotkeys = useCallback(
+    (event: KeyboardEvent) => {
+      const keyCode = event.code;
 
-    if (keyCode === coordinateSystemHotkey.code) {
-      event.preventDefault();
-      const currReferenceIndex = availableReferences.findIndex(coordRef => coordRef === reference);
-      const nextReferenceIndex = (currReferenceIndex + 1) % 2;
-      dispatch(setReference(availableReferences[nextReferenceIndex]));
-    }
-    if (keyCode === fisherHotkey.code) {
-      event.preventDefault();
-      dispatch(setStatisticsMode('fisher'))
-    }
-    if (keyCode === mcFaddenHotkey.code) {
-      event.preventDefault();
-      dispatch(setStatisticsMode('mcFad'))
-    }
-    if (keyCode === gcHotkey.code) {
-      event.preventDefault();
-      dispatch(setStatisticsMode('gc'))
-    }
-    if (keyCode === gcnHotkey.code) {
-      event.preventDefault();
-      dispatch(setStatisticsMode('gcn'))
-    }
-    if (keyCode === unselectHotkey.code) {
-      event.preventDefault();
-      dispatch(setSelectedDirectionsIDs([]));
-    }
-  }, [coordinateSystemHotkey, fisherHotkey, mcFaddenHotkey, gcHotkey, gcnHotkey, unselectHotkey, availableReferences, reference, dispatch]);
+      if (keyCode === coordinateSystemHotkey.code) {
+        event.preventDefault();
+        const currReferenceIndex = availableReferences.findIndex(
+          (coordRef) => coordRef === reference,
+        );
+        const nextReferenceIndex = (currReferenceIndex + 1) % 2;
+        dispatch(setReference(availableReferences[nextReferenceIndex]));
+      }
+      if (keyCode === fisherHotkey.code) {
+        event.preventDefault();
+        dispatch(setStatisticsMode('fisher'));
+      }
+      if (keyCode === mcFaddenHotkey.code) {
+        event.preventDefault();
+        dispatch(setStatisticsMode('mcFad'));
+      }
+      if (keyCode === gcHotkey.code) {
+        event.preventDefault();
+        dispatch(setStatisticsMode('gc'));
+      }
+      if (keyCode === gcnHotkey.code) {
+        event.preventDefault();
+        dispatch(setStatisticsMode('gcn'));
+      }
+      if (keyCode === unselectHotkey.code) {
+        event.preventDefault();
+        dispatch(setSelectedDirectionsIDs([]));
+      }
+    },
+    [
+      coordinateSystemHotkey,
+      fisherHotkey,
+      mcFaddenHotkey,
+      gcHotkey,
+      gcnHotkey,
+      unselectHotkey,
+      availableReferences,
+      reference,
+      dispatch,
+    ],
+  );
 
   useEffect(() => {
     if (!hotkeysActive) return;
-    window.addEventListener("keydown", handleHotkeys);
+    window.addEventListener('keydown', handleHotkeys);
     return () => {
-      window.removeEventListener("keydown", handleHotkeys);
+      window.removeEventListener('keydown', handleHotkeys);
     };
   }, [hotkeysActive, handleHotkeys]);
 
   // обработчик нажатий на клавиатуру
-  
 
-  // обработчик выбранной системы координат 
+  // обработчик выбранной системы координат
   const handleReferenceSelect = (selectedReference: Reference) => {
     dispatch(setReference(selectedReference));
   };
@@ -146,101 +187,97 @@ const ToolsDIR: FC<IToolsDIR> = ({ data }) => {
     dispatch(setSelectedDirectionsIDs(IDs));
     setShowIndexesInput(false);
   };
-  
+
   if (!data) return <ToolsPMDSkeleton />;
 
   return (
     <ToolsPMDSkeleton>
       <ButtonGroupWithLabel label={t('dirPage.tools.coordinateSystem.title')}>
-        {
-          availableReferences.map(availRef => (
-            <Tooltip
-              title={<Typography variant='body1'>{coordinateSystemHotkey.key}</Typography>}
-              enterDelay={250}
-              arrow
+        {availableReferences.map((availRef) => (
+          <Tooltip
+            key={availRef}
+            title={<Typography variant="body1">{coordinateSystemHotkey.key}</Typography>}
+            enterDelay={250}
+            arrow
+          >
+            <Button
+              color={reference === availRef ? 'secondary' : 'primary'}
+              onClick={() => handleReferenceSelect(availRef)}
+              sx={{
+                width: '80px',
+                borderRadius: '16px',
+                fontWeight: reference === availRef ? 600 : 400,
+              }}
             >
-              <Button 
-                color={reference === availRef ? 'secondary' : 'primary'}
-                onClick={() => handleReferenceSelect(availRef)}
-                sx={{
-                  width: '80px',
-                  borderRadius: '16px',
-                  fontWeight: reference === availRef ? 600 : 400,
-                }}
-              >
-                { referenceToLabel(availRef) }
-              </Button>
-            </Tooltip>
-          ))
-        }
+              {referenceToLabel(availRef)}
+            </Button>
+          </Tooltip>
+        ))}
       </ButtonGroupWithLabel>
       <ButtonGroupWithLabel label={t('dirPage.tools.statMethod.title')}>
-        <StatModeButton mode='fisher' hotkey={fisherHotkey.key}/>
-        <StatModeButton mode='mcFad' hotkey={mcFaddenHotkey.key}/>
-        <StatModeButton mode='gc' hotkey={gcHotkey.key}/>
+        <StatModeButton mode="fisher" hotkey={fisherHotkey.key} />
+        <StatModeButton mode="mcFad" hotkey={mcFaddenHotkey.key} />
+        <StatModeButton mode="gc" hotkey={gcHotkey.key} />
       </ButtonGroupWithLabel>
       <ShowHideDotsButtons data={data} />
       <ReversePolarityButtons data={data} />
       <ButtonGroupWithLabel label={t('dirPage.tools.vgp.title')}>
-        <Button onClick={() => setShowVGP(true)}>
-          {t('dirPage.tools.vgp.label')}
-        </Button>
+        <Button onClick={() => setShowVGP(true)}>{t('dirPage.tools.vgp.label')}</Button>
       </ButtonGroupWithLabel>
       <ButtonGroupWithLabel label={t('dirPage.tools.tests.title')}>
-        <Button onClick={() => setShowPMTests(true)}>
-          {t('dirPage.tools.tests.label')}
-        </Button>
+        <Button onClick={() => setShowPMTests(true)}>{t('dirPage.tools.tests.label')}</Button>
       </ButtonGroupWithLabel>
       <ToggleButton
         isActive={isCommentsInputVisible}
         onToggle={() => dispatch(toggleCommentsInput())}
         label={'Comments Input'}
       />
-      
+
       <ModalWrapper
         open={showVGP}
         setOpen={setShowVGP}
         size={{
-          width: widthLessThan1400 ? '94vw' : '88vw', 
-          height: widthLessThan1400 ? '88vh' : '80vh'
+          width: '94vw',
+          height: '88vh',
         }}
-        position={{left: '50%', top: '50%'}}
+        position={{ left: '50%', top: '50%' }}
         isDraggable={false}
       >
-        <VGPModalContent data={data}/>
+        <VGPModalContent data={data} />
       </ModalWrapper>
       <ModalWrapper
         open={showPMTests}
         setOpen={setShowPMTests}
         size={{
-          width: widthLessThan1400 ? '94vw' : '88vw', 
-          height: widthLessThan1400 ? '88vh' : '80vh'
+          width: widthLessThan1400 ? '94vw' : '88vw',
+          height: widthLessThan1400 ? '88vh' : '80vh',
         }}
-        position={{left: '50%', top: '50%'}}
+        position={{ left: '50%', top: '50%' }}
         isDraggable={false}
       >
-        <PMTestsModalContent data={data}/>
+        <PMTestsModalContent data={data} />
       </ModalWrapper>
-      {
-        showIndexesInput && 
+      {showIndexesInput && (
         <ModalWrapper
           open={showIndexesInput}
           setOpen={setShowIndexesInput}
-          size={{width: '26vw', height: '14vh'}}
-          position={{left: '50%', top: '20%'}}
-          onClose={() => {dispatch(setStatisticsMode(null))}}
+          size={{ width: '26vw', height: '14vh' }}
+          position={{ left: '50%', top: '20%' }}
+          onClose={() => {
+            dispatch(setStatisticsMode(null));
+          }}
           isDraggable={true}
         >
-          <InputApply 
+          <InputApply
             label={`${t('inputDirs.label')} (${statisticsMode})`}
             helperText={`${t('inputDirs.helper')} 1-9 || 2,4,8,9 || 2-4;8,9 || 2-4;8,9;12-14`}
             onApply={handleEnteredDotsIndexesApply}
             placeholder={`1-${data.interpretations.length}`}
           />
         </ModalWrapper>
-      }
+      )}
     </ToolsPMDSkeleton>
-  )
-}
+  );
+};
 
 export default ToolsDIR;

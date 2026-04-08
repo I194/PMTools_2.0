@@ -1,10 +1,10 @@
-import React from "react";
-import { Button } from "@mui/material";
-import { ButtonProps } from "@mui/material";
-import { useMediaQuery } from "react-responsive";
+import React from 'react';
+import { Button } from '@mui/material';
+import { ButtonProps } from '@mui/material';
+import { useMediaQuery } from 'react-responsive';
 
 const DefaultButton = <C extends React.ElementType>(
-  props: ButtonProps<C, { component?: C; buttonRef?: React.Ref<HTMLButtonElement> }>
+  props: ButtonProps<C, { component?: C; buttonRef?: React.Ref<HTMLButtonElement> }>,
 ) => {
   const { children, buttonRef, ...rest } = props;
   const widthLessThan720 = useMediaQuery({ maxWidth: 720 });
@@ -12,7 +12,7 @@ const DefaultButton = <C extends React.ElementType>(
 
   return (
     <Button
-      ref={buttonRef} 
+      ref={buttonRef}
       {...rest}
       sx={{
         textTransform: 'none',
@@ -21,13 +21,12 @@ const DefaultButton = <C extends React.ElementType>(
         fontSize: widthLessThan720 ? '12px' : widthLessThan1920 ? '14px' : '16px',
         width: 'fit-content',
         whiteSpace: 'nowrap',
-        ...rest.sx
+        ...rest.sx,
       }}
     >
-      { children }
+      {children}
     </Button>
   );
 };
 
 export default DefaultButton;
-
