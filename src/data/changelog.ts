@@ -6,6 +6,24 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '2.7.0',
+    date: 'April 8, 2026',
+    items: [
+      'VGP modal: refactored layout — clean flexbox structure with dedicated controls row (buttons, coordinate system selector, Mean VGP stats).',
+      'VGP modal: Calculate VGPs now pre-computes results for both geographic and stratigraphic coordinate systems — switching is instant without re-clicking Calculate.',
+      'VGP modal: added coordinate system selector (Geo/Strat) directly in the modal.',
+      'VGP modal: fixed sites table resetting to 0.0 after VGP calculation.',
+      'VGP modal: fixed "Remove imported" not clearing the stereonet and Mean VGP stats.',
+      'VGP modal: fixed hidden directions still being included in VGP calculation.',
+      'VGP modal: fixed non-serializable Direction object stored in Redux state.',
+      'New reusable ReferenceSelector component for coordinate system switching.',
+      'Performance: removed React.StrictMode (eliminated double-rendering in dev).',
+      'Performance: added debounce to window resize handler.',
+      'Performance: fixed unnecessary useMemo invalidation in StereoGraphVGP.',
+      'Changelog: automatically shown on first visit after a version update.',
+    ],
+  },
+  {
     version: '2.6.3',
     date: 'April 5, 2026',
     items: [

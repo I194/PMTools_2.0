@@ -29,7 +29,17 @@ const AppNavigation: FC = ({}) => {
 
   const [anchorElLang, setAnchorElLang] = useState<null | HTMLElement>(null);
   const openLang = Boolean(anchorElLang);
-  const [showChangelog, setShowChangelog] = useState<boolean>(false);
+  const curVersion = process.env.REACT_APP_VERSION || '';
+  const lastSeenVersion = localStorage.getItem('lastSeenChangelogVersion') || '';
+  const [showChangelog, setShowChangelog] = useState<boolean>(curVersion !== lastSeenVersion);
+
+  const handleCloseChangelog: React.Dispatch<React.SetStateAction<boolean>> = (value) => {
+    const newValue = typeof value === 'function' ? value(showChangelog) : value;
+    setShowChangelog(newValue);
+    if (!newValue) {
+      localStorage.setItem('lastSeenChangelogVersion', curVersion);
+    }
+  };
 
   const handleClickLang = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElLang(event.currentTarget);
@@ -111,7 +121,7 @@ const AppNavigation: FC = ({}) => {
       </div>
       <ModalWrapper
         open={showChangelog}
-        setOpen={setShowChangelog}
+        setOpen={handleCloseChangelog}
         size={{ width: '56vw', height: '70vh' }}
       >
         <ChangelogModal />

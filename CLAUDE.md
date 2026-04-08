@@ -113,6 +113,10 @@ Sites: `.csv`, `.xlsx` (Lat/Lon)
 - `.env` contains only `REACT_APP_VERSION=$npm_package_version`
 - GitHub Actions uses Node version from `.nvmrc` (22.10.0)
 
+## Migration Plans
+
+- MUI v5 (DataGrid, Button, etc.) is scheduled for replacement — morally outdated, the free DataGrid tier lacks proper API (forced apiRef hacks). Evaluate alternatives (Radix, Shadcn, AG Grid, TanStack Table) before starting new UI work.
+
 ## Do Not
 
 - Do NOT upgrade to React 18 without explicit request (breaking: ReactDOM.render API)
