@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import styles from './VGP.module.scss';
 import { IDirData, VGPData } from '../../../utils/GlobalTypes';
 import SitesDataTable from '../DataTablesDIR/SitesDataTable/SitesDataTable';
@@ -117,11 +117,11 @@ const VGPmodalContent: FC<Props> = ({ data }) => {
     dispatch(setSiteData(null));
   };
 
-  const handleReferenceChange = (newRef: Reference) => {
+  useEffect(() => {
     if (vgpCache) {
-      dispatch(setVGPData(vgpCache[newRef === 'geographic' ? 'geo' : 'strat']));
+      dispatch(setVGPData(vgpCache[reference === 'geographic' ? 'geo' : 'strat']));
     }
-  };
+  }, [reference, vgpCache, dispatch]);
 
   return (
     <div className={styles.modalContent}>
@@ -178,10 +178,7 @@ const VGPmodalContent: FC<Props> = ({ data }) => {
         >
           {t('vgp.dataManipulation.calculate')}
         </Button>
-        <ReferenceSelector
-          availableReferences={['geographic', 'stratigraphic']}
-          onChange={handleReferenceChange}
-        />
+        <ReferenceSelector availableReferences={['geographic', 'stratigraphic']} />
         <VGPMean />
       </div>
       <div className={styles.data}>
