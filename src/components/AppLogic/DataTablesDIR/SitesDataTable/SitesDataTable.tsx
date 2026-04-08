@@ -1,30 +1,18 @@
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
+import React, { forwardRef, useImperativeHandle } from 'react';
 import styles from './SitesDataTable.module.scss';
-import { useAppDispatch, useAppSelector } from '../../../../services/store/hooks';
+import { useAppSelector } from '../../../../services/store/hooks';
 import { getDataTableBaseStyle } from '../styleConstants';
 import SitesDataTableSkeleton from './SitesDataTableSkeleton';
-import { IDirData, ISitesData, VGPData } from '../../../../utils/GlobalTypes';
 import { DataGrid, GridValueFormatterParams } from '@mui/x-data-grid';
 import { useTheme } from '@mui/material/styles';
-import { Button } from '@mui/material';
 import SitesInputDataTableToolbar from '../../../Common/DataTable/Toolbar/SitesInputDataTableToolbar';
-import calculateVGP from '../../../../utils/statistics/calculation/calculateVGP';
 import useApiRef from '../useApiRef';
-import { setVGPData } from '../../../../services/reducers/dirPage';
-import { setSiteData } from '../../../../services/reducers/parsedData';
-import { textColor } from '../../../../utils/ThemeConstants';
-import Direction from '../../../../utils/graphs/classes/Direction';
-import { useTranslation } from 'react-i18next';
-import { IDataTableDIR, SiteDataTableColumns, SiteRow } from '../types';
+import { IDataTableDIR, SiteDataTableColumns, SiteRow, SitesDataTableHandle } from '../types';
 
-const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
-  const dispatch = useAppDispatch();
+const SitesDataTable = forwardRef<SitesDataTableHandle, IDataTableDIR>(({ data }, ref) => {
   const theme = useTheme();
-  const { t, i18n } = useTranslation('translation');
 
-  const { hiddenDirectionsIDs, reversedDirectionsIDs, reference } = useAppSelector(
-    (state) => state.dirPageReducer,
-  );
+  const { hiddenDirectionsIDs } = useAppSelector((state) => state.dirPageReducer);
   const sitesData = useAppSelector((state) => state.parsedDataReducer.siteData)?.data;
 
   const columns: SiteDataTableColumns = [
@@ -78,6 +66,10 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
 
   const { apiRef, enhancedColumns } = useApiRef(columns);
 
+  useImperativeHandle(ref, () => ({
+    getRows: () => Array.from(apiRef?.current?.getRowModels()?.values() || []) as SiteRow[],
+  }));
+
   if (!data) return <SitesDataTableSkeleton />;
 
   let visibleIndex = 1;
@@ -93,68 +85,6 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
       plateId: sitesData ? sitesData[index]?.plateId || 0 : 0,
     };
   });
-
-  const calculateVGPs = () => {
-    const rows: Array<SiteRow> = Array.from(apiRef?.current?.getRowModels()?.values() || []);
-    if (!rows.length) return;
-    const visibleRows = rows.filter((row) => !hiddenDirectionsIDs.includes(row.id));
-    const vgpData: VGPData = visibleRows.map((row, index) => {
-      // let [id, label] = [0, ''];
-      // let [lat, lon, age, plateId] = [0, 0, 0, 0];
-      let { id, label, lat, lon, age, plateId } = row;
-      // на случай, если были загружены данные из файла и не обновился apiRef
-      // if ((lat === 0 || lon === 0 || age === 0 || plateId === 0) && sitesData && sitesData[index]) {
-      //   lat = sitesData[index].lat;
-      //   lon = sitesData[index].lon;
-      //   age = sitesData[index].age;
-      //   plateId = sitesData[index].plateId;
-      // };
-      const interpretation = data.interpretations.find(
-        (interpretation) => interpretation.id === id,
-      )!;
-      // учёт перевернутых направлений
-      const { Dgeo, Igeo, Dstrat, Istrat } = interpretation;
-      let geoDirection = new Direction(Dgeo, Igeo, 1);
-      let stratDirection = new Direction(Dstrat, Istrat, 1);
-      if (reversedDirectionsIDs.includes(id)) {
-        geoDirection = geoDirection.reversePolarity();
-        stratDirection = stratDirection.reversePolarity();
-      }
-      const DgeoFinal = +geoDirection.declination.toFixed(1);
-      const IgeoFinal = +geoDirection.inclination.toFixed(1);
-      const DstratFinal = +stratDirection.declination.toFixed(1);
-      const IstratFinal = +stratDirection.inclination.toFixed(1);
-      // итоговые данные для расчёта vgp
-      const dec = reference === 'geographic' ? DgeoFinal : DstratFinal;
-      const inc = reference === 'geographic' ? IgeoFinal : IstratFinal;
-      const a95 = reference === 'geographic' ? interpretation.MADgeo : interpretation.MADstrat;
-      const vgp = calculateVGP(dec, inc, lat, lon, a95);
-      const dp: number = vgp?.dp || 0;
-      const dm: number = vgp?.dm || 0;
-      return {
-        id,
-        label,
-        dec,
-        inc,
-        a95,
-        lat,
-        lon,
-        age,
-        plateId,
-        ...vgp,
-        dp,
-        dm,
-      };
-    });
-    const newSitesData: ISitesData['data'] = [...rows];
-    dispatch(setVGPData(vgpData));
-    dispatch(setSiteData(newSitesData));
-  };
-
-  const deleteData = () => {
-    dispatch(setVGPData(null));
-    dispatch(setSiteData(null));
-  };
 
   return (
     <div className={styles.container}>
@@ -183,31 +113,8 @@ const SitesDataTable: FC<IDataTableDIR> = ({ data }) => {
           }
         />
       </SitesDataTableSkeleton>
-      <div className={styles.buttons}>
-        <Button
-          variant="outlined"
-          onClick={deleteData}
-          sx={{
-            textTransform: 'none',
-            marginTop: '16px',
-            color: textColor(theme.palette.mode),
-          }}
-        >
-          {t('vgp.dataManipulation.clear')}
-        </Button>
-        <Button
-          variant="contained"
-          onClick={calculateVGPs}
-          sx={{
-            textTransform: 'none',
-            marginTop: '16px',
-          }}
-        >
-          {t('vgp.dataManipulation.calculate')}
-        </Button>
-      </div>
     </div>
   );
-};
+});
 
 export default SitesDataTable;

@@ -29,6 +29,10 @@ export type SiteRow = {
   plateId: number;
 };
 
+export type SitesDataTableHandle = {
+  getRows: () => SiteRow[];
+};
+
 export type SiteDataTableColumns = readonly GridColDef<SiteRow>[];
 
 export type VGPRow = {
