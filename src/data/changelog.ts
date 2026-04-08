@@ -6,7 +6,7 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
-    version: '2.7.0',
+    version: '2.6.4',
     date: 'April 8, 2026',
     items: [
       'VGP modal: refactored layout — clean flexbox structure with dedicated controls row (buttons, coordinate system selector, Mean VGP stats).',
