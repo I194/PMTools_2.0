@@ -20,22 +20,29 @@ const Graphs: FC = () => {
   const [dataToShow, setDataToShow] = useState<VGPData | null>(null);
 
   useEffect(() => {
-    if (vgpData) {
-      setDataToShow(vgpData);
-    }
+    setDataToShow(vgpData);
   }, [vgpData]);
 
   useEffect(() => {
     if (vgpData) {
-      const directions = vgpData;
       const mean = fisherMean(
-        directions.map(
+        vgpData.map(
           (direction) => new Direction(direction.poleLongitude, direction.poleLatitude, 1),
         ),
       );
-      dispatch(setVGPMean(mean));
+      dispatch(
+        setVGPMean({
+          ...mean,
+          direction: {
+            declination: mean.direction.declination,
+            inclination: mean.direction.inclination,
+          },
+        }),
+      );
+    } else {
+      dispatch(setVGPMean(null));
     }
-  }, [vgpData, reference]);
+  }, [vgpData, dispatch]);
 
   const [wv, wh] = useWindowSize();
 

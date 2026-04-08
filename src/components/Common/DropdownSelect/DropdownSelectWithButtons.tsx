@@ -145,8 +145,14 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
           sx={{
             margin: 0,
             border: 0,
+            maxWidth: maxWidth || 'none',
             '::before': {
               border: 0,
+            },
+            '& .MuiSelect-select': {
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
             },
             '& .MuiListItem-root': {
               display: 'none',
@@ -154,6 +160,7 @@ const DropdownSelectWithButtons: FC<IDropdownSelectWithButtons> = ({
             '& .MuiListItemText-root': {
               textOverflow: 'ellipsis',
               overflow: 'hidden',
+              whiteSpace: 'nowrap',
               margin: 0,
             },
           }}

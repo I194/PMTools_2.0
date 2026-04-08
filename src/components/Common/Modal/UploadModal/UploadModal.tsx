@@ -1,5 +1,5 @@
-import { Typography, Button } from '@mui/material';
-import React, { useCallback } from 'react';
+import { Typography, Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useAppDispatch } from '../../../../services/store/hooks';
 import { textColor } from '../../../../utils/ThemeConstants';
@@ -12,28 +12,52 @@ import exampleDIR from '../../../../assets/examples/exampleDIR.pmm';
 import { useMediaQuery } from 'react-responsive';
 import { useTranslation } from 'react-i18next';
 import { filesToData } from '../../../../services/axios/filesAndData';
+import { generateMergedName } from '../../../../utils/files/mergeUtils';
 
 type Props = {
   page: 'pca' | 'dir';
+  open?: boolean;
 };
 
-const UploadModal = ({ page }: Props) => {
+const UploadModal = ({ page, open }: Props) => {
   const theme = useTheme();
-  const { t, i18n } = useTranslation('translation');
+  const { t } = useTranslation('translation');
   const dispatch = useAppDispatch();
   const widthLessThan720 = useMediaQuery({ maxWidth: 719 });
 
+  const [mergeEnabled, setMergeEnabled] = useState(false);
+  const [mergeName, setMergeName] = useState('');
+  const [alsoLoadSeparately, setAlsoLoadSeparately] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      setMergeEnabled(false);
+      setMergeName('');
+      setAlsoLoadSeparately(false);
+    }
+  }, [open]);
+
   const handleFileUpload = (event: any, files?: Array<File>) => {
     const acceptedFiles: File[] = files ? files : Array.from(event.currentTarget.files);
+
+    const mergeMode =
+      mergeEnabled && page === 'dir'
+        ? {
+            enabled: true as const,
+            name: mergeName || generateMergedName(acceptedFiles.map((f) => f.name)),
+            alsoLoadSeparately,
+          }
+        : undefined;
+
     if (page === 'pca') dispatch(filesToData({ files: acceptedFiles, format: 'pmd' }));
-    if (page === 'dir') dispatch(filesToData({ files: acceptedFiles, format: 'dir' }));
+    if (page === 'dir') dispatch(filesToData({ files: acceptedFiles, format: 'dir', mergeMode }));
   };
 
   const onDrop = useCallback(
     (acceptedFiles) => {
       handleFileUpload(undefined, acceptedFiles);
     },
-    [page],
+    [page, mergeEnabled, mergeName, alsoLoadSeparately],
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, noClick: true });
@@ -77,6 +101,51 @@ const UploadModal = ({ page }: Props) => {
           {t('importModal.useExample')}
         </Button>
       </div>
+      {page === 'dir' && (
+        <div className={styles.mergeOptions}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={mergeEnabled}
+                onChange={(e) => setMergeEnabled(e.target.checked)}
+                size="small"
+              />
+            }
+            label={t('importModal.mergeFiles')}
+            sx={{ color: textColor(theme.palette.mode) }}
+          />
+          {mergeEnabled && (
+            <>
+              <TextField
+                size="small"
+                label={t('importModal.mergedCollectionName')}
+                value={mergeName}
+                onChange={(e) => setMergeName(e.target.value)}
+                placeholder={t('importModal.mergedCollectionPlaceholder')}
+                sx={{
+                  minWidth: 280,
+                  '& .MuiInputBase-input': { color: textColor(theme.palette.mode) },
+                  '& .MuiInputLabel-root': { color: textColor(theme.palette.mode) },
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': { borderColor: textColor(theme.palette.mode) },
+                  },
+                }}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={alsoLoadSeparately}
+                    onChange={(e) => setAlsoLoadSeparately(e.target.checked)}
+                    size="small"
+                  />
+                }
+                label={t('importModal.alsoLoadSeparately')}
+                sx={{ color: textColor(theme.palette.mode) }}
+              />
+            </>
+          )}
+        </div>
+      )}
       {!widthLessThan720 && (
         <div
           className={styles.dropContainer}

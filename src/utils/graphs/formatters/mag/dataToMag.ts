@@ -32,10 +32,13 @@ const dataToMag = (data: IPmdData, graphSize: number, hiddenStepsIDs: Array<numb
     stepValues.push(stepValue ? +stepValue[0] : 0);
   });
 
-  const maxMAG = Math.max(...mag);
-  const maxStep = Math.max(...stepValues);
-  const maxStepOrder = maxStep.toFixed(0).length - 1;
-  const stepsCeil = Math.ceil(maxStep / Math.pow(10, maxStepOrder)) * Math.pow(10, maxStepOrder);
+  const maxMAG = mag.length > 0 ? Math.max(...mag) : 0;
+  const maxStep = stepValues.length > 0 ? Math.max(...stepValues) : 0;
+  const maxStepOrder = maxStep > 0 ? maxStep.toFixed(0).length - 1 : 0;
+  const stepsCeil =
+    maxStepOrder > 0
+      ? Math.ceil(maxStep / Math.pow(10, maxStepOrder)) * Math.pow(10, maxStepOrder)
+      : 1;
 
   const dotsData: DotsData = stepValues.map((value, index) => {
     const normalizedMAG = mag[index] / maxMAG;
@@ -51,7 +54,7 @@ const dataToMag = (data: IPmdData, graphSize: number, hiddenStepsIDs: Array<numb
 
   // Demagnetization type determined by the first step of demagnetization,
   // switches in demagnetization types (methods) are NOT supported
-  const demagnetizationType = data.steps[0].demagType;
+  const demagnetizationType = data.steps.find((step) => step.demagType)?.demagType;
 
   return {
     dotsData,

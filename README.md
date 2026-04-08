@@ -8,3 +8,7 @@ It's completely web, working website [here](https://pmtools.vercel.app/). Curren
 Technology stack: React/Redux/TypeScript. Design system - MaterialUI. 
 
 There is no server side in this project. All data in PMTools processed on client side.
+
+## Development
+
+See [docs/ai-assisted-development.md](docs/ai-assisted-development.md) for the AI-assisted development guide (Claude Code + gstack).

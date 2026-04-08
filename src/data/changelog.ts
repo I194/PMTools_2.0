@@ -6,6 +6,56 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '2.6.4',
+    date: 'April 8, 2026',
+    items: [
+      'VGP modal: refactored layout — clean flexbox structure with dedicated controls row (buttons, coordinate system selector, Mean VGP stats).',
+      'VGP modal: Calculate VGPs now pre-computes results for both geographic and stratigraphic coordinate systems — switching is instant without re-clicking Calculate.',
+      'VGP modal: added coordinate system selector (Geo/Strat) directly in the modal.',
+      'VGP modal: fixed sites table resetting to 0.0 after VGP calculation.',
+      'VGP modal: fixed "Remove imported" not clearing the stereonet and Mean VGP stats.',
+      'VGP modal: fixed hidden directions still being included in VGP calculation.',
+      'VGP modal: fixed non-serializable Direction object stored in Redux state.',
+      'New reusable ReferenceSelector component for coordinate system switching.',
+      'Performance: removed React.StrictMode (eliminated double-rendering in dev).',
+      'Performance: added debounce to window resize handler.',
+      'Performance: fixed unnecessary useMemo invalidation in StereoGraphVGP.',
+      'Changelog: automatically shown on first visit after a version update.',
+    ],
+  },
+  {
+    version: '2.6.3',
+    date: 'April 5, 2026',
+    items: [
+      'DIR page: added "Merge all files into one collection" option — upload multiple files and combine them into a single collection with sequential IDs.',
+      'DIR page: merge supports custom collection name or auto-generated name from file names.',
+      'DIR page: merge works across formats (PMM, DIR, CSV, XLSX).',
+      'PCA: fixed MAD=0 bug caused by incorrect eigenvalue sorting in PCA decomposition.',
+      'Upload modal: fixed dark theme contrast — checkbox and text field are now clearly visible.',
+      'File selector: fixed long merged names overflowing the dropdown — names are now truncated with ellipsis.',
+    ],
+  },
+  {
+    version: '2.6.2',
+    date: 'March 29, 2026',
+    items: [
+      'Magnetization graph: fixed x-axis showing "mT" instead of "°C" for thermal demagnetization (read demagType from first non-NRM step).',
+      'Metadata editor: fixed IEEE 754 floating-point artifacts (e.g., 22.599999999999994 instead of 22.6) by using string-based state.',
+      'Metadata editor: fixed NaN when typing decimal separator ("." or ",") as first character — field no longer gets stuck.',
+      'Interpretation labels: stripped file extension from component names (e.g., "300b" instead of "300b.pmd").',
+      'SQUID parser: files with header but no measurement data are now rejected with a clear error message instead of crashing the app.',
+      'Magnetization graph: guarded against -Infinity display when data is empty.',
+      'File import: added validation modal that detects and reports invalid data rows on upload.',
+      'Error boundary: added crash recovery UI so the app no longer shows a permanent white screen on unexpected errors.',
+      'Parsers: added numeric field validation in DIR/PMD parsers to prevent NaN propagation.',
+      'Zijderveld plot: guarded unit label against -INFINITY for empty datasets.',
+      'localStorage: added safe JSON parsing to prevent blank screen on corrupted storage.',
+      'Fixed React hooks order violations in DataTable components.',
+      'Added ESLint, Prettier, Husky pre-commit hook, and CI typecheck/lint steps.',
+      'Formatted entire codebase with Prettier; removed all console.log statements.',
+    ],
+  },
+  {
     version: '2.6.1',
     date: 'December 19, 2025',
     items: [

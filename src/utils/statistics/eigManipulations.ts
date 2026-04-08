@@ -36,7 +36,7 @@ export const sortEigenvectors = (eig: { lambda: any; E: any }) => {
   const indexOfT1: number = eig.lambda.x.indexOf(t1);
   const indexOfT3: number = eig.lambda.x.indexOf(t3);
   // now we can determine middle eigenvalue index and find it
-  const indexOfT2 = [1, 2, 3].filter((index) => index !== indexOfT1 && index !== indexOfT3)[0];
+  const indexOfT2 = [0, 1, 2].filter((index) => index !== indexOfT1 && index !== indexOfT3)[0];
   const t2 = eig.lambda.x[indexOfT2];
 
   // Sort eigenvectors

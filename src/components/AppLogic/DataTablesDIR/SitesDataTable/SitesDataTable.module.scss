@@ -3,7 +3,6 @@
   width: 100%;
   height: 100%;
 
-  margin-top: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -33,14 +32,4 @@
 
 .hiddenRow {
   opacity: 0.5;
-}
-
-.buttons {
-  position: absolute;
-  top: -62px;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 24px;
 }

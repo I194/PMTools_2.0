@@ -62,7 +62,7 @@ const ChangelogModal: FC = () => {
                 )}
               </div>
               {e.items && e.items.length > 0 && (
-                <ul className={styles.items}>
+                <ul className={styles.items} style={{ color: textColor(theme.palette.mode) }}>
                   {e.items.map((item, idx) => (
                     <li key={idx}>
                       <Typography variant="body2" color={textColor(theme.palette.mode)}>

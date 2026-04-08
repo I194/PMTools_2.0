@@ -4,6 +4,10 @@ Web application for paleomagnetic data analysis. Fully client-side (no server), 
 - Domain: pmtools.ru | Deploy: GitHub Pages
 - Bilingual: Russian and English (i18next)
 
+## Agent Behavior
+
+At the end of every response, suggest 1-3 relevant next steps the user could take using the available skills and workflows described in [docs/ai-assisted-development.md](docs/ai-assisted-development.md). Match suggestions to context: if the user just fixed a bug, suggest `/evaluate`; if they just finished a feature, suggest `/review` then `/evaluate`; if they're exploring a problem, suggest `/investigate`. Keep suggestions brief — one line each.
+
 ## Quick Commands
 
 ```bash
@@ -109,6 +113,10 @@ Sites: `.csv`, `.xlsx` (Lat/Lon)
 - `.env` contains only `REACT_APP_VERSION=$npm_package_version`
 - GitHub Actions uses Node version from `.nvmrc` (22.10.0)
 
+## Migration Plans
+
+- MUI v5 (DataGrid, Button, etc.) is scheduled for replacement — morally outdated, the free DataGrid tier lacks proper API (forced apiRef hacks). Evaluate alternatives (Radix, Shadcn, AG Grid, TanStack Table) before starting new UI work.
+
 ## Do Not
 
 - Do NOT upgrade to React 18 without explicit request (breaking: ReactDOM.render API)
@@ -119,4 +127,33 @@ Sites: `.csv`, `.xlsx` (Lat/Lon)
 
 ## 3-Agent Workflow
 
-See [docs/three-agent-workflow.md](docs/three-agent-workflow.md) for a detailed guide on how to run the Planner / Generator / Evaluator workflow.
+See [docs/three-agent-workflow.md](docs/three-agent-workflow.md) for the Planner / Generator / Evaluator workflow.
+See [docs/ai-assisted-development.md](docs/ai-assisted-development.md) for the full AI-assisted development guide (includes gstack).
+
+## gstack
+
+Vendored in `.claude/skills/gstack/`. If gstack skills aren't working, run `cd .claude/skills/gstack && ./setup` to rebuild.
+
+Use `/browse` for general web browsing. Never use `mcp__claude-in-chrome__*` tools.
+**Exception:** The `/evaluate` skill (PMTools Evaluator) uses Playwright MCP (`mcp__playwright__*`) for domain-specific QA — this is intentional and must not be replaced by gstack's `/qa`.
+
+### PMTools-specific rules
+- **Primary QA tool**: `/evaluate` — it understands PMD/DIR files, Zijderveld plots, Fisher statistics, and the three-agent workflow. Use it for all PMTools app testing.
+- **gstack `/qa` and `/qa-only`**: Use only for testing external sites or non-PMTools pages.
+- **`/review`**: Use for pre-landing code review (complementary to `/evaluate`).
+- **`/investigate`**: Use for systematic debugging with root cause analysis.
+
+### Recommended gstack skills
+- `/browse` — headless browser for web browsing
+- `/review` — code review before shipping
+- `/investigate` — systematic debugging
+- `/careful`, `/freeze`, `/guard`, `/unfreeze` — safety guardrails
+- `/learn` — cross-session memory for the codebase
+- `/benchmark` — performance measurement
+- `/health` — code quality dashboard
+- `/cso` — security audit
+- `/retro` — engineering retrospective
+- `/gstack-upgrade` — self-updater
+
+### All available gstack skills
+`/office-hours`, `/plan-ceo-review`, `/plan-eng-review`, `/plan-design-review`, `/design-consultation`, `/design-shotgun`, `/design-html`, `/review`, `/ship`, `/land-and-deploy`, `/canary`, `/benchmark`, `/browse`, `/connect-chrome`, `/qa`, `/qa-only`, `/design-review`, `/setup-browser-cookies`, `/setup-deploy`, `/retro`, `/investigate`, `/document-release`, `/codex`, `/cso`, `/autoplan`, `/plan-devex-review`, `/devex-review`, `/careful`, `/freeze`, `/guard`, `/unfreeze`, `/gstack-upgrade`, `/learn`.

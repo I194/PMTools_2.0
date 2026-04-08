@@ -6,14 +6,18 @@ import { GraphSettings, TMenuItem } from './graphs/types';
 
 export const useWindowSize = () => {
   // отслеживает изменения в размере окна (в том числе при его масштабировании, например, посредством ctrl+, ctrl-)
-  const [size, setSize] = useState([0, 0]);
+  const [size, setSize] = useState([window.innerWidth, window.innerHeight]);
   useEffect(() => {
+    let timeoutId: ReturnType<typeof setTimeout>;
     const updateSize = () => {
-      setSize([window.innerWidth, window.innerHeight]);
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setSize([window.innerWidth, window.innerHeight]);
+      }, 150);
     };
     window.addEventListener('resize', updateSize);
-    updateSize();
     return () => {
+      clearTimeout(timeoutId);
       window.removeEventListener('resize', updateSize);
     };
   }, []);

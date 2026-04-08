@@ -37,7 +37,12 @@ const parseSQUID = (data: string, name: string): IPmdData => {
   // поправка параметров 'a' и 'b':
   metadata.a = metadata.a < 90 ? metadata.a + 270 : metadata.a - 90;
 
-  const steps = lines.slice(1).map((line, index) => {
+  const dataLines = lines.slice(1);
+  if (dataLines.length === 0) {
+    throw new Error(`No measurement data in .squid file: ${name}`);
+  }
+
+  const steps = dataLines.map((line, index) => {
     // Описывать здесь формат .squid файла я не вижу смысла, формат относительно редкий и никто
     // не использует его как что-то, данные в себе хранящее - все данные из него в .pmd переводят
     const stepSymbol = line.slice(0, 1);

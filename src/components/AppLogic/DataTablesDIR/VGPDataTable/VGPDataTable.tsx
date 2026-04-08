@@ -1,16 +1,8 @@
-import React, { FC, useCallback, useEffect, useRef, useState } from 'react';
-import styles from './VGPDataTable.module.scss';
-import { useAppDispatch, useAppSelector } from '../../../../services/store/hooks';
+import React, { FC } from 'react';
+import { useAppSelector } from '../../../../services/store/hooks';
 import { getDataTableBaseStyle } from '../styleConstants';
-import SitesDataTableSkeleton from './VGPDataTableSkeleton';
-import { VGPData } from '../../../../utils/GlobalTypes';
 import { DataGrid, GridValueFormatterParams } from '@mui/x-data-grid';
 import { useTheme } from '@mui/material/styles';
-import { Button } from '@mui/material';
-import SitesInputDataTableToolbar from '../../../Common/DataTable/Toolbar/SitesInputDataTableToolbar';
-import calculateVGP from '../../../../utils/statistics/calculation/calculateVGP';
-import useApiRef from '../useApiRef';
-import { setVGPData } from '../../../../services/reducers/dirPage';
 import VGPDataTableSkeleton from './VGPDataTableSkeleton';
 import VGPDataTableToolbar from '../../../Common/DataTable/Toolbar/VGPDataTableToolbar';
 import { useCellModesModel } from '../../hooks';
