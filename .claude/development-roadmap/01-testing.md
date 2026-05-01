@@ -190,7 +190,7 @@ src/__tests__/fixtures/
    - `fast-check` — property-based tests.
    - A seedable integer-PRNG: hand-rolled LCG (preferred, ~10 lines, fully deterministic across engines) or `seedrandom`. **Integer state, not float**, so cross-engine and cross-language (Phase 7 Rust port) parity is bit-exact.
 3. Create `scripts/generate_fixtures.py` (PmagPy wrapper) + `scripts/README.md`.
-4. Create `src/__tests__/helpers/`:
+4. Create `src/test-utils/` (helpers live outside `__tests__/` because CRA's Jest config hardcodes `testMatch: __tests__/**/*.{js,ts,…}` and treats every TS file under `__tests__/` as a test suite — non-test helper files there fail with "test suite must contain at least one test"):
    - `directionFixtures.ts` — factories for `Direction`, `IPmdData`, `IDirData` from plain JSON.
    - `mathMatchers.ts` — custom matchers (`toBeCloseToArray`, `toBeCloseToDirection`).
    - `seededRng.ts` — seedable integer-PRNG used in bootstrap tests instead of `Math.random`.
@@ -340,9 +340,9 @@ Phase 1 is complete when all of:
 ### Files to create
 - `src/utils/statistics/PMTests/foldTestCore.ts`
 - `src/utils/statistics/PMTests/reversalTestCore.ts`
-- `src/__tests__/helpers/directionFixtures.ts`
-- `src/__tests__/helpers/mathMatchers.ts`
-- `src/__tests__/helpers/seededRng.ts`
+- `src/test-utils/directionFixtures.ts`
+- `src/test-utils/mathMatchers.ts`
+- `src/test-utils/seededRng.ts`
 - `src/__tests__/fixtures/THESIS_FORMULAS.md` — cheatsheet of thesis formulas.
 - `src/__tests__/fixtures/**` — full tree.
 - `scripts/generate_fixtures.py` + `scripts/README.md`
