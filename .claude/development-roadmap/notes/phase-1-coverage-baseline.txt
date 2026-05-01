@@ -1,0 +1,483 @@
+Phase 1 — Coverage baseline
+============================
+
+Captured: 2026-05-01
+Branch:   phase-1/coverage-baseline (local), off origin/dev tip
+Command:  npm test -- --watchAll=false --coverage --coverageReporters=text
+Node:     v22.22.2 (matches .nvmrc major 22.10.0; CI runs the exact pinned version)
+Jest:     ships with react-scripts 5.x
+
+Tests at this point: 1 file (src/utils/files/__tests__/mergeDir.test.ts), 4 cases.
+
+Phase 1 exit criterion: 100% line + branch coverage for
+  - src/utils/statistics/
+  - src/utils/files/parsers/
+  - src/utils/files/converters/
+Anything that can't be reached is dead code and gets deleted; "uncovered but
+probably fine" is not a valid state. Phase 4 must not let coverage drop below
+this floor.
+
+Top-level snapshot
+------------------
+All files                                                               |    1.26 |     0.08 |    0.69 |    1.22
+
+Phase-1-critical sections (current state — to be driven to 100%)
+----------------------------------------------------------------
+ src/utils/files/converters                                             |       0 |        0 |       0 |       0
+   dir.ts, index.ts, pmd.ts, vgp.ts — all at 0%
+ src/utils/files/parsers                                                |   15.47 |     1.36 |   17.14 |    15.9
+   parserCSV_DIR.ts                                                     |   93.93 |       25 |     100 |   96.42  (only one with meaningful coverage)
+   parserPMM.ts                                                         |   94.11 |       25 |     100 |   96.66
+   parserCSV_PMD.ts, parserDIR.ts, parserPMD.ts, parserMDIR.ts,
+   parserRS3.ts, parserSQUID.ts, parserCSV_SitesLatLon.ts,
+   parserXLSX_*.ts                                                      |       0 |        0 |       0 |       0
+ src/utils/statistics                                                   |       0 |        0 |       0 |       0
+   bootstrapManipulations.ts, calculateStatisticsDIR.ts,
+   calculateStatisticsPMD.ts, eigManipulations.ts, matrix.ts            |       0 |        0 |       0 |       0
+ src/utils/statistics/PMTests                                           |       0 |        0 |       0 |       0
+   conglomeratesTest.ts, foldTestBootstrap.ts, foldTestClassic.ts,
+   reversalTestBootstrap.tsx, reversalTestClassic.tsx,
+   reversalTestOldFashioned.tsx                                         |       0 |        0 |       0 |       0
+ src/utils/statistics/calculation                                       |       0 |        0 |       0 |       0
+   calculateBasicStatisticalParameters.ts, calculateButlerParameters.ts,
+   calculateCutoff.ts, calculateFisherMean.ts,
+   calculateMCFaddenIncMean.ts, calculateMcFaddenCombineMean.ts,
+   calculatePCA_dir.ts, calculatePCA_pmd.ts, calculateVGP.ts,
+   getRawPlaneData.ts                                                   |       0 |        0 |       0 |       0
+ src/utils/statistics/formtatters                                       |       0 |        0 |       0 |       0
+   rawStatisticsDIRToInterpretation.ts, rawStatisticsPMDToInterpretation.ts
+
+(`formtatters` is a typo on disk — leave it for now; rename when files in
+that directory are touched in a later phase.)
+
+Outside Phase-1 scope (UI / Redux — Phase 2 and Phase 6)
+--------------------------------------------------------
+src/App, src/components/*, src/pages/*, src/services/reducers/* are 0% as
+expected. Not part of Phase 1 exit criteria. Phase 2 covers UI via visual
+regression; Phase 6 replaces Redux slices.
+
+
+Full per-file table (verbatim Jest output)
+==========================================
+
+------------------------------------------------------------------------|---------|----------|---------|---------|-------------------
+File                                                                    | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+------------------------------------------------------------------------|---------|----------|---------|---------|-------------------
+All files                                                               |    1.26 |     0.08 |    0.69 |    1.22 |
+ src                                                                    |       0 |        0 |       0 |       0 |
+  i18n.js                                                               |       0 |      100 |     100 |       0 | 12
+  index.tsx                                                             |       0 |      100 |     100 |       0 | 11-25
+  reportWebVitals.ts                                                    |       0 |        0 |       0 |       0 | 3-10
+  service-worker.js                                                     |       0 |        0 |       0 |       0 | 16-68
+  serviceWorkerRegistration.js                                          |       0 |        0 |       0 |       0 | 13-134
+ src/App                                                                |       0 |        0 |       0 |       0 |
+  App.tsx                                                               |       0 |        0 |       0 |       0 | 28-170
+ src/assets/icons                                                       |       0 |        0 |       0 |       0 |
+  index.ts                                                              |       0 |        0 |       0 |       0 |
+ src/assets/icons/ZijdIcon                                              |       0 |      100 |     100 |       0 |
+  ZijdIcon.tsx                                                          |       0 |      100 |     100 |       0 | 4
+ src/components/AppGraphs                                               |       0 |        0 |       0 |       0 |
+  index.ts                                                              |       0 |        0 |       0 |       0 |
+ src/components/AppGraphs/FoldTestGraph                                 |       0 |      100 |       0 |       0 |
+  AxesAndData.tsx                                                       |       0 |      100 |       0 |       0 | 31-120
+  FoldTestConstants.ts                                                  |       0 |      100 |       0 |       0 | 1-5
+  FoldTestGraph.tsx                                                     |       0 |      100 |       0 |       0 | 22-28
+ src/components/AppGraphs/MagGraph                                      |       0 |        0 |       0 |       0 |
+  AxesAndData.tsx                                                       |       0 |        0 |       0 |       0 | 31-52
+  MagConstants.ts                                                       |       0 |      100 |       0 |       0 | 1-5
+  MagGraph.tsx                                                          |       0 |      100 |       0 |       0 | 26-43
+ src/components/AppGraphs/ReversalTestGraph                             |       0 |      100 |       0 |       0 |
+  AxesAndData.tsx                                                       |       0 |      100 |       0 |       0 | 32-60
+  ReversalTestConstants.ts                                              |       0 |      100 |       0 |       0 | 1-5
+  ReversalTestGraph.tsx                                                 |       0 |      100 |       0 |       0 | 23-37
+ src/components/AppGraphs/StereoGraph                                   |       0 |        0 |       0 |       0 |
+  AxesAndData.tsx                                                       |       0 |        0 |       0 |       0 | 42-95
+  StereoConstants.ts                                                    |       0 |      100 |       0 |       0 | 1-3
+  StereoGraph.tsx                                                       |       0 |      100 |       0 |       0 | 27-50
+ src/components/AppGraphs/StereoGraphDIR                                |       0 |        0 |       0 |       0 |
+  AxesAndData.tsx                                                       |       0 |        0 |       0 |       0 | 33-50
+  StereoConstants.ts                                                    |       0 |      100 |       0 |       0 | 1-3
+  StereoGraphDIR.tsx                                                    |       0 |        0 |       0 |       0 | 29-93
+ src/components/AppGraphs/StereoGraphVGP                                |       0 |        0 |       0 |       0 |
+  AxesAndData.tsx                                                       |       0 |        0 |       0 |       0 | 32-49
+  StereoConstants.ts                                                    |       0 |      100 |       0 |       0 | 1-3
+  StereoGraphVGP.tsx                                                    |       0 |      100 |       0 |       0 | 22-35
+ src/components/AppGraphs/ZijdGraph                                     |       0 |        0 |       0 |       0 |
+  AxesAndData.tsx                                                       |       0 |        0 |       0 |       0 | 34-61
+  ZijdConstants.ts                                                      |       0 |      100 |       0 |       0 | 1-3
+  ZijdGraph.tsx                                                         |       0 |        0 |       0 |       0 | 27-129
+ src/components/AppLogic                                                |       0 |        0 |       0 |       0 |
+  index.ts                                                              |       0 |        0 |       0 |       0 |
+ src/components/AppLogic/AppNavigation                                  |       0 |        0 |       0 |       0 |
+  AppNavigation.tsx                                                     |       0 |        0 |       0 |       0 | 18-117
+  NavButton.tsx                                                         |       0 |        0 |       0 |       0 | 14-33
+ src/components/AppLogic/AppSettings                                    |       0 |        0 |       0 |       0 |
+  AppSettings.tsx                                                       |       0 |        0 |       0 |       0 | 33-172
+  CurrentFileSelector.tsx                                               |       0 |        0 |       0 |       0 | 9-18
+  hotkeys.tsx                                                           |       0 |        0 |       0 |       0 |
+ src/components/AppLogic/DataTablesDIR                                  |       0 |      100 |       0 |       0 |
+  styleConstants.ts                                                     |       0 |      100 |       0 |       0 | 3
+  types.ts                                                              |       0 |        0 |       0 |       0 |
+  useApiRef.tsx                                                         |       0 |      100 |       0 |       0 | 4-23
+ src/components/AppLogic/DataTablesDIR/InputDataTable                   |       0 |        0 |       0 |       0 |
+  DataTableDIR.tsx                                                      |       0 |        0 |       0 |       0 | 32-292
+  DataTableDIRSkeleton.tsx                                              |       0 |      100 |       0 |       0 | 6-9
+ src/components/AppLogic/DataTablesDIR/OutputDataTable                  |       0 |        0 |       0 |       0 |
+  OutputDataTableDIR.tsx                                                |       0 |        0 |       0 |       0 | 25-260
+  OutputDataTableDIRSkeleton.tsx                                        |       0 |      100 |       0 |       0 | 6-9
+ src/components/AppLogic/DataTablesDIR/SitesDataTable                   |       0 |        0 |       0 |       0 |
+  SitesDataTable.tsx                                                    |       0 |        0 |       0 |       0 | 12-112
+  SitesDataTableSkeleton.tsx                                            |       0 |      100 |       0 |       0 | 6-9
+ src/components/AppLogic/DataTablesDIR/StatisticsDataTable              |       0 |        0 |       0 |       0 |
+  StatisticsDataTableDIR.tsx                                            |       0 |        0 |       0 |       0 | 34-294
+  StatisticsDataTableDIRSkeleton.tsx                                    |       0 |      100 |       0 |       0 | 7-10
+ src/components/AppLogic/DataTablesDIR/VGPDataTable                     |       0 |        0 |       0 |       0 |
+  VGPDataTable.tsx                                                      |       0 |        0 |       0 |       0 | 11-122
+  VGPDataTableSkeleton.tsx                                              |       0 |      100 |       0 |       0 | 6-9
+ src/components/AppLogic/DataTablesPMD                                  |       0 |      100 |       0 |       0 |
+  styleConstants.ts                                                     |       0 |      100 |       0 |       0 | 3
+  types.ts                                                              |       0 |        0 |       0 |       0 |
+ src/components/AppLogic/DataTablesPMD/InputDataTable                   |       0 |        0 |       0 |       0 |
+  DataTablePMD.tsx                                                      |       0 |        0 |       0 |       0 | 16-136
+  DataTablePMDSkeleton.tsx                                              |       0 |      100 |       0 |       0 | 6-9
+  MetaDataTablePMD.tsx                                                  |       0 |        0 |       0 |       0 | 12-125
+  MetaDataTablePMDSkeleton.tsx                                          |       0 |      100 |       0 |       0 | 6-9
+ src/components/AppLogic/DataTablesPMD/OutputDataTable                  |       0 |        0 |       0 |       0 |
+  OutputDataTablePMD.tsx                                                |       0 |        0 |       0 |       0 | 25-235
+  OutputDataTablePMDSkeleton.tsx                                        |       0 |      100 |       0 |       0 | 6-9
+ src/components/AppLogic/DataTablesPMD/StatisticsDataTable              |       0 |        0 |       0 |       0 |
+  StatisticsDataTablePMD.tsx                                            |       0 |        0 |       0 |       0 | 42-283
+  StatisticsDataTablePMDSkeleton.tsx                                    |       0 |      100 |       0 |       0 | 7-10
+ src/components/AppLogic/GraphsSelector                                 |       0 |      100 |       0 |       0 |
+  GraphsSelector.tsx                                                    |       0 |      100 |       0 |       0 | 14-41
+ src/components/AppLogic/ToolsDIR                                       |       0 |        0 |       0 |       0 |
+  CurrentDIRFileSelector.tsx                                            |       0 |        0 |       0 |       0 | 22-93
+  ReversePolarityButtons.tsx                                            |       0 |        0 |       0 |       0 | 27-152
+  ShowHideDotsButtons.tsx                                               |       0 |        0 |       0 |       0 | 25-145
+  StatModeButton.tsx                                                    |       0 |        0 |       0 |       0 | 12-28
+  ToolsDIR.tsx                                                          |       0 |        0 |       0 |       0 | 34-267
+  ToolsDIRSkeleton.tsx                                                  |       0 |      100 |       0 |       0 | 6-9
+ src/components/AppLogic/ToolsDIR/PMTests                               |       0 |        0 |       0 |       0 |
+  ConglomeratesTestContainer.tsx                                        |       0 |        0 |       0 |       0 | 14-26
+  FoldTestContainer.tsx                                                 |       0 |        0 |       0 |       0 | 15-91
+  GraphsSkeleton.tsx                                                    |       0 |      100 |       0 |       0 | 10-13
+  PMTestsModalContent.tsx                                               |       0 |        0 |       0 |       0 | 20-80
+  TestControls.tsx                                                      |       0 |        0 |       0 |       0 | 14-22
+ src/components/AppLogic/ToolsDIR/PMTests/ReversalTestContainer         |       0 |        0 |       0 |       0 |
+  ClassicResult.tsx                                                     |       0 |      100 |       0 |       0 | 9-18
+  ReversalTestControlledContainer.tsx                                   |       0 |        0 |       0 |       0 | 29-204
+  ReversalTestUncontrolledContainer.tsx                                 |       0 |        0 |       0 |       0 | 34-66
+ src/components/AppLogic/ToolsPMD                                       |       0 |        0 |       0 |       0 |
+  CurrentPMDFileSelector.tsx                                            |       0 |        0 |       0 |       0 | 21-89
+  ShowHideDotsButtons.tsx                                               |       0 |        0 |       0 |       0 | 25-143
+  StatModeButton.tsx                                                    |       0 |        0 |       0 |       0 | 12-28
+  ToolsPMD.tsx                                                          |       0 |        0 |       0 |       0 | 28-222
+  ToolsPMDSkeleton.tsx                                                  |       0 |      100 |       0 |       0 | 6-9
+ src/components/AppLogic/VGP                                            |       0 |        0 |       0 |       0 |
+  Graphs.tsx                                                            |       0 |        0 |       0 |       0 | 16-71
+  GraphsSkeleton.tsx                                                    |       0 |      100 |       0 |       0 | 11-14
+  VGPMean.tsx                                                           |       0 |        0 |       0 |       0 | 9-27
+  VGPmodalContent.tsx                                                   |       0 |        0 |       0 |       0 | 32-137
+ src/components/AppLogic/hooks                                          |       0 |        0 |       0 |       0 |
+  index.tsx                                                             |       0 |        0 |       0 |       0 |
+ src/components/AppLogic/hooks/useCellModesModel                        |       0 |      100 |       0 |       0 |
+  index.tsx                                                             |       0 |        0 |       0 |       0 |
+  useCellModesModel.tsx                                                 |       0 |      100 |       0 |       0 | 4-11
+ src/components/AppLogic/hooks/useScrollToInterpretationRow             |       0 |        0 |       0 |       0 |
+  index.tsx                                                             |       0 |        0 |       0 |       0 |
+  useScrollToInterpretationRow.tsx                                      |       0 |        0 |       0 |       0 | 10-25
+ src/components/Common/Buttons                                          |       0 |        0 |       0 |       0 |
+  index.ts                                                              |       0 |        0 |       0 |       0 |
+ src/components/Common/Buttons/ButtonGroupWithLabel                     |       0 |      100 |       0 |       0 |
+  ButtonGroupWithLabel.tsx                                              |       0 |      100 |       0 |       0 | 10-11
+ src/components/Common/Buttons/DefaultButton                            |       0 |        0 |       0 |       0 |
+  DefaultButton.tsx                                                     |       0 |        0 |       0 |       0 | 6-13
+ src/components/Common/Buttons/DefaultIconButton                        |       0 |      100 |       0 |       0 |
+  DefaultIconButton.tsx                                                 |       0 |      100 |       0 |       0 | 6-13
+ src/components/Common/Buttons/DefaultResponsiveButton                  |       0 |        0 |       0 |       0 |
+  DefaultResponsiveButton.tsx                                           |       0 |        0 |       0 |       0 | 25-36
+ src/components/Common/Buttons/InfoButton                               |       0 |        0 |       0 |       0 |
+  InfoButton.tsx                                                        |       0 |        0 |       0 |       0 | 11-280
+ src/components/Common/Buttons/PrettyButton                             |       0 |      100 |       0 |       0 |
+  PrettyButton.tsx                                                      |       0 |      100 |       0 |       0 | 7-13
+ src/components/Common/Buttons/ReferenceSelector                        |       0 |        0 |       0 |       0 |
+  ReferenceSelector.tsx                                                 |       0 |        0 |       0 |       0 | 15-36
+ src/components/Common/Buttons/ToggleButton                             |       0 |        0 |       0 |       0 |
+  ToggleButton.tsx                                                      |       0 |        0 |       0 |       0 | 14-25
+ src/components/Common/Buttons/UploadButton                             |       0 |        0 |       0 |       0 |
+  UploadButton.tsx                                                      |       0 |        0 |       0 |       0 | 16-35
+ src/components/Common/Carousel                                         |       0 |        0 |       0 |       0 |
+  Carousel.tsx                                                          |       0 |        0 |       0 |       0 | 10-90
+ src/components/Common/DataTable/MetaDataChange                         |       0 |        0 |       0 |       0 |
+  MetaDataChange.tsx                                                    |       0 |        0 |       0 |       0 | 18-144
+ src/components/Common/DataTable/Toolbar                                |       0 |        0 |       0 |       0 |
+  DIRInputDataTableToolbar.tsx                                          |       0 |        0 |       0 |       0 | 12-50
+  DIROutputDataTableToolbar.tsx                                         |       0 |        0 |       0 |       0 | 11-40
+  DIRStatisticsDataTableToolbar.tsx                                     |       0 |        0 |       0 |       0 | 11-42
+  PMDInputDataTableToolbar.tsx                                          |       0 |        0 |       0 |       0 | 11-21
+  PMDOutputDataTableToolbar.tsx                                         |       0 |        0 |       0 |       0 | 11-40
+  PMDStatisticsDataTableToolbar.tsx                                     |       0 |        0 |       0 |       0 | 11-42
+  SitesInputDataTableToolbar.tsx                                        |       0 |      100 |       0 |       0 | 8-9
+  VGPDataTableToolbar.tsx                                               |       0 |        0 |       0 |       0 | 11-23
+ src/components/Common/DataTable/Toolbar/Buttons/ExportButton           |       0 |      100 |       0 |       0 |
+  ExportDIRFromDIR.tsx                                                  |       0 |      100 |       0 |       0 | 13-15
+  ExportDIRFromPca.tsx                                                  |       0 |      100 |       0 |       0 | 13-15
+  ExportPMD.tsx                                                         |       0 |      100 |       0 |       0 | 12-14
+  ExportVGP.tsx                                                         |       0 |      100 |       0 |       0 | 7-9
+ src/components/Common/DataTable/Toolbar/Buttons/ExportButton/MenuItems |       0 |        0 |       0 |       0 |
+  DIRExportMenuItem.tsx                                                 |       0 |        0 |       0 |       0 | 12-50
+  PMDExportMenuItem.tsx                                                 |       0 |      100 |       0 |       0 | 12-25
+  VGPExportMenuItem.tsx                                                 |       0 |        0 |       0 |       0 | 17-55
+ src/components/Common/DropdownMenu                                     |       0 |        0 |       0 |       0 |
+  DropdownMenu.tsx                                                      |       0 |        0 |       0 |       0 | 14-102
+ src/components/Common/DropdownSelect                                   |       0 |        0 |       0 |       0 |
+  DropdownSelect.tsx                                                    |       0 |        0 |       0 |       0 | 22-80
+  DropdownSelectWithButtons.tsx                                         |       0 |        0 |       0 |       0 | 28-177
+ src/components/Common/ErrorBoundary                                    |       0 |        0 |       0 |       0 |
+  ErrorBoundary.tsx                                                     |       0 |        0 |       0 |       0 | 22-135
+ src/components/Common/Graphs                                           |       0 |        0 |       0 |       0 |
+  index.ts                                                              |       0 |        0 |       0 |       0 |
+ src/components/Common/Graphs/Axis                                      |       0 |        0 |       0 |       0 |
+  Axis.tsx                                                              |       0 |        0 |       0 |       0 | 79-124
+ src/components/Common/Graphs/Buttons/CenterByMean                      |       0 |        0 |       0 |       0 |
+  CenterByMean.tsx                                                      |       0 |        0 |       0 |       0 | 10-11
+ src/components/Common/Graphs/Buttons/Cutoff                            |       0 |        0 |       0 |       0 |
+  Cutoff.tsx                                                            |       0 |        0 |       0 |       0 | 14-22
+ src/components/Common/Graphs/Buttons/DefaultButton                     |       0 |        0 |       0 |       0 |
+  DefaultButton.tsx                                                     |       0 |        0 |       0 |       0 | 12-13
+ src/components/Common/Graphs/Buttons/ExportButton                      |       0 |      100 |       0 |       0 |
+  ExportButton.tsx                                                      |       0 |      100 |       0 |       0 | 13-22
+ src/components/Common/Graphs/Buttons/ProjectionSelect                  |       0 |        0 |       0 |       0 |
+  ProjectionSelect.tsx                                                  |       0 |        0 |       0 |       0 | 15-93
+ src/components/Common/Graphs/Buttons/ResetZoomPan                      |       0 |        0 |       0 |       0 |
+  ResetZoomPan.tsx                                                      |       0 |        0 |       0 |       0 | 10-11
+ src/components/Common/Graphs/Buttons/ToggleMean                        |       0 |        0 |       0 |       0 |
+  ToggleMean.tsx                                                        |       0 |        0 |       0 |       0 | 7-16
+ src/components/Common/Graphs/Buttons/ZoomMode                          |       0 |        0 |       0 |       0 |
+  ZoomMode.tsx                                                          |       0 |        0 |       0 |       0 | 10-11
+ src/components/Common/Graphs/ContextMenu                               |       0 |        0 |       0 |       0 |
+  ContextMenu.tsx                                                       |       0 |        0 |       0 |       0 | 13-54
+ src/components/Common/Graphs/CoordinateSystem                          |       0 |        0 |       0 |       0 |
+  CoordinateSystem.tsx                                                  |       0 |        0 |       0 |       0 | 12-13
+ src/components/Common/Graphs/Data                                      |       0 |        0 |       0 |       0 |
+  Data.tsx                                                              |       0 |        0 |       0 |       0 | 91-130
+ src/components/Common/Graphs/Dot                                       |       0 |        0 |       0 |       0 |
+  Dot.tsx                                                               |       0 |        0 |       0 |       0 | 102-279
+ src/components/Common/Graphs/GraphSymbols                              |       0 |        0 |       0 |       0 |
+  GraphSymbols.tsx                                                      |       0 |        0 |       0 |       0 | 14-83
+ src/components/Common/Graphs/SelectableGraph                           |       0 |        0 |       0 |       0 |
+  SelectableGraph.tsx                                                   |       0 |        0 |       0 |       0 | 48-214
+ src/components/Common/Graphs/Ticks                                     |       0 |        0 |       0 |       0 |
+  Ticks.tsx                                                             |       0 |        0 |       0 |       0 | 20-35
+ src/components/Common/Graphs/Tooltip                                   |       0 |        0 |       0 |       0 |
+  DotTooltip.tsx                                                        |       0 |      100 |       0 |       0 | 5-7
+  Tooltip.tsx                                                           |       0 |        0 |       0 |       0 | 16-45
+ src/components/Common/Graphs/Unit                                      |       0 |      100 |       0 |       0 |
+  Unit.tsx                                                              |       0 |      100 |       0 |       0 | 10-11
+ src/components/Common/InputApply                                       |       0 |        0 |       0 |       0 |
+  InputApply.tsx                                                        |       0 |        0 |       0 |       0 | 14-35
+ src/components/Common/InputSelect                                      |       0 |        0 |       0 |       0 |
+  InputSelect.tsx                                                       |       0 |        0 |       0 |       0 | 15-78
+ src/components/Common/Modal                                            |       0 |        0 |       0 |       0 |
+  ModalWrapper.tsx                                                      |       0 |        0 |       0 |       0 | 26-105
+ src/components/Common/Modal/ChangelogModal                             |       0 |        0 |       0 |       0 |
+  ChangelogModal.tsx                                                    |       0 |        0 |       0 |       0 | 8-67
+ src/components/Common/Modal/HelpModal                                  |       0 |      100 |       0 |       0 |
+  HelpModal.tsx                                                         |       0 |      100 |       0 |       0 | 13-30
+ src/components/Common/Modal/MergePromptModal                           |       0 |        0 |       0 |       0 |
+  MergePromptModal.tsx                                                  |       0 |        0 |       0 |       0 | 27-97
+ src/components/Common/Modal/SettingsModal                              |       0 |      100 |       0 |       0 |
+  SettingsModal.tsx                                                     |       0 |      100 |       0 |       0 | 9-41
+ src/components/Common/Modal/SettingsModal/Sections                     |       0 |        0 |       0 |       0 |
+  index.ts                                                              |       0 |        0 |       0 |       0 |
+ src/components/Common/Modal/SettingsModal/Sections/DisplaySection      |       0 |      100 |       0 |       0 |
+  DisplaySection.tsx                                                    |       0 |      100 |       0 |       0 | 11-44
+ src/components/Common/Modal/SettingsModal/Sections/HotkeysSection      |       0 |        0 |       0 |       0 |
+  HotkeysSection.tsx                                                    |       0 |        0 |       0 |       0 | 15-151
+ src/components/Common/Modal/UploadModal                                |       0 |        0 |       0 |       0 |
+  UploadModal.tsx                                                       |       0 |        0 |       0 |       0 | 22-138
+ src/components/Common/Modal/ValidationModal                            |       0 |        0 |       0 |       0 |
+  ValidationModal.tsx                                                   |       0 |        0 |       0 |       0 | 29-96
+ src/components/Common/Tabs                                             |       0 |        0 |       0 |       0 |
+  index.ts                                                              |       0 |        0 |       0 |       0 |
+ src/components/Common/Tabs/VerticalTabs                                |       0 |        0 |       0 |       0 |
+  VerticalTabs.tsx                                                      |       0 |        0 |       0 |       0 | 16-97
+ src/components/Layouts                                                 |       0 |        0 |       0 |       0 |
+  index.ts                                                              |       0 |        0 |       0 |       0 |
+ src/components/Layouts/AppLayout                                       |       0 |        0 |       0 |       0 |
+  AppLayout.tsx                                                         |       0 |        0 |       0 |       0 | 21-69
+ src/components/Layouts/MainPageLayout                                  |       0 |      100 |       0 |       0 |
+  MainPageLayout.tsx                                                    |       0 |      100 |       0 |       0 | 13-16
+ src/components/MainPage                                                |       0 |        0 |       0 |       0 |
+  index.ts                                                              |       0 |        0 |       0 |       0 |
+ src/components/MainPage/About                                          |       0 |        0 |       0 |       0 |
+  About.tsx                                                             |       0 |        0 |       0 |       0 | 10-15
+ src/components/MainPage/Description                                    |       0 |        0 |       0 |       0 |
+  Description.tsx                                                       |       0 |        0 |       0 |       0 | 20-140
+ src/components/MainPage/FeaturesCards                                  |       0 |        0 |       0 |       0 |
+  FeatureCard.tsx                                                       |       0 |        0 |       0 |       0 | 14-18
+  FeaturesCards.tsx                                                     |       0 |        0 |       0 |       0 | 39-123
+ src/components/MainPage/FeaturesCards/assets                           |       0 |        0 |       0 |       0 |
+  index.ts                                                              |       0 |        0 |       0 |       0 |
+ src/components/MainPage/Footer                                         |       0 |      100 |       0 |       0 |
+  Footer.tsx                                                            |       0 |      100 |       0 |       0 | 8-12
+ src/components/MainPage/Helper                                         |       0 |        0 |       0 |       0 |
+  Helper.tsx                                                            |       0 |        0 |       0 |       0 | 9-28
+ src/components/MainPage/NavPanel                                       |       0 |        0 |       0 |       0 |
+  NavButton.tsx                                                         |       0 |        0 |       0 |       0 | 12-38
+  NavPanel.tsx                                                          |       0 |        0 |       0 |       0 | 19-169
+ src/components/MainPage/Paper                                          |       0 |        0 |       0 |       0 |
+  Paper.tsx                                                             |       0 |        0 |       0 |       0 | 13-26
+ src/data                                                               |       0 |      100 |     100 |       0 |
+  changelog.ts                                                          |       0 |      100 |     100 |       0 | 7
+ src/pages                                                              |       0 |        0 |       0 |       0 |
+  index.ts                                                              |       0 |        0 |       0 |       0 |
+ src/pages/AuthorsAndHistory                                            |       0 |        0 |       0 |       0 |
+  Authors.tsx                                                           |       0 |        0 |       0 |       0 | 14-123
+  AuthorsAndHistory.tsx                                                 |       0 |        0 |       0 |       0 | 10-20
+  History.tsx                                                           |       0 |        0 |       0 |       0 | 21-26
+ src/pages/AuthorsAndHistory/assets                                     |       0 |        0 |       0 |       0 |
+  index.ts                                                              |       0 |        0 |       0 |       0 |
+ src/pages/DIRPage                                                      |       0 |        0 |       0 |       0 |
+  DIRPage.tsx                                                           |       0 |        0 |       0 |       0 | 16-56
+  Graphs.tsx                                                            |       0 |        0 |       0 |       0 | 16-80
+  GraphsSkeleton.tsx                                                    |       0 |      100 |       0 |       0 | 16-19
+  InterpretationSetter.tsx                                              |       0 |        0 |       0 |       0 | 27-104
+  Tables.tsx                                                            |       0 |        0 |       0 |       0 | 13-30
+ src/pages/MainPage                                                     |       0 |      100 |       0 |       0 |
+  MainPage.tsx                                                          |       0 |      100 |       0 |       0 | 7-10
+ src/pages/NotFoundPage                                                 |       0 |      100 |       0 |       0 |
+  NotFoundPage.tsx                                                      |       0 |      100 |       0 |       0 | 4-5
+ src/pages/PCAPage                                                      |       0 |        0 |       0 |       0 |
+  Graphs.tsx                                                            |       0 |        0 |       0 |       0 | 14-141
+  GraphsSkeleton.tsx                                                    |       0 |      100 |       0 |       0 | 21-31
+  InterpretationSetter.tsx                                              |       0 |        0 |       0 |       0 | 27-91
+  PCAPage.tsx                                                           |       0 |        0 |       0 |       0 | 16-56
+  Tables.tsx                                                            |       0 |        0 |       0 |       0 | 13-30
+ src/pages/WhyPMToolsPage                                               |       0 |        0 |       0 |       0 |
+  WhyPMToolsPage.tsx                                                    |       0 |        0 |       0 |       0 | 20-30
+ src/pages/WhyPMToolsPage/assets                                        |       0 |        0 |       0 |       0 |
+  index.ts                                                              |       0 |        0 |       0 |       0 |
+ src/services/axios                                                     |       0 |        0 |       0 |       0 |
+  filesAndData.ts                                                       |       0 |        0 |       0 |       0 | 17-85
+ src/services/reducers                                                  |       0 |        0 |       0 |       0 |
+  appSettings.ts                                                        |       0 |      100 |       0 |       0 | 11-51
+  dirPage.ts                                                            |       0 |        0 |       0 |       0 | 24-270
+  parsedData.ts                                                         |       0 |        0 |       0 |       0 | 26-228
+  pcaPage.ts                                                            |       0 |        0 |       0 |       0 | 22-230
+ src/services/store                                                     |       0 |      100 |       0 |       0 |
+  hooks.ts                                                              |       0 |      100 |       0 |       0 | 4-5
+  middleware.ts                                                         |       0 |      100 |       0 |       0 | 3-12
+  store.ts                                                              |       0 |      100 |       0 |       0 | 9-20
+ src/utils                                                              |       0 |        0 |       0 |       0 |
+  GlobalHooks.ts                                                        |       0 |        0 |       0 |       0 | 7-541
+  GlobalTypes.ts                                                        |       0 |        0 |       0 |       0 |
+  ThemeConstants.ts                                                     |       0 |        0 |       0 |       0 |
+  index.ts                                                              |       0 |        0 |       0 |       0 |
+ src/utils/files                                                        |    6.45 |        0 |   17.39 |    6.42 |
+  fileConstants.ts                                                      |       0 |      100 |     100 |       0 | 3-107
+  fileManipulations.ts                                                  |       0 |        0 |       0 |       0 | 6-132
+  mergeUtils.ts                                                         |   57.14 |        0 |      80 |   63.63 | 36-39
+  subFunctions.ts                                                       |       0 |        0 |       0 |       0 | 4-45
+  validation.ts                                                         |       0 |        0 |       0 |       0 |
+ src/utils/files/converters                                             |       0 |        0 |       0 |       0 |
+  dir.ts                                                                |       0 |        0 |       0 |       0 | 16-124
+  index.ts                                                              |       0 |      100 |     100 |       0 | 20-30
+  pmd.ts                                                                |       0 |        0 |       0 |       0 | 13-147
+  vgp.ts                                                                |       0 |        0 |       0 |       0 | 12-222
+ src/utils/files/parsers                                                |   15.47 |     1.36 |   17.14 |    15.9 |
+  parserCSV_DIR.ts                                                      |   93.93 |       25 |     100 |   96.42 | 44
+  parserCSV_PMD.ts                                                      |       0 |        0 |       0 |       0 | 9-75
+  parserCSV_SitesLatLon.ts                                              |       0 |      100 |       0 |       0 | 9-37
+  parserDIR.ts                                                          |       0 |        0 |       0 |       0 | 10-129
+  parserMDIR.ts                                                         |       0 |        0 |       0 |       0 | 10-82
+  parserPMD.ts                                                          |       0 |        0 |       0 |       0 | 10-111
+  parserPMM.ts                                                          |   94.11 |       25 |     100 |   96.66 | 52
+  parserRS3.ts                                                          |       0 |        0 |       0 |       0 | 11-111
+  parserSQUID.ts                                                        |       0 |        0 |       0 |       0 | 11-107
+  parserXLSX_DIR.ts                                                     |       0 |      100 |       0 |       0 | 12-18
+  parserXLSX_PMD.ts                                                     |       0 |      100 |       0 |       0 | 12-18
+  parserXLSX_SitesLatLon.ts                                             |       0 |      100 |       0 |       0 | 12-18
+ src/utils/files/pmFiles                                                |       0 |      100 |       0 |       0 |
+  index.ts                                                              |       0 |      100 |       0 |       0 | 16-57
+  poles.ts                                                              |       0 |        0 |       0 |       0 |
+  sample.ts                                                             |       0 |        0 |       0 |       0 |
+  site.ts                                                               |       0 |        0 |       0 |       0 |
+  specimen.ts                                                           |       0 |        0 |       0 |       0 |
+ src/utils/graphs                                                       |       0 |        0 |       0 |       0 |
+  consts.ts                                                             |       0 |      100 |     100 |       0 | 1
+  createPath.ts                                                         |       0 |        0 |       0 |       0 | 1-48
+  dirToCartesian.ts                                                     |       0 |        0 |       0 |       0 | 1-43
+  export.ts                                                             |       0 |        0 |       0 |       0 | 4-118
+  greatCircleCache.ts                                                   |       0 |        0 |       0 |       0 | 8-60
+  siteToVGP.ts                                                          |       0 |        0 |       0 |       0 |
+  stereoGreatCircle.ts                                                  |       0 |        0 |       0 |       0 | 6-81
+  types.ts                                                              |       0 |        0 |       0 |       0 |
+ src/utils/graphs/classes                                               |       0 |        0 |       0 |       0 |
+  Coordinates.ts                                                        |       0 |        0 |       0 |       0 | 7-162
+  Direction.ts                                                          |       0 |        0 |       0 |       0 | 7-67
+  Distribution.ts                                                       |       0 |        0 |       0 |       0 | 5-73
+ src/utils/graphs/formatters                                            |       0 |        0 |       0 |       0 |
+  fromReferenceCoordinates.ts                                           |       0 |        0 |       0 |       0 | 5-23
+  getCDF.ts                                                             |       0 |        0 |       0 |       0 | 1-17
+  getInterpretationIDs.ts                                               |       0 |        0 |       0 |       0 | 4-18
+  getInterpretationIDsDIR.ts                                            |       0 |        0 |       0 |       0 | 4-18
+  toReferenceCoordinates.ts                                             |       0 |        0 |       0 |       0 | 5-27
+ src/utils/graphs/formatters/foldTest                                   |       0 |        0 |       0 |       0 |
+  dataToFoldTest.ts                                                     |       0 |        0 |       0 |       0 | 7-99
+ src/utils/graphs/formatters/mag                                        |       0 |        0 |       0 |       0 |
+  dataToMag.ts                                                          |       0 |        0 |       0 |       0 | 6-59
+ src/utils/graphs/formatters/reversalTest                               |       0 |      100 |       0 |       0 |
+  dataToReversalTest.ts                                                 |       0 |      100 |       0 |       0 | 11-59
+ src/utils/graphs/formatters/stereo                                     |       0 |        0 |       0 |       0 |
+  axesNamesByReference.ts                                               |       0 |        0 |       0 |       0 | 3-5
+  dataToStereoDIR.ts                                                    |       0 |        0 |       0 |       0 | 12-175
+  dataToStereoPMD.ts                                                    |       0 |        0 |       0 |       0 | 10-97
+  dataToStereoVGP.ts                                                    |       0 |        0 |       0 |       0 | 24-97
+ src/utils/graphs/formatters/stereo/createPlaneData                     |       0 |        0 |       0 |       0 |
+  createConfidenceEllipse.ts                                            |       0 |        0 |       0 |       0 | 3-25
+  createStereoPlaneData.ts                                              |       0 |        0 |       0 |       0 | 5-43
+  splitCircle.ts                                                        |       0 |        0 |       0 |       0 | 3-37
+ src/utils/graphs/formatters/zijd                                       |       0 |        0 |       0 |       0 |
+  dataToZijd.ts                                                         |       0 |        0 |       0 |       0 | 17-105
+  pcaToZijd.ts                                                          |       0 |        0 |       0 |       0 | 5-53
+  projectionByReference.ts                                              |       0 |        0 |       0 |       0 | 4-19
+  stepByProjection.ts                                                   |       0 |        0 |       0 |       0 | 5-28
+ src/utils/math                                                         |       0 |      100 |       0 |       0 |
+  clamp.ts                                                              |       0 |      100 |       0 |       0 | 1-2
+ src/utils/parsers                                                      |       0 |        0 |       0 |       0 |
+  enteredIndexesToIDs.ts                                                |       0 |      100 |       0 |       0 | 3-36
+  labelToReference.ts                                                   |       0 |        0 |       0 |       0 | 3-12
+  parseDotsIndexesInput.ts                                              |       0 |        0 |       0 |       0 | 1-55
+ src/utils/statistics                                                   |       0 |        0 |       0 |       0 |
+  bootstrapManipulations.ts                                             |       0 |        0 |       0 |       0 | 4-30
+  calculateStatisticsDIR.ts                                             |       0 |        0 |       0 |       0 | 11-61
+  calculateStatisticsPMD.ts                                             |       0 |        0 |       0 |       0 | 7-41
+  eigManipulations.ts                                                   |       0 |        0 |       0 |       0 | 7-176
+  matrix.ts                                                             |       0 |      100 |       0 |       0 | 10-121
+ src/utils/statistics/PMTests                                           |       0 |        0 |       0 |       0 |
+  index.ts                                                              |       0 |        0 |       0 |       0 |
+ src/utils/statistics/PMTests/ConglomeratesTest                         |       0 |        0 |       0 |       0 |
+  conglomeratesTest.ts                                                  |       0 |        0 |       0 |       0 | 5-83
+ src/utils/statistics/PMTests/FoldTest                                  |       0 |        0 |       0 |       0 |
+  foldTestBootstrap.ts                                                  |       0 |        0 |       0 |       0 | 15-271
+  foldTestClassic.ts                                                    |       0 |      100 |       0 |       0 | 1
+ src/utils/statistics/PMTests/ReversalTest                              |       0 |        0 |       0 |       0 |
+  reversalTestBootstrap.tsx                                             |       0 |        0 |       0 |       0 | 7-68
+  reversalTestClassic.tsx                                               |       0 |        0 |       0 |       0 | 7-48
+  reversalTestOldFashioned.tsx                                          |       0 |        0 |       0 |       0 | 6-45
+ src/utils/statistics/calculation                                       |       0 |        0 |       0 |       0 |
+  calculateBasicStatisticalParameters.ts                                |       0 |      100 |       0 |       0 | 6-32
+  calculateButlerParameters.ts                                          |       0 |      100 |       0 |       0 | 3-23
+  calculateCutoff.ts                                                    |       0 |        0 |       0 |       0 | 5-65
+  calculateFisherMean.ts                                                |       0 |        0 |       0 |       0 | 5-93
+  calculateMCFaddenIncMean.ts                                           |       0 |        0 |       0 |       0 | 1-103
+  calculateMcFaddenCombineMean.ts                                       |       0 |        0 |       0 |       0 | 6-137
+  calculatePCA_dir.ts                                                   |       0 |        0 |       0 |       0 | 9-65
+  calculatePCA_pmd.ts                                                   |       0 |        0 |       0 |       0 | 7-73
+  calculateVGP.ts                                                       |       0 |        0 |       0 |       0 | 3-68
+  getRawPlaneData.ts                                                    |       0 |        0 |       0 |       0 | 5-25
+ src/utils/statistics/formtatters                                       |       0 |        0 |       0 |       0 |
+  rawStatisticsDIRToInterpretation.ts                                   |       0 |        0 |       0 |       0 | 6-48
+  rawStatisticsPMDToInterpretation.ts                                   |       0 |      100 |       0 |       0 | 7-54
+------------------------------------------------------------------------|---------|----------|---------|---------|-------------------
