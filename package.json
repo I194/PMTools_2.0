@@ -86,6 +86,7 @@
     "@types/deep-equal": "^1.0.1",
     "@types/uuid": "^8.3.4",
     "eslint-config-prettier": "^10.1.8",
+    "fast-check": "^4.7.0",
     "file-loader": "^6.2.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
