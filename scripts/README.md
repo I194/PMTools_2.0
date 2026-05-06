@@ -78,10 +78,19 @@ If PMTools and PmagPy produce different output for the same input:
    `src/__tests__/fixtures/THESIS_FORMULAS.md`.
 3. The outcome is one of:
    - **PMTools has a bug.** Fix it in a `fix(science):` commit and add the
-     failing fixture as the regression test. The thesis is the spec; the code
-     deviating from it is the bug.
+     failing fixture as the regression test. By default the thesis is the spec
+     and code deviating from it is the bug.
    - **PMTools uses a different convention** (e.g., Watson F-test vs. Watson
      Vw, different α₉₅ approximation). Document the convention in the
      fixture's `SOURCE.md` and keep the PMTools-side `<name>.expected.json`
      as the source of truth. The PmagPy fixture is then a documented
      reference, not a parity gate.
+   - **The thesis formula itself is wrong.** Hypothetically possible — the
+     thesis was checked many times and the work is long-accepted by the
+     paleomag community, but blind trust is still wrong for scientific code.
+     If a derivation error in the thesis is found: cite the original source
+     (Kirschvink 1980, Fisher 1953, etc.) in the fixture's `SOURCE.md`,
+     update the thesis cheat sheet at `src/__tests__/fixtures/THESIS_FORMULAS.md`
+     with a clarifying note, fix the code if needed in a `fix(science):` commit,
+     and flag the discrepancy in the PR description so a domain expert reviews
+     it before merge.
