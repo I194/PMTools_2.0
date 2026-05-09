@@ -37,7 +37,7 @@ All graphs are SVG generated inside React. Snapshot the serialized SVG markup, n
 - Use `document.querySelector('svg').outerHTML` (normalized) as the snapshot target.
 - Save to `__snapshots__/` next to the test file.
 - Golden data comes from `src/__tests__/fixtures/graphs/` (created in Phase 1).
-- Seeded RNG (Phase 1's `seededRng.ts`) for bootstrap-driven graphs.
+- Seeded RNG (Phase 1's `seededRandom.ts`) for bootstrap-driven graphs.
 
 ### Layer 2: Playwright page screenshots (secondary)
 
@@ -89,8 +89,8 @@ This keeps scientific capital in one place and ensures visual tests are driven b
 6. Add app-ready signal: `document.body.setAttribute('data-ready', 'true')` in `App.tsx` after initial hydration.
 7. Create `e2e/fixtures/determinism.ts`: freeze `Date.now`, seed `Math.random`, disable animations.
 8. Update CI to install Playwright browsers and run `npx playwright test` after Jest tests pass.
-9. Create `src/__tests__/helpers/svgSnapshot.ts` — normalize SVG (strip inter-tag whitespace, collapse adjacent spaces) before `toMatchSnapshot`.
-10. Create `src/__tests__/helpers/renderGraph.ts` — wraps graph components in a mock Redux `Provider` with a deterministic initial state. **This is throwaway code that gets deleted in Phase 5/6**: Phase 5 makes graphs prop-driven (no Provider needed), and Phase 6 finishes the state migration. Phase 6's exit criteria explicitly require this file to be gone — it should not survive the modernization.
+9. Create `src/test-utils/svgSnapshot.ts` — normalize SVG (strip inter-tag whitespace, collapse adjacent spaces) before `toMatchSnapshot`. (Helpers live outside `__tests__/` because CRA's Jest hardcodes `testMatch: __tests__/**/*.{js,ts,…}` and treats every TS file there as a test suite — see Phase 1 Step 0.3 justification in `01-testing.md`.)
+10. Create `src/test-utils/renderGraph.ts` — wraps graph components in a mock Redux `Provider` with a deterministic initial state. **This is throwaway code that gets deleted in Phase 5/6**: Phase 5 makes graphs prop-driven (no Provider needed), and Phase 6 finishes the state migration. Phase 6's exit criteria explicitly require this file to be gone — it should not survive the modernization.
 
 ### Step 1 — SVG snapshot tests for each graph component
 One test file per graph, colocated under a `__tests__/` directory next to the component:
@@ -103,7 +103,7 @@ One test file per graph, colocated under a `__tests__/` directory next to the co
 6. `FoldTestGraph` — 1 seeded snapshot.
 7. `ReversalTestGraph` — 1 seeded snapshot.
 
-Each test uses a Phase 1 fixture and asserts the normalized SVG against a saved snapshot. Bootstrap-driven graphs use Phase 1's `seededRng.ts`.
+Each test uses a Phase 1 fixture and asserts the normalized SVG against a saved snapshot. Bootstrap-driven graphs use Phase 1's `seededRandom.ts`.
 
 ### Step 2 — Playwright page screenshots
 1. `e2e/main-page.spec.ts` — light + dark.
@@ -142,8 +142,8 @@ Each test uses a Phase 1 fixture and asserts the normalized SVG against a saved 
 - `e2e/` — specs, fixtures, helpers, snapshots.
 - `e2e/fixtures/app.ts`, `e2e/fixtures/determinism.ts`, `e2e/README.md`.
 - `src/components/AppGraphs/*/__tests__/*.visual.test.tsx` — one per graph.
-- `src/__tests__/helpers/svgSnapshot.ts`
-- `src/__tests__/helpers/renderGraph.ts` (throwaway, removed in Phase 6).
+- `src/test-utils/svgSnapshot.ts`
+- `src/test-utils/renderGraph.ts` (throwaway, removed in Phase 6).
 
 ### Files to modify
 - `src/App/App.tsx` — add `document.body.setAttribute('data-ready', 'true')` after mount.
@@ -157,7 +157,7 @@ Each test uses a Phase 1 fixture and asserts the normalized SVG against a saved 
 ## Reused Code
 
 - Phase 1 fixtures under `src/__tests__/fixtures/`.
-- Phase 1 `seededRng.ts` for bootstrap-driven graphs.
+- Phase 1 `seededRandom.ts` for bootstrap-driven graphs.
 - Existing `src/assets/examples/examplePCA.pmd`, `exampleDIR.pmm` for Playwright "load real data" flows.
 
 ## Verification
