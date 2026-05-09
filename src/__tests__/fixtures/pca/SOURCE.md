@@ -1,7 +1,8 @@
 # fixtures/pca — SOURCE
 
 Fixtures for `calculatePCA_pmd` and `calculatePCA_dir`. Covers thesis formulas
-§1.1 (vector MAD), §1.2 (great-circle MAD), §1.3 (covariance matrix H).
+(1.1) (vector MAD), (1.2) (great-circle MAD), and (1.3) (covariance matrix H),
+all of which live in §1.3.
 
 ## Fixtures
 
@@ -11,7 +12,7 @@ _Populated in Phase 1 Step 2._
 
 Every fixture must have a `<name>.expected.json` sibling and cite at least one of:
 
-- `PMTools_how_to_use.pdf §<n>`
+- `PMTools_how_to_use.pdf formula (<X.Y>)` or `§<n>`
 - PmagPy `pmag.doprinc` (or equivalent) @ version `<X.Y.Z>`
 - Tauxe "Essentials of Paleomagnetism" 2010 chapter/page reference
 

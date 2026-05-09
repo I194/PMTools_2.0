@@ -8,20 +8,20 @@
 // so the [0, 1) values are also bit-exact across engines.
 //
 // Use as a drop-in replacement for `Math.random` in bootstrap tests:
-//   const seededRng = createSeededRng(42);
-//   const sample = items[Math.floor(seededRng.next() * items.length)];
+//   const random = createSeededRandom(42);
+//   const sample = items[Math.floor(random.next() * items.length)];
 //
 // `nextInt(min, max)` uses `Math.floor(next() * range)` and is technically
 // biased for ranges close to 2^32, but bias is < 10^-7 for any range below
 // ~1000 — irrelevant for bootstrap sample indices we actually use.
 
-export type SeededRng = {
+export type SeededRandom = {
   next: () => number;
   nextInt: (minInclusive: number, maxExclusive: number) => number;
   state: () => number;
 };
 
-export function createSeededRng(seed: number): SeededRng {
+export function createSeededRandom(seed: number): SeededRandom {
   let currentState = seed >>> 0;
 
   const next = (): number => {
@@ -36,9 +36,4 @@ export function createSeededRng(seed: number): SeededRng {
   const state = (): number => currentState;
 
   return { next, nextInt, state };
-}
-
-export function createSeededRandom(seed: number): () => number {
-  const seededRng = createSeededRng(seed);
-  return seededRng.next;
 }

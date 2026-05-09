@@ -37,7 +37,7 @@ All graphs are SVG generated inside React. Snapshot the serialized SVG markup, n
 - Use `document.querySelector('svg').outerHTML` (normalized) as the snapshot target.
 - Save to `__snapshots__/` next to the test file.
 - Golden data comes from `src/__tests__/fixtures/graphs/` (created in Phase 1).
-- Seeded RNG (Phase 1's `seededRng.ts`) for bootstrap-driven graphs.
+- Seeded RNG (Phase 1's `seededRandom.ts`) for bootstrap-driven graphs.
 
 ### Layer 2: Playwright page screenshots (secondary)
 
@@ -103,7 +103,7 @@ One test file per graph, colocated under a `__tests__/` directory next to the co
 6. `FoldTestGraph` — 1 seeded snapshot.
 7. `ReversalTestGraph` — 1 seeded snapshot.
 
-Each test uses a Phase 1 fixture and asserts the normalized SVG against a saved snapshot. Bootstrap-driven graphs use Phase 1's `seededRng.ts`.
+Each test uses a Phase 1 fixture and asserts the normalized SVG against a saved snapshot. Bootstrap-driven graphs use Phase 1's `seededRandom.ts`.
 
 ### Step 2 — Playwright page screenshots
 1. `e2e/main-page.spec.ts` — light + dark.
@@ -157,7 +157,7 @@ Each test uses a Phase 1 fixture and asserts the normalized SVG against a saved 
 ## Reused Code
 
 - Phase 1 fixtures under `src/__tests__/fixtures/`.
-- Phase 1 `seededRng.ts` for bootstrap-driven graphs.
+- Phase 1 `seededRandom.ts` for bootstrap-driven graphs.
 - Existing `src/assets/examples/examplePCA.pmd`, `exampleDIR.pmm` for Playwright "load real data" flows.
 
 ## Verification

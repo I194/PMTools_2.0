@@ -7,8 +7,8 @@ replacement, compute Fisher mean, repeat Q times.
 ## Fixtures
 
 Every fixture in this directory **must** be paired with a seed value (typically
-`seed = 42`) and the LCG output is reproduced by `createSeededRng(seed)` from
-`src/test-utils/seededRng.ts` (helpers live outside `__tests__/` because CRA's
+`seed = 42`) and the LCG output is reproduced by `createSeededRandom(seed)` from
+`src/test-utils/seededRandom.ts` (helpers live outside `__tests__/` because CRA's
 Jest config hardcodes `testMatch: __tests__/**/*.{js,ts,…}` and treats every TS
 file under `__tests__/` as a test suite). The hand-rolled LCG uses 32-bit unsigned
 integer state (Numerical Recipes constants) so output is bit-exact across JS
