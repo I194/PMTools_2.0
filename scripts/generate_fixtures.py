@@ -20,6 +20,7 @@ See `scripts/README.md` for the input-file shape per topic and for the
 from __future__ import annotations
 
 import argparse
+import functools
 import json
 import sys
 from pathlib import Path
@@ -30,7 +31,14 @@ FIXTURES_ROOT = REPO_ROOT / "src" / "__tests__" / "fixtures"
 INPUT_SUFFIX = ".input.json"
 OUTPUT_SUFFIX = ".pmagpy.json"
 
+PCA_CALC_TYPES = {"DE-BFL", "DE-BFL-A", "DE-BFP"}
 
+
+class StubNotImplemented(Exception):
+    """Topic is registered in the CLI but has no generator yet."""
+
+
+@functools.lru_cache(maxsize=1)
 def require_pmagpy():
     try:
         from pmagpy import pmag  # type: ignore[import-not-found]
@@ -44,11 +52,15 @@ def require_pmagpy():
 
 
 def pmagpy_version() -> str:
+    # PmagPy doesn't reliably set __version__ on the package, so read the
+    # PyPI/installer-recorded version instead.
     try:
-        import pmagpy  # type: ignore[import-not-found]
-
-        return getattr(pmagpy, "__version__", "unknown")
+        from importlib.metadata import PackageNotFoundError, version
     except ImportError:
+        return "unknown"
+    try:
+        return version("pmagpy")
+    except PackageNotFoundError:
         return "unknown"
 
 
@@ -61,6 +73,14 @@ def discover_inputs(topic_dir: Path) -> list[Path]:
 def output_path_for(input_path: Path) -> Path:
     stem = input_path.name[: -len(INPUT_SUFFIX)]
     return input_path.parent / f"{stem}{OUTPUT_SUFFIX}"
+
+
+def load_json(path: Path) -> dict:
+    with open(path, encoding="utf-8") as fh:
+        try:
+            return json.load(fh)
+        except json.JSONDecodeError as exc:
+            sys.exit(f"{path.relative_to(REPO_ROOT)}: invalid JSON — {exc}")
 
 
 def write_output(output_path: Path, data: dict, force: bool, label: str) -> bool:
@@ -82,8 +102,7 @@ def gen_fisher(args: argparse.Namespace) -> None:
         print("[fisher] no *.input.json files yet; nothing to do")
         return
     for inp in inputs:
-        with open(inp, encoding="utf-8") as fh:
-            data = json.load(fh)
+        data = load_json(inp)
         directions = data.get("directions") or []
         if not directions:
             print(f"[fisher] {inp.name}: missing or empty 'directions'; skipping")
@@ -94,13 +113,13 @@ def gen_fisher(args: argparse.Namespace) -> None:
         out = {
             "pmagpy_version": pmagpy_version(),
             "fisher_mean": {
-                "dec": result["dec"],
-                "inc": result["inc"],
-                "k": result["k"],
-                "a95": result["alpha95"],
+                "dec": result.get("dec"),
+                "inc": result.get("inc"),
+                "k": result.get("k"),
+                "a95": result.get("alpha95"),
                 "csd": result.get("csd"),
-                "n": result["n"],
-                "r": result["r"],
+                "n": result.get("n"),
+                "r": result.get("r"),
             },
         }
         write_output(output_path_for(inp), out, args.force, "fisher")
@@ -113,26 +132,35 @@ def gen_pca(args: argparse.Namespace) -> None:
         print("[pca] no *.input.json files yet; nothing to do")
         return
     for inp in inputs:
-        with open(inp, encoding="utf-8") as fh:
-            data = json.load(fh)
-        vectors = data.get("vectors") or []
-        anchored = bool(data.get("anchored", False))
-        if not vectors:
-            print(f"[pca] {inp.name}: missing or empty 'vectors'; skipping")
+        data = load_json(inp)
+        directions = data.get("directions") or []
+        calc_type = data.get("calculation_type", "DE-BFL")
+        if not directions:
+            print(f"[pca] {inp.name}: missing or empty 'directions'; skipping")
             continue
-        # pmag.doprinc: PCA on a block of [x, y, z] vectors.
-        result = pmag.doprinc(vectors)
+        if calc_type not in PCA_CALC_TYPES:
+            print(
+                f"[pca] {inp.name}: bad calculation_type {calc_type!r} "
+                f"(expected one of {sorted(PCA_CALC_TYPES)}); skipping"
+            )
+            continue
+        # pmag.domean(data, start, end, calculation_type):
+        #   data         — list of [dec, inc, intensity] rows
+        #   start/end    — indices into data (inclusive)
+        #   calc type    — DE-BFL (free line), DE-BFL-A (anchored line), DE-BFP (plane)
+        # Returns specimen_dec, specimen_inc, specimen_mad, specimen_n,
+        # specimen_direction_type, center_of_mass, ...
+        # doprinc is NOT used: it doesn't return MAD and doesn't model anchored mode.
+        result = pmag.domean(directions, 0, len(directions) - 1, calc_type)
         out = {
             "pmagpy_version": pmagpy_version(),
-            "anchored": anchored,
+            "calculation_type": calc_type,
             "principal": {
-                "dec": result.get("dec"),
-                "inc": result.get("inc"),
-                "tau1": result.get("tau1"),
-                "tau2": result.get("tau2"),
-                "tau3": result.get("tau3"),
-                "MAD": result.get("MAD"),
-                "N": result.get("N"),
+                "dec": result.get("specimen_dec"),
+                "inc": result.get("specimen_inc"),
+                "mad": result.get("specimen_mad"),
+                "n": result.get("specimen_n"),
+                "direction_type": result.get("specimen_direction_type"),
             },
         }
         write_output(output_path_for(inp), out, args.force, "pca")
@@ -140,9 +168,9 @@ def gen_pca(args: argparse.Namespace) -> None:
 
 def gen_stub(name: str) -> Callable[[argparse.Namespace], None]:
     def gen(_args: argparse.Namespace) -> None:
-        sys.exit(
+        raise StubNotImplemented(
             f"[{name}] generator not yet implemented. "
-            f"Implement it when the corresponding test step lands and document "
+            f"Implement when the corresponding test step lands and document "
             f"the input schema in scripts/README.md."
         )
 
@@ -155,7 +183,7 @@ GENERATORS: dict[str, Callable[[argparse.Namespace], None]] = {
     "watson": gen_stub("watson"),
     "vgp": gen_stub("vgp"),
     "mcfadden": gen_stub("mcfadden"),
-    "fold-test": gen_stub("fold-test"),
+    "fold_test": gen_stub("fold_test"),
     "cutoff": gen_stub("cutoff"),
     "bootstrap": gen_stub("bootstrap"),
 }
@@ -179,21 +207,21 @@ def main() -> None:
     args = parser.parse_args()
 
     if args.topic == "all":
-        any_failed = False
+        # Fail fast if PmagPy isn't installed — otherwise every implemented
+        # generator would print the install message in turn.
+        require_pmagpy()
         for name, fn in GENERATORS.items():
             print(f"\n=== {name} ===")
             try:
                 fn(args)
-            except SystemExit as exc:
-                # stubs raise SystemExit by design — keep going for the rest
-                code = exc.code
-                if code not in (None, 0):
-                    print(str(code) if isinstance(code, str) else f"exit code {code}")
-                    any_failed = True
-        if any_failed:
-            sys.exit(1)
+            except StubNotImplemented as exc:
+                print(str(exc))
+        # Stubs are expected absences, not failures: exit 0.
     else:
-        GENERATORS[args.topic](args)
+        try:
+            GENERATORS[args.topic](args)
+        except StubNotImplemented as exc:
+            sys.exit(str(exc))
 
 
 if __name__ == "__main__":

@@ -26,10 +26,13 @@ CI **never** runs this script — the test suite reads the committed
    python3 -c "from pmagpy import pmag; print('pmagpy OK')"
    ```
 
-The script writes `pmagpy_version` into every output JSON. Don't bump the
-version casually: regeneration with a different PmagPy version may produce
-floating-point drift that looks like a regression. If you do bump, document it
-in the commit message and re-run `npm test` to confirm tolerances still hold.
+The script writes `pmagpy_version` into every output JSON. The version is read
+via `importlib.metadata.version("pmagpy")` (PyPI/installer metadata), not via
+`pmagpy.__version__` — the latter is not reliably set on the package. Don't
+bump the version casually: regeneration with a different PmagPy version may
+produce floating-point drift that looks like a regression. If you do bump,
+document it in the commit message and re-run `npm test` to confirm tolerances
+still hold.
 
 ### Usage
 
@@ -52,13 +55,31 @@ the script writes `<name>.pmagpy.json` next to it.
 | Topic | Input shape | PmagPy routine |
 |---|---|---|
 | `fisher` | `{ "directions": [[D, I], …] }` | `pmag.fisher_mean` |
-| `pca` | `{ "vectors": [[x, y, z], …], "anchored": false }` | `pmag.doprinc` |
+| `pca` | `{ "directions": [[D, I, int], …], "calculation_type": "DE-BFL" \| "DE-BFL-A" \| "DE-BFP" }` | `pmag.domean` |
 | `watson` | _stub_ | `pmag.watsons_v` (planned) |
 | `vgp` | _stub_ | `pmag.dia_vgp` (planned) |
 | `mcfadden` | _stub_ | `pmag.dolnp` (planned) |
-| `fold-test` | _stub_ | `pmag.bootstrap_fold_test` (planned) |
+| `fold_test` | _stub_ | `pmag.bootstrap_fold_test` (planned) |
 | `cutoff` | _stub_ | Vandamme cutoff (planned) |
 | `bootstrap` | _stub_ | seeded bootstrap (planned) |
+
+PCA notes:
+- `directions` are PmagPy-native `[dec, inc, intensity]` rows. PMTools works
+  internally in cartesian, so the fixture writer is responsible for the
+  conversion when authoring the input.
+- `calculation_type` defaults to `DE-BFL`. Use `DE-BFL-A` for anchored PCA
+  (matches PMTools `calculatePCA_pmd(..., anchored=true)`) and `DE-BFP` for
+  great-circle / plane fits (matches `calculatePCA_dir`).
+- `pmag.doprinc` is intentionally **not** used: it expects `[dec, inc, int]`
+  too (despite older docs suggesting cartesian), but it does not return MAD
+  and has no anchored mode, so it can't act as a parity oracle for PMTools.
+
+Field mappings in the output JSON:
+- Fisher: `pmagpy alpha95 → fisher_mean.a95`. PMTools' `MeanDir.MAD` is
+  semantically α95 for Fisher, despite the field name.
+- PCA: `specimen_dec/inc/mad/n → principal.dec/inc/mad/n`. `center_of_mass`
+  is omitted for now (np.array, fiddly to serialize); add it explicitly if a
+  Step 2 fixture needs it.
 
 Stubs print an error and exit 1 — they are filled in as Phase 1 adds tests
 for the corresponding statistics module. When you implement a stub:
