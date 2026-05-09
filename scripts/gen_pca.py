@@ -38,14 +38,16 @@ def gen_pca(args: argparse.Namespace) -> None:
                 f"(expected one of {sorted(PCA_CALC_TYPES)}); skipping"
             )
             continue
-        # pmag.domean(data, start, end, calculation_type):
-        #   data         — list of [dec, inc, intensity] rows
-        #   start/end    — indices into data (inclusive)
-        #   calc type    — DE-BFL (free line), DE-BFL-A (anchored line), DE-BFP (plane)
-        # Returns specimen_dec, specimen_inc, specimen_mad, specimen_n,
-        # specimen_direction_type, center_of_mass, ...
-        # doprinc is NOT used: it doesn't return MAD and doesn't model anchored mode.
-        result = pmag.domean(directions, 0, len(directions) - 1, calc_type)
+        # pmag.domean wants 5+ column rows: [treatment, dec, inc, intensity, quality].
+        # It indexes row[5] for the 'g'/'b' quality flag (3-column input crashes
+        # with IndexError). We synthesize treatment as the row index and mark
+        # every point 'g' (good) since the input.json schema deliberately hides
+        # this from fixture authors — they write [dec, inc, intensity] tuples.
+        # start/end are inclusive. doprinc is NOT used: no MAD, no anchored mode.
+        datablock = [
+            [i, d[0], d[1], d[2], "g"] for i, d in enumerate(directions)
+        ]
+        result = pmag.domean(datablock, 0, len(datablock) - 1, calc_type)
         out = {
             "pmagpy_version": pmagpy_version(),
             "calculation_type": calc_type,
@@ -53,6 +55,7 @@ def gen_pca(args: argparse.Namespace) -> None:
                 "dec": result.get("specimen_dec"),
                 "inc": result.get("specimen_inc"),
                 "mad": result.get("specimen_mad"),
+                "dang": result.get("specimen_dang"),
                 "n": result.get("specimen_n"),
                 "direction_type": result.get("specimen_direction_type"),
             },

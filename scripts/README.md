@@ -67,6 +67,12 @@ PCA notes:
 - `directions` are PmagPy-native `[dec, inc, intensity]` rows. PMTools works
   internally in cartesian, so the fixture writer is responsible for the
   conversion when authoring the input.
+- Internally `gen_pca` wraps each row into the 5-column form
+  `[step, dec, inc, intensity, "g"]` (treatment step = row index, quality =
+  "good") before calling `pmag.domean` — the function indexes `row[5]` for
+  the quality flag and crashes with `IndexError` on 3-column input. This
+  wrapping is a `pmag.domean` API requirement, not part of the input.json
+  schema; fixture authors keep writing `[dec, inc, intensity]` tuples.
 - `calculation_type` defaults to `DE-BFL`. Use `DE-BFL-A` for anchored PCA
   (matches PMTools `calculatePCA_pmd(..., anchored=true)`) and `DE-BFP` for
   great-circle / plane fits (matches `calculatePCA_dir`).
@@ -77,16 +83,25 @@ PCA notes:
 Field mappings in the output JSON:
 - Fisher: `pmagpy alpha95 → fisher_mean.a95`. PMTools' `MeanDir.MAD` is
   semantically α95 for Fisher, despite the field name.
-- PCA: `specimen_dec/inc/mad/n → principal.dec/inc/mad/n`. `center_of_mass`
-  is omitted for now (np.array, fiddly to serialize); add it explicitly if a
-  Step 2 fixture needs it.
+- PCA: `specimen_dec/inc/mad/dang/n → principal.dec/inc/mad/dang/n`. DANG
+  (Demagnetization Angle — angle between the PCA line and the line from the
+  center of mass to the origin) is captured as a free quality metric; PMTools
+  computes the same value, so it makes a useful second parity axis once Step 2
+  fixtures land. `center_of_mass` is omitted for now (np.array, fiddly to
+  serialize); add it explicitly if a Step 2 fixture needs it.
 
 Stubs print an error and exit 1 — they are filled in as Phase 1 adds tests
 for the corresponding statistics module. When you implement a stub:
 
-1. Add the per-topic `gen_<topic>` function in `generate_fixtures.py`.
-2. Document the input shape in this table.
-3. Update the fixture's `SOURCE.md` so reviewers know what schema to use.
+1. Create `scripts/gen_<topic>.py` with a `gen_<topic>(args)` function (see
+   `gen_fisher.py` / `gen_pca.py` for the pattern: import helpers from
+   `_fixture_common`, call `require_pmagpy()`, iterate `discover_inputs`,
+   write via `write_output`).
+2. In `generate_fixtures.py`, replace the `gen_stub("<topic>")` entry in the
+   `GENERATORS` dict with `from gen_<topic> import gen_<topic>` at the top
+   and the imported function in the dict.
+3. Document the input shape in this table.
+4. Update the fixture's `SOURCE.md` so reviewers know what schema to use.
 
 ### Investigating PmagPy parity disagreements
 
