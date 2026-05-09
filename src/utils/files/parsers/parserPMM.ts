@@ -8,7 +8,7 @@ import { IDirData } from '../../GlobalTypes';
  */
 const parsePMM = (data: string, name: string): IDirData => {
   // eslint-disable-next-line no-control-regex
-  const eol = new RegExp('\r?\n');
+  const eol = /\r\n|\r|\n/;
   // Get all lines except first and the last one (they're garbage)
   const lines = data
     .split(eol)

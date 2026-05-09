@@ -399,15 +399,21 @@ Manual verification of scientific findings:
 
 Real-file investigation of the 2000-2014 archive surfaced five parser issues. Each gets its own `fix(science):` commit during Step 4 with the offending real file as the regression fixture.
 
-### D1. All parsers — Mac classic CR-only line endings break parsing
+### D1. All parsers — Mac classic CR-only line endings break parsing ✅ FIXED
 
-The archive file `2013-Kola/.../component means.dir` uses `\r`-only line terminators (no `\n`). The parser splits lines via `new RegExp('\r?\n')` which **does not match** a lone `\r`, so the entire file collapses to a single string and parsing returns garbage.
+**Status**: fixed. Severity at discovery: high (parsers silently produced wrong output on a class of legitimate legacy files). The archive file `2013-Kola/.../component means.dir` uses `\r`-only line terminators (no `\n`). The old regex `new RegExp('\r?\n')` did not match a lone `\r`, so the entire file collapsed to a single string and parsing returned garbage.
 
-The bug is **not parserDIR-specific**: every parser uses the same `new RegExp('\r?\n')` regex (`parserPMD`, `parserDIR`, `parserPMM`, `parserCSV_PMD`, `parserCSV_DIR`, `parserCSV_SitesLatLon`, `parserMDIR`, `parserRS3`, `parserSQUID` — 9 parsers total). Only `.dir` had a CR-only file in the archive, but the same input class would break any of the others.
+The bug was **not parserDIR-specific**: every parser used the same regex (`parserPMD`, `parserDIR`, `parserPMM`, `parserCSV_PMD`, `parserCSV_DIR`, `parserCSV_SitesLatLon`, `parserMDIR`, `parserRS3`, `parserSQUID` — 9 parsers total). Only `.dir` had a CR-only file in the archive, but the same input class would have broken any of the others.
 
-**Fix**: change the line-split regex to `/\r\n|\r|\n/` in **all 9 parsers** in a single commit (CRLF, CR, LF handled independently). Regression test for parserDIR uses the archive file and asserts N>0 interpretations with matching expected values; other parsers get a synthetic CR-only fixture each — single-line generator, low cost, locks the regression for the entire parser surface.
+**What landed in the fix:**
+- Replaced the regex with `/\r\n|\r|\n/` in **all 9 parsers** in one commit. CRLF, CR, and LF are matched independently as line terminators.
+- `parserDIR` regression test (`src/utils/files/__tests__/parserDIR.test.ts`) decomposes into:
+  1. Synthetic CR-only file built from the standard parserDIR column layout — asserts exact field values (label, code, Dgeo, Igeo, gcNormal) for 3 interpretations + back-compat with CRLF and LF.
+  2. The real archive file `kola2013_repG_macCR_component_means.dir` — asserts the file splits into 17 raw lines and the parser walks them individually (the file's non-standard column layout is a separate concern, see follow-up below).
 
-**Severity**: parser silently produces wrong output on a class of legitimate legacy files. High-priority `fix(science):`.
+**Pending follow-up** (separate Phase 1 fix): `kola2013_repG_macCR_component_means.dir` uses a non-standard `rep G`/`rep S`/`rep G&S` column layout that doesn't match the slice positions in `parserDIR`. Even after D1, the parser's columns land on the wrong fields for this file. Tracked in `parsers/dir/README.md` Pending follow-ups; will be addressed when `parserDIR` gets format-flexibility work in Phase 1 Step 4 or as a separate `fix(science):`.
+
+Other parsers will get synthetic CR-only fixtures during Step 4 to lock the regression on their full surface.
 
 ### D2. `parserRS3` — file encoding handling for non-UTF-8 sources
 

@@ -15,7 +15,7 @@ const parseSQUID = (data: string, name: string): IPmdData => {
   }
 
   // eslint-disable-next-line no-control-regex
-  const eol = new RegExp('\r?\n');
+  const eol = /\r\n|\r|\n/;
   // Get all lines except the first one (it's just copy of filename) and all too-short lines
   const lines = data
     .split(eol)

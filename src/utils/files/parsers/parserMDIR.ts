@@ -13,7 +13,7 @@ const parseMDIR = (data: string, name: string): IDirData => {
   // !!! DEPRECATED
 
   // eslint-disable-next-line no-control-regex
-  const eol = new RegExp('\r?\n');
+  const eol = /\r\n|\r|\n/;
   // Get all lines except the last one (it's garbage)
   const lines = data.split(eol).filter((line) => line.length > 1);
   // it's must an odd number of lines in .mdir file,
