@@ -179,7 +179,7 @@ The whole sub-phase 6c runs as a tight sequence. No long-lived intermediate stat
 3. Migrate every `useAppSelector`/`useAppDispatch` usage in one mechanical sweep (~177 sites; codemod-able).
 4. Delete `src/services/reducers/`, `src/services/store/`, the `<Provider>` wrapper.
 5. Remove `@reduxjs/toolkit`, `react-redux`, `redux-thunk` from `package.json`.
-6. Delete `src/__tests__/helpers/renderGraph.ts` from Phase 2 — graphs are now prop-driven (Phase 5) and stores are injectable. The throwaway helper has no reason to live past this commit.
+6. Delete `src/test-utils/renderGraph.ts` from Phase 2 — graphs are now prop-driven (Phase 5) and stores are injectable. The throwaway helper has no reason to live past this commit.
 7. Run the full test + visual regression suite + persistence migration tests.
 8. Merge the whole branch in one PR.
 
@@ -249,7 +249,7 @@ Otherwise defer to a future session.
 - [ ] `no-console` rule still blocks `console.log`.
 - [ ] Phase 1 tests, Phase 2 visual tests, and build all pass.
 - [ ] **No `@tanstack/*` package in `package.json`** — Phase 3 ban still holds after the architecture rewrite.
-- [ ] `src/__tests__/helpers/renderGraph.ts` deleted.
+- [ ] `src/test-utils/renderGraph.ts` deleted.
 - [ ] Dev server startup time measurably faster (record baseline and final).
 
 ## Critical Files
