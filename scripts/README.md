@@ -56,7 +56,7 @@ PmagPy is unit-agnostic about labels but strict about expectations:
   PMTools). A vector pointing into the ground has `inc > 0`.
 - **Coordinate system**: PmagPy doesn't know whether your `[dec, inc]` is
   in specimen, geographic, or stratigraphic coordinates — it just runs the
-  math. The fixture's `SOURCE.md` **must** state which coordinate system
+  math. The fixture's `README.md` **must** state which coordinate system
   the input is in, otherwise PMTools-side parity assertions are ambiguous.
 - **Hemisphere**: PmagPy returns lower-hemisphere directions by default
   (`pmag.doflip` is applied internally for principal components). PMTools
@@ -109,7 +109,7 @@ Field mappings in the output JSON:
   writes `k` as the **string** `"inf"` rather than a float, and `csd` as 0.
   For `N == 1` PmagPy returns only `dec`/`inc` and the script writes `null`
   for everything else. Both states are valid signals of degenerate input,
-  not parity gates — flag in the fixture's `SOURCE.md`.
+  not parity gates — flag in the fixture's `README.md`.
 - PCA: `specimen_dec/inc/mad/dang/n → principal.dec/inc/mad/dang/n`. DANG
   (Demagnetization Angle — angle between the PCA line and the line from the
   center of mass to the origin) is captured as a free quality metric; PMTools
@@ -132,7 +132,7 @@ for the corresponding statistics module. When you implement a stub:
    `GENERATORS` dict with `from gen_<topic> import gen_<topic>` at the top
    and the imported function in the dict.
 3. Document the input shape in this table.
-4. Update the fixture's `SOURCE.md` so reviewers know what schema to use.
+4. Update the fixture's `README.md` so reviewers know what schema to use.
 
 ### Investigating PmagPy parity disagreements
 
@@ -149,14 +149,14 @@ If PMTools and PmagPy produce different output for the same input:
      and code deviating from it is the bug.
    - **PMTools uses a different convention** (e.g., Watson F-test vs. Watson
      Vw, different α₉₅ approximation). Document the convention in the
-     fixture's `SOURCE.md` and keep the PMTools-side `<name>.expected.json`
+     fixture's `README.md` and keep the PMTools-side `<name>.expected.json`
      as the source of truth. The PmagPy fixture is then a documented
      reference, not a parity gate.
    - **The thesis formula itself is wrong.** Hypothetically possible — the
      thesis was checked many times and the work is long-accepted by the
      paleomag community, but blind trust is still wrong for scientific code.
      If a derivation error in the thesis is found: cite the original source
-     (Kirschvink 1980, Fisher 1953, etc.) in the fixture's `SOURCE.md`,
+     (Kirschvink 1980, Fisher 1953, etc.) in the fixture's `README.md`,
      update the thesis cheat sheet at `src/__tests__/fixtures/THESIS_FORMULAS.md`
      with a clarifying note, fix the code if needed in a `fix(science):` commit,
      and flag the discrepancy in the PR description so a domain expert reviews
