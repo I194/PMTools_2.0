@@ -208,7 +208,7 @@ src/__tests__/fixtures/
 
    Goal: representative coverage of every dialect a parser branches on, **not** bulk import. The full archive stays out of the repo (gitignored at `/test-data/potential-data`).
 9. Format-specific fixture sourcing:
-   - `.rs3`: real files now in archive (Polar Ural, Crimea — see Step 0.6 sweep notes). Synthetic-from-spec still required to cover `P1`/`P3` orientation branches (3, 9, 12) — all real files have `P1=6 P3=6`.
+   - `.rs3`: real files now in archive (Polar Ural, Crimea — see "Discovered During Fixture Sweep" section below). Synthetic-from-spec still required to cover `P1`/`P3` orientation branches (3, 9, 12) — all real files have `P1=6 P3=6`.
    - `.mdir`: out-of-scope per Non-Goals — no fixtures, no test suite, parser excluded from the coverage gate.
    - `.csv` and `.xlsx` (real): no real files exist on disk because users export them on demand from PMTools itself. Generate them via a Playwright-driven export run: load real PMD/DIR data, click through the export menu, capture the produced files, drop into `parsers/<format>/real/`. This is genuine "real" data — produced by the actual app, not synthesized from the format spec.
 
@@ -286,7 +286,7 @@ Per-parser coverage target: 100% lines, 100% branches. If a branch can't be reac
 3. `parserCSV_PMD`, `parserCSV_DIR`, `parserCSV_SitesLatLon` — real CSVs produced by Playwright-driven PMTools export of real PMD/DIR data (see Step 0 item 9) + synthetic separators (comma, semicolon), quoted fields, empty cells, encoding variants.
 4. `parserXLSX_PMD`, `parserXLSX_DIR`, `parserXLSX_SitesLatLon` — real `.xlsx` produced by Playwright-driven PMTools export + synthetic generated via the `xlsx` lib (multi-sheet, empty sheet, formula cells, date cells, hidden columns). Legacy `.xls` (Excel 97-2003 binary) is out-of-scope per Non-Goals.
 5. `parserPMM` — real `.pmm` (`season1_north.pmm`, `season1_south.pmm`, `season2_extra.pmm`, `exampleDIR.pmm`, plus archive PMMs with `Fisher` code and dashed IDs) + synthetic.
-6. `parserSQUID` — real `.squid` files in archive (currently only `406c.squid` — request additional samples covering `metadata.a < 90` branch) + synthetic edge cases including the throws-on-empty/invalid paths.
+6. `parserSQUID` — real `.squid` files in archive (`406c.squid`, `70.squid` — the latter paired with `70.pmd` as the golden output for the D5 fix; request additional samples covering `metadata.a < 90` branch) + synthetic edge cases including the throws-on-empty/invalid paths and a synthetic ARM-block fixture that locks the truncation behavior independently of `70.squid`.
 7. `parserRS3` — real files from 2012 Polar Ural + 2013 Crimea archives (all use `P1=6 P3=6`); synthetic-from-spec required to cover `P1`/`P3` ∈ {3, 9, 12} orientation correction branches.
 8. `parserMDIR` — out-of-scope per Non-Goals. No test suite, no fixtures, parser excluded from coverage via `coveragePathIgnorePatterns`.
 
@@ -397,13 +397,15 @@ Manual verification of scientific findings:
 
 ## Discovered During Fixture Sweep (2026-05-02)
 
-Real-file investigation of the 2000-2014 archive surfaced four parser issues. Each gets its own `fix(science):` commit during Step 4 with the offending real file as the regression fixture.
+Real-file investigation of the 2000-2014 archive surfaced five parser issues. Each gets its own `fix(science):` commit during Step 4 with the offending real file as the regression fixture.
 
-### D1. `parserDIR` — Mac classic CR-only line endings break parsing
+### D1. All parsers — Mac classic CR-only line endings break parsing
 
 The archive file `2013-Kola/.../component means.dir` uses `\r`-only line terminators (no `\n`). The parser splits lines via `new RegExp('\r?\n')` which **does not match** a lone `\r`, so the entire file collapses to a single string and parsing returns garbage.
 
-**Fix**: change the line-split regex to `/\r\n|\r|\n/` (handle CRLF, CR, LF independently). Regression test: parse the archive file, assert N>0 interpretations and matching expected values.
+The bug is **not parserDIR-specific**: every parser uses the same `new RegExp('\r?\n')` regex (`parserPMD`, `parserDIR`, `parserPMM`, `parserCSV_PMD`, `parserCSV_DIR`, `parserCSV_SitesLatLon`, `parserMDIR`, `parserRS3`, `parserSQUID` — 9 parsers total). Only `.dir` had a CR-only file in the archive, but the same input class would break any of the others.
+
+**Fix**: change the line-split regex to `/\r\n|\r|\n/` in **all 9 parsers** in a single commit (CRLF, CR, LF handled independently). Regression test for parserDIR uses the archive file and asserts N>0 interpretations with matching expected values; other parsers get a synthetic CR-only fixture each — single-line generator, low cost, locks the regression for the entire parser surface.
 
 **Severity**: parser silently produces wrong output on a class of legitimate legacy files. High-priority `fix(science):`.
 
@@ -441,6 +443,24 @@ Archive file `231-291.pmm` contains `STEPRANGE = "site avg"`. After `params = li
 
 **Severity**: cosmetic. Not a `fix(science):`. A behavior-locking test only.
 
+### D5. `parserSQUID` — AF field values are in Oersted; ARM block must be truncated
+
+The archive file `2bar/70.squid` contains AF lines with values `100, 150, 200, ..., 900`. These are **Oersted**, not millitesla. Physical AF demagnetization caps at ~200 mT, so triple-digit values interpreted as mT are unphysical. The corresponding PMD file produced by R.V. Veselovsky's pre-PMTools converter (`70.pmd`) has `M010, M015, M020, ..., M090` — confirming the original `/10` conversion (1 mT = 10 Oe) was correct.
+
+`parserSQUID.ts:53-58` actively removes this conversion with the comment `// почему-то так было в коде конвертера у РВ, но по факту это неправильно` — a regression introduced when the parser was rewritten. Confirmed wrong by R.V. Veselovsky (domain authority, original converter author) on 2026-05-09.
+
+The same archive file also exposes a second issue: after the AF demagnetization block ends, an ARM-acquisition section begins (`ARM  1`) followed by AF-of-ARM lines. These are a measurement-protocol artifact, **not** data PMTools should display or analyze. R.V. confirmed on 2026-05-09: silently truncate the `ARM` line and every line below it.
+
+**Fix** (single `fix(science):` commit):
+1. **Restore `/10` for AF** lines so `AF 100` → `M10`, `AF 900` → `M90`.
+2. **Truncate at ARM** — when a line starts with `ARM`, drop it and all subsequent lines without warning.
+3. **Compare first two characters** (`line.slice(0, 2)`) so `AF` and `ARM` are distinguishable. Free side-effect: the bare `AF` line (NRM, no field value) currently produces `M0` because `stepSymbol === 'N'` never matches first character `'A'`. With the two-char check this resolves correctly to step `NRM`.
+4. **Remove the misleading comment** at line 54 — the original RV converter logic was correct.
+
+**Severity**: HIGH. Numeric data corruption — every AF demagnetization step displayed in PMTools after a SQUID import currently shows the wrong field value (10× too large). Silently produces wrong PCA fits on real `.squid` input. Priority above D1.
+
+**Regression fixture**: `2bar/70.squid` (input) + `2bar/70.pmd` (expected output — golden produced by RV's converter). Single fixture verifies all three behaviors: Oersted→mT conversion, ARM truncation, NRM step name. A small synthetic fixture also covers ARM truncation independently of the real fixture so the locked behavior is unambiguous.
+
 ## Risks
 
 | Risk | Mitigation |
@@ -450,6 +470,7 @@ Archive file `231-291.pmm` contains `STEPRANGE = "site avg"`. After `params = li
 | Extraction refactors silently change behavior | Golden-master snapshot BEFORE refactoring, then refactor, then assert snapshot still matches. |
 | `.rs3` real files all share `P1=6 P3=6` (other orientation branches uncovered) | Synthetic fixture from spec covers P1/P3 ∈ {3, 9, 12} branches. Real files cover the dominant case. |
 | Archive files surface parser dialect surprises (CR-only line endings, non-UTF-8 encoding, NRM-prefixed steps without `T`/`M` letters) | Each surprise becomes a `fix(science):` commit with the offending real file as regression test. See "Discovered During Fixture Sweep" section. |
+| In-code commentary contradicts domain authority (e.g. `// по факту это неправильно` overriding correct logic from the original SQUID→PMD converter — see D5) | Treat the domain expert as overriding any uncited in-code commentary. Confirmation is recorded in the relevant `parsers/<format>/SOURCE.md` and in this section with the date and the expert's name. |
 | 100% coverage gate is hard for parsers with rarely-triggered branches | Either build the synthetic input that triggers the branch, or delete the branch as unreachable. Both are acceptable; "exempt" is not. |
 | Scope creep into Phase 4 (full extraction) | Strict boundary: only the 3 named tangled files get extracted here. All other extractions wait for Phase 4. |
 | Thesis formula differs from live code | Treat as a bug in the code — the thesis is the spec. Fix in a `fix(science):` commit unless there is a documented reason the code intentionally deviates. |
