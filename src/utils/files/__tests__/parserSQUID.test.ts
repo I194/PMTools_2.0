@@ -19,9 +19,10 @@ describe('parserSQUID — D5 regression: khramov2026_70.squid', () => {
   const pmdGolden = parsePMD(pmdGoldenContent, 'khramov2026_70.pmd').data;
 
   it('truncates the ARM-acquisition block silently', () => {
-    // Raw file has 22 data lines (header + 10 AF + 1 ARM + 11 AF-of-ARM). After
-    // truncation at the first `ARM` line, only the 10 AF demagnetization steps
-    // remain. R.V. Veselovsky's reference golden PMD has 10 steps — same count.
+    // After the parser strips the filename and metadata headers, 20 data lines
+    // remain: 10 AF demagnetization + 1 ARM + 9 AF-of-ARM. After truncation at
+    // the first `ARM` line, only the 10 AF steps remain. R.V. Veselovsky's
+    // reference golden PMD has 10 steps — same count.
     expect(squidParsed.steps).toHaveLength(10);
     expect(squidParsed.steps).toHaveLength(pmdGolden.steps.length);
   });
@@ -78,9 +79,11 @@ describe('parserSQUID — D5 regression: khramov2026_70.squid', () => {
     }
   });
 
-  it('preserves SQUID metadata corrections (a += 270 when a < 90, else -= 90)', () => {
+  it('locks the metadata.a >= 90 correction branch (a -= 90)', () => {
     // Raw SQUID metadata `a = 270.0`; since 270 ≥ 90, parser subtracts 90 → 180.
-    // Matches golden PMD `a=180.0`.
+    // Matches golden PMD `a=180.0`. The `a < 90` branch (a += 270) is NOT
+    // covered by this fixture — see fixtures/parsers/squid/README.md
+    // synthetic-fixture matrix; locked separately in Phase 1 Step 4.
     expect(squidParsed.metadata.a).toBeCloseTo(180.0, 1);
     expect(squidParsed.metadata.a).toBeCloseTo(pmdGolden.metadata.a, 1);
   });
