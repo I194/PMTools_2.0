@@ -443,23 +443,21 @@ Archive file `231-291.pmm` contains `STEPRANGE = "site avg"`. After `params = li
 
 **Severity**: cosmetic. Not a `fix(science):`. A behavior-locking test only.
 
-### D5. `parserSQUID` — AF field values are in Oersted; ARM block must be truncated
+### D5. `parserSQUID` — AF field values are in Oersted; ARM block must be truncated ✅ FIXED
 
-The archive file `2bar/70.squid` contains AF lines with values `100, 150, 200, ..., 900`. These are **Oersted**, not millitesla. Physical AF demagnetization caps at ~200 mT, so triple-digit values interpreted as mT are unphysical. The corresponding PMD file produced by R.V. Veselovsky's pre-PMTools converter (`70.pmd`) has `M010, M015, M020, ..., M090` — confirming the original `/10` conversion (1 mT = 10 Oe) was correct.
+**Status**: fixed. Severity at discovery: HIGH (numeric data corruption — every AF step displayed in PMTools after a SQUID import was 10× the correct field value, silently producing wrong PCA fits on real input).
 
-`parserSQUID.ts:53-58` actively removes this conversion with the comment `// почему-то так было в коде конвертера у РВ, но по факту это неправильно` — a regression introduced when the parser was rewritten. Confirmed wrong by R.V. Veselovsky (domain authority, original converter author) on 2026-05-09.
+The archive file `khramov2026_70.squid` contained AF lines with values `100, 150, 200, ..., 900`. These are **Oersted**, not millitesla. Physical AF demagnetization caps at ~200 mT, so triple-digit values interpreted as mT were unphysical. The paired golden PMD (`khramov2026_70.pmd`, produced by R.V. Veselovsky's pre-PMTools converter) has `M010, M015, M020, ..., M090` — confirming the `/10` conversion (1 mT ≈ 10 Oe) was the correct convention. The parser had explicitly removed this conversion with a misleading comment; the original RV-converter logic was correct, confirmed by R.V. Veselovsky (domain authority) on 2026-05-09.
 
-The same archive file also exposes a second issue: after the AF demagnetization block ends, an ARM-acquisition section begins (`ARM  1`) followed by AF-of-ARM lines. These are a measurement-protocol artifact, **not** data PMTools should display or analyze. R.V. confirmed on 2026-05-09: silently truncate the `ARM` line and every line below it.
+The same archive file also exposed a second issue: after the AF demagnetization block ended, an ARM-acquisition section began (`ARM  1`) followed by AF-of-ARM lines. These are a measurement-protocol artifact, **not** data PMTools should display or analyze. R.V. confirmed silently truncating the `ARM` line and every line below.
 
-**Fix** (single `fix(science):` commit):
-1. **Restore `/10` for AF** lines so `AF 100` → `M10`, `AF 900` → `M90`.
-2. **Truncate at ARM** — when a line starts with `ARM`, drop it and all subsequent lines without warning.
-3. **Compare first two characters** (`line.slice(0, 2)`) so `AF` and `ARM` are distinguishable. Free side-effect: the bare `AF` line (NRM, no field value) currently produces `M0` because `stepSymbol === 'N'` never matches first character `'A'`. With the two-char check this resolves correctly to step `NRM`.
-4. **Remove the misleading comment** at line 54 — the original RV converter logic was correct.
+**What landed in the fix:**
+1. **`/10` for AF** restored so `AF 100` → `M010`, `AF 900` → `M090`. Output is now zero-padded to 3 digits to match the PMD M-step naming convention exactly (`M000`, `M010`, `M015`, ...).
+2. **ARM truncation** — when a data line's first three characters are `ARM`, the parser drops it and every subsequent line silently. No warning, no log message — this is normal for many real `.squid` files.
+3. **Three-char ARM / two-char AF detection** so `AF` and `ARM` are distinguishable without ambiguity. Side effect: the bare `AF` first line (zero-field NRM measurement) now produces `M000` (matches RV-converter golden) instead of the previous-buggy `M0`.
+4. **Misleading comment removed** — the original RV-converter logic was correct, restored as documented behavior.
 
-**Severity**: HIGH. Numeric data corruption — every AF demagnetization step displayed in PMTools after a SQUID import currently shows the wrong field value (10× too large). Silently produces wrong PCA fits on real `.squid` input. Priority above D1.
-
-**Regression fixture**: `2bar/70.squid` (input) + `2bar/70.pmd` (expected output — golden produced by RV's converter). Single fixture verifies all three behaviors: Oersted→mT conversion, ARM truncation, NRM step name. A small synthetic fixture also covers ARM truncation independently of the real fixture so the locked behavior is unambiguous.
+**Regression fixture**: `parsers/squid/real/khramov2026_70.squid` (input) + `parsers/pmd/real/khramov2026_70.pmd` (expected output — golden produced by RV's converter). Single fixture verifies all three behaviors. Test: `src/utils/files/__tests__/parserSQUID.test.ts`. A synthetic fixture covering ARM truncation independently of the real fixture is still planned for Phase 1 Step 4 to make the locked behavior unambiguous.
 
 ## Risks
 

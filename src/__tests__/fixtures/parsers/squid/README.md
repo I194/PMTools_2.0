@@ -1,4 +1,4 @@
-# fixtures/parsers/squid — SOURCE
+# fixtures/parsers/squid — README
 
 Fixtures for `parserSQUID` (`.squid` format — SQUID magnetometer instrument data).
 
@@ -13,7 +13,7 @@ Fixtures for `parserSQUID` (`.squid` format — SQUID magnetometer instrument da
 
 | Filename | Origin | Edge cases covered |
 |---|---|---|
-| `khramov2026_70.squid` | `test-data/potential-data/squid-pmd/70.squid` (operator: khramov, 2026-01-18) | **D5 regression** — AF field values in Oersted (must be converted to mT, divide by 10), ARM-acquisition block at line 13 (must be silently truncated), bare `AF` first line as NRM (step name `M0` would be wrong, must resolve to `NRM`). Paired golden output: `parsers/pmd/real/khramov2026_70.pmd` (produced by R.V. Veselovsky's reference SQUID→PMD converter — domain-authority golden). |
+| `khramov2026_70.squid` | `test-data/potential-data/squid-pmd/70.squid` (operator: khramov, 2026-01-18) | **Locks D5 fix** — AF field values converted from Oersted to mT (÷10), ARM-acquisition block silently truncated at line 13, bare `AF` first line resolves to `M000` (matches RV-converter golden, not the previous-buggy `M0`). Paired golden output: `parsers/pmd/real/khramov2026_70.pmd` (produced by R.V. Veselovsky's reference SQUID→PMD converter — domain-authority golden). Verified by `src/utils/files/__tests__/parserSQUID.test.ts`. |
 
 `406c.squid` from `test-data/406c.squid` is intentionally not included in this
 first PR — it covers only the `metadata.a >= 90` correction branch and adds
@@ -22,33 +22,33 @@ SQUID parser test suite is written in Step 4.
 
 ## Locked behaviors (parserSQUID)
 
-These are policy decisions, not bugs. Tests in Step 4 lock them so future
-refactors cannot regress them silently.
+Policy decisions confirmed with R.V. Veselovsky on 2026-05-09 and locked by
+`src/utils/files/__tests__/parserSQUID.test.ts` (Phase 1 D5 fix).
 
 ### Oersted → mT conversion for AF fields
 
 SQUID magnetometer logs AF demagnetization fields in **Oersted** in the raw
 file, not millitesla. PMTools displays/uses millitesla everywhere. The parser
-divides the raw step value by 10 (1 Oe = 0.1 mT) before producing the
-canonical step name. Confirmed with R.V. Veselovsky on 2026-05-09; this is
-the original-converter behavior, restored in D5 fix.
+divides the raw step value by 10 (1 Oe ≈ 0.1 mT, RV-converter convention)
+and zero-pads to 3 digits — `100 Oe` becomes `M010`, `750 Oe` becomes `M075`.
 
 ### Silent ARM-block truncation
 
 A `.squid` file may contain an ARM-acquisition block beginning with a line
 whose first three characters are `ARM`. Everything from that line onwards
 (including AF-of-ARM steps that follow) is a measurement-protocol artifact,
-not data PMTools should display or analyze. Confirmed with R.V. Veselovsky
-on 2026-05-09: silently drop the `ARM` line and every subsequent line.
-No warning, no log message — this is normal for many real `.squid` files.
+not data PMTools should display or analyze. The parser silently drops the
+`ARM` line and every subsequent line — no warning, no log message. This is
+normal for many real `.squid` files.
 
-### Two-character step-symbol detection
+### Step-symbol detection (two-character for AF/ARM)
 
 `AF` (alternating field) and `ARM` both start with `A`. The parser
-distinguishes them by comparing `line.slice(0, 2)` (`AF` vs `AR`), not just
-the first character. Free side effect: a bare `AF` line (NRM measurement,
-no field value) resolves to step name `NRM` instead of the previous-buggy
-`M0`.
+distinguishes them by checking the first three characters for `ARM` (truncate)
+and the first two for `AF` (alternating field). The bare `AF` first line
+(zero-field NRM measurement) resolves to `M000` — `Oe→mT` of zero, plus the
+3-digit zero-padding — matching RV-converter output. The previous parser
+(pre-D5) produced `M0` for this line, breaking step-name sortability.
 
 ## Synthetic-fixture matrix
 
