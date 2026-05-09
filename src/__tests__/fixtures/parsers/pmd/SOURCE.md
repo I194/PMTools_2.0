@@ -4,20 +4,23 @@ Fixtures for `parserPMD` (`.pmd` format — paleomagnetic demagnetization data).
 
 ## Layout
 
-- `real/` — every real-world `.pmd` file we have. Names preserved from origin.
+- `real/` — real-world `.pmd` files curated from `test-data/potential-data/`.
 - `synthetic/` — hand-built edge-case files (empty, header-only, single-step,
   BOM, CRLF/LF, Russian decimal comma, Windows-1251 encoding, trailing whitespace,
-  extreme numeric values, malformed shapes).
-
-Every fixture has a `<name>.expected.json` sibling.
+  extreme numeric values, malformed shapes). Each documents the specific edge
+  case it exercises.
 
 ## Real-file origins
 
-_Populated in Phase 1 Step 0.6 (Gather real fixtures)._
-Sources to sweep:
-- `test-data/` and `test-data/v2.6.*/` regression directories
-- `src/assets/examples/examplePCA.pmd`
-- `.claude/issues/*` real user-reported tickets
+| Filename | Origin | Edge cases covered |
+|---|---|---|
+| `crimea2013_nrm_celsius_dialect_143.pmd` | `test-data/potential-data/2000-2014-ARCHIVE/2013-Crimea/.../sill_Lebed/143.pmd` | **D3 regression** — first valid step is `NRM` (no `T`/`M` letter prefix), subsequent steps are bare temperatures `90°C`, `150°C`, ... (no letter prefix either). Current parser sets `demagType = undefined` because `line.slice(0, 1)` is `'N'` then `'9'`/`'1'`/`'2'`. The `°` byte (0xB0) appears mid-data line. Header begins with `STEP` (other dialect) instead of `PAL`. Volume `v=11.0E-6m3`. Affects 23 files in the Crimea archive. |
+| `khramov2026_70.pmd` | `test-data/potential-data/squid-pmd/70.pmd` | **D5 paired golden** — output of R.V. Veselovsky's reference SQUID→PMD converter applied to `khramov2026_70.squid` (lives in `parsers/squid/real/`). After D5 fix, `parserSQUID(khramov2026_70.squid)` must produce the same canonical structure as `parserPMD(khramov2026_70.pmd)`. Cross-link is intentional: `70.pmd` is also a valid standalone PMD fixture. |
+
+More PMD fixtures (`sample.pmd` baseline, `examplePCA.pmd` bundled example,
+`v2.6.1/{invalid_rows,malformed}.pmd`, Polar Ural unprefixed-step files,
+Kola thermal/AF files, Siberia `T 20`-with-space files) will be added in
+follow-up PRs as the Step 4 parser test suite needs them.
 
 ## Synthetic-fixture matrix
 

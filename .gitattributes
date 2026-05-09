@@ -1,0 +1,12 @@
+# Parser test fixtures must preserve exact bytes.
+# Line endings (CR-only / CRLF / LF) and legacy encodings (Latin-1 0xB0,
+# Windows-1251) are part of the test surface — git EOL normalization or
+# an editor "fix encoding" would silently neutralize regression cases.
+src/__tests__/fixtures/parsers/**/*.dir    -text
+src/__tests__/fixtures/parsers/**/*.mdir   -text
+src/__tests__/fixtures/parsers/**/*.pmd    -text
+src/__tests__/fixtures/parsers/**/*.pmm    -text
+src/__tests__/fixtures/parsers/**/*.rs3    -text
+src/__tests__/fixtures/parsers/**/*.squid  -text
+src/__tests__/fixtures/parsers/**/*.csv    -text
+src/__tests__/fixtures/parsers/**/*.xlsx   binary
