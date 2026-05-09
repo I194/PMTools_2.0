@@ -38,16 +38,26 @@ def gen_pca(args: argparse.Namespace) -> None:
                 f"(expected one of {sorted(PCA_CALC_TYPES)}); skipping"
             )
             continue
-        # pmag.domean wants 5+ column rows: [treatment, dec, inc, intensity, quality].
-        # It indexes row[5] for the 'g'/'b' quality flag (3-column input crashes
-        # with IndexError). We synthesize treatment as the row index and mark
-        # every point 'g' (good) since the input.json schema deliberately hides
-        # this from fixture authors — they write [dec, inc, intensity] tuples.
-        # start/end are inclusive. doprinc is NOT used: no MAD, no anchored mode.
+        # pmag.domean expects 6-column rows: [treatment, dec, inc, intensity, ZI, quality].
+        # Index 5 is the 'g'/'b' quality flag (read at pmag.py:2899). If a row
+        # has fewer than 6 elements, domean appends a single 'g' (pmag.py:2895-2898),
+        # so 5-col rows survive but a 4-col row crashes with IndexError on the
+        # quality read. Index 4 is the Zijderveld step type ('Z'/'I'); domean
+        # itself never reads it, so we leave it empty. We write the full 6-col
+        # form explicitly rather than relying on the auto-pad. Treatment step is
+        # synthesized as the row index because the input.json schema hides this
+        # from fixture authors. start/end are 0-indexed and inclusive (pmag.py:2917,2923).
+        # doprinc is NOT used: it returns no MAD and has no anchored mode.
         datablock = [
-            [i, d[0], d[1], d[2], "g"] for i, d in enumerate(directions)
+            [i, d[0], d[1], d[2], "", "g"] for i, d in enumerate(directions)
         ]
         result = pmag.domean(datablock, 0, len(datablock) - 1, calc_type)
+        # pmag.domean returns {'specimen_direction_type': 'Error', ...} when its
+        # eigendecomposition fails; everything else is missing. Don't write a
+        # JSON full of nulls and pretend it's a parity oracle.
+        if result.get("specimen_direction_type") == "Error":
+            print(f"[pca] {inp.name}: pmag.domean returned Error; skipping")
+            continue
         out = {
             "pmagpy_version": pmagpy_version(),
             "calculation_type": calc_type,

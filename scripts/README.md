@@ -47,6 +47,21 @@ python3 scripts/generate_fixtures.py all
 python3 scripts/generate_fixtures.py fisher --force
 ```
 
+### Conventions
+
+PmagPy is unit-agnostic about labels but strict about expectations:
+
+- **Angles are degrees**, never radians. `dec ∈ [0, 360)`, `inc ∈ [-90, 90]`.
+- **Inclination sign**: positive = downward (paleomag standard, matches
+  PMTools). A vector pointing into the ground has `inc > 0`.
+- **Coordinate system**: PmagPy doesn't know whether your `[dec, inc]` is
+  in specimen, geographic, or stratigraphic coordinates — it just runs the
+  math. The fixture's `SOURCE.md` **must** state which coordinate system
+  the input is in, otherwise PMTools-side parity assertions are ambiguous.
+- **Hemisphere**: PmagPy returns lower-hemisphere directions by default
+  (`pmag.doflip` is applied internally for principal components). PMTools
+  matches this convention.
+
 ### Input format
 
 Each fixture lives at `src/__tests__/fixtures/<topic>/<name>.input.json` and
@@ -66,16 +81,23 @@ the script writes `<name>.pmagpy.json` next to it.
 PCA notes:
 - `directions` are PmagPy-native `[dec, inc, intensity]` rows. PMTools works
   internally in cartesian, so the fixture writer is responsible for the
-  conversion when authoring the input.
-- Internally `gen_pca` wraps each row into the 5-column form
-  `[step, dec, inc, intensity, "g"]` (treatment step = row index, quality =
-  "good") before calling `pmag.domean` — the function indexes `row[5]` for
-  the quality flag and crashes with `IndexError` on 3-column input. This
-  wrapping is a `pmag.domean` API requirement, not part of the input.json
-  schema; fixture authors keep writing `[dec, inc, intensity]` tuples.
+  conversion when authoring the input. Intensity matters: `DE-BFL` (line fit)
+  is weighted by vector magnitudes, so use the real demag-step magnitude;
+  `DE-BFP` (plane fit) overwrites intensity with 1.0 internally, so any
+  positive value works.
+- Internally `gen_pca` wraps each row into the 6-column form
+  `[step, dec, inc, intensity, "", "g"]` before calling `pmag.domean`. Index
+  layout: `[0]` treatment step (synthesized as row index), `[1]` dec, `[2]`
+  inc, `[3]` intensity, `[4]` Zijderveld step type (unused by `domean`),
+  `[5]` quality flag (`'g'`/`'b'`). This wrapping is a `pmag.domean` API
+  requirement, not part of the input.json schema; fixture authors keep
+  writing `[dec, inc, intensity]` tuples.
 - `calculation_type` defaults to `DE-BFL`. Use `DE-BFL-A` for anchored PCA
   (matches PMTools `calculatePCA_pmd(..., anchored=true)`) and `DE-BFP` for
   great-circle / plane fits (matches `calculatePCA_dir`).
+- For `DE-BFP` the returned `dec`/`inc` is the **pole of the plane**, not
+  a line direction, and `mad` follows thesis formula §1.2 (great-circle MAD)
+  instead of §1.1 (vector MAD). Compare against the matching PMTools field.
 - `pmag.doprinc` is intentionally **not** used: it expects `[dec, inc, int]`
   too (despite older docs suggesting cartesian), but it does not return MAD
   and has no anchored mode, so it can't act as a parity oracle for PMTools.
@@ -83,12 +105,21 @@ PCA notes:
 Field mappings in the output JSON:
 - Fisher: `pmagpy alpha95 → fisher_mean.a95`. PMTools' `MeanDir.MAD` is
   semantically α95 for Fisher, despite the field name.
+- Fisher edge cases: for `N == R` (perfectly parallel directions) PmagPy
+  writes `k` as the **string** `"inf"` rather than a float, and `csd` as 0.
+  For `N == 1` PmagPy returns only `dec`/`inc` and the script writes `null`
+  for everything else. Both states are valid signals of degenerate input,
+  not parity gates — flag in the fixture's `SOURCE.md`.
 - PCA: `specimen_dec/inc/mad/dang/n → principal.dec/inc/mad/dang/n`. DANG
   (Demagnetization Angle — angle between the PCA line and the line from the
   center of mass to the origin) is captured as a free quality metric; PMTools
   computes the same value, so it makes a useful second parity axis once Step 2
   fixtures land. `center_of_mass` is omitted for now (np.array, fiddly to
   serialize); add it explicitly if a Step 2 fixture needs it.
+- PCA `DE-BFL-A` exception: PmagPy's anchored path returns before computing
+  DANG, so `principal.dang` is **always** `null` for anchored fixtures. This
+  is a PmagPy quirk, not a script bug — don't add `dang` to the parity
+  assertion when `calculation_type === "DE-BFL-A"`.
 
 Stubs print an error and exit 1 — they are filled in as Phase 1 adds tests
 for the corresponding statistics module. When you implement a stub:
