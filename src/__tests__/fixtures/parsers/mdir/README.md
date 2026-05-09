@@ -14,7 +14,7 @@ removed without silently dropping support that some users rely on.
 
 The synthetic-only path is intentional and documented in the Phase 1 roadmap:
 > `.mdir`: deprecated; build synthetic from spec to lock current behavior, mark
-> legacy in `SOURCE.md`. No real-file requirement.
+> legacy in `README.md`. No real-file requirement.
 
 ## Status
 

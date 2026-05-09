@@ -70,7 +70,7 @@ Target: ≤ 10 pages × 2 themes = ≤ 20 baselines.
 
 ## Fixture Reuse
 
-All data fixtures come from Phase 1's `src/__tests__/fixtures/` tree — **no new fixtures created in Phase 2**. If a visual test needs a scenario not yet covered, the fixture goes into Phase 1's tree with proper `SOURCE.md` (thesis / PmagPy / literature), not into Phase 2.
+All data fixtures come from Phase 1's `src/__tests__/fixtures/` tree — **no new fixtures created in Phase 2**. If a visual test needs a scenario not yet covered, the fixture goes into Phase 1's tree with proper `README.md` (thesis / PmagPy / literature), not into Phase 2.
 
 This keeps scientific capital in one place and ensures visual tests are driven by the same numbers as unit tests.
 

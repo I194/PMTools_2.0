@@ -56,7 +56,7 @@ PmagPy (Tauxe / Swanson-Hysell) is the de-facto standard in paleomagnetism and i
 - A Python helper script `scripts/generate_fixtures.py` reads each input file in `test-data/` and `src/__tests__/fixtures/`, runs the equivalent PmagPy routine (`pmag.fisher_mean`, `pmag.doprinc`, `pmag.dolnp`, etc.), and writes `.pmagpy.json` next to each input.
 - Python is **only** needed when regenerating fixtures locally. CI consumes the committed JSON, so no Python in CI.
 - `scripts/README.md` documents: `pip install pmagpy`, PmagPy version used, how to regenerate.
-- Any numeric delta between PMTools and PmagPy is investigated. Outcome is either: (a) PMTools has a bug, fixed with `fix(science):` commit; or (b) PMTools uses a different documented convention (e.g., Watson F-test vs Vw), documented in `SOURCE.md` for that fixture.
+- Any numeric delta between PMTools and PmagPy is investigated. Outcome is either: (a) PMTools has a bug, fixed with `fix(science):` commit; or (b) PMTools uses a different documented convention (e.g., Watson F-test vs Vw), documented in `README.md` for that fixture.
 
 ### Tertiary: external published literature
 
@@ -70,7 +70,7 @@ Cross-checks for edge cases and worked examples not covered by the thesis or Pma
 - **Watson 1956, 1983** — randomness test, Vw test (cited).
 - **Efron 1979 / Tauxe 1991** — bootstrap method (cited).
 
-Each literature-sourced fixture has a `SOURCE.md` sibling explaining paper / page / equation used.
+Each literature-sourced fixture has a `README.md` sibling explaining paper / page / equation used.
 
 ### Tolerance
 
@@ -118,37 +118,37 @@ src/__tests__/fixtures/
 │   ├── sample_from_testdata.pmagpy.json
 │   ├── mad_zero_regression.pmd                 # captures v2.6.3 fix
 │   ├── mad_zero_regression.expected.json
-│   └── SOURCE.md
+│   └── README.md
 ├── fisher/
 │   ├── thesis_fisher_formula.json              # §1.4–1.5 hand-computed
 │   ├── thesis_fisher_formula.expected.json
 │   ├── fisher_1953_table2.json
 │   ├── fisher_1953_table2.expected.json
-│   └── SOURCE.md
+│   └── README.md
 ├── watson/
 │   ├── thesis_watson_R0.json                   # §1.4.1 randomness test
 │   ├── thesis_watson_R0.expected.json
 │   ├── thesis_watson_F.json                    # (1.7) common mean F-test
 │   ├── thesis_watson_F.expected.json
 │   ├── thesis_watson_Vw.json                   # (1.8–1.11) Vw statistic
-│   └── SOURCE.md
+│   └── README.md
 ├── vgp/
 │   ├── butler_chapter7_example.json
 │   ├── butler_chapter7_example.expected.json
-│   └── SOURCE.md
+│   └── README.md
 ├── mcfadden/
 │   ├── mcfadden_1988_combined.json             # directions + great circles
-│   └── SOURCE.md
+│   └── README.md
 ├── fold_test/
 │   ├── thesis_fold_matrix_T.json               # (1.12) scatter matrix
 │   ├── mcfadden_1990_dataset.json
-│   └── SOURCE.md
+│   └── README.md
 ├── cutoff/
 │   ├── vandamme_reference.json
-│   └── SOURCE.md
+│   └── README.md
 ├── bootstrap/
 │   ├── seed_42_reference.json                  # generated with seeded RNG
-│   └── SOURCE.md
+│   └── README.md
 ├── parsers/
 │   ├── pmd/
 │   │   ├── real/                               # all real fixtures we can find — multiple per format
@@ -170,7 +170,7 @@ src/__tests__/fixtures/
 │   │   │   ├── extreme_values.pmd
 │   │   │   └── ... (full edge-case matrix)
 │   │   ├── *.expected.json                     # one per fixture
-│   │   └── SOURCE.md
+│   │   └── README.md
 │   ├── dir/                                    # same real/ + synthetic/ structure
 │   ├── rs3/                                    # synthetic from spec first, real files added when sourced
 │   ├── squid/                                  # real .squid from .claude/issues/* + synthetic
@@ -184,7 +184,7 @@ src/__tests__/fixtures/
     └── stereo_projection.json
 ```
 
-**Principle**: fixture files are the scientific capital. Test code in `.test.ts` files can be rewritten freely during later phases; fixtures are only regenerated with documented justification. Every fixture's `SOURCE.md` entry must cite one of: (a) PMTools thesis formula number, (b) PmagPy version + function, (c) paper + page.
+**Principle**: fixture files are the scientific capital. Test code in `.test.ts` files can be rewritten freely during later phases; fixtures are only regenerated with documented justification. Every fixture's `README.md` entry must cite one of: (a) PMTools thesis formula number, (b) PmagPy version + function, (c) paper + page.
 
 ## Prerequisites (Step 0 — one-time setup)
 
@@ -197,7 +197,7 @@ src/__tests__/fixtures/
    - `directionFixtures.ts` — factories for `Direction`, `IPmdData`, `IDirData` from plain JSON.
    - `mathMatchers.ts` — custom matchers (`toBeCloseToArray`, `toBeCloseToDirection`).
    - `seededRandom.ts` — seedable integer-PRNG used in bootstrap tests instead of `Math.random`.
-5. Scaffold `src/__tests__/fixtures/` tree with empty `SOURCE.md` files per section. Each parser fixture directory has both `real/` and `synthetic/` subdirectories from day one.
+5. Scaffold `src/__tests__/fixtures/` tree with empty `README.md` files per section. Each parser fixture directory has both `real/` and `synthetic/` subdirectories from day one.
 6. Capture coverage baseline before any new tests land: `npm test -- --watchAll=false --coverage` → save to `.claude/development-roadmap/notes/phase-1-coverage-baseline.txt`. This is the floor; the phase exit requires this coverage to grow to 100% for statistics + parsers + converters.
 7. Copy `src/assets/PMTools_how_to_use.pdf` formulas into a cheatsheet at `src/__tests__/fixtures/THESIS_FORMULAS.md` so test authors can cite them without reopening the PDF.
 8. **Gather real fixtures**: copy a representative subset (3–8 per format) of real files from:
@@ -277,7 +277,7 @@ Each gets thesis formula tests + 2–3 PmagPy parity cases + property-based test
 
 ### Step 4 — Parsers
 
-One test suite per parser. **Each suite iterates over both `real/` and `synthetic/` fixture directories** — every real file is parsed and asserted against its `.expected.json`, then every synthetic edge case is parsed and asserted. No `it.skip` allowed without a written justification in `SOURCE.md`.
+One test suite per parser. **Each suite iterates over both `real/` and `synthetic/` fixture directories** — every real file is parsed and asserted against its `.expected.json`, then every synthetic edge case is parsed and asserted. No `it.skip` allowed without a written justification in `README.md`.
 
 Per-parser coverage target: 100% lines, 100% branches. If a branch can't be reached by real or synthetic input, it's dead code — delete it.
 
@@ -439,7 +439,7 @@ And 66 PMD files (Polar Ural 2012) with steps like `20`, `60`, `120` (no letter 
 
 Archive file `231-291.pmm` contains `STEPRANGE = "site avg"`. After `params = line.replace(/\s+/g, '').split(',')`, the field becomes `siteavg` — the space is silently dropped.
 
-**Decision**: leave as-is. This has been current behavior since v1.x; users who export with this convention have always seen the collapsed form. Document as expected behavior in `parsers/pmm/SOURCE.md` and lock with a regression test that asserts `stepRange === "siteavg"` on this fixture.
+**Decision**: leave as-is. This has been current behavior since v1.x; users who export with this convention have always seen the collapsed form. Document as expected behavior in `parsers/pmm/README.md` and lock with a regression test that asserts `stepRange === "siteavg"` on this fixture.
 
 **Severity**: cosmetic. Not a `fix(science):`. A behavior-locking test only.
 
@@ -465,12 +465,12 @@ The same archive file also exposes a second issue: after the AF demagnetization 
 
 | Risk | Mitigation |
 |---|---|
-| PmagPy produces different output than PMTools or the thesis formula on a real file | Investigate every delta. Either PMTools has a bug (commit as `fix(science):`) or different documented convention (note in `SOURCE.md`). |
+| PmagPy produces different output than PMTools or the thesis formula on a real file | Investigate every delta. Either PMTools has a bug (commit as `fix(science):`) or different documented convention (note in `README.md`). |
 | Bootstrap tests flaky due to RNG | Mandatory seeded **integer** PRNG in all bootstrap tests. No `Math.random()` directly. |
 | Extraction refactors silently change behavior | Golden-master snapshot BEFORE refactoring, then refactor, then assert snapshot still matches. |
 | `.rs3` real files all share `P1=6 P3=6` (other orientation branches uncovered) | Synthetic fixture from spec covers P1/P3 ∈ {3, 9, 12} branches. Real files cover the dominant case. |
 | Archive files surface parser dialect surprises (CR-only line endings, non-UTF-8 encoding, NRM-prefixed steps without `T`/`M` letters) | Each surprise becomes a `fix(science):` commit with the offending real file as regression test. See "Discovered During Fixture Sweep" section. |
-| In-code commentary contradicts domain authority (e.g. `// по факту это неправильно` overriding correct logic from the original SQUID→PMD converter — see D5) | Treat the domain expert as overriding any uncited in-code commentary. Confirmation is recorded in the relevant `parsers/<format>/SOURCE.md` and in this section with the date and the expert's name. |
+| In-code commentary contradicts domain authority (e.g. `// по факту это неправильно` overriding correct logic from the original SQUID→PMD converter — see D5) | Treat the domain expert as overriding any uncited in-code commentary. Confirmation is recorded in the relevant `parsers/<format>/README.md` and in this section with the date and the expert's name. |
 | 100% coverage gate is hard for parsers with rarely-triggered branches | Either build the synthetic input that triggers the branch, or delete the branch as unreachable. Both are acceptable; "exempt" is not. |
 | Scope creep into Phase 4 (full extraction) | Strict boundary: only the 3 named tangled files get extracted here. All other extractions wait for Phase 4. |
 | Thesis formula differs from live code | Treat as a bug in the code — the thesis is the spec. Fix in a `fix(science):` commit unless there is a documented reason the code intentionally deviates. |
