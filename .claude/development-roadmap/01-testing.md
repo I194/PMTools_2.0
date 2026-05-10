@@ -423,23 +423,28 @@ All 285 RS3 files in the archive are ISO-8859-1 (Latin-1). The parser's `slice(s
 
 **Severity**: cosmetic for now (column offsets survive replacement-character substitution because U+FFFD is one code unit). Becomes severity-high if any future parser uses 0xB0 as a delimiter.
 
-### D3. `parserPMD` — `demagType` fixed by first valid line; cannot detect step-only or NRM-prefixed files
+### D3. `parserPMD` — `demagType` fixed by first valid line; cannot detect step-only or NRM-prefixed files ✅ FIXED (parser); UX surfacing pending
 
-The archive contains 23 PMD files (Crimea 2013) with this shape:
-```
-NRM  ... data ...
-90°C ... data ...
-150°C ... data ...
-```
-And 66 PMD files (Polar Ural 2012) with steps like `20`, `60`, `120` (no letter prefix at all).
+**Status**: parser side fixed. UX surfacing of the new warning to the user falls into Phase 2 (UI work). Severity at discovery: medium (no numeric data corruption, but degraded UX and broken downstream filters that key off `demagType`).
 
-`parserPMD.ts` lines 64–69 set `demagType` from `line.slice(0, 1)` of the first valid step line, then never re-evaluates. For all 89 of these files, `demagType` becomes `undefined` and stays that way — the user sees no thermal/AF indication in the UI even though the data clearly shows thermal demagnetization.
+Two file dialects from the 2000-2014 archive triggered this:
+1. **Crimea 2013** (23 files) — `NRM` first, then bare temperatures `90°C, 150°C, 180°C, ...` with no `T`/`M` prefix.
+2. **Polar Ural 2012** (66 files) — bare numeric step names `20, 60, 120, 180, 220` with no prefix and no unit suffix at all — genuinely ambiguous between thermal (°C) and AF (mT).
 
-**Fix**: two-part.
-1. **Parser fix** (`fix(science):`) — scan the entire steps block for `°C` / temperature-shaped step names AND `mT`-shaped names; infer thermal vs AF from the dominant pattern, not the first-row prefix.
-2. **UX warning** (`feat(parser):` or scoped to Phase 2 UX work) — when the parser sees a file it cannot classify confidently, show a non-blocking warning on file load: explicitly explain "PMTools could not infer demagnetization type from this file; the demag column will be empty. Possible reasons: …". Wording must be aimed at scientists, not engineers — say what's missing in their terms (`T`/`M` step prefix or `°C`/`mT` unit suffix).
+The pre-D3 parser set `demagType` from `line.slice(0, 1)` of the first valid step and never re-evaluated. For all 89 files `demagType` ended up `undefined`, even when (Crimea case) the file unambiguously documented thermal demagnetization via `°C` markers.
 
-**Severity**: medium. Doesn't corrupt numeric data, but degrades UX and breaks downstream filters that key off `demagType`.
+**What landed in the parser fix:**
+- `inferDemagTypeFromStepNames` scans every parsed step's name and votes:
+  - Thermal markers: literal `°`, U+FFFD (the replacement character left by an upstream UTF-8 mis-decode of byte 0xB0 — common for ISO-8859 source files), or a digit immediately followed by `C`/`c`.
+  - AF markers: `mT` substring (case-insensitive).
+  - Letter-prefix fallbacks: leading `T`/`t` → thermal, leading `M`/`m` → AF.
+  - `NRM` and bare numeric steps cast no vote.
+- `demagType` is `'thermal'` if there's any thermal evidence and no AF evidence, `'alternating field'` for the symmetric case, and **`undefined`** otherwise (no evidence in either direction OR conflicting evidence).
+- A non-blocking `AMBIGUOUS_DEMAG_TYPE` warning is emitted in `validation.warnings` when `demagType` ends up undefined despite the file having steps. The `validation.warnings?: ParseWarning[]` field is new; existing consumers that read `validation.invalidRows` are unaffected.
+
+**Pending UX surfacing** (Phase 2): show `validation.warnings` to the user as a non-blocking toast/snackbar at file-load time. Wording aimed at scientists — what's missing in their terms (`T`/`M` step prefix or `°C`/`mT` unit suffix), not engineering jargon. The warning's `code` field (`AMBIGUOUS_DEMAG_TYPE`) lets the UI swap in a localized message.
+
+**Regression fixtures + test**: `parsers/pmd/real/crimea2013_nrm_celsius_dialect_143.pmd` (thermal-evidence path), `parsers/pmd/real/polarural2012_unprefixed_steps_1-1.pmd` (genuine ambiguity + warning), `parsers/pmd/real/khramov2026_70.pmd` (M-prefix → AF cross-check). Test: `src/utils/files/__tests__/parserPMD.test.ts` plus synthetic back-compat assertions for canonical `T*`/`M*` step names.
 
 ### D4. `parserPMM` — `replace(/\s+/g, '')` collapses internal whitespace in fields
 

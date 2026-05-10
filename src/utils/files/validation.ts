@@ -11,8 +11,18 @@ export interface InvalidRowInfo {
   invalidFields: InvalidFieldInfo[];
 }
 
+// Non-blocking parser warning. Used when a parser successfully reads a file but
+// detects something the user should know about (e.g. ambiguous demagnetization
+// type). UI consumers (Phase 2 work) display these as toast/snackbar
+// notifications without blocking file load.
+export interface ParseWarning {
+  code: string;
+  message: string;
+}
+
 export interface ValidationResult {
   invalidRows: InvalidRowInfo[];
+  warnings?: ParseWarning[];
 }
 
 export interface ParseResult<T> {

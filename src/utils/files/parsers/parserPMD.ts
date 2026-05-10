@@ -1,5 +1,62 @@
 import { IPmdData } from '../../GlobalTypes';
-import { InvalidRowInfo, ParseResult } from '../validation';
+import { InvalidRowInfo, ParseResult, ParseWarning } from '../validation';
+
+type DemagType = 'thermal' | 'alternating field' | undefined;
+
+/**
+ * Infer the demagnetization type for a PMD file by scanning every step name
+ * across the file (D3 fix). The previous implementation looked at the first
+ * valid step's leading character only — fine for `T100`/`M050`-style files
+ * but produced `undefined` for legitimate dialects: bare temperatures with
+ * a `°C` suffix (Crimea-style), bare numbers without any letter prefix
+ * (Polar Ural-style), and `NRM`-prefixed thermal sequences.
+ *
+ * Detection priorities:
+ *   1. Any step has a thermal marker — literal `°`, the U+FFFD replacement
+ *      character left in place by an upstream UTF-8 mis-decode of byte 0xB0
+ *      (common for legacy ISO-8859 files), or a digit immediately followed
+ *      by a `C`/`c` letter (e.g. `90C`) — → thermal.
+ *   2. Any step contains `mT` → alternating field.
+ *   3. Any step starts with `T`/`t` (and didn't already match a thermal
+ *      marker above) → thermal.
+ *   4. Any step starts with `M`/`m` → alternating field.
+ *   5. Mixed evidence (both thermal and AF markers) or no evidence at all
+ *      (numeric-only step names) → `undefined` (caller emits a warning).
+ *
+ * `NRM` lines and pure numeric step names are intentionally not counted as
+ * either type — they're consistent with both demagnetization protocols.
+ */
+const THERMAL_MARKER = /°|�|\d[Cc]\b/;
+const ALTERNATING_MARKER = /mT/i;
+
+const inferDemagTypeFromStepNames = (stepNames: string[]): DemagType => {
+  let thermalEvidence = 0;
+  let alternatingEvidence = 0;
+  for (const stepName of stepNames) {
+    const trimmed = stepName.trim();
+    if (THERMAL_MARKER.test(trimmed)) {
+      thermalEvidence++;
+    } else if (ALTERNATING_MARKER.test(trimmed)) {
+      alternatingEvidence++;
+    } else if (/^[Tt]/.test(trimmed)) {
+      thermalEvidence++;
+    } else if (/^[Mm]/.test(trimmed)) {
+      alternatingEvidence++;
+    }
+    // else: trimmed is `NRM`, a bare number, or otherwise neutral — no vote.
+  }
+  if (thermalEvidence > 0 && alternatingEvidence === 0) return 'thermal';
+  if (alternatingEvidence > 0 && thermalEvidence === 0) return 'alternating field';
+  return undefined;
+};
+
+const AMBIGUOUS_DEMAG_WARNING: ParseWarning = {
+  code: 'AMBIGUOUS_DEMAG_TYPE',
+  message:
+    'PMTools could not infer the demagnetization type from this file. ' +
+    'Step names lack a `T`/`M` letter prefix and a `°C`/`mT` unit suffix. ' +
+    'The demag column will be empty until the file is re-saved with conventional step names.',
+};
 
 /**
  * Process parsing of data from imported .pmd file
@@ -25,17 +82,13 @@ const parsePMD = (data: string, name: string): ParseResult<IPmdData> => {
     v: +headLine.slice(52, headLine.length).trim().toLowerCase().split('m')[0],
   };
 
-  // there is no standard for demagnetization symbol... and idk why
-  const thermalTypes = ['T', 't'];
-  const alternatingTypes = ['M', 'm'];
-
-  let demagType: 'thermal' | 'alternating field' | undefined = undefined;
-
   const invalidRows: InvalidRowInfo[] = [];
   let firstValidLine: string | undefined;
 
+  // Pass 1: parse each row; do NOT assign demagType yet (D3 — demagType is now
+  // inferred across all rows after parsing, see Pass 2).
   let stepId = 1;
-  const steps = lines
+  const stepsWithoutDemagType = lines
     .slice(2)
     .map((line, index) => {
       // PAL | Xc (Am2) | Yc (Am2) | Zc (Am2) | MAG (A/m) | Dg | Ig | Ds | Is| a95
@@ -59,13 +112,6 @@ const parsePMD = (data: string, name: string): ParseResult<IPmdData> => {
       const Istrat = +line.slice(62, 68).trim();
       const a95 = +line.slice(68, 74).trim();
       const comment = line.slice(74, line.length).trim();
-
-      if (!demagType) {
-        const demagSmbl = line.slice(0, 1);
-
-        if (thermalTypes.indexOf(demagSmbl) > -1) demagType = 'thermal';
-        else if (alternatingTypes.indexOf(demagSmbl) > -1) demagType = 'alternating field';
-      }
 
       // Collect info about rows where critical numeric fields parsed as NaN
       const invalidFields: { field: string; rawValue: string }[] = [];
@@ -102,10 +148,19 @@ const parsePMD = (data: string, name: string): ParseResult<IPmdData> => {
         Istrat: isNaN(Istrat) ? 0 : Istrat,
         a95: isNaN(a95) ? 0 : a95,
         comment,
-        demagType,
       };
     })
     .filter((step): step is NonNullable<typeof step> => step !== null);
+
+  // Pass 2: infer demagType from the entire steps block (D3). Emit a
+  // non-blocking warning if the file is genuinely ambiguous so the UI can
+  // tell the user why the demag column is empty.
+  const demagType = inferDemagTypeFromStepNames(stepsWithoutDemagType.map((step) => step.step));
+  const warnings: ParseWarning[] = [];
+  if (demagType === undefined && stepsWithoutDemagType.length > 0) {
+    warnings.push(AMBIGUOUS_DEMAG_WARNING);
+  }
+  const steps = stepsWithoutDemagType.map((step) => ({ ...step, demagType }));
 
   return {
     data: {
@@ -114,7 +169,7 @@ const parsePMD = (data: string, name: string): ParseResult<IPmdData> => {
       format: 'PMD',
       created: new Date().toISOString(),
     },
-    validation: { invalidRows },
+    validation: { invalidRows, warnings },
   };
 };
 
