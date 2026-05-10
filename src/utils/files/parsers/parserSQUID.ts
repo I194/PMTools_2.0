@@ -14,7 +14,6 @@ const parseSQUID = (data: string, name: string): IPmdData => {
     throw new Error(`Empty .squid file: ${name}`);
   }
 
-  // eslint-disable-next-line no-control-regex
   const eol = /\r\n|\r|\n/;
   // Get all lines except the first one (it's just copy of filename) and all too-short lines
   const lines = data

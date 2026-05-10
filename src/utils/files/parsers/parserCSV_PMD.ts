@@ -7,7 +7,6 @@ import { IPmdData } from '../../GlobalTypes';
  * @returns {IPmdData} IPmdData
  */
 const parseCSV_PMD = (data: string, name: string): IPmdData => {
-  // eslint-disable-next-line no-control-regex
   const eol = /\r\n|\r|\n/;
   // Get all lines except the last one (it's garbage)
   let lines = data.split(eol).filter((line) => line.length > 1);

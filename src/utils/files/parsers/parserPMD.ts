@@ -8,7 +8,6 @@ import { InvalidRowInfo, ParseResult } from '../validation';
  * @returns {ParseResult<IPmdData>} Parsed data with validation info
  */
 const parsePMD = (data: string, name: string): ParseResult<IPmdData> => {
-  // eslint-disable-next-line no-control-regex
   const eol = /\r\n|\r|\n/;
   // Get all lines except the last one (it's garbage) and the first one (it's empty)
   const lines = data

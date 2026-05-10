@@ -7,7 +7,6 @@ import { IDirData } from '../../GlobalTypes';
  * @returns {IDirData} IDirData
  */
 const parsePMM = (data: string, name: string): IDirData => {
-  // eslint-disable-next-line no-control-regex
   const eol = /\r\n|\r|\n/;
   // Get all lines except first and the last one (they're garbage)
   const lines = data

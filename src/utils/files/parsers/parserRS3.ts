@@ -9,7 +9,6 @@ import toReferenceCoordinates from '../../graphs/formatters/toReferenceCoordinat
  * @returns {IPmdData} IPmdData
  */
 const parserRS3 = (data: string, name: string): IPmdData => {
-  // eslint-disable-next-line no-control-regex
   const eol = /\r\n|\r|\n/;
 
   // metadata:
