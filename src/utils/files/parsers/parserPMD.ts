@@ -11,17 +11,26 @@ type DemagType = 'thermal' | 'alternating field' | undefined;
  * a `°C` suffix (Crimea-style), bare numbers without any letter prefix
  * (Polar Ural-style), and `NRM`-prefixed thermal sequences.
  *
- * Detection priorities:
- *   1. Any step has a thermal marker — literal `°`, the U+FFFD replacement
- *      character left in place by an upstream UTF-8 mis-decode of byte 0xB0
- *      (common for legacy ISO-8859 files), or a digit immediately followed
- *      by a `C`/`c` letter (e.g. `90C`) — → thermal.
- *   2. Any step contains `mT` → alternating field.
- *   3. Any step starts with `T`/`t` (and didn't already match a thermal
- *      marker above) → thermal.
- *   4. Any step starts with `M`/`m` → alternating field.
- *   5. Mixed evidence (both thermal and AF markers) or no evidence at all
- *      (numeric-only step names) → `undefined` (caller emits a warning).
+ * Per-step vote (first match wins within a step):
+ *   1. Thermal marker — literal `°`, the U+FFFD replacement character left
+ *      in place by an upstream UTF-8 mis-decode of byte 0xB0 (common for
+ *      legacy ISO-8859 files), or a digit immediately followed by a `C`/`c`
+ *      letter (e.g. `90C`) — votes thermal.
+ *   2. `mT` substring (case-insensitive, e.g. `50mT`) — votes alternating field.
+ *   3. Starts with `T`/`t` followed by a digit (e.g. `T100`) — votes thermal.
+ *      Strict `\d` after the letter avoids false positives on 4-char words
+ *      that happen to start with T (e.g. `Tea`).
+ *   4. Starts with `M`/`m` followed by a digit (e.g. `M050`) — votes
+ *      alternating field. Same rationale as (3).
+ *   5. Otherwise (`NRM`, bare numeric step names, `T 20`-with-space-padding
+ *      from fixed-width columns, etc.) — no vote.
+ *
+ * Global arbitration:
+ *   The file is classified only if every voting step agrees on one type.
+ *   Any mixture of thermal and AF evidence falls through to `undefined`
+ *   plus an `AMBIGUOUS_DEMAG_TYPE` warning, even if one side has more votes —
+ *   we never guess. A file with no votes at all (every step neutral) is
+ *   also `undefined`.
  *
  * `NRM` lines and pure numeric step names are intentionally not counted as
  * either type — they're consistent with both demagnetization protocols.
@@ -38,12 +47,13 @@ const inferDemagTypeFromStepNames = (stepNames: string[]): DemagType => {
       thermalEvidence++;
     } else if (ALTERNATING_MARKER.test(trimmed)) {
       alternatingEvidence++;
-    } else if (/^[Tt]/.test(trimmed)) {
+    } else if (/^[Tt]\d/.test(trimmed)) {
       thermalEvidence++;
-    } else if (/^[Mm]/.test(trimmed)) {
+    } else if (/^[Mm]\d/.test(trimmed)) {
       alternatingEvidence++;
     }
-    // else: trimmed is `NRM`, a bare number, or otherwise neutral — no vote.
+    // else: trimmed is `NRM`, a bare number, `T 20` with internal space, or
+    // otherwise neutral — no vote.
   }
   if (thermalEvidence > 0 && alternatingEvidence === 0) return 'thermal';
   if (alternatingEvidence > 0 && thermalEvidence === 0) return 'alternating field';
