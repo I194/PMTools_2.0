@@ -91,19 +91,18 @@ describe('parserDIR — D1 regression: Mac classic CR-only line endings', () => 
       // tracked as a future Phase 1 column-flexibility fix in the
       // dir/README.md "Pending follow-ups" section.
       //
-      // What D1 proves:
-      //   - the parser visits all 16 non-empty input rows (some get
-      //     pair-consumed by the `rep G` branch), producing a fixed total
-      //     of 11 interpretations + 1 invalidRow = 12 with the current
-      //     parser implementation.
-      //   - the LAST interpretation came from the LAST row of the file
-      //     (label "HTC-Al" — slice(0:7) of " HTC-All "). Without the
-      //     regex fix the parser would have stopped at the merged single
-      //     line and never reached the bottom of the file.
+      // What D1 proves: the parser reaches the LAST row of the file —
+      // label "HTC-Al" comes from slice(0:7) of " HTC-All ". Under the
+      // pre-fix regex the file collapses to a single line and the parser
+      // would only ever see the header row.
+      //
+      // We deliberately do NOT assert an exact total row count: that
+      // number is downstream of the column-layout misparse the future
+      // follow-up will change, and would mis-fire when that fix lands.
       const result = parseDIR(realContent, 'kola2013_repG_macCR_component_means.dir');
       const totalRowsSeen =
         result.data.interpretations.length + result.validation.invalidRows.length;
-      expect(totalRowsSeen).toBe(12);
+      expect(totalRowsSeen).toBeGreaterThan(1);
       const lastLabel = result.data.interpretations[result.data.interpretations.length - 1].label;
       expect(lastLabel).toBe('HTC-Al');
     });
