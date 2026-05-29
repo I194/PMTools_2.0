@@ -1,0 +1,88 @@
+{
+  "metadata": {
+    "name": "thermal_and_af.csv",
+    "a": 0,
+    "b": 0,
+    "s": 220,
+    "d": 30,
+    "v": 11
+  },
+  "steps": [
+    {
+      "id": 1,
+      "step": "NRM",
+      "x": 1e-9,
+      "y": 2e-9,
+      "z": 3e-9,
+      "mag": 3.74e-9,
+      "Dgeo": 45,
+      "Igeo": 30,
+      "Dstrat": 40,
+      "Istrat": 35,
+      "a95": 1.5,
+      "comment": ""
+    },
+    {
+      "id": 2,
+      "step": "T100",
+      "x": 9e-10,
+      "y": 1.8e-9,
+      "z": 2.7e-9,
+      "mag": 3.37e-9,
+      "Dgeo": 44.5,
+      "Igeo": 29.5,
+      "Dstrat": 39.5,
+      "Istrat": 34.5,
+      "a95": 1.8,
+      "comment": "",
+      "demagType": "thermal"
+    },
+    {
+      "id": 3,
+      "step": "T200",
+      "x": 7e-10,
+      "y": 1.4e-9,
+      "z": 2.1e-9,
+      "mag": 2.62e-9,
+      "Dgeo": 43,
+      "Igeo": 27,
+      "Dstrat": 38,
+      "Istrat": 32,
+      "a95": 2.4,
+      "comment": "",
+      "demagType": "thermal"
+    },
+    {
+      "id": 4,
+      "step": "M050",
+      "x": 5e-10,
+      "y": 1e-9,
+      "z": 1.5e-9,
+      "mag": 1.87e-9,
+      "Dgeo": 42,
+      "Igeo": 25,
+      "Dstrat": 37,
+      "Istrat": 30,
+      "a95": 3,
+      "comment": "",
+      "demagType": "alternating field"
+    },
+    {
+      "id": 5,
+      "step": "M100",
+      "x": 3e-10,
+      "y": 6e-10,
+      "z": 9e-10,
+      "mag": 1.12e-9,
+      "Dgeo": 40,
+      "Igeo": 22,
+      "Dstrat": 35,
+      "Istrat": 27,
+      "a95": 4.1,
+      "comment": "",
+      "demagType": "alternating field"
+    }
+  ],
+  "format": "CSV_PMD",
+  "created": "1970-01-01T00:00:00.000Z"
+}

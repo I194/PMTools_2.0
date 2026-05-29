@@ -1,17 +1,42 @@
-# fixtures/parsers/csv_pmd — SOURCE
+# Fixtures — `parseCSV_PMD`
 
-Fixtures for `parserCSV_PMD` (CSV variant of PMD demagnetization data).
+Reference-output inputs for `src/utils/files/parsers/parserCSV_PMD.ts`.
 
-## Layout
+Each `<file>.csv` has a committed `<file>.csv.expected.json` sibling — the parser's
+output with the non-deterministic `created` timestamp pinned. The test
+(`src/utils/files/__tests__/parserCSV_PMD.test.ts`) iterates every input in `real/`
+and `synthetic/` automatically; adding a case is dropping a file here, not writing code.
 
-- `real/` — real CSV files (e.g. `test-data/lab_results.csv` if applicable).
-- `synthetic/` — separator variants (comma, semicolon), quoted fields, empty
-  cells, encoding variants (UTF-8, UTF-8 BOM, Windows-1251).
+Regenerate the references ONLY after an intentional behavior change, then review the diff:
 
-## Real-file origins
+```
+UPDATE_FIXTURES=1 npm test -- --watchAll=false parserCSV_PMD
+```
 
-_Populated in Phase 1 Step 0.6._
+## CSV PMD format (as the parser reads it)
 
-## Synthetic-fixture matrix
+```
+<title line — ignored>
+<a>,<b>,<s>,<d>,<v>          # specimen metadata: 5 numbers, NO name (name comes from the file name)
+<column header — ignored>
+<step>,<Xc>,<Yc>,<Zc>,<MAG>,<Dg>,<Ig>,<Ds>,<Is>,<a95>[,comment]
+...
+```
 
-_Populated in Phase 1 Step 4._
+## synthetic/
+- `thermal_and_af.csv` — demagType inference: `T*` → thermal, `M*` → alternating field, `NRM` → undefined (key dropped).
+- `comment_with_commas.csv` — locks the comment-comma quirk below.
+- `crlf_line_endings.csv` / `cr_only_line_endings.csv` — D1 regression: parser splits on `\r\n`, `\r`, and `\n` alike.
+
+## real/
+Empty for now. The only on-disk `.csv` (`test-data/lab_results.csv`) is **DIR-format**,
+not PMD — it belongs to `parseCSV_DIR`. Real CSV PMD fixtures must be produced by a
+PMTools export run (Playwright); deferred to a follow-up. See
+`.claude/development-roadmap/notes/found-bugs-todo.md`.
+
+## Locked-as-is behavior (not bugs to fix here)
+- **Comment commas are dropped.** `parserCSV_PMD.ts:26` does `line.replace(/\s+/g, ' ')` then
+  `split(',')`, and rebuilds the comment by concatenating the trailing fields — so commas inside a
+  comment are lost and whitespace runs collapse to single spaces. `outlier, re-measured, ok`
+  parses to `outlier re-measured ok`. Current behavior since v1.x — locked by
+  `comment_with_commas.csv`. See `.claude/development-roadmap/notes/found-bugs-todo.md` (D4-analogous).

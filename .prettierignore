@@ -2,3 +2,9 @@ build/
 node_modules/
 coverage/
 package-lock.json
+
+# Generated reference-output fixtures — written by `UPDATE_FIXTURES=1 npm test`, not
+# hand-formatted. Prettier must not touch them, or every regeneration would
+# re-break `format:check`. The .expected.json files are scientific capital, kept
+# in the stable JSON.stringify(..., null, 2) shape the harness emits.
+src/__tests__/fixtures/
