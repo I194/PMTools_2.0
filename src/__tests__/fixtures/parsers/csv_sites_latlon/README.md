@@ -1,17 +1,17 @@
-# fixtures/parsers/csv_sites_latlon — SOURCE
+# Fixtures — `parseCSV_SitesLatLon`
 
-Fixtures for `parserCSV_SitesLatLon` (CSV with site latitude/longitude data).
+Reference-output inputs for `src/utils/files/parsers/parserCSV_SitesLatLon.ts`.
+Each `<file>.csv` has a `<file>.csv.expected.json` sibling (parser output, `created` pinned).
+Regenerate: `UPDATE_FIXTURES=1 npm test -- --watchAll=false parserCSV_SitesLatLon`.
 
-## Layout
+## Format
+The header row names the columns; the parser locates `lat`, `lon`, `age`, `plate_id` **by header
+name** (case-insensitive). Output is `{ data: [{ lat, lon, age, plateId }], ... }` — the site label
+column is not carried into the output, and absent columns become `null`.
 
-- `real/` — real CSV site-data files.
-- `synthetic/` — header order permutations, separator variants, missing optional
-  columns, boundary lat/lon values (poles, antimeridian, equator).
+## real/
+Empty — sites CSVs are exported on demand from PMTools; real fixtures deferred to an export run.
 
-## Real-file origins
-
-_Populated in Phase 1 Step 0.6._
-
-## Synthetic-fixture matrix
-
-_Populated in Phase 1 Step 4._
+## synthetic/
+- `basic_sites.csv` — `label,lat,lon` (age/plate_id absent → null).
+- `whitespace_and_signs.csv` — padded cells, negative and zero coordinates.

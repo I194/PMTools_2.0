@@ -1,0 +1,4 @@
+id,Code,StepRange,N,Dgeo,Igeo,Kgeo,MADgeo,Dstrat,Istrat,Kstrat,MADstrat,Comment
+SYN-01,DirOPCA,T300-T580,8,15.0,52.0,120.0,4.5,13.0,48.0,115.0,4.7,normal polarity
+SYN-02,GC,T200-T560,6,190.0,-50.0,90.0,6.0,188.0,-46.0,86.0,6.2,reversed polarity
+SYN-03,DirOPCA,T350-T620,9,9.8,50.1,102.3,6.0,7.4,46.6,97.8,6.2,normal weak
