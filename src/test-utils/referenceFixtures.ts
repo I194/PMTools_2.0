@@ -22,6 +22,33 @@ import { basename, join } from 'path';
  */
 const PINNED_CREATED = '1970-01-01T00:00:00.000Z';
 
+/**
+ * Significant figures kept when a reference value is a float. Some parsers
+ * (RS3, SQUID) derive geographic/stratigraphic directions through trig
+ * (Math.sin/atan2), which is NOT bit-identical across platforms — macOS and the
+ * Linux CI runner disagree in the ~15th–16th digit. Rounding to 10 sig figs sits
+ * far above that platform noise yet far below any meaningful paleomagnetic
+ * precision (~0.1°), so the reference is stable cross-platform. It is a no-op for
+ * the already-short values parsers read verbatim (e.g. Dgeo from toFixed(1)).
+ */
+const SIGNIFICANT_DIGITS = 10;
+
+/** Round a single number to SIGNIFICANT_DIGITS significant figures. */
+const roundToSignificant = (value: number): number =>
+  Number.isFinite(value) && value !== 0 ? Number(value.toPrecision(SIGNIFICANT_DIGITS)) : value;
+
+/** Recursively round every number in a JSON-shaped value; strings/bools untouched. */
+const roundFloatsDeep = (value: any): any => {
+  if (typeof value === 'number') return roundToSignificant(value);
+  if (Array.isArray(value)) return value.map(roundFloatsDeep);
+  if (value && typeof value === 'object') {
+    const out: Record<string, any> = {};
+    for (const key of Object.keys(value)) out[key] = roundFloatsDeep(value[key]);
+    return out;
+  }
+  return value;
+};
+
 /** Absolute path inside the committed fixtures tree (src/__tests__/fixtures/...). */
 export const fixturePath = (...segments: string[]): string =>
   join(__dirname, '..', '__tests__', 'fixtures', ...segments);
@@ -35,16 +62,17 @@ export const listInputs = (directory: string, extensions: string[]): string[] =>
 /**
  * Compare against — or, under UPDATE_FIXTURES, (re)write — the reference file.
  *
- * `rawResult` is normalized through JSON (NaN -> null, undefined dropped) so the
- * in-memory value and the on-disk JSON compare equal. Returns both sides; the
- * caller does the single `expect(actual).toEqual(expected)` so this primitive
- * stays free of test-framework globals.
+ * `rawResult` is normalized through JSON (NaN -> null, undefined dropped) and its
+ * floats are rounded to SIGNIFICANT_DIGITS so the in-memory value and the on-disk
+ * JSON compare equal across platforms. Returns both sides; the caller does the
+ * single `expect(actual).toEqual(expected)` so this primitive stays free of
+ * test-framework globals.
  */
 export const loadExpected = (
   expectedFile: string,
   rawResult: unknown,
 ): { actual: unknown; expected: unknown } => {
-  const actual = JSON.parse(JSON.stringify(rawResult));
+  const actual = roundFloatsDeep(JSON.parse(JSON.stringify(rawResult)));
   if (process.env.UPDATE_FIXTURES) {
     writeFileSync(expectedFile, `${JSON.stringify(actual, null, 2)}\n`);
     return { actual, expected: actual };
