@@ -1,0 +1,38 @@
+{
+  "name": "two_sites",
+  "vgps": [
+    {
+      "id": 1,
+      "label": "SYN-01",
+      "dec": 15.4,
+      "inc": 52.1,
+      "a95": 3.2,
+      "lat": 56.3,
+      "lon": 61.8,
+      "poleLatitude": 80.7,
+      "poleLongitude": 142.5,
+      "paleoLatitude": 32.6,
+      "dp": 2.9,
+      "dm": 4.1,
+      "age": 250,
+      "plateId": 401
+    },
+    {
+      "label": "SYN-02",
+      "dec": 192.345,
+      "inc": -48.678,
+      "a95": 5,
+      "lat": 56.3,
+      "lon": 61.8,
+      "poleLatitude": -78.2,
+      "poleLongitude": 318.9,
+      "paleoLatitude": -29.4,
+      "dp": 4.55,
+      "dm": 6.789,
+      "age": 250,
+      "plateId": 401
+    }
+  ],
+  "format": "VGP",
+  "created": "1970-01-01T00:00:00.000Z"
+}

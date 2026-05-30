@@ -1,0 +1,10 @@
+{
+  "filename": "long_labels.xlsx",
+  "type": "application/octet-stream",
+  "eol": "LF",
+  "lines": [
+    "id,Code,StepRange,N,Dgeo,Igeo,Kgeo,MADgeo,Dstrat,Istrat,Kstrat,MADstrat,Comment",
+    "SITE-001-A,DirPCA,M010-M080,11,9.8,50.1,102.3,6,7.4,46.6,97.8,6.2,\"two, commas, here\"",
+    ""
+  ]
+}

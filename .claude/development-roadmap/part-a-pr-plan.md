@@ -63,6 +63,16 @@ Buffer should work — verify, adjust the reader to pass `data.buffer` if needed
 **Watch for:** `.gitignore` may ignore `.xlsx` — `git add -f` if so (PR 1 hit this with a
 test file). Binary fixtures won't be prettier-touched (already ignored).
 
+> **As built (PR 4):** shipped golden snapshots for **all 11** converters, **no** round-trip
+> tests. The round-trip preferred above turned out non-exact for every matching pair — the
+> committed goldens themselves show why: `toCSV_*`/`toPMM` corrupt comment commas, `toDIR`
+> truncates labels to 6 chars, `toVGP` rounds to 2 decimals and drops 2 columns, `toPMM`
+> hardcodes provenance. A golden snapshot also locks output *formatting* (what a converter
+> regression net must catch), which round-trip does not. Each converter is captured via a
+> mocked `download` and locked as `{ filename, type, eol, lines[] }`; `.xlsx` payloads are
+> decoded through the same `xlsx_to_csv` bridge the parser uses (reviewable cell text, not
+> the non-deterministic zip). Helper: [`src/test-utils/converterFixtures.ts`](../../../src/test-utils/converterFixtures.ts).
+
 ---
 
 ## PR 4 — Converters (round-trip + forward-only)

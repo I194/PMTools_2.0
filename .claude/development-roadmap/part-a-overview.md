@@ -100,8 +100,8 @@ effort.
 |----|-------|--------|
 | 1 | reference-output harness + `parseCSV_PMD` exemplar | **merged** (#37) |
 | 2 | `parseCSV_DIR`, `parseCSV_SitesLatLon`, `parsePMM`, `parseRS3` + harness refactor into `describeParserReferenceOutput` | **merged** (#38) |
-| 3 | XLSX parsers (×3) | next |
-| 4 | converters (round-trip + forward-only snapshots) | planned |
+| 3 | XLSX parsers (×3) | **merged** (#41) |
+| 4 | converters (golden snapshots of serialized output, ×11) | in review |
 | 5 | simple pure stats | planned |
 | 6 | PCA / matrix / McFadden core | planned |
 

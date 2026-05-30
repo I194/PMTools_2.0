@@ -1,0 +1,13 @@
+{
+  "filename": "oriented_with_comment.xlsx",
+  "type": "application/octet-stream",
+  "eol": "LF",
+  "lines": [
+    "a,b,s,d,v (m3),,,,,,",
+    "162.9,28,270,12,0.000001,,,,,,",
+    "PAL, Xc (Am2), Yc (Am2), Zc (Am2), MAG(A/m), Dg, Ig, Ds, Is, a95,",
+    "NRM,-2.85E-08,1.57E-08,2.34E-08,4.05E-08,339.6,51.2,12.4,47.8,0.9,\"outlier, re-measured\"",
+    "T570,-1.2E-09,5E-10,8E-10,1.52E-09,341,49,14,45,2.1,endpoint",
+    ""
+  ]
+}

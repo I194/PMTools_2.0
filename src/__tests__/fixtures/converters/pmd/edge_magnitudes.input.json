@@ -1,0 +1,44 @@
+{
+  "metadata": {
+    "name": "edge_magnitudes",
+    "a": 12,
+    "b": 5,
+    "s": 0,
+    "d": 0,
+    "v": 1
+  },
+  "steps": [
+    {
+      "id": 1,
+      "step": "NRM",
+      "x": 2.34e-12,
+      "y": -1.05e-12,
+      "z": 5e-13,
+      "mag": 2.6e-12,
+      "Dgeo": 120.4,
+      "Igeo": -3.2,
+      "Dstrat": 118,
+      "Istrat": -5,
+      "a95": 7.7,
+      "comment": "two-digit exponents",
+      "demagType": "thermal"
+    },
+    {
+      "id": 2,
+      "step": "T100",
+      "x": 0,
+      "y": 1e-12,
+      "z": 0,
+      "mag": 1e-12,
+      "Dgeo": 0,
+      "Igeo": 0,
+      "Dstrat": 0,
+      "Istrat": 0,
+      "a95": 0,
+      "comment": "zero components",
+      "demagType": "thermal"
+    }
+  ],
+  "format": "PMD",
+  "created": "1970-01-01T00:00:00.000Z"
+}

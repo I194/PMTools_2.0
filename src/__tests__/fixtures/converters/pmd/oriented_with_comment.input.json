@@ -1,0 +1,44 @@
+{
+  "metadata": {
+    "name": "oriented_with_comment",
+    "a": 162.9,
+    "b": 62,
+    "s": 270,
+    "d": 12,
+    "v": 0.000001
+  },
+  "steps": [
+    {
+      "id": 1,
+      "step": "NRM",
+      "x": -2.85e-8,
+      "y": 1.57e-8,
+      "z": 2.34e-8,
+      "mag": 4.05e-8,
+      "Dgeo": 339.6,
+      "Igeo": 51.2,
+      "Dstrat": 12.4,
+      "Istrat": 47.8,
+      "a95": 0.9,
+      "comment": "outlier, re-measured",
+      "demagType": "thermal"
+    },
+    {
+      "id": 2,
+      "step": "T570",
+      "x": -1.2e-9,
+      "y": 0.5e-9,
+      "z": 0.8e-9,
+      "mag": 1.52e-9,
+      "Dgeo": 341,
+      "Igeo": 49,
+      "Dstrat": 14,
+      "Istrat": 45,
+      "a95": 2.1,
+      "comment": "endpoint",
+      "demagType": "thermal"
+    }
+  ],
+  "format": "PMD",
+  "created": "1970-01-01T00:00:00.000Z"
+}

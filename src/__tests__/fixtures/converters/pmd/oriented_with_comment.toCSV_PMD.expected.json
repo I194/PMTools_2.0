@@ -1,0 +1,12 @@
+{
+  "filename": "oriented_with_comment.csv",
+  "type": "text/csv;charset=utf-8",
+  "eol": "LF",
+  "lines": [
+    "a,b,s,d,v(m3)",
+    "162.9,28,270,12,0.000001",
+    "PAL,Xc(Am2),Yc(Am2),Zc(Am2),MAG(A/m),Dg,Ig,Ds,Is,a95",
+    "NRM,-2.85e-8,1.57e-8,2.34e-8,4.05e-8,339.6,51.2,12.4,47.8,0.9,outlier, re-measured",
+    "T570,-1.2e-9,5e-10,8e-10,1.52e-9,341,49,14,45,2.1,endpoint"
+  ]
+}
