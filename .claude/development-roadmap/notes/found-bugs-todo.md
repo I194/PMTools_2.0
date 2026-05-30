@@ -34,3 +34,15 @@ See `.claude/development-roadmap/01-testing.md` → "Discovered During Fixture S
   behavior; synthetic fixtures for the `P1/P3 ∈ {3,9,12}` orientation branches are a follow-up
   (roadmap risk note). That real file is ISO-8859-1 (D2): its reference locks the current
   encoding-affected output as-is.
+
+## Surfaced post-merge: cross-platform float non-determinism (hotfix)
+
+- **Derived trig floats differ macOS vs Linux CI in the ~15th digit.** `parserRS3`
+  (and `parserSQUID`) compute geographic/stratigraphic directions via Math.sin/atan2,
+  which is not bit-identical across platforms. The first RS3 reference locked full-precision
+  floats (`Dgeo: 207.6924967043676`) → passed locally, FAILED in CI. **Fix:** the harness
+  now rounds every reference float to 10 significant figures (`SIGNIFICANT_DIGITS` in
+  referenceFixtures.ts) before write/compare — well above platform noise, well below
+  meaningful precision (~0.1°), and a no-op for verbatim-read values. Any future computation
+  test (PCA/VGP/Fisher) inherits this automatically. **Process lesson:** wait for CI green
+  before merging; local-green is not enough for trig-derived outputs.
