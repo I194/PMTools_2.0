@@ -101,8 +101,8 @@ effort.
 | 1 | reference-output harness + `parseCSV_PMD` exemplar | **merged** (#37) |
 | 2 | `parseCSV_DIR`, `parseCSV_SitesLatLon`, `parsePMM`, `parseRS3` + harness refactor into `describeParserReferenceOutput` | **merged** (#38) |
 | 3 | XLSX parsers (×3) | **merged** (#41) |
-| 4 | converters (golden snapshots of serialized output, ×11) | in review |
-| 5 | simple pure stats | planned |
+| 4 | converters (golden snapshots of serialized output, ×11) | **merged** (#42) |
+| 5 | simple pure stats (Fisher, VGP, Butler, cutoff, basic-stats, raw-plane; ×6) | in review |
 | 6 | PCA / matrix / McFadden core | planned |
 
 After PR 6, Part A is effectively done: every parser, converter, and *pure* computation
