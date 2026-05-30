@@ -2,6 +2,38 @@
 
 Helper scripts for PMTools development. Run from the repo root.
 
+## generateXlsxFixtures.js
+
+Builds the binary `.xlsx` fixtures consumed by the `parserXLSX_*` reference-output
+tests (`src/__tests__/fixtures/parsers/xlsx_{pmd,dir,sites_latlon}/synthetic/`).
+Each XLSX parser is a thin wrapper — `XLSX.read(bytes)` → `xlsx_to_csv(workbook)` →
+the matching CSV parser — so the fixtures mirror the already-reviewed CSV fixtures
+cell-for-cell, with numbers as native numeric cells (the shape a real Excel sheet or
+PMTools' own `toXLSX_*` export produces). One fixture (`with_empty_second_sheet`)
+adds a trailing empty sheet to lock the only XLSX-specific behavior: `xlsx_to_csv`
+skips sheets whose CSV is empty.
+
+### When to run it
+
+Only when a fixture's data changes. CI **never** runs it; Jest reads the committed
+`.xlsx` files directly, and Node already has the `xlsx` dependency (no Python needed).
+
+```bash
+node scripts/generateXlsxFixtures.js            # (re)write the .xlsx files
+node scripts/generateXlsxFixtures.js --print    # also dump the intermediate CSV
+```
+
+After regenerating, regenerate the references and **eyeball** them before committing:
+
+```bash
+UPDATE_FIXTURES=1 npm test -- --watchAll=false parserXLSX
+npm test -- --watchAll=false parserXLSX         # prove they pass as committed
+```
+
+The reviewable surface is the `.expected.json` (every parsed number) plus this
+script's inline source data — the `.xlsx` files themselves are binary. Each
+reference should equal its CSV sibling's reference except `name`/`metadata.name`.
+
 ## generate_fixtures.py
 
 Regenerates PmagPy comparison fixtures used by the Phase 1 Jest suite.
