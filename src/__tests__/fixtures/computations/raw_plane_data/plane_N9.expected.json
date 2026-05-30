@@ -1,0 +1,47 @@
+[
+  {
+    "declination": 30,
+    "inclination": -50,
+    "length": 1
+  },
+  {
+    "declination": 87.26759,
+    "inclination": -32.79775,
+    "length": 1
+  },
+  {
+    "declination": 120,
+    "inclination": 0,
+    "length": 1
+  },
+  {
+    "declination": 152.7324,
+    "inclination": 32.79775,
+    "length": 1
+  },
+  {
+    "declination": 210,
+    "inclination": 50,
+    "length": 1
+  },
+  {
+    "declination": 267.2676,
+    "inclination": 32.79775,
+    "length": 1
+  },
+  {
+    "declination": 300,
+    "inclination": 0,
+    "length": 1
+  },
+  {
+    "declination": 332.7324,
+    "inclination": -32.79775,
+    "length": 1
+  },
+  {
+    "declination": 30,
+    "inclination": -50,
+    "length": 1
+  }
+]

@@ -118,3 +118,61 @@ bytes (those embed a non-deterministic timestamp and aren't reviewable). A side 
 SheetJS general number format is what gets locked, and it renders inconsistently across magnitudes
 (`1e-9` → `0.000000001`, but `3.74e-9` → `3.74E-09`). That formatting is deterministic for a pinned
 `xlsx` version (the same bridge PR 3's parser fixtures already rely on), so it's CI-stable.
+
+## Surfaced in PR 5 (pure-stats reference output — `statistics/calculation/*`)
+
+All **locked as-is** by `src/__tests__/fixtures/computations/*` — none fixed here.
+
+- **`calculateButlerParameters` mixes angle units.** Its comment says it "takes confidence and
+  inclination in degrees", but (a) the only real caller —
+  `calculateBasicStatisticalParameters` — passes `confidence` in **radians**
+  (`Distribution.getConfidenceInterval()` ends in `/ Distribution.RADIANS`), and (b) the body
+  feeds degree-valued `inclination` and the degree-valued `paleoLatitude` straight into
+  `Math.tan`/`Math.cos`/`Math.sin` without converting to radians (e.g.
+  `Math.atan(0.5 * Math.tan(inclination + dIx))`, `Math.cos(paleoLatitude)`). So `dDx/dIx/
+  palatMin/palatMax` are deterministic but **not physically meaningful** (and can go negative or
+  blow up, e.g. `inc=30` gives `dDx ≈ -0.108` because `Math.cos(16.1)` reads 16.1 as radians).
+  Locked by `butler/*`. Fix later: pick one unit convention end-to-end and convert consistently;
+  then flip these references.
+- **`Distribution.R` is never computed (stuck at 0).** The constructor sets `this.R = 0` and
+  nothing updates it, so `getDispersion()` = `(N-1)/N` and `getConfidenceInterval()` divides by
+  `R = 0` → NaN. In `calculateBasicStatisticalParameters` this makes `poleConfidence` NaN, which
+  flows into `calculateButlerParameters`, so the entire `butlerDistribution` locks as **null**
+  (`basic_statistical_parameters/five_directions.expected.json`). The resultant length `R` should
+  be accumulated from the direction vectors (as `fisherMean` does). Fix later: compute `R`; then
+  flip the reference.
+- **`calculateCutoff` skips an outlier sitting at array index 0.** The rejection line is
+  `if (index) iterateDirections[index].rejected = true;` — when the worst direction is at index 0,
+  `if (0)` is falsy so it is never rejected, and `scatter` stays inflated. Locked by
+  `cutoff/outlier_at_index_zero_vandamme.expected.json` (outlier kept, `scatter ≈ 74.7`). Use an
+  explicit `index !== undefined` guard. Fix later; flip the reference.
+- **`calculateCutoff` never resets `cutoffValue` between iterations.** `cutoffValue` is initialized
+  once before the loop and only ever increased, so after the first pass it holds the largest angle
+  ever seen. The Vandamme/45 break conditions (`cutoffValue < A`, `cutoffValue <= 45`) then never
+  fire on later passes, and the loop terminates via the 10-iteration cap rather than convergence.
+  A single outlier is still removed correctly (set on pass 1), but a dataset with two+ outliers
+  would only ever reject the first one's index. Locked by `cutoff/cluster_with_outlier_*` (single
+  outlier rejected; the reported `cutoffValue` is the stale outlier angle, not a converged cutoff).
+  Fix later: recompute the max per iteration.
+
+**Naming/representation quirks (locked, harmless — flagged so the references don't confuse a reader):**
+
+- **Fisher mean's `MAD` field actually holds α₉₅, not MAD.** `fisherMean` returns the
+  `Math.acos(...)`-derived 95% confidence cone under the key `MAD` (`calculateFisherMean.ts`).
+  The `fisher_mean/*` references therefore lock α₉₅ values in a field named `MAD`.
+- **VGP poles are stored as `Direction(poleLongitude, poleLatitude, 1)`.** In
+  `calculateBasicStatisticalParameters`/`calculateCutoff`, each pole packs longitude into the
+  `declination` slot and latitude into the `inclination` slot, so `poleDistribution.directions[*]`
+  in the references reads `{declination: poleLon, inclination: poleLat}`. Code-as-written; locked.
+
+**Not bugs, just noted:**
+
+- **`foldTestClassic` is an empty stub** (`PMTests/FoldTest/foldTestClassic.ts` — body is comments
+  only, returns `undefined`). The PR plan listed it as an "optional easy add (8 lines, pure
+  McElhinny ratio)", but there is nothing to lock. Skipped in PR 5; revisit if/when it is
+  implemented.
+- **Computation harness snaps sub-1e-9 values to 0** (`computationFixtures.ts`,
+  `ABSOLUTE_ZERO_EPSILON`). Not a code bug — a cross-platform measure. Trig of right angles
+  produces genuine zeros as ~1e-15 float noise (e.g. a great circle crossing the equator in
+  `getRawPlaneData`); 7-sig-fig relative rounding would keep 7 figs *of that noise* and flake
+  across macOS/Linux. The absolute floor sits far above the noise and far below any real value.

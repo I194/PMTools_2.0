@@ -1,0 +1,26 @@
+{
+  "geographic": {
+    "direction": {
+      "declination": 25,
+      "inclination": 60,
+      "length": 1
+    },
+    "MAD": null,
+    "k": null,
+    "N": 1,
+    "R": 1,
+    "csd": 0
+  },
+  "stratigraphic": {
+    "direction": {
+      "declination": 30,
+      "inclination": 65,
+      "length": 1
+    },
+    "MAD": null,
+    "k": null,
+    "N": 1,
+    "R": 1,
+    "csd": 0
+  }
+}
