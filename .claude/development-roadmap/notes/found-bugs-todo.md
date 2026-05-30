@@ -41,8 +41,9 @@ See `.claude/development-roadmap/01-testing.md` → "Discovered During Fixture S
   (and `parserSQUID`) compute geographic/stratigraphic directions via Math.sin/atan2,
   which is not bit-identical across platforms. The first RS3 reference locked full-precision
   floats (`Dgeo: 207.6924967043676`) → passed locally, FAILED in CI. **Fix:** the harness
-  now rounds every reference float to 10 significant figures (`SIGNIFICANT_DIGITS` in
-  referenceFixtures.ts) before write/compare — well above platform noise, well below
-  meaningful precision (~0.1°), and a no-op for verbatim-read values. Any future computation
+  now rounds every reference float to 7 significant figures (`SIGNIFICANT_DIGITS` in
+  referenceFixtures.ts; the hotfix first used 10, later tightened to 7 for ~1000× more
+  cross-platform margin — residual collision ~1e-8/value) before write/compare — well above
+  platform noise, well below meaningful precision (~0.1°), and a no-op for verbatim-read values. Any future computation
   test (PCA/VGP/Fisher) inherits this automatically. **Process lesson:** wait for CI green
   before merging; local-green is not enough for trig-derived outputs.
