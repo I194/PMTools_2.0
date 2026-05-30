@@ -1,0 +1,5 @@
+PMTOOLS PMD ASCII FILE
+0.0,0.0,220.0,30.0,11.0
+PAL,Xc(Am2),Yc(Am2),Zc(Am2),MAG(A/m),Dg,Ig,Ds,Is,a95,comment
+T200,1.0e-09,2.0e-09,3.0e-09,3.7e-09,40.0,20.0,35.0,25.0,2.0,outlier, re-measured, ok
+T300,0.8e-09,1.6e-09,2.4e-09,3.0e-09,41.0,21.0,36.0,26.0,2.2,clean
