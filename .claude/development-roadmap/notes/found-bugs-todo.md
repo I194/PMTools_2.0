@@ -63,3 +63,58 @@ See `.claude/development-roadmap/01-testing.md` → "Discovered During Fixture S
   (`if (csv.length)`). Not exercised with multiple *data* sheets here (would lock
   surprising behavior); the `xlsx_pmd/synthetic/with_empty_second_sheet.xlsx` fixture
   locks just the empty-sheet-skip path. Note for future multi-sheet import work.
+
+## Surfaced in PR 4 (converter reference output — `converters/{pmd,dir,vgp}.ts`)
+
+All **locked as-is** by `src/__tests__/fixtures/converters/*` — none fixed here.
+
+- **CSV converters don't quote fields, so a comma in a comment corrupts columns.**
+  `toCSV_PMD`, `toCSV_DIR`, and `toPMM` build rows by raw `${value},` concatenation, so a
+  comment like `outlier, re-measured` emits two CSV fields instead of one (the row gains a
+  trailing column). Because the comment is the *last* column, this doesn't mis-align the
+  numeric fields on re-import; instead the comment round-trips with its commas dropped and
+  whitespace collapsed — the same class as the already-noted `parserCSV_PMD` comment-comma
+  bug, now present on the *write* side too. (PR 4 is forward-only golden snapshots, so the
+  re-import behavior is *described here, not tested*.) The
+  `.xlsx` converters do NOT have this bug: `XLSX.utils.aoa_to_sheet` + `sheet_to_csv` auto-quote
+  comma fields (`"outlier, re-measured"`). Locked by the `oriented_with_comment` (PMD) and
+  `long_labels` (DIR) fixtures. Fix later: quote/escape CSV fields in the three text-CSV converters.
+- **`toPMM` hardcodes author and date.** The metadata line is literally
+  `${name},"author","2021-11-27"` — the author is the string `author` and the date is frozen,
+  neither derived from the data. A `.pmm` export therefore always claims the same fake
+  provenance. Deterministic (so safely lockable), but a stub to revisit when PMM export gains
+  real metadata. Locked by `dir/*.toPMM.expected.json`.
+- **`toPMM` column header names don't match the columns written.** Header says
+  `...,kg,a95g,...,ks,a95s,...` but the reduce writes `Kgeo, MADgeo, ..., Kstrat, MADstrat` in
+  those slots — i.e. the `a95g/a95s` headers actually carry MAD values. Cosmetic header/label
+  mismatch; locked.
+- **`toDIR` truncates the label to 6 chars; the other DIR converters keep it full.**
+  `toDIR` does `label.slice(0, 6)` (`SITE-001-A` → `SITE-0`) to fit the fixed-width `.dir`
+  column, while `toPMM`/`toCSV_DIR`/`toXLSX_DIR` emit the full label. So `.dir` is the only
+  lossy label export. Locked by `dir/long_labels.toDIR.expected.json`.
+- **`toVGP` is a narrower, lossy export than `toCSV_VGP`/`toXLSX_VGP`.** It writes only 11 of
+  the 13 VGP columns (drops `paleoLatitude` and `plateId`) and rounds every numeric to two
+  decimals via `Number(v).toFixed(2)` (`192.345` → `192.34`, `6.789` → `6.79`), wrapping each in
+  quotes on its own line. The CSV/XLSX VGP exporters keep all 13 columns at full precision.
+  Locked by `vgp/*.toVGP.expected.json`. (`toGPML` is timestamp-free XML — fully deterministic.)
+- **`toGPML` mislabels its MIME type as `text/csv`.** The download call is
+  `download(res, '${filename}.gpml', 'text/csv;charset=utf-8')` (`converters/vgp.ts`) even though
+  the payload is GPML/XML — should be `application/xml` (or `application/gpml+xml`). Cosmetic
+  today (the browser save dialog uses the `.gpml` extension regardless), surfaced because the
+  golden locks the `type` field. Locked by `vgp/*.toGPML.expected.json`. Fix later: pass the XML
+  MIME type.
+- **`toPMD` truncates the specimen name to 10 chars and lets it collide with `a=`.** The metadata
+  line writes the name in a fixed-width 10-char field (`dataModel_metaPMD.name: 10`) with no
+  separator before the `a=` token, so a name ≥ 10 chars is cut AND butts straight against the
+  azimuth: `oriented_with_comment` → `oriented_wa=162.9 ...` (same fixed-width-truncation class as
+  the `toDIR` 6-char label cut, but here it also visually merges two fields). The `.csv`/`.xlsx`
+  PMD exporters don't have this — they carry the full name only as the download *filename*, not in
+  a width-bounded cell. Locked by `pmd/oriented_with_comment.toPMD.expected.json`. Fix later: pad
+  the name field with a guaranteed separator (or widen/relax it) so name and `a=` never merge.
+
+**Note on the `.xlsx` references (not a bug, a harness choice).** The converter golden for an
+`.xlsx` output is the **`xlsx_to_csv` text projection** of the produced workbook, not its raw zip
+bytes (those embed a non-deterministic timestamp and aren't reviewable). A side effect is that the
+SheetJS general number format is what gets locked, and it renders inconsistently across magnitudes
+(`1e-9` → `0.000000001`, but `3.74e-9` → `3.74E-09`). That formatting is deterministic for a pinned
+`xlsx` version (the same bridge PR 3's parser fixtures already rely on), so it's CI-stable.

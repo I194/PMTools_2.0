@@ -10,3 +10,9 @@ src/__tests__/fixtures/parsers/**/*.rs3    -text
 src/__tests__/fixtures/parsers/**/*.squid  -text
 src/__tests__/fixtures/parsers/**/*.csv    -text
 src/__tests__/fixtures/parsers/**/*.xlsx   binary
+
+# Converter reference fixtures (src/__tests__/fixtures/converters/**) are deliberately
+# NOT byte-pinned: they are .json, and the line-ending regime they lock lives *inside*
+# the JSON as a separate "eol" field ("CRLF"/"LF"/...) — converterFixtures.ts strips the
+# raw newlines out of the "lines" array before writing — so git EOL normalization cannot
+# silently neutralize that surface the way it could for a raw .pmd/.csv parser fixture.

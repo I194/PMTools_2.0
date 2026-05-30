@@ -1,0 +1,13 @@
+{
+  "filename": "edge_magnitudes.xlsx",
+  "type": "application/octet-stream",
+  "eol": "LF",
+  "lines": [
+    "a,b,s,d,v (m3),,,,,,",
+    "12,85,0,0,1,,,,,,",
+    "PAL, Xc (Am2), Yc (Am2), Zc (Am2), MAG(A/m), Dg, Ig, Ds, Is, a95,",
+    "NRM,2.34E-12,-1.05E-12,5E-13,2.6E-12,120.4,-3.2,118,-5,7.7,two-digit exponents",
+    "T100,0,1E-12,0,1E-12,0,0,0,0,0,zero components",
+    ""
+  ]
+}

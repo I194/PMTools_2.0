@@ -1,0 +1,10 @@
+{
+  "filename": "labeled_pole.xlsx",
+  "type": "application/octet-stream",
+  "eol": "LF",
+  "lines": [
+    "label,dec,inc,a95,siteLat,siteLon,poleLat,poleLon,paleoLat,dp,dm,age,plateId",
+    "Site 7 mean,0.05,89.994,1.005,-33.9,18.4,-12.34,9.876,0,0.5,1,0,0",
+    ""
+  ]
+}
