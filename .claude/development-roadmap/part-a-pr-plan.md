@@ -12,6 +12,9 @@
   Don't hand-write the read/parse/compare loop.
 - Fixtures go under `src/__tests__/fixtures/...`. `.prettierignore` already excludes that
   tree so regenerating references never breaks `format:check`.
+- A fixture's **filename is load-bearing** for parsers that echo their `name` arg into the
+  output (PMM → `name`, RS3 → `metadata.name`): renaming a fixture changes its expected
+  output, so regenerate the reference after any rename. Keep names descriptive and stable.
 - Generate references with `UPDATE_FIXTURES=1 npm test -- --watchAll=false <pattern>`,
   then **eyeball the `.expected.json`** before committing. Re-run WITHOUT the env var to
   prove they pass.

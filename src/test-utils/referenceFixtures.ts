@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync, writeFileSync } from 'fs';
+import { existsSync, readFileSync, readdirSync, writeFileSync } from 'fs';
 import { basename, join } from 'path';
 
 /**
@@ -26,12 +26,16 @@ const PINNED_CREATED = '1970-01-01T00:00:00.000Z';
  * Significant figures kept when a reference value is a float. Some parsers
  * (RS3, SQUID) derive geographic/stratigraphic directions through trig
  * (Math.sin/atan2), which is NOT bit-identical across platforms — macOS and the
- * Linux CI runner disagree in the ~15th–16th digit. Rounding to 10 sig figs sits
- * far above that platform noise yet far below any meaningful paleomagnetic
- * precision (~0.1°), so the reference is stable cross-platform. It is a no-op for
- * the already-short values parsers read verbatim (e.g. Dgeo from toFixed(1)).
+ * Linux CI runner disagree in the last 1–2 digits of a double (~15th–16th sig fig).
+ *
+ * Rounding to 7 sig figs sits ~8 digits above that platform noise, so the residual
+ * chance of two platforms straddling a rounding boundary is ~10^(7-15) = 1e-8 per
+ * value — negligible even across hundreds of fixtures. Yet 7 sig figs is still
+ * ~0.0001° on a direction, ~1000× finer than any meaningful paleomagnetic precision
+ * (~0.1°), and the digits it drops are themselves trig/reassociation noise, not
+ * signal. A no-op for the short values parsers read verbatim (e.g. Dgeo from toFixed(1)).
  */
-const SIGNIFICANT_DIGITS = 10;
+const SIGNIFICANT_DIGITS = 7;
 
 /** Round a single number to SIGNIFICANT_DIGITS significant figures. */
 const roundToSignificant = (value: number): number =>
@@ -53,12 +57,6 @@ const roundFloatsDeep = (value: any): any => {
 export const fixturePath = (...segments: string[]): string =>
   join(__dirname, '..', '__tests__', 'fixtures', ...segments);
 
-/** Input fixture file names in `directory`, sorted (excludes references and docs). */
-export const listInputs = (directory: string, extensions: string[]): string[] =>
-  readdirSync(directory)
-    .filter((name) => extensions.some((extension) => name.endsWith(extension)))
-    .sort();
-
 /**
  * Compare against — or, under UPDATE_FIXTURES, (re)write — the reference file.
  *
@@ -77,6 +75,15 @@ export const loadExpected = (
     writeFileSync(expectedFile, `${JSON.stringify(actual, null, 2)}\n`);
     return { actual, expected: actual };
   }
+  if (!existsSync(expectedFile)) {
+    throw new Error(
+      `Missing reference ${basename(expectedFile)} — generate it with ` +
+        `UPDATE_FIXTURES=1 npm test, then eyeball the JSON before committing.`,
+    );
+  }
+  // `expected` is read raw and is NOT re-rounded: on-disk references are always
+  // written through the rounded `actual` path above, so they already sit at
+  // SIGNIFICANT_DIGITS. Never hand-edit floats in a *.expected.json file.
   return { actual, expected: JSON.parse(readFileSync(expectedFile, 'utf8')) };
 };
 
@@ -116,12 +123,17 @@ export const describeParserReferenceOutput = ({
   normalizeResult = pinCreated,
 }: ParserReferenceOptions): void => {
   const root = fixturePath('parsers', fixtureDirectory);
-  const inputs = (['real', 'synthetic'] as const).flatMap((bucket) =>
-    readdirSync(join(root, bucket))
+  const inputs = (['real', 'synthetic'] as const).flatMap((bucket) => {
+    const bucketDir = join(root, bucket);
+    // Skip a bucket whose directory doesn't exist (easy to forget when adding a
+    // new parser) so the empty-inputs guard below gives a clear message instead
+    // of readdirSync throwing a raw ENOENT mid-collection.
+    if (!existsSync(bucketDir)) return [];
+    return readdirSync(bucketDir)
       .filter(isInputFile)
       .sort()
-      .map((file) => join(bucket, file)),
-  );
+      .map((file) => join(bucket, file));
+  });
 
   describe(`${name} — reference output`, () => {
     if (inputs.length === 0) {
@@ -132,6 +144,9 @@ export const describeParserReferenceOutput = ({
     }
     it.each(inputs)('%s', (relativePath) => {
       const inputFile = join(root, relativePath);
+      // basename is the parser's `name` arg, which some parsers (PMM, RS3) echo
+      // into their output — so a fixture's filename is load-bearing: renaming a
+      // file means regenerating its reference. Keep fixture names stable.
       const result = parser(readInput(inputFile), basename(relativePath));
       const { actual, expected } = loadExpected(
         `${inputFile}.expected.json`,

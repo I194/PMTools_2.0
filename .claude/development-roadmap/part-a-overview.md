@@ -65,7 +65,7 @@ describeParserReferenceOutput({ parser: parsePMM, fixtureDirectory: 'pmm' });
 
 The helper lives in [`src/test-utils/referenceFixtures.ts`](../../../src/test-utils/referenceFixtures.ts).
 It reads every file in the fixture's `real/` and `synthetic/` dirs, runs the parser,
-pins the non-deterministic `created` timestamp, **rounds every float to 10 significant
+pins the non-deterministic `created` timestamp, **rounds every float to 7 significant
 figures**, and compares to the `.expected.json`. Adding a case = dropping a file into the
 fixture dir. Regenerate references (only after an *intentional* behavior change) with
 `UPDATE_FIXTURES=1 npm test -- <pattern>`.
@@ -73,9 +73,11 @@ fixture dir. Regenerate references (only after an *intentional* behavior change)
 The float rounding matters: parsers/computations that derive values via trig
 (`Math.sin`/`atan2` — e.g. RS3/SQUID directions, and later PCA/VGP/Fisher) are **not**
 bit-identical across platforms (macOS dev vs Linux CI disagree in the ~15th digit).
-Locking full-precision floats passes locally but fails CI. 10 sig figs is far above that
-noise and far below any meaningful precision (~0.1°). This was learned the hard way — a
-hotfix after PR #38 merged with a red CI. **Lesson: wait for CI green before merging.**
+Locking full-precision floats passes locally but fails CI. 7 sig figs sits ~8 digits above
+that noise (residual cross-platform collision ~10^(7-15) ≈ 1e-8 per value) yet is still
+~1000× finer than any meaningful precision (~0.1°). This was learned the hard way — a
+hotfix after PR #38 merged with a red CI (locked at 10 sig figs, later tightened to 7).
+**Lesson: wait for CI green before merging.**
 
 ## Hard rule for Part A: lock as-is, don't fix
 
