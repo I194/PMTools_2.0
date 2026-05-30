@@ -1,18 +1,17 @@
-# fixtures/parsers/csv_dir — SOURCE
+# Fixtures — `parseCSV_DIR`
 
-Fixtures for `parserCSV_DIR` (CSV variant of DIR directional data).
+Reference-output inputs for `src/utils/files/parsers/parserCSV_DIR.ts`.
+Each `<file>.csv` has a `<file>.csv.expected.json` sibling (parser output, `created` pinned).
+Regenerate: `UPDATE_FIXTURES=1 npm test -- --watchAll=false parserCSV_DIR`, then review the diff.
 
-## Layout
+## Columns (as the parser reads them)
+`id, Code, StepRange, N, Dgeo, Igeo, Kgeo, MADgeo, Dstrat, Istrat, Kstrat, MADstrat, Comment`
+(`gcNormal` is derived from `Code` starting with `GC`; `demagType` from the first char of `StepRange`.)
 
-- `real/` — real CSV files including `test-data/lab_results.csv` and any
-  user-reported variants.
-- `synthetic/` — separator variants, quoted fields, empty cells, encoding
-  variants (UTF-8, UTF-8 BOM, Windows-1251).
+## real/
+- `lab_results.csv` — copied from `test-data/lab_results.csv`. Format-accurate DIR CSV (this is the
+  file that is *not* a valid CSV_PMD input — see the csv_pmd notes).
 
-## Real-file origins
-
-_Populated in Phase 1 Step 0.6._
-
-## Synthetic-fixture matrix
-
-_Populated in Phase 1 Step 4._
+## synthetic/
+- `normal_and_reversed.csv` — normal + reversed polarity + a `GC` code.
+- `crlf_line_endings.csv` — D1 regression (`\r\n`).
