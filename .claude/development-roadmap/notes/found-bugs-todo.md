@@ -176,3 +176,65 @@ All **locked as-is** by `src/__tests__/fixtures/computations/*` — none fixed h
   produces genuine zeros as ~1e-15 float noise (e.g. a great circle crossing the equator in
   `getRawPlaneData`); 7-sig-fig relative rounding would keep 7 figs *of that noise* and flake
   across macOS/Linux. The absolute floor sits far above the noise and far below any real value.
+
+## Surfaced in PR 6 (PCA / matrix / McFadden reference output — `statistics/{calculation,matrix,eigManipulations}`)
+
+All **locked as-is** by `src/__tests__/fixtures/computations/{pca_pmd,pca_dir,mcfadden_*,matrix_*,eig_*}`
+— none fixed here. Each reference was independently re-derived and confirmed faithful (matrix
+products and eigenvalue sorts checked by hand; the trig/iterative outputs — PCA eigen-fits,
+McFadden MLE, `strangeRotation`, `getEigenvaluesFast` — checked against the algorithm and domain
+sanity bounds).
+
+- **`calculatePCA_dir` "anchoring by mirroring" is a no-op, and its comment is wrong.**
+  `calculatePCA_dir.ts:44` does `vectors.push(...vectors)` under the comment "When anchoring we
+  mirror the points and add them". It does **not** mirror (no negation) — it duplicates the
+  vectors verbatim. And because `TMatrix` divides by the vector count `N`, doubling every vector
+  leaves the orientation matrix (and therefore its eigenvectors) **identical**: 2N vectors at
+  weight 1/(2N) == N vectors at weight 1/N. So the line changes nothing. Locked by `pca_dir/*`
+  (the references are byte-identical with or without it). Fix later: either implement true
+  antipodal mirroring (`push(...vectors.map(reflect))`) if that was the intent, or delete the
+  dead line and correct the comment, then flip the references if mirroring changes the pole.
+- **`calculatePCA_dir` carries dead code copied from `calculatePCA_pmd`.** `centerMass`,
+  `firstVector`/`lastVector`, `centerMassCoordinates`, `directionVector` and `intensity`
+  (lines 24, 38–39, 49–51) are all computed but never returned — `pcaByReference` only returns
+  `{ direction, MAD }`. Harmless, just cognitive load (and the `factor = 1` divide-by-one on
+  line 33 is likewise a readability-only no-op). Clean up in the same refactor.
+- **`calculateMCFaddenIncMean` hardcodes the F-distribution term to 0.**
+  `calculateMCFaddenIncMean.ts:97` is `const f = 0; // const f = fcalc(2, N - 1);` — the
+  `f / (2 * C * k)` confidence term of the McFadden & Reid (1982) inclination-only α95 is stubbed
+  out, so `a95 = acos(1 - 0.5·(S/C)²)` omits it and is far tighter than the true 95% cone (the
+  `steep_inclinations` fixture locks `a95 ≈ 0.45°` at `k ≈ 70`, where a real α95 would be ~7°).
+  Deterministic, locked by `mcfadden_inc_mean/steep_inclinations`. Fix later: implement `fcalc`
+  (F-distribution quantile) and flip the reference.
+- **`calculateMCFaddenIncMean` crashes for a single inclination (N=1).** `gausspars` returns
+  `null` for `N ≤ 1` (line 6), but the only guard is `if (!absInclinations.length) return null`
+  (empty array only). For one inclination the non-null assertion `gausspars(...)!` does nothing at
+  runtime and `gaussparsRes.MI` (line 47) throws `TypeError: Cannot read properties of null`. Not
+  lockable as a reference (it throws), so recorded here only. Fix later: return early / a sentinel
+  for `N === 1`.
+- **`calculateMcFaddenMean` would index `gcPath[-1]` if a great circle yielded no usable point.**
+  `calculateMcFaddenCombineMean.ts:65–85`: `bestGCdir.dirIndex` starts at `-1`; if every
+  `getRawPlaneData` point were null/never beat `r = 0`, `gcPath[bestGCdir.dirIndex]` reads
+  `gcPath[-1]` → `undefined`, which then poisons the resultant with `NaN`. Not exercised (real
+  great circles always yield a best point), so noted, not locked. Fix later: guard `dirIndex >= 0`.
+- **`calculatePCA_pmd` MAD silently becomes 0 on degenerate eigenvalues.** When the smallest two
+  eigenvalues vanish (a perfectly collinear fit), `Math.sqrt(tau[0])`/the planes ratio produce
+  `Infinity`/`NaN`; the `isFinite(madValue) ? madValue : 0` guards (lines 63, 70) then report
+  `MAD = 0`. Correct-as-written and unreachable for real scattered data, but the "0 means
+  perfect *or* degenerate" overload is undocumented. Noted, not separately locked.
+
+**Naming/representation quirks (locked, harmless — flagged so the references don't confuse a reader):**
+
+- **`calculateMcFaddenMean`'s `MAD` field actually holds α₉₅.** `calculateMcFaddenCombineMean.ts:130`
+  returns the Fisher 95% confidence cone (`a95`) under the key `MAD` — same overload as the
+  Fisher-mean quirk already noted for PR 5. The `mcfadden_combine_mean/*` references lock α₉₅
+  values in a field named `MAD` (verified equal to `81/√k`-consistent `csd` and the `acos` cone).
+
+**Refactor target already on the roadmap (restated here because PR 6 locks around it):**
+
+- **`normalizeEigenValues` / `sortEigenvectors` mutate their `eig` argument in place.**
+  `eigManipulations.ts:7,31` — `sortEigenvectors` calls `normalizeEigenValues`, which rescales
+  `eig.lambda.x` in place and returns void. The PR-6 `eig_sort_eigenvectors` / `eig_normalize_eigenvalues`
+  tests therefore hand the function a freshly-cloned object each call so the reference stays stable.
+  The plan's Step-3 refactor (return a new object instead of mutating) is the proper fix; flip
+  nothing — the references already capture the post-normalization values.

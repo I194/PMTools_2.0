@@ -1,0 +1,24 @@
+{
+  "directions": [
+    {
+      "declination": 15,
+      "inclination": 50
+    },
+    {
+      "declination": 20,
+      "inclination": 45
+    },
+    {
+      "declination": 10,
+      "inclination": 55
+    },
+    {
+      "declination": 195,
+      "inclination": -50
+    },
+    {
+      "declination": 200,
+      "inclination": -45
+    }
+  ]
+}
