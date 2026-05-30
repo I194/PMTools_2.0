@@ -1,6 +1,7 @@
 import * as XLSX from 'xlsx';
 import { readFileSync, readdirSync } from 'fs';
 import { join } from 'path';
+import { IDirData, IPmdData, IVGPData } from '../utils/GlobalTypes';
 import { xlsx_to_csv } from '../utils/files/subFunctions';
 import { fixturePath, loadExpected } from './referenceFixtures';
 
@@ -21,10 +22,121 @@ import { fixturePath, loadExpected } from './referenceFixtures';
  * through the very `xlsx_to_csv` bridge the matching parser uses — locking the
  * reviewable cell text, not the non-deterministic zip bytes.
  *
+ * Caveat — float rounding does NOT reach converter output. `loadExpected` rounds
+ * floats to 7 sig figs to absorb cross-platform trig noise, but converters emit
+ * numbers already baked into strings (`toFixed`, exponential, SheetJS formatting), so
+ * every digit here is locked verbatim. That is fine today (inputs are exact decimals
+ * and the formatters are deterministic), but a future fixture that pushes a
+ * trig-derived or long-fraction value through string output would NOT be shielded —
+ * check such a value for macOS↔Linux stability before locking it.
+ *
  * Regenerate references ONLY after an intentional behavior change:
  *   UPDATE_FIXTURES=1 npm test -- --watchAll=false <pattern>
  * then eyeball the JSON before committing. Never regenerate just to go green.
  */
+
+/**
+ * Compile-time witnesses anchoring the fixture-row key lists to the live types.
+ * `Record<keyof T, true>` fails `npm run typecheck` the instant T gains, loses, or
+ * renames a field, so these lists cannot silently fall out of sync with
+ * IPmdData/IDirData/IVGPData. `assertRowShape` (below) then validates every parsed
+ * `*.input.json` row against them at runtime — catching a fixture that drifts from
+ * the type (missing / renamed / typo'd field). Both halves are needed because the
+ * types extend an index signature (`IObjectKeys`), which defeats a plain
+ * `: IPmdData` annotation, and `JSON.parse` is `any` regardless.
+ */
+const PMD_STEP_KEYS: Record<keyof IPmdData['steps'][number], true> = {
+  id: true,
+  step: true,
+  x: true,
+  y: true,
+  z: true,
+  mag: true,
+  Dgeo: true,
+  Igeo: true,
+  Dstrat: true,
+  Istrat: true,
+  a95: true,
+  comment: true,
+  demagType: true,
+};
+
+const DIR_INTERPRETATION_KEYS: Record<keyof IDirData['interpretations'][number], true> = {
+  id: true,
+  label: true,
+  code: true,
+  gcNormal: true,
+  stepRange: true,
+  stepCount: true,
+  Dgeo: true,
+  Igeo: true,
+  Dstrat: true,
+  Istrat: true,
+  MADgeo: true,
+  Kgeo: true,
+  MADstrat: true,
+  Kstrat: true,
+  comment: true,
+  demagType: true,
+};
+
+const VGP_KEYS: Record<keyof IVGPData['vgps'][number], true> = {
+  id: true,
+  label: true,
+  dec: true,
+  inc: true,
+  a95: true,
+  lat: true,
+  lon: true,
+  poleLatitude: true,
+  poleLongitude: true,
+  paleoLatitude: true,
+  dp: true,
+  dm: true,
+  age: true,
+  plateId: true,
+};
+
+interface RowShape {
+  /** Pull the array of row objects the converters in this group iterate. */
+  rows: (input: any) => unknown;
+  /** Every key the row type declares (from the compile-time witness above). */
+  allKeys: string[];
+  /** Subset of `allKeys` the type marks optional (`?`), so absence is allowed. */
+  optionalKeys: string[];
+}
+
+/** Per-group row shape, keyed by the same `group` the test files pass. */
+const ROW_SHAPE: Record<string, RowShape> = {
+  pmd: { rows: (input) => input.steps, allKeys: Object.keys(PMD_STEP_KEYS), optionalKeys: [] },
+  dir: {
+    rows: (input) => input.interpretations,
+    allKeys: Object.keys(DIR_INTERPRETATION_KEYS),
+    optionalKeys: ['gcNormal'],
+  },
+  vgp: { rows: (input) => input.vgps, allKeys: Object.keys(VGP_KEYS), optionalKeys: [] },
+};
+
+/** Throw if any row in a parsed fixture has a missing required or unknown key. */
+const assertRowShape = (input: any, shape: RowShape, fixtureName: string): void => {
+  const rows = shape.rows(input);
+  if (!Array.isArray(rows) || rows.length === 0) {
+    throw new Error(`${fixtureName}: expected a non-empty array of rows for this converter group`);
+  }
+  const allowed = new Set(shape.allKeys);
+  const required = shape.allKeys.filter((key) => !shape.optionalKeys.includes(key));
+  rows.forEach((row: any, index) => {
+    const missing = required.filter((key) => !(key in row));
+    const unknown = Object.keys(row).filter((key) => !allowed.has(key));
+    if (missing.length || unknown.length) {
+      throw new Error(
+        `${fixtureName} row ${index} drifted from the type shape — ` +
+          `missing [${missing.join(', ') || 'none'}], unknown [${unknown.join(', ') || 'none'}]. ` +
+          `Fix the fixture, or — if the type changed on purpose — update the *_KEYS witness in converterFixtures.ts.`,
+      );
+    }
+  });
+};
 
 /** Run an async converter and return the payload it passed to the mocked download(). */
 export const captureDownload = async (
@@ -98,8 +210,14 @@ export const describeConverterReferenceOutput = ({
       return Object.keys(converters).map((converterName) => ({ inputFile, base, converterName }));
     });
 
+    const shape = ROW_SHAPE[group];
+
     it.each(cases)('$base → $converterName', async ({ inputFile, base, converterName }) => {
       const inputData = JSON.parse(readFileSync(join(root, inputFile), 'utf8'));
+      // Guard the fixture against type drift before feeding it to the converter:
+      // a renamed/removed field in IPmdData/IDirData/IVGPData would otherwise leave
+      // these tests green on an input that no real parser could ever produce.
+      if (shape) assertRowShape(inputData, shape, inputFile);
       const { payload, filename, type } = await captureDownload(download, () =>
         converters[converterName](inputData),
       );

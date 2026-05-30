@@ -97,6 +97,20 @@ All **locked as-is** by `src/__tests__/fixtures/converters/*` — none fixed her
   decimals via `Number(v).toFixed(2)` (`192.345` → `192.34`, `6.789` → `6.79`), wrapping each in
   quotes on its own line. The CSV/XLSX VGP exporters keep all 13 columns at full precision.
   Locked by `vgp/*.toVGP.expected.json`. (`toGPML` is timestamp-free XML — fully deterministic.)
+- **`toGPML` mislabels its MIME type as `text/csv`.** The download call is
+  `download(res, '${filename}.gpml', 'text/csv;charset=utf-8')` (`converters/vgp.ts`) even though
+  the payload is GPML/XML — should be `application/xml` (or `application/gpml+xml`). Cosmetic
+  today (the browser save dialog uses the `.gpml` extension regardless), surfaced because the
+  golden locks the `type` field. Locked by `vgp/*.toGPML.expected.json`. Fix later: pass the XML
+  MIME type.
+- **`toPMD` truncates the specimen name to 10 chars and lets it collide with `a=`.** The metadata
+  line writes the name in a fixed-width 10-char field (`dataModel_metaPMD.name: 10`) with no
+  separator before the `a=` token, so a name ≥ 10 chars is cut AND butts straight against the
+  azimuth: `oriented_with_comment` → `oriented_wa=162.9 ...` (same fixed-width-truncation class as
+  the `toDIR` 6-char label cut, but here it also visually merges two fields). The `.csv`/`.xlsx`
+  PMD exporters don't have this — they carry the full name only as the download *filename*, not in
+  a width-bounded cell. Locked by `pmd/oriented_with_comment.toPMD.expected.json`. Fix later: pad
+  the name field with a guaranteed separator (or widen/relax it) so name and `a=` never merge.
 
 **Note on the `.xlsx` references (not a bug, a harness choice).** The converter golden for an
 `.xlsx` output is the **`xlsx_to_csv` text projection** of the produced workbook, not its raw zip
