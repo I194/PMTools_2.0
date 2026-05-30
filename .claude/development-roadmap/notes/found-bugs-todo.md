@@ -47,3 +47,19 @@ See `.claude/development-roadmap/01-testing.md` → "Discovered During Fixture S
   platform noise, well below meaningful precision (~0.1°), and a no-op for verbatim-read values. Any future computation
   test (PCA/VGP/Fisher) inherits this automatically. **Process lesson:** wait for CI green
   before merging; local-green is not enough for trig-derived outputs.
+
+## Surfaced in PR 3 (XLSX_PMD / XLSX_DIR / XLSX_SitesLatLon reference output)
+
+- **XLSX wrappers don't relabel `format`.** `parserXLSX_PMD`/`_DIR`/`_SitesLatLon`
+  delegate to the CSV parser via `xlsx_to_csv`, so the output `format` is `CSV_PMD` /
+  `CSV_DIR` / `CSV_SitesLatLon` even though the input was an `.xlsx` file — the format
+  field reflects the internal CSV bridge, not the real input format. Cosmetic (no
+  consumer branches on the `XLSX_*` vs `CSV_*` distinction today), **locked as-is** by
+  the `xlsx_*` fixtures. If a future feature needs to distinguish import formats, give
+  each XLSX wrapper its own `format` label and flip the references.
+- **`xlsx_to_csv` blindly concatenates every non-empty sheet.** `subFunctions.ts`
+  joins all sheets' CSV with `\n`, so a multi-data-sheet workbook would merge rows from
+  every sheet into one parse (extra/garbage steps); only empty sheets are skipped
+  (`if (csv.length)`). Not exercised with multiple *data* sheets here (would lock
+  surprising behavior); the `xlsx_pmd/synthetic/with_empty_second_sheet.xlsx` fixture
+  locks just the empty-sheet-skip path. Note for future multi-sheet import work.
