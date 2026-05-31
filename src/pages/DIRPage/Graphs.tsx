@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../services/store/hooks';
 import {
   addHiddenDirectionsIDs,
   removeHiddenDirectionsIDs,
+  setCenteredByMean as setCenteredByMeanAction,
   setCutoffEnabled,
 } from '../../services/reducers/dirPage';
 import Direction from '../../utils/graphs/classes/Direction';
@@ -24,18 +25,19 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
   const graphRef = useRef<HTMLDivElement>(null);
   const graphToExportRef = useRef<HTMLDivElement>(null);
   const { menuItems, settings } = useDIRGraphSettings();
-  const { reference, currentInterpretation, cutoffEnabled, cutoffAngle } = useAppSelector(
-    (state) => state.dirPageReducer,
-  );
+  const { reference, currentInterpretation, centeredByMean, cutoffEnabled, cutoffAngle } =
+    useAppSelector((state) => state.dirPageReducer);
 
-  // Cutoff enable/angle live in Redux so the export menu can read them; the
-  // remaining cutoff visibility toggles stay local to the graph.
+  // Center-by-mean and cutoff enable/angle live in Redux so the directions table
+  // and export menu can read them; the remaining cutoff visibility toggles stay
+  // local to the graph.
+  const setCenteredByMean: React.Dispatch<React.SetStateAction<boolean>> = (value) =>
+    dispatch(setCenteredByMeanAction(typeof value === 'function' ? value(centeredByMean) : value));
   const enableCutoff = cutoffEnabled;
   const setEnableCutoff: React.Dispatch<React.SetStateAction<boolean>> = (value) =>
     dispatch(setCutoffEnabled(typeof value === 'function' ? value(cutoffEnabled) : value));
 
   const [graphSize, setGraphSize] = useState<number>(300);
-  const [centeredByMean, setCenteredByMean] = useState<boolean>(false);
   const [showCutoffCircle, setShowCutoffCircle] = useState<boolean>(true);
   const [showCutoffOuterDots, setShowCutoffOuterDots] = useState<boolean>(false);
 

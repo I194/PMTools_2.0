@@ -19,6 +19,7 @@ interface IInitialState {
   showSelectionInput: boolean;
   showVGPMean: boolean;
   labelModeIsNumeric: boolean;
+  centeredByMean: boolean;
   cutoffEnabled: boolean;
   cutoffAngle: number;
 }
@@ -39,6 +40,7 @@ const initialState: IInitialState = {
   showSelectionInput: false,
   showVGPMean: false,
   labelModeIsNumeric: false,
+  centeredByMean: false,
   cutoffEnabled: false,
   cutoffAngle: 45,
 };
@@ -84,7 +86,11 @@ const dirPage = createSlice({
     setStatisticsMode(state, action) {
       state.statisticsMode = action.payload;
     },
-    // Cutoff view-state (shared between the DIR stereonet and the export menu)
+    // Center-by-mean / cutoff view-state (shared between the DIR stereonet,
+    // the directions table and the export menu)
+    setCenteredByMean(state, action: { payload: boolean }) {
+      state.centeredByMean = action.payload;
+    },
     setCutoffEnabled(state, action: { payload: boolean }) {
       state.cutoffEnabled = action.payload;
     },
@@ -259,6 +265,7 @@ export const {
   setReversedDirectionsIDs,
   addReversedDirectionsIDs,
   setStatisticsMode,
+  setCenteredByMean,
   setCutoffEnabled,
   setCutoffAngle,
   toggleCommentsInput,
