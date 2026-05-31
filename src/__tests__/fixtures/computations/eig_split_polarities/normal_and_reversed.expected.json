@@ -1,0 +1,58 @@
+{
+  "normalDirections": [
+    {
+      "declination": 15,
+      "inclination": 50,
+      "length": 1
+    },
+    {
+      "declination": 20,
+      "inclination": 45,
+      "length": 1
+    },
+    {
+      "declination": 10,
+      "inclination": 55,
+      "length": 1
+    }
+  ],
+  "reversedDirections": [
+    {
+      "declination": 15,
+      "inclination": 50,
+      "length": 1
+    },
+    {
+      "declination": 20,
+      "inclination": 45,
+      "length": 1
+    }
+  ],
+  "combinedDirections": [
+    {
+      "declination": 15,
+      "inclination": 50,
+      "length": 1
+    },
+    {
+      "declination": 20,
+      "inclination": 45,
+      "length": 1
+    },
+    {
+      "declination": 10,
+      "inclination": 55,
+      "length": 1
+    },
+    {
+      "declination": 15,
+      "inclination": 50,
+      "length": 1
+    },
+    {
+      "declination": 20,
+      "inclination": 45,
+      "length": 1
+    }
+  ]
+}

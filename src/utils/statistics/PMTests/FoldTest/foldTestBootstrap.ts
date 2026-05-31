@@ -6,7 +6,10 @@ import { drawBootstrap } from '../../bootstrapManipulations';
 import { getEigenvaluesFast } from '../../eigManipulations';
 import { TMatrix } from '../../matrix';
 
-type CoordsWithBeddingPars = {
+// Exported for reference-output testing of the deterministic fold-test core
+// (`unfold` / `findBed`). These are pure, randomness-free functions — see
+// FoldTest/__tests__/foldTestDeterministicCore.test.ts (Part A "Layer A").
+export type CoordsWithBeddingPars = {
   coordinates: Coordinates;
   beddingAzimuth: number; // azimuth = strike + 90 degrees
   beddingDip: number;
@@ -125,7 +128,7 @@ const foldTestBootstrap = (
 
 export default foldTestBootstrap;
 
-function findBed(cartesianCoordsGeo: Coordinates, cartesianCoordsStrat: Coordinates) {
+export function findBed(cartesianCoordsGeo: Coordinates, cartesianCoordsStrat: Coordinates) {
   const degrad = 180 / Math.PI;
   let strike, striker, dip;
 
@@ -195,7 +198,7 @@ export const FNarcsin = (x: number) => {
   return 90 - FNarccos(x);
 };
 
-const unfold = (vectors: Array<CoordsWithBeddingPars>, iteration: number) => {
+export const unfold = (vectors: Array<CoordsWithBeddingPars>, iteration: number) => {
   // Function unfold
   // Unfolds a bunch of vectors following their bedding
 

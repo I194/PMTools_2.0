@@ -106,7 +106,8 @@ the script writes `<name>.pmagpy.json` next to it.
 | `watson` | _stub_ | `pmag.watsons_v` (planned) |
 | `vgp` | _stub_ | `pmag.dia_vgp` (planned) |
 | `mcfadden` | _stub_ | `pmag.dolnp` (planned) |
-| `fold_test` | _stub_ | `pmag.bootstrap_fold_test` (planned) |
+| `fold_test` | _stub_ (Layer B, seeded `runFoldTest`) | `pmag.bootstrap_fold_test` (planned) |
+| `fold_unfold` | self-generating (seed 42) — see `gen_foldtest.py` | `dotilt` + eigen (Layer A core: `findBed`/`unfold`) |
 | `cutoff` | _stub_ | Vandamme cutoff (planned) |
 | `bootstrap` | _stub_ | seeded bootstrap (planned) |
 
