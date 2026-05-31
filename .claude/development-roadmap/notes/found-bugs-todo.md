@@ -273,3 +273,43 @@ strategy (lock the pure core `findBed`/`unfold` now; seed + extract `runFoldTest
   - **Why a plain golden-master wasn't enough:** locking PMTools alone would have enshrined −17 %
     as "correct". The PmagPy cross-check is what exposed the defect — the validation half of
     Layer A, not just the regression half.
+
+## Surfaced in parserPMD reference output (Part A — final parser lock)
+
+Locked as-is by `src/__tests__/fixtures/parsers/pmd/*` (the `describeParserReferenceOutput`
+harness; `parserPMD.test.ts`). This was the last in-scope parser to get a reference net
+(`parserMDIR` remains out of scope). Eyeballing the generated references caught a real
+data-loss bug a green test alone would not have:
+
+- **🔴 `parserPMD` silently drops 3-digit `°C`-suffixed steps (4-char step-column overflow).**
+  The step token is `line.slice(0, 4)` and X is `line.slice(4, 14)` (fixed-width). In the
+  Crimea 2013 "`STEP`"-dialect files, step labels are `NRM`, then bare temperatures written
+  **with a `°C` suffix**: `90°C`, `150°C`, … `470°C`. A 2-digit label (`90°C`) is exactly 4
+  chars and fits; `NRM` (3 chars) fits. But a 3-digit label (`150°C`) is **5 chars**, so
+  `slice(0, 4)` keeps `"150°"` (drops the `C`) and `slice(4, 14)` then starts at that stray
+  `C` → `rawX = "C-1.23E-07"` → `+rawX = NaN` → the row is pushed to `validation.invalidRows`
+  and dropped from `steps`. Net effect on `crimea2013_nrm_celsius_dialect_143.pmd`: a 12-step
+  demagnetization parses to **2 steps** (`NRM`, `90°C`) with **10 invalid rows**, all reported
+  as failing field `X`. Downstream PCA/Fisher would then run on 2 points. Real data loss, not
+  cosmetic — affects ~23 files in this Crimea sub-archive.
+  - **Independent of D2 and D3.** D2 is a `parserRS3` ISO-8859 step-name *cosmetic* note; this
+    is `parserPMD` and it *loses rows*. The `°` here reads as `U+FFFD` (ISO-8859 source decoded
+    as UTF-8), but that is incidental: even a correctly-decoded `°` makes `"150°C"` 5 chars, so
+    the overflow happens regardless of encoding. D3 only changes `demagType` inference, not the
+    column slicing, so this row loss persists after D3 lands.
+  - **Not fixed here** (Part A locks behavior as-is). Fix later: parse the step token tolerant
+    of width (e.g. split the label/numeric boundary on whitespace, or strip a trailing `°C`/`mT`
+    unit before the fixed-width numeric slice) so the X column realigns; then regenerate
+    `crimea2013_nrm_celsius_dialect_143.pmd.expected.json` (the 10 rows should become valid steps).
+  - **Why eyeballing earned its keep:** the test is *green* — it faithfully locks the buggy
+    2-step output. Only reading the reference (`steps: 2`, `invalidRows: 10`) revealed that the
+    "current behavior" being locked is itself lossy. This is the regression-net catching a bug
+    the golden-master would otherwise have silently enshrined.
+
+- **`demagType` is inferred from the first letter only (`line.slice(0, 1)`), pre-D3.** On
+  `polarural2012_unprefixed_steps_1-1.pmd` (bare-number steps) and `crimea` (NRM/`°C`) the
+  current parser yields `demagType = undefined`; on `siberia` (`T 20`…) the first step's `T`
+  sets `'thermal'`. These are the pre-D3 behaviors the open PR #36 will flip (scan the whole
+  block + emit `AMBIGUOUS_DEMAG_TYPE`); their references are locked now precisely so that fix
+  becomes a clean reference-flip. Not a separate bug — recorded so the references aren't
+  mistaken for the post-D3 contract.

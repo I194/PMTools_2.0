@@ -1,8 +1,12 @@
 # Part A — Remaining PR Plan
 
 > Companion to [part-a-overview.md](part-a-overview.md) (read that first for the "why").
-> This is the step-by-step for a future session. Total Part A = ~6 PRs; **1 and 2 are
-> merged**, so 3–6 remain.
+> **Status (2026-05-31): PRs 1–6 + Layer A all merged.** The final piece — locking
+> `parsePMD` (PR 7, branch `phase-1/parserpmd-reference-output`) — closes the parser
+> surface and the Part A Definition of Done. The PR-3/4/5/6 sections below are kept as the
+> as-built record. The only remaining Part-A-adjacent work is the explicitly-deferred
+> tangled computations (see the bottom section) and the still-open D3 fix (PR #36), which
+> PR 7 leaves as a clean reference-flip.
 
 ## Conventions every PR follows
 
@@ -203,12 +207,17 @@ deferral is about **non-determinism + impurity** (`Math.random` + Dispatch/timer
 baked into the function), not about how the code runs. Layer A is the cheapest, highest-value
 slice and does not wait on Step 3.
 
-**Also worth a small cleanup PR (optional):** migrate the three *old-style* parser tests
-that predate the harness — `parserPMD.test.ts` (248 lines), `parserDIR.test.ts` (110),
-`parserSQUID.test.ts` (90) — onto `describeParserReferenceOutput` for consistency. Caveat:
-they encode the D1/D3/D5 regression intent as *targeted* assertions, not plain snapshots;
-converting to golden snapshots loses that intent unless you keep a couple of focused
-assertions alongside. Judgment call — do it only if the consistency is worth it.
+**Also worth a small cleanup PR (optional):** two *old-style* parser tests still predate the
+harness — `parserDIR.test.ts` (110 lines) and `parserSQUID.test.ts` (90) — and could move onto
+`describeParserReferenceOutput` for consistency. (`parsePMD` is now on the harness — PR 7. The
+248-line `parserPMD.test.ts` referenced earlier never lived on `dev`; it is the targeted D3 test
+on the open PR #36 branch, which stays as the science-fix test.) Caveat: the two remaining
+old-style tests encode the D1/D5 regression intent as *targeted* assertions, not plain
+snapshots; converting to golden snapshots loses that intent unless you keep a couple of focused
+assertions alongside. Judgment call — do it only if the consistency is worth it. When migrating,
+note `parserDIR` returns the `ParseResult` wrapper, so the harness's `pinCreated` (generalized in
+PR 7) already handles its nested `data.created`; `parserSQUID` returns bare `IPmdData` (top-level
+`created`, the common case).
 
 **Optional integration-level goldens (low priority):** `calculateStatisticsPMD`,
 `calculateStatisticsDIR` (orchestrators), and the two `rawStatistics*ToInterpretation`
