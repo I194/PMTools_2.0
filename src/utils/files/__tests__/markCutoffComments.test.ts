@@ -55,7 +55,7 @@ describe('markCutoffComments', () => {
     expect(rejected.comment).toBe(`outlier; ${CUTOFF_COMMENT_MARKER}`);
   });
 
-  it('is idempotent — does not add a duplicate CUT95 marker', () => {
+  it('is idempotent — does not add a duplicate CUT45 marker', () => {
     const data = makeData([makeInterpretation({ Dgeo: 0, Igeo: 40 })]);
 
     const once = markCutoffComments(data, centreMean, 'geographic', 45);

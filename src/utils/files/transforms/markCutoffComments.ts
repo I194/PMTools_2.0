@@ -3,11 +3,11 @@ import Direction from '../../graphs/classes/Direction';
 import { Reference } from '../../graphs/types';
 
 /** Marker appended to the comment of directions rejected by the cutoff. */
-export const CUTOFF_COMMENT_MARKER = 'CUT95';
+export const CUTOFF_COMMENT_MARKER = 'CUT45';
 
 /**
  * Returns a copy of the parsed DIR dataset where every direction whose angular
- * distance from the mean exceeds the cutoff angle has the "CUT95" marker
+ * distance from the mean exceeds the cutoff angle has the "CUT45" marker
  * appended to its comment. The angular test mirrors the 45° cutoff drawn on the
  * DIR stereonet (DIRPage/Graphs.tsx). Directions are kept in place — none are
  * removed — so the export records which directions the cutoff rejected.
@@ -15,7 +15,7 @@ export const CUTOFF_COMMENT_MARKER = 'CUT95';
  * @param {Direction} mean - mean direction the cutoff is measured from
  * @param {Reference} reference - which coordinates to test ('stratigraphic' uses Dstrat/Istrat, otherwise Dgeo/Igeo)
  * @param {number} cutoffAngle - cutoff angle in degrees (45 in the common case)
- * @returns {IDirData} a new dataset with CUT95 added to rejected directions' comments
+ * @returns {IDirData} a new dataset with CUT45 added to rejected directions' comments
  */
 const markCutoffComments = (
   data: IDirData,
