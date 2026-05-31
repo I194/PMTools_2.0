@@ -35,7 +35,8 @@ tags them `CUT45`. Test on **/app/dir** with `test-data/sample.dir`.
 
 ## 4. Cutoff → CUT45 in "Export with hidden"
 - Enable the **45° cutoff** on the stereonet (the outliers get hidden on the
-  graph and drop out of the table).
+  graph; in the bottom table they stay listed but their index column shows `-`,
+  and they are dropped from the regular export).
 - **Export with hidden as CSV**. In the `Comment` column, the directions beyond
   45° from the mean must contain **`CUT45`**:
   - empty comment → `CUT45`
@@ -51,6 +52,12 @@ tags them `CUT45`. Test on **/app/dir** with `test-data/sample.dir`.
 - Reverse one direction (swap-polarity icon). Both the table and every export
   show the **flipped** D/I (declination +180, inclination negated), then centered
   if the toggle is on.
+- **Reversal + cutoff (regression).** Reverse the whole reverse-polarity cluster
+  (e.g. test02/04/06/08), Fisher-mean all 8 → one tight cluster on the mean. Enable
+  the **45° cutoff**: the drawn circle must match what it cuts — directions **inside**
+  the circle stay, none of the aligned cluster is hidden (the table keeps indices
+  1–8, no `-`). Directions visibly **outside** the circle (e.g. a reverse-polarity
+  one left un-reversed) are still cut. Switching Geo↔Strat re-evaluates the cutoff.
 
 ## 6. No mean → no centering, no crash
 - Before computing a Fisher mean (fresh reload), the **Center by mean** toggle has
