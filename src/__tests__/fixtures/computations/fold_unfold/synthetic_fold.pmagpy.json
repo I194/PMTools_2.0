@@ -1,0 +1,92 @@
+{
+  "pmagpy_version": "4.3.14",
+  "seed": 42,
+  "note": "True best-unfolding optimum for this seeded dataset. PMTools' unfold locks index = -17 (see found-bugs-todo.md: findBed azimuth vs correctBedding strike).",
+  "bestUntiltPercent": 100,
+  "tau1Curve": [
+    {
+      "untiltPercent": -50,
+      "tau1": 0.463367
+    },
+    {
+      "untiltPercent": -40,
+      "tau1": 0.457657
+    },
+    {
+      "untiltPercent": -30,
+      "tau1": 0.474042
+    },
+    {
+      "untiltPercent": -20,
+      "tau1": 0.509501
+    },
+    {
+      "untiltPercent": -10,
+      "tau1": 0.556078
+    },
+    {
+      "untiltPercent": 0,
+      "tau1": 0.608251
+    },
+    {
+      "untiltPercent": 10,
+      "tau1": 0.662626
+    },
+    {
+      "untiltPercent": 20,
+      "tau1": 0.716831
+    },
+    {
+      "untiltPercent": 30,
+      "tau1": 0.768974
+    },
+    {
+      "untiltPercent": 40,
+      "tau1": 0.817434
+    },
+    {
+      "untiltPercent": 50,
+      "tau1": 0.860783
+    },
+    {
+      "untiltPercent": 60,
+      "tau1": 0.897766
+    },
+    {
+      "untiltPercent": 70,
+      "tau1": 0.927314
+    },
+    {
+      "untiltPercent": 80,
+      "tau1": 0.948555
+    },
+    {
+      "untiltPercent": 90,
+      "tau1": 0.960839
+    },
+    {
+      "untiltPercent": 100,
+      "tau1": 0.963751
+    },
+    {
+      "untiltPercent": 110,
+      "tau1": 0.957124
+    },
+    {
+      "untiltPercent": 120,
+      "tau1": 0.941046
+    },
+    {
+      "untiltPercent": 130,
+      "tau1": 0.915857
+    },
+    {
+      "untiltPercent": 140,
+      "tau1": 0.882142
+    },
+    {
+      "untiltPercent": 150,
+      "tau1": 0.840718
+    }
+  ]
+}

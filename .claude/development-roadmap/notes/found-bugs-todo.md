@@ -238,3 +238,38 @@ sanity bounds).
   tests therefore hand the function a freshly-cloned object each call so the reference stays stable.
   The plan's Step-3 refactor (return a new object instead of mutating) is the proper fix; flip
   nothing — the references already capture the post-normalization values.
+
+## Surfaced in Layer A (fold-test deterministic core — `PMTests/FoldTest/foldTestBootstrap.ts`)
+
+Locked as-is by `src/__tests__/fixtures/computations/fold_unfold/*` and cross-checked against
+PmagPy (`scripts/gen_foldtest.py`). This is the first finding from the layered fold-test
+strategy (lock the pure core `findBed`/`unfold` now; seed + extract `runFoldTest` later).
+
+- **🔴 The bootstrap fold test unfolds about the wrong axis (90° bedding-convention bug).**
+  `unfold` (`foldTestBootstrap.ts`) calls
+  `vector.coordinates.correctBedding(vector.beddingAzimuth, 0.01 * pct * vector.beddingDip)`.
+  But `findBed` returns `azimuth = strike + 90` (a **dip direction**), whereas
+  `Coordinates.correctBedding(strike, plunge)` expects a **strike** as its first argument — it
+  computes `dipDirection = strike + 90` *itself*. So the effective dip direction is off by 90°
+  and every fractional untilting rotates about the wrong horizontal axis. On a seeded synthetic
+  fold whose true optimum is **~100 %** (PmagPy confirms on the 10 % grid: tau1 0.61 → 0.96;
+  ~98 % on a finer grid), PMTools' `unfold`
+  peaks near **0 %** (locked index −17 %; tau1 *falls* 0.61 → 0.44). Both agree exactly at 0 %,
+  then diverge in opposite directions — i.e. the geographic state is read correctly but the
+  unfolding is applied backwards.
+  - **Self-consistency proof (convention, not data):** build `strat = geo.correctBedding(strike,
+    dip)` with PMTools' own forward model; `findBed(geo, strat)` returns `azimuth = strike + 90`;
+    re-applying `correctBedding(azimuth, dip)` does **not** recover `strat`, but
+    `correctBedding(azimuth − 90, dip)` recovers it exactly. So within PMTools' own definitions
+    `findBed`'s output is not directly consumable by `correctBedding`.
+  - **Impact:** the bootstrap fold test (the `mcFad`-adjacent Fold-Test tool in the DIR UI)
+    reports a geologically wrong best-unfolding percentage. This is a real scientific defect, not
+    cosmetic. **Not fixed here** (Part A locks behavior; fixing scientific logic is out of scope
+    for the test net). Fix later: pass the strike (`beddingAzimuth − 90`) into `correctBedding`,
+    or give `correctBedding` a dip-direction contract; then regenerate `fold_unfold/*` (index
+    should become ~100 %) and re-verify against `synthetic_fold.pmagpy.json`.
+  - **Also check `foldTestClassic.ts`** — it shares the same `findBed`/`correctBedding` pieces and
+    likely carries the same bug; not yet locked.
+  - **Why a plain golden-master wasn't enough:** locking PMTools alone would have enshrined −17 %
+    as "correct". The PmagPy cross-check is what exposed the defect — the validation half of
+    Layer A, not just the regression half.

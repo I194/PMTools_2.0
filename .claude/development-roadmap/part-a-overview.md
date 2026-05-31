@@ -94,7 +94,7 @@ effort.
 - **One PR at a time.** Open it, stop, wait for explicit review/approval before the next.
 - Full descriptive names in code (domain abbreviations like `Dgeo`, `a95` are fine).
 
-## Current status (2026-05-30)
+## Current status (2026-05-31)
 
 | PR | Scope | Status |
 |----|-------|--------|
@@ -102,12 +102,20 @@ effort.
 | 2 | `parseCSV_DIR`, `parseCSV_SitesLatLon`, `parsePMM`, `parseRS3` + harness refactor into `describeParserReferenceOutput` | **merged** (#38) |
 | 3 | XLSX parsers (×3) | **merged** (#41) |
 | 4 | converters (golden snapshots of serialized output, ×11) | **merged** (#42) |
-| 5 | simple pure stats (Fisher, VGP, Butler, cutoff, basic-stats, raw-plane; ×6) | in review |
-| 6 | PCA / matrix / McFadden core | planned |
+| 5 | simple pure stats (Fisher, VGP, Butler, cutoff, basic-stats, raw-plane; ×6) | **merged** (#43) |
+| 6 | PCA / matrix / McFadden core | on branch `phase-1/pca-matrix-mcfadden-reference-output`, pending review |
+| A | **Layer A**: fold-test deterministic core (`findBed` + `unfold`) locked + PmagPy cross-check | done locally, uncommitted — follow-up PR after #6 |
 
-After PR 6, Part A is effectively done: every parser, converter, and *pure* computation
-has a reference-output test. Tangled computations (bootstrap/fold/reversal tests,
-conglomerates) need small refactors first and are explicitly **deferred** — see the plan.
+After PR 6, the *pure* surface of Part A is done: every parser, converter, and pure
+computation has a reference-output test. Tangled computations (bootstrap/fold/reversal
+tests, conglomerates) are random + impure and need small refactors first — but they are
+**not all-or-nothing**. See the plan's **layered strategy (A/B/C)**: the deterministic
+*kernel* of each (e.g. the fold test's `findBed`/`unfold`) can be locked now (Layer A)
+without any refactor, the seeded full pipeline later (Layer B), and PmagPy agreement
+statistically (Layer C). Layer A for the fold test is already done — and its PmagPy
+cross-check **uncovered a real scientific bug** (90° bedding-convention error → wrong
+best-unfolding %; found-bugs-todo "Surfaced in Layer A"), proving the cross-check earns its
+keep over a plain golden-master.
 
 ## How this relates to the old Phase 1
 

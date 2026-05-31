@@ -162,13 +162,46 @@ separate `refactor(...)` PR (the roadmap's Step 3), and these belong to a later 
 Part A's 6.
 
 - `PMTests/FoldTest/foldTestBootstrap.ts` — timers + RNG + Dispatch. Extract a pure
-  `runFoldTest(input, rng)` core first.
+  `runFoldTest(input, rng)` core first. **Partially covered now via "Layer A"** (see the
+  layered strategy below): the randomness-free inner functions `findBed` + `unfold` are
+  already exported and locked (`fixtures/computations/fold_unfold/*`) with a PmagPy
+  cross-check that **uncovered a real bug** (90° bedding-convention error → wrong
+  best-unfolding %; see found-bugs-todo "Surfaced in Layer A").
 - `PMTests/ReversalTest/reversalTestBootstrap.tsx` — RNG + Dispatch. Extract
-  `bootstrapCommonMeanTest(...)`.
+  `bootstrapCommonMeanTest(...)`. Layer A candidate: lock any pure inner helper now.
 - `bootstrapManipulations.ts` — randomness. Inject a seeded integer RNG
   (`src/test-utils/seededRandom.ts` exists).
 - `PMTests/ConglomeratesTest/conglomeratesTest.ts` — calls `alert()`. Lift the alert to
   the UI boundary first (roadmap refactor #4), then it's pure.
+
+### Layered strategy for randomized tests (fold / reversal / bootstrap)
+
+The bootstrap tests look untestable because their output is random — but the randomness is
+a thin shell around a deterministic kernel. Three layers, in priority order:
+
+- **Layer A — lock the deterministic core now (no refactor).** The per-sample math
+  (`findBed` + `unfold` for the fold test; the eigen/Tmatrix work) is pure and
+  randomness-free — it just needs `export`. Golden-master it **and** cross-check it against
+  PmagPy on the *same fixed input* (no RNG → exact comparison is possible). This is where
+  most of the science and most of the refactor risk lives. **Done for the fold test** — and
+  it immediately paid off: the PmagPy cross-check found the bedding-convention bug a plain
+  golden-master would have silently enshrined. Do the same for the reversal/conglomerate
+  cores.
+- **Layer B — seed the RNG, then golden-master the whole pipeline.** Needs the Step-3
+  extraction (`runFoldTest(input, rng)` with an injected seeded RNG; `seededRandom.ts`
+  exists). Same seed + input → identical output every run *and* across a future
+  web-worker/Rust port, so it guards "did my refactor change behavior". Fixtures live under
+  `src/__tests__/fixtures/fold_test/` (reserved for exactly this).
+- **Layer C — cross-check against PmagPy statistically.** You can't byte-match PmagPy across
+  languages (different RNG streams), but bootstrap confidence intervals converge: run both
+  with large N and assert the 95 % bounds agree within a calibrated tolerance. This is a
+  property/statistical test (loose tolerance), distinct from the Layer A/B golden-masters —
+  it validates "our science agrees with the field standard" without identical draws.
+
+Key point: execution substrate (JS / worker / Rust) is irrelevant to all three — the
+deferral is about **non-determinism + impurity** (`Math.random` + Dispatch/timer/localStorage
+baked into the function), not about how the code runs. Layer A is the cheapest, highest-value
+slice and does not wait on Step 3.
 
 **Also worth a small cleanup PR (optional):** migrate the three *old-style* parser tests
 that predate the harness — `parserPMD.test.ts` (248 lines), `parserDIR.test.ts` (110),
