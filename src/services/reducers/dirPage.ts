@@ -19,6 +19,8 @@ interface IInitialState {
   showSelectionInput: boolean;
   showVGPMean: boolean;
   labelModeIsNumeric: boolean;
+  cutoffEnabled: boolean;
+  cutoffAngle: number;
 }
 
 const initialState: IInitialState = {
@@ -37,6 +39,8 @@ const initialState: IInitialState = {
   showSelectionInput: false,
   showVGPMean: false,
   labelModeIsNumeric: false,
+  cutoffEnabled: false,
+  cutoffAngle: 45,
 };
 
 const dirPage = createSlice({
@@ -79,6 +83,13 @@ const dirPage = createSlice({
     },
     setStatisticsMode(state, action) {
       state.statisticsMode = action.payload;
+    },
+    // Cutoff view-state (shared between the DIR stereonet and the export menu)
+    setCutoffEnabled(state, action: { payload: boolean }) {
+      state.cutoffEnabled = action.payload;
+    },
+    setCutoffAngle(state, action: { payload: number }) {
+      state.cutoffAngle = action.payload;
     },
     toggleCommentsInput(state) {
       state.isCommentsInputVisible = !state.isCommentsInputVisible;
@@ -248,6 +259,8 @@ export const {
   setReversedDirectionsIDs,
   addReversedDirectionsIDs,
   setStatisticsMode,
+  setCutoffEnabled,
+  setCutoffAngle,
   toggleCommentsInput,
   setCommentsInput,
   showSelectionInput,
