@@ -13,6 +13,7 @@ import {
 } from '../../services/reducers/dirPage';
 import Direction from '../../utils/graphs/classes/Direction';
 import { strangeRotation } from '../../utils/statistics/matrix';
+import reverseDirectionsByIds from '../../utils/files/transforms/reverseDirectionsByIds';
 
 interface IGraphs {
   dataToShow: IDirData | null;
@@ -25,8 +26,14 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
   const graphRef = useRef<HTMLDivElement>(null);
   const graphToExportRef = useRef<HTMLDivElement>(null);
   const { menuItems, settings } = useDIRGraphSettings();
-  const { reference, currentInterpretation, centeredByMean, cutoffEnabled, cutoffAngle } =
-    useAppSelector((state) => state.dirPageReducer);
+  const {
+    reference,
+    currentInterpretation,
+    centeredByMean,
+    cutoffEnabled,
+    cutoffAngle,
+    reversedDirectionsIDs,
+  } = useAppSelector((state) => state.dirPageReducer);
 
   // Center-by-mean and cutoff enable/angle live in Redux so the directions table
   // and export menu can read them; the remaining cutoff visibility toggles stay
@@ -60,8 +67,14 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
       meanDirection.inclination,
       meanDirection.length,
     );
-    // затем берём все имеющиеся векторы и фильтруем их по их удалённости от среднего направления
-    const newDirsToHideIDs = dataToShow.interpretations
+    // Test the cutoff against the SAME reversed/aligned coordinates the stereonet
+    // plots and the Fisher mean was computed in. Without this, a reversed direction
+    // sitting on the mean would be measured at its raw antipodal position (~180°
+    // away) and wrongly hidden — so the 45° circle drawn on screen would not match
+    // which dots it actually cuts. Mirrors the export path (reverseDirectionsByIds
+    // then markCutoffComments). When nothing is reversed this is a no-op copy.
+    const alignedData = reverseDirectionsByIds(dataToShow, reversedDirectionsIDs);
+    const newDirsToHideIDs = alignedData.interpretations
       .filter((direction) => {
         const { Dgeo, Igeo, Dstrat, Istrat } = direction;
         const inReferenceCoords: [number, number] =
@@ -71,7 +84,7 @@ const Graphs: FC<IGraphs> = ({ dataToShow }) => {
       })
       .map((dir) => dir.id);
     return newDirsToHideIDs;
-  }, [currentInterpretation, dataToShow]);
+  }, [currentInterpretation, dataToShow, reversedDirectionsIDs, reference, cutoffAngle]);
 
   useEffect(() => {
     if (dataToShow && enableCutoff && !showCutoffOuterDots) {
