@@ -103,19 +103,27 @@ effort.
 | 3 | XLSX parsers (×3) | **merged** (#41) |
 | 4 | converters (golden snapshots of serialized output, ×11) | **merged** (#42) |
 | 5 | simple pure stats (Fisher, VGP, Butler, cutoff, basic-stats, raw-plane; ×6) | **merged** (#43) |
-| 6 | PCA / matrix / McFadden core | on branch `phase-1/pca-matrix-mcfadden-reference-output`, pending review |
-| A | **Layer A**: fold-test deterministic core (`findBed` + `unfold`) locked + PmagPy cross-check | done locally, uncommitted — follow-up PR after #6 |
+| 6 | PCA / matrix / McFadden core | **merged** (#44) |
+| A | **Layer A**: fold-test deterministic core (`findBed` + `unfold`) locked + PmagPy cross-check | **merged** (in #44) |
+| 7 | `parsePMD` — the last in-scope parser (`ParseResult` wrapper) + harness `pinCreated` generalized | branch `phase-1/parserpmd-reference-output`, pending review |
 
-After PR 6, the *pure* surface of Part A is done: every parser, converter, and pure
-computation has a reference-output test. Tangled computations (bootstrap/fold/reversal
-tests, conglomerates) are random + impure and need small refactors first — but they are
-**not all-or-nothing**. See the plan's **layered strategy (A/B/C)**: the deterministic
-*kernel* of each (e.g. the fold test's `findBed`/`unfold`) can be locked now (Layer A)
-without any refactor, the seeded full pipeline later (Layer B), and PmagPy agreement
-statistically (Layer C). Layer A for the fold test is already done — and its PmagPy
-cross-check **uncovered a real scientific bug** (90° bedding-convention error → wrong
-best-unfolding %; found-bugs-todo "Surfaced in Layer A"), proving the cross-check earns its
-keep over a plain golden-master.
+With PR 7 the *pure* surface of Part A is complete: every parser (except out-of-scope
+`parserMDIR`), every converter, and every pure computation has a reference-output test.
+`parsePMD` was the final gap — it was the only parser returning the `ParseResult` wrapper
+(nested `data.created`) and its lock was entangled with the still-open D3 science fix
+(PR #36); PR 7 locks its current behavior cleanly so PR #36 becomes a pure reference-flip.
+Its eyeball **caught a real data-loss bug** (3-digit `°C` step labels overflow the 4-char
+step column → 10 rows silently dropped; found-bugs-todo "Surfaced in parserPMD reference
+output") — the regression net earning its keep again.
+
+Tangled computations (bootstrap/fold/reversal tests, conglomerates) are random + impure and
+need small refactors first — but they are **not all-or-nothing**. See the plan's **layered
+strategy (A/B/C)**: the deterministic *kernel* of each (e.g. the fold test's
+`findBed`/`unfold`) can be locked now (Layer A) without any refactor, the seeded full
+pipeline later (Layer B), and PmagPy agreement statistically (Layer C). Layer A for the fold
+test is already done — and its PmagPy cross-check **uncovered a real scientific bug** (90°
+bedding-convention error → wrong best-unfolding %; found-bugs-todo "Surfaced in Layer A"),
+proving the cross-check earns its keep over a plain golden-master.
 
 ## How this relates to the old Phase 1
 

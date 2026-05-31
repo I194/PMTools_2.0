@@ -87,11 +87,26 @@ export const loadExpected = (
   return { actual, expected: JSON.parse(readFileSync(expectedFile, 'utf8')) };
 };
 
-/** Pin the volatile `created` timestamp; leave everything else untouched. */
-const pinCreated = (result: any): any =>
-  result && typeof result === 'object' && 'created' in result
-    ? { ...result, created: PINNED_CREATED }
-    : result;
+/**
+ * Pin the volatile `created` timestamp wherever a parser stamps it, then leave
+ * everything else untouched. Most parsers return a bare data object with a
+ * top-level `created` (e.g. `parseCSV_PMD`, `parseRS3`); the ParseResult-wrapped
+ * parsers (`parsePMD`, and the parserDIR/SQUID migrations planned next) nest it
+ * under `data`. Pinning both shapes keeps every parser test on the same 3-line
+ * default. A no-op when neither field is present, so existing references are
+ * untouched. Never mutates the input.
+ */
+const pinCreated = (result: any): any => {
+  if (!result || typeof result !== 'object') return result;
+  let pinned = result;
+  if ('created' in pinned) {
+    pinned = { ...pinned, created: PINNED_CREATED };
+  }
+  if (pinned.data && typeof pinned.data === 'object' && 'created' in pinned.data) {
+    pinned = { ...pinned, data: { ...pinned.data, created: PINNED_CREATED } };
+  }
+  return pinned;
+};
 
 /** A fixture input is any file that is not a reference, a doc, or a dotfile. */
 const isInputFile = (name: string): boolean =>
