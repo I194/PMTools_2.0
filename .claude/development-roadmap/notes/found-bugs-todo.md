@@ -313,3 +313,18 @@ data-loss bug a green test alone would not have:
   block + emit `AMBIGUOUS_DEMAG_TYPE`); their references are locked now precisely so that fix
   becomes a clean reference-flip. Not a separate bug — recorded so the references aren't
   mistaken for the post-D3 contract.
+
+- **`validation.invalidRows[].rowNumber` is off by one — and not blank-line-robust.** The row
+  pointer is `index + 3` (`parserPMD.ts:81`), where `index` runs over `lines.slice(2)` of
+  `lines = split(eol).slice(1).filter((line) => line.length > 1)`. Three non-data lines precede
+  the first step (the dropped first line + metadata + the `PAL`/`STEP` column header), so the
+  correct base offset is `+4`; the comment "+2 for header lines (empty + metadata)" forgot the
+  column header, so every reported `rowNumber` is **one less than the real file line**. Locked
+  as-is: synthetic `invalid_rows_nan_fields` reports `rowNumber` 4 & 6 for the bad rows physically
+  on lines 5 & 7; `crimea2013_nrm_celsius_dialect_143` reports 5–14 for physical lines 6–15. Worse,
+  the `.filter(length > 1)` strips blank lines *before* `index` is assigned, so an interior blank
+  shifts the mapping further — `rowNumber` is really "position among non-blank lines − 1", not a
+  file line. Cosmetic (a "which row is bad?" hint for the user; no effect on the parsed data),
+  **not fixed here** (Part A locks behavior as-is). Fix later: index over physical lines (don't
+  pre-filter) with the correct base offset, then regenerate the affected references. Recorded so a
+  future reader doesn't mistake the locked `rowNumber`s for file line numbers.
