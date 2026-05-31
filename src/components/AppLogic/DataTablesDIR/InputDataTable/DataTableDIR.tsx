@@ -26,16 +26,22 @@ import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore
 
 import { useTheme } from '@mui/material/styles';
 import { primaryColor } from '../../../../utils/ThemeConstants';
-import Direction from '../../../../utils/graphs/classes/Direction';
 import { DIRDataTableColumns, IDataTableDIR } from '../types';
+import reverseDirectionsByIds from '../../../../utils/files/transforms/reverseDirectionsByIds';
+import centerDirectionsByMean from '../../../../utils/files/transforms/centerDirectionsByMean';
+import meanDirectionsOf from '../../../../utils/files/transforms/meanDirectionsOf';
 
 const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
 
-  const { selectedDirectionsIDs, hiddenDirectionsIDs, reversedDirectionsIDs } = useAppSelector(
-    (state) => state.dirPageReducer,
-  );
+  const {
+    selectedDirectionsIDs,
+    hiddenDirectionsIDs,
+    reversedDirectionsIDs,
+    centeredByMean,
+    currentInterpretation,
+  } = useAppSelector((state) => state.dirPageReducer);
 
   // selectionModel is array of ID's of rows
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
@@ -208,9 +214,17 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
     col.hideSortIcons = true;
   });
 
+  // Apply the same reversal + center-by-mean the stereonet uses, so the table
+  // matches the graph (and the centered export). Centering needs a Fisher mean.
+  const means = meanDirectionsOf(currentInterpretation);
+  let displayData = data ? reverseDirectionsByIds(data, reversedDirectionsIDs) : null;
+  if (displayData && centeredByMean && means) {
+    displayData = centerDirectionsByMean(displayData, means.geographic, means.stratigraphic);
+  }
+
   let visibleIndex = 1;
-  const rows: Array<DataGridDIRFromDIRRow> = data
-    ? data.interpretations.map((interpretation, index) => {
+  const rows: Array<DataGridDIRFromDIRRow> = displayData
+    ? displayData.interpretations.map((interpretation) => {
         const {
           id,
           label,
@@ -227,16 +241,6 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
           Kstrat,
           comment,
         } = interpretation;
-        let geoDirection = new Direction(Dgeo, Igeo, 1);
-        let stratDirection = new Direction(Dstrat, Istrat, 1);
-        if (reversedDirectionsIDs.includes(id)) {
-          geoDirection = geoDirection.reversePolarity();
-          stratDirection = stratDirection.reversePolarity();
-        }
-        const DgeoFinal = +geoDirection.declination.toFixed(1);
-        const IgeoFinal = +geoDirection.inclination.toFixed(1);
-        const DstratFinal = +stratDirection.declination.toFixed(1);
-        const IstratFinal = +stratDirection.inclination.toFixed(1);
         return {
           id,
           index: hiddenDirectionsIDs.includes(id) ? '-' : visibleIndex++,
@@ -244,10 +248,10 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
           code: code as StatisticsModeDIR,
           stepRange,
           stepCount,
-          Dgeo: DgeoFinal,
-          Igeo: IgeoFinal,
-          Dstrat: DstratFinal,
-          Istrat: IstratFinal,
+          Dgeo: +Dgeo.toFixed(1),
+          Igeo: +Igeo.toFixed(1),
+          Dstrat: +Dstrat.toFixed(1),
+          Istrat: +Istrat.toFixed(1),
           confidenceRadiusGeo: +MADgeo.toFixed(1),
           accuracyGeo: +(Kgeo || 0).toFixed(1),
           confidenceRadiusStrat: +MADstrat.toFixed(1),
