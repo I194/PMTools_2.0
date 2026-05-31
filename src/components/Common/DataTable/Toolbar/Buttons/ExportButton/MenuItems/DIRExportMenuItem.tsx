@@ -7,9 +7,13 @@ import { IDirData } from '../../../../../../../utils/GlobalTypes';
 interface DIRExport {
   as: 'dir' | 'pmm' | 'csv' | 'xlsx';
   data: IDirData;
+  label?: string;
 }
 
-const DIRExportMenuItem: FC<DIRExport> = ({ as, data }, props: GridExportMenuItemProps<{}>) => {
+const DIRExportMenuItem: FC<DIRExport> = (
+  { as, data, label },
+  props: GridExportMenuItemProps<{}>,
+) => {
   const { hideMenu } = props;
 
   const exportAs = {
@@ -50,7 +54,7 @@ const DIRExportMenuItem: FC<DIRExport> = ({ as, data }, props: GridExportMenuIte
         hideMenu?.();
       }}
     >
-      {exportAs[as].label}
+      {label ?? exportAs[as].label}
     </MenuItem>
   );
 };
