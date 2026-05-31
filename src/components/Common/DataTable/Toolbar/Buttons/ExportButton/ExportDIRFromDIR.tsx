@@ -7,39 +7,39 @@ import DIRExportMenuItem from './MenuItems/DIRExportMenuItem';
 type ExportDIRFromDIRProps = ButtonProps & {
   data: IDirData;
   /**
-   * Directions rotated so the Fisher mean sits at the stereonet centre (with
-   * CUT95 markers when the cutoff is active). When provided, "Export centered"
-   * menu items are shown alongside the regular ones.
+   * Every direction including the ones hidden on the graph, with CUT45 markers
+   * on directions the cutoff rejects. When provided, "Export with hidden" menu
+   * items are shown alongside the regular ones.
    */
-  centeredData?: IDirData | null;
+  withHiddenData?: IDirData | null;
 };
 
 const ExportDIRFromDIR = (props: ExportDIRFromDIRProps) => {
-  const { data, centeredData, ...containerProps } = props;
+  const { data, withHiddenData, ...containerProps } = props;
   return (
     <GridToolbarExportContainer {...containerProps}>
       {/* <DIRExportMenuItem as={'dir'} data={data}/> */}
       <DIRExportMenuItem as={'pmm'} data={data} />
       <DIRExportMenuItem as={'csv'} data={data} />
       <DIRExportMenuItem as={'xlsx'} data={data} />
-      {centeredData && [
+      {withHiddenData && [
         <DIRExportMenuItem
-          key="centered-pmm"
+          key="with-hidden-pmm"
           as={'pmm'}
-          data={centeredData}
-          label="Export centered as PMM"
+          data={withHiddenData}
+          label="Export with hidden as PMM"
         />,
         <DIRExportMenuItem
-          key="centered-csv"
+          key="with-hidden-csv"
           as={'csv'}
-          data={centeredData}
-          label="Export centered as CSV"
+          data={withHiddenData}
+          label="Export with hidden as CSV"
         />,
         <DIRExportMenuItem
-          key="centered-xlsx"
+          key="with-hidden-xlsx"
           as={'xlsx'}
-          data={centeredData}
-          label="Export centered as XLSX"
+          data={withHiddenData}
+          label="Export with hidden as XLSX"
         />,
       ]}
     </GridToolbarExportContainer>
