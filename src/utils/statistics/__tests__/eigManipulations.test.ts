@@ -10,7 +10,12 @@ import {
 import { describeComputationReferenceOutput } from '../../../test-utils/computationFixtures';
 
 // getEigenvaluesFast(T): closed-form eigenvalues (O.K. Smith 1961) of a symmetric 3x3,
-// normalized to sum 1. Input is a symmetric matrix with non-zero off-diagonals.
+// normalized to sum 1. Cases cover all three phi-branches of the closed form: a generic
+// matrix with non-zero off-diagonals takes the acos branch (distinct eigenvalues, r in
+// (-1, 1)); the two diagonal degenerate matrices have repeated eigenvalues that drive r
+// onto its guard branches — prolate diag(4,1,1) → r >= 1 (phi = 0), oblate diag(4,4,1) →
+// r <= -1 (phi = pi/3). Their m and p are exact integers, so r lands on 1 / -1 with no
+// float noise and the guard fires identically on every platform.
 describeComputationReferenceOutput({
   name: 'getEigenvaluesFast',
   fixtureDirectory: 'eig_eigenvalues_fast',
