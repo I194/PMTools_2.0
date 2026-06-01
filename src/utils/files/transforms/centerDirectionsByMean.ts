@@ -1,12 +1,13 @@
 import { IDirData } from '../../GlobalTypes';
 import Direction from '../../graphs/classes/Direction';
-import { strangeRotation } from '../../statistics/matrix';
+import centerDirectionOnMean from '../../graphs/centerDirectionOnMean';
 
 /**
  * Rotates a single direction so that the given mean direction is moved to the
- * centre of the stereonet (declination 0, inclination 90). This is the exact
- * two-step rotation sequence used by dataToStereoDIR for the on-screen
- * "Center by mean" view, so exported data matches what the user sees.
+ * centre of the stereonet (declination 0, inclination 90), rounding the result
+ * to 0.1°. Delegates to the shared centerDirectionOnMean helper — the same
+ * rotation dataToStereoDIR uses for the on-screen "Center by mean" view — so
+ * exported data matches what the user sees.
  * @param {number} declination - direction declination, degrees
  * @param {number} inclination - direction inclination, degrees
  * @param {Direction} mean - the mean direction to centre on
@@ -17,12 +18,11 @@ const centerDirectionAboutMean = (
   inclination: number,
   mean: Direction,
 ): [number, number] => {
-  const directionVector = new Direction(declination, inclination, 1);
-  const firstRotationDirection = new Direction(mean.declination, 0, 1);
-  const secondRotationDirection = new Direction(0, mean.inclination - 90, 1);
-  const firstRotation = strangeRotation(directionVector, firstRotationDirection);
-  const secondRotation = strangeRotation(firstRotation, secondRotationDirection);
-  const [rotatedDeclination, rotatedInclination] = secondRotation.toArray();
+  const [rotatedDeclination, rotatedInclination] = centerDirectionOnMean(
+    declination,
+    inclination,
+    mean,
+  );
   return [+rotatedDeclination.toFixed(1), +rotatedInclination.toFixed(1)];
 };
 

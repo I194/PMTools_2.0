@@ -6,7 +6,8 @@ import { dirToCartesian2D } from '../../dirToCartesian';
 import { graphSelectedDotColor } from '../../../ThemeConstants';
 import createStereoPlaneData from './createPlaneData/createStereoPlaneData';
 import Direction from '../../classes/Direction';
-import { strangeRotation } from '../../../statistics/matrix';
+import centerDirectionOnMean from '../../centerDirectionOnMean';
+import reverseDirectionsByIds from '../../../files/transforms/reverseDirectionsByIds';
 import calculateCutoff from '../../../statistics/calculation/calculateCutoff';
 
 const dataToStereoDIR = (
@@ -19,30 +20,17 @@ const dataToStereoDIR = (
   statistics?: RawStatisticsDIR,
   cutoff?: boolean,
 ) => {
-  let directions = data.interpretations.filter(
+  // Reverse polarity first (by id), then drop hidden directions. Reversal
+  // preserves order and count, so the index-based hidden filter is unaffected.
+  // Uses the shared reverseDirectionsByIds so the plotted dots flip exactly the
+  // same way (and with the same 0.1° rounding) as the table and the export.
+  const reversedInterpretations = reverseDirectionsByIds(
+    data,
+    reversedDirectionsIDs,
+  ).interpretations;
+  const directions = reversedInterpretations.filter(
     (direction, index) => !hiddenDirectionsIDs.includes(index + 1),
   );
-
-  directions = directions.map((direction, index) => {
-    const { id, Dgeo, Igeo, Dstrat, Istrat } = direction;
-    let geoDirection = new Direction(Dgeo, Igeo, 1);
-    let stratDirection = new Direction(Dstrat, Istrat, 1);
-    if (reversedDirectionsIDs.includes(id)) {
-      geoDirection = geoDirection.reversePolarity();
-      stratDirection = stratDirection.reversePolarity();
-    }
-    const DgeoFinal = +geoDirection.declination.toFixed(1);
-    const IgeoFinal = +geoDirection.inclination.toFixed(1);
-    const DstratFinal = +stratDirection.declination.toFixed(1);
-    const IstratFinal = +stratDirection.inclination.toFixed(1);
-    return {
-      ...direction,
-      Dgeo: DgeoFinal,
-      Igeo: IgeoFinal,
-      Dstrat: DstratFinal,
-      Istrat: IstratFinal,
-    };
-  });
 
   // annotations for dots ('id' field added right in the Data.tsx as dot index)
   const labels = directions.map((direction) => direction.label);
@@ -120,12 +108,11 @@ const dataToStereoDIR = (
       reference === 'stratigraphic' ? [Dstrat, Istrat] : [Dgeo, Igeo];
     let finalCoords: [number, number] = inReferenceCoords;
     if (centeredByMean && meanDirection) {
-      const directionVector = new Direction(finalCoords[0], finalCoords[1], 1);
-      const firstRotationDirection = new Direction(meanDirection.dirData[0], 0, 1);
-      const secondRotationDirection = new Direction(0, meanDirection.dirData[1] - 90, 1);
-      const firstRotation = strangeRotation(directionVector, firstRotationDirection);
-      const secondRotation = strangeRotation(firstRotation, secondRotationDirection);
-      finalCoords = secondRotation.toArray();
+      finalCoords = centerDirectionOnMean(
+        finalCoords[0],
+        finalCoords[1],
+        new Direction(meanDirection.dirData[0], meanDirection.dirData[1], 1),
+      );
     }
     return finalCoords;
   });
