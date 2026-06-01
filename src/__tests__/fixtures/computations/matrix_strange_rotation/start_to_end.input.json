@@ -1,0 +1,10 @@
+{
+  "start": {
+    "declination": 10,
+    "inclination": 30
+  },
+  "end": {
+    "declination": 200,
+    "inclination": -40
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "filename": "oriented_with_comment.pmd",
+  "type": "text/plain;charset=utf-8",
+  "eol": "CRLF",
+  "lines": [
+    " ",
+    "oriented_wa=162.9   b= 28.0   s=270.0   d= 12.0   v= 1.0E-6m3",
+    " PAL  Xc (Am2)  Yc (Am2)  Zc (Am2)  MAG(A/m)   Dg    Ig    Ds    Is   a95 ",
+    "NRM  -2.85E-08  1.57E-08  2.34E-08  4.05E-08 339.6  51.2  12.4  47.8  0.9  outlier, re-measured",
+    "T570 -1.20E-09  5.00E-10  8.00E-10  1.52E-09 341.0  49.0  14.0  45.0  2.1  endpoint",
+    ""
+  ]
+}

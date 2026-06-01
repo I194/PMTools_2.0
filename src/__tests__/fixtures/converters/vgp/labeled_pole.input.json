@@ -1,0 +1,23 @@
+{
+  "name": "labeled_pole",
+  "vgps": [
+    {
+      "id": 1,
+      "label": "Site 7 mean",
+      "dec": 0.05,
+      "inc": 89.994,
+      "a95": 1.005,
+      "lat": -33.9,
+      "lon": 18.4,
+      "poleLatitude": -12.34,
+      "poleLongitude": 9.876,
+      "paleoLatitude": 0,
+      "dp": 0.5,
+      "dm": 1,
+      "age": 0,
+      "plateId": 0
+    }
+  ],
+  "format": "VGP",
+  "created": "1970-01-01T00:00:00.000Z"
+}

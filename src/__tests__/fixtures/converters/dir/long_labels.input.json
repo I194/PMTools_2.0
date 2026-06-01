@@ -1,0 +1,25 @@
+{
+  "name": "long_labels",
+  "interpretations": [
+    {
+      "id": 1,
+      "label": "SITE-001-A",
+      "code": "DirPCA",
+      "gcNormal": false,
+      "demagType": "alternating field",
+      "stepRange": "M010-M080",
+      "stepCount": 11,
+      "Dgeo": 9.8,
+      "Igeo": 50.1,
+      "Dstrat": 7.4,
+      "Istrat": 46.6,
+      "MADgeo": 6,
+      "MADstrat": 6.2,
+      "Kgeo": 102.3,
+      "Kstrat": 97.8,
+      "comment": "two, commas, here"
+    }
+  ],
+  "format": "PMM",
+  "created": "1970-01-01T00:00:00.000Z"
+}

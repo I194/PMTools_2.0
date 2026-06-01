@@ -1,0 +1,100 @@
+{
+  "data": {
+    "metadata": {
+      "name": "invalid_rows_nan_fields.pmd",
+      "a": 0,
+      "b": 0,
+      "s": 220,
+      "d": 30,
+      "v": 0.000008
+    },
+    "steps": [
+      {
+        "id": 1,
+        "step": "T000",
+        "x": 5e-8,
+        "y": -2e-8,
+        "z": 3e-8,
+        "mag": 0.00742,
+        "Dgeo": 338.2,
+        "Igeo": 36.9,
+        "Dstrat": 350.1,
+        "Istrat": 25.4,
+        "a95": 0,
+        "comment": "",
+        "demagType": "thermal"
+      },
+      {
+        "id": 2,
+        "step": "T200",
+        "x": 4.5e-8,
+        "y": -1.8e-8,
+        "z": 2.7e-8,
+        "mag": 0.00668,
+        "Dgeo": 338.2,
+        "Igeo": 36.9,
+        "Dstrat": 350,
+        "Istrat": 25.3,
+        "a95": 0,
+        "comment": "",
+        "demagType": "thermal"
+      },
+      {
+        "id": 3,
+        "step": "T400",
+        "x": 3.2e-8,
+        "y": -1.2e-8,
+        "z": 2e-8,
+        "mag": 0.00482,
+        "Dgeo": 339.5,
+        "Igeo": 38.7,
+        "Dstrat": 351.5,
+        "Istrat": 27,
+        "a95": 0,
+        "comment": "",
+        "demagType": "thermal"
+      },
+      {
+        "id": 4,
+        "step": "T500",
+        "x": 2e-8,
+        "y": -8e-9,
+        "z": 1.2e-8,
+        "mag": 0.00297,
+        "Dgeo": 338.2,
+        "Igeo": 36.9,
+        "Dstrat": 350,
+        "Istrat": 25.3,
+        "a95": 0,
+        "comment": "",
+        "demagType": "thermal"
+      }
+    ],
+    "format": "PMD",
+    "created": "1970-01-01T00:00:00.000Z"
+  },
+  "validation": {
+    "invalidRows": [
+      {
+        "rowNumber": 4,
+        "fileName": "invalid_rows_nan_fields.pmd",
+        "invalidFields": [
+          {
+            "field": "X",
+            "rawValue": "XXXXXXXX"
+          }
+        ]
+      },
+      {
+        "rowNumber": 6,
+        "fileName": "invalid_rows_nan_fields.pmd",
+        "invalidFields": [
+          {
+            "field": "Y",
+            "rawValue": ""
+          }
+        ]
+      }
+    ]
+  }
+}

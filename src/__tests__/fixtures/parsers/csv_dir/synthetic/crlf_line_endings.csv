@@ -1,0 +1,3 @@
+id,Code,StepRange,N,Dgeo,Igeo,Kgeo,MADgeo,Dstrat,Istrat,Kstrat,MADstrat,Comment
+CR-01,DirOPCA,T300-T580,8,15.0,52.0,120.0,4.5,13.0,48.0,115.0,4.7,crlf row
+CR-02,GC,T200-T560,6,190.0,-50.0,90.0,6.0,188.0,-46.0,86.0,6.2,reversed

@@ -29,3 +29,8 @@ yarn-error.log*
 .claude/issues/
 .claude/settings.json
 .claude/settings.local.json
+
+# Real-data archive used to source Phase 1 parser fixtures.
+# Ivan curates which files migrate to src/__tests__/fixtures/parsers/<format>/real/.
+# The full archive (404 files across 2011-2014 expedition data) stays out of the repo.
+/test-data/potential-data

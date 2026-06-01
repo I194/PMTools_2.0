@@ -6,6 +6,20 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '2.6.5',
+    date: 'June 1, 2026',
+    items: [
+      'DIR page: new "Export centered" option (PMM/CSV/XLSX) — rotates both geographic and stratigraphic directions about their Fisher mean before export.',
+      'DIR page: centered exports now include a CUT45 comment when the 45° cutoff is enabled.',
+      'DIR page: added "Export with hidden" on the main directions table.',
+      'DIR page: the directions table now rotates by mean when Center-by-mean is enabled; center-by-mean and the cutoff reset when the current DIR file changes.',
+      'DIR page: fixed the 45° cutoff not re-syncing after a reference or reversal change.',
+      'SQUID parser: AF fields are now converted from Oersted to mT, step names are zero-padded (M000, M010, …), and the trailing ARM-acquisition block is dropped to match the reference converter.',
+      'Parsers: all file parsers now handle classic Mac (CR-only) line endings.',
+      'Reliability: added a comprehensive reference-output regression test suite covering all parsers, converters, and core scientific computations (PCA, Fisher mean, McFadden, fold test) to guard against future regressions.',
+    ],
+  },
+  {
     version: '2.6.4',
     date: 'April 8, 2026',
     items: [

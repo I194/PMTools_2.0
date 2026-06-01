@@ -20,6 +20,9 @@ Establish a test suite that:
 - No UI component tests (Phase 2).
 - No tests for Redux slices in their current shape — they will be replaced in Phase 6.
 - No migration to Vitest — Jest ships with `react-scripts` and is ready today. The Jest → Vitest migration happens in Phase 6 and is trivial (~95% API compatibility).
+- **No legacy XLS support (Excel 97-2003 binary `.xls`).** PMTools was created in 2021 — pre-2021 files are not in scope, ever. PMTools reads/writes only modern OpenXML `.xlsx` produced by PMTools itself or by tooling explicitly conforming to PMTools schema. Legacy `.xls` files encountered in user archives are out-of-scope and never become test fixtures.
+- **No `.jr6` parser.** In 3 years of PMTools no user has requested it; users with JR6 instruments convert to the supported formats. We will not introduce a JR6 parser in Phase 1 or any later phase unless real demand emerges.
+- **No `.mdir` test suite.** Even synthetic — the format is dead, no real files exist in any current archive, and the parser is scheduled for removal in a future cleanup. `parserMDIR.ts` is excluded from the Phase 1 100% coverage gate; coverage tooling treats it as `coveragePathIgnorePatterns`.
 
 ## Oracle Strategy
 
@@ -53,7 +56,7 @@ PmagPy (Tauxe / Swanson-Hysell) is the de-facto standard in paleomagnetism and i
 - A Python helper script `scripts/generate_fixtures.py` reads each input file in `test-data/` and `src/__tests__/fixtures/`, runs the equivalent PmagPy routine (`pmag.fisher_mean`, `pmag.doprinc`, `pmag.dolnp`, etc.), and writes `.pmagpy.json` next to each input.
 - Python is **only** needed when regenerating fixtures locally. CI consumes the committed JSON, so no Python in CI.
 - `scripts/README.md` documents: `pip install pmagpy`, PmagPy version used, how to regenerate.
-- Any numeric delta between PMTools and PmagPy is investigated. Outcome is either: (a) PMTools has a bug, fixed with `fix(science):` commit; or (b) PMTools uses a different documented convention (e.g., Watson F-test vs Vw), documented in `SOURCE.md` for that fixture.
+- Any numeric delta between PMTools and PmagPy is investigated. Outcome is either: (a) PMTools has a bug, fixed with `fix(science):` commit; or (b) PMTools uses a different documented convention (e.g., Watson F-test vs Vw), documented in `README.md` for that fixture.
 
 ### Tertiary: external published literature
 
@@ -67,7 +70,7 @@ Cross-checks for edge cases and worked examples not covered by the thesis or Pma
 - **Watson 1956, 1983** — randomness test, Vw test (cited).
 - **Efron 1979 / Tauxe 1991** — bootstrap method (cited).
 
-Each literature-sourced fixture has a `SOURCE.md` sibling explaining paper / page / equation used.
+Each literature-sourced fixture has a `README.md` sibling explaining paper / page / equation used.
 
 ### Tolerance
 
@@ -115,37 +118,37 @@ src/__tests__/fixtures/
 │   ├── sample_from_testdata.pmagpy.json
 │   ├── mad_zero_regression.pmd                 # captures v2.6.3 fix
 │   ├── mad_zero_regression.expected.json
-│   └── SOURCE.md
+│   └── README.md
 ├── fisher/
 │   ├── thesis_fisher_formula.json              # §1.4–1.5 hand-computed
 │   ├── thesis_fisher_formula.expected.json
 │   ├── fisher_1953_table2.json
 │   ├── fisher_1953_table2.expected.json
-│   └── SOURCE.md
+│   └── README.md
 ├── watson/
 │   ├── thesis_watson_R0.json                   # §1.4.1 randomness test
 │   ├── thesis_watson_R0.expected.json
 │   ├── thesis_watson_F.json                    # (1.7) common mean F-test
 │   ├── thesis_watson_F.expected.json
 │   ├── thesis_watson_Vw.json                   # (1.8–1.11) Vw statistic
-│   └── SOURCE.md
+│   └── README.md
 ├── vgp/
 │   ├── butler_chapter7_example.json
 │   ├── butler_chapter7_example.expected.json
-│   └── SOURCE.md
+│   └── README.md
 ├── mcfadden/
 │   ├── mcfadden_1988_combined.json             # directions + great circles
-│   └── SOURCE.md
+│   └── README.md
 ├── fold_test/
 │   ├── thesis_fold_matrix_T.json               # (1.12) scatter matrix
 │   ├── mcfadden_1990_dataset.json
-│   └── SOURCE.md
+│   └── README.md
 ├── cutoff/
 │   ├── vandamme_reference.json
-│   └── SOURCE.md
+│   └── README.md
 ├── bootstrap/
 │   ├── seed_42_reference.json                  # generated with seeded RNG
-│   └── SOURCE.md
+│   └── README.md
 ├── parsers/
 │   ├── pmd/
 │   │   ├── real/                               # all real fixtures we can find — multiple per format
@@ -167,7 +170,7 @@ src/__tests__/fixtures/
 │   │   │   ├── extreme_values.pmd
 │   │   │   └── ... (full edge-case matrix)
 │   │   ├── *.expected.json                     # one per fixture
-│   │   └── SOURCE.md
+│   │   └── README.md
 │   ├── dir/                                    # same real/ + synthetic/ structure
 │   ├── rs3/                                    # synthetic from spec first, real files added when sourced
 │   ├── squid/                                  # real .squid from .claude/issues/* + synthetic
@@ -181,7 +184,7 @@ src/__tests__/fixtures/
     └── stereo_projection.json
 ```
 
-**Principle**: fixture files are the scientific capital. Test code in `.test.ts` files can be rewritten freely during later phases; fixtures are only regenerated with documented justification. Every fixture's `SOURCE.md` entry must cite one of: (a) PMTools thesis formula number, (b) PmagPy version + function, (c) paper + page.
+**Principle**: fixture files are the scientific capital. Test code in `.test.ts` files can be rewritten freely during later phases; fixtures are only regenerated with documented justification. Every fixture's `README.md` entry must cite one of: (a) PMTools thesis formula number, (b) PmagPy version + function, (c) paper + page.
 
 ## Prerequisites (Step 0 — one-time setup)
 
@@ -190,17 +193,24 @@ src/__tests__/fixtures/
    - `fast-check` — property-based tests.
    - A seedable integer-PRNG: hand-rolled LCG (preferred, ~10 lines, fully deterministic across engines) or `seedrandom`. **Integer state, not float**, so cross-engine and cross-language (Phase 7 Rust port) parity is bit-exact.
 3. Create `scripts/generate_fixtures.py` (PmagPy wrapper) + `scripts/README.md`.
-4. Create `src/__tests__/helpers/`:
+4. Create `src/test-utils/` (helpers live outside `__tests__/` because CRA's Jest config hardcodes `testMatch: __tests__/**/*.{js,ts,…}` and treats every TS file under `__tests__/` as a test suite — non-test helper files there fail with "test suite must contain at least one test"):
    - `directionFixtures.ts` — factories for `Direction`, `IPmdData`, `IDirData` from plain JSON.
    - `mathMatchers.ts` — custom matchers (`toBeCloseToArray`, `toBeCloseToDirection`).
-   - `seededRng.ts` — seedable integer-PRNG used in bootstrap tests instead of `Math.random`.
-5. Scaffold `src/__tests__/fixtures/` tree with empty `SOURCE.md` files per section. Each parser fixture directory has both `real/` and `synthetic/` subdirectories from day one.
+   - `seededRandom.ts` — seedable integer-PRNG used in bootstrap tests instead of `Math.random`.
+5. Scaffold `src/__tests__/fixtures/` tree with empty `README.md` files per section. Each parser fixture directory has both `real/` and `synthetic/` subdirectories from day one.
 6. Capture coverage baseline before any new tests land: `npm test -- --watchAll=false --coverage` → save to `.claude/development-roadmap/notes/phase-1-coverage-baseline.txt`. This is the floor; the phase exit requires this coverage to grow to 100% for statistics + parsers + converters.
 7. Copy `src/assets/PMTools_how_to_use.pdf` formulas into a cheatsheet at `src/__tests__/fixtures/THESIS_FORMULAS.md` so test authors can cite them without reopening the PDF.
-8. **Gather real fixtures**: copy every real file matching each parser's format from `test-data/`, `test-data/v2.6.*/`, `src/assets/examples/`, `.claude/issues/*` into the matching `parsers/<format>/real/` directory. Then ask Ivan for any additional private samples (target 3–11 real files per format).
+8. **Gather real fixtures**: copy a representative subset (3–8 per format) of real files from:
+   - `test-data/` and `test-data/v2.6.*/` regression directories
+   - `src/assets/examples/`
+   - `test-data/potential-data/` — large multi-year archive of expedition data (gitignored locally; Ivan curates which files migrate to `real/`). Sweep performed 2026-05-02 surfaced multiple parser bugs documented in "Discovered During Fixture Sweep" below.
+   - Future user-reported tickets when they appear.
+
+   Goal: representative coverage of every dialect a parser branches on, **not** bulk import. The full archive stays out of the repo (gitignored at `/test-data/potential-data`).
 9. Format-specific fixture sourcing:
-   - `.rs3`: write a synthetic file from the format spec **first** (unblocks the parser test suite), then add real files when sourced. Do not block the phase on a real `.rs3`.
-   - `.mdir`: deprecated; build synthetic from spec to lock current behavior, mark legacy in `SOURCE.md`. No real-file requirement.
+   - `.rs3`: real files now in archive (Polar Ural, Crimea — see "Discovered During Fixture Sweep" section below). Synthetic-from-spec still required to cover `P1`/`P3` orientation branches (3, 9, 12) — all real files have `P1=6 P3=6`.
+   - `.mdir`: out-of-scope per Non-Goals — no fixtures, no test suite, parser excluded from the coverage gate.
+   - `.csv` and `.xlsx` (real): no real files exist on disk because users export them on demand from PMTools itself. Generate them via a Playwright-driven export run: load real PMD/DIR data, click through the export menu, capture the produced files, drop into `parsers/<format>/real/`. This is genuine "real" data — produced by the actual app, not synthesized from the format spec.
 
 ## Extraction Refactors (before writing tests for these modules)
 
@@ -250,7 +260,7 @@ Each gets thesis formula tests + 2–3 PmagPy parity cases + property-based test
 
 ### Step 2 — Testable-with-fixtures statistics
 
-1. **`calculatePCA_pmd` — HIGHEST PRIORITY**. Core of the PCA page. Tests must cover thesis formulas (1.1) vector MAD, (1.2) great-circle MAD, (1.3) covariance matrix H. Include regression case for the v2.6.3 MAD=0 bug fix (fixture captured from `test-data/v2.6.3/`).
+1. **`calculatePCA_pmd` — HIGHEST PRIORITY**. Core of the PCA page. Tests must cover thesis formulas (1.1) vector MAD, (1.2) great-circle MAD, (1.3) covariance matrix H.
 2. `calculatePCA_dir`.
 3. `calculateFisherMean` (IDirData wrapper).
 4. `calculateMcFaddenCombineMean` — McFadden 1988.
@@ -267,18 +277,18 @@ Each gets thesis formula tests + 2–3 PmagPy parity cases + property-based test
 
 ### Step 4 — Parsers
 
-One test suite per parser. **Each suite iterates over both `real/` and `synthetic/` fixture directories** — every real file is parsed and asserted against its `.expected.json`, then every synthetic edge case is parsed and asserted. No `it.skip` allowed without a written justification in `SOURCE.md`.
+One test suite per parser. **Each suite iterates over both `real/` and `synthetic/` fixture directories** — every real file is parsed and asserted against its `.expected.json`, then every synthetic edge case is parsed and asserted. No `it.skip` allowed without a written justification in `README.md`.
 
 Per-parser coverage target: 100% lines, 100% branches. If a branch can't be reached by real or synthetic input, it's dead code — delete it.
 
 1. `parserPMD` — every real `.pmd` we have + full synthetic matrix (empty, header-only, single-step, BOM, CRLF/LF, Russian decimal comma, Windows-1251, trailing whitespace, extreme numeric values, malformed shapes).
 2. `parserDIR` — every real `.dir` (including `field_batch.dir`, `sample.dir`, `malformed.dir`, `invalid_rows.dir`, `all_invalid.dir`) + full synthetic matrix including paired-G variant.
-3. `parserCSV_PMD`, `parserCSV_DIR`, `parserCSV_SitesLatLon` — real CSVs from `test-data/lab_results.csv` and any others + synthetic separators (comma, semicolon), quoted fields, empty cells, encoding variants.
-4. `parserXLSX_PMD`, `parserXLSX_DIR`, `parserXLSX_SitesLatLon` — real `.xlsx` files Ivan provides + synthetic generated via `xlsx` lib (multi-sheet, empty sheet, formula cells, date cells, hidden columns).
-5. `parserPMM` — real `.pmm` (`season1_north.pmm`, `season1_south.pmm`, `season2_extra.pmm`, `exampleDIR.pmm`) + synthetic.
-6. `parserSQUID` — real `.squid` from `test-data/406c.squid` and `.claude/issues/*` (`a11-19.squid`, `10bg136b.squid`, `406c.squid`) + synthetic edge cases including the throws-on-empty/invalid paths.
-7. `parserRS3` — synthetic-from-spec covers all branches (unblocks the test suite); real files added to `real/` as soon as they're sourced. Both layers are required for this parser to be considered tested.
-8. `parserMDIR` — deprecated; synthetic-only test suite that locks current behavior so the parser can be safely removed in a future cleanup. Document the legacy status in `SOURCE.md`.
+3. `parserCSV_PMD`, `parserCSV_DIR`, `parserCSV_SitesLatLon` — real CSVs produced by Playwright-driven PMTools export of real PMD/DIR data (see Step 0 item 9) + synthetic separators (comma, semicolon), quoted fields, empty cells, encoding variants.
+4. `parserXLSX_PMD`, `parserXLSX_DIR`, `parserXLSX_SitesLatLon` — real `.xlsx` produced by Playwright-driven PMTools export + synthetic generated via the `xlsx` lib (multi-sheet, empty sheet, formula cells, date cells, hidden columns). Legacy `.xls` (Excel 97-2003 binary) is out-of-scope per Non-Goals.
+5. `parserPMM` — real `.pmm` (`season1_north.pmm`, `season1_south.pmm`, `season2_extra.pmm`, `exampleDIR.pmm`, plus archive PMMs with `Fisher` code and dashed IDs) + synthetic.
+6. `parserSQUID` — real `.squid` files in archive (`406c.squid`, `70.squid` — the latter paired with `70.pmd` as the golden output for the D5 fix; request additional samples covering `metadata.a < 90` branch) + synthetic edge cases including the throws-on-empty/invalid paths and a synthetic ARM-block fixture that locks the truncation behavior independently of `70.squid`.
+7. `parserRS3` — real files from 2012 Polar Ural + 2013 Crimea archives (all use `P1=6 P3=6`); synthetic-from-spec required to cover `P1`/`P3` ∈ {3, 9, 12} orientation correction branches.
+8. `parserMDIR` — out-of-scope per Non-Goals. No test suite, no fixtures, parser excluded from coverage via `coveragePathIgnorePatterns`.
 
 ### Step 5 — Converters (round-trip tests)
 
@@ -340,9 +350,9 @@ Phase 1 is complete when all of:
 ### Files to create
 - `src/utils/statistics/PMTests/foldTestCore.ts`
 - `src/utils/statistics/PMTests/reversalTestCore.ts`
-- `src/__tests__/helpers/directionFixtures.ts`
-- `src/__tests__/helpers/mathMatchers.ts`
-- `src/__tests__/helpers/seededRng.ts`
+- `src/test-utils/directionFixtures.ts`
+- `src/test-utils/mathMatchers.ts`
+- `src/test-utils/seededRandom.ts`
 - `src/__tests__/fixtures/THESIS_FORMULAS.md` — cheatsheet of thesis formulas.
 - `src/__tests__/fixtures/**` — full tree.
 - `scripts/generate_fixtures.py` + `scripts/README.md`
@@ -351,6 +361,7 @@ Phase 1 is complete when all of:
 ### Files to leave alone
 - `src/components/`, `src/pages/`, `src/App/` — UI tested in Phase 2.
 - `src/services/reducers/` — Redux slices will be replaced in Phase 6.
+- `src/utils/files/parsers/parserMDIR.ts` — out-of-scope per Non-Goals; excluded from the 100% coverage gate via `coveragePathIgnorePatterns` in the Jest config / `package.json`.
 
 ## Reused Existing Code
 
@@ -384,14 +395,86 @@ Manual verification of scientific findings:
 - Review any `fix(science):` commits with a domain expert.
 - Cross-check at least 3 PmagPy-parity fixtures by hand against the thesis formulas.
 
+## Discovered During Fixture Sweep (2026-05-02)
+
+Real-file investigation of the 2000-2014 archive surfaced five parser issues. Each gets its own `fix(science):` commit during Step 4 with the offending real file as the regression fixture.
+
+### D1. All parsers — Mac classic CR-only line endings break parsing ✅ FIXED
+
+**Status**: fixed. Severity at discovery: high (parsers silently produced wrong output on a class of legitimate legacy files). The archive file `2013-Kola/.../component means.dir` uses `\r`-only line terminators (no `\n`). The old regex `new RegExp('\r?\n')` did not match a lone `\r`, so the entire file collapsed to a single string and parsing returned garbage.
+
+The bug was **not parserDIR-specific**: every parser used the same regex (`parserPMD`, `parserDIR`, `parserPMM`, `parserCSV_PMD`, `parserCSV_DIR`, `parserCSV_SitesLatLon`, `parserMDIR`, `parserRS3`, `parserSQUID` — 9 parsers total). Only `.dir` had a CR-only file in the archive, but the same input class would have broken any of the others.
+
+**What landed in the fix:**
+- Replaced the regex with `/\r\n|\r|\n/` in **all 9 parsers** in one commit. CRLF, CR, and LF are matched independently as line terminators.
+- `parserDIR` regression test (`src/utils/files/__tests__/parserDIR.test.ts`) decomposes into:
+  1. Synthetic CR-only file built from the standard parserDIR column layout — asserts exact field values (label, code, Dgeo, Igeo, gcNormal) for 3 interpretations + back-compat with CRLF and LF.
+  2. The real archive file `kola2013_repG_macCR_component_means.dir` — asserts the file splits into 17 raw lines and the parser walks them individually (the file's non-standard column layout is a separate concern, see follow-up below).
+
+**Pending follow-up** (separate Phase 1 fix): `kola2013_repG_macCR_component_means.dir` uses a non-standard `rep G`/`rep S`/`rep G&S` column layout that doesn't match the slice positions in `parserDIR`. Even after D1, the parser's columns land on the wrong fields for this file. Tracked in `parsers/dir/README.md` Pending follow-ups; will be addressed when `parserDIR` gets format-flexibility work in Phase 1 Step 4 or as a separate `fix(science):`.
+
+Other parsers will get synthetic CR-only fixtures during Step 4 to lock the regression on their full surface.
+
+### D2. `parserRS3` — file encoding handling for non-UTF-8 sources
+
+All 285 RS3 files in the archive are ISO-8859-1 (Latin-1). The parser's `slice(start, end)` operates on a JS string assumed to be already-decoded. If the upstream FileReader was invoked with the wrong encoding, the `°` byte (0xB0) in `Step[°C]` headers and elsewhere becomes `U+FFFD` — single character, so column offsets do not shift, but downstream consumers receive corrupt step-name strings.
+
+**Fix**: detect ISO-8859-1 / Windows-1251 in the FileReader pipeline (via byte-pattern heuristic on first 1KB or trial-decode comparison) and decode appropriately before handing to the parser. Regression test: parse one Polar Ural RS3, assert step names render as `Step[°C]` not `Step[?C]`.
+
+**Severity**: cosmetic for now (column offsets survive replacement-character substitution because U+FFFD is one code unit). Becomes severity-high if any future parser uses 0xB0 as a delimiter.
+
+### D3. `parserPMD` — `demagType` fixed by first valid line; cannot detect step-only or NRM-prefixed files
+
+The archive contains 23 PMD files (Crimea 2013) with this shape:
+```
+NRM  ... data ...
+90°C ... data ...
+150°C ... data ...
+```
+And 66 PMD files (Polar Ural 2012) with steps like `20`, `60`, `120` (no letter prefix at all).
+
+`parserPMD.ts` lines 64–69 set `demagType` from `line.slice(0, 1)` of the first valid step line, then never re-evaluates. For all 89 of these files, `demagType` becomes `undefined` and stays that way — the user sees no thermal/AF indication in the UI even though the data clearly shows thermal demagnetization.
+
+**Fix**: two-part.
+1. **Parser fix** (`fix(science):`) — scan the entire steps block for `°C` / temperature-shaped step names AND `mT`-shaped names; infer thermal vs AF from the dominant pattern, not the first-row prefix.
+2. **UX warning** (`feat(parser):` or scoped to Phase 2 UX work) — when the parser sees a file it cannot classify confidently, show a non-blocking warning on file load: explicitly explain "PMTools could not infer demagnetization type from this file; the demag column will be empty. Possible reasons: …". Wording must be aimed at scientists, not engineers — say what's missing in their terms (`T`/`M` step prefix or `°C`/`mT` unit suffix).
+
+**Severity**: medium. Doesn't corrupt numeric data, but degrades UX and breaks downstream filters that key off `demagType`.
+
+### D4. `parserPMM` — `replace(/\s+/g, '')` collapses internal whitespace in fields
+
+Archive file `231-291.pmm` contains `STEPRANGE = "site avg"`. After `params = line.replace(/\s+/g, '').split(',')`, the field becomes `siteavg` — the space is silently dropped.
+
+**Decision**: leave as-is. This has been current behavior since v1.x; users who export with this convention have always seen the collapsed form. Document as expected behavior in `parsers/pmm/README.md` and lock with a regression test that asserts `stepRange === "siteavg"` on this fixture.
+
+**Severity**: cosmetic. Not a `fix(science):`. A behavior-locking test only.
+
+### D5. `parserSQUID` — AF field values are in Oersted; ARM block must be truncated ✅ FIXED
+
+**Status**: fixed. Severity at discovery: HIGH (numeric data corruption — every AF step displayed in PMTools after a SQUID import was 10× the correct field value, silently producing wrong PCA fits on real input).
+
+The archive file `khramov2026_70.squid` contained AF lines with values `100, 150, 200, ..., 900`. These are **Oersted**, not millitesla. Physical AF demagnetization caps at ~200 mT, so triple-digit values interpreted as mT were unphysical. The paired golden PMD (`khramov2026_70.pmd`, produced by R.V. Veselovsky's pre-PMTools converter) has `M010, M015, M020, ..., M090` — confirming the `/10` conversion (1 mT ≈ 10 Oe) was the correct convention. The parser had explicitly removed this conversion with a misleading comment; the original RV-converter logic was correct, confirmed by R.V. Veselovsky (domain authority) on 2026-05-09.
+
+The same archive file also exposed a second issue: after the AF demagnetization block ended, an ARM-acquisition section began (`ARM  1`) followed by AF-of-ARM lines. These are a measurement-protocol artifact, **not** data PMTools should display or analyze. R.V. confirmed silently truncating the `ARM` line and every line below.
+
+**What landed in the fix:**
+1. **`/10` for AF** restored so `AF 100` → `M010`, `AF 900` → `M090`. Output is now zero-padded to 3 digits to match the PMD M-step naming convention exactly (`M000`, `M010`, `M015`, ...).
+2. **ARM truncation** — when a data line's first three characters are `ARM`, the parser drops it and every subsequent line silently. No warning, no log message — this is normal for many real `.squid` files.
+3. **Three-char ARM / two-char AF detection** so `AF` and `ARM` are distinguishable without ambiguity. Side effect: the bare `AF` first line (zero-field NRM measurement) now produces `M000` (matches RV-converter golden) instead of the previous-buggy `M0`.
+4. **Misleading comment removed** — the original RV-converter logic was correct, restored as documented behavior.
+
+**Regression fixture**: `parsers/squid/real/khramov2026_70.squid` (input) + `parsers/pmd/real/khramov2026_70.pmd` (expected output — golden produced by RV's converter). Single fixture verifies all three behaviors. Test: `src/utils/files/__tests__/parserSQUID.test.ts`. A synthetic fixture covering ARM truncation independently of the real fixture is still planned for Phase 1 Step 4 to make the locked behavior unambiguous.
+
 ## Risks
 
 | Risk | Mitigation |
 |---|---|
-| PmagPy produces different output than PMTools or the thesis formula on a real file | Investigate every delta. Either PMTools has a bug (commit as `fix(science):`) or different documented convention (note in `SOURCE.md`). |
+| PmagPy produces different output than PMTools or the thesis formula on a real file | Investigate every delta. Either PMTools has a bug (commit as `fix(science):`) or different documented convention (note in `README.md`). |
 | Bootstrap tests flaky due to RNG | Mandatory seeded **integer** PRNG in all bootstrap tests. No `Math.random()` directly. |
 | Extraction refactors silently change behavior | Golden-master snapshot BEFORE refactoring, then refactor, then assert snapshot still matches. |
-| `.rs3` real file missing | Synthetic fixture from spec unblocks the parser test suite immediately. Real files added to `real/` subdir as soon as sourced — phase does not wait. |
+| `.rs3` real files all share `P1=6 P3=6` (other orientation branches uncovered) | Synthetic fixture from spec covers P1/P3 ∈ {3, 9, 12} branches. Real files cover the dominant case. |
+| Archive files surface parser dialect surprises (CR-only line endings, non-UTF-8 encoding, NRM-prefixed steps without `T`/`M` letters) | Each surprise becomes a `fix(science):` commit with the offending real file as regression test. See "Discovered During Fixture Sweep" section. |
+| In-code commentary contradicts domain authority (e.g. `// по факту это неправильно` overriding correct logic from the original SQUID→PMD converter — see D5) | Treat the domain expert as overriding any uncited in-code commentary. Confirmation is recorded in the relevant `parsers/<format>/README.md` and in this section with the date and the expert's name. |
 | 100% coverage gate is hard for parsers with rarely-triggered branches | Either build the synthetic input that triggers the branch, or delete the branch as unreachable. Both are acceptable; "exempt" is not. |
 | Scope creep into Phase 4 (full extraction) | Strict boundary: only the 3 named tangled files get extracted here. All other extractions wait for Phase 4. |
 | Thesis formula differs from live code | Treat as a bug in the code — the thesis is the spec. Fix in a `fix(science):` commit unless there is a documented reason the code intentionally deviates. |

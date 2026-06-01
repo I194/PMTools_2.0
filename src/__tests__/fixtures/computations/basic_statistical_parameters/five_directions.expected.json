@@ -1,0 +1,70 @@
+{
+  "directionDistribution": {
+    "directions": [
+      {
+        "declination": 10,
+        "inclination": 50,
+        "length": 1
+      },
+      {
+        "declination": 15,
+        "inclination": 48,
+        "length": 1
+      },
+      {
+        "declination": 8,
+        "inclination": 52,
+        "length": 1
+      },
+      {
+        "declination": 12,
+        "inclination": 46,
+        "length": 1
+      },
+      {
+        "declination": 14,
+        "inclination": 51,
+        "length": 1
+      }
+    ],
+    "R": 0,
+    "N": 5
+  },
+  "poleDistribution": {
+    "directions": [
+      {
+        "declination": 16.24698,
+        "inclination": 57.77931,
+        "length": 1
+      },
+      {
+        "declination": 24.98945,
+        "inclination": 57.61417,
+        "length": 1
+      },
+      {
+        "declination": 12.26896,
+        "inclination": 56.52074,
+        "length": 1
+      },
+      {
+        "declination": 21.87822,
+        "inclination": 60.29893,
+        "length": 1
+      },
+      {
+        "declination": 21.39569,
+        "inclination": 55.64926,
+        "length": 1
+      }
+    ],
+    "R": 0,
+    "N": 5
+  },
+  "butlerDistribution": {
+    "dDx": null,
+    "dIx": null,
+    "palatMin": null,
+    "palatMax": null
+  }
+}

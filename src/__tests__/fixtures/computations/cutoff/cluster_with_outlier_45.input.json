@@ -1,0 +1,11 @@
+{
+  "cutoffType": "45",
+  "directions": [
+    { "declination": 10, "inclination": 50, "length": 1 },
+    { "declination": 15, "inclination": 48, "length": 1 },
+    { "declination": 8, "inclination": 52, "length": 1 },
+    { "declination": 12, "inclination": 46, "length": 1 },
+    { "declination": 14, "inclination": 51, "length": 1 },
+    { "declination": 200, "inclination": -40, "length": 1 }
+  ]
+}

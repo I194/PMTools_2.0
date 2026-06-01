@@ -1,0 +1,9 @@
+{
+  "filename": "long_labels.dir",
+  "type": "text/plain;charset=utf-8",
+  "eol": "CRLF",
+  "lines": [
+    "SITE-0 DirPCA  M010-M080 11   9.8  50.1   7.4  46.6      6 102.3  two, commas, here",
+    ""
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "filename": "thermal_and_af.pmd",
+  "type": "text/plain;charset=utf-8",
+  "eol": "CRLF",
+  "lines": [
+    " ",
+    "thermal_ana=  0.0   b= 90.0   s=220.0   d= 30.0   v= 1.1E+1m3",
+    " PAL  Xc (Am2)  Yc (Am2)  Zc (Am2)  MAG(A/m)   Dg    Ig    Ds    Is   a95 ",
+    "NRM   1.00E-09  2.00E-09  3.00E-09  3.74E-09  45.0  30.0  40.0  35.0  1.5  ",
+    "T200  7.00E-10  1.40E-09  2.10E-09  2.62E-09  43.0  27.0  38.0  32.0  2.4  ",
+    "M050  5.00E-10  1.00E-09  1.50E-09  1.87E-09  42.0  25.0  37.0  30.0  3.0  ",
+    ""
+  ]
+}

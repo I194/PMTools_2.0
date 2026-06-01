@@ -1,0 +1,12 @@
+{
+  "filename": "normal_and_reversed.pmm",
+  "type": "text/plain;charset=utf-8",
+  "eol": "LF",
+  "lines": [
+    "\"file_comment\"",
+    "normal_and_reversed,\"author\",\"2021-11-27\"",
+    "ID,CODE,STEPRANGE,N,Dg,Ig,kg,a95g,Ds,Is,ks,a95s,comment",
+    "SYN-01,DirOPCA,T300-T580,8,15,52,120,4.5,13,48,115,4.7,normal polarity,",
+    "SYN-02,GC,T200-T560,6,190,-50,90,6,188,-46,86,6.2,reversed polarity,"
+  ]
+}

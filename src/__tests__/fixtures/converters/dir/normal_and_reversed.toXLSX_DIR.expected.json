@@ -1,0 +1,11 @@
+{
+  "filename": "normal_and_reversed.xlsx",
+  "type": "application/octet-stream",
+  "eol": "LF",
+  "lines": [
+    "id,Code,StepRange,N,Dgeo,Igeo,Kgeo,MADgeo,Dstrat,Istrat,Kstrat,MADstrat,Comment",
+    "SYN-01,DirOPCA,T300-T580,8,15,52,120,4.5,13,48,115,4.7,normal polarity",
+    "SYN-02,GC,T200-T560,6,190,-50,90,6,188,-46,86,6.2,reversed polarity",
+    ""
+  ]
+}
