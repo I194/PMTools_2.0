@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../services/store/hooks';
 import { IDirData } from '../../../utils/GlobalTypes';
 import {
@@ -16,6 +16,8 @@ import {
   setHiddenDirectionsIDs,
   deleteAllInterpretations,
   setReversedDirectionsIDs,
+  setCenteredByMean,
+  setCutoffEnabled,
 } from '../../../services/reducers/dirPage';
 import { useTranslation } from 'react-i18next';
 
@@ -27,6 +29,12 @@ const CurrentDIRFileSelector: FC = () => {
 
   const [allDirData, setAllDirData] = useState<Array<IDirData>>([]);
   const [currentFileName, setCurrentFileName] = useState<string>('');
+  // The file this effect last applied its resets for. Guards against re-firing on
+  // an allDirData reference change (e.g. another upload) while the same file is
+  // still selected — which would otherwise wipe the current file's view state.
+  // Keyed on the filename, not the numeric id: deleting another file shifts
+  // indices under a fixed id, and that case must still re-sync to the new file.
+  const lastAppliedFileNameRef = useRef<string | null>(null);
 
   useEffect(() => {
     if (dirStatData) {
@@ -39,12 +47,18 @@ const CurrentDIRFileSelector: FC = () => {
       const filename = allDirData[currentDataDIRid]?.name;
       if (filename) {
         setCurrentFileName(filename);
+        // Only reset per-file state when the selected file actually changes.
+        if (lastAppliedFileNameRef.current === filename) return;
+        lastAppliedFileNameRef.current = filename;
         dispatch(updateCurrentFileInterpretations(filename));
         dispatch(setLastInterpretationAsCurrent());
         dispatch(setSelectedDirectionsIDs(null));
         dispatch(setHiddenDirectionsIDs([]));
         dispatch(setReversedDirectionsIDs([]));
         dispatch(setStatisticsMode(null));
+        // Center-by-mean / cutoff are per-file view state: reset on file switch.
+        dispatch(setCenteredByMean(false));
+        dispatch(setCutoffEnabled(false));
       }
     }
   }, [currentDataDIRid, allDirData]);
@@ -74,6 +88,8 @@ const CurrentDIRFileSelector: FC = () => {
       dispatch(setHiddenDirectionsIDs([]));
       dispatch(setReversedDirectionsIDs([]));
       dispatch(setStatisticsMode(null));
+      dispatch(setCenteredByMean(false));
+      dispatch(setCutoffEnabled(false));
     }
   };
 
@@ -85,6 +101,8 @@ const CurrentDIRFileSelector: FC = () => {
     dispatch(setHiddenDirectionsIDs([]));
     dispatch(setReversedDirectionsIDs([]));
     dispatch(setStatisticsMode(null));
+    dispatch(setCenteredByMean(false));
+    dispatch(setCutoffEnabled(false));
   };
 
   return (
