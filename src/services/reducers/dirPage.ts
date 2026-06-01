@@ -19,6 +19,9 @@ interface IInitialState {
   showSelectionInput: boolean;
   showVGPMean: boolean;
   labelModeIsNumeric: boolean;
+  centeredByMean: boolean;
+  cutoffEnabled: boolean;
+  cutoffAngle: number;
 }
 
 const initialState: IInitialState = {
@@ -37,6 +40,9 @@ const initialState: IInitialState = {
   showSelectionInput: false,
   showVGPMean: false,
   labelModeIsNumeric: false,
+  centeredByMean: false,
+  cutoffEnabled: false,
+  cutoffAngle: 45,
 };
 
 const dirPage = createSlice({
@@ -60,10 +66,12 @@ const dirPage = createSlice({
       state.hiddenDirectionsIDs = updatedHiddenDirectionsIDs;
     },
     removeHiddenDirectionsIDs(state, action: { payload: Array<number> }) {
-      const visibleDirectionsIDs = [...new Set([...state.hiddenDirectionsIDs, ...action.payload])];
-      state.hiddenDirectionsIDs = state.hiddenDirectionsIDs.filter(
-        (id) => !visibleDirectionsIDs.includes(id),
-      );
+      // Remove only the ids in the payload — directions hidden by other means
+      // (e.g. the eye icon) must stay hidden. (Previously this unioned the
+      // payload with the current set and filtered all of them out, so it always
+      // cleared every hidden direction regardless of the payload.)
+      const idsToRemove = new Set(action.payload);
+      state.hiddenDirectionsIDs = state.hiddenDirectionsIDs.filter((id) => !idsToRemove.has(id));
     },
     setReversedDirectionsIDs(state, action: { payload: Array<number> }) {
       state.reversedDirectionsIDs = action.payload;
@@ -79,6 +87,17 @@ const dirPage = createSlice({
     },
     setStatisticsMode(state, action) {
       state.statisticsMode = action.payload;
+    },
+    // Center-by-mean / cutoff view-state (shared between the DIR stereonet,
+    // the directions table and the export menu)
+    setCenteredByMean(state, action: { payload: boolean }) {
+      state.centeredByMean = action.payload;
+    },
+    setCutoffEnabled(state, action: { payload: boolean }) {
+      state.cutoffEnabled = action.payload;
+    },
+    setCutoffAngle(state, action: { payload: number }) {
+      state.cutoffAngle = action.payload;
     },
     toggleCommentsInput(state) {
       state.isCommentsInputVisible = !state.isCommentsInputVisible;
@@ -248,6 +267,9 @@ export const {
   setReversedDirectionsIDs,
   addReversedDirectionsIDs,
   setStatisticsMode,
+  setCenteredByMean,
+  setCutoffEnabled,
+  setCutoffAngle,
   toggleCommentsInput,
   setCommentsInput,
   showSelectionInput,
