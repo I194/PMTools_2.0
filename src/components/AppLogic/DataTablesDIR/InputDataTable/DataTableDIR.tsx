@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 import styles from './DataTableDIR.module.scss';
 import { DataGridDIRFromDIRRow, IDirData } from '../../../../utils/GlobalTypes';
 import {
@@ -216,11 +216,17 @@ const DataTableDIR: FC<IDataTableDIR> = ({ data }) => {
 
   // Apply the same reversal + center-by-mean the stereonet uses, so the table
   // matches the graph (and the centered export). Centering needs a Fisher mean.
-  const means = meanDirectionsOf(currentInterpretation);
-  let displayData = data ? reverseDirectionsByIds(data, reversedDirectionsIDs) : null;
-  if (displayData && centeredByMean && means) {
-    displayData = centerDirectionsByMean(displayData, means.geographic, means.stratigraphic);
-  }
+  // Memoised so the per-direction rotations don't rerun on every unrelated
+  // render (row selection, hover, theme, …).
+  const means = useMemo(() => meanDirectionsOf(currentInterpretation), [currentInterpretation]);
+  const displayData = useMemo(() => {
+    if (!data) return null;
+    const reversed = reverseDirectionsByIds(data, reversedDirectionsIDs);
+    if (centeredByMean && means) {
+      return centerDirectionsByMean(reversed, means.geographic, means.stratigraphic);
+    }
+    return reversed;
+  }, [data, reversedDirectionsIDs, centeredByMean, means]);
 
   let visibleIndex = 1;
   const rows: Array<DataGridDIRFromDIRRow> = displayData
