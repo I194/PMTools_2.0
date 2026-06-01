@@ -66,10 +66,12 @@ const dirPage = createSlice({
       state.hiddenDirectionsIDs = updatedHiddenDirectionsIDs;
     },
     removeHiddenDirectionsIDs(state, action: { payload: Array<number> }) {
-      const visibleDirectionsIDs = [...new Set([...state.hiddenDirectionsIDs, ...action.payload])];
-      state.hiddenDirectionsIDs = state.hiddenDirectionsIDs.filter(
-        (id) => !visibleDirectionsIDs.includes(id),
-      );
+      // Remove only the ids in the payload — directions hidden by other means
+      // (e.g. the eye icon) must stay hidden. (Previously this unioned the
+      // payload with the current set and filtered all of them out, so it always
+      // cleared every hidden direction regardless of the payload.)
+      const idsToRemove = new Set(action.payload);
+      state.hiddenDirectionsIDs = state.hiddenDirectionsIDs.filter((id) => !idsToRemove.has(id));
     },
     setReversedDirectionsIDs(state, action: { payload: Array<number> }) {
       state.reversedDirectionsIDs = action.payload;
