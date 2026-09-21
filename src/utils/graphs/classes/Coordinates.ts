@@ -103,8 +103,8 @@ class Coordinates {
   };
 
   angle = (coordinates: Coordinates) => {
-    // Rounding can push the dot product of two unit vectors to +/-1.0000000000000002
-    // for identical or exactly antipodal vectors, and acos of that is NaN
+    // Rounding can push the dot product of two unit vectors slightly beyond +/-1 (up to
+    // 1.0000000000000004) for identical or exactly antipodal vectors, and acos of that is NaN
     const cosineOfAngle = Math.max(-1, Math.min(1, this.toUnit().dot(coordinates.toUnit())));
     return Math.acos(cosineOfAngle) * Coordinates.RADIANS;
   };

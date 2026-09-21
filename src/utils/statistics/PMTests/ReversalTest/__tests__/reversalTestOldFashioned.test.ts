@@ -20,6 +20,10 @@ describe('reversalTestOldFashioned', () => {
     expect(result.gamma).toBeCloseTo(151.73, 2);
     expect(result.gammaCritical).toBeCloseTo(6.52, 2);
     expect(result.classification).toBe('-');
+    // The figure prints two decimals; these lock the hand calculation (R1 = 69.25,
+    // R2 = 133.0535714, law of cosines) that reproduces it.
+    expect(result.gamma).toBeCloseTo(151.7336281, 6);
+    expect(result.gammaCritical).toBeCloseTo(6.5220881, 6);
   });
 
   // SCI-22: for exactly antipodal means gamma used to be NaN, `NaN > gammaCritical` is false,

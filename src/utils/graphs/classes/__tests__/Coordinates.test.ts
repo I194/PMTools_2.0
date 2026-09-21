@@ -2,10 +2,10 @@ import Coordinates from '../Coordinates';
 import Direction from '../Direction';
 
 // SCI-22: Coordinates.angle used to take acos of an unclamped dot product. For identical or
-// exactly antipodal vectors rounding pushes the dot product of the two unit vectors to
-// +/-1.0000000000000002, acos returns NaN, and every caller's `NaN > threshold` is false.
-// Correct values (0 and 180) come from hand calculation: PmagPy's pmag.angle has the same
-// unclamped arccos, so it is not an oracle here.
+// exactly antipodal vectors rounding pushes the dot product of the two unit vectors slightly
+// beyond +/-1 (1.0000000000000002 to 1.0000000000000004), acos returns NaN, and every
+// caller's `NaN > threshold` is false. Correct values (0 and 180) come from hand calculation:
+// PmagPy's pmag.angle has the same unclamped arccos, so it is not an oracle here.
 describe('Coordinates.angle', () => {
   // Only IEEE-exact operations are involved (sqrt(3), division, sum), no trigonometry on the
   // input side, so these two fail before the fix on every platform.
@@ -40,6 +40,7 @@ describe('Coordinates.angle', () => {
   // up to about 1.5e-6 degrees), hence toBeCloseTo with precision 5.
   it('is never NaN for a direction against itself or its exact antipode (integer-degree sweep)', () => {
     let notANumberCount = 0;
+    let outOfRangeCount = 0;
     let largestSelfAngle = 0;
     let smallestAntipodeAngle = 180;
 
@@ -55,14 +56,17 @@ describe('Coordinates.angle', () => {
           notANumberCount++;
           continue;
         }
+        if (selfAngle < 0 || selfAngle > 180 || antipodeAngle < 0 || antipodeAngle > 180) {
+          outOfRangeCount++;
+        }
         largestSelfAngle = Math.max(largestSelfAngle, selfAngle);
         smallestAntipodeAngle = Math.min(smallestAntipodeAngle, antipodeAngle);
       }
     }
 
     expect(notANumberCount).toBe(0);
+    expect(outOfRangeCount).toBe(0);
     expect(largestSelfAngle).toBeCloseTo(0, 5);
     expect(smallestAntipodeAngle).toBeCloseTo(180, 5);
-    expect(smallestAntipodeAngle).toBeLessThanOrEqual(180);
   });
 });
