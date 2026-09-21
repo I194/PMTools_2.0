@@ -1,0 +1,9 @@
+id,Code,StepRange,N,Dgeo,Igeo,Kgeo,MADgeo,Dstrat,Istrat,Kstrat,MADstrat,Comment
+DUP-1,DirOPCA,T300-T580,8,5,54,100,5,5,54,100,5,select rows 1-3 for the mean
+DUP-2,DirOPCA,T300-T580,8,5,54,100,5,5,54,100,5,exact duplicate
+DUP-3,DirOPCA,T300-T580,8,5,54,100,5,5,54,100,5,exact duplicate
+ANTIPOD,DirOPCA,T300-T580,8,185,-54,100,5,185,-54,100,5,exact antipode of the mean: 180 deg; CUT45
+ANTI-1,DirOPCA,T300-T580,8,184,-54,100,5,184,-54,100,5,control: 179.4 deg from the mean; CUT45
+FAR-50,DirOPCA,T300-T580,8,5,4,100,5,5,4,100,5,control: 50 deg from the mean; CUT45
+NEAR-40,DirOPCA,T300-T580,8,5,14,100,5,5,14,100,5,control: 40 deg from the mean
+NEAR-20,DirOPCA,T300-T580,8,5,34,100,5,5,34,100,5,control: 20 deg from the mean

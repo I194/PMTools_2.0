@@ -7,7 +7,12 @@ antipodal unit vectors rounding can give `+/-1.0000000000000002`, `acos` returns
 ## Files
 
 - `sci22_cutoff45_exact_antipode.csv`: DIR import, 8 rows, Dgeo/Igeo equal to Dstrat/Istrat.
-- `before-reversal-manual.png`: manual reversal test before the fix (gamma NaN, class B).
+- `before-cutoff45.png`, `after-cutoff45.png`: Check 1 on `dev` and on the fix branch.
+- `before-export-with-hidden.csv`, `after-export-with-hidden.csv`: the files Check 2 produced.
+- `before-reversal-manual.png`, `after-reversal-manual.png`: Check 3 on `dev` and on the fix branch.
+
+The "after" screenshots show a V2.6.5 badge: that dev server had been started before the version
+bump to 2.6.6 and kept the old `REACT_APP_VERSION`; it serves the fix branch.
 
 | id | D | I | Angle from the mean of DUP-1..3 (5 / 54) |
 |---|---|---|---|
@@ -42,7 +47,8 @@ DUP-1..3, NEAR-40 and NEAR-20 stay visible in both cases.
 
 ## Check 2: CUT45 marker in the export
 
-With CUTOFF 45 still on, open EXPORT in the table toolbar and choose "Export with hidden as CSV"
+With CUTOFF 45 still on, open EXPORT in the toolbar of the LOWER table (input directions; the
+upper interpretations table has its own EXPORT without these entries) and choose "Export with hidden as CSV"
 (also "... as PMM", "... as XLSX"). These exports keep every row and append `CUT45` to the comment
 of each cut row (`src/utils/files/transforms/markCutoffComments.ts`). The plain "Export as ..."
 entries drop hidden rows instead and carry no marker.
