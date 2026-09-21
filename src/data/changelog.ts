@@ -6,6 +6,13 @@ export type ChangelogEntry = {
 
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '2.6.6',
+    date: 'September 21, 2026',
+    items: [
+      'DIR page: fixed table export (PMM/CSV/XLSX) ignoring the active column filter — only directions that pass the filter are exported now. "Export with hidden" still exports every direction.',
+    ],
+  },
+  {
     version: '2.6.5',
     date: 'June 1, 2026',
     items: [

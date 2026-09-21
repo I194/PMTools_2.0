@@ -113,9 +113,12 @@ Sites: `.csv`, `.xlsx` (Lat/Lon)
 - `.env` contains only `REACT_APP_VERSION=$npm_package_version`
 - GitHub Actions uses Node version from `.nvmrc` (22.10.0)
 
-## Migration Plans
+## UI Kit Decision (September 2026)
 
-- MUI v5 (DataGrid, Button, etc.) is scheduled for replacement — morally outdated, the free DataGrid tier lacks proper API (forced apiRef hacks). Evaluate alternatives (Radix, Shadcn, AG Grid, TanStack Table) before starting new UI work.
+MUI is being replaced by a **custom in-house UI kit** in `src/ui-kit/` (tokens, primitives, patterns, inline icons, hand-built DataTable). Plan: [03a-ui-kit.md](.claude/development-roadmap/03a-ui-kit.md) builds the kit first; [03-ui-migration.md](.claude/development-roadmap/03-ui-migration.md) migrates the app and deletes MUI/Emotion.
+- No new `@mui` imports once `src/ui-kit/` exists; app code imports UI only from `src/ui-kit`.
+- No Tailwind, no TanStack, no DataGrid libraries. Radix (headless) only inside the kit, and only if the open decision in 03a lands that way.
+- Design decisions (tokens, naming, component API) are Ivan's; agents implement against `src/ui-kit/SPEC.md`.
 
 ## Do Not
 
@@ -123,12 +126,20 @@ Sites: `.csv`, `.xlsx` (Lat/Lon)
 - Do NOT remove `CI=false` from build script
 - Do NOT modify `.env`
 - Do NOT add server-side code — this is a fully client-side application
-- Do NOT modify scientific logic in `utils/statistics/` without explicit request
+- Do NOT modify scientific logic in `utils/statistics/` without explicit request (a PreToolUse hook blocks it until `.claude/.science-unlock` exists; create that file only after Ivan approves, delete it after)
+- Do NOT regenerate `*.expected.json` references without an approved, documented behavior change
+- Do NOT commit on `main` or `dev`, or push to them (hooks block it): branch from `dev`, PR to `dev`, one PR at a time
 
 ## 3-Agent Workflow
 
 See [docs/three-agent-workflow.md](docs/three-agent-workflow.md) for the Planner / Generator / Evaluator workflow.
 See [docs/ai-assisted-development.md](docs/ai-assisted-development.md) for the full AI-assisted development guide (includes gstack).
+
+## Agent Harness
+
+Subagents (`.claude/agents/`: bug-investigator, science-reviewer, evaluator, generator, repo-hygienist), hooks (`.claude/settings.json` + `.claude/hooks/`), saved workflows (`.claude/workflows/`: investigate-found-bugs, dark-mode-audit, pr-review) and the cross-session ledger (`.claude/progress.json`) are documented in [docs/agentic-workflows.md](docs/agentic-workflows.md). Read the ledger before picking up work; update it when work starts, when a PR opens, and when it merges.
+
+Agent teams (experimental): preferable for the calculation-verification loop (science fixes cross-checked against PmagPy/thesis). Enable locally with `bash .claude/scripts/agent-teams.sh on` (or `/agent-teams on`); when such work starts without a team, a `UserPromptSubmit` hook plus a `PreToolUse` gate force Claude to ask Ivan first (AskUserQuestion) and to record the answer with `.claude/scripts/agent-teams-decision.sh` before any other tool runs. See docs/agentic-workflows.md, section 5b.
 
 ## gstack
 

@@ -1,9 +1,10 @@
 # AI-Assisted Development Guide
 
-This project uses [Claude Code](https://docs.anthropic.com/en/docs/claude-code) with two toolkits:
+This project uses [Claude Code](https://docs.anthropic.com/en/docs/claude-code) with two toolkits and a harness layer:
 
 - **PMTools skills** — custom agents for the three-agent workflow (plan → generate → evaluate)
 - **gstack** — general-purpose development skills (code review, debugging, browsing, safety)
+- **Harness layer** — subagents, hooks, saved workflows and a progress ledger that make the workflow above run inside one session with guardrails. See [agentic-workflows.md](agentic-workflows.md).
 
 ## Prerequisites
 
@@ -72,6 +73,20 @@ General-purpose development skills. The most useful ones for this project:
 | `/gstack-upgrade` | Update gstack to latest version | When skills feel outdated |
 
 Full list of all gstack skills is in `CLAUDE.md`.
+
+---
+
+### Harness layer (`.claude/agents`, `.claude/hooks`, `.claude/workflows`, `.claude/progress.json`)
+
+| Piece | What it is | Where |
+|-------|-----------|-------|
+| Subagents | The Planner/Generator/Evaluator roles (plus a science reviewer, a bug investigator and a repo hygienist) as agent definitions with their own tools, model and effort. Spawned from one session with isolated context. | `.claude/agents/*.md` |
+| Hooks | Rules the harness enforces instead of the model remembering them: branch guard, protected science paths, Prettier+ESLint after every edit, `npm run verify` before a turn ends, startup checklist. | `.claude/settings.json`, `.claude/hooks/*.sh` |
+| Workflows | Deterministic multi-agent scripts: investigate found bugs, dark-mode audit, PR review with adversarial verification. | `.claude/workflows/*.js` |
+| Ledger | One JSON file with every planned item and its status; printed at session start. | `.claude/progress.json` |
+| Agent teams toggle | `/agent-teams on|off|status` enables the experimental teams feature for this repo only; for PmagPy verification loops a prompt hook and a tool gate make Claude ask Ivan (team / no team) before any work starts. | `.claude/scripts/agent-teams.sh`, `.claude/hooks/remind-agent-teams.sh`, `.claude/hooks/gate-agent-teams-decision.sh` |
+
+Full walkthrough, including how to run and extend each piece: [agentic-workflows.md](agentic-workflows.md).
 
 ---
 

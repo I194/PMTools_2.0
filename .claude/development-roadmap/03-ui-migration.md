@@ -1,4 +1,6 @@
-# Phase 3 — MUI → Design System + Radix + SCSS Modules + In-House Tables
+# Phase 3b — Migrate the app onto the UI kit and remove MUI
+
+> **Status note (September 2026).** Ivan decided to replace MUI with a **custom in-house UI kit** (he has built several in big-tech settings). The kit is built *first*, in isolation, per [03a-ui-kit.md](03a-ui-kit.md); this document is the *migration* half (3b) and is executed only once the kit is complete. Two things in this document are now decisions recorded in 03a rather than givens: the directory is `src/ui-kit/`, and whether Radix headless primitives are used *inside* the kit at all is an open decision (default: hand-rolled; Radix only for focus trapping/positioning if Ivan chooses).
 
 ## Context
 
@@ -10,12 +12,12 @@ The goal isn't just "delete MUI" — it's to build **a proper design system laye
 
 ## Goal
 
-1. Build `src/design-system/` — a dedicated layer with design tokens, primitives, and patterns.
+1. Build `src/ui-kit/` — a dedicated layer with design tokens, primitives, and patterns.
 2. Remove every MUI / Emotion dependency.
 3. Replace MUI primitives with Radix UI Primitives wrapped by the design system.
 4. Replace `@mui/x-data-grid` with an **in-house `DataTable` primitive** built from scratch on top of native HTML `<table>` / `<thead>` / `<tbody>` / `<tr>` / `<td>` elements. **No TanStack Table. No DataGrid library of any kind.** Ivan has years of experience with table libs and knows they are best built by hand.
 5. Replace `@mui/icons-material` with inlined SVG icons under the design system.
-6. Make the rest of the app (`src/pages/`, `src/components/AppLogic/`) import **only** from `src/design-system/`, never from Radix directly.
+6. Make the rest of the app (`src/pages/`, `src/components/AppLogic/`) import **only** from `src/ui-kit/`, never from Radix directly.
 
 ## Non-Goals
 
@@ -29,7 +31,7 @@ The goal isn't just "delete MUI" — it's to build **a proper design system laye
 ## Design System Structure
 
 ```
-src/design-system/
+src/ui-kit/
 ├── tokens/                        # Source of truth for all design values
 │   ├── colors.scss                # Light + dark palettes as CSS custom properties
 │   ├── spacing.scss               # 4px scale (--space-1 .. --space-12)
@@ -88,17 +90,17 @@ src/design-system/
 └── index.ts                       # Public barrel — the only import surface for the rest of the app
 ```
 
-**Hard rule**: nothing under `src/pages/`, `src/components/AppLogic/`, or `src/components/Layouts/` may import from `@radix-ui/*` or from deep paths inside `src/design-system/`. They import only from `src/design-system` (the barrel). The ESLint `no-restricted-imports` rule added in Step 0 also **bans `@tanstack/*` repo-wide** as a tripwire — no one should ever accidentally pull in a TanStack package.
+**Hard rule**: nothing under `src/pages/`, `src/components/AppLogic/`, or `src/components/Layouts/` may import from `@radix-ui/*` or from deep paths inside `src/ui-kit/`. They import only from `src/ui-kit` (the barrel). The ESLint `no-restricted-imports` rule added in Step 0 also **bans `@tanstack/*` repo-wide** as a tripwire — no one should ever accidentally pull in a TanStack package.
 
-**`src/components/Common/` fate**: absorbed into `src/design-system/primitives/` where appropriate, or promoted to `src/design-system/patterns/`. Anything app-specific that doesn't belong in a design system (e.g., things coupled to PMTools data shapes) stays in `src/components/Common/` but is refactored to consume only DS primitives.
+**`src/components/Common/` fate**: absorbed into `src/ui-kit/primitives/` where appropriate, or promoted to `src/ui-kit/patterns/`. Anything app-specific that doesn't belong in a design system (e.g., things coupled to PMTools data shapes) stays in `src/components/Common/` but is refactored to consume only DS primitives.
 
 ## Dependency Replacement Map
 
 | Removed | Replaced with | Notes |
 |---|---|---|
 | `@mui/material` | Radix UI primitives + design-system wrappers | Wrapped once, used everywhere. |
-| `@mui/x-data-grid` | **Hand-built `design-system/primitives/DataTable/`** on native `<table>` | 12 DataGrid instances. No TanStack, no DataGrid lib. |
-| `@mui/icons-material` | Inlined SVGs in `design-system/icons/` | 58 distinct icons. |
+| `@mui/x-data-grid` | **Hand-built `ui-kit/primitives/DataTable/`** on native `<table>` | 12 DataGrid instances. No TanStack, no DataGrid lib. |
+| `@mui/icons-material` | Inlined SVGs in `ui-kit/icons/` | 58 distinct icons. |
 | `@mui/system` | Removed entirely | Layout via SCSS + `Stack` primitive. |
 | `@emotion/react`, `@emotion/styled` | Removed entirely | Only installed because MUI required them. |
 
@@ -107,7 +109,7 @@ src/design-system/
 CSS custom properties are the single source of truth. SCSS files only `@forward` / `@use` tokens — no hardcoded colors, sizes, radii, or durations anywhere in the codebase after the migration.
 
 ```scss
-/* src/design-system/tokens/colors.scss */
+/* src/ui-kit/tokens/colors.scss */
 :root {
   --color-bg-primary: #ffffff;
   --color-bg-secondary: #f5f5f5;
@@ -150,7 +152,7 @@ First commits establish the foundation — nothing migrates yet. Build:
 
 ### Tier 3 — In-house DataTable (sub-phase — biggest item)
 
-Build `design-system/primitives/DataTable/` from scratch on top of native `<table>`, `<thead>`, `<tbody>`, `<tr>`, `<th>`, `<td>`. **No TanStack. No grid library.** Ivan has years of experience with table libs and the conclusion is: hand-rolled tables on native HTML are simpler, smaller, more accessible, and easier to debug than any abstraction layer.
+Build `ui-kit/primitives/DataTable/` from scratch on top of native `<table>`, `<thead>`, `<tbody>`, `<tr>`, `<th>`, `<td>`. **No TanStack. No grid library.** Ivan has years of experience with table libs and the conclusion is: hand-rolled tables on native HTML are simpler, smaller, more accessible, and easier to debug than any abstraction layer.
 
 **Why hand-built**:
 - Native HTML tables already implement keyboard navigation, screen-reader semantics, column-header relationships, and printability for free.
@@ -160,7 +162,7 @@ Build `design-system/primitives/DataTable/` from scratch on top of native `<tabl
 
 **Architecture**:
 ```
-src/design-system/primitives/DataTable/
+src/ui-kit/primitives/DataTable/
 ├── DataTable.tsx               # Main component — renders <table> with composable subcomponents
 ├── DataTable.types.ts          # Column<T>, Row<T>, SortState, SelectionState, FilterState
 ├── DataTable.module.scss       # Styling (sticky header, zebra rows, hover, selected)
@@ -245,11 +247,11 @@ Then migrate the 12 grids in order of increasing complexity:
 ### Step 0 — Infrastructure
 1. Install `@radix-ui/react-dialog`, `@radix-ui/react-tooltip`, `@radix-ui/react-select`, `@radix-ui/react-tabs`, `@radix-ui/react-dropdown-menu`, `@radix-ui/react-checkbox`, `@radix-ui/react-switch`, `@radix-ui/react-slot`.
 2. **Do NOT install `@tanstack/react-table` or any other TanStack package.** The DataTable is hand-built. The lint rule below makes accidental TanStack installs visible.
-3. Scaffold `src/design-system/` with empty folders and `index.ts`.
+3. Scaffold `src/ui-kit/` with empty folders and `index.ts`.
 4. Add ESLint rule `no-restricted-imports` disallowing:
    - `@mui/*` repo-wide
    - `@emotion/*` repo-wide
-   - `@radix-ui/*` everywhere except inside `src/design-system/`
+   - `@radix-ui/*` everywhere except inside `src/ui-kit/`
    - `@tanstack/*` repo-wide (full ban — tripwire for accidental installs).
 
 ### Step 1 — Tokens and theme
@@ -294,21 +296,21 @@ Final grep, package removal. No bundle measurement — bundle size is intentiona
 - [ ] `grep -rn '@emotion' src/` returns zero results.
 - [ ] `grep -rn '@tanstack' src/` returns zero results AND `package.json` lists no `@tanstack/*` package.
 - [ ] `useApiRef.tsx` no longer exists.
-- [ ] All DataTables use `src/design-system/primitives/DataTable/`, which is hand-built on native `<table>` with no library dependency.
+- [ ] All DataTables use `src/ui-kit/primitives/DataTable/`, which is hand-built on native `<table>` with no library dependency.
 - [ ] `package.json` no longer lists any MUI or Emotion package.
-- [ ] `src/pages/` and `src/components/AppLogic/` import only from `src/design-system` or from domain code — never from Radix / ex-MUI primitives directly.
+- [ ] `src/pages/` and `src/components/AppLogic/` import only from `src/ui-kit` or from domain code — never from Radix / ex-MUI primitives directly.
 - [ ] ESLint `no-restricted-imports` rule enforces this AND bans `@tanstack/*` repo-wide.
-- [ ] SCSS token sweep complete: no hardcoded colors, sizes, or durations in any `*.module.scss` outside `src/design-system/tokens/`.
+- [ ] SCSS token sweep complete: no hardcoded colors, sizes, or durations in any `*.module.scss` outside `src/ui-kit/tokens/`.
 - [ ] All Phase 1 unit tests pass.
 - [ ] All Phase 2 visual regression tests pass (intentional diffs regenerated after inspection).
 - [ ] Light/dark theme still works via `data-theme` attribute.
 - [ ] Dev server + production build both succeed.
-- [ ] `src/design-system/README.md` is complete and `src/design-system/primitives/DataTable/README.md` documents how to handle every existing DataGrid pattern.
+- [ ] `src/ui-kit/README.md` is complete and `src/ui-kit/primitives/DataTable/README.md` documents how to handle every existing DataGrid pattern.
 
 ## Critical Files
 
 ### Files to create
-- `src/design-system/` — entire tree per the structure above.
+- `src/ui-kit/` — entire tree per the structure above.
 - `.eslintrc` — `no-restricted-imports` rule (incl. full `@tanstack/*` ban).
 - `.claude/development-roadmap/notes/phase-3-token-sweep-log.md`.
 
