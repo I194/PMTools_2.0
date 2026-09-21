@@ -1,12 +1,13 @@
 {
-  "$comment": "Cross-session progress ledger (the 'feature list' pattern from Anthropic's long-running-agents guide). Agents read it at session start (hook) and update status as work moves: todo -> in-progress -> pr-open -> merged, or blocked. Keep entries one line; details live in the linked docs.",
+  "$comment": "Cross-session progress ledger (the 'feature list' pattern from Anthropic's long-running-agents guide). Agents read it at session start (hook) and update status as work moves: todo -> in-progress -> pr-open -> merged, or blocked (resumes once the reason in notes is resolved), or closed (terminal: superseded, parked or not a bug; nobody picks it up). Keep entries one line; details live in the linked docs.",
   "updated": "2026-09-22",
   "statuses": [
     "todo",
     "in-progress",
     "pr-open",
     "merged",
-    "blocked"
+    "blocked",
+    "closed"
   ],
   "tracks": {
     "science-fixes": {
@@ -41,7 +42,7 @@
           "id": "SCI-03",
           "title": "calculateCutoff never resets cutoffValue between iterations",
           "severity": "major",
-          "status": "blocked",
+          "status": "closed",
           "pr": null,
           "notes": "SUPERSEDED by SCI-20 (Ivan 2026-09-22: delete the dead code, do not fix). No production caller; the live MCFAD and CUTOFF 45 buttons use other code. Evidence: test-data/v2.6.6/science-fix-queue.md"
         },
@@ -49,7 +50,7 @@
           "id": "SCI-04",
           "title": "calculateCutoff skips an outlier at index 0 (if (index) guard)",
           "severity": "major",
-          "status": "blocked",
+          "status": "closed",
           "pr": null,
           "notes": "SUPERSEDED by SCI-20 (Ivan 2026-09-22: delete the dead code, do not fix). No production caller; the live MCFAD and CUTOFF 45 buttons use other code. Evidence: test-data/v2.6.6/science-fix-queue.md"
         },
@@ -57,7 +58,7 @@
           "id": "SCI-05",
           "title": "Distribution.R stuck at 0 -> poleConfidence NaN -> butlerDistribution always null",
           "severity": "major",
-          "status": "blocked",
+          "status": "closed",
           "pr": null,
           "notes": "SUPERSEDED by SCI-20 (Ivan 2026-09-22: delete the dead code, do not fix). No production caller; the live MCFAD and CUTOFF 45 buttons use other code. Evidence: test-data/v2.6.6/science-fix-queue.md"
         },
@@ -65,7 +66,7 @@
           "id": "SCI-06",
           "title": "calculateButlerParameters mixes degrees and radians",
           "severity": "major",
-          "status": "blocked",
+          "status": "closed",
           "pr": null,
           "notes": "SUPERSEDED by SCI-20 (Ivan 2026-09-22: delete the dead code, do not fix). No production caller; the live MCFAD and CUTOFF 45 buttons use other code. Evidence: test-data/v2.6.6/science-fix-queue.md"
         },
@@ -73,7 +74,7 @@
           "id": "SCI-07",
           "title": "calculateMCFaddenIncMean hardcodes the F-distribution term to 0 (a95 far too tight)",
           "severity": "major",
-          "status": "blocked",
+          "status": "closed",
           "pr": null,
           "notes": "SUPERSEDED by SCI-20 (Ivan 2026-09-22: delete the dead code, do not fix). No production caller; the live MCFAD and CUTOFF 45 buttons use other code. Evidence: test-data/v2.6.6/science-fix-queue.md"
         },
@@ -81,7 +82,7 @@
           "id": "SCI-08",
           "title": "calculateMCFaddenIncMean crashes for N=1",
           "severity": "minor",
-          "status": "blocked",
+          "status": "closed",
           "pr": null,
           "notes": "SUPERSEDED by SCI-20 (Ivan 2026-09-22: delete the dead code, do not fix). No production caller; the live MCFAD and CUTOFF 45 buttons use other code. Evidence: test-data/v2.6.6/science-fix-queue.md"
         },
@@ -105,7 +106,7 @@
           "id": "SCI-11",
           "title": "toPMM hardcodes author/date and mislabels a95g/a95s columns (they carry MAD)",
           "severity": "minor",
-          "status": "blocked",
+          "status": "closed",
           "pr": null,
           "notes": "PARKED by Ivan 2026-09-22: nobody complained, keep the literal \"author\",\"2021-11-27\" header as is. The a95g/a95s half is not a bug (canonical PMM header, thesis Fig. 2.16). Details: test-data/v2.6.6/science-fix-queue.md"
         },
@@ -121,7 +122,7 @@
           "id": "SCI-13",
           "title": "toPMD truncates specimen name to 10 chars and merges it with a=",
           "severity": "minor",
-          "status": "blocked",
+          "status": "closed",
           "pr": null,
           "notes": "PARKED by Ivan 2026-09-22: nobody asked for it, PMTools re-import unaffected (only PmagPy's PMD reader fails). Details: test-data/v2.6.6/science-fix-queue.md"
         },
@@ -135,11 +136,11 @@
         },
         {
           "id": "SCI-15",
-          "title": "CLOSED not-a-bug for RS3 (UTF-8 vs Latin-1 give identical parser output on all 286 files); superseded by SCI-19",
+          "title": "parserRS3 ISO-8859-1 input decoded as UTF-8 (degree sign becomes U+FFFD)",
           "severity": "cosmetic",
-          "status": "blocked",
+          "status": "closed",
           "pr": null,
-          "notes": "Closed by Ivan 2026-09-22; see SCI-19. Details: test-data/v2.6.6/science-fix-queue.md"
+          "notes": "CLOSED by Ivan 2026-09-22: not a bug for RS3 (UTF-8 vs Latin-1 give identical parser output on all 286 files); superseded by SCI-19. Details: test-data/v2.6.6/science-fix-queue.md"
         },
         {
           "id": "SCI-16",
@@ -203,7 +204,7 @@
           "severity": "major",
           "status": "blocked",
           "pr": null,
-          "notes": "Investigated 2026-09-22: confirmed wrong numbers in production (strat I 25.40235 -> 25.04235; order dependence up to 7-12 deg for circle-dominated sets), 12 reference flips verified, fix lens refuted the spec as written. BLOCKED on 4 decisions by Ivan (M = 0 / zero line sum policy, non-convergence outcome, getRawPlaneData removal, sequencing with SCI-17). Spec and questions: test-data/v2.6.6/science-fix-queue-SCI-22-SCI-23.md"
+          "notes": "Investigated 2026-09-22: confirmed wrong numbers in production (strat I 25.40235 -> 25.04235; order dependence up to 7-12 deg for circle-dominated sets), 1 reference file flips (mcfadden_combine_mean/directions_and_great_circles.expected.json, 12 values; directions_only and all other references unchanged), fix lens refuted the spec as written. BLOCKED on 4 decisions by Ivan (M = 0 / zero line sum policy, non-convergence outcome, getRawPlaneData removal, sequencing with SCI-17). Spec and questions: test-data/v2.6.6/science-fix-queue-SCI-22-SCI-23.md"
         }
       ]
     },

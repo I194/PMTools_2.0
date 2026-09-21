@@ -12,7 +12,7 @@ Model policy (Ivan, September 2026): never Sonnet or Haiku on this project. The 
 
 One JSON file, five tracks (`science-fixes`, `ui-kit`, `visual-tests`, `performance`, `housekeeping`), one entry per planned item with an id (`SCI-03`, `UIK-04`, …), a title, a severity where it applies, a status, a PR number and a one-line note.
 
-- Statuses: `todo` → `in-progress` → `pr-open` → `merged`, or `blocked` with the reason in `notes`.
+- Statuses: `todo` → `in-progress` → `pr-open` → `merged`, or `blocked` with the reason in `notes` (work resumes once it is resolved), or `closed` (terminal: superseded, parked or not a bug, with the reason in `notes`; nobody picks it up).
 - Agents update it when they start an item, when the PR opens and when it merges. Humans read it; the session-start hook prints it.
 - Ids are referenced by the workflows (`investigate-found-bugs` takes `["SCI-01", "SCI-02"]`), by commit messages and by PR titles, so one id ties together the roadmap note, the ledger entry, the investigation report and the PR.
 - It mirrors, it does not replace: the science items point at [found-bugs-todo.md](../.claude/development-roadmap/notes/found-bugs-todo.md), the UI kit items at [03a-ui-kit.md](../.claude/development-roadmap/03a-ui-kit.md).
@@ -68,7 +68,7 @@ Workflows spawn many agents and cost accordingly, so they only run when you ask 
 
 | Workflow | What it does | Args | Output |
 |---|---|---|---|
-| `investigate-found-bugs` | One `bug-investigator` per bug from the found-bugs catalog (parallel, read-only) → three `science-reviewer` refuters per spec (root cause, fix, science) → a ranking pass. | `["SCI-01", "SCI-05"]` or none for all | `test-data/v{version}/science-fix-queue.md` plus the structured queue and a "needs decision" list |
+| `investigate-found-bugs` | One `bug-investigator` per bug from the found-bugs catalog (parallel, read-only) → three `science-reviewer` refuters per spec (root cause, fix, science) → a ranking pass. | `["SCI-01", "SCI-05"]` or none for every open item (catalog entries with `skip: true` mirror `closed` and hard-blocked ledger items and run only when named) | `test-data/v{version}/science-fix-queue.md` (scoped run: `science-fix-queue-<ids>.md`; an existing report is never overwritten) plus the structured queue and a "needs decision" list |
 | `dark-mode-audit` | One `evaluator` walks every page and modal in dark mode (serial: Playwright shares one browser) → one `bug-investigator` per defect maps it to `path:line` and proposes a token → a plan pass. Needs `npm start` running. | optional custom scope | `test-data/v{version}/dark-mode-audit.md`, screenshots under `dark-mode/`, a token plan |
 | `pr-review` | Scope the diff → one reviewer per dimension (correctness, conventions, tests; plus `science-reviewer` when science paths changed and a UI lens when TSX/SCSS changed) → dedup → three refuters per finding. | `{ "base": "dev", "head": "HEAD" }` | Confirmed findings sorted by severity, plus what was refuted and why |
 
@@ -113,7 +113,7 @@ Claude keeps an auto-memory directory per project outside the repository (`~/.cl
 ### A. A science fix (one `SCI-xx` item)
 
 1. Start on `dev`: `git checkout dev && git pull`, then `git checkout -b fix/sci-03-cutoff-reset dev`.
-2. If the item has not been investigated yet: *"run the investigate-found-bugs workflow for SCI-03"*. Read `test-data/v{version}/science-fix-queue.md`. If the spec landed in "needs decision", decide, then continue.
+2. If the item has not been investigated yet: *"run the investigate-found-bugs workflow for SCI-03"*. Read `test-data/v{version}/science-fix-queue-SCI-03.md` (a scoped run names the report after its ids; only a no-args run writes `science-fix-queue.md`). If the spec landed in "needs decision", decide, then continue.
 3. Ivan approves the change to scientific logic in the conversation. Then `touch .claude/.science-unlock`.
 4. *"Use the generator subagent to implement SCI-03 from the science-fix queue."* It changes the code, regenerates exactly the affected references with `UPDATE_FIXTURES=1 npm test -- --watchAll=false <pattern>`, eyeballs them, commits with `fix(science): …`, updates the ledger, writes `verify-fixes.md`.
 5. `rm .claude/.science-unlock`.
