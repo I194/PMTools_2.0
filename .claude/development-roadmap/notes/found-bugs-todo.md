@@ -4,6 +4,7 @@ Bugs/follow-ups surfaced during the fixture sweep that are **deliberately not fi
 Out of scope for Part A (regression safety net) — Part A locks current behavior *as-is*, even when it's wrong. Fix these later, each in its own `fix(science):` PR with the locking test flipped to assert correct output.
 
 - **D2 — `parserRS3` non-UTF-8 encoding.** All 285 archive RS3 files are ISO-8859-1; `°` (0xB0) can become `U+FFFD`, corrupting step-name strings. Column offsets survive (single code unit), so severity is cosmetic *for now* — becomes high if any parser ever uses 0xB0 as a delimiter. Fix: detect ISO-8859-1/Windows-1251 in the FileReader pipeline and decode before parsing.
+  - **2026-09-22 (SCI-15 closed, re-scoped as SCI-19).** Does not reproduce for RS3: UTF-8 and Latin-1 decoding give identical parser output on all 286 real files (0xB0 sits only in the discarded title line and unread columns). "Column offsets survive" above is false in general (valid pairs and truncated cp1251 sequences). The real, format-agnostic defect is `fileManipulations.ts:74,110` (`readAsText` with no encoding): ledger SCI-19. Evidence: `test-data/v2.6.6/science-fix-queue.md`.
 - **D3 — demagType warning UX surfacing.** Parser side is fixed (emits `AMBIGUOUS_DEMAG_TYPE` in `validation.warnings`). Still pending: show it to the user as a non-blocking toast at file load. This is UI work → belongs to Phase 2, not Part A.
 - **D4 — `parserPMM` collapses internal whitespace.** `replace(/\s+/g,'')` turns `"site avg"` → `"siteavg"`. **Won't-fix** (long-standing behavior). Action: just lock it with a regression test asserting `stepRange === "siteavg"`. Not a bug.
 
@@ -79,15 +80,28 @@ All **locked as-is** by `src/__tests__/fixtures/converters/*` — none fixed her
   `.xlsx` converters do NOT have this bug: `XLSX.utils.aoa_to_sheet` + `sheet_to_csv` auto-quote
   comma fields (`"outlier, re-measured"`). Locked by the `oriented_with_comment` (PMD) and
   `long_labels` (DIR) fixtures. Fix later: quote/escape CSV fields in the three text-CSV converters.
+  - **HARD BLOCK on SCI-10 (Ivan, 2026-09-22). Check before starting any work on it.** No
+    session may touch SCI-10, on the write or the read side, until ledger item **SCI-21** is merged
+    AND Ivan has explicitly confirmed that the test data is sufficient. Reason: the first spec was
+    refuted 2 of 3 (write-only quoting makes native-PMM comments grow quotes on every
+    export/import cycle; the fix needs a quote-aware read side), and the read path is barely
+    covered: 3 real `.pmm` references, 0 real CSV_PMD, 1 real CSV_DIR, 0 round-trip tests.
+    Plan: (1) SCI-21, a tests-only PR that locks CURRENT behavior: every available real `.pmm`
+    (9 today) as parser references, app-exported CSV_PMD / CSV_DIR / XLSX fixtures, and
+    export -> import round-trip tests; ask Roman for more real PMM/CSV files. (2) Ivan confirms
+    sufficiency. (3) Rewrite the SCI-10 spec (one PR, write + read), then implement.
+    Evidence and the open design questions: `test-data/v2.6.6/science-fix-queue.md`.
 - **`toPMM` hardcodes author and date.** The metadata line is literally
   `${name},"author","2021-11-27"` — the author is the string `author` and the date is frozen,
   neither derived from the data. A `.pmm` export therefore always claims the same fake
   provenance. Deterministic (so safely lockable), but a stub to revisit when PMM export gains
   real metadata. Locked by `dir/*.toPMM.expected.json`.
+  - **2026-09-22: PARKED by Ivan (SCI-11).** Nobody complained; the literal header stays. If it is ever reopened: never parse a `toLocaleString()` value (day/month swap for days 1-12), and `toISOString()` is the UTC date. Evidence: `test-data/v2.6.6/science-fix-queue.md`.
 - **`toPMM` column header names don't match the columns written.** Header says
   `...,kg,a95g,...,ks,a95s,...` but the reduce writes `Kgeo, MADgeo, ..., Kstrat, MADstrat` in
   those slots — i.e. the `a95g/a95s` headers actually carry MAD values. Cosmetic header/label
   mismatch; locked.
+  - **2026-09-22: not a bug.** `a95g/a95s` is the canonical PMM header (thesis Fig. 2.16, all real files), a generic confidence-radius slot.
 - **`toDIR` truncates the label to 6 chars; the other DIR converters keep it full.**
   `toDIR` does `label.slice(0, 6)` (`SITE-001-A` → `SITE-0`) to fit the fixed-width `.dir`
   column, while `toPMM`/`toCSV_DIR`/`toXLSX_DIR` emit the full label. So `.dir` is the only
@@ -111,6 +125,7 @@ All **locked as-is** by `src/__tests__/fixtures/converters/*` — none fixed her
   PMD exporters don't have this — they carry the full name only as the download *filename*, not in
   a width-bounded cell. Locked by `pmd/oriented_with_comment.toPMD.expected.json`. Fix later: pad
   the name field with a guaranteed separator (or widen/relax it) so name and `a=` never merge.
+  - **2026-09-22: PARKED by Ivan (SCI-13).** Nobody asked for it; PMTools re-import is unaffected (only PmagPy's PMD reader fails, on 22 of 141 real files). "Widen" is unsafe; if reopened, read the refuter notes first (interior dots in names, empty stem shifts columns). Evidence: `test-data/v2.6.6/science-fix-queue.md`.
 
 **Note on the `.xlsx` references (not a bug, a harness choice).** The converter golden for an
 `.xlsx` output is the **`xlsx_to_csv` text projection** of the produced workbook, not its raw zip
@@ -217,6 +232,27 @@ sanity bounds).
   `getRawPlaneData` point were null/never beat `r = 0`, `gcPath[bestGCdir.dirIndex]` reads
   `gcPath[-1]` → `undefined`, which then poisons the resultant with `NaN`. Not exercised (real
   great circles always yield a best point), so noted, not locked. Fix later: guard `dirIndex >= 0`.
+  - **SCI-17 re-investigation brief (2026-09-22; the first spec was refuted 3 of 3, see
+    `test-data/v2.6.6/science-fix-queue.md`).** The text above is partly wrong: the result is a
+    thrown `TypeError` at `calculateMcFaddenCombineMean.ts:42`, not a NaN resultant, and "a guard
+    is enough" does not hold. What the next investigation must establish before any PR:
+    1. **Reachability.** A `.dir` file cannot trigger it (`parserDIR.ts:82-93` drops NaN rows).
+       The route is the unvalidated imports behind `wrapPlain`: `parserCSV_DIR.ts:22-29`, XLSX
+       through it, and `parserMDIR`. Reproduce in the app with a CSV/XLSX row holding a
+       non-numeric Dgeo/Igeo plus at least one great-circle row.
+    2. **All crash sites, not one.** The same row also throws in GC mode, and after the
+       localStorage round trip (NaN -> null) every mode throws at `calculateStatisticsDIR.ts:27`.
+       List every site and the user-visible effect of each.
+    3. **Where the fix lives** (Ivan's decision, needs the evidence from 1 and 2): finite-value
+       validation in the CSV/XLSX/MDIR DIR parsers, a finite filter in `calculateStatisticsDIR`,
+       a NaN-shaped McFadden result (parity with Fisher), or a combination. Silently filtering
+       rows and reducing N is not recommended.
+    4. **Traps found by the refuters.** A `return` inside the `forEach` only skips the circle and
+       outputs a plausible wrong mean (a95 76.9 where 3.5 is correct). Regression values must not
+       sit on an argmax over a ~1e-15 spread with ties (platform-fragile). k for a single great
+       circle is -Infinity.
+    Run with: `/investigate-found-bugs` with `args: ["SCI-17"]` after the catalog text in the
+    workflow is updated to this brief.
 - **`calculatePCA_pmd` MAD silently becomes 0 on degenerate eigenvalues.** When the smallest two
   eigenvalues vanish (a perfectly collinear fit), `Math.sqrt(tau[0])`/the planes ratio produce
   `Infinity`/`NaN`; the `isFinite(madValue) ? madValue : 0` guards (lines 63, 70) then report
@@ -273,6 +309,14 @@ strategy (lock the pure core `findBed`/`unfold` now; seed + extract `runFoldTest
   - **Why a plain golden-master wasn't enough:** locking PMTools alone would have enshrined −17 %
     as "correct". The PmagPy cross-check is what exposed the defect — the validation half of
     Layer A, not just the regression half.
+  - **2026-09-22 decision (Ivan): one PR, PmagPy parity, nothing more.** SCI-01 ships the
+    call-site fix (`beddingAzimuth - 90` passed to `correctBedding`; do not change
+    `correctBedding`) together with the `findBed` normalization for vertical and overturned beds
+    (`foldTestBootstrap.ts:175-181` returns a dip in (180, 270); queue report, NEW-A). Oracle:
+    `synthetic_fold.pmagpy.json` plus a vertical/overturned-limb case generated from PmagPy.
+    Verified spec and refuter corrections: `test-data/v2.6.6/science-fix-queue.md`, section 1.
+    The expected index is 98 (the sample optimum of this N=18 draw), not 100. The
+    `foldTestClassic.ts` sub-item above is stale (the file is an empty stub).
 
 ## Surfaced in parserPMD reference output (Part A — final parser lock)
 
@@ -328,3 +372,50 @@ data-loss bug a green test alone would not have:
   **not fixed here** (Part A locks behavior as-is). Fix later: index over physical lines (don't
   pre-filter) with the correct base offset, then regenerate the affected references. Recorded so a
   future reader doesn't mistake the locked `rowNumber`s for file line numbers.
+
+## Surfaced by the investigate-found-bugs run (2026-09-21, report `test-data/v2.6.6/science-fix-queue.md`)
+
+- **Decision (Ivan, 2026-09-22): delete the dead statistics code instead of fixing it (SCI-20,
+  replaces SCI-03..08).** `calculateCutoff` (only an unused import in `dataToStereoDIR.ts`),
+  `calculateButlerParameters` with the Distribution/Butler branch reachable only through it, and
+  `calculateMCFaddenIncMean` have no production caller. The live **MCFAD** button uses
+  `calculateMcFaddenMean` (`calculateStatisticsDIR.ts:47`) and the live **CUTOFF 45** button uses
+  the 45-degree circle plus `mean.angle(direction) > 45` (`markCutoffComments.ts:32` and the stereo
+  graph); neither touches the dead functions. The "Fix later" notes for those functions in the
+  PR 5 / PR 6 sections above are obsolete.
+- **SCI-22: `Coordinates.angle` takes `acos` of an unclamped dot product (live code).**
+  `Coordinates.ts:106`. Reported by a refuter: NaN for about 30 % of identical or antipodal
+  integer-degree pairs. Under the shipped 45-degree cutoff a direction antipodal to the mean can
+  escape the cut, because `NaN > 45` is false (`markCutoffComments.ts:32`, stereo graph dots).
+  Not yet independently verified or locked. To establish: every caller of `angle`, which of them
+  compare or display the value, whether a clamp to [-1, 1] changes any locked reference.
+- **SCI-23: the McFadden combined mean is a single greedy pass (live MCFAD button).**
+  `calculateMcFaddenCombineMean.ts`: one pass over the great-circle points (194 per circle),
+  whereas the thesis describes an iterative procedure. Reported by a refuter on the locked
+  stratigraphic fixture: I = 25.40 (24.66 with the great-circle rows swapped, so the result is
+  order-dependent) against PmagPy 25.04. Not yet independently verified. To establish: the
+  algorithm in the thesis and in PmagPy, the size of the error on real collections, convergence
+  criterion, and which references flip.
+- **Verdicts for SCI-22 and SCI-23 (2026-09-22, report `test-data/v2.6.6/science-fix-queue-SCI-22-SCI-23.md`).**
+  - **SCI-22: confirmed, 0 of 3 refuted, ready once Ivan approves.** One-line clamp in
+    `src/utils/graphs/classes/Coordinates.ts:105-107`, no reference flips. Three live symptoms of
+    the one root cause: CUTOFF 45 escape (graph filter and CUT45 marker), `splitPolarities` puts an
+    exact antipode into the normal group, the manual reversal test returns gamma = NaN with class
+    A/B/C. Reach is narrow (exact antipode or identical direction), so the reviewers recommend
+    severity minor. Do not import `clamp` from `stereoGreatCircle.ts` (import cycle); no
+    exact-equality asserts on trig-derived angles.
+  - **SCI-23: confirmed, but the fix spec was refuted; blocked on four decisions by Ivan.**
+    (1) policy for great circles only (M = 0) or an exactly zero sum of lines, including the
+    statistics for tiny selections; (2) what the user gets on non-convergence or when the running
+    mean is parallel to a circle's pole; (3) `getRawPlaneData` becomes dead after the fix: delete
+    in the same PR or later (SCI-20 must not delete it first); (4) sequencing with SCI-17.
+    Verified new values: stratigraphic I 25.40235 -> 25.04235, D 346.6498 -> 346.6868; geographic
+    I 36.69984 -> 36.65407.
+  - **New findings without a ledger item (Ivan decides whether to open them):** NEW-I the manual
+    reversal test reports the raw angle between the typed means and never says the reversed mean
+    must be inverted, so true N/R means give gamma near 180 and class '-'; NEW-J unclamped `acos`
+    in the gammaCritical expression (`reversalTestClassic.tsx:30`,
+    `reversalTestOldFashioned.tsx:27`) and in `Distribution.ts:46`; NEW-K NaN-input paths still
+    make `NaN > threshold` false in every `angle()` caller after SCI-22 (candidate for the SCI-17
+    re-investigation); NEW-L McFadden k/a95 edge cases for tiny selections (covered by SCI-23
+    question 1).

@@ -1,6 +1,6 @@
 {
   "$comment": "Cross-session progress ledger (the 'feature list' pattern from Anthropic's long-running-agents guide). Agents read it at session start (hook) and update status as work moves: todo -> in-progress -> pr-open -> merged, or blocked. Keep entries one line; details live in the linked docs.",
-  "updated": "2026-09-21",
+  "updated": "2026-09-22",
   "statuses": [
     "todo",
     "in-progress",
@@ -23,11 +23,11 @@
         },
         {
           "id": "SCI-01",
-          "title": "Fold test unfolds about the wrong axis (findBed returns dip direction, correctBedding expects strike)",
+          "title": "Fold test unfolds about the wrong axis (call site passes dip direction as strike) + findBed returns dip in (180, 270) for vertical/overturned beds",
           "severity": "critical",
           "status": "todo",
           "pr": null,
-          "notes": "found-bugs-todo: 'Surfaced in Layer A'; PmagPy cross-check; fixtures fold_unfold/*"
+          "notes": "Ivan 2026-09-22: ONE PR for the call-site fix and the findBed normalization (NEW-A), target = PmagPy parity, nothing more. Spec + refuter corrections: test-data/v2.6.6/science-fix-queue.md section 1 and NEW-A; flips fold_unfold/* (index -17 -> 98)"
         },
         {
           "id": "SCI-02",
@@ -41,49 +41,49 @@
           "id": "SCI-03",
           "title": "calculateCutoff never resets cutoffValue between iterations",
           "severity": "major",
-          "status": "todo",
+          "status": "blocked",
           "pr": null,
-          "notes": "underneath the CUT45 export shipped in 2.6.5"
+          "notes": "SUPERSEDED by SCI-20 (Ivan 2026-09-22: delete the dead code, do not fix). No production caller; the live MCFAD and CUTOFF 45 buttons use other code. Evidence: test-data/v2.6.6/science-fix-queue.md"
         },
         {
           "id": "SCI-04",
           "title": "calculateCutoff skips an outlier at index 0 (if (index) guard)",
           "severity": "major",
-          "status": "todo",
+          "status": "blocked",
           "pr": null,
-          "notes": "fixture cutoff/outlier_at_index_zero_vandamme"
+          "notes": "SUPERSEDED by SCI-20 (Ivan 2026-09-22: delete the dead code, do not fix). No production caller; the live MCFAD and CUTOFF 45 buttons use other code. Evidence: test-data/v2.6.6/science-fix-queue.md"
         },
         {
           "id": "SCI-05",
           "title": "Distribution.R stuck at 0 -> poleConfidence NaN -> butlerDistribution always null",
           "severity": "major",
-          "status": "todo",
+          "status": "blocked",
           "pr": null,
-          "notes": "calculateBasicStatisticalParameters"
+          "notes": "SUPERSEDED by SCI-20 (Ivan 2026-09-22: delete the dead code, do not fix). No production caller; the live MCFAD and CUTOFF 45 buttons use other code. Evidence: test-data/v2.6.6/science-fix-queue.md"
         },
         {
           "id": "SCI-06",
           "title": "calculateButlerParameters mixes degrees and radians",
           "severity": "major",
-          "status": "todo",
+          "status": "blocked",
           "pr": null,
-          "notes": "fix together with SCI-05 or right after"
+          "notes": "SUPERSEDED by SCI-20 (Ivan 2026-09-22: delete the dead code, do not fix). No production caller; the live MCFAD and CUTOFF 45 buttons use other code. Evidence: test-data/v2.6.6/science-fix-queue.md"
         },
         {
           "id": "SCI-07",
           "title": "calculateMCFaddenIncMean hardcodes the F-distribution term to 0 (a95 far too tight)",
           "severity": "major",
-          "status": "todo",
+          "status": "blocked",
           "pr": null,
-          "notes": "needs fcalc(2, N-1)"
+          "notes": "SUPERSEDED by SCI-20 (Ivan 2026-09-22: delete the dead code, do not fix). No production caller; the live MCFAD and CUTOFF 45 buttons use other code. Evidence: test-data/v2.6.6/science-fix-queue.md"
         },
         {
           "id": "SCI-08",
           "title": "calculateMCFaddenIncMean crashes for N=1",
           "severity": "minor",
-          "status": "todo",
+          "status": "blocked",
           "pr": null,
-          "notes": ""
+          "notes": "SUPERSEDED by SCI-20 (Ivan 2026-09-22: delete the dead code, do not fix). No production caller; the live MCFAD and CUTOFF 45 buttons use other code. Evidence: test-data/v2.6.6/science-fix-queue.md"
         },
         {
           "id": "SCI-09",
@@ -97,17 +97,17 @@
           "id": "SCI-10",
           "title": "CSV converters (toCSV_PMD, toCSV_DIR, toPMM) do not quote fields with commas",
           "severity": "minor",
-          "status": "todo",
+          "status": "blocked",
           "pr": null,
-          "notes": ""
+          "notes": "HARD BLOCK (Ivan 2026-09-22): no session may start SCI-10 (write or read side) until SCI-21 is merged AND Ivan has explicitly confirmed the test data is sufficient. Check this before any work. Spec was refuted 2/3 and must be rewritten (write + quote-aware read in one PR). Evidence: test-data/v2.6.6/science-fix-queue.md"
         },
         {
           "id": "SCI-11",
           "title": "toPMM hardcodes author/date and mislabels a95g/a95s columns (they carry MAD)",
           "severity": "minor",
-          "status": "todo",
+          "status": "blocked",
           "pr": null,
-          "notes": ""
+          "notes": "PARKED by Ivan 2026-09-22: nobody complained, keep the literal \"author\",\"2021-11-27\" header as is. The a95g/a95s half is not a bug (canonical PMM header, thesis Fig. 2.16). Details: test-data/v2.6.6/science-fix-queue.md"
         },
         {
           "id": "SCI-12",
@@ -121,9 +121,9 @@
           "id": "SCI-13",
           "title": "toPMD truncates specimen name to 10 chars and merges it with a=",
           "severity": "minor",
-          "status": "todo",
+          "status": "blocked",
           "pr": null,
-          "notes": ""
+          "notes": "PARKED by Ivan 2026-09-22: nobody asked for it, PMTools re-import unaffected (only PmagPy's PMD reader fails). Details: test-data/v2.6.6/science-fix-queue.md"
         },
         {
           "id": "SCI-14",
@@ -135,11 +135,11 @@
         },
         {
           "id": "SCI-15",
-          "title": "parserRS3 ISO-8859-1 input decoded as UTF-8 (degree sign becomes U+FFFD)",
+          "title": "CLOSED not-a-bug for RS3 (UTF-8 vs Latin-1 give identical parser output on all 286 files); superseded by SCI-19",
           "severity": "cosmetic",
-          "status": "todo",
+          "status": "blocked",
           "pr": null,
-          "notes": "D2; fix in FileReader pipeline"
+          "notes": "Closed by Ivan 2026-09-22; see SCI-19. Details: test-data/v2.6.6/science-fix-queue.md"
         },
         {
           "id": "SCI-16",
@@ -151,11 +151,11 @@
         },
         {
           "id": "SCI-17",
-          "title": "calculateMcFaddenMean would index gcPath[-1] if a great circle yields no point",
-          "severity": "cosmetic",
+          "title": "Non-finite direction crashes DIR statistics: McFadden gcPath[-1], GC mode, and every mode after the localStorage round trip (NaN -> null)",
+          "severity": "minor",
           "status": "todo",
           "pr": null,
-          "notes": "guard only"
+          "notes": "Spec refuted 3/3, needs RE-INVESTIGATION before any PR (Ivan: later, with agents). Brief: found-bugs-todo 'SCI-17 re-investigation brief'; evidence: test-data/v2.6.6/science-fix-queue.md"
         },
         {
           "id": "SCI-18",
@@ -164,6 +164,46 @@
           "status": "blocked",
           "pr": null,
           "notes": "waiting for reference data from scientists (.claude/feature-requests-v2.6.3/mad-zero-investigation.md)"
+        },
+        {
+          "id": "SCI-19",
+          "title": "FileReader pipeline decodes legacy single-byte files (cp1251/Latin-1) as UTF-8 - format-agnostic (fileManipulations.ts readAsText without encoding)",
+          "severity": "cosmetic",
+          "status": "todo",
+          "pr": null,
+          "notes": "Re-scope of SCI-15 (Ivan 2026-09-22). BOM sniffing, fatal UTF-8, single windows-1251 fallback; must not break UTF-16 BOM files; TextDecoder is undefined in jest. Related: parserPMD degC item. Details: test-data/v2.6.6/science-fix-queue.md"
+        },
+        {
+          "id": "SCI-20",
+          "title": "Delete dead statistics code: calculateCutoff (+ unused import in dataToStereoDIR.ts), calculateButlerParameters and the Distribution/Butler branch reachable only through it, calculateMCFaddenIncMean; remove their fixtures and *.expected.json",
+          "severity": "minor",
+          "status": "todo",
+          "pr": null,
+          "notes": "Ivan approved deletion 2026-09-22 (replaces SCI-03..08). Needs .claude/.science-unlock. First prove each symbol has no production caller (grep + typecheck); keep anything still imported by live code; reference removals are the approved, documented behavior change. Restore from git if Vandamme or inclination-only statistics are ever wanted. Do NOT delete getRawPlaneData here: it is live until SCI-23 lands."
+        },
+        {
+          "id": "SCI-21",
+          "title": "Prerequisite for SCI-10: lock the CSV/PMM/XLSX read path with real data (all available real .pmm as parser references, app-exported CSV_PMD / CSV_DIR / XLSX fixtures, export -> import round-trip tests that lock CURRENT behavior)",
+          "severity": "minor",
+          "status": "todo",
+          "pr": null,
+          "notes": "Today: 3 real .pmm references, 6 more real .pmm outside fixtures, 0 real CSV_PMD, 1 real CSV_DIR, 0 round-trip tests. Ask Roman for more real PMM/CSV files. Tests only, no behavior change. Done = merged + Ivan confirms sufficiency; only then SCI-10 goes back to todo."
+        },
+        {
+          "id": "SCI-22",
+          "title": "Coordinates.angle calls acos on an unclamped dot product: NaN for identical/antipodal pairs, so a direction antipodal to the mean can escape the live CUTOFF 45 (NaN > 45 is false)",
+          "severity": "major",
+          "status": "todo",
+          "pr": null,
+          "notes": "Investigated 2026-09-22: confirmed, 0 of 3 refuted. One-line clamp in src/utils/graphs/classes/Coordinates.ts:105-107, zero reference flips, risk low; fires only on degenerate input (exact antipode / identical), reviewers recommend severity minor. Needs Ivan's go-ahead; follow the refuters' test corrections. Spec: test-data/v2.6.6/science-fix-queue-SCI-22-SCI-23.md"
+        },
+        {
+          "id": "SCI-23",
+          "title": "McFadden combined mean (live MCFAD button) is a single greedy pass, thesis says iterative: locked stratigraphic fixture I = 25.40 (24.66 with GC rows swapped) vs PmagPy 25.04, order-dependent",
+          "severity": "major",
+          "status": "blocked",
+          "pr": null,
+          "notes": "Investigated 2026-09-22: confirmed wrong numbers in production (strat I 25.40235 -> 25.04235; order dependence up to 7-12 deg for circle-dominated sets), 12 reference flips verified, fix lens refuted the spec as written. BLOCKED on 4 decisions by Ivan (M = 0 / zero line sum policy, non-convergence outcome, getRawPlaneData removal, sequencing with SCI-17). Spec and questions: test-data/v2.6.6/science-fix-queue-SCI-22-SCI-23.md"
         }
       ]
     },

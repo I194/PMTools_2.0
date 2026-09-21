@@ -29,11 +29,15 @@ const CATALOG = [
   { id: 'SCI-13', title: 'toPMD truncates the specimen name to 10 chars and merges it with a=', section: 'Surfaced in PR 4' },
   { id: 'SCI-14', title: 'parserPMD validation.invalidRows rowNumber is off by one', section: 'Surfaced in parserPMD reference output' },
   { id: 'SCI-15', title: 'parserRS3 ISO-8859-1 input decoded as UTF-8 (D2)', section: 'top of the file (D2)' },
-  { id: 'SCI-17', title: 'calculateMcFaddenMean would index gcPath[-1] if a great circle yields no point', section: 'Surfaced in PR 6' },
+  { id: 'SCI-17', title: 'Non-finite direction crashes DIR statistics: McFadden gcPath[-1], GC mode, every mode after the localStorage round trip (follow the "SCI-17 re-investigation brief")', section: 'Surfaced in PR 6' },
+  { id: 'SCI-22', title: 'Coordinates.angle takes acos of an unclamped dot product; a direction antipodal to the mean can escape the live CUTOFF 45', section: 'Surfaced by the investigate-found-bugs run' },
+  { id: 'SCI-23', title: 'McFadden combined mean (live MCFAD button) is a single greedy pass instead of the iterative procedure; order-dependent, differs from PmagPy', section: 'Surfaced by the investigate-found-bugs run' },
 ]
 
 const requested = Array.isArray(args) && args.length ? args.map(String) : null
 const selected = requested ? CATALOG.filter((bug) => requested.includes(bug.id)) : CATALOG
+// A scoped run must not overwrite the full-catalog report.
+const reportFileName = requested ? `science-fix-queue-${selected.map((bug) => bug.id).join('-')}.md` : 'science-fix-queue.md'
 if (requested) {
   const unknown = requested.filter((id) => !CATALOG.some((bug) => bug.id === id))
   if (unknown.length) log(`Unknown ids ignored (not in the catalog): ${unknown.join(', ')}`)
@@ -133,7 +137,7 @@ ${JSON.stringify(spec, null, 2)}`
 
 const rankPrompt = (items) => `Rank these verified science-fix specs for PMTools into an ordered PR queue.
 Rules: one fix per PR; researcher impact first (wrong numbers > silent data loss > crashes > cosmetic); cheap independent fixes may go early; respect dependencies (for example Distribution.R before the Butler unit fix); an item with survives=false, confirmed=false, or an unresolved open question goes to needsDecision instead of the queue, with the question Ivan must answer.
-Write the result as Markdown to test-data/v{version}/science-fix-queue.md (read the version from package.json; create the directory if needed). Per item include: id, title, severity, root cause in one line, references to flip, risk, and the three refuter verdicts with their reasoning. Then return the structured summary.
+Write the result as Markdown to test-data/v{version}/${reportFileName} (read the version from package.json; create the directory if needed). Do not modify any other science-fix-queue*.md file. Per item include: id, title, severity, root cause in one line, references to flip, risk, and the three refuter verdicts with their reasoning. Then return the structured summary.
 Data:
 ${JSON.stringify(items, null, 2)}`
 
