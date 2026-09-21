@@ -1,6 +1,6 @@
 {
   "$comment": "Cross-session progress ledger (the 'feature list' pattern from Anthropic's long-running-agents guide). Agents read it at session start (hook) and update status as work moves: todo -> in-progress -> pr-open -> merged, or blocked. Keep entries one line; details live in the linked docs.",
-  "updated": "2026-09-05",
+  "updated": "2026-09-21",
   "statuses": [
     "todo",
     "in-progress",
@@ -321,9 +321,9 @@
           "id": "HK-03",
           "title": "Roadmap README: Phase 1 status says Planned although Part A is done",
           "severity": null,
-          "status": "in-progress",
-          "pr": null,
-          "notes": "fixed in chore/agentic-harness"
+          "status": "pr-open",
+          "pr": 48,
+          "notes": "PR #48 chore/agentic-harness"
         }
       ]
     }
