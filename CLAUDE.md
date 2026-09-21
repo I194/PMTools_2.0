@@ -128,6 +128,7 @@ MUI is being replaced by a **custom in-house UI kit** in `src/ui-kit/` (tokens, 
 - Do NOT add server-side code — this is a fully client-side application
 - Do NOT modify scientific logic in `utils/statistics/` without explicit request (a PreToolUse hook blocks it until `.claude/.science-unlock` exists; create that file only after Ivan approves, delete it after)
 - Do NOT regenerate `*.expected.json` references without an approved, documented behavior change
+- Do NOT start work on SCI-10 (quoting in the CSV/PMM converters, or any quote-aware change to the CSV/PMM/XLSX read path) until ledger item SCI-21 is merged AND Ivan has explicitly confirmed the test data is sufficient. Before touching `src/utils/files/converters/` or the CSV/PMM/XLSX parsers, check `.claude/progress.json` for blocked items
 - Do NOT commit on `main` or `dev`, or push to them (hooks block it): branch from `dev`, PR to `dev`, one PR at a time
 
 ## 3-Agent Workflow

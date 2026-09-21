@@ -3,41 +3,52 @@ export const meta = {
   description:
     'Investigate found-bugs-todo entries in parallel (read-only), adversarially verify each fix spec, write a ranked science-fix queue',
   whenToUse:
-    'Before starting science-fix PRs or whenever found-bugs-todo.md grows. args: ["SCI-01", "SCI-02"] limits the scope; no args = every item in the catalog below.',
+    'Before starting science-fix PRs or whenever found-bugs-todo.md grows. args: ["SCI-01", "SCI-02"] limits the scope; no args = every open item in the catalog below (skip: true items run only when named).',
   phases: [
     { title: 'Investigate', detail: 'one read-only bug-investigator per item' },
     { title: 'Verify', detail: 'three science-reviewer lenses per spec, each trying to refute it' },
-    { title: 'Rank', detail: 'one ranking pass; writes test-data/v{version}/science-fix-queue.md' },
+    { title: 'Rank', detail: 'one ranking pass; writes test-data/v{version}/science-fix-queue.md (scoped run: science-fix-queue-<ids>.md)' },
   ],
 }
 
 // Mirrors the science-fixes track in .claude/progress.json. Keep the ids in sync.
 // Titles are hints only: the investigator reads the full bullet in found-bugs-todo.md itself.
+// skip: true = the ledger item is closed (superseded, parked, not a bug) or hard-blocked (SCI-10 until SCI-21 is
+// merged and Ivan confirms the test data). A no-args run leaves these out; naming the id in args still runs it.
 const CATALOG = [
   { id: 'SCI-01', title: 'Fold test unfolds about the wrong axis (findBed returns a dip direction, correctBedding expects a strike)', section: 'Surfaced in Layer A' },
   { id: 'SCI-02', title: 'parserPMD drops 3-digit degC steps (4-char step column overflow)', section: 'Surfaced in parserPMD reference output' },
-  { id: 'SCI-03', title: 'calculateCutoff never resets cutoffValue between iterations', section: 'Surfaced in PR 5' },
-  { id: 'SCI-04', title: 'calculateCutoff skips an outlier sitting at index 0', section: 'Surfaced in PR 5' },
-  { id: 'SCI-05', title: 'Distribution.R stuck at 0 so butlerDistribution is always null', section: 'Surfaced in PR 5' },
-  { id: 'SCI-06', title: 'calculateButlerParameters mixes degrees and radians', section: 'Surfaced in PR 5' },
-  { id: 'SCI-07', title: 'calculateMCFaddenIncMean hardcodes the F-distribution term to 0', section: 'Surfaced in PR 6' },
-  { id: 'SCI-08', title: 'calculateMCFaddenIncMean crashes for a single inclination (N = 1)', section: 'Surfaced in PR 6' },
+  { id: 'SCI-03', title: 'calculateCutoff never resets cutoffValue between iterations', section: 'Surfaced in PR 5', skip: true },
+  { id: 'SCI-04', title: 'calculateCutoff skips an outlier sitting at index 0', section: 'Surfaced in PR 5', skip: true },
+  { id: 'SCI-05', title: 'Distribution.R stuck at 0 so butlerDistribution is always null', section: 'Surfaced in PR 5', skip: true },
+  { id: 'SCI-06', title: 'calculateButlerParameters mixes degrees and radians', section: 'Surfaced in PR 5', skip: true },
+  { id: 'SCI-07', title: 'calculateMCFaddenIncMean hardcodes the F-distribution term to 0', section: 'Surfaced in PR 6', skip: true },
+  { id: 'SCI-08', title: 'calculateMCFaddenIncMean crashes for a single inclination (N = 1)', section: 'Surfaced in PR 6', skip: true },
   { id: 'SCI-09', title: 'calculatePCA_dir no-op mirroring line and dead code copied from PCA_pmd', section: 'Surfaced in PR 6' },
-  { id: 'SCI-10', title: 'CSV converters do not quote fields containing commas', section: 'Surfaced in PR 4' },
-  { id: 'SCI-11', title: 'toPMM hardcodes author/date and mislabels the a95g/a95s columns', section: 'Surfaced in PR 4' },
+  { id: 'SCI-10', title: 'CSV converters do not quote fields containing commas', section: 'Surfaced in PR 4', skip: true },
+  { id: 'SCI-11', title: 'toPMM hardcodes author/date and mislabels the a95g/a95s columns', section: 'Surfaced in PR 4', skip: true },
   { id: 'SCI-12', title: 'toGPML download uses the text/csv MIME type', section: 'Surfaced in PR 4' },
-  { id: 'SCI-13', title: 'toPMD truncates the specimen name to 10 chars and merges it with a=', section: 'Surfaced in PR 4' },
+  { id: 'SCI-13', title: 'toPMD truncates the specimen name to 10 chars and merges it with a=', section: 'Surfaced in PR 4', skip: true },
   { id: 'SCI-14', title: 'parserPMD validation.invalidRows rowNumber is off by one', section: 'Surfaced in parserPMD reference output' },
-  { id: 'SCI-15', title: 'parserRS3 ISO-8859-1 input decoded as UTF-8 (D2)', section: 'top of the file (D2)' },
-  { id: 'SCI-17', title: 'calculateMcFaddenMean would index gcPath[-1] if a great circle yields no point', section: 'Surfaced in PR 6' },
+  { id: 'SCI-15', title: 'parserRS3 ISO-8859-1 input decoded as UTF-8 (D2)', section: 'top of the file (D2)', skip: true },
+  { id: 'SCI-17', title: 'Non-finite direction crashes DIR statistics: McFadden gcPath[-1], GC mode, every mode after the localStorage round trip (follow the "SCI-17 re-investigation brief")', section: 'Surfaced in PR 6' },
+  { id: 'SCI-19', title: 'FileReader pipeline decodes legacy single-byte files (cp1251/Latin-1) as UTF-8: fileManipulations.ts readAsText without an encoding, format-agnostic', section: 'top of the file (D2), SCI-19 re-scope note' },
+  { id: 'SCI-22', title: 'Coordinates.angle takes acos of an unclamped dot product; a direction antipodal to the mean can escape the live CUTOFF 45', section: 'Surfaced by the investigate-found-bugs run' },
+  { id: 'SCI-23', title: 'McFadden combined mean (live MCFAD button) is a single greedy pass instead of the iterative procedure; order-dependent, differs from PmagPy', section: 'Surfaced by the investigate-found-bugs run' },
 ]
 
 const requested = Array.isArray(args) && args.length ? args.map(String) : null
-const selected = requested ? CATALOG.filter((bug) => requested.includes(bug.id)) : CATALOG
+const selected = requested ? CATALOG.filter((bug) => requested.includes(bug.id)) : CATALOG.filter((bug) => !bug.skip)
+// A scoped run must not overwrite the full-catalog report.
+const reportFileName = requested ? `science-fix-queue-${selected.map((bug) => bug.id).join('-')}.md` : 'science-fix-queue.md'
 if (requested) {
   const unknown = requested.filter((id) => !CATALOG.some((bug) => bug.id === id))
   if (unknown.length) log(`Unknown ids ignored (not in the catalog): ${unknown.join(', ')}`)
 }
+const skipped = CATALOG.filter((bug) => bug.skip && !selected.includes(bug))
+if (!requested && skipped.length) log(`Skipped (closed or hard-blocked in the ledger): ${skipped.map((bug) => bug.id).join(', ')}`)
+const forced = selected.filter((bug) => bug.skip)
+if (forced.length) log(`Explicitly requested although marked skip: ${forced.map((bug) => bug.id).join(', ')}`)
 if (!selected.length) return { error: 'nothing selected', catalog: CATALOG.map((bug) => bug.id) }
 log(`Investigating ${selected.length} item(s): ${selected.map((bug) => bug.id).join(', ')}`)
 
@@ -133,7 +144,7 @@ ${JSON.stringify(spec, null, 2)}`
 
 const rankPrompt = (items) => `Rank these verified science-fix specs for PMTools into an ordered PR queue.
 Rules: one fix per PR; researcher impact first (wrong numbers > silent data loss > crashes > cosmetic); cheap independent fixes may go early; respect dependencies (for example Distribution.R before the Butler unit fix); an item with survives=false, confirmed=false, or an unresolved open question goes to needsDecision instead of the queue, with the question Ivan must answer.
-Write the result as Markdown to test-data/v{version}/science-fix-queue.md (read the version from package.json; create the directory if needed). Per item include: id, title, severity, root cause in one line, references to flip, risk, and the three refuter verdicts with their reasoning. Then return the structured summary.
+Write the result as Markdown to test-data/v{version}/${reportFileName} (read the version from package.json; create the directory if needed). The ledger cites existing reports as evidence: if that file already exists, do not overwrite it, write science-fix-queue-YYYY-MM-DD.md (today's date, plus the ids for a scoped run) next to it instead. Do not modify any other science-fix-queue*.md file. Per item include: id, title, severity, root cause in one line, references to flip, risk, and the three refuter verdicts with their reasoning. Then return the structured summary.
 Data:
 ${JSON.stringify(items, null, 2)}`
 
