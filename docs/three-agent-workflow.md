@@ -1,5 +1,7 @@
 # Three-Agent Workflow Guide
 
+> **September 2026:** the three roles below now also exist as subagents (`.claude/agents/`), with hooks enforcing the rules and saved workflows for the repeatable multi-step jobs. This document is still the conceptual guide; the operational walkthrough is [agentic-workflows.md](agentic-workflows.md).
+
 This workflow splits AI-assisted development into three specialized roles: **Planner**, **Generator**, and **Evaluator**. The separation of generation and evaluation is a powerful lever — it's much easier to teach a separate evaluator to be skeptical than to make a generator critique itself.
 
 > Based on [Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) by Anthropic.

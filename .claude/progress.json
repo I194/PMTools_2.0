@@ -1,0 +1,331 @@
+{
+  "$comment": "Cross-session progress ledger (the 'feature list' pattern from Anthropic's long-running-agents guide). Agents read it at session start (hook) and update status as work moves: todo -> in-progress -> pr-open -> merged, or blocked. Keep entries one line; details live in the linked docs.",
+  "updated": "2026-09-05",
+  "statuses": [
+    "todo",
+    "in-progress",
+    "pr-open",
+    "merged",
+    "blocked"
+  ],
+  "tracks": {
+    "science-fixes": {
+      "doc": ".claude/development-roadmap/notes/found-bugs-todo.md",
+      "rule": "One fix(science) PR per item; each PR flips the locked reference and justifies the new numbers; needs Ivan's explicit approval (touch .claude/.science-unlock).",
+      "items": [
+        {
+          "id": "SCI-00",
+          "title": "Redo the D3 demagType fix on a fresh branch from dev (cherry-pick 14837f5 + 80b4db6 from phase-1/d3-pmd-demagtype, flip the locked parserPMD references)",
+          "severity": "major",
+          "status": "todo",
+          "pr": null,
+          "notes": "PR #36 closed as superseded on 2026-09-05; branch kept; first reference-flip PR"
+        },
+        {
+          "id": "SCI-01",
+          "title": "Fold test unfolds about the wrong axis (findBed returns dip direction, correctBedding expects strike)",
+          "severity": "critical",
+          "status": "todo",
+          "pr": null,
+          "notes": "found-bugs-todo: 'Surfaced in Layer A'; PmagPy cross-check; fixtures fold_unfold/*"
+        },
+        {
+          "id": "SCI-02",
+          "title": "parserPMD drops 3-digit degC steps (4-char step column overflow)",
+          "severity": "critical",
+          "status": "todo",
+          "pr": null,
+          "notes": "crimea2013_nrm_celsius_dialect_143.pmd: 12 steps -> 2; ~23 files affected"
+        },
+        {
+          "id": "SCI-03",
+          "title": "calculateCutoff never resets cutoffValue between iterations",
+          "severity": "major",
+          "status": "todo",
+          "pr": null,
+          "notes": "underneath the CUT45 export shipped in 2.6.5"
+        },
+        {
+          "id": "SCI-04",
+          "title": "calculateCutoff skips an outlier at index 0 (if (index) guard)",
+          "severity": "major",
+          "status": "todo",
+          "pr": null,
+          "notes": "fixture cutoff/outlier_at_index_zero_vandamme"
+        },
+        {
+          "id": "SCI-05",
+          "title": "Distribution.R stuck at 0 -> poleConfidence NaN -> butlerDistribution always null",
+          "severity": "major",
+          "status": "todo",
+          "pr": null,
+          "notes": "calculateBasicStatisticalParameters"
+        },
+        {
+          "id": "SCI-06",
+          "title": "calculateButlerParameters mixes degrees and radians",
+          "severity": "major",
+          "status": "todo",
+          "pr": null,
+          "notes": "fix together with SCI-05 or right after"
+        },
+        {
+          "id": "SCI-07",
+          "title": "calculateMCFaddenIncMean hardcodes the F-distribution term to 0 (a95 far too tight)",
+          "severity": "major",
+          "status": "todo",
+          "pr": null,
+          "notes": "needs fcalc(2, N-1)"
+        },
+        {
+          "id": "SCI-08",
+          "title": "calculateMCFaddenIncMean crashes for N=1",
+          "severity": "minor",
+          "status": "todo",
+          "pr": null,
+          "notes": ""
+        },
+        {
+          "id": "SCI-09",
+          "title": "calculatePCA_dir: no-op 'mirroring' line + dead code copied from PCA_pmd",
+          "severity": "minor",
+          "status": "todo",
+          "pr": null,
+          "notes": "decide: real antipodal mirroring or delete"
+        },
+        {
+          "id": "SCI-10",
+          "title": "CSV converters (toCSV_PMD, toCSV_DIR, toPMM) do not quote fields with commas",
+          "severity": "minor",
+          "status": "todo",
+          "pr": null,
+          "notes": ""
+        },
+        {
+          "id": "SCI-11",
+          "title": "toPMM hardcodes author/date and mislabels a95g/a95s columns (they carry MAD)",
+          "severity": "minor",
+          "status": "todo",
+          "pr": null,
+          "notes": ""
+        },
+        {
+          "id": "SCI-12",
+          "title": "toGPML download uses text/csv MIME type",
+          "severity": "cosmetic",
+          "status": "todo",
+          "pr": null,
+          "notes": ""
+        },
+        {
+          "id": "SCI-13",
+          "title": "toPMD truncates specimen name to 10 chars and merges it with a=",
+          "severity": "minor",
+          "status": "todo",
+          "pr": null,
+          "notes": ""
+        },
+        {
+          "id": "SCI-14",
+          "title": "parserPMD validation.invalidRows rowNumber off by one and not blank-line robust",
+          "severity": "cosmetic",
+          "status": "todo",
+          "pr": null,
+          "notes": ""
+        },
+        {
+          "id": "SCI-15",
+          "title": "parserRS3 ISO-8859-1 input decoded as UTF-8 (degree sign becomes U+FFFD)",
+          "severity": "cosmetic",
+          "status": "todo",
+          "pr": null,
+          "notes": "D2; fix in FileReader pipeline"
+        },
+        {
+          "id": "SCI-16",
+          "title": "Surface AMBIGUOUS_DEMAG_TYPE warning as a non-blocking toast at file load",
+          "severity": "minor",
+          "status": "blocked",
+          "pr": null,
+          "notes": "D3 UI half; depends on SCI-00"
+        },
+        {
+          "id": "SCI-17",
+          "title": "calculateMcFaddenMean would index gcPath[-1] if a great circle yields no point",
+          "severity": "cosmetic",
+          "status": "todo",
+          "pr": null,
+          "notes": "guard only"
+        },
+        {
+          "id": "SCI-18",
+          "title": "MAD=0 root cause investigation",
+          "severity": "major",
+          "status": "blocked",
+          "pr": null,
+          "notes": "waiting for reference data from scientists (.claude/feature-requests-v2.6.3/mad-zero-investigation.md)"
+        }
+      ]
+    },
+    "ui-kit": {
+      "doc": ".claude/development-roadmap/03a-ui-kit.md",
+      "rule": "Build the kit first in src/ui-kit/ with a showcase route and snapshot tests; no app migration until the kit is complete (3a). Then migrate and delete MUI (3b).",
+      "items": [
+        {
+          "id": "UIK-01",
+          "title": "Ivan writes the kit spec: tokens, naming, component API conventions",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": "src/ui-kit/SPEC.md; Ivan's call, not the agent's"
+        },
+        {
+          "id": "UIK-02",
+          "title": "Scaffold src/ui-kit/ + ESLint boundary rules + /ui-kit showcase route",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": ""
+        },
+        {
+          "id": "UIK-03",
+          "title": "Tokens + theme (light/dark via data-theme) + anti-flash script",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": ""
+        },
+        {
+          "id": "UIK-04",
+          "title": "Primitives wave 1: Button, IconButton, ButtonGroup, Typography, Divider, Stack",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": "ordered by current MUI usage counts"
+        },
+        {
+          "id": "UIK-05",
+          "title": "Primitives wave 2: TextField, NumberField, Checkbox, Switch, Select, Tabs, Tooltip",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": ""
+        },
+        {
+          "id": "UIK-06",
+          "title": "Primitives wave 3: Dialog, Popover, DropdownMenu",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": "focus trap + positioning: decide hand-rolled vs Radix headless (open decision in 03a)"
+        },
+        {
+          "id": "UIK-07",
+          "title": "Icons: inline the 29 SVG icons currently imported from @mui/icons-material",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": ""
+        },
+        {
+          "id": "UIK-08",
+          "title": "DataTable primitive on native <table> (sort, select, edit, sticky header, optional windowing)",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": "replaces 28 files using @mui/x-data-grid"
+        },
+        {
+          "id": "UIK-09",
+          "title": "3b: migrate pages/AppLogic onto the kit, remove MUI + Emotion",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": "per .claude/development-roadmap/03-ui-migration.md"
+        }
+      ]
+    },
+    "visual-tests": {
+      "doc": ".claude/development-roadmap/02-visual-tests.md",
+      "rule": "SVG string snapshots first (Jest, no browser). Playwright page screenshots second.",
+      "items": [
+        {
+          "id": "VIS-01",
+          "title": "SVG snapshot tests for the 6 graph components",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": "Zijderveld, Stereo, Mag, VGP, FoldTest, ReversalTest"
+        },
+        {
+          "id": "VIS-02",
+          "title": "Playwright screenshot baselines: showcase page + app pages, light and dark",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": "prerequisite for 3b migration"
+        }
+      ]
+    },
+    "performance": {
+      "doc": ".claude/development-roadmap/07-performance.md",
+      "rule": "Measure first. No algorithmic changes to the math; off-main-thread and caching only.",
+      "items": [
+        {
+          "id": "PERF-01",
+          "title": "Track A: cumulative lag on DIR page with 200+ directions (root cause + fix + regression test)",
+          "severity": "major",
+          "status": "todo",
+          "pr": null,
+          "notes": "hypothesis list in 07-performance.md; greatCircleCache first"
+        },
+        {
+          "id": "PERF-02",
+          "title": "Extract runFoldTest(input, rng) / bootstrapCommonMeanTest pure cores (Layer B)",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": "prerequisite for workers and for seeded golden masters"
+        },
+        {
+          "id": "PERF-03",
+          "title": "Move bootstrap tests to a Web Worker",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": "after PERF-02"
+        }
+      ]
+    },
+    "housekeeping": {
+      "doc": "docs/agentic-workflows.md",
+      "rule": "Cheap, low-risk, do in the gaps.",
+      "items": [
+        {
+          "id": "HK-01",
+          "title": "Close stale PRs #6, #8, #9, #13, #19",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": "2022-2025, all conflicting"
+        },
+        {
+          "id": "HK-02",
+          "title": "Delete merged phase-1/* branches on origin",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": ""
+        },
+        {
+          "id": "HK-03",
+          "title": "Roadmap README: Phase 1 status says Planned although Part A is done",
+          "severity": null,
+          "status": "in-progress",
+          "pr": null,
+          "notes": "fixed in chore/agentic-harness"
+        }
+      ]
+    }
+  }
+}
