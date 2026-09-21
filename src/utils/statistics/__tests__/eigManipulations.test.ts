@@ -78,3 +78,32 @@ describeComputationReferenceOutput({
       ),
     ),
 });
+
+// SCI-22: an exact antipode of the principal direction used to get a NaN angle, `NaN > 90` is
+// false, so it stayed in the normal group and [n, n, antipode] split 3/0. PmagPy's doprinc +
+// flip gives 2 and 1 for the same input. Which group holds the pair depends on the hemisphere
+// of the principal direction, so only the sizes are locked; hand-picked inputs overshoot only
+// under one platform's trig rounding, hence a sweep (72 declinations x 81 inclinations = 5832).
+describe('splitPolarities with an exact antipode', () => {
+  it('separates the antipode from the two identical directions for every swept direction', () => {
+    let wrongSplitCount = 0;
+
+    for (let declination = 0; declination < 360; declination += 5) {
+      for (let inclination = -80; inclination <= 80; inclination += 2) {
+        const direction = new Direction(declination, inclination, 1);
+        const antipode = new Direction((declination + 180) % 360, -inclination, 1);
+
+        const { normalDirections, reversedDirections } = splitPolarities([
+          direction,
+          new Direction(declination, inclination, 1),
+          antipode,
+        ]);
+
+        const groupSizes = [normalDirections.length, reversedDirections.length].sort();
+        if (groupSizes[0] !== 1 || groupSizes[1] !== 2) wrongSplitCount++;
+      }
+    }
+
+    expect(wrongSplitCount).toBe(0);
+  });
+});
