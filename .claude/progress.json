@@ -321,7 +321,7 @@
           "id": "HK-03",
           "title": "Roadmap README: Phase 1 status says Planned although Part A is done",
           "severity": null,
-          "status": "pr-open",
+          "status": "merged",
           "pr": 48,
           "notes": "PR #48 chore/agentic-harness"
         }
