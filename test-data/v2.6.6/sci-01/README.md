@@ -33,3 +33,24 @@ generator used, and the answer matches PmagPy.
 
 The app runs a 1000-draw bootstrap on top of this, so the displayed **bounds** are stochastic
 and will differ run to run. The best-unfolding percentage is the number to compare.
+
+## For the PR description: one commit message carries a superseded claim
+
+The message of commit `4dc785a` ("fix(science): normalize findBed dips past 180 degrees")
+ends with *"Vertical beds (dip exactly 90, cosdip = 0) are untouched."* **That is wrong**, and
+the science review caught it. At dip exactly 90 `cosdip` is not 0 — it is a float residue of
+order 1e-16 whose sign is arbitrary, so about half of exactly-vertical beds did take the long
+arc before this fix. Two of six measured cases did:
+
+```
+true azimuth 313.5024, dip 90 -> pre-fix (133.5024, 270.0), fractional-unfold error  98.67 deg
+true azimuth 186.0364, dip 90 -> pre-fix (  6.0364, 270.0), fractional-unfold error 150.68 deg
+```
+
+The reassuring half of that finding is real and stands: **after** the normalization both
+residue signs yield the same bedding, so the vertical boundary is no longer float-sensitive.
+
+The commit message was left as written rather than reworded, because `git rebase -i` is not
+supported in this environment and mangling a seven-commit branch to fix a paragraph is a bad
+trade. The corrected wording is in `found-bugs-todo.md` and in the test comments; please carry
+this correction into the PR description.

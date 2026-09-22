@@ -98,11 +98,10 @@ describe('unfold against the PmagPy fold-test oracle', () => {
   it('finds the best unfolding near 100 %, not near 0 %', () => {
     // 98, not 100, is the finite-sample optimum of this N=18 draw -- PmagPy on a 1 % grid
     // also lands on 98 for unrounded input. The oracle's 100 % is its 10 %-grid answer.
-    expect(index).toBe(98);
-    expect(oracle.bestUntiltPercent).toBe(100);
     // Before SCI-01 this was -17: the fold test claimed the directions were already at their
     // tightest before any unfolding at all.
-    expect(index).toBeGreaterThan(90);
+    expect(index).toBe(98);
+    expect(oracle.bestUntiltPercent).toBe(100);
   });
 });
 
@@ -126,6 +125,17 @@ describe('findBed and the untilting step round trip', () => {
     { description: 'overturned bed at another strike', strike: 250, dip: 145 },
     { description: 'strongly overturned bed', strike: 0, dip: 170 },
   ];
+
+  // Which of these carry the NEW-A regression net: the dip 91, 110 and 145 rows. The two
+  // dip 90 rows are NOT regression cases -- with the normalization removed they still pass on
+  // this platform. They are boundary coverage, and they pin the 1.52e-8 residual that
+  // `findBed`'s near-singular solve produces at exactly vertical.
+  //
+  // Whether a dip = 90 row lands in the unnormalized bad branch at all is decided by a ~1e-16
+  // residue in `cosdip` whose sign is arbitrary, so the counterfactual may differ on the Linux
+  // CI runner. That affects only what a mutation run would show; the shipped code gives the
+  // same bedding for either sign of the residue, so these rows are not flaky. Do not delete
+  // them for looking like they might be.
 
   // Comfortably above the worst observed residual (1.5e-8, at an exactly vertical bed, where
   // `findBed`'s solve divides by a vanishing quantity) and far below any wrong answer: an
@@ -165,11 +175,13 @@ describe('findBed and the untilting step round trip', () => {
     });
   });
 
-  it('would fail at 50 % for an overturned bed without the findBed normalization', () => {
+  it('takes the short arc for the two beddings that exercise the normalization', () => {
     // Pinned so the intent of the case list above cannot be lost: these two beddings are the
     // ones that actually exercise NEW-A. Measured against the unnormalized `findBed`, each
     // returned a dip of 250 about the opposite strike and missed the 50 % target by ~1.5,
-    // while still landing on the right 100 % endpoint to within 1e-15.
+    // while still landing on the right 100 % endpoint to within 1e-15. This test cannot
+    // observe that counterfactual -- it asserts the fixed behavior; the measurement above is
+    // the record of what the unnormalized code did.
     const overturnedBeddings = [
       { strike: 140, dip: 110 },
       { strike: 250, dip: 110 },
@@ -178,6 +190,9 @@ describe('findBed and the untilting step round trip', () => {
     overturnedBeddings.forEach(({ strike, dip }) => {
       const geographic = stratigraphic.correctBedding(strike, -dip);
       const vector = toVectorWithBedding(geographic, stratigraphic);
+      // `toBeCloseTo(dip, 6)` is safe only for these pinned rows, which recover the bedding
+      // exactly. Do NOT extend this idiom to the vertical rows: at strike 250, dip 90 the
+      // near-singular solve recovers 89.99999879, which fails at 6 decimal places.
       expect(vector.beddingDip).toBeCloseTo(dip, 6);
       expect(
         largestComponentDifference(

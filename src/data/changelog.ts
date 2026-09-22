@@ -9,7 +9,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     version: '2.6.6',
     date: 'September 21, 2026',
     items: [
-      'Fold test: fixed a wrong best-unfolding percentage. The test unfolded about an axis 90° away from the fold axis, so on a two-limb fold it read 41 % instead of 92 %, with bootstrap bounds of −50…150 instead of 90…109. Results now match PmagPy across the whole −50…150 % range.',
+      'Fold test: fixed a wrong best-unfolding percentage. The test unfolded about an axis 90 degrees away from the fold axis, so the reported percentage and its confidence bounds were wrong for every tilted collection. Results now match PmagPy across the whole -50 to 150 % range.',
       'Fold test: fixed fractional unfolding taking the long way round for vertical and overturned beds (dip ≥ 90°), which skewed the curve and the confidence bounds for those collections.',
       'If you ran a fold test in an earlier version, please re-run it — the reported best-unfolding percentage and its bounds were wrong for every tilted collection.',
       'DIR page: fixed table export (PMM/CSV/XLSX) ignoring the active column filter — only directions that pass the filter are exported now. "Export with hidden" still exports every direction.',

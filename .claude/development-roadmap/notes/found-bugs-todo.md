@@ -309,9 +309,11 @@ strategy (lock the pure core `findBed`/`unfold` now; seed + extract `runFoldTest
     The earlier open question "stop rounding the fixture to get 100" is dropped.
   - **Shipped with it:** the `findBed` dip normalization for vertical and overturned beds
     (NEW-A, below), because the call-site fix alone still left dips ≥ 90 wrong.
-  - **Still only approximate for post-folding data.** On random post-fold sets PMTools reads
-    −5 / −2 / 6 where PmagPy reads −11 / −11 / 4. That is not exact parity and is not claimed to
-    be; it is a separate open question, not part of SCI-01.
+  - **Agreement with PmagPy is exact** given the same directions and beddings (max |Δtau1|
+    1.2e-15 over 480 synthetic collections). Because `findBed` re-derives the bedding from
+    directions stored at 0.1 degrees, the best-unfolding percentage can differ from a PmagPy run
+    handed the true beddings by up to about 2 % on post-folding data, where the tau1 curve is
+    nearly flat; measured max |Δindex| = 2 over 480 collections, 0 for pre-folding data.
   - **Why a plain golden-master wasn't enough:** locking PMTools alone would have enshrined −17 %
     as "correct". The PmagPy cross-check is what exposed the defect — the validation half of
     Layer A, not just the regression half.
@@ -327,12 +329,24 @@ strategy (lock the pure core `findBed`/`unfold` now; seed + extract `runFoldTest
   Roughly half of dip > 90 beddings were affected, depending on the sign of `sindip`.
   - **The fix:** normalize a dip past 180 to `360 − dip` about the opposite strike — the same
     rotation, taken the short way round — which puts the bed back in the geological [0, 180)
-    range (≥ 90 = overturned). Exactly vertical beds (dip 90, `cosdip = 0`) never entered the
-    bad branch and are unchanged.
+    range (≥ 90 = overturned). Confirmed equivalent to solving the dip with
+    `atan2(sindip, cosdip)`, numerically over the full sweep.
+  - **Exactly vertical beds are affected too:** `cosdip` there is a ~1e-16 residue whose sign
+    decides between dip 90 and dip 270, so about half of them took the long arc. Two of six
+    exactly-vertical cases did, pre-fix — true azimuth 313.5024 became (133.5024, 270.0), a
+    98.67° fractional-unfold error, and 186.0364 became (6.0364, 270.0), 150.68°. After the
+    normalization both residue signs give the same bedding, so the vertical boundary is no
+    longer float-sensitive.
   - The locked `fold_unfold` references are **unaffected** (their beddings are dips 25…65).
     Coverage for this path lives in `FoldTest/__tests__/foldTestUnfoldAxis.test.ts`, which
     compares components rather than `Coordinates.angle`, asserts the short arc at 50 % as well
     as the endpoint at 100 %, and was mutation-checked against both defects.
+
+- **⚪ Not a bug in practice, noted while fixing SCI-01 — `findBed` can return `azimuth`
+  exactly 360.** The `if (ys == yg) { strike = 90 }` branch combined with `strike += 180` can
+  push `azimuth` to exactly 360, because the wraparound clamp is a single-shot `if`, not a
+  modulo. Pre-existing and harmless downstream (`correctBedding` is periodic), so **do not
+  fix** unless something starts range-checking the azimuth.
 
 ## Surfaced in parserPMD reference output (Part A — final parser lock)
 
