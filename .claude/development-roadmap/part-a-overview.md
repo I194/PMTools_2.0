@@ -121,9 +121,11 @@ need small refactors first — but they are **not all-or-nothing**. See the plan
 strategy (A/B/C)**: the deterministic *kernel* of each (e.g. the fold test's
 `findBed`/`unfold`) can be locked now (Layer A) without any refactor, the seeded full
 pipeline later (Layer B), and PmagPy agreement statistically (Layer C). Layer A for the fold
-test is already done — and its PmagPy cross-check **uncovered a real scientific bug** (90°
-bedding-convention error → wrong best-unfolding %; found-bugs-todo "Surfaced in Layer A"),
-proving the cross-check earns its keep over a plain golden-master.
+test is already done — and its PmagPy cross-check **uncovered a real scientific bug** (a 90°
+axis error → wrong best-unfolding %; found-bugs-todo "Surfaced in Layer A"), proving the
+cross-check earns its keep over a plain golden-master. That bug was locked as-is at the time
+(Part A locks behavior) and fixed later in SCI-01, September 2026: the references moved from
+index −17 to 98 and now track PmagPy to within 1.938e-4 across the grid.
 
 ## How this relates to the old Phase 1
 

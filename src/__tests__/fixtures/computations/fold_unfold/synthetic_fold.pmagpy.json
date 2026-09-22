@@ -1,7 +1,7 @@
 {
   "pmagpy_version": "4.3.14",
   "seed": 42,
-  "note": "True best-unfolding optimum for this seeded dataset. PMTools' unfold locks index = -17 (see found-bugs-todo.md: findBed azimuth vs correctBedding strike).",
+  "note": "Oracle for the fold-test deterministic core. bestUntiltPercent is PmagPy's answer on the coarse 10 % grid below; on a 1 % grid PmagPy lands on 98, the finite-sample optimum of this N=18 draw, which is what PMTools' unfold locks. Since SCI-01 PMTools tracks this curve to within 1.938e-4 over the whole -50..150 % range (tolerance 5e-4). Before SCI-01 it locked index = -17 and fell where this curve rises: a 90-degree axis error, findBed's dip direction fed to correctBedding as if it were a strike.",
   "bestUntiltPercent": 100,
   "tau1Curve": [
     {
