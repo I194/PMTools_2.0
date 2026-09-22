@@ -209,13 +209,18 @@ export const unfold = (vectors: Array<CoordsWithBeddingPars>, iteration: number)
     // Function eigenvaluesOfUnfoldedDirections
     // Returns the three eigenvalues of a cloud of vectors at a percentage of unfolding
 
-    // Do the tilt correction on all points in pseudoDirections
-    const tilts: Array<Coordinates> = vectors.map((vector) =>
-      vector.coordinates.correctBedding(
-        vector.beddingAzimuth,
+    // Do the tilt correction on all points in pseudoDirections.
+    // `beddingAzimuth` is a dip direction (`findBed` returns strike + 90), but
+    // `Coordinates.correctBedding` takes a STRIKE and derives the dip direction itself
+    // (`dipDirection = strike + 90`). Handing it the azimuth added the 90 degrees twice and
+    // unfolded about an axis 90 degrees away from the true fold axis.
+    const tilts: Array<Coordinates> = vectors.map((vector) => {
+      const beddingStrike = vector.beddingAzimuth - 90;
+      return vector.coordinates.correctBedding(
+        beddingStrike,
         1e-2 * unfoldingPercentage * vector.beddingDip,
-      ),
-    );
+      );
+    });
 
     // Return the eigen values of a real, symmetrical matrix
     return getEigenvaluesFast(TMatrix(tilts.map((coords) => coords.toArray())));
