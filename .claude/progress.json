@@ -26,9 +26,9 @@
           "id": "SCI-01",
           "title": "Fold test unfolds about the wrong axis (call site passes dip direction as strike) + findBed returns dip in (180, 270) for vertical/overturned beds",
           "severity": "critical",
-          "status": "todo",
+          "status": "in-progress",
           "pr": null,
-          "notes": "Ivan 2026-09-22: ONE PR for the call-site fix and the findBed normalization (NEW-A), target = PmagPy parity, nothing more. Spec + refuter corrections: test-data/v2.6.6/science-fix-queue.md section 1 and NEW-A; flips fold_unfold/* (index -17 -> 98)"
+          "notes": "Ivan 2026-09-22: ONE PR for the call-site fix and the findBed normalization (NEW-A), target = PmagPy parity, nothing more. Spec + refuter corrections: test-data/v2.6.6/science-fix-queue.md section 1 and NEW-A; flips fold_unfold/* (index -17 -> 98) Started 2026-09-22 on branch fix/sci-01-fold-test-unfold-axis; agent team (generator + science-reviewer) per Ivan."
         },
         {
           "id": "SCI-02",
@@ -194,9 +194,9 @@
           "id": "SCI-22",
           "title": "Coordinates.angle calls acos on an unclamped dot product: NaN for identical/antipodal pairs, so a direction antipodal to the mean can escape the live CUTOFF 45 (NaN > 45 is false)",
           "severity": "major",
-          "status": "pr-open",
+          "status": "merged",
           "pr": 53,
-          "notes": "Investigated 2026-09-22: confirmed, 0 of 3 refuted. One-line clamp in src/utils/graphs/classes/Coordinates.ts:105-107, zero reference flips, risk low; fires only on degenerate input (exact antipode / identical), reviewers recommend severity minor. Needs Ivan's go-ahead; follow the refuters' test corrections. Spec: test-data/v2.6.6/science-fix-queue-SCI-22-SCI-23.md. Approved by Ivan 2026-09-22; branch fix/sci-22-clamp-coordinates-angle; manual verification data in test-data/v2.6.6/sci-22/. Severity left as major in the ledger, reviewers recommend minor."
+          "notes": "Investigated 2026-09-22: confirmed, 0 of 3 refuted. One-line clamp in src/utils/graphs/classes/Coordinates.ts:105-107, zero reference flips, risk low; fires only on degenerate input (exact antipode / identical), reviewers recommend severity minor. Needs Ivan's go-ahead; follow the refuters' test corrections. Spec: test-data/v2.6.6/science-fix-queue-SCI-22-SCI-23.md. Approved by Ivan 2026-09-22; branch fix/sci-22-clamp-coordinates-angle; manual verification data in test-data/v2.6.6/sci-22/. Severity left as major in the ledger, reviewers recommend minor. Merged 2026-09-22 via PR #53 (commit c979320)."
         },
         {
           "id": "SCI-23",
