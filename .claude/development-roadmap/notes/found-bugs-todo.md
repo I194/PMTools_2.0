@@ -298,8 +298,11 @@ strategy (lock the pure core `findBed`/`unfold` now; seed + extract `runFoldTest
     `findBed`'s output was not directly consumable by `correctBedding`.
   - **Impact while it shipped (2022-05-10, 84c20ea → September 2026):** the bootstrap fold test
     in the DIR UI reported a geologically wrong best-unfolding percentage for every tilted
-    collection. On a two-limb fold it read 41 % where the answer is 92 %, with bootstrap bounds
-    −50…150 instead of 90…109. Researchers who ran a fold test in that window should re-run it.
+    collection. On the two-limb fold committed at `test-data/v2.6.6/sci-01/two_limb_fold.dir`
+    it read 150 % where the answer is 98 %. (The figures "41 % instead of 92 %, bounds
+    −50…150 instead of 90…109" circulated in the investigation reports; neither the generator
+    nor the science reviewer could reproduce them and the originating dataset is unavailable, so
+    they are not cited as impact.) Researchers who ran a fold test in that window should re-run it.
   - **The fix:** `unfold` now passes `beddingAzimuth − 90` through a named `beddingStrike`
     local. `correctBedding` was **not** changed — its strike contract is correct for its other
     caller (`toReferenceCoordinates.ts:27`, which hands it a PMD header's `s`). The references
