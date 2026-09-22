@@ -103,7 +103,10 @@ class Coordinates {
   };
 
   angle = (coordinates: Coordinates) => {
-    return Math.acos(this.toUnit().dot(coordinates.toUnit())) * Coordinates.RADIANS;
+    // Rounding can push the dot product of two unit vectors slightly beyond +/-1 (up to
+    // 1.0000000000000004) for identical or exactly antipodal vectors, and acos of that is NaN
+    const cosineOfAngle = Math.max(-1, Math.min(1, this.toUnit().dot(coordinates.toUnit())));
+    return Math.acos(cosineOfAngle) * Coordinates.RADIANS;
   };
 
   // rotation methods below (метод correctBedding стоит вынести в отдельный класс для геологических координат)

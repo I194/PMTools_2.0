@@ -77,6 +77,42 @@ describe('markCutoffComments', () => {
     expect(stratigraphicResult.interpretations[0].comment).toBe(CUTOFF_COMMENT_MARKER);
   });
 
+  // SCI-22: the angle between a mean and its exact antipode used to be NaN, `NaN > 45` is
+  // false, so the direction farthest from the mean was the only one that escaped the cutoff.
+  // The mean of a single direction (or of exact duplicates) coincides with a data row, which
+  // is how this happens in the app. Sweep instead of one hand-picked pair: which pairs
+  // overshoot depends on the platform's trig rounding.
+  it('marks the exact antipode of the mean for every integer-degree mean', () => {
+    let escapedCount = 0;
+
+    for (let declination = 0; declination < 360; declination++) {
+      for (let inclination = -90; inclination <= 90; inclination++) {
+        const mean = new Direction(declination, inclination, 1);
+        const data = makeData([
+          makeInterpretation({ Dgeo: (declination + 180) % 360, Igeo: -inclination }),
+        ]);
+
+        const [antipode] = markCutoffComments(data, mean, 'geographic', 45).interpretations;
+        if (antipode.comment !== CUTOFF_COMMENT_MARKER) escapedCount++;
+      }
+    }
+
+    expect(escapedCount).toBe(0);
+  });
+
+  it('keeps a direction identical to the mean', () => {
+    const data = makeData([makeInterpretation({ Dgeo: 0, Igeo: -86 })]);
+
+    const [kept] = markCutoffComments(
+      data,
+      new Direction(0, -86, 1),
+      'geographic',
+      45,
+    ).interpretations;
+
+    expect(kept.comment).toBe('');
+  });
+
   it('does not mutate the input dataset', () => {
     const data = makeData([makeInterpretation({ Dgeo: 0, Igeo: 40 })]);
 

@@ -194,9 +194,9 @@
           "id": "SCI-22",
           "title": "Coordinates.angle calls acos on an unclamped dot product: NaN for identical/antipodal pairs, so a direction antipodal to the mean can escape the live CUTOFF 45 (NaN > 45 is false)",
           "severity": "major",
-          "status": "todo",
-          "pr": null,
-          "notes": "Investigated 2026-09-22: confirmed, 0 of 3 refuted. One-line clamp in src/utils/graphs/classes/Coordinates.ts:105-107, zero reference flips, risk low; fires only on degenerate input (exact antipode / identical), reviewers recommend severity minor. Needs Ivan's go-ahead; follow the refuters' test corrections. Spec: test-data/v2.6.6/science-fix-queue-SCI-22-SCI-23.md"
+          "status": "pr-open",
+          "pr": 53,
+          "notes": "Investigated 2026-09-22: confirmed, 0 of 3 refuted. One-line clamp in src/utils/graphs/classes/Coordinates.ts:105-107, zero reference flips, risk low; fires only on degenerate input (exact antipode / identical), reviewers recommend severity minor. Needs Ivan's go-ahead; follow the refuters' test corrections. Spec: test-data/v2.6.6/science-fix-queue-SCI-22-SCI-23.md. Approved by Ivan 2026-09-22; branch fix/sci-22-clamp-coordinates-angle; manual verification data in test-data/v2.6.6/sci-22/. Severity left as major in the ledger, reviewers recommend minor."
         },
         {
           "id": "SCI-23",
@@ -370,9 +370,9 @@
           "id": "HK-04",
           "title": "Record the 2026-09-22 science-fix queue decisions, investigation reports and the SCI-10 block",
           "severity": null,
-          "status": "pr-open",
+          "status": "merged",
           "pr": 52,
-          "notes": "PR #52 chore/science-queue-decisions"
+          "notes": "PR #52 chore/science-queue-decisions, merged into dev 2026-09-22"
         }
       ]
     }
