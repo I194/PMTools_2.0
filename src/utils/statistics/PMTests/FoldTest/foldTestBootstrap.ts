@@ -179,6 +179,16 @@ export function findBed(cartesianCoordsGeo: Coordinates, cartesianCoordsStrat: C
     dip = -dip;
     strike += 180;
   }
+  // `cosdip < 0` together with `sindip < 0` leaves the dip in (180, 270): a rotation that
+  // reaches the stratigraphic direction the long way round. The endpoint is right at 100 %
+  // unfolding, but every fractional step in between travels the wrong arc, so the tau1 curve
+  // and the best-unfolding index come out wrong for vertical and overturned beds. A rotation
+  // of `dip` about the strike is the same rotation as one of `360 - dip` about the opposite
+  // strike, which brings the bed back into the geological [0, 180) range (>= 90 = overturned).
+  if (dip > 180) {
+    dip = 360 - dip;
+    strike += 180;
+  }
   let azimuth = strike + 90; // here we changing from strike to azimuth
   if (azimuth < 0) azimuth += 360;
   if (azimuth > 360) azimuth -= 360;
