@@ -208,6 +208,29 @@ export const FNarcsin = (x: number) => {
   return 90 - FNarccos(x);
 };
 
+/**
+ * Partially untilt one vector: rotate it back about its bedding strike by
+ * `unfoldingPercentage` per cent of the bedding dip.
+ *
+ * `beddingAzimuth` is a dip direction (`findBed` returns `strike + 90`), while
+ * `Coordinates.correctBedding` takes a STRIKE and derives the dip direction itself
+ * (`dipDirection = strike + 90`). Handing it the azimuth added the 90 degrees twice and
+ * unfolded about an axis 90 degrees away from the true fold axis, which is what the call
+ * site below used to do.
+ *
+ * Exported so the round-trip tests exercise this exact expression instead of a copy of it.
+ */
+export const untiltVectorAtPercentage = (
+  vector: CoordsWithBeddingPars,
+  unfoldingPercentage: number,
+) => {
+  const beddingStrike = vector.beddingAzimuth - 90;
+  return vector.coordinates.correctBedding(
+    beddingStrike,
+    1e-2 * unfoldingPercentage * vector.beddingDip,
+  );
+};
+
 export const unfold = (vectors: Array<CoordsWithBeddingPars>, iteration: number) => {
   // Function unfold
   // Unfolds a bunch of vectors following their bedding
@@ -219,18 +242,10 @@ export const unfold = (vectors: Array<CoordsWithBeddingPars>, iteration: number)
     // Function eigenvaluesOfUnfoldedDirections
     // Returns the three eigenvalues of a cloud of vectors at a percentage of unfolding
 
-    // Do the tilt correction on all points in pseudoDirections.
-    // `beddingAzimuth` is a dip direction (`findBed` returns strike + 90), but
-    // `Coordinates.correctBedding` takes a STRIKE and derives the dip direction itself
-    // (`dipDirection = strike + 90`). Handing it the azimuth added the 90 degrees twice and
-    // unfolded about an axis 90 degrees away from the true fold axis.
-    const tilts: Array<Coordinates> = vectors.map((vector) => {
-      const beddingStrike = vector.beddingAzimuth - 90;
-      return vector.coordinates.correctBedding(
-        beddingStrike,
-        1e-2 * unfoldingPercentage * vector.beddingDip,
-      );
-    });
+    // Do the tilt correction on all points in pseudoDirections
+    const tilts: Array<Coordinates> = vectors.map((vector) =>
+      untiltVectorAtPercentage(vector, unfoldingPercentage),
+    );
 
     // Return the eigen values of a real, symmetrical matrix
     return getEigenvaluesFast(TMatrix(tilts.map((coords) => coords.toArray())));
