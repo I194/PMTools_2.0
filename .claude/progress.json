@@ -28,7 +28,7 @@
           "severity": "critical",
           "status": "in-progress",
           "pr": null,
-          "notes": "Ivan 2026-09-22: ONE PR for the call-site fix and the findBed normalization (NEW-A), target = PmagPy parity, nothing more. Spec + refuter corrections: test-data/v2.6.6/science-fix-queue.md section 1 and NEW-A; flips fold_unfold/* (index -17 -> 98) Started 2026-09-22 on branch fix/sci-01-fold-test-unfold-axis; agent team (generator + science-reviewer) per Ivan."
+          "notes": "Ivan 2026-09-22: ONE PR for the call-site fix and the findBed normalization (NEW-A), target = PmagPy parity, nothing more. Spec + refuter corrections: test-data/v2.6.6/science-fix-queue.md section 1 and NEW-A; flips fold_unfold/* (index -17 -> 98) Started 2026-09-22 on branch fix/sci-01-fold-test-unfold-axis; agent team (generator + science-reviewer) per Ivan. Both fixes implemented and verified: max |tau1 - PmagPy| 1.938e-4 over the whole grid (tolerance 5e-4); verification data in test-data/v2.6.6/sci-01/ (two-limb 150 -> 98, overturned limb 83 -> 101, both matching PmagPy). Awaiting science-reviewer approval; no PR opened yet."
         },
         {
           "id": "SCI-02",
