@@ -205,6 +205,30 @@
           "status": "blocked",
           "pr": null,
           "notes": "Investigated 2026-09-22: confirmed wrong numbers in production (strat I 25.40235 -> 25.04235; order dependence up to 7-12 deg for circle-dominated sets), 1 reference file flips (mcfadden_combine_mean/directions_and_great_circles.expected.json, 12 values; directions_only and all other references unchanged), fix lens refuted the spec as written. BLOCKED on 4 decisions by Ivan (M = 0 / zero line sum policy, non-convergence outcome, getRawPlaneData removal, sequencing with SCI-17). Spec and questions: test-data/v2.6.6/science-fix-queue-SCI-22-SCI-23.md"
+        },
+        {
+          "id": "SCI-24",
+          "title": "Fold test never displays the best-unfolding point estimate (only the bootstrap CI), although the label promises accuracy + 95% CI",
+          "severity": "major",
+          "status": "todo",
+          "pr": null,
+          "notes": "Found by the evaluator during SCI-01 verification 2026-09-22. FoldTestContainer.tsx renders percentiles on line 1 and min/max on line 2; the point estimate is computed and discarded. Evidence: test-data/v2.6.6/evaluation-report-1.md."
+        },
+        {
+          "id": "SCI-25",
+          "title": "Fold test bounds: || -50 and || 150 turn a legitimate bound of 0 into the grid edge; getCDF sorts its input in place (queue tag NEW-B)",
+          "severity": "major",
+          "status": "todo",
+          "pr": null,
+          "notes": "In dataToFoldTest.ts and FoldTestContainer.tsx:88-89. SCI-01 makes index 0 reachable in post-fold draws, so this is more likely to bite after SCI-01 lands. Fix the in-place sort in getCDF and the dependent percentile indexing in the same PR."
+        },
+        {
+          "id": "SCI-26",
+          "title": "Fold test presents grid-edge results without a caveat (sample.dir reads -50 to -22)",
+          "severity": "minor",
+          "status": "todo",
+          "pr": null,
+          "notes": "Found by the evaluator 2026-09-22. Flag any result whose optimum or CI bound sits on -50 or 150 so the user knows the optimum ran off the searched range."
         }
       ]
     },

@@ -12,11 +12,17 @@ folding a tight cluster of pre-fold directions down onto known beddings, so **th
 best-unfolding percentage is near 100 %** by construction. PmagPy's own answers on the exact
 same directions are in `test-data/v2.6.6/sci-01/oracle.json`.
 
-Important: the fold test runs a **1000-draw bootstrap**, so the displayed *range* line is
-stochastic and will differ between runs. The number to check is the **best-unfolding
-percentage** on the first result line, and it is a finite-sample optimum — a couple of per
-cent of spread is expected and fine. What must NOT happen is an answer tens of per cent away,
-or an answer pinned to the −50 / 150 grid edges.
+Important: the fold test runs a **1000-draw bootstrap**, so both displayed lines are
+stochastic and will differ between runs.
+
+**Correction (2026-09-22, from the first run of this prompt):** the UI does **not** display a
+single best-unfolding percentage. `FoldTestContainer.tsx` prints the 2.5th/97.5th percentiles
+of the 1000 bootstrap optima on line 1 and min/max on line 2, despite the label promising
+"(accuracy, 95% confidence interval)". So what you check is whether the **confidence interval
+brackets the oracle value** and whether the **tau1 curve peaks near 100 %**, not a point
+estimate. The missing point estimate is filed as a separate bug; do not treat it as a failure
+of this PR. What must NOT happen is an interval tens of per cent away from the oracle, or one
+pinned to the −50 / 150 grid edges.
 
 ## 1. Two-limb fold reads ~98 %, not a grid edge
 
@@ -28,10 +34,11 @@ or an answer pinned to the −50 / 150 grid edges.
    reads "Processing..." while the 1000 draws run.
 5. When it finishes, read the first result line: *"The densest grouping of vectors (accuracy,
    95% confidence interval) is observed on:"*.
-   - **PASS:** the best-unfolding percentage is in the **90–105** range (PmagPy says 98, the
-     deterministic core gives exactly 98).
-   - **FAIL:** anything near 150, near −50, or below about 80. Before this fix the same file
-     gave **150**.
+   - **PASS:** the interval brackets **98** and sits inside roughly 85–110. Measured on
+     2026-09-22: `91 — 106`, stable across five runs (three English dark, one Russian, one
+     light).
+   - **FAIL:** an interval pinned to the grid edges. Before this fix the same file gave
+     `−50 — 150`, the entire search range.
 6. Look at the fold-test graph. The tau1 curve must **rise** from left to right and peak near
    100 %, then fall. Before the fix it peaked at the right-hand edge.
 7. Screenshot the result lines and the graph.
@@ -41,11 +48,13 @@ or an answer pinned to the −50 / 150 grid edges.
 1. Still on `/app/dir`, upload `test-data/v2.6.6/sci-01/overturned_limb.dir`. 18 directions,
    no validation errors. (One limb of this fold is overturned: bed dips 95–140 degrees.)
 2. Open **"Paleomagnetic tests"** → **"Fold Test (Bootstrap Version)"** → **"Run"**.
-3. Read the best-unfolding percentage.
-   - **PASS:** in the **95–108** range (PmagPy says 101, the deterministic core gives exactly
-     101).
-   - **FAIL:** near 83, which is what this file gave before the fix, or near 99, which is what
-     it gave with only half the fix applied.
+3. Read the interval on the first result line.
+   - **PASS:** it brackets **101**. Measured on 2026-09-22: `97 — 106`, `96 — 105`, `96 — 105`.
+   - **FAIL:** an interval topping out at 100, which is what this file gave before the fix
+     (`−3 — 100`). The deterministic core gives 83 before the fix and 99 with only the
+     call-site half applied.
+4. Cross-check tau1 on the graph against `oracle.json`: it must rise from about 0.77 at 0 % to
+   a peak of about 0.97 near 100 %. Before the fix it never exceeded 0.80 on this file.
 4. Screenshot the result lines and the graph.
 
 ## 3. Ordinary data still behaves and nothing else regressed

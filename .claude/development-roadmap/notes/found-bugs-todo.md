@@ -452,3 +452,27 @@ data-loss bug a green test alone would not have:
     make `NaN > threshold` false in every `angle()` caller after SCI-22 (candidate for the SCI-17
     re-investigation); NEW-L McFadden k/a95 edge cases for tiny selections (covered by SCI-23
     question 1).
+
+## Surfaced by the SCI-01 evaluator run (2026-09-22)
+
+Found while verifying the fold-test fixes in the live app. All three are **pre-existing** and
+none blocks SCI-01; the full evidence is in `test-data/v2.6.6/evaluation-report-1.md`.
+
+- **🟠 SCI-24 — the fold test never displays the best-unfolding point estimate.** The result
+  label promises *"(accuracy, 95% confidence interval)"*, but `FoldTestContainer.tsx` renders the
+  2.5th/97.5th percentiles of the 1000 bootstrap optima on line 1 and min/max on line 2. The
+  point estimate — the number a researcher actually quotes in a paper — is computed and thrown
+  away. Suggested rendering: `98 % (91 — 106)`. This is also why the first version of
+  `test-data/v2.6.6/verify-fixes.md` could not be followed literally.
+- **🟡 SCI-25 — a legitimate bound of 0 is displayed as the grid edge (queue tag NEW-B).**
+  `const unfoldingMinimun = untilts[...] || -50;` in both `dataToFoldTest.ts` and
+  `FoldTestContainer.tsx` (and the matching `|| 150`) turns a true bound of `0` into `-50`.
+  SCI-01 makes index 0 reachable in post-fold draws, so this is **more likely to bite after
+  SCI-01 lands than before**. Same code is fragile in a second way: the percentile index only
+  works because `getCDF()` sorts its input in place. Fix both together, and make `getCDF` sort a
+  copy while correcting the now-dependent indexing.
+- **🟡 SCI-26 — grid-edge results are presented without a caveat.** `test-data/sample.dir`
+  reads `-50 — -22`, with the lower bound sitting exactly on the search-grid edge, and nothing
+  tells the user the optimum ran off the searched range. Flag any result whose optimum or CI
+  bound lands on −50 or 150.
+
