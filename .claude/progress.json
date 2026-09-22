@@ -26,9 +26,9 @@
           "id": "SCI-01",
           "title": "Fold test unfolds about the wrong axis (call site passes dip direction as strike) + findBed returns dip in (180, 270) for vertical/overturned beds",
           "severity": "critical",
-          "status": "in-progress",
-          "pr": null,
-          "notes": "Ivan 2026-09-22: ONE PR for the call-site fix and the findBed normalization (NEW-A), target = PmagPy parity, nothing more. Spec + refuter corrections: test-data/v2.6.6/science-fix-queue.md section 1 and NEW-A; flips fold_unfold/* (index -17 -> 98). Branch fix/sci-01-fold-test-unfold-axis, agent team (generator + science-reviewer). Both fixes implemented; max |tau1 - PmagPy| 1.938e-4 over the whole grid (tolerance 5e-4, do not tighten). Verification data in test-data/v2.6.6/sci-01/ (two-limb 150 -> 98, overturned limb 83 -> 101, both matching PmagPy). Science review: approve-with-corrections, all six corrections applied in 951c403. Ready for PR; not opened yet."
+          "status": "pr-open",
+          "pr": 54,
+          "notes": "Ivan 2026-09-22: ONE PR for the call-site fix and the findBed normalization (NEW-A), target = PmagPy parity, nothing more. Spec + refuter corrections: test-data/v2.6.6/science-fix-queue.md section 1 and NEW-A; flips fold_unfold/* (index -17 -> 98). Branch fix/sci-01-fold-test-unfold-axis, agent team (generator + science-reviewer). Both fixes implemented; max |tau1 - PmagPy| 1.938e-4 over the whole grid (tolerance 5e-4, do not tighten). Verification data in test-data/v2.6.6/sci-01/ (two-limb 150 -> 98, overturned limb 83 -> 101, both matching PmagPy). Science review: approve-with-corrections, all six corrections applied in 951c403. Ready for PR; not opened yet. PR #54 opened 2026-09-22; science review approve-with-corrections, all six applied; evaluator all sections PASS."
         },
         {
           "id": "SCI-02",
