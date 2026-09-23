@@ -281,75 +281,42 @@ Locked as-is by `src/__tests__/fixtures/computations/fold_unfold/*` and cross-ch
 PmagPy (`scripts/gen_foldtest.py`). This is the first finding from the layered fold-test
 strategy (lock the pure core `findBed`/`unfold` now; seed + extract `runFoldTest` later).
 
-- **✅ FIXED (SCI-01, September 2026) — the bootstrap fold test unfolded about the wrong axis
-  (90-degree axis error).** `unfold` (`foldTestBootstrap.ts`) called
+- **🔴 The bootstrap fold test unfolds about the wrong axis (90° bedding-convention bug).**
+  `unfold` (`foldTestBootstrap.ts`) calls
   `vector.coordinates.correctBedding(vector.beddingAzimuth, 0.01 * pct * vector.beddingDip)`.
   But `findBed` returns `azimuth = strike + 90` (a **dip direction**), whereas
   `Coordinates.correctBedding(strike, plunge)` expects a **strike** as its first argument — it
-  computes `dipDirection = strike + 90` *itself*. The 90 degrees went in twice, so every
-  fractional untilting rotated about an axis 90° away from the fold axis. On a seeded synthetic
-  fold whose true optimum is **~100 %**, PMTools' `unfold` peaked near **0 %** (locked index
-  −17 %; tau1 *falling* 0.61 → 0.44 where PmagPy's rose). Both agreed exactly at 0 %, which is
-  why it hid: the geographic state was read correctly and only the unfolding was wrong.
+  computes `dipDirection = strike + 90` *itself*. So the effective dip direction is off by 90°
+  and every fractional untilting rotates about the wrong horizontal axis. On a seeded synthetic
+  fold whose true optimum is **~100 %** (PmagPy confirms on the 10 % grid: tau1 0.61 → 0.96;
+  ~98 % on a finer grid), PMTools' `unfold`
+  peaks near **0 %** (locked index −17 %; tau1 *falls* 0.61 → 0.44). Both agree exactly at 0 %,
+  then diverge in opposite directions — i.e. the geographic state is read correctly but the
+  unfolding is applied backwards.
   - **Self-consistency proof (convention, not data):** build `strat = geo.correctBedding(strike,
     dip)` with PMTools' own forward model; `findBed(geo, strat)` returns `azimuth = strike + 90`;
     re-applying `correctBedding(azimuth, dip)` does **not** recover `strat`, but
     `correctBedding(azimuth − 90, dip)` recovers it exactly. So within PMTools' own definitions
-    `findBed`'s output was not directly consumable by `correctBedding`.
-  - **Impact while it shipped (2022-05-10, 84c20ea → September 2026):** the bootstrap fold test
-    in the DIR UI reported a geologically wrong best-unfolding percentage for every tilted
-    collection. On the two-limb fold committed at `test-data/v2.6.6/sci-01/two_limb_fold.dir`
-    it read 150 % where the answer is 98 %. (The figures "41 % instead of 92 %, bounds
-    −50…150 instead of 90…109" circulated in the investigation reports; neither the generator
-    nor the science reviewer could reproduce them and the originating dataset is unavailable, so
-    they are not cited as impact.) Researchers who ran a fold test in that window should re-run it.
-  - **The fix:** `unfold` now passes `beddingAzimuth − 90` through a named `beddingStrike`
-    local. `correctBedding` was **not** changed — its strike contract is correct for its other
-    caller (`toReferenceCoordinates.ts:27`, which hands it a PMD header's `s`). The references
-    were regenerated to index 98; the curve now tracks `synthetic_fold.pmagpy.json` to within
-    1.938e-4 over the whole grid.
-  - **98, not 100,** is the finite-sample optimum of this N=18 draw; PmagPy on a 1 % grid agrees.
-    The earlier open question "stop rounding the fixture to get 100" is dropped.
-  - **Shipped with it:** the `findBed` dip normalization for vertical and overturned beds
-    (NEW-A, below), because the call-site fix alone still left dips ≥ 90 wrong.
-  - **Agreement with PmagPy is exact** given the same directions and beddings (max |Δtau1|
-    1.2e-15 over 480 synthetic collections). Because `findBed` re-derives the bedding from
-    directions stored at 0.1 degrees, the best-unfolding percentage can differ from a PmagPy run
-    handed the true beddings by up to about 2 % on post-folding data, where the tau1 curve is
-    nearly flat; measured max |Δindex| = 2 over 480 collections, 0 for pre-folding data.
+    `findBed`'s output is not directly consumable by `correctBedding`.
+  - **Impact:** the bootstrap fold test (the `mcFad`-adjacent Fold-Test tool in the DIR UI)
+    reports a geologically wrong best-unfolding percentage. This is a real scientific defect, not
+    cosmetic. **Not fixed here** (Part A locks behavior; fixing scientific logic is out of scope
+    for the test net). Fix later: pass the strike (`beddingAzimuth − 90`) into `correctBedding`,
+    or give `correctBedding` a dip-direction contract; then regenerate `fold_unfold/*` (index
+    should become ~100 %) and re-verify against `synthetic_fold.pmagpy.json`.
+  - **Also check `foldTestClassic.ts`** — it shares the same `findBed`/`correctBedding` pieces and
+    likely carries the same bug; not yet locked.
   - **Why a plain golden-master wasn't enough:** locking PMTools alone would have enshrined −17 %
     as "correct". The PmagPy cross-check is what exposed the defect — the validation half of
     Layer A, not just the regression half.
-  - The old `foldTestClassic.ts` sub-item here was stale: that file is an empty stub.
-
-- **✅ FIXED (SCI-01, September 2026) — `findBed` returned dips in (180, 270) for vertical and
-  overturned beds (queue tag NEW-A).** `if (cosdip < 0) dip = 180 - dip` ran before the
-  `if (dip < 0)` flip, so when both `cosdip` and `sindip` were negative the dip landed past 180
-  and, being positive, never reached the flip. A 100 % unfolding still hit the right endpoint —
-  which is why a full tilt correction looked correct — but every fractional step travelled the
-  long arc, so the tau1 curve and the best-unfolding index came out wrong for dips ≥ 90 even
-  after the call-site fix (tau1 off by up to 0.38; index 103 where PmagPy gives 97 or 100).
-  Roughly half of dip > 90 beddings were affected, depending on the sign of `sindip`.
-  - **The fix:** normalize a dip past 180 to `360 − dip` about the opposite strike — the same
-    rotation, taken the short way round — which puts the bed back in the geological [0, 180)
-    range (≥ 90 = overturned). Confirmed equivalent to solving the dip with
-    `atan2(sindip, cosdip)`, numerically over the full sweep.
-  - **Exactly vertical beds are affected too:** `cosdip` there is a ~1e-16 residue whose sign
-    decides between dip 90 and dip 270, so about half of them took the long arc. Two of six
-    exactly-vertical cases did, pre-fix — true azimuth 313.5024 became (133.5024, 270.0), a
-    98.67° fractional-unfold error, and 186.0364 became (6.0364, 270.0), 150.68°. After the
-    normalization both residue signs give the same bedding, so the vertical boundary is no
-    longer float-sensitive.
-  - The locked `fold_unfold` references are **unaffected** (their beddings are dips 25…65).
-    Coverage for this path lives in `FoldTest/__tests__/foldTestUnfoldAxis.test.ts`, which
-    compares components rather than `Coordinates.angle`, asserts the short arc at 50 % as well
-    as the endpoint at 100 %, and was mutation-checked against both defects.
-
-- **⚪ Not a bug in practice, noted while fixing SCI-01 — `findBed` can return `azimuth`
-  exactly 360.** The `if (ys == yg) { strike = 90 }` branch combined with `strike += 180` can
-  push `azimuth` to exactly 360, because the wraparound clamp is a single-shot `if`, not a
-  modulo. Pre-existing and harmless downstream (`correctBedding` is periodic), so **do not
-  fix** unless something starts range-checking the azimuth.
+  - **2026-09-22 decision (Ivan): one PR, PmagPy parity, nothing more.** SCI-01 ships the
+    call-site fix (`beddingAzimuth - 90` passed to `correctBedding`; do not change
+    `correctBedding`) together with the `findBed` normalization for vertical and overturned beds
+    (`foldTestBootstrap.ts:175-181` returns a dip in (180, 270); queue report, NEW-A). Oracle:
+    `synthetic_fold.pmagpy.json` plus a vertical/overturned-limb case generated from PmagPy.
+    Verified spec and refuter corrections: `test-data/v2.6.6/science-fix-queue.md`, section 1.
+    The expected index is 98 (the sample optimum of this N=18 draw), not 100. The
+    `foldTestClassic.ts` sub-item above is stale (the file is an empty stub).
 
 ## Surfaced in parserPMD reference output (Part A — final parser lock)
 
@@ -452,27 +419,3 @@ data-loss bug a green test alone would not have:
     make `NaN > threshold` false in every `angle()` caller after SCI-22 (candidate for the SCI-17
     re-investigation); NEW-L McFadden k/a95 edge cases for tiny selections (covered by SCI-23
     question 1).
-
-## Surfaced by the SCI-01 evaluator run (2026-09-22)
-
-Found while verifying the fold-test fixes in the live app. All three are **pre-existing** and
-none blocks SCI-01; the full evidence is in `test-data/v2.6.6/evaluation-report-1.md`.
-
-- **🟠 SCI-24 — the fold test never displays the best-unfolding point estimate.** The result
-  label promises *"(accuracy, 95% confidence interval)"*, but `FoldTestContainer.tsx` renders the
-  2.5th/97.5th percentiles of the 1000 bootstrap optima on line 1 and min/max on line 2. The
-  point estimate — the number a researcher actually quotes in a paper — is computed and thrown
-  away. Suggested rendering: `98 % (91 — 106)`. This is also why the first version of
-  `test-data/v2.6.6/verify-fixes.md` could not be followed literally.
-- **🟡 SCI-25 — a legitimate bound of 0 is displayed as the grid edge (queue tag NEW-B).**
-  `const unfoldingMinimun = untilts[...] || -50;` in both `dataToFoldTest.ts` and
-  `FoldTestContainer.tsx` (and the matching `|| 150`) turns a true bound of `0` into `-50`.
-  SCI-01 makes index 0 reachable in post-fold draws, so this is **more likely to bite after
-  SCI-01 lands than before**. Same code is fragile in a second way: the percentile index only
-  works because `getCDF()` sorts its input in place. Fix both together, and make `getCDF` sort a
-  copy while correcting the now-dependent indexing.
-- **🟡 SCI-26 — grid-edge results are presented without a caveat.** `test-data/sample.dir`
-  reads `-50 — -22`, with the lower bound sitting exactly on the search-grid edge, and nothing
-  tells the user the optimum ran off the searched range. Flag any result whose optimum or CI
-  bound lands on −50 or 150.
-

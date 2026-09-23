@@ -179,12 +179,8 @@ export function findBed(cartesianCoordsGeo: Coordinates, cartesianCoordsStrat: C
     dip = -dip;
     strike += 180;
   }
-  // `cosdip < 0` together with `sindip < 0` leaves the dip in (180, 270): a rotation that
-  // reaches the stratigraphic direction the long way round. The endpoint is right at 100 %
-  // unfolding, but every fractional step in between travels the wrong arc, so the tau1 curve
-  // and the best-unfolding index come out wrong for vertical and overturned beds. A rotation
-  // of `dip` about the strike is the same rotation as one of `360 - dip` about the opposite
-  // strike, which brings the bed back into the geological [0, 180) range (>= 90 = overturned).
+  // A dip in (180, 270) is the long-arc rotation: right at 100 %, wrong at every fraction.
+  // Same rotation as (360 - dip) about the opposite strike, which keeps dip in [0, 180].
   if (dip > 180) {
     dip = 360 - dip;
     strike += 180;
@@ -208,18 +204,7 @@ export const FNarcsin = (x: number) => {
   return 90 - FNarccos(x);
 };
 
-/**
- * Partially untilt one vector: rotate it back about its bedding strike by
- * `unfoldingPercentage` per cent of the bedding dip.
- *
- * `beddingAzimuth` is a dip direction (`findBed` returns `strike + 90`), while
- * `Coordinates.correctBedding` takes a STRIKE and derives the dip direction itself
- * (`dipDirection = strike + 90`). Handing it the azimuth added the 90 degrees twice and
- * unfolded about an axis 90 degrees away from the true fold axis, which is what the call
- * site below used to do.
- *
- * Exported so the round-trip tests exercise this exact expression instead of a copy of it.
- */
+// beddingAzimuth is a dip direction (strike + 90); correctBedding takes a strike.
 export const untiltVectorAtPercentage = (
   vector: CoordsWithBeddingPars,
   unfoldingPercentage: number,

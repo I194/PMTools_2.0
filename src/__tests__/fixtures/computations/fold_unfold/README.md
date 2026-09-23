@@ -26,41 +26,12 @@ consumes (verified). Re-run with `python3 scripts/gen_foldtest.py --force`.
   captured (the `iteration < 24` branch of `unfold`).
 - `synthetic_fold_unsaved_iteration` — `iteration: 24` → `taus` stays empty, only the index
   is reported (the other branch). Same directions as above.
+- `overturned_limb` — one limb overturned (dips 95…140), from
+  `test-data/v2.6.6/sci-01/overturned_limb.dir`. Index only; PmagPy's 1 % grid optimum is 101.
 
-## PmagPy cross-check — and the bug it exposed
+## PmagPy cross-check
 
-`synthetic_fold.pmagpy.json` records PmagPy's fold-test curve on the same data: tau1 rises
-monotonically 0.61 (0 %) → 0.96 (100 %), optimum **100 %** on the 10 % grid.
-
-PMTools' `unfold` now tracks that curve across the whole −50…150 % grid to a maximum
-difference of **1.938e-4** (largest at 150 %; 3e-7 at 0 %, 1.6e-5 at 100 %), well inside the
-5e-4 tolerance the parity test asserts. The locked `index` is **98**.
-
-**98, not 100, is the right answer here.** It is the finite-sample optimum of this particular
-N=18 draw: PMTools hones in on a 1 % grid, and PmagPy on a 1 % grid lands on 98 as well for
-unrounded input. The `bestUntiltPercent: 100` in the cross-check file is PmagPy's answer on
-the coarse 10 % grid, which is the finest resolution that file records.
-
-### What this fixture used to lock, and why
-
-Until SCI-01 (September 2026) these references locked **index = −17 %**, with tau1 *falling*
-0.61 → 0.44 across 0 → 100 % while PmagPy's rose. That was a real scientific defect in
-PMTools, deliberately locked as-is under the Part A golden-master discipline:
-
-> `findBed` returns a dip direction (`azimuth = strike + 90`); `unfold` then passed that
-> azimuth straight into `Coordinates.correctBedding`, whose first parameter is a **strike**
-> (it computes `dipDirection = strike + 90` itself). The 90 degrees went in twice, so every
-> fractional untilting rotated about an axis 90° away from the fold axis — a 90-degree axis
-> error — and clustering was maximised near 0 % instead of near 100 %.
-
-The two conventions agreed exactly at 0 % (0.6083), which is why the defect survived four
-years in production: the one point everybody eyeballs is the one point that cannot disagree.
-
-The cross-check is what surfaced it. A plain golden-master would have silently enshrined
-−17 % as "correct", and the references would have gone green on a wrong number forever. This
-is the validation half of Layer A earning its keep.
-
-SCI-01 also shipped a normalization in `findBed` for vertical and overturned beds (dips
-≥ 90), which these fixtures do **not** cover — their beddings are dips 25…65, so the
-normalization is a verified no-op on them. That path is covered by the property tests in
-`FoldTest/__tests__/foldTestUnfoldAxis.test.ts` instead.
+`synthetic_fold.pmagpy.json` is PmagPy's fold-test curve on the same data (optimum 100 % on
+the 10 % grid, 98 on a 1 % grid). `foldTestUnfoldAxis.test.ts` asserts PMTools tracks it to
+5e-4 at every grid point. Until SCI-01 these references locked index −17; see
+`found-bugs-todo.md`, "Surfaced in Layer A".

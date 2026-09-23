@@ -20,25 +20,9 @@ import { describeComputationReferenceOutput } from '../../../../../test-utils/co
 // the geo↔strat rotation via `findBed`, then runs `unfold` over the −50…150 % grid. Output:
 // { index (best-unfolding %), taus ([{x: untilt %, y: t1}]) }.
 //
-// The locked `index` is 98 %, and 98 rather than 100 is the correct answer for this input,
-// not a rounding artifact: it is the finite-sample optimum of this N=18 draw, and PmagPy on a
-// 1 % grid lands on 98 too. `unfold` hones in on a 1 % grid, so it resolves the peak that the
-// 10 % grid in synthetic_fold.pmagpy.json (which reports 100 %) cannot.
-//
-// These numbers changed in SCI-01 (September 2026). Until then the fixture locked
-// index = −17 % with tau1 *falling* 0.61 → 0.44 where PmagPy's rose — a confirmed PMTools
-// defect, locked as-is under the Part A golden-master discipline (see found-bugs-todo.md,
-// "Surfaced in Layer A"): `findBed` returns a dip direction (`azimuth = strike + 90`), and
-// `unfold` fed it straight into `Coordinates.correctBedding`, whose first parameter is a
-// *strike* (it computes `dipDirection = strike + 90` itself). The 90 degrees went in twice,
-// so every fractional untilting rotated about an axis 90° away from the fold axis and
-// clustering peaked near 0 %. The two conventions agree exactly at 0 % unfolding, which is
-// why it hid for four years. The PmagPy cross-check is what exposed it — a plain
-// golden-master would have silently enshrined −17 % as "correct".
-//
-// The curve here is the locked regression net; the *properties* it is meant to have (PmagPy
-// parity within 5e-4 across the grid, component-wise round trips including overturned beds)
-// live next door in foldTestUnfoldAxis.test.ts.
+// The locked index for synthetic_fold is 98: the finite-sample optimum of this N=18 draw,
+// which PmagPy also finds on a 1 % grid (its 10 % grid in synthetic_fold.pmagpy.json says 100).
+// PmagPy parity and overturned-bed properties are in foldTestUnfoldAxis.test.ts.
 //
 // The `iteration` argument only gates whether the per-step taus curve is captured
 // (`iteration < 24`); `index` is computed regardless. Two cases lock both branches:

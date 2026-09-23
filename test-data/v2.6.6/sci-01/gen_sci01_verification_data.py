@@ -5,7 +5,7 @@ Both are synthetic folds with a KNOWN answer: a tight Fisher cluster of pre-fold
 100 % recovers the cluster and the fold test must peak near 100 %.
 
   two_limb_fold.dir   -- a classic two-limb fold, dips 25..60, both limbs. Exercises the
-                         call-site fix (SCI-01). Before the fix PMTools read ~41 % here.
+                         call-site fix (SCI-01). Before the fix PMTools read 150 % here.
   overturned_limb.dir -- the same cluster with one limb overturned (dips 95..140) and
                          the beddings chosen so findBed lands in the (180, 270) branch.
                          Exercises the findBed normalization (NEW-A).
@@ -96,11 +96,13 @@ def build_case(name, beddings, comment):
     rows = build_folded_dataset(beddings)
     write_dir_file(OUTPUT_DIRECTORY / f"{name}.dir", rows, comment)
     geographic_directions = [(dgeo, igeo) for dgeo, igeo, _, _ in rows]
-    best = max(GRID, key=lambda p: tau1_at(geographic_directions, beddings, p))
+    best = max(GRID, key=lambda percent: tau1_at(geographic_directions, beddings, percent))
     return {
         "file": f"{name}.dir",
         "sites": len(rows),
-        "beddings_dip_azimuth_dip": [[float(a), float(d)] for a, d in beddings],
+        "beddings_dip_azimuth_dip": [
+            [float(dip_azimuth), float(dip)] for dip_azimuth, dip in beddings
+        ],
         "pmagpy_best_untilt_percent_1pct_grid": best,
         "pmagpy_tau1_at_0_percent": round(tau1_at(geographic_directions, beddings, 0), 6),
         "pmagpy_tau1_at_best": round(tau1_at(geographic_directions, beddings, best), 6),

@@ -16,16 +16,8 @@ Construction (seed 42, fully reproducible):
 
 It then runs PmagPy's fold test (max normalised eigenvalue tau1 of the orientation
 matrix vs untilting %) on the rounded geographic directions and records the curve +
-optimum. PMTools' `unfold` on the SAME geo/strat pairs now tracks that curve to within
-1.938e-4 across the whole grid and locks index = 98 — the finite-sample optimum of this
-N=18 draw, which PmagPy also reaches on a 1 % grid (the 100 % recorded below is its
-answer on the coarse 10 % grid).
-
-Before SCI-01 (September 2026) PMTools locked index = -17 % and fell where this curve
-rises: a 90-degree axis error, `findBed` returning azimuth = strike + 90 and `unfold`
-feeding that to correctBedding as if it were a strike, so the 90 degrees were added
-twice. The cross-check here is what exposed it. See
-.claude/development-roadmap/notes/found-bugs-todo.md ("Surfaced in Layer A").
+optimum (10 % grid; 98 on a 1 % grid for unrounded input). PMTools' `unfold` must
+track this curve; see foldTestUnfoldAxis.test.ts.
 
 Run:  python3 scripts/gen_foldtest.py --force
 """
@@ -113,13 +105,8 @@ def gen_foldtest(args: argparse.Namespace) -> None:
         "pmagpy_version": pmagpy_version(),
         "seed": SEED,
         "note": (
-            "Oracle for the fold-test deterministic core. bestUntiltPercent is PmagPy's "
-            "answer on the coarse 10 % grid below; on a 1 % grid PmagPy lands on 98, the "
-            "finite-sample optimum of this N=18 draw, which is what PMTools' unfold locks. "
-            "Since SCI-01 PMTools tracks this curve to within 1.938e-4 over the whole "
-            "-50..150 % range (tolerance 5e-4). Before SCI-01 it locked index = -17 and fell "
-            "where this curve rises: a 90-degree axis error, findBed's dip direction fed to "
-            "correctBedding as if it were a strike."
+            "PmagPy fold test on this seeded dataset, 10 % untilting grid. "
+            "On a 1 % grid (unrounded input) its optimum is 98."
         ),
         "bestUntiltPercent": best,
         "tau1Curve": curve,
