@@ -9,6 +9,7 @@ export const CHANGELOG: ChangelogEntry[] = [
     version: '2.6.6',
     date: 'September 21, 2026',
     items: [
+      'Fold test: fixed a wrong best-unfolding percentage and bounds for every tilted collection (the test unfolded about an axis 90° off the fold axis, and took the long way round for overturned beds). Results now match PmagPy — please re-run earlier fold tests.',
       'DIR page: fixed table export (PMM/CSV/XLSX) ignoring the active column filter — only directions that pass the filter are exported now. "Export with hidden" still exports every direction.',
     ],
   },

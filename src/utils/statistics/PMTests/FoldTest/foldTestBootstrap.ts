@@ -179,6 +179,12 @@ export function findBed(cartesianCoordsGeo: Coordinates, cartesianCoordsStrat: C
     dip = -dip;
     strike += 180;
   }
+  // A dip in (180, 270) is the long-arc rotation: right at 100 %, wrong at every fraction.
+  // Same rotation as (360 - dip) about the opposite strike, which keeps dip in [0, 180].
+  if (dip > 180) {
+    dip = 360 - dip;
+    strike += 180;
+  }
   let azimuth = strike + 90; // here we changing from strike to azimuth
   if (azimuth < 0) azimuth += 360;
   if (azimuth > 360) azimuth -= 360;
@@ -198,6 +204,18 @@ export const FNarcsin = (x: number) => {
   return 90 - FNarccos(x);
 };
 
+// beddingAzimuth is a dip direction (strike + 90); correctBedding takes a strike.
+export const untiltVectorAtPercentage = (
+  vector: CoordsWithBeddingPars,
+  unfoldingPercentage: number,
+) => {
+  const beddingStrike = vector.beddingAzimuth - 90;
+  return vector.coordinates.correctBedding(
+    beddingStrike,
+    1e-2 * unfoldingPercentage * vector.beddingDip,
+  );
+};
+
 export const unfold = (vectors: Array<CoordsWithBeddingPars>, iteration: number) => {
   // Function unfold
   // Unfolds a bunch of vectors following their bedding
@@ -211,10 +229,7 @@ export const unfold = (vectors: Array<CoordsWithBeddingPars>, iteration: number)
 
     // Do the tilt correction on all points in pseudoDirections
     const tilts: Array<Coordinates> = vectors.map((vector) =>
-      vector.coordinates.correctBedding(
-        vector.beddingAzimuth,
-        1e-2 * unfoldingPercentage * vector.beddingDip,
-      ),
+      untiltVectorAtPercentage(vector, unfoldingPercentage),
     );
 
     // Return the eigen values of a real, symmetrical matrix

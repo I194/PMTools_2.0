@@ -1,7 +1,7 @@
 {
   "pmagpy_version": "4.3.14",
   "seed": 42,
-  "note": "True best-unfolding optimum for this seeded dataset. PMTools' unfold locks index = -17 (see found-bugs-todo.md: findBed azimuth vs correctBedding strike).",
+  "note": "PmagPy fold test on this seeded dataset, 10 % untilting grid. On a 1 % grid (unrounded input) its optimum is 98.",
   "bestUntiltPercent": 100,
   "tau1Curve": [
     {
