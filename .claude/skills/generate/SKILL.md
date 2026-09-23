@@ -19,7 +19,7 @@ Read CLAUDE.md for project context. Read git log for recent history.
 When you are done with all work, create a verification prompt for the Evaluator agent:
 
 1. Read the version from `package.json`
-2. Save to `test-data/v{version}/verify-fixes.md`
+2. Save to `test-data/v{version}/verify-fixes.md` (commit it on a `chore/` branch, not the fix branch)
 3. The file must contain a ready-to-paste prompt for `/evaluate` that describes exactly what to test, with concrete reproduction steps for each fix/feature
 
 Example:

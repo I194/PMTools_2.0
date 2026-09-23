@@ -102,6 +102,7 @@ Sites: `.csv`, `.xlsx` (Lat/Lon)
 - i18next: translations in `public/locales/{ru,en}/`
 - PascalCase for components, camelCase for utils
 - Commits: lowercase imperative, `hotfix:` prefix for critical fixes
+- Comments: only the non-obvious *why*, 1-3 lines. No bug history or "the code used to do X"; that goes in the commit message, once
 - `numeric` npm package for matrix operations (eigenvalue decomposition for PCA)
 - `console.log` is forbidden — ESLint treats it as an error, blocked by pre-commit hook and CI
 
@@ -129,6 +130,7 @@ MUI is being replaced by a **custom in-house UI kit** in `src/ui-kit/` (tokens, 
 - Do NOT modify scientific logic in `utils/statistics/` without explicit request (a PreToolUse hook blocks it until `.claude/.science-unlock` exists; create that file only after Ivan approves, delete it after)
 - Do NOT regenerate `*.expected.json` references without an approved, documented behavior change
 - Do NOT start work on SCI-10 (quoting in the CSV/PMM converters, or any quote-aware change to the CSV/PMM/XLSX read path) until ledger item SCI-21 is merged AND Ivan has explicitly confirmed the test data is sufficient. Before touching `src/utils/files/converters/` or the CSV/PMM/XLSX parsers, check `.claude/progress.json` for blocked items
+- Do NOT put anything into a fix/feature PR that the change does not need: evaluator reports, `verify-fixes.md`, extra screenshots, ledger or found-bugs edits and new bug items go in a separate `chore/` PR. A PR body stays under ~200 words (`.github/pull_request_template.md`)
 - Do NOT commit on `main` or `dev`, or push to them (hooks block it): branch from `dev`, PR to `dev`, one PR at a time
 
 ## 3-Agent Workflow
@@ -138,7 +140,7 @@ See [docs/ai-assisted-development.md](docs/ai-assisted-development.md) for the f
 
 ## Agent Harness
 
-Subagents (`.claude/agents/`: bug-investigator, science-reviewer, evaluator, generator, repo-hygienist), hooks (`.claude/settings.json` + `.claude/hooks/`), saved workflows (`.claude/workflows/`: investigate-found-bugs, dark-mode-audit, pr-review) and the cross-session ledger (`.claude/progress.json`) are documented in [docs/agentic-workflows.md](docs/agentic-workflows.md). Read the ledger before picking up work; update it when work starts, when a PR opens, and when it merges.
+Subagents (`.claude/agents/`: bug-investigator, science-reviewer, evaluator, generator, repo-hygienist), hooks (`.claude/settings.json` + `.claude/hooks/`), saved workflows (`.claude/workflows/`: investigate-found-bugs, dark-mode-audit, pr-review) and the cross-session ledger (`.claude/progress.json`) are documented in [docs/agentic-workflows.md](docs/agentic-workflows.md). Read the ledger before picking up work; update it when work starts, when a PR opens, and when it merges, always through a `chore/` branch, never inside the fix PR.
 
 Agent teams (experimental): preferable for the calculation-verification loop (science fixes cross-checked against PmagPy/thesis). Enable locally with `bash .claude/scripts/agent-teams.sh on` (or `/agent-teams on`); when such work starts without a team, a `UserPromptSubmit` hook plus a `PreToolUse` gate force Claude to ask Ivan first (AskUserQuestion) and to record the answer with `.claude/scripts/agent-teams-decision.sh` before any other tool runs. See docs/agentic-workflows.md, section 5b.
 

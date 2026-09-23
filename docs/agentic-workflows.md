@@ -70,7 +70,7 @@ Workflows spawn many agents and cost accordingly, so they only run when you ask 
 |---|---|---|---|
 | `investigate-found-bugs` | One `bug-investigator` per bug from the found-bugs catalog (parallel, read-only) → three `science-reviewer` refuters per spec (root cause, fix, science) → a ranking pass. | `["SCI-01", "SCI-05"]` or none for every open item (catalog entries with `skip: true` mirror `closed` and hard-blocked ledger items and run only when named) | `test-data/v{version}/science-fix-queue.md` (scoped run: `science-fix-queue-<ids>.md`; an existing report is never overwritten) plus the structured queue and a "needs decision" list |
 | `dark-mode-audit` | One `evaluator` walks every page and modal in dark mode (serial: Playwright shares one browser) → one `bug-investigator` per defect maps it to `path:line` and proposes a token → a plan pass. Needs `npm start` running. | optional custom scope | `test-data/v{version}/dark-mode-audit.md`, screenshots under `dark-mode/`, a token plan |
-| `pr-review` | Scope the diff → one reviewer per dimension (correctness, conventions, tests; plus `science-reviewer` when science paths changed and a UI lens when TSX/SCSS changed) → dedup → three refuters per finding. | `{ "base": "dev", "head": "HEAD" }` | Confirmed findings sorted by severity, plus what was refuted and why |
+| `pr-review` | Scope the diff → one reviewer per dimension (correctness, conventions, tests, reviewability; plus `science-reviewer` when science paths changed and a UI lens when TSX/SCSS changed) → dedup → three refuters per finding. | `{ "base": "dev", "head": "HEAD" }` | Confirmed findings sorted by severity, plus what was refuted and why |
 
 Anatomy of a workflow, so you can write the next one (for example `ui-kit-review`):
 
