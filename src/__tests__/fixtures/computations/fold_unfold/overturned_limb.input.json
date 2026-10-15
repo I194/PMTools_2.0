@@ -1,0 +1,113 @@
+{
+  "iteration": 24,
+  "directions": [
+    {
+      "Dgeo": 48.4,
+      "Igeo": -60.6,
+      "Dstrat": 49.1,
+      "Istrat": 34.4
+    },
+    {
+      "Dgeo": 15.3,
+      "Igeo": -55.3,
+      "Dstrat": 25.8,
+      "Istrat": 37.7
+    },
+    {
+      "Dgeo": 52.2,
+      "Igeo": -59.5,
+      "Dstrat": 51.6,
+      "Istrat": 46.8
+    },
+    {
+      "Dgeo": 21.7,
+      "Igeo": -60.6,
+      "Dstrat": 30.3,
+      "Istrat": 46.5
+    },
+    {
+      "Dgeo": 2.9,
+      "Igeo": -65.1,
+      "Dstrat": 25.3,
+      "Istrat": 42.3
+    },
+    {
+      "Dgeo": 17.1,
+      "Igeo": -72.9,
+      "Dstrat": 36.5,
+      "Istrat": 46.8
+    },
+    {
+      "Dgeo": 23.6,
+      "Igeo": -83.4,
+      "Dstrat": 45.9,
+      "Istrat": 44.6
+    },
+    {
+      "Dgeo": 29.7,
+      "Igeo": -85.4,
+      "Dstrat": 47.6,
+      "Istrat": 48.6
+    },
+    {
+      "Dgeo": 299.3,
+      "Igeo": -68.5,
+      "Dstrat": 23.8,
+      "Istrat": 39.0
+    },
+    {
+      "Dgeo": 35.6,
+      "Igeo": 59.6,
+      "Dstrat": 16.5,
+      "Istrat": 45.4
+    },
+    {
+      "Dgeo": 50.2,
+      "Igeo": 49.0,
+      "Dstrat": 30.2,
+      "Istrat": 36.5
+    },
+    {
+      "Dgeo": 77.6,
+      "Igeo": 60.1,
+      "Dstrat": 34.0,
+      "Istrat": 52.3
+    },
+    {
+      "Dgeo": 56.8,
+      "Igeo": 54.8,
+      "Dstrat": 25.3,
+      "Istrat": 37.7
+    },
+    {
+      "Dgeo": 73.0,
+      "Igeo": 40.1,
+      "Dstrat": 44.7,
+      "Istrat": 32.4
+    },
+    {
+      "Dgeo": 72.1,
+      "Igeo": 59.8,
+      "Dstrat": 21.8,
+      "Istrat": 41.0
+    },
+    {
+      "Dgeo": 109.4,
+      "Igeo": 43.5,
+      "Dstrat": 52.4,
+      "Istrat": 54.0
+    },
+    {
+      "Dgeo": 91.6,
+      "Igeo": 45.3,
+      "Dstrat": 39.5,
+      "Istrat": 40.6
+    },
+    {
+      "Dgeo": 117.0,
+      "Igeo": 43.7,
+      "Dstrat": 41.9,
+      "Istrat": 56.0
+    }
+  ]
+}

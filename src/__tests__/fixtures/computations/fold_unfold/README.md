@@ -26,23 +26,12 @@ consumes (verified). Re-run with `python3 scripts/gen_foldtest.py --force`.
   captured (the `iteration < 24` branch of `unfold`).
 - `synthetic_fold_unsaved_iteration` — `iteration: 24` → `taus` stays empty, only the index
   is reported (the other branch). Same directions as above.
+- `overturned_limb` — one limb overturned (dips 95…140), from
+  `test-data/v2.6.6/sci-01/overturned_limb.dir`. Index only; PmagPy's 1 % grid optimum is 101.
 
-## PmagPy cross-check — and the bug it exposed
+## PmagPy cross-check
 
-`synthetic_fold.pmagpy.json` records PmagPy's fold-test curve on the same data: tau1 rises
-monotonically 0.61 (0 %) → 0.96 (100 %), optimum **100 %**.
-
-PMTools' `unfold` on the identical geo/strat pairs locks **index = −17 %**, with tau1
-*falling* 0.61 → 0.44 across 0 → 100 %. Both agree exactly at 0 % (0.6083) but move in
-opposite directions. This is a **confirmed PMTools bug** (locked as-is per the Part A
-golden-master discipline; documented in
-`.claude/development-roadmap/notes/found-bugs-todo.md`, "Surfaced in Layer A"):
-
-> `findBed` returns a dip-direction (`azimuth = strike + 90`); `unfold` then passes that
-> azimuth straight into `Coordinates.correctBedding`, whose first parameter is a **strike**
-> (it computes `dipDirection = strike + 90` itself). The 90° mismatch unfolds about the wrong
-> axis, so clustering is maximised near 0 % instead of the true 100 %.
-
-The cross-check is what surfaced it: a plain golden-master would have silently enshrined the
-wrong answer. When the convention bug is fixed, these fixtures go red and must be regenerated
-(the locked index should become ~100 %).
+`synthetic_fold.pmagpy.json` is PmagPy's fold-test curve on the same data (optimum 100 % on
+the 10 % grid, 98 on a 1 % grid). `foldTestUnfoldAxis.test.ts` asserts PMTools tracks it to
+5e-4 at every grid point. Until SCI-01 these references locked index −17; see
+`found-bugs-todo.md`, "Surfaced in Layer A".

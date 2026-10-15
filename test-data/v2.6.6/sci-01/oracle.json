@@ -1,0 +1,169 @@
+{
+  "pmagpy_version": "pmagpy-4.3.14",
+  "seed": 2026,
+  "note": "Verification data for SCI-01. Both datasets are synthetic folds whose true optimum is 100 % by construction; the numbers below are PmagPy's fold test on a 1 % grid, which lands a few per cent off 100 because each is a finite sample. PMTools runs a 1000-draw bootstrap, so compare the best-unfolding percentage, not the bounds.",
+  "cases": [
+    {
+      "file": "two_limb_fold.dir",
+      "sites": 18,
+      "beddings_dip_azimuth_dip": [
+        [
+          90.0,
+          25.0
+        ],
+        [
+          90.0,
+          29.375
+        ],
+        [
+          90.0,
+          33.75
+        ],
+        [
+          90.0,
+          38.125
+        ],
+        [
+          90.0,
+          42.5
+        ],
+        [
+          90.0,
+          46.875
+        ],
+        [
+          90.0,
+          51.25
+        ],
+        [
+          90.0,
+          55.625
+        ],
+        [
+          90.0,
+          60.0
+        ],
+        [
+          270.0,
+          25.0
+        ],
+        [
+          270.0,
+          29.375
+        ],
+        [
+          270.0,
+          33.75
+        ],
+        [
+          270.0,
+          38.125
+        ],
+        [
+          270.0,
+          42.5
+        ],
+        [
+          270.0,
+          46.875
+        ],
+        [
+          270.0,
+          51.25
+        ],
+        [
+          270.0,
+          55.625
+        ],
+        [
+          270.0,
+          60.0
+        ]
+      ],
+      "pmagpy_best_untilt_percent_1pct_grid": 98,
+      "pmagpy_tau1_at_0_percent": 0.682365,
+      "pmagpy_tau1_at_best": 0.968721
+    },
+    {
+      "file": "overturned_limb.dir",
+      "sites": 18,
+      "beddings_dip_azimuth_dip": [
+        [
+          230.0,
+          95.0
+        ],
+        [
+          230.0,
+          100.625
+        ],
+        [
+          230.0,
+          106.25
+        ],
+        [
+          230.0,
+          111.875
+        ],
+        [
+          230.0,
+          117.5
+        ],
+        [
+          230.0,
+          123.125
+        ],
+        [
+          230.0,
+          128.75
+        ],
+        [
+          230.0,
+          134.375
+        ],
+        [
+          230.0,
+          140.0
+        ],
+        [
+          340.0,
+          20.0
+        ],
+        [
+          340.0,
+          24.375
+        ],
+        [
+          340.0,
+          28.75
+        ],
+        [
+          340.0,
+          33.125
+        ],
+        [
+          340.0,
+          37.5
+        ],
+        [
+          340.0,
+          41.875
+        ],
+        [
+          340.0,
+          46.25
+        ],
+        [
+          340.0,
+          50.625
+        ],
+        [
+          340.0,
+          55.0
+        ]
+      ],
+      "pmagpy_best_untilt_percent_1pct_grid": 101,
+      "pmagpy_tau1_at_0_percent": 0.767889,
+      "pmagpy_tau1_at_best": 0.968621
+    }
+  ]
+}

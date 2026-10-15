@@ -16,10 +16,8 @@ Construction (seed 42, fully reproducible):
 
 It then runs PmagPy's fold test (max normalised eigenvalue tau1 of the orientation
 matrix vs untilting %) on the rounded geographic directions and records the curve +
-optimum. PMTools' `unfold` on the SAME geo/strat pairs locks index = -17 % instead of
-100 % — a confirmed convention bug (findBed returns azimuth = strike + 90, which
-`unfold` then feeds to correctBedding as if it were a strike). See
-.claude/development-roadmap/notes/found-bugs-todo.md ("Surfaced in Layer A").
+optimum (10 % grid; 98 on a 1 % grid for unrounded input). PMTools' `unfold` must
+track this curve; see foldTestUnfoldAxis.test.ts.
 
 Run:  python3 scripts/gen_foldtest.py --force
 """
@@ -107,8 +105,8 @@ def gen_foldtest(args: argparse.Namespace) -> None:
         "pmagpy_version": pmagpy_version(),
         "seed": SEED,
         "note": (
-            "True best-unfolding optimum for this seeded dataset. PMTools' unfold locks "
-            "index = -17 (see found-bugs-todo.md: findBed azimuth vs correctBedding strike)."
+            "PmagPy fold test on this seeded dataset, 10 % untilting grid. "
+            "On a 1 % grid (unrounded input) its optimum is 98."
         ),
         "bestUntiltPercent": best,
         "tau1Curve": curve,
