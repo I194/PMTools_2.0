@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # UserPromptSubmit hook — Ivan's rule (2026-09-05): work that needs the calculation-verification loop
-# (cross-checking computations against PmagPy / the thesis; science fixes with reference flips) is
+# (science fixes that change numbers and are cross-checked against PmagPy / the thesis) is
 # preferably done by an agent team. When such a prompt arrives and no decision was taken this session,
 # this hook opens a "decision pending" state (.claude/.agent-teams-pending) and tells Claude that its
 # FIRST action must be AskUserQuestion with a fixed set of options. gate-agent-teams-decision.sh
@@ -26,7 +26,9 @@ if [ -f "$pending" ] && [ "$(cat "$pending")" = "$session_id" ]; then
   exit 0
 fi
 
-pattern='pmagpy|fix\(science\)|science[- ]fix|reference[- ]flip|expected\.json|\bSCI-[0-9]+|cross-?check|verif(y|ication)[^.]{0,40}(calculation|computation|formula|number)|thesis|fold[- ]test|reversal[- ]test|butler|mcfadden|fisher mean'
+# Narrowed 2026-10-16 to fix work only: Part B (oracle + parity test, no fixes) mentions PmagPy in
+# nearly every prompt and does not need a team.
+pattern='fix\(science\)|science[- ]fix|reference[- ]flip|\bSCI-[0-9]+'
 matched="$(printf '%s' "$prompt" | grep -oiE "$pattern" | head -1 || true)"
 [ -z "$matched" ] && exit 0
 
