@@ -4,6 +4,10 @@ Web application for paleomagnetic data analysis. Fully client-side (no server), 
 - Domain: pmtools.ru | Deploy: GitHub Pages
 - Bilingual: Russian and English (i18next)
 
+## Current Focus (from October 2026)
+
+**Part B is the only active work**: verify every computation against PmagPy, one computation per PR (oracle + parity test, no fixes). Plan and status table: [part-b-plan.md](.claude/development-roadmap/part-b-plan.md). All other roadmap tracks are paused; do not start them unless Ivan asks. Mismatches are recorded, not fixed.
+
 ## Agent Behavior
 
 At the end of every response, suggest 1-3 relevant next steps the user could take using the available skills and workflows described in [docs/ai-assisted-development.md](docs/ai-assisted-development.md). Match suggestions to context: if the user just fixed a bug, suggest `/evaluate`; if they just finished a feature, suggest `/review` then `/evaluate`; if they're exploring a problem, suggest `/investigate`. Keep suggestions brief — one line each.
@@ -132,6 +136,7 @@ MUI is being replaced by a **custom in-house UI kit** in `src/ui-kit/` (tokens, 
 - Do NOT start work on SCI-10 (quoting in the CSV/PMM converters, or any quote-aware change to the CSV/PMM/XLSX read path) until ledger item SCI-21 is merged AND Ivan has explicitly confirmed the test data is sufficient. Before touching `src/utils/files/converters/` or the CSV/PMM/XLSX parsers, check `.claude/progress.json` for blocked items
 - Do NOT put anything into a fix/feature PR that the change does not need: evaluator reports, `verify-fixes.md`, extra screenshots, ledger or found-bugs edits and new bug items go in a separate `chore/` PR. A PR body stays under ~200 words (`.github/pull_request_template.md`)
 - Do NOT commit on `main` or `dev`, or push to them (hooks block it): branch from `dev`, PR to `dev`, one PR at a time
+- Do NOT merge anything into `main`; Ivan merges `dev` into `main` by hand. Merge a PR into `dev` only when Ivan says so and CI is green
 
 ## 3-Agent Workflow
 
@@ -169,5 +174,3 @@ Use `/browse` for general web browsing. Never use `mcp__claude-in-chrome__*` too
 - `/retro` — engineering retrospective
 - `/gstack-upgrade` — self-updater
 
-### All available gstack skills
-`/office-hours`, `/plan-ceo-review`, `/plan-eng-review`, `/plan-design-review`, `/design-consultation`, `/design-shotgun`, `/design-html`, `/review`, `/ship`, `/land-and-deploy`, `/canary`, `/benchmark`, `/browse`, `/connect-chrome`, `/qa`, `/qa-only`, `/design-review`, `/setup-browser-cookies`, `/setup-deploy`, `/retro`, `/investigate`, `/document-release`, `/codex`, `/cso`, `/autoplan`, `/plan-devex-review`, `/devex-review`, `/careful`, `/freeze`, `/guard`, `/unfreeze`, `/gstack-upgrade`, `/learn`.

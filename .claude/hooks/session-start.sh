@@ -18,8 +18,12 @@ git log --oneline -5 2>/dev/null | sed 's/^/  /'
 
 ledger=".claude/progress.json"
 if [ -f "$ledger" ] && command -v jq >/dev/null 2>&1; then
+  focus="$(jq -r '.focus // empty | "FOCUS: \(.summary) Plan: \(.doc)"' "$ledger")"
+  [ -n "$focus" ] && echo "$focus"
   echo "Progress ledger ($ledger, updated $(jq -r '.updated' "$ledger")):"
-  jq -r '.tracks | to_entries[] | "  \(.key): " + ([.value.items[] | .status] | group_by(.) | map("\(.[0]) \(length)") | join(", "))' "$ledger"
+  jq -r '.tracks | to_entries[] | select(.value.rule | startswith("PAUSED") | not) | "  \(.key): " + ([.value.items[] | .status] | group_by(.) | map("\(.[0]) \(length)") | join(", "))' "$ledger"
+  paused="$(jq -r '[.tracks | to_entries[] | select(.value.rule | startswith("PAUSED")) | .key] | join(", ")' "$ledger")"
+  [ -n "$paused" ] && echo "  paused: $paused"
   active="$(jq -r '.tracks | to_entries[] | .value.items[] | select(.status == "in-progress" or .status == "pr-open") | "  - [\(.id)] \(.title) — \(.status)\(if .pr then " (PR #\(.pr))" else "" end)"' "$ledger")"
   if [ -n "$active" ]; then echo "Active items:"; echo "$active"; fi
 fi

@@ -1,6 +1,6 @@
 {
   "$comment": "Cross-session progress ledger (the 'feature list' pattern from Anthropic's long-running-agents guide). Agents read it at session start (hook) and update status as work moves: todo -> in-progress -> pr-open -> merged, or blocked (resumes once the reason in notes is resolved), or closed (terminal: superseded, parked or not a bug; nobody picks it up). Keep entries one line; details live in the linked docs.",
-  "updated": "2026-09-22",
+  "updated": "2026-10-16",
   "statuses": [
     "todo",
     "in-progress",
@@ -10,9 +10,127 @@
     "closed"
   ],
   "tracks": {
+    "part-b": {
+      "doc": ".claude/development-roadmap/part-b-plan.md",
+      "rule": "ACTIVE. One computation per PR: oracle + parity test, no fixes. A mismatch is asserted as a mismatch and logged in found-bugs-todo.md.",
+      "items": [
+        {
+          "id": "PB-00",
+          "title": "Confirm the PmagPy oracle and conventions for every row of part-b-plan.md (read-only investigation)",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": ""
+        },
+        {
+          "id": "PB-01",
+          "title": "Coordinate transforms specimen -> geographic -> stratigraphic vs pmag.dogeo / pmag.dotilt",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": ""
+        },
+        {
+          "id": "PB-02",
+          "title": "Fisher mean, k, a95 vs pmag.fisher_mean",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": ""
+        },
+        {
+          "id": "PB-03",
+          "title": "PCA on demag steps (line, anchored line, plane, MAD) vs pmag.domean",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": ""
+        },
+        {
+          "id": "PB-04",
+          "title": "PCA on directions vs pmag.doprinc",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": ""
+        },
+        {
+          "id": "PB-05",
+          "title": "VGP, dp/dm, mean pole vs pmag.dia_vgp",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": ""
+        },
+        {
+          "id": "PB-06",
+          "title": "Inclination-only mean vs pmag.doincfish",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": ""
+        },
+        {
+          "id": "PB-07",
+          "title": "Lines + great circles mean vs pmag.dolnp",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": ""
+        },
+        {
+          "id": "PB-08",
+          "title": "Cutoff 45 / Vandamme vs pmag.dovandamme",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": ""
+        },
+        {
+          "id": "PB-09",
+          "title": "Watson tests (randomness, k-ratio, common mean Vw)",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": ""
+        },
+        {
+          "id": "PB-10",
+          "title": "Reversal tests, classic and bootstrap",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": ""
+        },
+        {
+          "id": "PB-11",
+          "title": "Fold test, classic and bootstrap (deterministic core done in SCI-01)",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": ""
+        },
+        {
+          "id": "PB-12",
+          "title": "Conglomerate test",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": ""
+        },
+        {
+          "id": "PB-13",
+          "title": "Public verification page built from the oracles and parity results",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": ""
+        }
+      ]
+    },
     "science-fixes": {
       "doc": ".claude/development-roadmap/notes/found-bugs-todo.md",
-      "rule": "One fix(science) PR per item; each PR flips the locked reference and justifies the new numbers; needs Ivan's explicit approval (touch .claude/.science-unlock).",
+      "rule": "PAUSED until Part B is done (Ivan 2026-10-16). One fix(science) PR per item; each PR flips the locked reference and justifies the new numbers; needs Ivan's explicit approval (touch .claude/.science-unlock).",
       "items": [
         {
           "id": "SCI-00",
@@ -26,9 +144,9 @@
           "id": "SCI-01",
           "title": "Fold test unfolds about the wrong axis (call site passes dip direction as strike) + findBed returns dip in (180, 270) for vertical/overturned beds",
           "severity": "critical",
-          "status": "pr-open",
+          "status": "merged",
           "pr": 54,
-          "notes": "Ivan 2026-09-22: ONE PR for the call-site fix and the findBed normalization (NEW-A), target = PmagPy parity, nothing more. Spec + refuter corrections: test-data/v2.6.6/science-fix-queue.md section 1 and NEW-A; flips fold_unfold/* (index -17 -> 98). Branch fix/sci-01-fold-test-unfold-axis, agent team (generator + science-reviewer). Both fixes implemented; max |tau1 - PmagPy| 1.938e-4 over the whole grid (tolerance 5e-4, do not tighten). Verification data in test-data/v2.6.6/sci-01/ (two-limb 150 -> 98, overturned limb 83 -> 101, both matching PmagPy). Science review: approve-with-corrections, all six corrections applied in 951c403. Ready for PR; not opened yet. PR #54 opened 2026-09-22; science review approve-with-corrections, all six applied; evaluator all sections PASS."
+          "notes": "Squash-merged into dev as 57ea323 (PR #54), 2026-10-16. Fold test now matches PmagPy (98 / 101 on the verification folds)."
         },
         {
           "id": "SCI-02",
@@ -234,7 +352,7 @@
     },
     "ui-kit": {
       "doc": ".claude/development-roadmap/03a-ui-kit.md",
-      "rule": "Build the kit first in src/ui-kit/ with a showcase route and snapshot tests; no app migration until the kit is complete (3a). Then migrate and delete MUI (3b).",
+      "rule": "PAUSED until Part B is done (Ivan 2026-10-16). Build the kit first in src/ui-kit/ with a showcase route and snapshot tests; no app migration until the kit is complete (3a). Then migrate and delete MUI (3b).",
       "items": [
         {
           "id": "UIK-01",
@@ -312,7 +430,7 @@
     },
     "visual-tests": {
       "doc": ".claude/development-roadmap/02-visual-tests.md",
-      "rule": "SVG string snapshots first (Jest, no browser). Playwright page screenshots second.",
+      "rule": "PAUSED until Part B is done (Ivan 2026-10-16). SVG string snapshots first (Jest, no browser). Playwright page screenshots second.",
       "items": [
         {
           "id": "VIS-01",
@@ -334,7 +452,7 @@
     },
     "performance": {
       "doc": ".claude/development-roadmap/07-performance.md",
-      "rule": "Measure first. No algorithmic changes to the math; off-main-thread and caching only.",
+      "rule": "PAUSED until Part B is done (Ivan 2026-10-16). Measure first. No algorithmic changes to the math; off-main-thread and caching only.",
       "items": [
         {
           "id": "PERF-01",
@@ -364,7 +482,7 @@
     },
     "housekeeping": {
       "doc": "docs/agentic-workflows.md",
-      "rule": "Cheap, low-risk, do in the gaps.",
+      "rule": "PAUSED until Part B is done (Ivan 2026-10-16). Cheap, low-risk, do in the gaps.",
       "items": [
         {
           "id": "HK-01",
@@ -397,8 +515,21 @@
           "status": "merged",
           "pr": 52,
           "notes": "PR #52 chore/science-queue-decisions, merged into dev 2026-09-22"
+        },
+        {
+          "id": "HK-05",
+          "title": "At the next release, move the SCI-01 changelog line from the already-released 2.6.6 entry to the new version",
+          "severity": null,
+          "status": "todo",
+          "pr": null,
+          "notes": "src/data/changelog.ts; Ivan does releases into main by hand"
         }
       ]
     }
+  },
+  "focus": {
+    "track": "part-b",
+    "doc": ".claude/development-roadmap/part-b-plan.md",
+    "summary": "Ivan 2026-10-16: Part B (verify every computation against PmagPy) is the only active track for the next month. Other tracks are paused. Merge only into dev; Ivan merges dev into main himself."
   }
 }

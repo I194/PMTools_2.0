@@ -13,7 +13,7 @@ This directory tracks the long-term modernization plan for PMTools 2.0. Each pha
 
 | # | Phase | Status | Doc |
 |---|---|---|---|
-| 1 | Comprehensive testing & scientific verification | **Part A done** (reference-output regression net, PRs #37–#45, June 2026). Part B (scientific verification against the thesis/PmagPy) runs lazily, one formula at a time, and never blocks other phases | [part-a-overview.md](part-a-overview.md), [01-testing.md](01-testing.md) |
+| 1 | Comprehensive testing & scientific verification | **Part A done** (reference-output regression net, PRs #37–#45, June 2026). **Part B is the only active track from October 2026** (every computation vs PmagPy); all other phases are paused | [part-b-plan.md](part-b-plan.md), [part-a-overview.md](part-a-overview.md), [01-testing.md](01-testing.md) |
 | 2 | Screenshot / visual regression tests | Planned | [02-visual-tests.md](02-visual-tests.md) |
 | 3a | **Custom UI kit** — build it first, in isolation, with a showcase route and snapshot tests | Planned, **next UI work** | [03a-ui-kit.md](03a-ui-kit.md) |
 | 3b | Migrate the app onto the kit, delete MUI/Emotion | Planned | [03-ui-migration.md](03-ui-migration.md) |
