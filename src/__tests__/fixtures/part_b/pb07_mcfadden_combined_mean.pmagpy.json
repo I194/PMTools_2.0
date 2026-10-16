@@ -1,0 +1,2310 @@
+{
+  "pmagpy_version": "4.3.14",
+  "oracle": "pmag.dolnp(records, 'dir_type') replayed at full precision (process_data_for_mean, calculate_best_fit_vectors, cart2dir, dolnp k/a95); no planes -> pmag.fisher_mean; k null means 'inf'; dolnp holds dolnp's own printed strings",
+  "seed": 20261016,
+  "cases": [
+    {
+      "name": "directions_only.input.json",
+      "group": "locked",
+      "rows": [
+        {
+          "Dgeo": 338.2,
+          "Igeo": 36.9,
+          "Dstrat": 350,
+          "Istrat": 25.3,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 340.1,
+          "Igeo": 35.2,
+          "Dstrat": 351.8,
+          "Istrat": 23.7,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 335.9,
+          "Igeo": 38.4,
+          "Dstrat": 347.6,
+          "Istrat": 26.8,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 337.5,
+          "Igeo": 37.1,
+          "Dstrat": 349.2,
+          "Istrat": 25.5,
+          "gcNormal": false
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 337.94725738811724,
+          "inc": 36.909561423734566,
+          "R": 3.9983242821714646,
+          "k": 1790.2775448907707,
+          "a95": 2.1721178575737325,
+          "csd": 1.9143654016427636,
+          "nTotal": 4,
+          "nLines": 4,
+          "nPlanes": 0,
+          "a": null,
+          "dolnp": {
+            "dec": "  337.9 ",
+            "inc": "   36.9 ",
+            "R": "3.9983 ",
+            "K": "  1790 ",
+            "alpha95": "    2.2 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 349.6635789827524,
+          "inc": 25.33274027099901,
+          "R": 3.9981224392505017,
+          "k": 1597.8178073873933,
+          "a95": 2.2992915149770994,
+          "csd": 2.0263823329156754,
+          "nTotal": 4,
+          "nLines": 4,
+          "nPlanes": 0,
+          "a": null,
+          "dolnp": {
+            "dec": "  349.7 ",
+            "inc": "   25.3 ",
+            "R": "3.9981 ",
+            "K": "  1598 ",
+            "alpha95": "    2.3 "
+          }
+        }
+      }
+    },
+    {
+      "name": "directions_and_great_circles.input.json",
+      "group": "locked",
+      "rows": [
+        {
+          "Dgeo": 338.2,
+          "Igeo": 36.9,
+          "Dstrat": 350,
+          "Istrat": 25.3,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 340.1,
+          "Igeo": 35.2,
+          "Dstrat": 351.8,
+          "Istrat": 23.7,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 335.9,
+          "Igeo": 38.4,
+          "Dstrat": 347.6,
+          "Istrat": 26.8,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 70,
+          "Igeo": 10,
+          "Dstrat": 75,
+          "Istrat": 5,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 250,
+          "Igeo": -5,
+          "Dstrat": 255,
+          "Istrat": -8,
+          "gcNormal": true
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 336.6292420091748,
+          "inc": 36.65878775353387,
+          "R": 4.996059473652353,
+          "k": 761.3196145208259,
+          "a95": 2.9799447273079713,
+          "csd": null,
+          "nTotal": 5,
+          "nLines": 3,
+          "nPlanes": 2,
+          "a": 0.9986477927605365,
+          "dolnp": {
+            "dec": "  336.6 ",
+            "inc": "   36.7 ",
+            "R": "4.9961 ",
+            "K": "   761 ",
+            "alpha95": "    3.0 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 346.6871573305457,
+          "inc": 25.0386850110082,
+          "R": 4.988809901858985,
+          "k": 268.0941634465228,
+          "a95": 5.026361061486895,
+          "csd": null,
+          "nTotal": 5,
+          "nLines": 3,
+          "nPlanes": 2,
+          "a": 0.996154493403881,
+          "dolnp": {
+            "dec": "  346.7 ",
+            "inc": "   25.0 ",
+            "R": "4.9888 ",
+            "K": "   268 ",
+            "alpha95": "    5.0 "
+          }
+        }
+      }
+    },
+    {
+      "name": "directions_and_great_circles with the circles swapped",
+      "group": "locked",
+      "rows": [
+        {
+          "Dgeo": 338.2,
+          "Igeo": 36.9,
+          "Dstrat": 350,
+          "Istrat": 25.3,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 340.1,
+          "Igeo": 35.2,
+          "Dstrat": 351.8,
+          "Istrat": 23.7,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 335.9,
+          "Igeo": 38.4,
+          "Dstrat": 347.6,
+          "Istrat": 26.8,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 250,
+          "Igeo": -5,
+          "Dstrat": 255,
+          "Istrat": -8,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 70,
+          "Igeo": 10,
+          "Dstrat": 75,
+          "Istrat": 5,
+          "gcNormal": true
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 336.6302608397931,
+          "inc": 36.65364657837246,
+          "R": 4.996059515042287,
+          "k": 761.3276112443377,
+          "a95": 2.9799290612341665,
+          "csd": null,
+          "nTotal": 5,
+          "nLines": 3,
+          "nPlanes": 2,
+          "a": 0.9986478069748588,
+          "dolnp": {
+            "dec": "  336.6 ",
+            "inc": "   36.7 ",
+            "R": "4.9961 ",
+            "K": "   761 ",
+            "alpha95": "    3.0 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 346.68627832278855,
+          "inc": 25.047254146591456,
+          "R": 4.988809882297245,
+          "k": 268.09369478404744,
+          "a95": 5.026365467530412,
+          "csd": null,
+          "nTotal": 5,
+          "nLines": 3,
+          "nPlanes": 2,
+          "a": 0.996154486666359,
+          "dolnp": {
+            "dec": "  346.7 ",
+            "inc": "   25.0 ",
+            "R": "4.9888 ",
+            "K": "   268 ",
+            "alpha95": "    5.0 "
+          }
+        }
+      }
+    },
+    {
+      "name": "test-data/sample.dir",
+      "group": "real file",
+      "path": "test-data/sample.dir",
+      "rows": [
+        {
+          "Dgeo": 338.2,
+          "Igeo": 36.9,
+          "Dstrat": 350.0,
+          "Istrat": 25.3,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 145.5,
+          "Igeo": -42.3,
+          "Dstrat": 157.2,
+          "Istrat": -30.8,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 340.1,
+          "Igeo": 35.2,
+          "Dstrat": 351.8,
+          "Istrat": 23.7,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 142.8,
+          "Igeo": -40.1,
+          "Dstrat": 154.5,
+          "Istrat": -28.6,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 335.9,
+          "Igeo": 38.4,
+          "Dstrat": 347.6,
+          "Istrat": 26.8,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 148.2,
+          "Igeo": -44.6,
+          "Dstrat": 159.9,
+          "Istrat": -33.1,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 337.5,
+          "Igeo": 37.1,
+          "Dstrat": 349.2,
+          "Istrat": 25.5,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 143.9,
+          "Igeo": -41.5,
+          "Dstrat": 155.6,
+          "Istrat": -29.9,
+          "gcNormal": true
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 287.89170283448044,
+          "inc": -40.9717467954487,
+          "R": 7.997032735366108,
+          "k": 1011.0321694042624,
+          "a95": 2.0437730532708076,
+          "csd": null,
+          "nTotal": 8,
+          "nLines": 0,
+          "nPlanes": 8,
+          "a": 0.9993638727100684,
+          "dolnp": {
+            "dec": "  287.9 ",
+            "inc": "  -41.0 ",
+            "R": "7.9970 ",
+            "K": "  1011 ",
+            "alpha95": "    2.0 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 295.73863162964665,
+          "inc": -51.57402309865593,
+          "R": 7.996891696936406,
+          "k": 965.1568520256629,
+          "a95": 2.0918046857646293,
+          "csd": null,
+          "nTotal": 8,
+          "nLines": 0,
+          "nPlanes": 8,
+          "a": 0.9993336248967855,
+          "dolnp": {
+            "dec": "  295.7 ",
+            "inc": "  -51.6 ",
+            "R": "7.9969 ",
+            "K": "   965 ",
+            "alpha95": "    2.1 "
+          }
+        }
+      }
+    },
+    {
+      "name": "test-data/field_batch.dir",
+      "group": "real file",
+      "path": "test-data/field_batch.dir",
+      "rows": [
+        {
+          "Dgeo": 13.7,
+          "Igeo": 51.5,
+          "Dstrat": 11.2,
+          "Istrat": 47.9,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 20.4,
+          "Igeo": 54.3,
+          "Dstrat": 17.8,
+          "Istrat": 50.8,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 6.1,
+          "Igeo": 48.9,
+          "Dstrat": 3.5,
+          "Istrat": 45.3,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 190.8,
+          "Igeo": -49.2,
+          "Dstrat": 188.4,
+          "Istrat": -45.8,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 187.3,
+          "Igeo": -52.4,
+          "Dstrat": 184.9,
+          "Istrat": -49.0,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 17.1,
+          "Igeo": 53.0,
+          "Dstrat": 14.5,
+          "Istrat": 49.5,
+          "gcNormal": false
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 19.332393034545614,
+          "inc": 53.059111438439004,
+          "R": 1.99886637708249,
+          "k": 1.249645843208342,
+          "a95": 180.0,
+          "csd": 72.4588679182359,
+          "nTotal": 6,
+          "nLines": 6,
+          "nPlanes": 0,
+          "a": null,
+          "dolnp": {
+            "dec": "   19.3 ",
+            "inc": "   53.1 ",
+            "R": "1.9989 ",
+            "K": "     1 ",
+            "alpha95": "  180.0 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 16.57341456907361,
+          "inc": 49.374404777241,
+          "R": 1.998082357905325,
+          "k": 1.2494010240008115,
+          "a95": 180.0,
+          "csd": 72.46596670131872,
+          "nTotal": 6,
+          "nLines": 6,
+          "nPlanes": 0,
+          "a": null,
+          "dolnp": {
+            "dec": "   16.6 ",
+            "inc": "   49.4 ",
+            "R": "1.9981 ",
+            "K": "     1 ",
+            "alpha95": "  180.0 "
+          }
+        }
+      }
+    },
+    {
+      "name": "test-data/lab_results.csv",
+      "group": "real file",
+      "path": "test-data/lab_results.csv",
+      "rows": [
+        {
+          "Dgeo": 16.4,
+          "Igeo": 53.2,
+          "Dstrat": 14.0,
+          "Istrat": 49.7,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 9.8,
+          "Igeo": 50.1,
+          "Dstrat": 7.4,
+          "Istrat": 46.6,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 21.5,
+          "Igeo": 54.8,
+          "Dstrat": 19.1,
+          "Istrat": 51.3,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 189.3,
+          "Igeo": -47.9,
+          "Dstrat": 186.9,
+          "Istrat": -44.5,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 194.7,
+          "Igeo": -51.6,
+          "Dstrat": 192.3,
+          "Istrat": -48.2,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 3.2,
+          "Igeo": 46.7,
+          "Dstrat": 0.8,
+          "Istrat": 43.2,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 11.6,
+          "Igeo": 49.4,
+          "Dstrat": 9.2,
+          "Istrat": 45.9,
+          "gcNormal": false
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 12.289688652648818,
+          "inc": 51.81959588376803,
+          "R": 2.985002748950753,
+          "k": 1.494397038113042,
+          "a95": 82.58760836865268,
+          "csd": 66.26008975259808,
+          "nTotal": 7,
+          "nLines": 7,
+          "nPlanes": 0,
+          "a": null,
+          "dolnp": {
+            "dec": "   12.3 ",
+            "inc": "   51.8 ",
+            "R": "2.9850 ",
+            "K": "     1 ",
+            "alpha95": "   82.6 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 9.953682453838853,
+          "inc": 48.257798071992816,
+          "R": 2.98327082515807,
+          "k": 1.4937526875299272,
+          "a95": 82.63854193927187,
+          "csd": 66.27437930821873,
+          "nTotal": 7,
+          "nLines": 7,
+          "nPlanes": 0,
+          "a": null,
+          "dolnp": {
+            "dec": "   10.0 ",
+            "inc": "   48.3 ",
+            "R": "2.9833 ",
+            "K": "     1 ",
+            "alpha95": "   82.6 "
+          }
+        }
+      }
+    },
+    {
+      "name": "seeded 0: lines only, mean 124.3/9.1, kappa 200",
+      "group": "lines only",
+      "rows": [
+        {
+          "Dgeo": 121.2,
+          "Igeo": 10.0,
+          "Dstrat": 120.1,
+          "Istrat": -13.5,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 129.0,
+          "Igeo": 7.1,
+          "Dstrat": 124.8,
+          "Istrat": -20.3,
+          "gcNormal": false
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 125.11486476868694,
+          "inc": 8.569550778637263,
+          "R": 1.9948321368231094,
+          "k": 193.50357503111937,
+          "a95": 18.051548086227683,
+          "csd": 5.822915962263144,
+          "nTotal": 2,
+          "nLines": 2,
+          "nPlanes": 0,
+          "a": null,
+          "dolnp": {
+            "dec": "  125.1 ",
+            "inc": "    8.6 ",
+            "R": "1.9948 ",
+            "K": "   194 ",
+            "alpha95": "   18.1 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 122.40755770486682,
+          "inc": -16.913408823100287,
+          "R": 1.994943051311463,
+          "k": 197.74770550209058,
+          "a95": 17.8546820589741,
+          "csd": 5.7600903070604135,
+          "nTotal": 2,
+          "nLines": 2,
+          "nPlanes": 0,
+          "a": null,
+          "dolnp": {
+            "dec": "  122.4 ",
+            "inc": "  -16.9 ",
+            "R": "1.9949 ",
+            "K": "   198 ",
+            "alpha95": "   17.9 "
+          }
+        }
+      }
+    },
+    {
+      "name": "seeded 1: lines only, mean 297.3/-61.6, kappa 50",
+      "group": "lines only",
+      "rows": [
+        {
+          "Dgeo": 297.2,
+          "Igeo": -66.2,
+          "Dstrat": 298.3,
+          "Istrat": -67.0,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 299.0,
+          "Igeo": -42.4,
+          "Dstrat": 299.4,
+          "Istrat": -43.1,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 286.6,
+          "Igeo": -68.4,
+          "Dstrat": 287.4,
+          "Istrat": -69.3,
+          "gcNormal": false
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 295.503832125354,
+          "inc": -59.15823883173231,
+          "R": 2.9339369648768105,
+          "k": 30.274116172085467,
+          "a95": 22.80661344747913,
+          "csd": 14.72140573184582,
+          "nTotal": 3,
+          "nLines": 3,
+          "nPlanes": 0,
+          "a": null,
+          "dolnp": {
+            "dec": "  295.5 ",
+            "inc": "  -59.2 ",
+            "R": "2.9339 ",
+            "K": "    30 ",
+            "alpha95": "   22.8 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 296.23900644851585,
+          "inc": -59.95287733172901,
+          "R": 2.9334356725774424,
+          "k": 30.046123463454876,
+          "a95": 22.89612725380662,
+          "csd": 14.77715385687312,
+          "nTotal": 3,
+          "nLines": 3,
+          "nPlanes": 0,
+          "a": null,
+          "dolnp": {
+            "dec": "  296.2 ",
+            "inc": "  -60.0 ",
+            "R": "2.9334 ",
+            "K": "    30 ",
+            "alpha95": "   22.9 "
+          }
+        }
+      }
+    },
+    {
+      "name": "seeded 2: lines only, mean 175.3/-39.4, kappa 15",
+      "group": "lines only",
+      "rows": [
+        {
+          "Dgeo": 183.3,
+          "Igeo": -61.8,
+          "Dstrat": 175.7,
+          "Istrat": -60.2,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 188.0,
+          "Igeo": -55.4,
+          "Dstrat": 181.9,
+          "Istrat": -54.2,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 186.3,
+          "Igeo": -42.7,
+          "Dstrat": 182.4,
+          "Istrat": -41.5,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 195.2,
+          "Igeo": -22.0,
+          "Dstrat": 193.4,
+          "Istrat": -21.5,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 167.9,
+          "Igeo": -26.0,
+          "Dstrat": 166.2,
+          "Istrat": -23.5,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 188.8,
+          "Igeo": -67.1,
+          "Dstrat": 178.9,
+          "Istrat": -65.9,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 172.0,
+          "Igeo": -54.2,
+          "Dstrat": 166.9,
+          "Istrat": -51.9,
+          "gcNormal": false
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 182.79375130712043,
+          "inc": -47.55200169624442,
+          "R": 6.678265221553487,
+          "k": 18.648900902074775,
+          "a95": 14.349166274281655,
+          "csd": 18.756784911899526,
+          "nTotal": 7,
+          "nLines": 7,
+          "nPlanes": 0,
+          "a": null,
+          "dolnp": {
+            "dec": "  182.8 ",
+            "inc": "  -47.6 ",
+            "R": "6.6783 ",
+            "K": "    19 ",
+            "alpha95": "   14.3 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 178.3023908268348,
+          "inc": -46.03764439664179,
+          "R": 6.677542652561807,
+          "k": 18.607112065108247,
+          "a95": 14.366136447575022,
+          "csd": 18.77783558943,
+          "nTotal": 7,
+          "nLines": 7,
+          "nPlanes": 0,
+          "a": null,
+          "dolnp": {
+            "dec": "  178.3 ",
+            "inc": "  -46.0 ",
+            "R": "6.6775 ",
+            "K": "    19 ",
+            "alpha95": "   14.4 "
+          }
+        }
+      }
+    },
+    {
+      "name": "seeded 3: lines only, mean 285.7/57.8, kappa 200",
+      "group": "lines only",
+      "rows": [
+        {
+          "Dgeo": 280.2,
+          "Igeo": 48.1,
+          "Dstrat": 285.1,
+          "Istrat": 47.6,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 273.1,
+          "Igeo": 63.9,
+          "Dstrat": 282.3,
+          "Istrat": 63.8,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 282.4,
+          "Igeo": 58.2,
+          "Dstrat": 289.5,
+          "Istrat": 57.4,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 301.1,
+          "Igeo": 56.8,
+          "Dstrat": 306.9,
+          "Istrat": 54.7,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 285.0,
+          "Igeo": 61.5,
+          "Dstrat": 292.9,
+          "Istrat": 60.5,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 284.0,
+          "Igeo": 61.6,
+          "Dstrat": 292.0,
+          "Istrat": 60.6,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 284.8,
+          "Igeo": 58.2,
+          "Dstrat": 291.7,
+          "Istrat": 57.2,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 278.3,
+          "Igeo": 61.1,
+          "Dstrat": 286.3,
+          "Istrat": 60.6,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 291.7,
+          "Igeo": 64.1,
+          "Dstrat": 300.1,
+          "Istrat": 62.6,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 276.0,
+          "Igeo": 52.1,
+          "Dstrat": 281.7,
+          "Istrat": 51.9,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 283.6,
+          "Igeo": 54.3,
+          "Dstrat": 289.6,
+          "Istrat": 53.5,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 298.8,
+          "Igeo": 58.9,
+          "Dstrat": 305.2,
+          "Istrat": 56.9,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 290.3,
+          "Igeo": 53.5,
+          "Dstrat": 295.9,
+          "Istrat": 52.2,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 290.3,
+          "Igeo": 55.5,
+          "Dstrat": 296.4,
+          "Istrat": 54.2,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 285.1,
+          "Igeo": 59.9,
+          "Dstrat": 292.5,
+          "Istrat": 58.9,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 278.6,
+          "Igeo": 59.2,
+          "Dstrat": 286.0,
+          "Istrat": 58.7,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 283.6,
+          "Igeo": 57.2,
+          "Dstrat": 290.4,
+          "Istrat": 56.3,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 282.9,
+          "Igeo": 52.6,
+          "Dstrat": 288.6,
+          "Istrat": 51.8,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 279.7,
+          "Igeo": 55.7,
+          "Dstrat": 286.1,
+          "Istrat": 55.2,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 294.2,
+          "Igeo": 58.7,
+          "Dstrat": 300.8,
+          "Istrat": 57.0,
+          "gcNormal": false
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 285.1360072223973,
+          "inc": 57.752095444508086,
+          "R": 19.90836210047193,
+          "k": 207.33779470992766,
+          "a95": 2.271978809454012,
+          "csd": 5.625301202713124,
+          "nTotal": 20,
+          "nLines": 20,
+          "nPlanes": 0,
+          "a": null,
+          "dolnp": {
+            "dec": "  285.1 ",
+            "inc": "   57.8 ",
+            "R": "19.9084 ",
+            "K": "   207 ",
+            "alpha95": "    2.3 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 291.944306208399,
+          "inc": 56.77250864530272,
+          "R": 19.908578018131006,
+          "k": 207.82747881386692,
+          "a95": 2.269287949420916,
+          "csd": 5.618670113500203,
+          "nTotal": 20,
+          "nLines": 20,
+          "nPlanes": 0,
+          "a": null,
+          "dolnp": {
+            "dec": "  291.9 ",
+            "inc": "   56.8 ",
+            "R": "19.9086 ",
+            "K": "   208 ",
+            "alpha95": "    2.3 "
+          }
+        }
+      }
+    },
+    {
+      "name": "seeded 4: 1 line + 1 circle, mean 185.8/-29.3, kappa 200",
+      "group": "1 line + 1 circle",
+      "rows": [
+        {
+          "Dgeo": 184.6,
+          "Igeo": -31.1,
+          "Dstrat": 181.8,
+          "Istrat": 14.2,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 172.7,
+          "Igeo": 63.4,
+          "Dstrat": 329.0,
+          "Istrat": 67.4,
+          "gcNormal": true
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 184.33751286405553,
+          "inc": -28.623577858273606,
+          "R": 1.9981163987742545,
+          "k": 265.4489672048872,
+          "a95": 51.4009005182055,
+          "csd": null,
+          "nTotal": 2,
+          "nLines": 1,
+          "nPlanes": 1,
+          "a": 0.6238673134690784,
+          "dolnp": {
+            "dec": "  184.3 ",
+            "inc": "  -28.6 ",
+            "R": "1.9981 ",
+            "K": "   265 ",
+            "alpha95": "   51.4 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 182.3421029874556,
+          "inc": 16.630950820557477,
+          "R": 1.9981169732913189,
+          "k": 265.5299564764013,
+          "a95": 51.39248140346196,
+          "csd": null,
+          "nTotal": 2,
+          "nLines": 1,
+          "nPlanes": 1,
+          "a": 0.6239821457869037,
+          "dolnp": {
+            "dec": "  182.3 ",
+            "inc": "   16.6 ",
+            "R": "1.9981 ",
+            "K": "   266 ",
+            "alpha95": "   51.4 "
+          }
+        }
+      }
+    },
+    {
+      "name": "seeded 5: 1 line + 1 circle, mean 147.2/-1.7, kappa 50",
+      "group": "1 line + 1 circle",
+      "rows": [
+        {
+          "Dgeo": 147.2,
+          "Igeo": 10.3,
+          "Dstrat": 132.6,
+          "Istrat": 24.3,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 231.3,
+          "Igeo": -8.5,
+          "Dstrat": 235.3,
+          "Istrat": 35.2,
+          "gcNormal": true
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 145.08188212620192,
+          "inc": 10.63923794197932,
+          "R": 1.998643590354829,
+          "k": 368.6202039185254,
+          "a95": 43.179573690426366,
+          "csd": null,
+          "nTotal": 2,
+          "nLines": 1,
+          "nPlanes": 1,
+          "a": 0.7292126264857668,
+          "dolnp": {
+            "dec": "  145.1 ",
+            "inc": "   10.6 ",
+            "R": "1.9986 ",
+            "K": "   369 ",
+            "alpha95": "   43.2 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 130.77023673576812,
+          "inc": 23.023021620402176,
+          "R": 1.9986478870650206,
+          "k": 369.79159585336123,
+          "a95": 43.10765492702167,
+          "csd": null,
+          "nTotal": 2,
+          "nLines": 1,
+          "nPlanes": 1,
+          "a": 0.7300709822133743,
+          "dolnp": {
+            "dec": "  130.8 ",
+            "inc": "   23.0 ",
+            "R": "1.9986 ",
+            "K": "   370 ",
+            "alpha95": "   43.1 "
+          }
+        }
+      }
+    },
+    {
+      "name": "seeded 6: 1 line + 1 circle, mean 46.4/1.7, kappa 200",
+      "group": "1 line + 1 circle",
+      "rows": [
+        {
+          "Dgeo": 53.4,
+          "Igeo": -2.0,
+          "Dstrat": 53.7,
+          "Istrat": -6.9,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 296.1,
+          "Igeo": -81.2,
+          "Dstrat": 258.4,
+          "Istrat": -80.1,
+          "gcNormal": true
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 53.260912979525,
+          "inc": -3.011598593966119,
+          "R": 1.999682402272478,
+          "k": 1574.3185692828786,
+          "a95": 20.50703372570112,
+          "csd": null,
+          "nTotal": 2,
+          "nLines": 1,
+          "nPlanes": 1,
+          "a": 0.9366291901467516,
+          "dolnp": {
+            "dec": "   53.3 ",
+            "inc": "   -3.0 ",
+            "R": "1.9997 ",
+            "K": "  1574 ",
+            "alpha95": "   20.5 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 53.62362695334302,
+          "inc": -7.949451711514186,
+          "R": 1.9996627723547074,
+          "k": 1482.6779683679167,
+          "a95": 21.138449904810482,
+          "csd": null,
+          "nTotal": 2,
+          "nLines": 1,
+          "nPlanes": 1,
+          "a": 0.9327117390332158,
+          "dolnp": {
+            "dec": "   53.6 ",
+            "inc": "   -7.9 ",
+            "R": "1.9997 ",
+            "K": "  1483 ",
+            "alpha95": "   21.1 "
+          }
+        }
+      }
+    },
+    {
+      "name": "seeded 7: 1 line + 1 circle, mean 350.0/19.9, kappa 50",
+      "group": "1 line + 1 circle",
+      "rows": [
+        {
+          "Dgeo": 340.3,
+          "Igeo": 12.1,
+          "Dstrat": 339.1,
+          "Istrat": 5.4,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 267.1,
+          "Igeo": -48.5,
+          "Dstrat": 260.8,
+          "Istrat": -57.4,
+          "gcNormal": true
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 340.8643323940375,
+          "inc": 12.769651095122063,
+          "R": 1.9997708915113075,
+          "k": 2182.372215248036,
+          "a95": 17.3909367411839,
+          "csd": null,
+          "nTotal": 2,
+          "nLines": 1,
+          "nPlanes": 1,
+          "a": 0.9542876199586916,
+          "dolnp": {
+            "dec": "  340.9 ",
+            "inc": "   12.8 ",
+            "R": "1.9998 ",
+            "K": "  2182 ",
+            "alpha95": "   17.4 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 339.54849968991704,
+          "inc": 6.117479145924097,
+          "R": 1.999782537445966,
+          "k": 2299.246425302263,
+          "a95": 16.939783633595823,
+          "csd": null,
+          "nTotal": 2,
+          "nLines": 1,
+          "nPlanes": 1,
+          "a": 0.9566115027834873,
+          "dolnp": {
+            "dec": "  339.5 ",
+            "inc": "    6.1 ",
+            "R": "1.9998 ",
+            "K": "  2299 ",
+            "alpha95": "   16.9 "
+          }
+        }
+      }
+    },
+    {
+      "name": "seeded 8: 1 line + 4 circles, mean 115.5/-3.1, kappa 50",
+      "group": "1 line + 4 circles",
+      "rows": [
+        {
+          "Dgeo": 125.6,
+          "Igeo": 7.1,
+          "Dstrat": 123.7,
+          "Istrat": -15.8,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 205.0,
+          "Igeo": -4.4,
+          "Dstrat": 211.7,
+          "Istrat": -31.8,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 122.2,
+          "Igeo": -66.3,
+          "Dstrat": 39.0,
+          "Istrat": -64.9,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 172.5,
+          "Igeo": -61.5,
+          "Dstrat": 351.5,
+          "Istrat": -85.0,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 216.9,
+          "Igeo": 38.9,
+          "Dstrat": 206.4,
+          "Istrat": 12.5,
+          "gcNormal": true
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 118.99476075978998,
+          "inc": 15.439375895562165,
+          "R": 4.968872404516199,
+          "k": 64.25167022749436,
+          "a95": 11.972096767246585,
+          "csd": null,
+          "nTotal": 5,
+          "nLines": 1,
+          "nPlanes": 4,
+          "a": 0.978248738411203,
+          "dolnp": {
+            "dec": "  119.0 ",
+            "inc": "   15.4 ",
+            "R": "4.9689 ",
+            "K": "    64 ",
+            "alpha95": "   12.0 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 121.40888671466769,
+          "inc": -5.502860607942779,
+          "R": 4.968985301421974,
+          "k": 64.48555335685187,
+          "a95": 11.950150756046813,
+          "csd": null,
+          "nTotal": 5,
+          "nLines": 1,
+          "nPlanes": 4,
+          "a": 0.9783281206254679,
+          "dolnp": {
+            "dec": "  121.4 ",
+            "inc": "   -5.5 ",
+            "R": "4.9690 ",
+            "K": "    64 ",
+            "alpha95": "   12.0 "
+          }
+        }
+      }
+    },
+    {
+      "name": "seeded 9: 1 line + 4 circles, mean 239.8/73.0, kappa 15",
+      "group": "1 line + 4 circles",
+      "rows": [
+        {
+          "Dgeo": 281.0,
+          "Igeo": 42.7,
+          "Dstrat": 290.1,
+          "Istrat": -0.5,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 176.1,
+          "Igeo": -10.5,
+          "Dstrat": 180.6,
+          "Istrat": 24.4,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 202.8,
+          "Igeo": -17.5,
+          "Dstrat": 196.7,
+          "Istrat": 2.6,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 310.7,
+          "Igeo": -9.9,
+          "Dstrat": 308.7,
+          "Istrat": -57.8,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 226.3,
+          "Igeo": -12.5,
+          "Dstrat": 215.8,
+          "Istrat": -10.7,
+          "gcNormal": true
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 265.2884420032301,
+          "inc": 59.400040273797835,
+          "R": 4.890728581201864,
+          "k": 18.303047786857434,
+          "a95": 22.716995514115368,
+          "csd": null,
+          "nTotal": 5,
+          "nLines": 1,
+          "nPlanes": 4,
+          "a": 0.9224235784579995,
+          "dolnp": {
+            "dec": "  265.3 ",
+            "inc": "   59.4 ",
+            "R": "4.8907 ",
+            "K": "    18 ",
+            "alpha95": "   22.7 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 289.6473996068691,
+          "inc": 18.768223286401536,
+          "R": 4.891106704720579,
+          "k": 18.366603700145106,
+          "a95": 22.676246039063958,
+          "csd": null,
+          "nTotal": 5,
+          "nLines": 1,
+          "nPlanes": 4,
+          "a": 0.9226980009589338,
+          "dolnp": {
+            "dec": "  289.6 ",
+            "inc": "   18.8 ",
+            "R": "4.8911 ",
+            "K": "    18 ",
+            "alpha95": "   22.7 "
+          }
+        }
+      }
+    },
+    {
+      "name": "seeded 10: 1 line + 4 circles, mean 76.6/-46.7, kappa 200",
+      "group": "1 line + 4 circles",
+      "rows": [
+        {
+          "Dgeo": 74.5,
+          "Igeo": -53.9,
+          "Dstrat": 70.1,
+          "Istrat": -8.1,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 159.3,
+          "Igeo": 12.0,
+          "Dstrat": 166.1,
+          "Istrat": 4.2,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 299.3,
+          "Igeo": -39.8,
+          "Dstrat": 348.1,
+          "Istrat": -49.0,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 237.0,
+          "Igeo": -41.5,
+          "Dstrat": 175.7,
+          "Istrat": -84.7,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 24.5,
+          "Igeo": 23.1,
+          "Dstrat": 353.5,
+          "Istrat": 52.0,
+          "gcNormal": true
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 81.43484220960606,
+          "inc": -48.60186232421794,
+          "R": 4.987775248081756,
+          "k": 163.60250198740243,
+          "a95": 7.480162795165585,
+          "csd": null,
+          "nTotal": 5,
+          "nLines": 1,
+          "nPlanes": 4,
+          "a": 0.9914899933206475,
+          "dolnp": {
+            "dec": "   81.4 ",
+            "inc": "  -48.6 ",
+            "R": "4.9878 ",
+            "K": "   164 ",
+            "alpha95": "    7.5 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 75.29921872209037,
+          "inc": -3.6360499314733143,
+          "R": 4.987744048001132,
+          "k": 163.18601771488244,
+          "a95": 7.489739226420841,
+          "csd": null,
+          "nTotal": 5,
+          "nLines": 1,
+          "nPlanes": 4,
+          "a": 0.9914682206647969,
+          "dolnp": {
+            "dec": "   75.3 ",
+            "inc": "   -3.6 ",
+            "R": "4.9877 ",
+            "K": "   163 ",
+            "alpha95": "    7.5 "
+          }
+        }
+      }
+    },
+    {
+      "name": "seeded 11: 1 line + 4 circles, mean 251.1/4.5, kappa 200",
+      "group": "1 line + 4 circles",
+      "rows": [
+        {
+          "Dgeo": 249.8,
+          "Igeo": 5.7,
+          "Dstrat": 250.2,
+          "Istrat": -3.2,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 158.4,
+          "Igeo": -69.2,
+          "Dstrat": 147.5,
+          "Istrat": -49.0,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 165.1,
+          "Igeo": -41.5,
+          "Dstrat": 159.1,
+          "Istrat": -22.7,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 158.3,
+          "Igeo": 54.7,
+          "Dstrat": 183.4,
+          "Istrat": 72.3,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 157.5,
+          "Igeo": -65.0,
+          "Dstrat": 148.3,
+          "Istrat": -44.9,
+          "gcNormal": true
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 249.9752640988034,
+          "inc": 1.9917710707262524,
+          "R": 4.994744135898156,
+          "k": 380.5273426491735,
+          "a95": 4.899296812732151,
+          "csd": null,
+          "nTotal": 5,
+          "nLines": 1,
+          "nPlanes": 4,
+          "a": 0.996346344432051,
+          "dolnp": {
+            "dec": "  250.0 ",
+            "inc": "    2.0 ",
+            "R": "4.9947 ",
+            "K": "   381 ",
+            "alpha95": "    4.9 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 249.16821610619337,
+          "inc": -6.768149512668909,
+          "R": 4.994707403002192,
+          "k": 377.8863194813785,
+          "a95": 4.9164160038520865,
+          "csd": null,
+          "nTotal": 5,
+          "nLines": 1,
+          "nPlanes": 4,
+          "a": 0.9963207822103117,
+          "dolnp": {
+            "dec": "  249.2 ",
+            "inc": "   -6.8 ",
+            "R": "4.9947 ",
+            "K": "   378 ",
+            "alpha95": "    4.9 "
+          }
+        }
+      }
+    },
+    {
+      "name": "seeded 12: 5 lines + 3 circles, mean 255.7/19.5, kappa 15",
+      "group": "5 lines + 3 circles",
+      "rows": [
+        {
+          "Dgeo": 255.0,
+          "Igeo": 31.9,
+          "Dstrat": 221.4,
+          "Istrat": 40.6,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 270.4,
+          "Igeo": 32.0,
+          "Dstrat": 232.3,
+          "Istrat": 51.3,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 270.3,
+          "Igeo": 29.9,
+          "Dstrat": 234.9,
+          "Istrat": 49.9,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 261.9,
+          "Igeo": 16.5,
+          "Dstrat": 241.4,
+          "Istrat": 35.3,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 257.2,
+          "Igeo": -7.4,
+          "Dstrat": 254.8,
+          "Istrat": 14.1,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 71.6,
+          "Igeo": 41.4,
+          "Dstrat": 92.3,
+          "Istrat": 15.6,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 184.3,
+          "Igeo": 63.0,
+          "Dstrat": 159.1,
+          "Istrat": 25.4,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 340.8,
+          "Igeo": -44.9,
+          "Dstrat": 333.8,
+          "Istrat": -3.5,
+          "gcNormal": true
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 266.9910228709475,
+          "inc": 21.381877716045086,
+          "R": 7.615475598455858,
+          "k": 14.303383550988045,
+          "a95": 15.540632200070835,
+          "csd": null,
+          "nTotal": 8,
+          "nLines": 5,
+          "nPlanes": 3,
+          "a": 0.9634406946289806,
+          "dolnp": {
+            "dec": "  267.0 ",
+            "inc": "   21.4 ",
+            "R": "7.6155 ",
+            "K": "    14 ",
+            "alpha95": "   15.5 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 241.31491724403045,
+          "inc": 42.11195411476992,
+          "R": 7.615884266296633,
+          "k": 14.318601185567084,
+          "a95": 15.531901523099855,
+          "csd": null,
+          "nTotal": 8,
+          "nLines": 5,
+          "nPlanes": 3,
+          "a": 0.9634815090974543,
+          "dolnp": {
+            "dec": "  241.3 ",
+            "inc": "   42.1 ",
+            "R": "7.6159 ",
+            "K": "    14 ",
+            "alpha95": "   15.5 "
+          }
+        }
+      }
+    },
+    {
+      "name": "seeded 13: 5 lines + 3 circles, mean 145.6/3.1, kappa 15",
+      "group": "5 lines + 3 circles",
+      "rows": [
+        {
+          "Dgeo": 144.1,
+          "Igeo": -4.8,
+          "Dstrat": 143.5,
+          "Istrat": -6.4,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 168.2,
+          "Igeo": -11.5,
+          "Dstrat": 166.8,
+          "Istrat": -15.8,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 167.4,
+          "Igeo": 14.0,
+          "Dstrat": 168.6,
+          "Istrat": 9.7,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 152.4,
+          "Igeo": 8.1,
+          "Dstrat": 153.2,
+          "Istrat": 5.4,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 124.4,
+          "Igeo": 1.4,
+          "Dstrat": 124.7,
+          "Istrat": 2.2,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 52.6,
+          "Igeo": 17.5,
+          "Dstrat": 53.2,
+          "Istrat": 24.5,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 38.9,
+          "Igeo": 17.2,
+          "Dstrat": 38.8,
+          "Istrat": 24.3,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 85.4,
+          "Igeo": -77.6,
+          "Dstrat": 69.8,
+          "Istrat": -71.8,
+          "gcNormal": true
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 147.38112840157797,
+          "inc": 3.3755950848000693,
+          "R": 7.6838972707725555,
+          "k": 17.399406874600565,
+          "a95": 14.019433002326672,
+          "csd": null,
+          "nTotal": 8,
+          "nLines": 5,
+          "nPlanes": 3,
+          "a": 0.9702136178491176,
+          "dolnp": {
+            "dec": "  147.4 ",
+            "inc": "    3.4 ",
+            "R": "7.6839 ",
+            "K": "    17 ",
+            "alpha95": "   14.0 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 147.690132197823,
+          "inc": 1.322641413883217,
+          "R": 7.684305483879537,
+          "k": 17.421905415364574,
+          "a95": 14.009958361491199,
+          "csd": null,
+          "nTotal": 8,
+          "nLines": 5,
+          "nPlanes": 3,
+          "a": 0.9702536640961399,
+          "dolnp": {
+            "dec": "  147.7 ",
+            "inc": "    1.3 ",
+            "R": "7.6843 ",
+            "K": "    17 ",
+            "alpha95": "   14.0 "
+          }
+        }
+      }
+    },
+    {
+      "name": "two lines",
+      "group": "edge",
+      "rows": [
+        {
+          "Dgeo": 340.0,
+          "Igeo": 35.0,
+          "Dstrat": 340.0,
+          "Istrat": 35.0,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 350.0,
+          "Igeo": 30.0,
+          "Dstrat": 350.0,
+          "Istrat": 30.0,
+          "gcNormal": false
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 345.13942928496294,
+          "inc": 32.59899117143244,
+          "R": 1.992695270047138,
+          "k": 136.89760011021508,
+          "a95": 21.510454182864255,
+          "csd": 6.922884747034793,
+          "nTotal": 2,
+          "nLines": 2,
+          "nPlanes": 0,
+          "a": null,
+          "dolnp": {
+            "dec": "  345.1 ",
+            "inc": "   32.6 ",
+            "R": "1.9927 ",
+            "K": "   137 ",
+            "alpha95": "   21.5 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 345.13942928496294,
+          "inc": 32.59899117143244,
+          "R": 1.992695270047138,
+          "k": 136.89760011021508,
+          "a95": 21.510454182864255,
+          "csd": 6.922884747034793,
+          "nTotal": 2,
+          "nLines": 2,
+          "nPlanes": 0,
+          "a": null,
+          "dolnp": {
+            "dec": "  345.1 ",
+            "inc": "   32.6 ",
+            "R": "1.9927 ",
+            "K": "   137 ",
+            "alpha95": "   21.5 "
+          }
+        }
+      }
+    },
+    {
+      "name": "lines across declination 0",
+      "group": "edge",
+      "rows": [
+        {
+          "Dgeo": 359.0,
+          "Igeo": 40.0,
+          "Dstrat": 359.0,
+          "Istrat": 40.0,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 1.0,
+          "Igeo": 40.0,
+          "Dstrat": 1.0,
+          "Istrat": 40.0,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 358.0,
+          "Igeo": 42.0,
+          "Dstrat": 358.0,
+          "Istrat": 42.0,
+          "gcNormal": false
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 359.34671694744543,
+          "inc": 40.67333656184894,
+          "R": 2.999185653177122,
+          "k": 2455.9560420848693,
+          "a95": 2.4881304438300593,
+          "csd": 1.6344616093538238,
+          "nTotal": 3,
+          "nLines": 3,
+          "nPlanes": 0,
+          "a": null,
+          "dolnp": {
+            "dec": "  359.3 ",
+            "inc": "   40.7 ",
+            "R": "2.9992 ",
+            "K": "  2456 ",
+            "alpha95": "    2.5 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 359.34671694744543,
+          "inc": 40.67333656184894,
+          "R": 2.999185653177122,
+          "k": 2455.9560420848693,
+          "a95": 2.4881304438300593,
+          "csd": 1.6344616093538238,
+          "nTotal": 3,
+          "nLines": 3,
+          "nPlanes": 0,
+          "a": null,
+          "dolnp": {
+            "dec": "  359.3 ",
+            "inc": "   40.7 ",
+            "R": "2.9992 ",
+            "K": "  2456 ",
+            "alpha95": "    2.5 "
+          }
+        }
+      }
+    },
+    {
+      "name": "lines around declination 0 + horizontal circle (optimum lies on the grid)",
+      "group": "edge",
+      "rows": [
+        {
+          "Dgeo": 10.0,
+          "Igeo": 5.0,
+          "Dstrat": 10.0,
+          "Istrat": 5.0,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 350.0,
+          "Igeo": -5.0,
+          "Dstrat": 350.0,
+          "Istrat": -5.0,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 0.0,
+          "Igeo": 90.0,
+          "Dstrat": 0.0,
+          "Istrat": 90.0,
+          "gcNormal": true
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 360.0,
+          "inc": -1.1844064481477525e-15,
+          "R": 2.962120524380814,
+          "k": 39.599281021732175,
+          "a95": 23.28274339176082,
+          "csd": null,
+          "nTotal": 3,
+          "nLines": 2,
+          "nPlanes": 1,
+          "a": 0.9185654719105797,
+          "dolnp": {
+            "dec": "  360.0 ",
+            "inc": "   -0.0 ",
+            "R": "2.9621 ",
+            "K": "    40 ",
+            "alpha95": "   23.3 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 360.0,
+          "inc": -1.1844064481477525e-15,
+          "R": 2.962120524380814,
+          "k": 39.599281021732175,
+          "a95": 23.28274339176082,
+          "csd": null,
+          "nTotal": 3,
+          "nLines": 2,
+          "nPlanes": 1,
+          "a": 0.9185654719105797,
+          "dolnp": {
+            "dec": "  360.0 ",
+            "inc": "   -0.0 ",
+            "R": "2.9621 ",
+            "K": "    40 ",
+            "alpha95": "   23.3 "
+          }
+        }
+      }
+    },
+    {
+      "name": "declination wrap: lines across 0 + circle",
+      "group": "edge",
+      "rows": [
+        {
+          "Dgeo": 359.0,
+          "Igeo": 40.0,
+          "Dstrat": 359.0,
+          "Istrat": 40.0,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 1.0,
+          "Igeo": 40.0,
+          "Dstrat": 1.0,
+          "Istrat": 40.0,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 358.0,
+          "Igeo": 42.0,
+          "Dstrat": 358.0,
+          "Istrat": 42.0,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 90.0,
+          "Igeo": 0.0,
+          "Dstrat": 90.0,
+          "Istrat": 0.0,
+          "gcNormal": true
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 359.5100662576021,
+          "inc": 40.67414213852748,
+          "R": 3.9991576124045825,
+          "k": 2967.755002091191,
+          "a95": 1.7891686315739819,
+          "csd": null,
+          "nTotal": 4,
+          "nLines": 3,
+          "nPlanes": 1,
+          "a": 0.9995124804913105,
+          "dolnp": {
+            "dec": "  359.5 ",
+            "inc": "   40.7 ",
+            "R": "3.9992 ",
+            "K": "  2968 ",
+            "alpha95": "    1.8 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 359.5100662576021,
+          "inc": 40.67414213852748,
+          "R": 3.9991576124045825,
+          "k": 2967.755002091191,
+          "a95": 1.7891686315739819,
+          "csd": null,
+          "nTotal": 4,
+          "nLines": 3,
+          "nPlanes": 1,
+          "a": 0.9995124804913105,
+          "dolnp": {
+            "dec": "  359.5 ",
+            "inc": "   40.7 ",
+            "R": "3.9992 ",
+            "K": "  2968 ",
+            "alpha95": "    1.8 "
+          }
+        }
+      }
+    },
+    {
+      "name": "near-vertical lines + circle",
+      "group": "edge",
+      "rows": [
+        {
+          "Dgeo": 0.0,
+          "Igeo": 90.0,
+          "Dstrat": 0.0,
+          "Istrat": 90.0,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 10.0,
+          "Igeo": 89.0,
+          "Dstrat": 10.0,
+          "Istrat": 89.0,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 90.0,
+          "Igeo": 0.0,
+          "Dstrat": 90.0,
+          "Istrat": 0.0,
+          "gcNormal": true
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 6.704339365522715,
+          "inc": 89.504205577883,
+          "R": 2.9999230807120245,
+          "k": 19500.960545527385,
+          "a95": 1.0354038685289648,
+          "csd": null,
+          "nTotal": 3,
+          "nLines": 2,
+          "nPlanes": 1,
+          "a": 0.9998367201896998,
+          "dolnp": {
+            "dec": "    6.7 ",
+            "inc": "   89.5 ",
+            "R": "2.9999 ",
+            "K": " 19501 ",
+            "alpha95": "    1.0 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 6.704339365522715,
+          "inc": 89.504205577883,
+          "R": 2.9999230807120245,
+          "k": 19500.960545527385,
+          "a95": 1.0354038685289648,
+          "csd": null,
+          "nTotal": 3,
+          "nLines": 2,
+          "nPlanes": 1,
+          "a": 0.9998367201896998,
+          "dolnp": {
+            "dec": "    6.7 ",
+            "inc": "   89.5 ",
+            "R": "2.9999 ",
+            "K": " 19501 ",
+            "alpha95": "    1.0 "
+          }
+        }
+      }
+    },
+    {
+      "name": "circle-dominated, wide dihedral angles",
+      "group": "edge",
+      "rows": [
+        {
+          "Dgeo": 20.0,
+          "Igeo": 50.0,
+          "Dstrat": 20.0,
+          "Istrat": 50.0,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 300.0,
+          "Igeo": 10.0,
+          "Dstrat": 300.0,
+          "Istrat": 10.0,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 120.0,
+          "Igeo": -20.0,
+          "Dstrat": 120.0,
+          "Istrat": -20.0,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 200.0,
+          "Igeo": 30.0,
+          "Dstrat": 200.0,
+          "Istrat": 30.0,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 60.0,
+          "Igeo": -40.0,
+          "Dstrat": 60.0,
+          "Istrat": -40.0,
+          "gcNormal": true
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 40.41476376318402,
+          "inc": 51.48088872146289,
+          "R": 4.953054710652249,
+          "k": 42.60278353350503,
+          "a95": 14.739871908758342,
+          "csd": null,
+          "nTotal": 5,
+          "nLines": 1,
+          "nPlanes": 4,
+          "a": 0.967090929419449,
+          "dolnp": {
+            "dec": "   40.4 ",
+            "inc": "   51.5 ",
+            "R": "4.9531 ",
+            "K": "    43 ",
+            "alpha95": "   14.7 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 40.41476376318402,
+          "inc": 51.48088872146289,
+          "R": 4.953054710652249,
+          "k": 42.60278353350503,
+          "a95": 14.739871908758342,
+          "csd": null,
+          "nTotal": 5,
+          "nLines": 1,
+          "nPlanes": 4,
+          "a": 0.967090929419449,
+          "dolnp": {
+            "dec": "   40.4 ",
+            "inc": "   51.5 ",
+            "R": "4.9531 ",
+            "K": "    43 ",
+            "alpha95": "   14.7 "
+          }
+        }
+      }
+    },
+    {
+      "name": "scattered, a < 0",
+      "group": "edge",
+      "rows": [
+        {
+          "Dgeo": 207.8,
+          "Igeo": -16.5,
+          "Dstrat": 207.8,
+          "Istrat": -16.5,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 351.5,
+          "Igeo": -72.5,
+          "Dstrat": 351.5,
+          "Istrat": -72.5,
+          "gcNormal": false
+        },
+        {
+          "Dgeo": 309.0,
+          "Igeo": -33.7,
+          "Dstrat": 309.0,
+          "Istrat": -33.7,
+          "gcNormal": true
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 201.72639718543198,
+          "inc": -53.955392829051334,
+          "R": 2.36181950144491,
+          "k": 2.350432210630321,
+          "a95": 43.88801784731343,
+          "csd": null,
+          "nTotal": 3,
+          "nLines": 2,
+          "nPlanes": 1,
+          "a": -0.7206961056713317,
+          "dolnp": {
+            "dec": "  201.7 ",
+            "inc": "  -54.0 ",
+            "R": "2.3618 ",
+            "K": "     2 ",
+            "alpha95": "   43.9 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 201.72639718543198,
+          "inc": -53.955392829051334,
+          "R": 2.36181950144491,
+          "k": 2.350432210630321,
+          "a95": 43.88801784731343,
+          "csd": null,
+          "nTotal": 3,
+          "nLines": 2,
+          "nPlanes": 1,
+          "a": -0.7206961056713317,
+          "dolnp": {
+            "dec": "  201.7 ",
+            "inc": "  -54.0 ",
+            "R": "2.3618 ",
+            "K": "     2 ",
+            "alpha95": "   43.9 "
+          }
+        }
+      }
+    },
+    {
+      "name": "circles only, nearly coincident",
+      "group": "circles only",
+      "rows": [
+        {
+          "Dgeo": 70.0,
+          "Igeo": 10.0,
+          "Dstrat": 70.0,
+          "Istrat": 10.0,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 250.0,
+          "Igeo": -5.0,
+          "Dstrat": 250.0,
+          "Istrat": -5.0,
+          "gcNormal": true
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 158.20521770528737,
+          "inc": -13.373909807576208,
+          "R": 1.9998960615875907,
+          "k": 962.1082108336439,
+          "a95": 180.0,
+          "csd": null,
+          "nTotal": 2,
+          "nLines": 0,
+          "nPlanes": 2,
+          "a": -532192328.148439,
+          "dolnp": {
+            "dec": "  158.2 ",
+            "inc": "  -13.4 ",
+            "R": "1.9999 ",
+            "K": "   962 ",
+            "alpha95": "  180.0 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 158.20521770528737,
+          "inc": -13.373909807576208,
+          "R": 1.9998960615875907,
+          "k": 962.1082108336439,
+          "a95": 180.0,
+          "csd": null,
+          "nTotal": 2,
+          "nLines": 0,
+          "nPlanes": 2,
+          "a": -532192328.148439,
+          "dolnp": {
+            "dec": "  158.2 ",
+            "inc": "  -13.4 ",
+            "R": "1.9999 ",
+            "K": "   962 ",
+            "alpha95": "  180.0 "
+          }
+        }
+      }
+    },
+    {
+      "name": "circles only, orthogonal poles",
+      "group": "circles only",
+      "rows": [
+        {
+          "Dgeo": 0.0,
+          "Igeo": 0.0,
+          "Dstrat": 0.0,
+          "Istrat": 0.0,
+          "gcNormal": true
+        },
+        {
+          "Dgeo": 90.0,
+          "Igeo": 0.0,
+          "Dstrat": 90.0,
+          "Istrat": 0.0,
+          "gcNormal": true
+        }
+      ],
+      "pmagpy": {
+        "geographic": {
+          "dec": 90.00000000000001,
+          "inc": -90.0,
+          "R": 2.0,
+          "k": null,
+          "a95": 0.0,
+          "csd": null,
+          "nTotal": 2,
+          "nLines": 0,
+          "nPlanes": 2,
+          "a": null,
+          "dolnp": {
+            "dec": "   90.0 ",
+            "inc": "  -90.0 ",
+            "R": "2.0000 ",
+            "K": "inf",
+            "alpha95": "    0.0 "
+          }
+        },
+        "stratigraphic": {
+          "dec": 90.00000000000001,
+          "inc": -90.0,
+          "R": 2.0,
+          "k": null,
+          "a95": 0.0,
+          "csd": null,
+          "nTotal": 2,
+          "nLines": 0,
+          "nPlanes": 2,
+          "a": null,
+          "dolnp": {
+            "dec": "   90.0 ",
+            "inc": "  -90.0 ",
+            "R": "2.0000 ",
+            "K": "inf",
+            "alpha95": "    0.0 "
+          }
+        }
+      }
+    }
+  ]
+}
