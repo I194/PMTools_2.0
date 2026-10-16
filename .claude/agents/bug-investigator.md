@@ -3,7 +3,7 @@ name: bug-investigator
 description: Read-only root-cause investigator for PMTools. Use when asked why something happens, to reproduce a reported bug, to map a UI defect to its source, or to turn a found-bugs-todo entry into an evidence-backed fix spec. Returns structured findings; never edits files, never commits.
 tools: Read, Grep, Glob, Bash
 disallowedTools: Write, Edit, MultiEdit, NotebookEdit
-model: fable
+model: opus
 effort: high
 color: cyan
 ---

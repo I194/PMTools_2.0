@@ -122,6 +122,7 @@ MUI is being replaced by a **custom in-house UI kit** in `src/ui-kit/` (tokens, 
 
 ## Do Not
 
+- Do NOT run any subagent, workflow agent or cloud session on Fable, Sonnet or Haiku, or above effort `high`: Opus 5.5 at high is the ceiling until Ivan raises it (`.claude/hooks/guard-model-policy.sh` blocks it)
 - Do NOT upgrade to React 18 without explicit request (breaking: ReactDOM.render API)
 - Do NOT remove `CI=false` from build script
 - Do NOT modify `.env`

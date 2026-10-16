@@ -2,7 +2,7 @@
 
 The three-agent workflow in [three-agent-workflow.md](three-agent-workflow.md) used to be executed by hand: three terminals, files as the bridge, rules remembered by the model. Since September 2026 the same workflow runs inside one Claude Code session on a **harness**: subagents with fixed roles, hooks that enforce the rules deterministically, saved multi-agent workflows for the repeatable multi-step jobs, and a ledger that survives context resets. This document is the walkthrough. Everything it describes is checked into the repository.
 
-Model policy (Ivan, September 2026): never Sonnet or Haiku on this project. The floor is Opus 5 for mechanical fact-gathering; reasoning, verification, implementation and orchestration run on Fable 5.1 or whatever is the newest, most capable model. The agent definitions pin this; bump them when a newer model appears.
+Model policy (Ivan, 2026-10-16): every subagent, workflow agent and cloud session runs on Opus 5.5 (`model: opus`) at effort `high` or lower. Fable, Sonnet and Haiku are forbidden, and so are effort `xhigh` and `max`. The agent definitions pin this, `.claude/settings.json` sets `CLAUDE_CODE_SUBAGENT_MODEL`, and `.claude/hooks/guard-model-policy.sh` blocks any Agent or Workflow call that breaks it. Raise the cap only when Ivan says so after a newer Opus ships.
 
 ## 1. What you see when a session starts
 
@@ -25,10 +25,10 @@ A subagent is a Markdown file with YAML frontmatter (name, description, tools, m
 
 | Agent | Role | Can edit? | Model / effort |
 |---|---|---|---|
-| `bug-investigator` | Reproduce, localize, prove a root cause; return an evidence-backed fix spec. Also maps UI defects to source. | No (`disallowedTools: Write, Edit`) | Fable / high |
-| `science-reviewer` | Skeptical domain review of anything touching `src/utils/statistics`, parsers, converters or `*.expected.json`; thesis + PmagPy cross-checks; reference-flip discipline. | No | Fable / xhigh |
-| `evaluator` | Drives the live app on `localhost:3000` through Playwright as a researcher would; smoke tests, `verify-fixes.md` verification, dark-mode audits; writes the scored report under `test-data/v{version}/`. | Report file only | Fable / medium |
-| `generator` | Implements one ledger item on a feature branch: change, `npm run verify`, atomic commits, ledger update, `verify-fixes.md`. | Yes | Fable / high |
+| `bug-investigator` | Reproduce, localize, prove a root cause; return an evidence-backed fix spec. Also maps UI defects to source. | No (`disallowedTools: Write, Edit`) | Opus / high |
+| `science-reviewer` | Skeptical domain review of anything touching `src/utils/statistics`, parsers, converters or `*.expected.json`; thesis + PmagPy cross-checks; reference-flip discipline. | No | Opus / high |
+| `evaluator` | Drives the live app on `localhost:3000` through Playwright as a researcher would; smoke tests, `verify-fixes.md` verification, dark-mode audits; writes the scored report under `test-data/v{version}/`. | Report file only | Opus / medium |
+| `generator` | Implements one ledger item on a feature branch: change, `npm run verify`, atomic commits, ledger update, `verify-fixes.md`. | Yes | Opus / high |
 | `repo-hygienist` | Read-only repository health report: CI, stale PRs and branches, dependency drift, docs and ledger drift, harness health. Proposes commands, runs none. | No | Opus / medium |
 
 How they compose with the old skills: `/evaluate`, `/generate`, `/plan-fixes` and `/write-verify` still exist as skills you invoke in the main session. The `evaluator` agent loads the `/evaluate` skill as its protocol; the `generator` agent follows `/generate`'s rules. The difference is isolation: an agent's exploration does not pollute your context, and several can run at once.

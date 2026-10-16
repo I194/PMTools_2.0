@@ -80,7 +80,7 @@ grep -rhoE "#[0-9a-fA-F]{3,6}\b" src --include='*.scss' | sort | uniq -c | sort 
 | D6 | Tables: hand-built on native `<table>`. Virtualization hand-rolled; a tiny single-purpose lib only if profiling forces it. Never TanStack. | decided |
 | D7 | Showcase route `/ui-kit` ships in the production build (tiny, lazy-loaded, unlinked). It is the visual-regression target and the place to reproduce UI bugs. | decided (revisit if size matters) |
 | D8 | Component API conventions live in `src/ui-kit/SPEC.md`, written by Ivan before UIK-04 starts. | pending (UIK-01) |
-| D9 | Model policy for agents on this track: Fable-class for implementation and review; nothing below Opus 5. | decided |
+| D9 | Model policy for agents on this track: Opus 5.5 at effort high or lower; no Fable, Sonnet or Haiku (Ivan, 2026-10-16). | decided |
 
 ## Structure
 
