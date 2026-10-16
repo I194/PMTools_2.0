@@ -1,7 +1,7 @@
 export const meta = {
   name: 'pr-review',
   description:
-    'Review a branch against dev on PMTools-specific dimensions (correctness, conventions, tests, science when relevant), then adversarially verify every finding',
+    'Review a branch against dev on PMTools-specific dimensions (correctness, conventions, tests, reviewability, science when relevant), then adversarially verify every finding',
   whenToUse:
     'Before opening or merging a PR to dev. args: { base: "dev", head: "HEAD" } are the defaults. Complements the built-in /code-review with the project rules and a science lens.',
   phases: [
@@ -89,6 +89,11 @@ Dimension: PROJECT CONVENTIONS (CLAUDE.md). Full descriptive identifiers (no r, 
     key: 'tests',
     prompt: `${shared}
 Dimension: TESTS AND REFERENCES. New logic has a test; a science fix flips exactly the locked references it should (src/__tests__/fixtures/**/*.expected.json) and the PR text/commit explains the new numbers; no reference regenerated without justification; fixtures use the shared harness in src/test-utils/ (describeParserReferenceOutput, computation/converter helpers) rather than hand-written loops; no test only passes on one platform (trig floats are rounded to 7 significant figures by the harness).`,
+  },
+  {
+    key: 'reviewability',
+    prompt: `${shared}
+Dimension: REVIEWABILITY. Ivan reviews every PR by hand and cannot review bloat. Flag: (1) files the change does not need (evaluator reports, verify-fixes.md, ledger or found-bugs edits, new bug items, screenshots beyond one before/after pair); they belong in a separate chore/ PR; (2) comments longer than 3 lines, or that tell the bug's history or what the code "used to do" instead of a non-obvious why; (3) the same fact or number written as prose in several files; (4) tests that duplicate another case. If gh pr list --head <branch> finds an open PR, also flag a body over ~200 words (.github/pull_request_template.md). Severity: major when non-code or off-scope lines dwarf the change, minor otherwise. Anchor file-level findings to line 1.`,
   },
 ]
 if (touchesScience) {

@@ -18,10 +18,12 @@ You are the PMTools Generator. You turn an approved spec into merge-ready commit
 - After every change: `npm run verify` (a Stop hook re-runs it anyway; a PostToolUse hook already formats and lints each edited file).
 - Tests: a science fix flips the locked reference (`UPDATE_FIXTURES=1 npm test -- --watchAll=false <pattern>`), and the PR text must say which numbers changed and why. Eyeball the regenerated `.expected.json` before committing. Protected paths (`src/utils/statistics/**`, `*.expected.json`) require Ivan's explicit approval; only then `touch .claude/.science-unlock`, and remove it when done.
 - Conventions: full descriptive names (no `r`, `e`, `tmp`, `tol`; domain names like `Dgeo`, `a95` are fine); no `console.log`; SCSS modules; i18n keys in both `public/locales/ru` and `public/locales/en`; React 17 (`ReactDOM.render`); no new MUI imports once `src/ui-kit/` exists; no Tailwind, no TanStack, no DataGrid libraries.
+- Comments: only the non-obvious *why*, 1-3 lines. The bug story goes in the commit message, not the code, and not repeated across files.
 - Commits: lowercase imperative subject with a scope, e.g. `fix(science): reset cutoffValue every iteration`, `feat(ui-kit): Button primitive`. Atomic: one logical change per commit. `git add` only the exact paths you changed (the pre-commit hook may try to stage extras) and check `git show --name-only HEAD` afterwards.
 - Never push to `main`/`dev`; never open a second PR while one is waiting for review.
 
 ## When the item is done
+The fix branch carries only the change, its tests and a minimal repro fixture. Steps 1-2 below go on a separate `chore/<item>-followups` branch (opened as its own PR after the fix PR is reviewed). Keep the PR body to the template in `.github/pull_request_template.md`.
 1. Update `.claude/progress.json`: status (`in-progress` -> `pr-open` once the PR exists), `pr` number, one-line `notes`, and the `updated` date.
 2. Write `test-data/v{version}/verify-fixes.md`: a ready-to-paste prompt for the evaluator with literal reproduction steps for every acceptance criterion (see `.claude/skills/generate/SKILL.md` for the format).
 3. Report: commits made (`git log --oneline dev..HEAD`), verify/test results verbatim, what was left out and why.
