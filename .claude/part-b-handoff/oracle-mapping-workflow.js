@@ -189,7 +189,8 @@ const CRITIC_SCHEMA = {
   required: ['gaps', 'summary'],
 }
 
-const AGENT_OPTS = { model: 'fable', effort: 'xhigh' }
+// Ivan 2026-10-16: Fable is forbidden; subagents never above Opus 5.5 at high effort.
+const AGENT_OPTS = { model: 'opus', effort: 'high' }
 
 const mapPrompt = (row) => `${COMMON(row.id + '-map')}
 YOUR ROW: ${row.id} - ${row.title}
