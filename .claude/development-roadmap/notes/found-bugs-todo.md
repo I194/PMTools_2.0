@@ -476,3 +476,47 @@ none blocks SCI-01; the full evidence is in `test-data/v2.6.6/evaluation-report-
   tells the user the optimum ran off the searched range. Flag any result whose optimum or CI
   bound lands on −50 or 150.
 
+
+## Surfaced by Part B parity (2026-10-16, draft PRs #57-#68)
+
+Each item is asserted as a `MISMATCH PB-NN-<n>` test in its row's parity PR, so a fix makes that
+test fail and must turn it into a parity assertion. Nothing here is fixed. Ledger items SCI-27..36.
+
+- **🟠 SCI-27 — VGP pole longitude NaN at declination exactly 0/180/360 (PB-05-1..3, #63).**
+  `calculateVGP.ts:30-34` takes `acos` of a ratio that float noise pushes past 1; `toFixed(1)`
+  produces such declinations. `exampleDIR.pmm` row ZH29 (Dg 360.0) gives a NaN pole and turns the
+  whole-file mean pole NaN (PmagPy: 105.88/86.12, A95 14.33). PmagPy clamps (pmag.py:1386-1399).
+- **🟡 SCI-28 — VGP longitude not wrapped (PB-05-4).** `calculateVGP.ts:44-46` adds 360 to negative
+  values but never subtracts it: site lon 350 gives 494.69 (PmagPy 134.69).
+- **🟡 SCI-29 — dm at |I| = 90 is a95 instead of 2·a95 (PB-05-5).** At 89.9 both sides agree.
+- **🟡 SCI-30 — GC fit on identical directions shows a noise MAD (PB-04-1, #62).** Rank-1 orientation
+  matrix, no tau3 clamp (`calculatePCA_dir.ts:61-63`): 24.79° for 3 × (10, 30), 84.35° for
+  2 × (338.2, 36.9); PmagPy 0. Reachable with duplicate rows.
+- **🟠 SCI-31 — `splitPolarities` centres before the principal axis (PB-10-1, #68).** A
+  single-polarity set (30 directions, k 20) is split 17/13 (PmagPy `pmag.flip`: 30/0); 30N + 1R at
+  k 10 gives 9 reversed in 23 of 50 draws. The reversal tests then compare made-up groups. Both real
+  files split identically.
+- **🟡 SCI-32 — reversal-test critical angle estimator (PB-10-2).** Closed-form MM1990 eq. 15
+  (common k, thesis 1.7) gives 13.12° where PmagPy's per-group Watson V simulation gives 12.44°
+  (4.4 sd). Same class on every tested set. Decision for Ivan.
+- **🟠 SCI-33 — stereonets are equidistant, not equal-area (Part B inventory).** `dirToCartesian.ts:40`
+  maps inc 30 to r 0.667; `pmag.dimap` (equal-area, thesis §1.2) gives 0.707.
+  `projectInclination('equalArea')` is dead. Affects every stereonet and exported SVG. Needs its own
+  Part B row (oracle `pmag.dimap`) before any fix.
+- **🟡 SCI-34 — DIR-page GCN hotkey writes a 0/0 interpretation (found in PB-04).** The hotkey sends
+  `'gcn'`, which `calculateStatisticsDIR.ts:40-47` has no case for; there is no GCN button.
+- **🟡 SCI-35 — reversal and conglomerate tests ignore the selected reference (found in PB-10/12).**
+  They always build directions from Dgeo/Igeo. Decision for Ivan.
+- **🟡 SCI-36 — mean VGP of one site shows a95 NaN, k Infinity (found in PB-02).** `fisherMean` has
+  no N < 2 guard; reachable only on the VGP page.
+- **Added to existing items:** SCI-23 gains two decision cases from PB-07 (#64): a < 0 gives a95 180
+  vs dolnp arccos(−a) = 43.9°, and circles-only selections (`test-data/sample.dir` is all GC) give
+  k 0/NaN, a95 NaN and a noise-dependent direction. SCI-20 gains two defects in the dead
+  `calculateMCFaddenIncMean` from PB-06 (#61): ginc sign flip after the search reverses, and an endless
+  loop when the misfit is exactly 0 at the start. PB-11-1 (#67) is SCI-25.
+- **Open questions for Ivan (no item):** pca0 direction = thesis anchored eigenvector, not PmagPy's
+  DE-BFL-A vector mean (13.8° apart on examplePCA M070-M130); gc/gcn pole sign is fixed in the
+  specimen frame; fixed 45° cutoff vs Vandamme (on unflipped `exampleDIR.pmm` 100 vs 80 of 224
+  rejected); the Watson Ro formula for N ≥ 21 jumps above the table (7.17 → 7.40); thesis §1.4.1
+  says H0 "может быть принята" where it means rejected; `scripts/README.md:128-129` claims DE-BFL-A
+  matches anchored PCA (true only for the MAD).
