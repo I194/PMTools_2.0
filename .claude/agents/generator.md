@@ -1,7 +1,7 @@
 ---
 name: generator
 description: Implements one planned item at a time on a feature branch. Reads the spec and .claude/progress.json, makes the change, runs npm run verify, commits atomically, updates the ledger, and writes the verify-fixes.md prompt for the evaluator. Use for any implementation task that already has an approved spec or ledger item.
-model: fable
+model: opus
 effort: high
 color: orange
 ---

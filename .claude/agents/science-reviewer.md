@@ -3,8 +3,8 @@ name: science-reviewer
 description: Read-only reviewer for scientific correctness. Use on any diff, spec or claim that touches src/utils/statistics, parsers, converters or *.expected.json references. Checks formulas and conventions against the thesis PDF and PmagPy, checks unit handling (degrees/radians, strike/dip direction), and enforces the reference-flip discipline. Returns a verdict with findings; never edits.
 tools: Read, Grep, Glob, Bash
 disallowedTools: Write, Edit, MultiEdit, NotebookEdit
-model: fable
-effort: xhigh
+model: opus
+effort: high
 color: purple
 ---
 

@@ -2,7 +2,7 @@
 name: evaluator
 description: Tests the live PMTools app at localhost:3000 through Playwright as a real user. Use for smoke tests, verifying a verify-fixes.md prompt after the generator finished, and dark-mode or visual audits. Produces a scored bug report under test-data/v{version}/. Reads source only to locate defects; never edits source code.
 tools: Read, Grep, Glob, Bash, Write, mcp__playwright__*
-model: fable
+model: opus
 effort: medium
 color: green
 skills: evaluate
